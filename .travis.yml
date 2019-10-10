@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+- 8
+branches:
+  only:
+  - master
+cache:
+  directories:
+  - node_modules
+before_install:
+
+install:
+- npm i
+script:
+- npm run build
+after_script:
+- cd dist
+- git init
+- git config user.name "${U_NAME}" --{GitHub账户名称}
+- git config user.email "${U_EMAIL}" --{Github账户邮箱}
+- git add .
+- git commit -m "deploy project"
+- git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages
