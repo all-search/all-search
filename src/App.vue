@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     current () {
-      return this.$route.query.s
+      return this.$route.query.s || ''
     }
   },
   methods: {

@@ -30,10 +30,10 @@ export default {
       return `${this.url.protocol}//${this.url.host}`
     },
     keyword () {
-      return this.$route.query.k
+      return this.$route.query.k || ''
     },
     current () {
-      return this.$route.query.s
+      return this.$route.query.s || ''
     },
     site () {
       const index = sites.findIndex(site => site.name === this.current)

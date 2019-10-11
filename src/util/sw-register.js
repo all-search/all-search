@@ -3,6 +3,7 @@
 const version = Number(__SW_VERSION__)
 // eslint-disable-next-line
 const project = __PROJECT_NAME__
+const swUrl = `/${project}/service-worker.js?version=${version}`
 
 function emitUpdate () {
   var event = document.createEvent('Event')
@@ -43,9 +44,12 @@ function setFailVersion () {
   window.localStorage.setItem(failSwName, version)
 }
 
-if (getFailVersion() !== version && 'serviceWorker' in navigator) {
+if ('serviceWorker' in navigator &&
+  getFailVersion() !== version &&
+  process.env.NODE_ENV === 'production') {
   // 如果是新的版本，那就尝试注册安装
-  navigator.serviceWorker.register(`/${project}/service-worker.js?version=${version}`) // eslint-disable-line
+  // eslint-disable-next-line
+  navigator.serviceWorker.register(swUrl)
     .then(function (reg) {
       if (reg.waiting) {
         emitUpdate()

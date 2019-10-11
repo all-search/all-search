@@ -1,35 +1,8 @@
-<template>
-  <div>
-    <div
-      class="sw-update-dialog"
-      v-if="showSwUpdate"
-    >
-      <button @click="handleSkipWaiting">
-        更新
-      </button>
-    </div>
-    <div
-      class="sw-update-dialog"
-      v-if="showSwUnregister"
-    >
-      <button @click="handleRefresh">
-        更新
-      </button>
-    </div>
-  </div>
-</template>
-
 <script>
 let refreshing = false
 
 export default {
   name: 'SWUpdatePopup',
-  data () {
-    return {
-      showSwUpdate: false,
-      showSwUnregister: false
-    }
-  },
   mounted () {
     this.addListener()
   },
@@ -43,7 +16,14 @@ export default {
       })
     },
     handleUpdate () {
-      this.showSwUpdate = true
+      this.$notify({
+        title: '提示',
+        message: '网站内容有更新，点击更新',
+        duration: 0,
+        onClick: () => {
+          this.handleSkipWaiting()
+        }
+      })
     },
     handleSkipWaiting () {
       navigator.serviceWorker.getRegistration()
@@ -60,6 +40,9 @@ export default {
       window.location.reload()
     },
     skipWaiting (registration) {
+      if (!registration) {
+        return Promise.resolve()
+      }
       const worker = registration.waiting
       if (!worker) {
         return Promise.resolve()
@@ -79,7 +62,14 @@ export default {
       })
     },
     handleUnregister () {
-      this.showSwUnregister = true
+      this.$notify({
+        title: '提示',
+        message: '网站内容有更新，点击更新',
+        duration: 0,
+        onClick: () => {
+          this.handleRefresh()
+        }
+      })
     },
     handleRefresh () {
       window.location.reload(true)
@@ -87,19 +77,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .sw-update-dialog {
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
-    background-color: #fff;
-    border: 1px solid #42b983;
-  }
-
-  .sw-update-dialog button {
-    padding: 6px 10px;
-    margin: 15px 30px;
-    font-size: 16px;
-  }
-</style>
