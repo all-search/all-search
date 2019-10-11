@@ -13,22 +13,35 @@
 
 <script>
 // @ is an alias to /src
+import sites from '../config/sites'
+import Url from 'url'
 
 export default {
   name: 'Index',
-  props: {
-    link: {
-      type: String,
-      default: ''
-    },
-    keyword: {
-      type: String,
-      default: ''
-    }
-  },
   computed: {
+    url () {
+      // eslint-disable-next-line
+      return Url.parse(this.site.src)
+    },
     src () {
-      return this.link.replace('{keyword}', this.keyword)
+      if (this.keyword !== '') {
+        return this.site.src.replace('{keyword}', this.keyword)
+      }
+      return `${this.url.protocol}//${this.url.host}`
+    },
+    keyword () {
+      return this.$route.query.k
+    },
+    current () {
+      return this.$route.query.s
+    },
+    site () {
+      const index = sites.findIndex(site => site.name === this.current)
+      if (index > -1) {
+        return sites[index]
+      } else {
+        return sites[0]
+      }
     }
   },
   data () {

@@ -13,9 +13,7 @@
           @search="search"
         />
         <el-main>
-          <router-view
-            :link="site.link"
-            :keyword="keyword" />
+          <router-view/>
         </el-main>
       </el-container>
     </el-container>
@@ -51,25 +49,18 @@ export default {
   computed: {
     current () {
       return this.$route.query.s
-    },
-    site () {
-      const index = sites.findIndex(site => site.name === this.current)
-      if (index > -1) {
-        return sites[index]
-      } else {
-        return sites[0]
-      }
     }
   },
   methods: {
     init () {
       this.keyword = getQueryString('k')
-      if (!this.keyword) {
+      const site = getQueryString('s')
+      if (!site) {
         this.$router.push({
           path: '/',
           query: {
             s: sites[0].name,
-            k: ''
+            k: this.keyword
           }
         })
       }
