@@ -8,7 +8,7 @@ export default [
   {
     nameZh: 'Bing',
     name: 'Bing',
-    link: 'https://cn.bing.com/search?q={keyword}&ensearch=1',
+    link: 'https://cn.bing.com/search?q={keyword}',
     icon: 'https://cn.bing.com/favicon.ico'
   },
   {

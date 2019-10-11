@@ -3,7 +3,7 @@
     <el-container>
       <el-header
         id="header"
-        height="0px"/>
+        height="0px" />
       <el-container>
         <sideBar
           :value="current"
@@ -15,11 +15,11 @@
         <el-main>
           <router-view
             :link="site.link"
-            :keyword="keyword"/>
+            :keyword="keyword" />
         </el-main>
       </el-container>
     </el-container>
-    <SW-update-popup/>
+    <SW-update-popup />
   </div>
 </template>
 
@@ -64,6 +64,15 @@ export default {
   methods: {
     init () {
       this.keyword = getQueryString('k')
+      if (!this.keyword) {
+        this.$router.push({
+          path: '/',
+          query: {
+            s: sites[0].name,
+            k: ''
+          }
+        })
+      }
     },
     menuClick (item) {
       this.$router.push({
