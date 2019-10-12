@@ -3,8 +3,6 @@ const fs = require('fs')
 const argv = require('minimist')(process.argv.slice(2))
 const { InjectManifest } = require('workbox-webpack-plugin')
 const webpack = require('webpack')
-
-const isDev = process.env.NODE_ENV === 'development'
 const isProd = process.env.NODE_ENV === 'production'
 const srcFiles = fs.readdirSync(path.resolve(__dirname, 'src/'))
 // 项目名称
@@ -27,6 +25,15 @@ module.exports = {
   runtimeCompiler: true,
   productionSourceMap: !!argv.sourceMap,
   crossorigin: 'anonymous',
+  chainWebpack: config => {
+    config.plugin('html')
+      .tap(args => {
+        args[0].minify = false
+        args[0].filename = indexPath
+        args[0].template = path.join(__dirname, `src/${indexPath}`)
+        return args
+      })
+  },
   configureWebpack: config => {
     config.entry.app[0] = entryPath
     if (isProd) {

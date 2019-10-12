@@ -7,6 +7,7 @@
       <el-container>
         <sideBar
           :value="current"
+          :keyword="keyword"
           :is-collapse="isCollapse"
           @menu-click="menuClick"
           @changeCollapse="changeCollapse"

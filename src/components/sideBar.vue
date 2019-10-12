@@ -2,10 +2,16 @@
   <el-aside
     class="side-bar light"
     width="140px">
+    <a class="title"
+       :href="siteUrl">
+      <h1 class="title-inner">
+        All Search
+      </h1>
+    </a>
     <el-input
       class="search-input"
-      placeholder="回车搜索"
-      v-model="keyword"
+      placeholder="搜索"
+      v-model="localKeyword"
       @keyup.enter.native="handleSearch"
     >
       <i slot="prefix"
@@ -29,11 +35,26 @@
         <span v-text="item.nameZh"></span>
       </li>
     </ul>
+    <div class="footer">
+      <a
+        class="link"
+        href="https://github.com/endday/all-search"
+        target="_blank">
+        代码仓库
+      </a>
+      <a
+        class="link"
+        href="https://github.com/endday/all-search/issues"
+        target="_blank">
+        反馈建议
+      </a>
+    </div>
   </el-aside>
 </template>
 
 <script>
 import sites from '../config/sites'
+import { getQueryString } from '../util/index'
 
 export default {
   name: 'SideBar',
@@ -59,15 +80,27 @@ export default {
         icon: 'el-icon-d-arrow-left',
         text: '收起'
       }
+    },
+    siteUrl () {
+      if (window.location.host === 'endday.github.io') {
+        return 'https://endday.gitee.io/all-search'
+      }
+      return 'https://endday.github.io/all-search'
     }
   },
   data () {
     return {
       sites,
-      keyword: ''
+      localKeyword: ''
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.localKeyword = getQueryString('k')
+    },
     handleOpen (key, keyPath) {
       console.log(key, keyPath)
     },
@@ -81,7 +114,7 @@ export default {
       this.$emit('menu-click', item)
     },
     handleSearch () {
-      this.$emit('search', this.keyword)
+      this.$emit('search', this.localKeyword)
     }
   }
 }
@@ -93,10 +126,29 @@ export default {
     z-index: 20;
     text-align: left;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      border-bottom: 1px #e8e8e8 solid;
+      text-decoration: none;
+      .title-inner {
+        font-size: 16px;
+        line-height: 44px;
+        font-weight: 600;
+        color: #1990fc;
+        margin: 0;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+
     ul {
+      flex: 1;
       list-style: none;
       padding-left: 0;
     }
+
     li {
       list-style: none;
     }
@@ -113,6 +165,7 @@ export default {
     border-color .3s cubic-bezier(.645, .045, .355, 1),
     background .3s cubic-bezier(.645, .045, .355, 1),
     padding .15s cubic-bezier(.645, .045, .355, 1);
+
     .icon {
       height: 16px;
       width: 16px;
@@ -120,16 +173,20 @@ export default {
       vertical-align: middle;
       margin-right: 10px;
     }
+
     a {
       display: block;
       color: rgba(0, 0, 0, .65);
     }
+
     & > a:hover {
       color: #1890ff;
     }
+
     &:hover {
       color: #1890ff;
     }
+
     &:after {
       position: absolute;
       top: 0;
@@ -147,6 +204,7 @@ export default {
     background-color: #e6f7ff;
     color: #1890ff;
     position: relative;
+
     &:after {
       transform: scaleY(1);
       opacity: 1;
@@ -159,22 +217,39 @@ export default {
     box-shadow: 2px 0 8px 0 rgba(29, 35, 41, .05);
   }
 
-  a {
-    color: rgba(0, 0, 0, .65);
-    text-decoration: none;
-    background-color: transparent;
-    outline: 0;
-    cursor: pointer;
-    transition: color .3s;
-  }
-
   .search-input {
-    margin-top: 10px;
+
     .el-input__inner {
       border-top: none;
       border-left: none;
       border-right: none;
       border-radius: 0;
+    }
+  }
+
+  .footer {
+    padding-bottom: 10px;
+
+    .link {
+      display: block;
+      text-align: center;
+      margin: 0;
+      line-height: 32px;
+      height: 32px;
+      font-size: 14px;
+    }
+
+    a {
+      color: rgba(0, 0, 0, .65);
+      text-decoration: none;
+      background-color: transparent;
+      outline: 0;
+      cursor: pointer;
+      transition: color .3s;
+
+      &:hover {
+        color: #1890ff;
+      }
     }
   }
 </style>
