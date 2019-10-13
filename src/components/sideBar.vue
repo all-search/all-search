@@ -170,17 +170,8 @@ export default {
       height: 16px;
       width: 16px;
       background-color: #fff;
-      vertical-align: middle;
+      vertical-align: text-bottom;
       margin-right: 10px;
-    }
-
-    a {
-      display: block;
-      color: rgba(0, 0, 0, .65);
-    }
-
-    & > a:hover {
-      color: #1890ff;
     }
 
     &:hover {
@@ -232,11 +223,12 @@ export default {
 
     .link {
       display: block;
-      text-align: center;
+      height: 28px;
+      line-height: 28px;
       margin: 0;
-      line-height: 32px;
-      height: 32px;
-      font-size: 14px;
+      padding: 0 24px;
+      text-align: left;
+      font-size: 13px;
     }
 
     a {

@@ -3,7 +3,7 @@
     <el-container>
       <el-header
         id="header"
-        height="0px" />
+        height="0px"/>
       <el-container>
         <sideBar
           :value="current"
@@ -18,7 +18,7 @@
         </el-main>
       </el-container>
     </el-container>
-    <SW-update-popup />
+    <SW-update-popup/>
   </div>
 </template>
 
@@ -46,6 +46,14 @@ export default {
     this.$nextTick(() => {
       this.init()
     })
+  },
+  watch: {
+    current (val) {
+      const i = this.sites.findIndex(site => site.name === val)
+      if (i === -1) {
+        this.handleClick(this.sites[0])
+      }
+    }
   },
   computed: {
     current () {

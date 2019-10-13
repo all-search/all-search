@@ -16,13 +16,12 @@ export default [
     name: 'doge',
     src: 'https://www.dogedoge.com/results?q={keyword}',
     icon: 'https://www.dogedoge.com/favicon.ico'
-
   },
   {
-    nameZh: '微博',
-    name: 'weibo',
-    src: 'https://s.weibo.com/weibo/{keyword}?topnav=1&wvr=6',
-    icon: 'https://s.weibo.com/favicon.ico'
+    nameZh: '秘迹',
+    name: 'mijisou',
+    src: 'https://mijisou.com/?q={keyword}',
+    icon: 'https://mijisou.com/themes/entropage/img/logo_search_page.png'
   },
   {
     nameZh: '悟空',
@@ -31,8 +30,8 @@ export default [
     icon: 'https://www.wukong.com/favicon.ico'
   },
   {
-    nameZh: '翻译',
-    name: 'fanyi',
+    nameZh: '百度翻译',
+    name: 'baidufanyi',
     src: 'https://fanyi.baidu.com/#en/zh/{keyword}',
     icon: 'https://fanyi.baidu.com/favicon.ico'
   },
@@ -48,13 +47,11 @@ export default [
     src: 'https://segmentfault.com/search?q={keyword}',
     icon: 'https://segmentfault.com/favicon.ico'
   },
-
   {
     nameZh: 'Yarn',
     name: 'yarn',
     src: 'https://www.yarnpkg.com/zh-Hans/packages?q={keyword}',
     icon: 'https://www.yarnpkg.com/favicon.ico'
-
   },
   {
     nameZh: 'Bilibili',
@@ -62,12 +59,12 @@ export default [
     src: 'https://search.bilibili.com/all?keyword={keyword}',
     icon: 'https://www.bilibili.com/favicon.ico'
   },
-  /*{
-    nameZh: '网易云',
-    name: 'music',
-    src: 'https://music.163.com/#/search/m/?s={keyword}',
-    icon: 'https://s1.music.126.net/style/favicon.ico?v20180823'
-  },*/
+  {
+    nameZh: '微博',
+    name: 'weibo',
+    src: 'https://s.weibo.com/weibo/{keyword}?topnav=1&wvr=6',
+    icon: 'https://s.weibo.com/favicon.ico'
+  },
   {
     nameZh: '京东',
     name: 'jd',
