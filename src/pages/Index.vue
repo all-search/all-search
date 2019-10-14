@@ -47,27 +47,17 @@ export default {
   data () {
     return {}
   },
-  mounted () {
-    this.changeFrameHeight()
-  },
   methods: {
-    changeFrameHeight () {
-      const ifm = document.getElementById('frame')
-      const header = document.getElementById('header')
-      ifm.height = document.documentElement.clientHeight - header.clientHeight
-      window.onresize = () => {
-        return (() => {
-          const ifm = document.getElementById('frame')
-          ifm.height = document.documentElement.clientHeight - header.clientHeight
-        })()
-      }
-    }
+
   }
 }
 </script>
 
 <style scoped>
-  .home {
-
+  #frame {
+    display: block; /* iframes are inline by default */
+    border: none; /* Reset default border */
+    height: 100vh; /* Viewport-relative units */
+    width: 100%;
   }
 </style>

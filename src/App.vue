@@ -1,28 +1,28 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header
-        id="header"
-        height="0px"/>
-      <el-container>
-        <sideBar
-          :value="current"
-          :keyword="keyword"
-          :is-collapse="isCollapse"
-          @menu-click="menuClick"
-          @changeCollapse="changeCollapse"
-          @search="search"
-        />
-        <el-main>
-          <router-view/>
-        </el-main>
-      </el-container>
-    </el-container>
+    <tab-header
+      v-show="showHeader"
+      :value="current"
+      @menu-click="menuClick"/>
+    <div class="container">
+      <sideBar
+        :value="current"
+        :keyword="keyword"
+        :is-collapse="isCollapse"
+        @menu-click="menuClick"
+        @changeCollapse="changeCollapse"
+        @search="search"
+      />
+      <main>
+        <router-view/>
+      </main>
+    </div>
     <SW-update-popup/>
   </div>
 </template>
 
 <script>
+import tabHeader from './components/header'
 import SWUpdatePopup from './components/SWUpdatePopup'
 import sites from './config/sites'
 import sideBar from './components/sideBar'
@@ -31,11 +31,13 @@ import { getQueryString } from './util/index'
 export default {
   name: 'App',
   components: {
+    tabHeader,
     SWUpdatePopup,
     sideBar
   },
   data () {
     return {
+      showHeader: false,
       showSwUpdate: false,
       keyword: '',
       sites: sites,
@@ -51,7 +53,7 @@ export default {
     current (val) {
       const i = this.sites.findIndex(site => site.name === val)
       if (i === -1) {
-        this.handleClick(this.sites[0])
+        this.menuClick(this.sites[0])
       }
     }
   },
@@ -112,34 +114,21 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+  }
 
-    .el-header {
-      width: 100%;
-      position: fixed;
-      top: 0;
-      background-color: #fff;
-      border-bottom: 1px #ccc solid;
-    }
+  .container {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 0;
+  }
 
-    .el-tabs__header {
-      margin: 0;
-    }
-
-    .el-main {
-      padding: 0;
-    }
-
-    .search {
-      width: 160px;
-      float: left;
-      margin-right: 20px;
-      z-index: 1;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .el-tabs {
-
-    }
+  main {
+    display: block;
+    flex: 1;
+    flex-basis: auto;
+    overflow: auto;
   }
 </style>

@@ -1,7 +1,6 @@
 <template>
-  <el-aside
-    class="side-bar light"
-    width="140px">
+  <aside
+    class="side-bar light">
     <a class="title"
        :href="siteUrl">
       <h1 class="title-inner">
@@ -49,7 +48,7 @@
         反馈建议
       </a>
     </div>
-  </el-aside>
+  </aside>
 </template>
 
 <script>
@@ -62,25 +61,9 @@ export default {
     value: {
       type: String,
       default: ''
-    },
-    isCollapse: {
-      type: Boolean,
-      default: true
     }
   },
   computed: {
-    collapseBtn () {
-      if (this.isCollapse) {
-        return {
-          icon: 'el-icon-d-arrow-right',
-          text: '展开'
-        }
-      }
-      return {
-        icon: 'el-icon-d-arrow-left',
-        text: '收起'
-      }
-    },
     siteUrl () {
       if (window.location.host === 'endday.github.io') {
         return 'https://endday.gitee.io/all-search'
@@ -101,15 +84,6 @@ export default {
     init () {
       this.localKeyword = getQueryString('k')
     },
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    changeCollapse () {
-      this.$emit('changeCollapse', !this.isCollapse)
-    },
     handleClick (item) {
       this.$emit('menu-click', item)
     },
@@ -122,7 +96,7 @@ export default {
 
 <style lang="scss">
   .side-bar {
-    width: 100%;
+    width: 140px;
     z-index: 20;
     text-align: left;
     height: 100vh;
