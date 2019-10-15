@@ -12,12 +12,14 @@
         @menu-click="menuClick"
         @changeCollapse="changeCollapse"
         @search="search"
+        @open-setting="drawer = true"
       />
       <main>
         <router-view/>
       </main>
     </div>
     <SW-update-popup/>
+    <setting :visible.sync="drawer"/>
   </div>
 </template>
 
@@ -26,6 +28,7 @@ import tabHeader from './components/header'
 import SWUpdatePopup from './components/SWUpdatePopup'
 import sites from './config/sites'
 import sideBar from './components/sideBar'
+import setting from './components/setting'
 import { getQueryString } from './util/index'
 
 export default {
@@ -33,7 +36,8 @@ export default {
   components: {
     tabHeader,
     SWUpdatePopup,
-    sideBar
+    sideBar,
+    setting
   },
   data () {
     return {
@@ -41,7 +45,8 @@ export default {
       showSwUpdate: false,
       keyword: '',
       sites: sites,
-      isCollapse: true
+      isCollapse: true,
+      drawer: false
     }
   },
   mounted () {

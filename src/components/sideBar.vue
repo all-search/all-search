@@ -2,7 +2,7 @@
   <aside
     class="side-bar light">
     <a class="title"
-       :href="siteUrl">
+       href="https://github.com/endday/all-search">
       <h1 class="title-inner">
         All Search
       </h1>
@@ -35,12 +35,11 @@
       </li>
     </ul>
     <div class="footer">
-      <a
+      <p
         class="link"
-        href="https://github.com/endday/all-search"
-        target="_blank">
-        代码仓库
-      </a>
+        @click="showSetting">
+        设置
+      </p>
       <a
         class="link"
         href="https://github.com/endday/all-search/issues"
@@ -63,14 +62,6 @@ export default {
       default: ''
     }
   },
-  computed: {
-    siteUrl () {
-      if (window.location.host === 'endday.github.io') {
-        return 'https://endday.gitee.io/all-search'
-      }
-      return 'https://endday.github.io/all-search'
-    }
-  },
   data () {
     return {
       sites,
@@ -89,6 +80,9 @@ export default {
     },
     handleSearch () {
       this.$emit('search', this.localKeyword)
+    },
+    showSetting () {
+      this.$emit('open-setting')
     }
   }
 }
@@ -203,9 +197,6 @@ export default {
       padding: 0 24px;
       text-align: left;
       font-size: 13px;
-    }
-
-    a {
       color: rgba(0, 0, 0, .65);
       text-decoration: none;
       background-color: transparent;
