@@ -4,6 +4,7 @@ import router from './route'
 import './util/sw-register'
 import './plugins/element.js'
 import './plugins/axios.js'
+import './assets/reset.css'
 
 Vue.config.productionTip = false
 

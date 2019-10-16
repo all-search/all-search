@@ -1,0 +1,90 @@
+@charset "UTF-8";
+* {
+    -webkit-tap-highlight-color: transparent;
+    outline: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+    box-sizing: border-box;
+}
+
+blockquote,
+body,
+button,
+dd,
+dl,
+dt,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+input,
+legend,
+li,
+ol,
+p,
+pre,
+td,
+textarea,
+th,
+ul {
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+img {
+    border: 0 none;
+    vertical-align: top;
+}
+
+em,
+i {
+    font-style: normal;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+button,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+select {
+    font-size: 100%;
+    font-family: inherit;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    margin: 0 auto;
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    color: #666;
+    -webkit-text-size-adjust: 100%;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: #fff;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #b2b2b2;
+}

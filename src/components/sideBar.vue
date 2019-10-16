@@ -101,7 +101,7 @@ export default {
       border-bottom: 1px #e8e8e8 solid;
       text-decoration: none;
       .title-inner {
-        font-size: 16px;
+        font-size: 18px;
         line-height: 44px;
         font-weight: 600;
         color: #1990fc;
@@ -114,7 +114,7 @@ export default {
     ul {
       flex: 1;
       list-style: none;
-      padding-left: 0;
+      padding: 15px 0;
     }
 
     li {

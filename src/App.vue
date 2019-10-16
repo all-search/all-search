@@ -6,6 +6,7 @@
       @menu-click="menuClick"/>
     <div class="container">
       <sideBar
+        v-show="!showHeader"
         :value="current"
         :keyword="keyword"
         :is-collapse="isCollapse"
@@ -41,7 +42,7 @@ export default {
   },
   data () {
     return {
-      showHeader: false,
+      // showHeader: false,
       showSwUpdate: false,
       keyword: '',
       sites: sites,
@@ -65,6 +66,9 @@ export default {
   computed: {
     current () {
       return this.$route.query.s || ''
+    },
+    showHeader () {
+      return this.$route.query.layout === 'topMenu'
     }
   },
   methods: {
@@ -75,6 +79,7 @@ export default {
         this.$router.push({
           path: '/',
           query: {
+            ...this.$route.query,
             s: sites[0].name,
             k: this.keyword
           }
@@ -85,6 +90,7 @@ export default {
       this.$router.push({
         path: '/',
         query: {
+          ...this.$route.query,
           s: item.name,
           k: this.keyword
         }
@@ -114,9 +120,6 @@ export default {
   }
 
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
   }
