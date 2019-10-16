@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="menu-header">
     <a class="title"
        href="https://github.com/endday/all-search">
       <h1 class="title-inner">
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style lang="scss">
-  header {
+  .menu-header {
     display: flex;
     position: relative;
     &::after {
@@ -64,21 +64,20 @@ export default {
       background-color: #E4E7ED;
       z-index: 1;
     }
-  }
-
-  .title {
-    border-bottom: 1px #e8e8e8 solid;
-    text-decoration: none;
-    .title-inner {
-      font-size: 16px;
-      width: 120px;
-      height: 40px;
-      line-height: 40px;
-      font-weight: 600;
-      color: #1990fc;
-      margin: 0;
-      text-align: center;
-      cursor: pointer;
+    .title {
+      border-bottom: 1px #e8e8e8 solid;
+      text-decoration: none;
+      .title-inner {
+        font-size: 16px;
+        width: 120px;
+        height: 40px;
+        line-height: 40px;
+        font-weight: 600;
+        color: #1990fc;
+        margin: 0;
+        text-align: center;
+        cursor: pointer;
+      }
     }
   }
 
