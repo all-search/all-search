@@ -1,12 +1,7 @@
 <template>
   <aside
     class="side-bar light">
-    <a class="title"
-       href="https://github.com/endday/all-search">
-      <h1 class="title-inner">
-        All Search
-      </h1>
-    </a>
+    <logo />
     <el-input
       class="search-input"
       placeholder="搜索"
@@ -52,10 +47,14 @@
 
 <script>
 import sites from '../config/sites'
+import logo from '../components/logo'
 import { getQueryString } from '../util/index'
 
 export default {
   name: 'SideBar',
+  components: {
+    logo
+  },
   props: {
     value: {
       type: String,
@@ -96,20 +95,6 @@ export default {
     height: 100vh;
     display: flex;
     flex-direction: column;
-
-    .title {
-      border-bottom: 1px #e8e8e8 solid;
-      text-decoration: none;
-      .title-inner {
-        font-size: 18px;
-        line-height: 44px;
-        font-weight: 600;
-        color: #1990fc;
-        margin: 0;
-        text-align: center;
-        cursor: pointer;
-      }
-    }
 
     ul {
       flex: 1;
