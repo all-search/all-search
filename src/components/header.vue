@@ -1,11 +1,6 @@
 <template>
   <header class="menu-header">
-    <a class="title"
-       href="https://github.com/endday/all-search">
-      <h1 class="title-inner">
-        All Search
-      </h1>
-    </a>
+    <logo />
     <el-tabs
       :value="value"
       @tab-click="handleClick">
@@ -13,16 +8,20 @@
         v-for="item in sites"
         :key="item.name"
         :label="item.nameZh"
-        :name="item.name"/>
+        :name="item.name" />
     </el-tabs>
   </header>
 </template>
 
 <script>
 import sites from '../config/sites'
+import logo from '../components/logo'
 
 export default {
   name: 'tab-header',
+  components: {
+    logo
+  },
   props: {
     value: {
       type: String,
@@ -40,7 +39,7 @@ export default {
     }
   },
   methods: {
-    handleClick (tab, event) {
+    handleClick (tab) {
       this.$emit('menu-click', tab)
     },
     handleSearch () {
@@ -54,6 +53,7 @@ export default {
   .menu-header {
     display: flex;
     position: relative;
+
     &::after {
       content: "";
       position: absolute;
@@ -64,27 +64,14 @@ export default {
       background-color: #E4E7ED;
       z-index: 1;
     }
-    .title {
-      border-bottom: 1px #e8e8e8 solid;
-      text-decoration: none;
-      .title-inner {
-        font-size: 16px;
-        width: 120px;
-        height: 40px;
-        line-height: 40px;
-        font-weight: 600;
-        color: #1990fc;
-        margin: 0;
-        text-align: center;
-        cursor: pointer;
-      }
-    }
   }
-
+</style>
+<style lang="scss">
   .el-tabs {
     .el-tabs__header {
       margin-bottom: 0;
     }
+
     .el-tabs__nav-wrap::after {
       height: 0;
     }
