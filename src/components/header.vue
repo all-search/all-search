@@ -1,6 +1,6 @@
 <template>
   <header class="menu-header">
-    <logo />
+    <logo class="logo" />
     <el-tabs
       :value="value"
       @tab-click="handleClick">
@@ -67,6 +67,10 @@ export default {
   }
 </style>
 <style lang="scss">
+  .logo {
+    width: 130px;
+    min-width: 130px;
+  }
   .el-tabs {
     .el-tabs__header {
       margin-bottom: 0;

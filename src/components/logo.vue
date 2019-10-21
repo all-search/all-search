@@ -20,7 +20,7 @@ export default {
 
     .title-inner {
       font-size: 18px;
-      width: 120px;
+      width: 100%;
       height: 39px;
       line-height: 40px;
       font-weight: 600;

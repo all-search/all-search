@@ -30,7 +30,7 @@ export default [
     icon: 'https://www.wukong.com/favicon.ico'
   },
   {
-    nameZh: '百度翻译',
+    nameZh: '翻译',
     name: 'baidufanyi',
     src: 'https://fanyi.baidu.com/#en/zh/{keyword}',
     icon: 'https://fanyi.baidu.com/favicon.ico'

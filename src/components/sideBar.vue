@@ -24,7 +24,7 @@
         <img
           class="icon"
           :src="item.icon"
-          :alt="item.name"
+          alt=""
         />
         <span v-text="item.nameZh"></span>
       </li>
@@ -89,7 +89,7 @@ export default {
 
 <style lang="scss">
   .side-bar {
-    width: 140px;
+    width: 130px;
     z-index: 20;
     text-align: left;
     height: 100vh;
@@ -125,6 +125,8 @@ export default {
       background-color: #fff;
       vertical-align: text-bottom;
       margin-right: 10px;
+      min-width: 16px;
+      min-height: 16px;
     }
 
     &:hover {
