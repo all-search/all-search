@@ -1,12 +1,10 @@
 <template>
   <div id="app">
     <tab-header
-      v-show="showHeader"
       :value="current"
       @menu-click="menuClick"/>
     <div class="container">
       <sideBar
-        v-show="!showHeader"
         :value="current"
         :keyword="keyword"
         :is-collapse="isCollapse"
@@ -20,16 +18,14 @@
       </main>
     </div>
     <SW-update-popup/>
-    <setting :visible.sync="drawer"/>
   </div>
 </template>
 
 <script>
 import tabHeader from './components/header'
 import SWUpdatePopup from './components/SWUpdatePopup'
-import sites from './config/sites'
+import { tabs } from './config/sites'
 import sideBar from './components/sideBar'
-import setting from './components/setting'
 import { getQueryString } from './util/index'
 
 export default {
@@ -37,15 +33,14 @@ export default {
   components: {
     tabHeader,
     SWUpdatePopup,
-    sideBar,
-    setting
+    sideBar
   },
   data () {
     return {
       // showHeader: false,
       showSwUpdate: false,
       keyword: '',
-      sites: sites,
+      tabs: tabs,
       isCollapse: true,
       drawer: false
     }
@@ -57,9 +52,9 @@ export default {
   },
   watch: {
     current (val) {
-      const i = this.sites.findIndex(site => site.name === val)
+      const i = this.tabs.findIndex(site => site.name === val)
       if (i === -1) {
-        this.menuClick(this.sites[0])
+        this.menuClick(this.tabs[0])
       }
     }
   },
@@ -80,7 +75,7 @@ export default {
           path: '/',
           query: {
             ...this.$route.query,
-            s: sites[0].name,
+            s: tabs[0].name,
             k: this.keyword
           }
         })

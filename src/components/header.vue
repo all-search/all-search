@@ -1,20 +1,20 @@
 <template>
   <header class="menu-header">
-    <logo class="logo" />
+    <logo class="logo"/>
     <el-tabs
       :value="value"
       @tab-click="handleClick">
       <el-tab-pane
-        v-for="item in sites"
+        v-for="item in tabs"
         :key="item.name"
         :label="item.nameZh"
-        :name="item.name" />
+        :name="item.name"/>
     </el-tabs>
   </header>
 </template>
 
 <script>
-import sites from '../config/sites'
+import { tabs } from '../config/sites'
 import logo from '../components/logo'
 
 export default {
@@ -34,7 +34,7 @@ export default {
   },
   data () {
     return {
-      sites,
+      tabs,
       localKeyword: ''
     }
   },
@@ -64,13 +64,24 @@ export default {
       background-color: #E4E7ED;
       z-index: 1;
     }
+    .logo {
+      width: 130px;
+      min-width: 130px;
+    }
+
+    .el-dropdown-link {
+      padding: 0 20px;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      color: #1990fc;
+    }
+    .el-icon-arrow-down {
+      font-size: 12px;
+    }
   }
 </style>
 <style lang="scss">
-  .logo {
-    width: 130px;
-    min-width: 130px;
-  }
   .el-tabs {
     .el-tabs__header {
       margin-bottom: 0;
@@ -79,13 +90,9 @@ export default {
     .el-tabs__nav-wrap::after {
       height: 0;
     }
-  }
 
-  .el-tabs__nav {
-    margin: 0 10px;
-  }
-
-  .el-main {
-    padding: 0;
+    .el-tabs__nav {
+      margin: 0 10px;
+    }
   }
 </style>

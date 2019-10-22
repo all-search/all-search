@@ -1,4 +1,4 @@
-export default [
+export const tabs = [
   {
     nameZh: '百度',
     name: 'baidu',
@@ -76,5 +76,47 @@ export default [
     name: 'taobao',
     src: 'https://s.taobao.com/search?q={keyword}',
     icon: 'https://www.taobao.com/favicon.ico'
+  }
+]
+export const links = [
+  {
+    nameZh: 'github',
+    name: 'github',
+    src: 'https://github.com/search?q={keyword}'
+  },
+  {
+    nameZh: '知乎',
+    name: 'zhihu',
+    src: 'https://www.zhihu.com/search?type=content&q={keyword}'
+  },
+  {
+    nameZh: '微信',
+    name: 'weixin',
+    src: 'https://weixin.sogou.com/weixin?p=01030402&query={keyword}&type=2&ie=utf8'
+  },
+  {
+    nameZh: '谷歌',
+    name: 'Google',
+    src: 'https://www.google.com.hk/search?safe=strict&source=hp&q={keyword}&oq={keyword}'
+  },
+  {
+    nameZh: '简书',
+    name: 'jianshu',
+    src: 'https://www.jianshu.com/search?q={keyword}'
+  },
+  {
+    nameZh: '掘金',
+    name: 'juejin',
+    src: 'https://juejin.im/search?query={keyword}&type=all'
+  },
+  {
+    nameZh: 'NPM',
+    name: 'NPM',
+    src: 'https://www.npmjs.com/search?q={keyword}'
+  },
+  {
+    nameZh: '溢栈',
+    name: 'Stackoverflow',
+    src: 'https://stackoverflow.com/search?q={keyword}'
   }
 ]

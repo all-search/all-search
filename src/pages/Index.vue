@@ -13,7 +13,7 @@
 
 <script>
 // @ is an alias to /src
-import sites from '../config/sites'
+import { tabs } from '../config/sites'
 import Url from 'url'
 
 export default {
@@ -36,20 +36,18 @@ export default {
       return this.$route.query.s || ''
     },
     site () {
-      const index = sites.findIndex(site => site.name === this.current)
+      const index = tabs.findIndex(site => site.name === this.current)
       if (index > -1) {
-        return sites[index]
+        return tabs[index]
       } else {
-        return sites[0]
+        return tabs[0]
       }
     }
   },
   data () {
     return {}
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 

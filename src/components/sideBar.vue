@@ -1,7 +1,6 @@
 <template>
   <aside
     class="side-bar light">
-    <logo />
     <el-input
       class="search-input"
       placeholder="搜索"
@@ -15,26 +14,18 @@
     </el-input>
     <ul>
       <li
-        v-for="item in sites"
+        v-for="item in links"
         :key="item.name"
         class="side-bar-item"
-        :class="{ selected: value === item.name }"
-        @click="handleClick(item)"
       >
-        <img
-          class="icon"
-          :src="item.icon"
-          alt=""
-        />
-        <span v-text="item.nameZh"></span>
+        <a :href="getLink(item.src)"
+           target="_blank"
+           :class="{small: item.nameZh.length > 10}"
+           v-text="item.nameZh">
+        </a>
       </li>
     </ul>
     <div class="footer">
-      <p
-        class="link"
-        @click="showSetting">
-        设置
-      </p>
       <a
         class="link"
         href="https://github.com/endday/all-search/issues"
@@ -46,15 +37,11 @@
 </template>
 
 <script>
-import sites from '../config/sites'
-import logo from '../components/logo'
+import { links } from '../config/sites'
 import { getQueryString } from '../util/index'
 
 export default {
   name: 'SideBar',
-  components: {
-    logo
-  },
   props: {
     value: {
       type: String,
@@ -63,7 +50,7 @@ export default {
   },
   data () {
     return {
-      sites,
+      links,
       localKeyword: ''
     }
   },
@@ -74,14 +61,11 @@ export default {
     init () {
       this.localKeyword = getQueryString('k')
     },
-    handleClick (item) {
-      this.$emit('menu-click', item)
-    },
     handleSearch () {
       this.$emit('search', this.localKeyword)
     },
-    showSetting () {
-      this.$emit('open-setting')
+    getLink (link) {
+      return link.replace('{keyword}', this.localKeyword)
     }
   }
 }
@@ -120,13 +104,17 @@ export default {
     padding .15s cubic-bezier(.645, .045, .355, 1);
 
     .icon {
+      display: inline-block;
       height: 16px;
       width: 16px;
-      background-color: #fff;
-      vertical-align: text-bottom;
       margin-right: 10px;
       min-width: 16px;
       min-height: 16px;
+      img {
+        width: 100%;
+        height: 100%;
+        vertical-align: text-bottom;
+      }
     }
 
     &:hover {
@@ -173,27 +161,37 @@ export default {
     }
   }
 
+  .small {
+    font-size: 15px;
+  }
+
   .footer {
     padding-bottom: 10px;
 
     .link {
-      display: block;
       height: 28px;
       line-height: 28px;
-      margin: 0;
-      padding: 0 24px;
-      text-align: left;
       font-size: 13px;
-      color: rgba(0, 0, 0, .65);
-      text-decoration: none;
-      background-color: transparent;
-      outline: 0;
-      cursor: pointer;
-      transition: color .3s;
-
+      padding: 0 24px;
       &:hover {
         color: #1890ff;
       }
+    }
+  }
+
+  a {
+    display: block;
+    margin: 0;
+    text-align: left;
+    color: rgba(0, 0, 0, .65);
+    text-decoration: none;
+    background-color: transparent;
+    outline: 0;
+    cursor: pointer;
+    transition: color .3s;
+
+    &:hover {
+      color: #1890ff;
     }
   }
 </style>
