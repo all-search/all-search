@@ -47,6 +47,8 @@ export default {
   data () {
     return {}
   },
+  mounted () {
+  },
   methods: {}
 }
 </script>
@@ -55,7 +57,7 @@ export default {
   #frame {
     display: block; /* iframes are inline by default */
     border: none; /* Reset default border */
-    height: 100vh; /* Viewport-relative units */
+    height: calc(100vh - 40px); /* Viewport-relative units */
     width: 100%;
   }
 </style>

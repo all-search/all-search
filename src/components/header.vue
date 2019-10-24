@@ -1,5 +1,6 @@
 <template>
-  <header class="menu-header">
+  <header id="header"
+          class="menu-header">
     <logo class="logo"/>
     <el-tabs
       :value="value"

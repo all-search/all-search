@@ -76,7 +76,6 @@ export default {
     width: 130px;
     z-index: 20;
     text-align: left;
-    height: 100vh;
     display: flex;
     flex-direction: column;
 

@@ -1,3 +1,4 @@
+<template></template>
 <script>
 let refreshing = false
 
