@@ -1,17 +1,7 @@
 <template>
   <aside
     class="side-bar light">
-    <el-input
-      class="search-input"
-      placeholder="搜索"
-      v-model="localKeyword"
-      @keyup.enter.native="handleSearch"
-    >
-      <i slot="prefix"
-         class="el-input__icon el-icon-search"
-         @click="handleSearch">
-      </i>
-    </el-input>
+
     <ul>
       <li
         v-for="item in links"
@@ -19,9 +9,13 @@
         class="side-bar-item"
       >
         <a :href="getLink(item.src)"
-           target="_blank"
-           :class="{small: item.nameZh.length > 10}"
-           v-text="item.nameZh">
+           target="_blank">
+          <div class="icon">
+            <img
+              :src="item.icon"
+            />
+          </div>
+          <span v-text="item.nameZh"></span>
         </a>
       </li>
     </ul>
@@ -38,7 +32,6 @@
 
 <script>
 import { links } from '../config/sites'
-import { getQueryString } from '../util/index'
 
 export default {
   name: 'SideBar',
@@ -50,22 +43,17 @@ export default {
   },
   data () {
     return {
-      links,
-      localKeyword: ''
+      links
     }
   },
-  mounted () {
-    this.init()
+  computed: {
+    keyword () {
+      return this.$route.query.k
+    }
   },
   methods: {
-    init () {
-      this.localKeyword = getQueryString('k')
-    },
-    handleSearch () {
-      this.$emit('search', this.localKeyword)
-    },
     getLink (link) {
-      return link.replace('{keyword}', this.localKeyword)
+      return link.replace('{keyword}', this.keyword)
     }
   }
 }
@@ -102,20 +90,6 @@ export default {
     background .3s cubic-bezier(.645, .045, .355, 1),
     padding .15s cubic-bezier(.645, .045, .355, 1);
 
-    .icon {
-      display: inline-block;
-      height: 16px;
-      width: 16px;
-      margin-right: 10px;
-      min-width: 16px;
-      min-height: 16px;
-      img {
-        width: 100%;
-        height: 100%;
-        vertical-align: text-bottom;
-      }
-    }
-
     &:hover {
       color: #1890ff;
     }
@@ -131,37 +105,24 @@ export default {
       transition: transform .15s cubic-bezier(.215, .61, .355, 1), opacity .15s cubic-bezier(.215, .61, .355, 1);
       content: "";
     }
-  }
-
-  .selected {
-    background-color: #e6f7ff;
-    color: #1890ff;
-    position: relative;
-
-    &:after {
-      transform: scaleY(1);
-      opacity: 1;
-      transition: transform .15s cubic-bezier(.645, .045, .355, 1), opacity .15s cubic-bezier(.645, .045, .355, 1);
+    .icon {
+      display: inline-block;
+      height: 16px;
+      width: 16px;
+      margin-right: 10px;
+      min-width: 16px;
+      min-height: 16px;
+      img {
+        width: 100%;
+        height: 100%;
+        vertical-align: text-bottom;
+      }
     }
   }
 
   .side-bar.light {
     background-color: #fff;
     box-shadow: 2px 0 8px 0 rgba(29, 35, 41, .05);
-  }
-
-  .search-input {
-
-    .el-input__inner {
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      border-radius: 0;
-    }
-  }
-
-  .small {
-    font-size: 15px;
   }
 
   .footer {

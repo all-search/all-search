@@ -2,16 +2,13 @@
   <div id="app">
     <tab-header
       :value="current"
+      @search="search"
       @menu-click="menuClick"/>
     <div class="container">
       <sideBar
         :value="current"
         :keyword="keyword"
         :is-collapse="isCollapse"
-        @menu-click="menuClick"
-        @changeCollapse="changeCollapse"
-        @search="search"
-        @open-setting="drawer = true"
       />
       <main>
         <router-view/>

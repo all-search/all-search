@@ -2,6 +2,18 @@
   <header id="header"
           class="menu-header">
     <logo class="logo"/>
+    <div class="search-input">
+      <el-input
+        placeholder="搜索"
+        v-model="localKeyword"
+        @keyup.enter.native="handleSearch"
+      >
+        <i slot="prefix"
+           class="el-input__icon el-icon-search"
+           @click="handleSearch">
+        </i>
+      </el-input>
+    </div>
     <el-tabs
       :value="value"
       @tab-click="handleClick">
@@ -17,6 +29,7 @@
 <script>
 import { tabs } from '../config/sites'
 import logo from '../components/logo'
+import { getQueryString } from '../util/index'
 
 export default {
   name: 'tab-header',
@@ -39,7 +52,13 @@ export default {
       localKeyword: ''
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.localKeyword = getQueryString('k')
+    },
     handleClick (tab) {
       this.$emit('menu-click', tab)
     },
@@ -84,6 +103,7 @@ export default {
 </style>
 <style lang="scss">
   .el-tabs {
+    width: calc(100vw - 280px);
     .el-tabs__header {
       margin-bottom: 0;
     }
@@ -94,6 +114,17 @@ export default {
 
     .el-tabs__nav {
       margin: 0 10px;
+    }
+  }
+
+  .search-input {
+    width: 180px;
+    min-width: 180px;
+    .el-input__inner {
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-radius: 0;
     }
   }
 </style>
