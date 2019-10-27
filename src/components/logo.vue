@@ -1,6 +1,8 @@
 <template>
   <a class="title"
-     href="https://github.com/endday/all-search">
+     href="https://github.com/endday/all-search"
+     target="_blank"
+  >
     <h1 class="title-inner">
       All Search
     </h1>
