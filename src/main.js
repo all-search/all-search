@@ -1,14 +1,26 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './route'
-import './util/sw-register'
-import './plugins/element.js'
-import './plugins/axios.js'
-import './assets/reset.css'
+import { checkBody, getCurrentSite } from './util'
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+const currentSite = getCurrentSite()
+
+if (currentSite) {
+  const el = document.createElement('div')
+  el.id = 'all-search'
+
+  const app = new Vue({
+    data () {
+      return {
+        currentSite
+      }
+    },
+    render: h => h(App)
+  })
+
+  checkBody().then(() => {
+    document.body.insertBefore(el, document.body.childNodes[0])
+    app.$mount('#all-search')
+  })
+}

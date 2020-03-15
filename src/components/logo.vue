@@ -3,9 +3,9 @@
      href="https://github.com/endday/all-search"
      target="_blank"
   >
-    <h1 class="title-inner">
+    <p class="title-inner">
       All Search
-    </h1>
+    </p>
   </a>
 </template>
 
@@ -16,15 +16,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import "../assets/common";
   .title {
-    border-bottom: 1px #e8e8e8 solid;
     text-decoration: none;
 
     .title-inner {
       font-size: 18px;
-      width: 100%;
-      height: 39px;
-      line-height: 40px;
+      width: 120px;
+      height: $height;
+      line-height: $height;
       font-weight: 600;
       color: #1990fc;
       margin: 0;
