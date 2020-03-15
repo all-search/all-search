@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import { checkBody, getCurrentSite } from './util'
+import isWhiteList from './config/whiteList'
 
 Vue.config.productionTip = false
 
 const currentSite = getCurrentSite()
 
-if (currentSite) {
+if (currentSite || isWhiteList()) {
   const el = document.createElement('div')
   el.id = 'all-search'
 
