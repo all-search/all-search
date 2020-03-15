@@ -2,7 +2,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve'
 import VuePlugin from 'rollup-plugin-vue'
 import replace from 'rollup-plugin-replace'
-// import { terser } from 'rollup-plugin-terser'
+import { terser } from 'rollup-plugin-terser'
 import banner from './src/config/banner'
 
 export default {
@@ -22,7 +22,7 @@ export default {
       'process.env.NODE_ENV': JSON.stringify('development'),
       'process.env.VUE_ENV': JSON.stringify('browser')
     }),
-    /*terser({
+    terser({
       output: {
         comments: function (node, comment) {
           var text = comment.value
@@ -33,6 +33,6 @@ export default {
           }
         }
       }
-    })*/
+    })
   ]
 }
