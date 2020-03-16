@@ -59,7 +59,7 @@ export function getCurrentSite () {
     if (!currentSite) {
       currentSite = module.list.find(item => {
         const urlObj = parseUrl(item.url)
-        return urlObj.hostname === window.location.hostname
+        return window.location.hostname.includes(urlObj.hostname)
       })
     }
   }
@@ -85,4 +85,14 @@ export function checkBody () {
       }, 100)
     }
   })
+}
+
+export function getSession (name) {
+  // eslint-disable-next-line
+  return GM_getValue(name)
+}
+
+export function setSession (name, value) {
+// eslint-disable-next-line
+  GM_setValue(name, value)
 }

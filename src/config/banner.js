@@ -13,8 +13,8 @@ const banner =
 // @require      https://cdn.jsdelivr.net/npm/vue
 // @run-at       document-body
 
-// @grant        GM_addStyle
-// @grant        GM_getResourceText
+// @grant        GM_getValue
+// @grant        GM_setValue
 
 // ==/UserScript==
 

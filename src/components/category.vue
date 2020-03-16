@@ -35,7 +35,12 @@ export default {
   },
   computed: {
     nameZh () {
-      return this.engines.find(item => item.name === this.value).nameZh
+      const i = this.engines.findIndex(item => item.name === this.value)
+      if (i > -1) {
+        return this.engines[i].nameZh
+      } else {
+        return this.engines[0].nameZh
+      }
     }
   },
   methods: {

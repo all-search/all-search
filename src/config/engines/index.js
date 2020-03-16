@@ -1,11 +1,11 @@
-import web from './web'
+import search from './search'
 import developer from './developer'
 
 export default [
   {
     nameZh: '搜索',
-    name: 'web',
-    list: web
+    name: 'search',
+    list: search
   },
   {
     nameZh: '开发者',

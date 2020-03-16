@@ -1,8 +1,13 @@
 export default [
   {
-    name: '百度',
+    name: 'baidu',
     nameZh: '百度',
     url: 'https://www.baidu.com/s?wd=%s&ie=utf-8'
+  },
+  {
+    name: 'google',
+    nameZh: '谷歌',
+    url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8'
   },
   {
     name: 'bing',
@@ -30,7 +35,7 @@ export default [
     name: 'sogou',
     nameZh: '搜狗',
     url: 'https://www.sogou.com/web?query=%s',
-    disable: true
+    disable: false
   },
   {
     name: 'startpage',
@@ -46,6 +51,7 @@ export default [
   {
     name: 'Yandex',
     nameZh: 'Yandex',
-    url: 'https://yandex.com/search/?text=%s'
+    url: 'https://yandex.com/search/?text=%s',
+    disabled: true
   }
 ]
