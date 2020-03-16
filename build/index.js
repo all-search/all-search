@@ -240,7 +240,7 @@
     undefined
   )
 
-  var web = [
+  var search = [
     {
       name: '百度',
       nameZh: '百度',
@@ -290,7 +290,7 @@
       nameZh: 'Yandex',
       url: 'https://yandex.com/search/?text=%s'
     }
-  ]
+  ];
 
   var developer = [
     {
@@ -321,20 +321,20 @@
       url: 'https://greasyfork.org/scripts?q=%s&utf8=✓',
       blank: true
     }
-  ]
+  ];
 
   var engines = [
     {
       nameZh: '搜索',
-      name: 'web',
-      list: web
+      name: 'search',
+      list: search
     },
     {
       nameZh: '开发者',
       name: 'developer',
       list: developer
     }
-  ]
+  ];
 
   //
 
@@ -369,7 +369,7 @@
         this.show = false
       }
     }
-  }
+  };
 
   /* script */
   const __vue_script__$1 = script$1
@@ -563,7 +563,7 @@
         window.location.href = item.url.replace('%s', keyword)
       }
     }
-  }
+  };
 
   /* script */
   const __vue_script__$2 = script$2
@@ -648,7 +648,7 @@
   //
 
   var script$3 = {
-    name: 'tab-header',
+    name: 'all-search',
     components: {
       logo: __vue_component__,
       category: __vue_component__$1,
@@ -686,7 +686,7 @@
         this.categoryName = name
       }
     }
-  }
+  };
 
   /* script */
   const __vue_script__$3 = script$3
@@ -718,15 +718,15 @@
   /* style */
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject('data-v-04dd3b14_0', {
-      source: 'body {\n  margin-top: 36px;\n}\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=allSearch.vue.map */',
+    inject('data-v-0b3a8697_0', {
+      source: 'body {\n  margin-top: 36px;\n}\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\components\\allSearch.vue', 'allSearch.vue'],
+        'sources': ['E:\\myProject\\all-search\\src\\App.vue', 'App.vue'],
         'names': [],
-        'mappings': 'AA4DA;EACA,gBAAA;AC3DA;AD8DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC3DA;AD+DA;EACA,gBAAA;AC5DA;AD+DA;EACA,SAAA;AC7DA;ADgEA;EACA,cAAA;AC9DA;ADgEA;EACA,YAAA;EACA,iBAAA;AC9DA;;AAEA,wCAAwC',
-        'file': 'allSearch.vue',
-        'sourcesContent': ['<template>\r\n  <header id="all-search">\r\n    <logo class="logo"/>\r\n    <category :value="categoryName"\r\n              @change="changeCategory"/>\r\n    <site-menu :menus="menus"/>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport logo from \'../components/logo.vue\'\r\nimport category from \'../components/category.vue\'\r\nimport siteMenu from \'../components/menu.vue\'\r\nimport engines from \'../config/engines/index.js\'\r\n\r\nexport default {\r\n  name: \'tab-header\',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu\r\n  },\r\n  props: {\r\n    value: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: \'web\'\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const item = this.engines.find(item => item.name === this.categoryName)\r\n      return item.list\r\n    }\r\n  },\r\n  mounted () {\r\n\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit(\'menu-click\', tab)\r\n    },\r\n    handleSearch () {\r\n      this.$emit(\'search\')\r\n    },\r\n    changeCategory (name) {\r\n      this.categoryName = name\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, \'Noto Sans\', sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\', \'Noto Color Emoji\';\r\n  }\r\n\r\n  .el-tabs {\r\n    .el-tabs__header {\r\n      margin-bottom: 0;\r\n    }\r\n\r\n    .el-tabs__nav-wrap::after {\r\n      height: 0;\r\n    }\r\n\r\n    .el-tabs__nav {\r\n      margin: 0 20px;\r\n    }\r\n    .el-tabs__item {\r\n      height: $height;\r\n      line-height: $height;\r\n    }\r\n  }\r\n</style>\r\n', 'body {\n  margin-top: 36px;\n}\n\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=allSearch.vue.map */']
+        'mappings': 'AA4DA;EACA,gBAAA;AC3DA;AD8DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC3DA;AD+DA;EACA,gBAAA;AC5DA;AD+DA;EACA,SAAA;AC7DA;ADgEA;EACA,cAAA;AC9DA;ADgEA;EACA,YAAA;EACA,iBAAA;AC9DA;;AAEA,kCAAkC',
+        'file': 'App.vue',
+        'sourcesContent': ['<template>\r\n  <header id="all-search">\r\n    <logo class="logo"/>\r\n    <category :value="categoryName"\r\n              @change="changeCategory"/>\r\n    <site-menu :menus="menus"/>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport logo from \'./components/logo.vue\'\r\nimport category from \'./components/category.vue\'\r\nimport siteMenu from \'./components/menu.vue\'\r\nimport engines from \'./config/engines/index.js\'\r\n\r\nexport default {\r\n  name: \'all-search\',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu\r\n  },\r\n  props: {\r\n    value: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: \'web\'\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const item = this.engines.find(item => item.name === this.categoryName)\r\n      return item.list\r\n    }\r\n  },\r\n  mounted () {\r\n\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit(\'menu-click\', tab)\r\n    },\r\n    handleSearch () {\r\n      this.$emit(\'search\')\r\n    },\r\n    changeCategory (name) {\r\n      this.categoryName = name\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss">\r\n  @import "./assets/common";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, \'Noto Sans\', sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\', \'Noto Color Emoji\';\r\n  }\r\n\r\n  .el-tabs {\r\n    .el-tabs__header {\r\n      margin-bottom: 0;\r\n    }\r\n\r\n    .el-tabs__nav-wrap::after {\r\n      height: 0;\r\n    }\r\n\r\n    .el-tabs__nav {\r\n      margin: 0 20px;\r\n    }\r\n    .el-tabs__item {\r\n      height: $height;\r\n      line-height: $height;\r\n    }\r\n  }\r\n</style>\r\n', 'body {\n  margin-top: 36px;\n}\n\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */']
       },
       media: undefined
     })
@@ -750,77 +750,6 @@
     __vue_scope_id__$3,
     __vue_is_functional_template__$3,
     __vue_module_identifier__$3,
-    false,
-    createInjector,
-    undefined,
-    undefined
-  )
-
-  //
-
-  var script$4 = {
-    name: 'App',
-    components: {
-      allSearch: __vue_component__$3
-    },
-    data () {
-      return {}
-    },
-    mounted () {
-
-    },
-    watch: {},
-    computed: {},
-    methods: {}
-  }
-
-  /* script */
-  const __vue_script__$4 = script$4
-
-  /* template */
-  var __vue_render__$4 = function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c('all-search')
-  }
-  var __vue_staticRenderFns__$4 = []
-  __vue_render__$4._withStripped = true
-
-  /* style */
-  const __vue_inject_styles__$4 = function (inject) {
-    if (!inject) return
-    inject('data-v-31ae8f24_0', { source: 'body {\n  margin: 0;\n}\n\n/*# sourceMappingURL=App.vue.map */',
-      map: {
-        'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\App.vue', 'App.vue'],
-        'names': [],
-        'mappings': 'AAwBA;EACA,SAAA;ACvBA;;AAEA,kCAAkC',
-        'file': 'App.vue',
-        'sourcesContent': ['<template>\r\n  <all-search/>\r\n</template>\r\n\r\n<script>\r\nimport allSearch from \'./components/allSearch.vue\'\r\n\r\nexport default {\r\n  name: \'App\',\r\n  components: {\r\n    allSearch\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  mounted () {\r\n\r\n  },\r\n  watch: {},\r\n  computed: {},\r\n  methods: {}\r\n}\r\n</script>\r\n<style lang="scss">\r\n  body {\r\n    margin: 0;\r\n  }\r\n</style>\r\n', 'body {\n  margin: 0;\n}\n\n/*# sourceMappingURL=App.vue.map */']
-      },
-      media: undefined
-    })
-
-  }
-  /* scoped */
-  const __vue_scope_id__$4 = undefined
-  /* module identifier */
-  const __vue_module_identifier__$4 = undefined
-  /* functional template */
-  const __vue_is_functional_template__$4 = false
-  /* style inject SSR */
-
-  /* style inject shadow dom */
-
-
-  const __vue_component__$4 = normalizeComponent(
-    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
-    __vue_inject_styles__$4,
-    __vue_script__$4,
-    __vue_scope_id__$4,
-    __vue_is_functional_template__$4,
-    __vue_module_identifier__$4,
     false,
     createInjector,
     undefined,
@@ -851,7 +780,7 @@
           currentSite
         }
       },
-      render: h => h(__vue_component__$4)
+      render: h => h(__vue_component__$3)
     })
 
     checkBody().then(() => {
@@ -860,4 +789,4 @@
     })
   }
 
-}(Vue))
+}(Vue));
