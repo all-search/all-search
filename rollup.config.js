@@ -10,8 +10,11 @@ export default {
   output: {
     name: 'allSearch',
     file: 'build/index.js',
-    format: 'umd',
-    banner: banner
+    format: 'iife',
+    banner: banner,
+    globals: {
+      vue: 'Vue'
+    }
   },
   external: ['vue'],
   plugins: [

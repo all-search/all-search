@@ -9,8 +9,7 @@ export default [
     name: '谷歌搜索',
     blank: true,
     // url: 'https://www.google.com/cse?q=%s&newwindow=1&cx=006100883259189159113%3Atwgohm0sz8q',
-    url: 'https://cse.google.com/?q=%s&newwindow=1&cx=006100883259189159113%3Atwgohm0sz8q',
-    favicon: icon.google
+    url: 'https://cse.google.com/?q=%s&newwindow=1&cx=006100883259189159113%3Atwgohm0sz8q'
   },
   {
     name: '动漫花园',

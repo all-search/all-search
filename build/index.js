@@ -16,11 +16,7 @@
 // ==/UserScript==
 
 
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('vue')) :
-    typeof define === 'function' && define.amd ? define(['vue'], factory) :
-      (global = global || self, factory(global.Vue))
-}(this, (function (Vue) {
+(function (Vue) {
   'use strict'
 
   Vue = Vue && Object.prototype.hasOwnProperty.call(Vue, 'default') ? Vue['default'] : Vue
@@ -294,7 +290,7 @@
       nameZh: 'Yandex',
       url: 'https://yandex.com/search/?text=%s'
     }
-  ];
+  ]
 
   var developer = [
     {
@@ -325,7 +321,7 @@
       url: 'https://greasyfork.org/scripts?q=%s&utf8=✓',
       blank: true
     }
-  ];
+  ]
 
   var engines = [
     {
@@ -338,7 +334,7 @@
       name: 'developer',
       list: developer
     }
-  ];
+  ]
 
   //
 
@@ -373,7 +369,7 @@
         this.show = false
       }
     }
-  };
+  }
 
   /* script */
   const __vue_script__$1 = script$1
@@ -567,7 +563,7 @@
         window.location.href = item.url.replace('%s', keyword)
       }
     }
-  };
+  }
 
   /* script */
   const __vue_script__$2 = script$2
@@ -690,7 +686,7 @@
         this.categoryName = name
       }
     }
-  };
+  }
 
   /* script */
   const __vue_script__$3 = script$3
@@ -864,4 +860,4 @@
     })
   }
 
-})));
+}(Vue))
