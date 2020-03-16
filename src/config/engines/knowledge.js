@@ -12,13 +12,11 @@ export default [
   {
     name: '百度百科',
     url: 'http://baike.baidu.com/search/word?pic=1&sug=1&word=%s',
-    favicon: icon.baidu,
     disable: true
   },
   {
     name: '百度文库',
-    url: 'http://wenku.baidu.com/search?word=%s&ie=utf-8',
-    favicon: icon.baidu
+    url: 'http://wenku.baidu.com/search?word=%s&ie=utf-8'
   },
   {
     name: '豆丁文档',

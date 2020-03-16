@@ -12,7 +12,6 @@ export default [
   {
     name: '百度贴吧',
     url: 'http://tieba.baidu.com/f?kw=%s&ie=utf-8',
-    favicon: icon.baidu,
     blank: true
   },
   {

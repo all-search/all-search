@@ -27,8 +27,7 @@ export default [
   },
   {
     name: '百度音乐',
-    url: 'http://music.baidu.com/search?ie=utf-8&oe=utf-8&key=%s',
-    favicon: icon.baidu
+    url: 'http://music.baidu.com/search?ie=utf-8&oe=utf-8&key=%s'
   },
   {
     name: '酷我音乐',

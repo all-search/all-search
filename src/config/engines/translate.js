@@ -17,8 +17,7 @@ export default [
   },
   {
     name: '必应翻译',
-    url: 'http://cn.bing.com/dict/search?q=%s',
-    favicon: icon.bing
+    url: 'http://cn.bing.com/dict/search?q=%s'
   },
   {
     name: 'Forvo发音',
