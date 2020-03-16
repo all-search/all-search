@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search
-// @version      0.1.1d
+// @version      0.1.1f
 // @description  在各个引擎之间跳转的顶部菜单，借鉴自searchEngineJump
 // @author       endday
 // @include      *
@@ -9,8 +9,10 @@
 
 // @require      https://cdn.jsdelivr.net/npm/vue
 // @run-at       document-body
+
 // @grant        GM_getValue
 // @grant        GM_setValue
+
 // ==/UserScript==
 
 
@@ -33,7 +35,7 @@
 
   var script = {
     name: 'logo'
-  }
+  };
 
   function normalizeComponent (template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
     if (typeof shadowMode !== 'boolean') {
@@ -82,7 +84,8 @@
       // used by ssr in case component is cached and beforeCreate
       // never gets called
       options._ssrRegister = hook
-    } else if (style) {
+    }
+    else if (style) {
       hook = shadowMode
         ? function (context) {
           style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot))
@@ -99,7 +102,8 @@
           hook.call(context)
           return originalRender(h, context)
         }
-      } else {
+      }
+      else {
         // inject component registration as beforeCreate hook
         const existing = options.beforeCreate
         options.beforeCreate = existing ? [].concat(existing, hook) : [hook]
@@ -109,7 +113,7 @@
   }
 
   const isOldIE = typeof navigator !== 'undefined' &&
-    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase())
+    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
 
   function createInjector (context) {
     return (id, style) => addStyle(id, style)
@@ -149,7 +153,8 @@
         style.element.styleSheet.cssText = style.styles
           .filter(Boolean)
           .join('\n')
-      } else {
+      }
+      else {
         const index = style.ids.size - 1
         const textNode = document.createTextNode(code)
         const nodes = style.element.childNodes
@@ -172,7 +177,7 @@
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _vm._m(0)
-  }
+  };
   var __vue_staticRenderFns__ = [
     function () {
       var _vm = this
@@ -194,17 +199,16 @@
         ]
       )
     }
-  ]
+  ];
   __vue_render__._withStripped = true
 
   /* style */
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject('data-v-4cf5fe12_0', {
-      source: '.title[data-v-4cf5fe12] {\n  text-decoration: none;\n}\n.title .title-inner[data-v-4cf5fe12] {\n  font-size: 18px;\n  width: 120px;\n  height: 36px;\n  line-height: 36px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */',
+    inject('data-v-379cea1e_0', { source: '.title[data-v-379cea1e] {\n  text-decoration: none;\n}\n.title .title-inner[data-v-379cea1e] {\n  font-size: 18px;\n  width: 120px;\n  height: 36px;\n  line-height: 36px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\components\\logo.vue', 'logo.vue'],
+        'sources': ['E:\\project\\all-search\\src\\components\\logo.vue', 'logo.vue'],
         'names': [],
         'mappings': 'AAmBA;EACA,qBAAA;AClBA;ADoBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;AClBA;;AAEA,mCAAmC',
         'file': 'logo.vue',
@@ -215,7 +219,7 @@
 
   }
   /* scoped */
-  const __vue_scope_id__ = 'data-v-4cf5fe12'
+  const __vue_scope_id__ = 'data-v-379cea1e'
   /* module identifier */
   const __vue_module_identifier__ = undefined
   /* functional template */
@@ -240,9 +244,14 @@
 
   var search = [
     {
-      name: '百度',
+      name: 'baidu',
       nameZh: '百度',
       url: 'https://www.baidu.com/s?wd=%s&ie=utf-8'
+    },
+    {
+      name: 'google',
+      nameZh: '谷歌',
+      url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8'
     },
     {
       name: 'bing',
@@ -270,7 +279,7 @@
       name: 'sogou',
       nameZh: '搜狗',
       url: 'https://www.sogou.com/web?query=%s',
-      disable: true
+      disable: false
     },
     {
       name: 'startpage',
@@ -286,7 +295,8 @@
     {
       name: 'Yandex',
       nameZh: 'Yandex',
-      url: 'https://yandex.com/search/?text=%s'
+      url: 'https://yandex.com/search/?text=%s',
+      disabled: true
     }
   ];
 
@@ -352,7 +362,12 @@
     },
     computed: {
       nameZh () {
-        return this.engines.find(item => item.name === this.value).nameZh
+        const i = this.engines.findIndex(item => item.name === this.value)
+        if (i > -1) {
+          return this.engines[i].nameZh
+        } else {
+          return this.engines[0].nameZh
+        }
       }
     },
     methods: {
@@ -409,22 +424,21 @@
         0
       )
     ])
-  }
+  };
   var __vue_staticRenderFns__$1 = []
   __vue_render__$1._withStripped = true
 
   /* style */
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject('data-v-943d1922_0', {
-      source: '.all-search-select {\n  position: relative;\n}\n.all-search-select ul li {\n  list-style: none;\n}\n.all-search-select .content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  padding-left: 10px;\n  position: relative;\n}\n.all-search-select .content :after {\n  position: absolute;\n  right: 10px;\n  top: 0;\n  width: 10px;\n  height: 10px;\n  border: #666 solid;\n  border-width: 1px 1px 0 0;\n  transform: rotate(135deg);\n  margin-bottom: 10px;\n}\n.all-search-select .list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.all-search-select .list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.all-search-select .list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */',
+    inject('data-v-67b587fd_0', { source: '.all-search-select {\n  position: relative;\n}\n.all-search-select ul li {\n  list-style: none;\n}\n.all-search-select .content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  padding-left: 10px;\n  position: relative;\n}\n.all-search-select .content :after {\n  position: absolute;\n  right: 10px;\n  top: 0;\n  width: 10px;\n  height: 10px;\n  border: #666 solid;\n  border-width: 1px 1px 0 0;\n  transform: rotate(135deg);\n  margin-bottom: 10px;\n}\n.all-search-select .list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.all-search-select .list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.all-search-select .list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\components\\category.vue', 'category.vue'],
+        'sources': ['E:\\project\\all-search\\src\\components\\category.vue', 'category.vue'],
         'names': [],
-        'mappings': 'AA0DA;EACA,kBAAA;ACzDA;AD0DA;EACA,gBAAA;ACxDA;AD2DA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;ACzDA;AD0DA;EACA,kBAAA;EACA,WAAA;EACA,MAAA;EACA,WAAA;EACA,YAAA;EACA,kBAAA;EACA,yBAAA;EACA,yBAAA;EACA,mBAAA;ACxDA;AD2DA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;ACzDA;AD0DA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;ACxDA;ADyDA;EACA,yBAAA;ACvDA;;AAEA,uCAAuC',
+        'mappings': 'AA+DA;EACA,kBAAA;AC9DA;AD+DA;EACA,gBAAA;AC7DA;ADgEA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;AC9DA;AD+DA;EACA,kBAAA;EACA,WAAA;EACA,MAAA;EACA,WAAA;EACA,YAAA;EACA,kBAAA;EACA,yBAAA;EACA,yBAAA;EACA,mBAAA;AC7DA;ADgEA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;AC9DA;AD+DA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;AC7DA;AD8DA;EACA,yBAAA;AC5DA;;AAEA,uCAAuC',
         'file': 'category.vue',
-        'sourcesContent': ['<template>\r\n  <div class="all-search-select">\r\n    <div class="content"\r\n         @click="openValue">\r\n      <span v-text="nameZh"></span>\r\n    </div>\r\n    <ul class="list"\r\n        v-show="show">\r\n      <li\r\n        v-for="(item,index) in engines"\r\n        :key="item.index"\r\n        v-text="item.nameZh"\r\n        @click="selectCategory(index,item)">\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport engines from \'../config/engines\'\r\n\r\nexport default {\r\n  name: \'category\',\r\n  props: {\r\n    value: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      show: false\r\n    }\r\n  },\r\n  computed: {\r\n    nameZh () {\r\n      return this.engines.find(item => item.name === this.value).nameZh\r\n    }\r\n  },\r\n  methods: {\r\n    handleChange (val) {\r\n      this.$emit(\'change\', val)\r\n    },\r\n    openValue () {\r\n      this.show = !this.show\r\n    },\r\n    selectCategory (index, item) {\r\n      this.handleChange(item.name)\r\n      this.show = false\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .all-search-select {\r\n    position: relative;\r\n    ul li {\r\n      list-style: none;\r\n    }\r\n\r\n    .content {\r\n      width: 100px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-size: 14px;\r\n      padding-left: 10px;\r\n      position: relative;\r\n      :after {\r\n        position: absolute;\r\n        right: 10px;\r\n        top: 0;\r\n        width: 10px;\r\n        height: 10px;\r\n        border: #666 solid;\r\n        border-width: 1px 1px 0 0;\r\n        transform: rotate(135deg);\r\n        margin-bottom: 10px;\r\n      }\r\n    }\r\n    .list {\r\n      padding: 4px 0;\r\n      min-width: 100px;\r\n      border: 1px solid #e4e7ed;\r\n      border-radius: 4px;\r\n      background-color: #fff;\r\n      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);\r\n      box-sizing: border-box;\r\n      margin: 5px 0;\r\n      position: absolute;\r\n      li {\r\n        font-size: 14px;\r\n        padding: 0 20px;\r\n        position: relative;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n        color: #606266;\r\n        height: 34px;\r\n        line-height: 34px;\r\n        box-sizing: border-box;\r\n        cursor: pointer;\r\n        &:hover {\r\n          background-color: #f5f7fa;\r\n        }\r\n      }\r\n    }\r\n  }\r\n</style>\r\n', '.all-search-select {\n  position: relative;\n}\n.all-search-select ul li {\n  list-style: none;\n}\n.all-search-select .content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  padding-left: 10px;\n  position: relative;\n}\n.all-search-select .content :after {\n  position: absolute;\n  right: 10px;\n  top: 0;\n  width: 10px;\n  height: 10px;\n  border: #666 solid;\n  border-width: 1px 1px 0 0;\n  transform: rotate(135deg);\n  margin-bottom: 10px;\n}\n.all-search-select .list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.all-search-select .list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.all-search-select .list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */']
+        'sourcesContent': ['<template>\r\n  <div class="all-search-select">\r\n    <div class="content"\r\n         @click="openValue">\r\n      <span v-text="nameZh"></span>\r\n    </div>\r\n    <ul class="list"\r\n        v-show="show">\r\n      <li\r\n        v-for="(item,index) in engines"\r\n        :key="item.index"\r\n        v-text="item.nameZh"\r\n        @click="selectCategory(index,item)">\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport engines from \'../config/engines\'\r\n\r\nexport default {\r\n  name: \'category\',\r\n  props: {\r\n    value: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      show: false\r\n    }\r\n  },\r\n  computed: {\r\n    nameZh () {\r\n      const i = this.engines.findIndex(item => item.name === this.value)\r\n      if (i > -1) {\r\n        return this.engines[i].nameZh\r\n      } else {\r\n        return this.engines[0].nameZh\r\n      }\r\n    }\r\n  },\r\n  methods: {\r\n    handleChange (val) {\r\n      this.$emit(\'change\', val)\r\n    },\r\n    openValue () {\r\n      this.show = !this.show\r\n    },\r\n    selectCategory (index, item) {\r\n      this.handleChange(item.name)\r\n      this.show = false\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .all-search-select {\r\n    position: relative;\r\n    ul li {\r\n      list-style: none;\r\n    }\r\n\r\n    .content {\r\n      width: 100px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-size: 14px;\r\n      padding-left: 10px;\r\n      position: relative;\r\n      :after {\r\n        position: absolute;\r\n        right: 10px;\r\n        top: 0;\r\n        width: 10px;\r\n        height: 10px;\r\n        border: #666 solid;\r\n        border-width: 1px 1px 0 0;\r\n        transform: rotate(135deg);\r\n        margin-bottom: 10px;\r\n      }\r\n    }\r\n    .list {\r\n      padding: 4px 0;\r\n      min-width: 100px;\r\n      border: 1px solid #e4e7ed;\r\n      border-radius: 4px;\r\n      background-color: #fff;\r\n      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);\r\n      box-sizing: border-box;\r\n      margin: 5px 0;\r\n      position: absolute;\r\n      li {\r\n        font-size: 14px;\r\n        padding: 0 20px;\r\n        position: relative;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n        color: #606266;\r\n        height: 34px;\r\n        line-height: 34px;\r\n        box-sizing: border-box;\r\n        cursor: pointer;\r\n        &:hover {\r\n          background-color: #f5f7fa;\r\n        }\r\n      }\r\n    }\r\n  }\r\n</style>\r\n', '.all-search-select {\n  position: relative;\n}\n.all-search-select ul li {\n  list-style: none;\n}\n.all-search-select .content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  padding-left: 10px;\n  position: relative;\n}\n.all-search-select .content :after {\n  position: absolute;\n  right: 10px;\n  top: 0;\n  width: 10px;\n  height: 10px;\n  border: #666 solid;\n  border-width: 1px 1px 0 0;\n  transform: rotate(135deg);\n  margin-bottom: 10px;\n}\n.all-search-select .list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.all-search-select .list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.all-search-select .list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */']
       },
       media: undefined
     })
@@ -456,7 +470,7 @@
 
   function getKeyword () {
     const el = document.querySelector('input[type=\'search\'],input[type=\'text\'][autocomplete=\'off\'],input[autocomplete=\'off\']:not([type])') ||
-      document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])')
+      document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])');
     if (el) {
       if (el.nodeName === 'INPUT' || el.localName === 'textarea') {
         return el.value
@@ -506,8 +520,8 @@
       if (!currentSite) {
         currentSite = module.list.find(item => {
           const urlObj = parseUrl(item.url)
-          return urlObj.hostname === window.location.hostname
-        })
+          return window.location.hostname.includes(urlObj.hostname)
+        });
       }
     }
     return currentSite
@@ -529,9 +543,19 @@
             clearInterval(id)
             reject(new Error('timeOut'))
           }
-        }, 100)
+        }, 100);
       }
     })
+  }
+
+  function getSession (name) {
+    // eslint-disable-next-line
+    return GM_getValue(name)
+  }
+
+  function setSession (name, value) {
+    // eslint-disable-next-line
+    GM_setValue(name, value)
   }
 
   //
@@ -598,18 +622,17 @@
         0
       )
     ])
-  }
+  };
   var __vue_staticRenderFns__$2 = []
   __vue_render__$2._withStripped = true
 
   /* style */
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject('data-v-0ae3a423_0', {
-      source: '.menu-container[data-v-0ae3a423] {\n  display: flex;\n}\n.menu[data-v-0ae3a423] {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.menu-submenu[data-v-0ae3a423] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.menu-submenu-selected[data-v-0ae3a423] {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n.menu-submenu-title[data-v-0ae3a423] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
+    inject('data-v-b3cefad2_0', { source: '.menu-container[data-v-b3cefad2] {\n  display: flex;\n}\n.menu[data-v-b3cefad2] {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.menu-submenu[data-v-b3cefad2] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.menu-submenu-selected[data-v-b3cefad2] {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n.menu-submenu-title[data-v-b3cefad2] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\components\\menu.vue', 'menu.vue'],
+        'sources': ['E:\\project\\all-search\\src\\components\\menu.vue', 'menu.vue'],
         'names': [],
         'mappings': 'AAiDA;EACA,aAAA;AChDA;ADmDA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AChDA;ADmDA;EACA,kBAAA;EACA,QAAA;EACA,qBAAA;EACA,sBAAA;AChDA;ADmDA;EACA,cAAA;EACA,gCAAA;AChDA;ADmDA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AChDA;;AAEA,mCAAmC',
         'file': 'menu.vue',
@@ -620,7 +643,7 @@
 
   }
   /* scoped */
-  const __vue_scope_id__$2 = 'data-v-0ae3a423'
+  const __vue_scope_id__$2 = 'data-v-b3cefad2'
   /* module identifier */
   const __vue_module_identifier__$2 = undefined
   /* functional template */
@@ -652,35 +675,30 @@
       category: __vue_component__$1,
       siteMenu: __vue_component__$2
     },
-    props: {
-      value: {
-        type: String,
-        default: ''
-      }
-    },
     data () {
       return {
         engines,
-        categoryName: 'web'
+        categoryName: 'search'
       }
     },
     computed: {
       menus () {
-        const item = this.engines.find(item => item.name === this.categoryName)
-        return item.list
+        const i = this.engines.findIndex(item => item.name === this.categoryName)
+        if (i > -1) {
+          return this.engines[i].list
+        }
+        return this.engines[0].list
       }
     },
-    mounted () {
-
+    created () {
+      this.categoryName = getSession('__allSearch__categoryName') || this.categoryName
     },
     methods: {
       handleClick (tab) {
         this.$emit('menu-click', tab)
       },
-      handleSearch () {
-        this.$emit('search')
-      },
       changeCategory (name) {
+        setSession('__allSearch__categoryName', name)
         this.categoryName = name
       }
     }
@@ -698,7 +716,7 @@
       'header',
       { attrs: { id: 'all-search' } },
       [
-        _c('logo', { staticClass: 'logo' }),
+        _c('logo'),
         _vm._v(' '),
         _c('category', {
           attrs: { value: _vm.categoryName },
@@ -709,22 +727,21 @@
       ],
       1
     )
-  }
+  };
   var __vue_staticRenderFns__$3 = []
   __vue_render__$3._withStripped = true
 
   /* style */
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject('data-v-0b3a8697_0', {
-      source: 'body {\n  margin-top: 36px;\n}\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
+    inject('data-v-5316ad40_0', { source: 'body {\n  margin-top: 36px;\n}\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\App.vue', 'App.vue'],
+        'sources': ['E:\\project\\all-search\\src\\App.vue', 'App.vue'],
         'names': [],
-        'mappings': 'AA4DA;EACA,gBAAA;AC3DA;AD8DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC3DA;AD+DA;EACA,gBAAA;AC5DA;AD+DA;EACA,SAAA;AC7DA;ADgEA;EACA,cAAA;AC9DA;ADgEA;EACA,YAAA;EACA,iBAAA;AC9DA;;AAEA,kCAAkC',
+        'mappings': 'AAwDA;EACA,gBAAA;ACvDA;AD0DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;ACvDA;AD2DA;EACA,gBAAA;ACxDA;AD2DA;EACA,SAAA;ACzDA;AD4DA;EACA,cAAA;AC1DA;AD4DA;EACA,YAAA;EACA,iBAAA;AC1DA;;AAEA,kCAAkC',
         'file': 'App.vue',
-        'sourcesContent': ['<template>\r\n  <header id="all-search">\r\n    <logo class="logo"/>\r\n    <category :value="categoryName"\r\n              @change="changeCategory"/>\r\n    <site-menu :menus="menus"/>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport logo from \'./components/logo.vue\'\r\nimport category from \'./components/category.vue\'\r\nimport siteMenu from \'./components/menu.vue\'\r\nimport engines from \'./config/engines/index.js\'\r\n\r\nexport default {\r\n  name: \'all-search\',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu\r\n  },\r\n  props: {\r\n    value: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: \'web\'\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const item = this.engines.find(item => item.name === this.categoryName)\r\n      return item.list\r\n    }\r\n  },\r\n  mounted () {\r\n\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit(\'menu-click\', tab)\r\n    },\r\n    handleSearch () {\r\n      this.$emit(\'search\')\r\n    },\r\n    changeCategory (name) {\r\n      this.categoryName = name\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss">\r\n  @import "./assets/common";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, \'Noto Sans\', sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\', \'Noto Color Emoji\';\r\n  }\r\n\r\n  .el-tabs {\r\n    .el-tabs__header {\r\n      margin-bottom: 0;\r\n    }\r\n\r\n    .el-tabs__nav-wrap::after {\r\n      height: 0;\r\n    }\r\n\r\n    .el-tabs__nav {\r\n      margin: 0 20px;\r\n    }\r\n    .el-tabs__item {\r\n      height: $height;\r\n      line-height: $height;\r\n    }\r\n  }\r\n</style>\r\n', 'body {\n  margin-top: 36px;\n}\n\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */']
+        'sourcesContent': ['<template>\r\n  <header id="all-search">\r\n    <logo/>\r\n    <category :value="categoryName"\r\n              @change="changeCategory"/>\r\n    <site-menu :menus="menus"/>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport logo from \'./components/logo.vue\'\r\nimport category from \'./components/category.vue\'\r\nimport siteMenu from \'./components/menu.vue\'\r\nimport engines from \'./config/engines/index.js\'\r\nimport { getSession, setSession } from \'./util\'\r\n\r\nexport default {\r\n  name: \'all-search\',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: \'search\'\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list\r\n      }\r\n      return this.engines[0].list\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession(\'__allSearch__categoryName\') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit(\'menu-click\', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession(\'__allSearch__categoryName\', name)\r\n      this.categoryName = name\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss">\r\n  @import "./assets/common";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, \'Noto Sans\', sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\', \'Noto Color Emoji\';\r\n  }\r\n\r\n  .el-tabs {\r\n    .el-tabs__header {\r\n      margin-bottom: 0;\r\n    }\r\n\r\n    .el-tabs__nav-wrap::after {\r\n      height: 0;\r\n    }\r\n\r\n    .el-tabs__nav {\r\n      margin: 0 20px;\r\n    }\r\n    .el-tabs__item {\r\n      height: $height;\r\n      line-height: $height;\r\n    }\r\n  }\r\n</style>\r\n', 'body {\n  margin-top: 36px;\n}\n\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */']
       },
       media: undefined
     })
@@ -758,8 +775,7 @@
     'endday.github.io',
     'endday.gitee.io',
     'localhost'
-  ]
-
+  ];
   function isWhiteList () {
     return whiteList.findIndex(url => url === window.location.hostname) > -1
   }
@@ -779,12 +795,12 @@
         }
       },
       render: h => h(__vue_component__$3)
-    })
+    });
 
     checkBody().then(() => {
       document.body.insertBefore(el, document.body.childNodes[0])
       app.$mount('#all-search')
-    })
+    });
   }
 
 }(Vue));
