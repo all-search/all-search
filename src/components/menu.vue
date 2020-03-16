@@ -34,7 +34,7 @@ export default {
       this.$emit('click', item)
       let keyword = ''
       if (this.$root.currentSite.keyword) {
-
+        keyword = this.$root.currentSite.keyword()
       } else {
         keyword = getKeyword()
       }

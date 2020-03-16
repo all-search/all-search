@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search
-// @version      0.1.1c
+// @version      0.1.1d
 // @description  在各个引擎之间跳转的顶部菜单，借鉴自searchEngineJump
 // @author       endday
 // @include      *
@@ -294,7 +294,7 @@
       nameZh: 'Yandex',
       url: 'https://yandex.com/search/?text=%s'
     }
-  ]
+  ];
 
   var developer = [
     {
@@ -325,7 +325,7 @@
       url: 'https://greasyfork.org/scripts?q=%s&utf8=✓',
       blank: true
     }
-  ]
+  ];
 
   var engines = [
     {
@@ -338,7 +338,7 @@
       name: 'developer',
       list: developer
     }
-  ]
+  ];
 
   //
 
@@ -373,7 +373,7 @@
         this.show = false
       }
     }
-  }
+  };
 
   /* script */
   const __vue_script__$1 = script$1
@@ -559,14 +559,15 @@
       handleClick (item) {
         this.$emit('click', item)
         let keyword = ''
-        if (this.$root.currentSite.keyword)  else
-        {
+        if (this.$root.currentSite.keyword) {
+          keyword = this.$root.currentSite.keyword()
+        } else {
           keyword = getKeyword()
         }
         window.location.href = item.url.replace('%s', keyword)
       }
     }
-  }
+  };
 
   /* script */
   const __vue_script__$2 = script$2
@@ -610,22 +611,22 @@
   /* style */
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject('data-v-24ec2621_0', {
-      source: '.menu-container[data-v-24ec2621] {\n  display: flex;\n}\n.menu[data-v-24ec2621] {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.menu-submenu[data-v-24ec2621] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.menu-submenu-selected[data-v-24ec2621] {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n.menu-submenu-title[data-v-24ec2621] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
+    inject('data-v-0ae3a423_0', {
+      source: '.menu-container[data-v-0ae3a423] {\n  display: flex;\n}\n.menu[data-v-0ae3a423] {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.menu-submenu[data-v-0ae3a423] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.menu-submenu-selected[data-v-0ae3a423] {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n.menu-submenu-title[data-v-0ae3a423] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
       map: {
         'version': 3,
         'sources': ['E:\\myProject\\all-search\\src\\components\\menu.vue', 'menu.vue'],
         'names': [],
         'mappings': 'AAiDA;EACA,aAAA;AChDA;ADmDA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AChDA;ADmDA;EACA,kBAAA;EACA,QAAA;EACA,qBAAA;EACA,sBAAA;AChDA;ADmDA;EACA,cAAA;EACA,gCAAA;AChDA;ADmDA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AChDA;;AAEA,mCAAmC',
         'file': 'menu.vue',
-        'sourcesContent': ['<template>\r\n  <div class="menu-container">\r\n    <ul class="menu">\r\n      <li class="menu-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)">\r\n        <div class="menu-submenu-title"\r\n             v-text="item.nameZh">\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      let keyword = \'\'\r\n      if (this.$root.currentSite.keyword) {\r\n\r\n      } else {\r\n        keyword = getKeyword()\r\n      }\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss" scoped>\r\n  @import "../assets/common";\r\n\r\n  .menu-container {\r\n    display: flex;\r\n  }\r\n\r\n  .menu {\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .menu-submenu {\r\n    position: relative;\r\n    top: 1px;\r\n    display: inline-block;\r\n    vertical-align: bottom;\r\n  }\r\n\r\n  .menu-submenu-selected {\r\n    color: #1890ff;\r\n    border-bottom: 2px solid #1890ff;\r\n  }\r\n\r\n  .menu-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n  }\r\n</style>\r\n', '.menu-container {\n  display: flex;\n}\n\n.menu {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.menu-submenu {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n\n.menu-submenu-selected {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n\n.menu-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */']
+        'sourcesContent': ['<template>\r\n  <div class="menu-container">\r\n    <ul class="menu">\r\n      <li class="menu-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)">\r\n        <div class="menu-submenu-title"\r\n             v-text="item.nameZh">\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      let keyword = \'\'\r\n      if (this.$root.currentSite.keyword) {\r\n        keyword = this.$root.currentSite.keyword()\r\n      } else {\r\n        keyword = getKeyword()\r\n      }\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss" scoped>\r\n  @import "../assets/common";\r\n\r\n  .menu-container {\r\n    display: flex;\r\n  }\r\n\r\n  .menu {\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .menu-submenu {\r\n    position: relative;\r\n    top: 1px;\r\n    display: inline-block;\r\n    vertical-align: bottom;\r\n  }\r\n\r\n  .menu-submenu-selected {\r\n    color: #1890ff;\r\n    border-bottom: 2px solid #1890ff;\r\n  }\r\n\r\n  .menu-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n  }\r\n</style>\r\n', '.menu-container {\n  display: flex;\n}\n\n.menu {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.menu-submenu {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n\n.menu-submenu-selected {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n\n.menu-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */']
       },
       media: undefined
     })
 
   }
   /* scoped */
-  const __vue_scope_id__$2 = 'data-v-24ec2621'
+  const __vue_scope_id__$2 = 'data-v-0ae3a423'
   /* module identifier */
   const __vue_module_identifier__$2 = undefined
   /* functional template */
@@ -689,7 +690,7 @@
         this.categoryName = name
       }
     }
-  }
+  };
 
   /* script */
   const __vue_script__$3 = script$3
@@ -793,8 +794,7 @@
   /* style */
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject('data-v-31ae8f24_0', {
-      source: 'body {\n  margin: 0;\n}\n\n/*# sourceMappingURL=App.vue.map */',
+    inject('data-v-31ae8f24_0', { source: 'body {\n  margin: 0;\n}\n\n/*# sourceMappingURL=App.vue.map */',
       map: {
         'version': 3,
         'sources': ['E:\\myProject\\all-search\\src\\App.vue', 'App.vue'],
@@ -864,4 +864,4 @@
     })
   }
 
-})))
+})));
