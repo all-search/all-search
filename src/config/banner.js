@@ -15,9 +15,9 @@ const banner =
 
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @grant        GM_addStyle
 
 // ==/UserScript==
-
 `
 
 export default banner

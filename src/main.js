@@ -21,7 +21,12 @@ if (currentSite || isWhiteList()) {
   })
 
   checkBody().then(() => {
-    document.body.insertBefore(el, document.body.childNodes[0])
-    app.$mount('#all-search')
+    const mountEL = document.body.parentElement.insertBefore(el, document.body)
+    // document.body.insertBefore(el, document.body.childNodes[0])
+    app.$mount(mountEL)
+    if (currentSite.styleString) {
+      // eslint-disable-next-line no-undef
+      GM_addStyle(currentSite.styleString)
+    }
   })
 }
