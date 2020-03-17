@@ -24,7 +24,11 @@ if (currentSite || isWhiteList()) {
     const mountEL = document.body.parentElement.insertBefore(el, document.body)
     // document.body.insertBefore(el, document.body.childNodes[0])
     app.$mount(mountEL)
-    if (currentSite.styleString) {
+    if (
+      currentSite &&
+      currentSite.styleString &&
+      window.location.hostname !== 'localhost'
+    ) {
       // eslint-disable-next-line no-undef
       GM_addStyle(currentSite.styleString)
     }

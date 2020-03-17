@@ -72,18 +72,15 @@ export default {
       height: $height;
       line-height: $height;
       font-size: 14px;
+      cursor: pointer;
       padding-left: 10px;
       position: relative;
-      :after {
+      &::after {
+        content: ' ▾';
         position: absolute;
-        right: 10px;
-        top: 0;
-        width: 10px;
-        height: 10px;
-        border: #666 solid;
-        border-width: 1px 1px 0 0;
-        transform: rotate(135deg);
-        margin-bottom: 10px;
+        right: 12px;
+        font-size: 24px;
+        color: #999;
       }
     }
     .list {

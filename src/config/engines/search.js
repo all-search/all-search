@@ -47,7 +47,8 @@ export default [
   {
     name: 'mijisou',
     nameZh: '秘迹搜索',
-    url: 'https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN'
+    url: 'https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN',
+    styleString: '.search-page{top: 36px} .searx-navbar{top: 48px!important;}'
   },
   {
     name: 'Yandex',

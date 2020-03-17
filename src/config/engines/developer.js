@@ -5,6 +5,16 @@ export default [
     url: 'https://developer.mozilla.org/zh-CN/search?q=%s'
   },
   {
+    name: 'stackoverflow',
+    nameZh: 'stackoverflow',
+    url: 'https://stackoverflow.com/search?q=%s'
+  },
+  {
+    name: 'juejin',
+    nameZh: '掘金',
+    url: 'https://juejin.im/search?query=%s&type=all'
+  },
+  {
     name: 'Can I Use',
     nameZh: 'Can I Use',
     url: 'http://caniuse.com/#search=%s',

@@ -59,7 +59,8 @@ export function getCurrentSite () {
     if (!currentSite) {
       currentSite = module.list.find(item => {
         const urlObj = parseUrl(item.url)
-        return window.location.hostname.includes(urlObj.hostname)
+        return window.location.hostname === urlObj.hostname &&
+          window.location.pathname === urlObj.pathname
       })
     }
   }
@@ -88,11 +89,16 @@ export function checkBody () {
 }
 
 export function getSession (name) {
+  if (window.location.hostname === 'localhost') {
+    return null
+  }
   // eslint-disable-next-line
   return GM_getValue(name)
 }
 
 export function setSession (name, value) {
-// eslint-disable-next-line
-  GM_setValue(name, value)
+  if (window.location.hostname !== 'localhost') {
+    // eslint-disable-next-line
+    GM_setValue(name, value)
+  }
 }
