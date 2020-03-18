@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { checkBody, getCurrentSite } from './util'
+import { checkBody, getCurrentSite, addStyle } from './util'
 import isWhiteList from './config/whiteList'
 
 Vue.config.productionTip = false
@@ -26,11 +26,9 @@ if (currentSite || isWhiteList()) {
     app.$mount(mountEL)
     if (
       currentSite &&
-      currentSite.styleString &&
-      window.location.hostname !== 'localhost'
+      currentSite.styleString
     ) {
-      // eslint-disable-next-line no-undef
-      GM_addStyle(currentSite.styleString)
+      addStyle(currentSite.styleString)
     }
   })
 }

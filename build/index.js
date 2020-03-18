@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search
-// @version      0.1.2b
+// @version      0.1.2c
 // @description  在各个引擎之间跳转的顶部菜单，借鉴自searchEngineJump
 // @author       endday
 // @include      *
@@ -35,7 +35,7 @@
 
   var script = {
     name: 'logo'
-  };
+  }
 
   function normalizeComponent (template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
     if (typeof shadowMode !== 'boolean') {
@@ -84,8 +84,7 @@
       // used by ssr in case component is cached and beforeCreate
       // never gets called
       options._ssrRegister = hook
-    }
-    else if (style) {
+    } else if (style) {
       hook = shadowMode
         ? function (context) {
           style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot))
@@ -102,8 +101,7 @@
           hook.call(context)
           return originalRender(h, context)
         }
-      }
-      else {
+      } else {
         // inject component registration as beforeCreate hook
         const existing = options.beforeCreate
         options.beforeCreate = existing ? [].concat(existing, hook) : [hook]
@@ -113,7 +111,7 @@
   }
 
   const isOldIE = typeof navigator !== 'undefined' &&
-    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase())
 
   function createInjector (context) {
     return (id, style) => addStyle(id, style)
@@ -153,8 +151,7 @@
         style.element.styleSheet.cssText = style.styles
           .filter(Boolean)
           .join('\n')
-      }
-      else {
+      } else {
         const index = style.ids.size - 1
         const textNode = document.createTextNode(code)
         const nodes = style.element.childNodes
@@ -177,7 +174,7 @@
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _vm._m(0)
-  };
+  }
   var __vue_staticRenderFns__ = [
     function () {
       var _vm = this
@@ -199,16 +196,17 @@
         ]
       )
     }
-  ];
+  ]
   __vue_render__._withStripped = true
 
   /* style */
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject('data-v-379cea1e_0', { source: '.title[data-v-379cea1e] {\n  text-decoration: none;\n}\n.title .title-inner[data-v-379cea1e] {\n  font-size: 18px;\n  width: 120px;\n  height: 36px;\n  line-height: 36px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */',
+    inject('data-v-4cf5fe12_0', {
+      source: '.title[data-v-4cf5fe12] {\n  text-decoration: none;\n}\n.title .title-inner[data-v-4cf5fe12] {\n  font-size: 18px;\n  width: 120px;\n  height: 36px;\n  line-height: 36px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\project\\all-search\\src\\components\\logo.vue', 'logo.vue'],
+        'sources': ['E:\\myProject\\all-search\\src\\components\\logo.vue', 'logo.vue'],
         'names': [],
         'mappings': 'AAmBA;EACA,qBAAA;AClBA;ADoBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;AClBA;;AAEA,mCAAmC',
         'file': 'logo.vue',
@@ -219,7 +217,7 @@
 
   }
   /* scoped */
-  const __vue_scope_id__ = 'data-v-379cea1e'
+  const __vue_scope_id__ = 'data-v-4cf5fe12'
   /* module identifier */
   const __vue_module_identifier__ = undefined
   /* functional template */
@@ -347,7 +345,7 @@
       nameZh: '海词',
       url: 'http://dict.cn/%s'
     }
-  ]
+  ];
 
   var developer = [
     {
@@ -385,7 +383,7 @@
     {
       name: 'GreasyFork',
       nameZh: 'GreasyFork',
-      url: 'https://greasyfork.org/scripts?q=%s&utf8=✓',
+      url: 'https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓',
       blank: true
     }
   ];
@@ -434,7 +432,7 @@
       url: 'http://search.5sing.kugou.com/?keyword=%s',
       blank: true
     }
-  ]
+  ];
 
   var news = [
     {
@@ -497,7 +495,7 @@
       url: 'https://www.toutiao.com/search/?keyword=%E4%B8%96%E7%95%8C%E6%9D%AF',
       blank: true
     }
-  ]
+  ];
 
   var social = [
     {
@@ -542,7 +540,7 @@
       url: 'http://weixin.sogou.com/weixin?ie=utf8&type=2&query=%s',
       favicon: 'data:image/png;base64,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'
     }
-  ]
+  ];
 
   var engines = [
     {
@@ -657,17 +655,18 @@
         0
       )
     ])
-  };
+  }
   var __vue_staticRenderFns__$1 = []
   __vue_render__$1._withStripped = true
 
   /* style */
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject('data-v-68c17614_0', { source: '@charset "UTF-8";\n.all-search-select {\n  position: relative;\n}\n.all-search-select ul li {\n  list-style: none;\n}\n.all-search-select .content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.all-search-select .content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.all-search-select .list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.all-search-select .list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.all-search-select .list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */',
+    inject('data-v-c02246c0_0', {
+      source: '@charset "UTF-8";\n.all-search-select {\n  position: relative;\n}\n.all-search-select ul li {\n  list-style: none;\n}\n.all-search-select .content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.all-search-select .content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.all-search-select .list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.all-search-select .list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.all-search-select .list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */',
       map: {
         'version': 3,
-        'sources': ['category.vue', 'E:\\project\\all-search\\src\\components\\category.vue'],
+        'sources': ['category.vue', 'E:\\myProject\\all-search\\src\\components\\category.vue'],
         'names': [],
         'mappings': 'AAAA,gBAAgB;AC+DhB;EACA,kBAAA;AD7DA;AC8DA;EACA,gBAAA;AD5DA;AC+DA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;AD7DA;AC8DA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,eAAA;EACA,WAAA;AD5DA;AC+DA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;AD7DA;AC8DA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;AD5DA;AC6DA;EACA,yBAAA;AD3DA;;AAEA,uCAAuC',
         'file': 'category.vue',
@@ -703,7 +702,7 @@
 
   function getKeyword () {
     const el = document.querySelector('input[type=\'search\'],input[type=\'text\'][autocomplete=\'off\'],input[autocomplete=\'off\']:not([type])') ||
-      document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])');
+      document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])')
     if (el) {
       if (el.nodeName === 'INPUT' || el.localName === 'textarea') {
         return el.value
@@ -753,8 +752,7 @@
       if (!currentSite) {
         currentSite = module.list.find(item => {
           const urlObj = parseUrl(item.url)
-          return window.location.hostname === urlObj.hostname &&
-            window.location.pathname === urlObj.pathname
+          return window.location.href.includes(urlObj.hostname + urlObj.pathname)
         });
       }
     }
@@ -794,6 +792,13 @@
     if (window.location.hostname !== 'localhost') {
       // eslint-disable-next-line
       GM_setValue(name, value)
+    }
+  }
+
+  function addStyle$1 (style) {
+    if (window.location.hostname !== 'localhost') {
+      // eslint-disable-next-line
+      GM_addStyle(style)
     }
   }
 
@@ -861,17 +866,18 @@
         0
       )
     ])
-  };
+  }
   var __vue_staticRenderFns__$2 = []
   __vue_render__$2._withStripped = true
 
   /* style */
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject('data-v-b3cefad2_0', { source: '.menu-container[data-v-b3cefad2] {\n  display: flex;\n}\n.menu[data-v-b3cefad2] {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.menu-submenu[data-v-b3cefad2] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.menu-submenu-selected[data-v-b3cefad2] {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n.menu-submenu-title[data-v-b3cefad2] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
+    inject('data-v-0ae3a423_0', {
+      source: '.menu-container[data-v-0ae3a423] {\n  display: flex;\n}\n.menu[data-v-0ae3a423] {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.menu-submenu[data-v-0ae3a423] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.menu-submenu-selected[data-v-0ae3a423] {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n.menu-submenu-title[data-v-0ae3a423] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\project\\all-search\\src\\components\\menu.vue', 'menu.vue'],
+        'sources': ['E:\\myProject\\all-search\\src\\components\\menu.vue', 'menu.vue'],
         'names': [],
         'mappings': 'AAiDA;EACA,aAAA;AChDA;ADmDA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AChDA;ADmDA;EACA,kBAAA;EACA,QAAA;EACA,qBAAA;EACA,sBAAA;AChDA;ADmDA;EACA,cAAA;EACA,gCAAA;AChDA;ADmDA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AChDA;;AAEA,mCAAmC',
         'file': 'menu.vue',
@@ -882,7 +888,7 @@
 
   }
   /* scoped */
-  const __vue_scope_id__$2 = 'data-v-b3cefad2'
+  const __vue_scope_id__$2 = 'data-v-0ae3a423'
   /* module identifier */
   const __vue_module_identifier__$2 = undefined
   /* functional template */
@@ -966,17 +972,18 @@
       ],
       1
     )
-  };
+  }
   var __vue_staticRenderFns__$3 = []
   __vue_render__$3._withStripped = true
 
   /* style */
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject('data-v-5316ad40_0', { source: 'body {\n  margin-top: 36px;\n}\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
+    inject('data-v-f0ce6228_0', {
+      source: 'body {\n  margin-top: 36px;\n}\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\project\\all-search\\src\\App.vue', 'App.vue'],
+        'sources': ['E:\\myProject\\all-search\\src\\App.vue', 'App.vue'],
         'names': [],
         'mappings': 'AAwDA;EACA,gBAAA;ACvDA;AD0DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;ACvDA;AD2DA;EACA,gBAAA;ACxDA;AD2DA;EACA,SAAA;ACzDA;AD4DA;EACA,cAAA;AC1DA;AD4DA;EACA,YAAA;EACA,iBAAA;AC1DA;;AAEA,kCAAkC',
         'file': 'App.vue',
@@ -1014,7 +1021,8 @@
     'endday.github.io',
     'endday.gitee.io',
     'localhost'
-  ];
+  ]
+
   function isWhiteList () {
     return whiteList.findIndex(url => url === window.location.hostname) > -1
   }
@@ -1034,7 +1042,7 @@
         }
       },
       render: h => h(__vue_component__$3)
-    });
+    })
 
     checkBody().then(() => {
       const mountEL = document.body.parentElement.insertBefore(el, document.body)
@@ -1042,11 +1050,9 @@
       app.$mount(mountEL)
       if (
         currentSite &&
-        currentSite.styleString &&
-        window.location.hostname !== 'localhost'
+        currentSite.styleString
       ) {
-        // eslint-disable-next-line no-undef
-        GM_addStyle(currentSite.styleString)
+        addStyle$1(currentSite.styleString)
       }
     });
   }

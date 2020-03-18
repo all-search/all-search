@@ -59,8 +59,7 @@ export function getCurrentSite () {
     if (!currentSite) {
       currentSite = module.list.find(item => {
         const urlObj = parseUrl(item.url)
-        return window.location.hostname === urlObj.hostname &&
-          window.location.pathname === urlObj.pathname
+        return window.location.href.includes(urlObj.hostname + urlObj.pathname)
       })
     }
   }
@@ -100,5 +99,12 @@ export function setSession (name, value) {
   if (window.location.hostname !== 'localhost') {
     // eslint-disable-next-line
     GM_setValue(name, value)
+  }
+}
+
+export function addStyle (style) {
+  if (window.location.hostname !== 'localhost') {
+    // eslint-disable-next-line
+    GM_addStyle(style)
   }
 }

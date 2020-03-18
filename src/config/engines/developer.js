@@ -34,7 +34,7 @@ export default [
   {
     name: 'GreasyFork',
     nameZh: 'GreasyFork',
-    url: 'https://greasyfork.org/scripts?q=%s&utf8=✓',
+    url: 'https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓',
     blank: true
   }
 ]
