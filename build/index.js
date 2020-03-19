@@ -35,7 +35,7 @@
 
   var script = {
     name: 'logo'
-  }
+  };
 
   function normalizeComponent (template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
     if (typeof shadowMode !== 'boolean') {
@@ -84,7 +84,8 @@
       // used by ssr in case component is cached and beforeCreate
       // never gets called
       options._ssrRegister = hook
-    } else if (style) {
+    }
+    else if (style) {
       hook = shadowMode
         ? function (context) {
           style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot))
@@ -101,7 +102,8 @@
           hook.call(context)
           return originalRender(h, context)
         }
-      } else {
+      }
+      else {
         // inject component registration as beforeCreate hook
         const existing = options.beforeCreate
         options.beforeCreate = existing ? [].concat(existing, hook) : [hook]
@@ -111,7 +113,7 @@
   }
 
   const isOldIE = typeof navigator !== 'undefined' &&
-    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase())
+    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
 
   function createInjector (context) {
     return (id, style) => addStyle(id, style)
@@ -151,7 +153,8 @@
         style.element.styleSheet.cssText = style.styles
           .filter(Boolean)
           .join('\n')
-      } else {
+      }
+      else {
         const index = style.ids.size - 1
         const textNode = document.createTextNode(code)
         const nodes = style.element.childNodes
@@ -174,7 +177,7 @@
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _vm._m(0)
-  }
+  };
   var __vue_staticRenderFns__ = [
     function () {
       var _vm = this
@@ -183,41 +186,40 @@
       return _c(
         'a',
         {
-          staticClass: 'title',
+          staticClass: 'as-title',
           attrs: {
             href: 'https://github.com/endday/all-search',
             target: '_blank'
           }
         },
         [
-          _c('p', { staticClass: 'title-inner' }, [
+          _c('p', { staticClass: 'as-title-inner' }, [
             _vm._v('\n    All Search\n  ')
           ])
         ]
       )
     }
-  ]
+  ];
   __vue_render__._withStripped = true
 
   /* style */
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject('data-v-4cf5fe12_0', {
-      source: '.title[data-v-4cf5fe12] {\n  text-decoration: none;\n}\n.title .title-inner[data-v-4cf5fe12] {\n  font-size: 18px;\n  width: 120px;\n  height: 36px;\n  line-height: 36px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */',
+    inject('data-v-29e2b7f2_0', { source: '.as-title[data-v-29e2b7f2] {\n  text-decoration: none;\n}\n.as-title .as-title-inner[data-v-29e2b7f2] {\n  font-size: 18px;\n  width: 120px;\n  height: 36px;\n  line-height: 36px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\components\\logo.vue', 'logo.vue'],
+        'sources': ['E:\\project\\all-search\\src\\components\\logo.vue', 'logo.vue'],
         'names': [],
         'mappings': 'AAmBA;EACA,qBAAA;AClBA;ADoBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;AClBA;;AAEA,mCAAmC',
         'file': 'logo.vue',
-        'sourcesContent': ['<template>\r\n  <a class="title"\r\n     href="https://github.com/endday/all-search"\r\n     target="_blank"\r\n  >\r\n    <p class="title-inner">\r\n      All Search\r\n    </p>\r\n  </a>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'logo\'\r\n}\r\n</script>\r\n\r\n<style lang="scss" scoped>\r\n  @import "../assets/common";\r\n  .title {\r\n    text-decoration: none;\r\n\r\n    .title-inner {\r\n      font-size: 18px;\r\n      width: 120px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-weight: 600;\r\n      color: #1990fc;\r\n      margin: 0;\r\n      text-align: center;\r\n      cursor: pointer;\r\n    }\r\n  }\r\n</style>\r\n', '.title {\n  text-decoration: none;\n}\n.title .title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 36px;\n  line-height: 36px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */']
+        'sourcesContent': ['<template>\r\n  <a class="as-title"\r\n     href="https://github.com/endday/all-search"\r\n     target="_blank"\r\n  >\r\n    <p class="as-title-inner">\r\n      All Search\r\n    </p>\r\n  </a>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'logo\'\r\n}\r\n</script>\r\n\r\n<style lang="scss" scoped>\r\n  @import "../assets/common";\r\n  .as-title {\r\n    text-decoration: none;\r\n\r\n    .as-title-inner {\r\n      font-size: 18px;\r\n      width: 120px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-weight: 600;\r\n      color: #1990fc;\r\n      margin: 0;\r\n      text-align: center;\r\n      cursor: pointer;\r\n    }\r\n  }\r\n</style>\r\n', '.as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 36px;\n  line-height: 36px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */']
       },
       media: undefined
     })
 
   }
   /* scoped */
-  const __vue_scope_id__ = 'data-v-4cf5fe12'
+  const __vue_scope_id__ = 'data-v-29e2b7f2'
   /* module identifier */
   const __vue_module_identifier__ = undefined
   /* functional template */
@@ -250,7 +252,6 @@
       name: 'google',
       nameZh: '谷歌',
       url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8',
-      styleString: '.srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}'
     },
     {
       name: 'bing',
@@ -290,7 +291,6 @@
       name: 'mijisou',
       nameZh: '秘迹搜索',
       url: 'https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN',
-      styleString: '.search-page{top: 36px} .searx-navbar{top: 48px!important;}'
     },
     {
       name: 'Yandex',
@@ -623,10 +623,12 @@
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c('div', { staticClass: 'all-search-select' }, [
-      _c('div', { staticClass: 'content', on: { click: _vm.openValue } }, [
-        _c('span', { domProps: { textContent: _vm._s(_vm.nameZh) } })
-      ]),
+    return _c('div', { staticClass: 'as-select' }, [
+      _c(
+        'div',
+        { staticClass: 'as-select-content', on: { click: _vm.openValue } },
+        [_c('span', { domProps: { textContent: _vm._s(_vm.nameZh) } })]
+      ),
       _vm._v(' '),
       _c(
         'ul',
@@ -639,7 +641,7 @@
               expression: 'show'
             }
           ],
-          staticClass: 'list'
+          staticClass: 'as-select-list'
         },
         _vm._l(_vm.engines, function (item, index) {
           return _c('li', {
@@ -655,22 +657,21 @@
         0
       )
     ])
-  }
+  };
   var __vue_staticRenderFns__$1 = []
   __vue_render__$1._withStripped = true
 
   /* style */
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject('data-v-c02246c0_0', {
-      source: '@charset "UTF-8";\n.all-search-select {\n  position: relative;\n}\n.all-search-select ul li {\n  list-style: none;\n}\n.all-search-select .content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.all-search-select .content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.all-search-select .list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.all-search-select .list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.all-search-select .list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */',
+    inject('data-v-c61f9cee_0', { source: '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n.as-select-content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.as-select-list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */',
       map: {
         'version': 3,
-        'sources': ['category.vue', 'E:\\myProject\\all-search\\src\\components\\category.vue'],
+        'sources': ['category.vue', 'E:\\project\\all-search\\src\\components\\category.vue'],
         'names': [],
-        'mappings': 'AAAA,gBAAgB;AC+DhB;EACA,kBAAA;AD7DA;AC8DA;EACA,gBAAA;AD5DA;AC+DA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;AD7DA;AC8DA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,eAAA;EACA,WAAA;AD5DA;AC+DA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;AD7DA;AC8DA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;AD5DA;AC6DA;EACA,yBAAA;AD3DA;;AAEA,uCAAuC',
+        'mappings': 'AAAA,gBAAgB;AC+DhB;EACA,kBAAA;AD7DA;AC8DA;EACA,gBAAA;AD5DA;ACgEA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;AD7DA;AC8DA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,eAAA;EACA,WAAA;AD5DA;ACgEA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;AD7DA;AC8DA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;AD5DA;AC6DA;EACA,yBAAA;AD3DA;;AAEA,uCAAuC',
         'file': 'category.vue',
-        'sourcesContent': ['@charset "UTF-8";\n.all-search-select {\n  position: relative;\n}\n.all-search-select ul li {\n  list-style: none;\n}\n.all-search-select .content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.all-search-select .content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.all-search-select .list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.all-search-select .list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.all-search-select .list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */', '<template>\r\n  <div class="all-search-select">\r\n    <div class="content"\r\n         @click="openValue">\r\n      <span v-text="nameZh"></span>\r\n    </div>\r\n    <ul class="list"\r\n        v-show="show">\r\n      <li\r\n        v-for="(item,index) in engines"\r\n        :key="item.index"\r\n        v-text="item.nameZh"\r\n        @click="selectCategory(index,item)">\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport engines from \'../config/engines\'\r\n\r\nexport default {\r\n  name: \'category\',\r\n  props: {\r\n    value: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      show: false\r\n    }\r\n  },\r\n  computed: {\r\n    nameZh () {\r\n      const i = this.engines.findIndex(item => item.name === this.value)\r\n      if (i > -1) {\r\n        return this.engines[i].nameZh\r\n      } else {\r\n        return this.engines[0].nameZh\r\n      }\r\n    }\r\n  },\r\n  methods: {\r\n    handleChange (val) {\r\n      this.$emit(\'change\', val)\r\n    },\r\n    openValue () {\r\n      this.show = !this.show\r\n    },\r\n    selectCategory (index, item) {\r\n      this.handleChange(item.name)\r\n      this.show = false\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .all-search-select {\r\n    position: relative;\r\n    ul li {\r\n      list-style: none;\r\n    }\r\n\r\n    .content {\r\n      width: 100px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-size: 14px;\r\n      cursor: pointer;\r\n      padding-left: 10px;\r\n      position: relative;\r\n      &::after {\r\n        content: \' ▾\';\r\n        position: absolute;\r\n        right: 12px;\r\n        font-size: 24px;\r\n        color: #999;\r\n      }\r\n    }\r\n    .list {\r\n      padding: 4px 0;\r\n      min-width: 100px;\r\n      border: 1px solid #e4e7ed;\r\n      border-radius: 4px;\r\n      background-color: #fff;\r\n      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);\r\n      box-sizing: border-box;\r\n      margin: 5px 0;\r\n      position: absolute;\r\n      li {\r\n        font-size: 14px;\r\n        padding: 0 20px;\r\n        position: relative;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n        color: #606266;\r\n        height: 34px;\r\n        line-height: 34px;\r\n        box-sizing: border-box;\r\n        cursor: pointer;\r\n        &:hover {\r\n          background-color: #f5f7fa;\r\n        }\r\n      }\r\n    }\r\n  }\r\n</style>\r\n']
+        'sourcesContent': ['@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n\n.as-select-content {\n  width: 100px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n\n.as-select-list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n\n/*# sourceMappingURL=category.vue.map */', '<template>\r\n  <div class="as-select">\r\n    <div class="as-select-content"\r\n         @click="openValue">\r\n      <span v-text="nameZh"></span>\r\n    </div>\r\n    <ul class="as-select-list"\r\n        v-show="show">\r\n      <li\r\n        v-for="(item,index) in engines"\r\n        :key="item.index"\r\n        v-text="item.nameZh"\r\n        @click="selectCategory(index,item)">\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport engines from \'../config/engines\'\r\n\r\nexport default {\r\n  name: \'category\',\r\n  props: {\r\n    value: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      show: false\r\n    }\r\n  },\r\n  computed: {\r\n    nameZh () {\r\n      const i = this.engines.findIndex(item => item.name === this.value)\r\n      if (i > -1) {\r\n        return this.engines[i].nameZh\r\n      } else {\r\n        return this.engines[0].nameZh\r\n      }\r\n    }\r\n  },\r\n  methods: {\r\n    handleChange (val) {\r\n      this.$emit(\'change\', val)\r\n    },\r\n    openValue () {\r\n      this.show = !this.show\r\n    },\r\n    selectCategory (index, item) {\r\n      this.handleChange(item.name)\r\n      this.show = false\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-select {\r\n    position: relative;\r\n    ul li {\r\n      list-style: none;\r\n    }\r\n  }\r\n\r\n  .as-select-content {\r\n    width: 100px;\r\n    height: $height;\r\n    line-height: $height;\r\n    font-size: 14px;\r\n    cursor: pointer;\r\n    padding-left: 10px;\r\n    position: relative;\r\n    &::after {\r\n      content: \' ▾\';\r\n      position: absolute;\r\n      right: 12px;\r\n      font-size: 24px;\r\n      color: #999;\r\n    }\r\n  }\r\n\r\n  .as-select-list {\r\n    padding: 4px 0;\r\n    min-width: 100px;\r\n    border: 1px solid #e4e7ed;\r\n    border-radius: 4px;\r\n    background-color: #fff;\r\n    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);\r\n    box-sizing: border-box;\r\n    margin: 5px 0;\r\n    position: absolute;\r\n    li {\r\n      font-size: 14px;\r\n      padding: 0 20px;\r\n      position: relative;\r\n      white-space: nowrap;\r\n      overflow: hidden;\r\n      text-overflow: ellipsis;\r\n      color: #606266;\r\n      height: 34px;\r\n      line-height: 34px;\r\n      box-sizing: border-box;\r\n      cursor: pointer;\r\n      &:hover {\r\n        background-color: #f5f7fa;\r\n      }\r\n    }\r\n  }\r\n</style>\r\n']
       },
       media: undefined
     })
@@ -702,7 +703,7 @@
 
   function getKeyword () {
     const el = document.querySelector('input[type=\'search\'],input[type=\'text\'][autocomplete=\'off\'],input[autocomplete=\'off\']:not([type])') ||
-      document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])')
+      document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])');
     if (el) {
       if (el.nodeName === 'INPUT' || el.localName === 'textarea') {
         return el.value
@@ -839,16 +840,16 @@
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c('div', { staticClass: 'menu-container' }, [
+    return _c('div', { staticClass: 'as-menu-container' }, [
       _c(
         'ul',
-        { staticClass: 'menu' },
+        { staticClass: 'as-menu' },
         _vm._l(_vm.menus, function (item, i) {
           return _c(
             'li',
             {
               key: i,
-              staticClass: 'menu-submenu',
+              staticClass: 'as-submenu',
               on: {
                 click: function ($event) {
                   return _vm.handleClick(item)
@@ -857,7 +858,7 @@
             },
             [
               _c('div', {
-                staticClass: 'menu-submenu-title',
+                staticClass: 'as-submenu-title',
                 domProps: { textContent: _vm._s(item.nameZh) }
               })
             ]
@@ -866,29 +867,28 @@
         0
       )
     ])
-  }
+  };
   var __vue_staticRenderFns__$2 = []
   __vue_render__$2._withStripped = true
 
   /* style */
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject('data-v-0ae3a423_0', {
-      source: '.menu-container[data-v-0ae3a423] {\n  display: flex;\n}\n.menu[data-v-0ae3a423] {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.menu-submenu[data-v-0ae3a423] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.menu-submenu-selected[data-v-0ae3a423] {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n.menu-submenu-title[data-v-0ae3a423] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
+    inject('data-v-626ceb4a_0', { source: '.as-menu-container[data-v-626ceb4a] {\n  display: flex;\n}\n.as-menu[data-v-626ceb4a] {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu[data-v-626ceb4a] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.as-submenu-selected[data-v-626ceb4a] {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n.as-submenu-title[data-v-626ceb4a] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\components\\menu.vue', 'menu.vue'],
+        'sources': ['E:\\project\\all-search\\src\\components\\menu.vue', 'menu.vue'],
         'names': [],
         'mappings': 'AAiDA;EACA,aAAA;AChDA;ADmDA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AChDA;ADmDA;EACA,kBAAA;EACA,QAAA;EACA,qBAAA;EACA,sBAAA;AChDA;ADmDA;EACA,cAAA;EACA,gCAAA;AChDA;ADmDA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AChDA;;AAEA,mCAAmC',
         'file': 'menu.vue',
-        'sourcesContent': ['<template>\r\n  <div class="menu-container">\r\n    <ul class="menu">\r\n      <li class="menu-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)">\r\n        <div class="menu-submenu-title"\r\n             v-text="item.nameZh">\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      let keyword = \'\'\r\n      if (this.$root.currentSite.keyword) {\r\n        keyword = this.$root.currentSite.keyword()\r\n      } else {\r\n        keyword = getKeyword()\r\n      }\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss" scoped>\r\n  @import "../assets/common";\r\n\r\n  .menu-container {\r\n    display: flex;\r\n  }\r\n\r\n  .menu {\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .menu-submenu {\r\n    position: relative;\r\n    top: 1px;\r\n    display: inline-block;\r\n    vertical-align: bottom;\r\n  }\r\n\r\n  .menu-submenu-selected {\r\n    color: #1890ff;\r\n    border-bottom: 2px solid #1890ff;\r\n  }\r\n\r\n  .menu-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n  }\r\n</style>\r\n', '.menu-container {\n  display: flex;\n}\n\n.menu {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.menu-submenu {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n\n.menu-submenu-selected {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n\n.menu-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */']
+        'sourcesContent': ['<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)">\r\n        <div class="as-submenu-title"\r\n             v-text="item.nameZh">\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      let keyword = \'\'\r\n      if (this.$root.currentSite.keyword) {\r\n        keyword = this.$root.currentSite.keyword()\r\n      } else {\r\n        keyword = getKeyword()\r\n      }\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    }\r\n  }\r\n}\r\n</script>\r\n\r\n<style lang="scss" scoped>\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n  }\r\n\r\n  .as-menu {\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    position: relative;\r\n    top: 1px;\r\n    display: inline-block;\r\n    vertical-align: bottom;\r\n  }\r\n\r\n  .as-submenu-selected {\r\n    color: #1890ff;\r\n    border-bottom: 2px solid #1890ff;\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n  }\r\n</style>\r\n', '.as-menu-container {\n  display: flex;\n}\n\n.as-menu {\n  line-height: 36px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n\n.as-submenu-selected {\n  color: #1890ff;\n  border-bottom: 2px solid #1890ff;\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */']
       },
       media: undefined
     })
 
   }
   /* scoped */
-  const __vue_scope_id__$2 = 'data-v-0ae3a423'
+  const __vue_scope_id__$2 = 'data-v-626ceb4a'
   /* module identifier */
   const __vue_module_identifier__$2 = undefined
   /* functional template */
@@ -972,18 +972,17 @@
       ],
       1
     )
-  }
+  };
   var __vue_staticRenderFns__$3 = []
   __vue_render__$3._withStripped = true
 
   /* style */
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject('data-v-f0ce6228_0', {
-      source: 'body {\n  margin-top: 36px;\n}\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
+    inject('data-v-5316ad40_0', { source: 'body {\n  margin-top: 36px;\n}\n#all-search {\n  height: 36px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 36px;\n  line-height: 36px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
       map: {
         'version': 3,
-        'sources': ['E:\\myProject\\all-search\\src\\App.vue', 'App.vue'],
+        'sources': ['E:\\project\\all-search\\src\\App.vue', 'App.vue'],
         'names': [],
         'mappings': 'AAwDA;EACA,gBAAA;ACvDA;AD0DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;ACvDA;AD2DA;EACA,gBAAA;ACxDA;AD2DA;EACA,SAAA;ACzDA;AD4DA;EACA,cAAA;AC1DA;AD4DA;EACA,YAAA;EACA,iBAAA;AC1DA;;AAEA,kCAAkC',
         'file': 'App.vue',
@@ -1021,17 +1020,461 @@
     'endday.github.io',
     'endday.gitee.io',
     'localhost'
-  ]
-
+  ];
   function isWhiteList () {
     return whiteList.findIndex(url => url === window.location.hostname) > -1
+  }
+
+  const list = [
+    {
+      url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
+      enabled: true,
+      style: '.srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}'
+    },
+    {
+      url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/[^.]*\.bing\.com\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/duckduckgo\.com\/*/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/search\.yahoo\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/tw\.search\.yahoo\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+
+      url: /^https?:\/\/searx\.me\/\?q/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/yandex\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/mijisou.com\/\?q/i,
+      enabled: true,
+      style: '.search-page{top: 36px} .searx-navbar{top: 48px!important;}'
+    },
+    {
+      url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/baike\.baidu\.com\/item/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/baike\.baidu\.com\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/wenku\.baidu\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/zhidao\.baidu\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/so\.baike\.com\/doc/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.baike\.com\/wiki/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.docin\.com\/search\.do/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.quora\.com\/search\?/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/stackoverflow\.com\/search\?/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.soku\.com\/search_video\//,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/search\.bilibili\.com\/all/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.acfun\.cn\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.youtube\.com\/results/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.nicovideo\.jp\/search\//,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/so\.iqiyi\.com\/so\/q/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/v\.qq\.com\/x\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/music\.baidu\.com\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/so\.1ting\.com\/all\.do/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.xiami\.com\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/s\.music\.qq\.com/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/music\.163\.com\/.*?#\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/image\.baidu\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/.*\.bing\.com\/images\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.flickr\.com\/search\//,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^http:\/\/www\.pixiv\.net\/search\.php/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/huaban\.com\/search\/\?/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.pinterest\.com\/search\//,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/thepiratebay\.org\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.zimuzu\.tv\/search\//,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/so\.cqp\.cc\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/subhd\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/fanyi\.baidu\.com/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/dict\.youdao\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/dict\.youdao\.com\/w/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/dict\.cn\/./,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/s\.taobao\.com\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/search\.jd\.com\/Search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/search\.suning\.com/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/search\.smzdm\.com\/\?/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/s\.weibo\.com\/weibo\//i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.douban\.com\/search/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^http:\/\/search\.cnki\.net\/search\.aspx/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^http:\/\/.*?ebscohost\.com\/.*?results/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^http:\/\/link\.springer\.com\/search\?query=/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:.*?runoob\.com\//i,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/github\.com\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/www\.startpage\.com\/do\/search/,
+      enabled: true,
+      style: ''
+    },
+    {
+      url: /^https?:\/\/127\.0\.0\.1:8090\/./,
+      enabled: true,
+      style: ''
+    }
+  ]
+
+  const item = {
+    url: '',
+    enabled: false,
+    style: ''
+  }
+
+  const target = list.find(item => {
+    return item.url.test(window.location.href)
+  })
+
+  if (target) {
+    item.url = target.url
+    item.enabled = target.enabled
+    item.style = target.style
   }
 
   Vue.config.productionTip = false
 
   const currentSite = getCurrentSite()
 
-  if (currentSite || isWhiteList()) {
+  if (item.enabled || isWhiteList()) {
     const el = document.createElement('div')
     el.id = 'all-search'
 
@@ -1042,17 +1485,14 @@
         }
       },
       render: h => h(__vue_component__$3)
-    })
+    });
 
     checkBody().then(() => {
       const mountEL = document.body.parentElement.insertBefore(el, document.body)
       // document.body.insertBefore(el, document.body.childNodes[0])
       app.$mount(mountEL)
-      if (
-        currentSite &&
-        currentSite.styleString
-      ) {
-        addStyle$1(currentSite.styleString)
+      if (item.style) {
+        addStyle$1(item.style)
       }
     });
   }

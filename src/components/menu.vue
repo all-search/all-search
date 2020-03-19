@@ -1,11 +1,11 @@
 <template>
-  <div class="menu-container">
-    <ul class="menu">
-      <li class="menu-submenu"
+  <div class="as-menu-container">
+    <ul class="as-menu">
+      <li class="as-submenu"
           v-for="(item, i) in menus"
           :key="i"
           @click="handleClick(item)">
-        <div class="menu-submenu-title"
+        <div class="as-submenu-title"
              v-text="item.nameZh">
         </div>
       </li>
@@ -47,11 +47,11 @@ export default {
 <style lang="scss" scoped>
   @import "../assets/common";
 
-  .menu-container {
+  .as-menu-container {
     display: flex;
   }
 
-  .menu {
+  .as-menu {
     line-height: $height;
     width: 100%;
     height: 100%;
@@ -64,19 +64,19 @@ export default {
     background-color: #fff;
   }
 
-  .menu-submenu {
+  .as-submenu {
     position: relative;
     top: 1px;
     display: inline-block;
     vertical-align: bottom;
   }
 
-  .menu-submenu-selected {
+  .as-submenu-selected {
     color: #1890ff;
     border-bottom: 2px solid #1890ff;
   }
 
-  .menu-submenu-title {
+  .as-submenu-title {
     position: relative;
     display: block;
     margin: 0;

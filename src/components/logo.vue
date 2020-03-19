@@ -1,9 +1,9 @@
 <template>
-  <a class="title"
+  <a class="as-title"
      href="https://github.com/endday/all-search"
      target="_blank"
   >
-    <p class="title-inner">
+    <p class="as-title-inner">
       All Search
     </p>
   </a>
@@ -17,10 +17,11 @@ export default {
 
 <style lang="scss" scoped>
   @import "../assets/common";
-  .title {
+
+  .as-title {
     text-decoration: none;
 
-    .title-inner {
+    .as-title-inner {
       font-size: 18px;
       width: 120px;
       height: $height;

@@ -1,10 +1,10 @@
 <template>
-  <div class="all-search-select">
-    <div class="content"
+  <div class="as-select">
+    <div class="as-select-content"
          @click="openValue">
       <span v-text="nameZh"></span>
     </div>
-    <ul class="list"
+    <ul class="as-select-list"
         v-show="show">
       <li
         v-for="(item,index) in engines"
@@ -61,53 +61,54 @@ export default {
 <style lang="scss">
   @import "../assets/common";
 
-  .all-search-select {
+  .as-select {
     position: relative;
     ul li {
       list-style: none;
     }
+  }
 
-    .content {
-      width: 100px;
-      height: $height;
-      line-height: $height;
-      font-size: 14px;
-      cursor: pointer;
-      padding-left: 10px;
-      position: relative;
-      &::after {
-        content: ' ▾';
-        position: absolute;
-        right: 12px;
-        font-size: 24px;
-        color: #999;
-      }
-    }
-    .list {
-      padding: 4px 0;
-      min-width: 100px;
-      border: 1px solid #e4e7ed;
-      border-radius: 4px;
-      background-color: #fff;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-      box-sizing: border-box;
-      margin: 5px 0;
+  .as-select-content {
+    width: 100px;
+    height: $height;
+    line-height: $height;
+    font-size: 14px;
+    cursor: pointer;
+    padding-left: 10px;
+    position: relative;
+    &::after {
+      content: ' ▾';
       position: absolute;
-      li {
-        font-size: 14px;
-        padding: 0 20px;
-        position: relative;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: #606266;
-        height: 34px;
-        line-height: 34px;
-        box-sizing: border-box;
-        cursor: pointer;
-        &:hover {
-          background-color: #f5f7fa;
-        }
+      right: 12px;
+      font-size: 24px;
+      color: #999;
+    }
+  }
+
+  .as-select-list {
+    padding: 4px 0;
+    min-width: 100px;
+    border: 1px solid #e4e7ed;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    box-sizing: border-box;
+    margin: 5px 0;
+    position: absolute;
+    li {
+      font-size: 14px;
+      padding: 0 20px;
+      position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #606266;
+      height: 34px;
+      line-height: 34px;
+      box-sizing: border-box;
+      cursor: pointer;
+      &:hover {
+        background-color: #f5f7fa;
       }
     }
   }

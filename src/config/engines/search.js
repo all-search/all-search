@@ -8,7 +8,6 @@ export default [
     name: 'google',
     nameZh: '谷歌',
     url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8',
-    styleString: '.srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}'
   },
   {
     name: 'bing',
@@ -48,7 +47,6 @@ export default [
     name: 'mijisou',
     nameZh: '秘迹搜索',
     url: 'https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN',
-    styleString: '.search-page{top: 36px} .searx-navbar{top: 48px!important;}'
   },
   {
     name: 'Yandex',

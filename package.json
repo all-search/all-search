@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "0.1.2c",
+  "version": "0.1.3a",
   "license": "MIT",
   "main": "dist/index.js",
   "homepage": "https://github.com/endday/all-search",
