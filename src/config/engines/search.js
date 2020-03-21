@@ -7,7 +7,7 @@ export default [
   {
     name: 'google',
     nameZh: '谷歌',
-    url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8',
+    url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8'
   },
   {
     name: 'bing',
@@ -46,7 +46,7 @@ export default [
   {
     name: 'mijisou',
     nameZh: '秘迹搜索',
-    url: 'https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN',
+    url: 'https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN'
   },
   {
     name: 'Yandex',

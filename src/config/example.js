@@ -35,7 +35,7 @@
     var rules = [
       // 网页搜索/////////////第一个可以当模板看
       {
-        name: 'google网页搜索',// 你要加载的网站的名字(方便自己查找)
+        name: 'google网页搜索', // 你要加载的网站的名字(方便自己查找)
         // 是否启用.
         enabled: true,
         // 在哪个网站上加载,正则.
@@ -79,7 +79,7 @@
         stylish: 'body.vasq #hdtbMenus.hdtb-td-o{top:100px !important}'
       },
       {
-        name: 'google-hash-query',// 不刷新页面显示搜索结果的google
+        name: 'google-hash-query', // 不刷新页面显示搜索结果的google
         enabled: true,
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/,
         engineList: 'web',
@@ -304,7 +304,7 @@
           target: 'css;#cat',
           where: 'beforeBegin'
         },
-        stylish: '.default-container{margin-top:50px;}'  // 此处应该仅在需要置顶的时候才会有影响，后期需要在加一个判断，2019-04-19 22:52:38
+        stylish: '.default-container{margin-top:50px;}' // 此处应该仅在需要置顶的时候才会有影响，后期需要在加一个判断，2019-04-19 22:52:38
       },
       {
         name: 'infinitynewtab',
@@ -563,7 +563,6 @@
         }
       },
 
-
       // 视频网站
       {
         name: '优酷',
@@ -694,7 +693,6 @@
         }
       },
 
-
       // 音乐
       {
         name: '百度音乐',
@@ -769,9 +767,9 @@
                     padding-top:8px;\
                     ',
         insertIntoDoc: {
-          keyword: (function () {
+          keyword: function () {
             return decodeURI(document.URL.match(/s=(.+?)(&|$)/)[1])
-          }),
+          },
           target: 'css;.m-subnav.m-subnav-up.f-pr.j-tflag',
           where: 'afterEnd'
         }
@@ -795,7 +793,6 @@
           where: 'afterEnd'
         }
       },
-
 
       // 图片
       {
@@ -917,7 +914,6 @@
         }
       },
 
-
       // 资源下载
       {
         name: '海盗湾thepiratebay',
@@ -1002,7 +998,6 @@
           where: 'afterEnd'
         }
       },
-
 
       //翻译词典
       {
@@ -1235,7 +1230,6 @@
         }
       },
 
-
       //社交
       {
         name: '新浪微博',
@@ -1305,7 +1299,6 @@
           where: 'afterEnd'
         }
       },
-
 
       //学术搜索列表
       {
@@ -1646,7 +1639,6 @@
       url: 'https://yandex.com/search/?text=%s',
       favicon: 'data:image/ico;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAAAAAAsAAAAUwAAAF8AAABfAAAAXwAAAF8AAABfAAAAXwAAAF8AAABfAAAAXwAAADjBwcEAwcHBAMHBwQDBwcEAAAAAUbq6uurExMT/xMTE/8TExP/ExMT/xMTE/8TExP/ExMT/xMTE/8TExP9ubm6QAAAALcTExADExMQAxMTEAAAAAFrHx8f/x8fH/8fHx/+7u8j/AADS/wAA0v+wsMj/x8fH/8fHx//Hx8f/vr6+7h4eHmQAAAAQx8fHAMfHxwAAAABXy8vL/8vLy//Ly8v/v7/M/wAA2/8AANv/s7PN/8vLy//Ly8v/y8vL/8vLy/+kpKS6AAAAM8vLywDLy8sAAAAAU9DQ0P/Q0ND/0NDQ/8TE0f8AAOX/AADl/7i40v/Q0ND/0NDQ/9DQ0P/Q0ND/0NDQ/2VlZXsAAAAk0NDQAAAAAE/U1NT/1NTU/9TU1P/IyNb/AADw/wAA8P+7u9f/1NTU/9TU1P/U1NT/1NTU/9TU1P/JycnkDw8PUwAAAAcAAABL2dnZ/9nZ2f/Z2dn/np7i/wAA+f8AAPn/goLm/9nZ2f/Z2dn/2dnZ/9nZ2f/Z2dn/2dnZ/6ioqKYAAAAqAAAASOLi4v/i4uL/4uLi/0hI9v8AAP//BQX+/yAg+//f3+L/4uLi/+Li4v/i4uL/4uLi/+Li4v/g4OD7AAAARgAAAETx8fH/8fHx/9jZ8v8LD///HiL+/3h6+P8IDP//lJX3//Hx8f/x8fH/8fHx//Hx8f/x8fH/7+/v+wAAAEIAAABA9vb2//b29v+Ah/v/Ex///3N6+//Z2vf/FiL//ys2/v/r7Pb/9vb2//b29v/29vb/9vb2/8jIyKMAAAAkAAAAPPn5+f/09Pn/NEf+/yA0///Gy/r/+fn5/1hn/f8gNP//jpj8//n5+f/5+fn/+fn5//Dw8OMXFxdBAAAABgAAADj7+/v/tb/8/y5K//9GX///+/v7//v7+/+zvfz/Lkr//zhS///l6Pv/+/v7//v7+/+Tk5NnAAAAGfv7+wAAAAA1/f39/3OM/v85Xf//mqz+//39/f/9/f3/9vf9/0do//85Xf//fpX+//39/f/c3NysAAAAH/39/QD9/f0AAAAAMv7+/v/+/v7//v7+//7+/v/+/v7//v7+//7+/v+VrP//QWn//0Fp///T3PrtPj4+PgAAAAn+/v4A/v7+AAAAACn39/fi////////////////////////////////////////////////tbW1cgAAABf///8A////AP///wAAAAAVAAAAKAAAAC4AAAAuAAAALgAAAC4AAAAuAAAALgAAAC4AAAAuAAAALgAAABv///8A////AP///wD///8AAA8AAAAHAAAAAwAAAAMAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAMAAAADAAAABwAAAA8AAA=='
     }
-
 
     // 视频搜索列表
     engineList.video = []
@@ -2404,7 +2396,6 @@
       ]
     }
 
-
     var settingData = {
       'status': 1,
       'message': '$相关说明$(status: 这个在将来或许很重要)...' +
@@ -2514,7 +2505,6 @@
       }
 
       engineList = getSettingData.engineList
-
     } else {
       console.log('未发现本地列表')
       settingData.engineList = engineList
@@ -2576,10 +2566,10 @@
     // (c) Steven Levithan <stevenlevithan.com>
     // MIT License
     var parseUri = function (str) {
-      var o = parseUri.options,
-        m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str),
-        uri = {},
-        i = 14
+      var o = parseUri.options
+      var m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str)
+      var uri = {}
+      var i = 14
 
       while (i--) uri[o.key[i]] = m[i] || ''
 
@@ -2588,8 +2578,8 @@
       uri[o.ds.name][0]['key'] = (uri.protocol ? uri.protocol : 'http') + '://' + uri.host + (uri.port ? ':' + uri.port : '') + '/'
       uri[o.ds.name][0]['val'] = '/'
       i = 0
-      var tempsub = '/',
-        subs = uri[o.key[10]].substr(1).split('/')
+      var tempsub = '/'
+      var subs = uri[o.key[10]].substr(1).split('/')
       for (var j = 1; j < (subs.length + 1); j++, i++) {
         tempsub += tempsub === '/' ? subs[i] : '/' + subs[i]
         if (subs[i]) {
@@ -2675,7 +2665,6 @@
         ret[matched[1]] = matched[2]
       }
 
-
       return ret
     }
 
@@ -2695,26 +2684,22 @@
 
         if (pEventName in elem) {
           return pEventName.slice(2)
-        } else if (typeof elem.setAttribute == 'function') { // setAttribute 是元素节点的方法
+        } else if (typeof elem.setAttribute === 'function') { // setAttribute 是元素节点的方法
           setAttr = false
           if (!elem.hasAttribute(pEventName)) {
             setAttr = true
             elem.setAttribute(pEventName, 'return;')
           }
 
-
-          isFunction = typeof elem[pEventName] == 'function'
+          isFunction = typeof elem[pEventName] === 'function'
 
           if (setAttr) elem.removeAttribute(pEventName)
 
           if (isFunction) {
             return pEventName.slice(2)
           }
-
         }
-
       }
-
 
       return false
     }
@@ -2734,16 +2719,15 @@
           id = cache.objs.push(obj) - 1
         }
 
-        if (!cache.data[id]) {//初始化
+        if (!cache.data[id]) { //初始化
           cache.data[id] = {}
         }
 
-        if (typeof value == 'undefined') {// 取值
-          return typeof key == 'undefined' ? cache.data[id] : cache.data[id][key]
+        if (typeof value === 'undefined') { // 取值
+          return typeof key === 'undefined' ? cache.data[id] : cache.data[id][key]
         } else {
           return cache.data[id][key] = value
         }
-
       }
 
       return data
@@ -2752,7 +2736,6 @@
     // 为mouseleave mouseenter事件做个兼容
     // 需要 eventSupported, data函数支持
     var mouseEventListener = (function () {
-
       var support = {
         mouseleave: eventSupported('mouseleave'),
         mouseenter: eventSupported('mouseenter')
@@ -2777,15 +2760,12 @@
                 if (!ele.contains(relatedTarget)) { // contains函数,自己.contains(自己) 返回true
                   callback.call(ele, e)
                 }
-
               }
               data(callback, 'mouseELListener', listener)
             }
 
-
             ele.addEventListener(map[type], listener, true)
           }
-
         },
         remove: function (type, ele, callback) {
           if (support[type]) {
@@ -2793,7 +2773,6 @@
           } else {
             ele.removeEventListener(map[type], data(callback, 'mouseELListener'), true)
           }
-
         }
       }
     })()
@@ -2819,7 +2798,6 @@
       } else {
         return getElementByXPath(selector)
       }
-
     }
 
     function mousedownhandler (e) {
@@ -2831,7 +2809,7 @@
       if (!target || !this.contains(target)) return
 
       var value
-      if (typeof iInput == 'function') {
+      if (typeof iInput === 'function') {
         value = iInput()
       } else {
         if (iInput.nodeName == 'INPUT') {
@@ -2839,9 +2817,7 @@
         } else {
           value = iInput.textContent
         }
-
       }
-
 
       // 编码 解码
       // 对搜索词编码 (未做解码处理，浏览器自动处理) 网站1688采用gbk编码
@@ -2869,7 +2845,6 @@
         target.setAttribute('onclick', 'return false;')
         return
       }
-
 
       // 如果有post请求
       var postSign = targetURL.indexOf('$post$')
@@ -2921,7 +2896,6 @@
         matchedRule = rule
         return true
       }
-
     })
 
     // console.log(marchedSign,matchedRule);
@@ -2931,14 +2905,13 @@
           matchedRule = rule
           return true
         }
-
       })
     }
 
     if (!matchedRule || !matchedRule.enabled) return
 
     var iTarget = getElement(matchedRule.insertIntoDoc.target)
-    var iInput = typeof matchedRule.insertIntoDoc.keyword == 'function' ? matchedRule.insertIntoDoc.keyword : getElement(matchedRule.insertIntoDoc.keyword)
+    var iInput = typeof matchedRule.insertIntoDoc.keyword === 'function' ? matchedRule.insertIntoDoc.keyword : getElement(matchedRule.insertIntoDoc.keyword)
 
     ///test -------------- 测试 start
     debug('searchEngineJump test iTarget, iInput: ', iTarget, iInput)
@@ -3108,7 +3081,6 @@
             style.zIndex = DropDownList.zIndex++
             style.opacity = 0.96
           }
-
         })
 
         // 离开隐藏
@@ -3122,7 +3094,6 @@
               self.hide()
             }, self.hideDelay)
           }
-
         })
 
         mouseEventListener.add('mouseenter', list, function () {
@@ -3134,7 +3105,6 @@
         })
 
         mouseEventListener.add('mouseleave', list, function () {
-
           list.style.opacity = 0.04
           list.style.top = parseInt(list.style.top) + 6 + 'px'
           self.hideTimerId = setTimeout(function () {
@@ -3176,7 +3146,6 @@
         }, 30)
 
         this.a.classList.add(this.aShownClass)
-
       },
       hide: function () {
         if (this.hidden) return
@@ -3187,7 +3156,6 @@
         style.opacity = 0.1
 
         this.a.classList.remove(this.aShownClass)
-
       }
     }
 
@@ -3203,18 +3171,17 @@
 
     if (matchedRule.style) {
       // 判断是否存在脚本 “AC-baidu:重定向优化百度搜狗谷歌搜索_去广告_favicon_双列”
-      if (getSettingData.center == 2) {    // 自动判断是否添加
+      if (getSettingData.center == 2) { // 自动判断是否添加
         if (document.querySelector('#myuser') && matchedRule.style_ACBaidu) {
           console.log('检测到脚本：“AC-baidu:重定向优化百度搜狗谷歌搜索_去广告_favicon_双列”   ------自动添加')
           matchedRule.style = matchedRule.style_ACBaidu
         }
-      } else if (getSettingData.center == 1) {   //  强制添加
+      } else if (getSettingData.center == 1) { //  强制添加
         console.log('检测到脚本：“AC-baidu:重定向优化百度搜狗谷歌搜索_去广告_favicon_双列”   ------强制添加')
         matchedRule.style = matchedRule.style_ACBaidu ? matchedRule.style_ACBaidu : matchedRule.style
-      }     //
+      } //
       container.style.cssText = matchedRule.style
     }
-
 
     var dropLists = []
     engineList.details.forEach(function (item) {
@@ -3252,7 +3219,6 @@
           a = a.replace('target="$blank$"', '')
         }
 
-
         engines.push(a)
       })
       // 非空列表
@@ -3274,7 +3240,6 @@
         a.lastChild.nodeValue = cName
         dropLists.push([a, dropList])
       }
-
     })
 
     //将各个搜索列表插入文档中
@@ -3312,7 +3277,6 @@
         break
     }
 
-
     // todo: 此处与上面重复,在百度页面会插入两次
     if (/^https?:\/\/www\.baidu\.com\/(?:s|baidu)/.test(url)) {
       var sej = document.getElementsByTagName('sejspan')[0]
@@ -3328,7 +3292,6 @@
         new DropDownList(item[0], item[1])
       })
     }
-
 
     // 由于与要插入网页的样式无法很好的兼容,更改源网页的样式
     if (matchedRule.stylish) {
@@ -3409,7 +3372,6 @@
         return true
       }
     }
-
 
     // -------------------设置相关--------------------------------
     // 设置按钮相关
@@ -3495,7 +3457,6 @@
             break
           }
 
-
           var odiv = document.createElement('div')
           odiv.id = details[j][1] // "web"
           odiv.classList.add('iqxin-items')
@@ -3540,10 +3501,8 @@
               a = a.replace('data-iqxindisabled="$disabled$"', '')
             }
 
-
             oDivConStr += a
           }
-
 
           oDivConStr += '<span class=\'iqxin-additem\'>+</span>'
 
@@ -3552,7 +3511,6 @@
 
           this.ele.appendChild(odiv)
         }
-
 
         // 更多设置 菜单
         var btnEle2 = document.createElement('div')
@@ -3593,7 +3551,6 @@
           '</div>'
         btnEle2.innerHTML = btnStr2
         this.ele.appendChild(btnEle2)
-
 
         // 添加按钮
         var btnEle = document.createElement('div')
@@ -3714,7 +3671,6 @@
           // 添加搜索列表
           var olistAdd = document.querySelector('#nSearchList')
           olistAdd.classList.add('iqxin-set-active')
-
         }
       },
       // 关闭 “添加删除框”
@@ -3798,7 +3754,6 @@
           a = a.replace('$blank$', '_blank')
         }
 
-
         a = a.replace('$name$', otitle)
           .replace('$favicon$', oimg)
 
@@ -3812,7 +3767,7 @@
         this.addItemBoxRemove()
       },
       addItemBoxRemove: function (ele) {
-        ele = ele ? ele : '#newSearchBox'
+        ele = ele || '#newSearchBox'
         var newBox = document.querySelector(ele)
         if (newBox) {
           newBox.style.transform = 'scale(0.01, 0.01)'
@@ -3997,7 +3952,7 @@
         odisabled = document.querySelector('#iqxin-newDisabled').checked
 
         this.editTemp.dataset.iqxintitle = otitle
-        this.editTemp.lastChild.innerText = otitle  //文本节点
+        this.editTemp.lastChild.innerText = otitle //文本节点
 
         this.editTemp.dataset.iqxinlink = olink
         this.editTemp.dataset.iqxinimg = oimg
@@ -4210,7 +4165,6 @@
             a = a.replace('data-iqxintarget="$blank$"', '')
           }
 
-
           a = a.replace('$name$', elist[i].name)
             .replace('$favicon$', elist[i].favicon)
 
@@ -4221,7 +4175,6 @@
           '<span class="iqxin-additem iqxin-set-active">+</span>' +
           '</div>' +
           ''
-
 
         odiv.innerHTML = innerHTML
 
@@ -4277,7 +4230,6 @@
           e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode)
         }
 
-
         if (~e.target.className.indexOf('iqxin-additem')) {
           this.parentNode = e.target.parentNode
           this.addItemBox()
@@ -4311,15 +4263,12 @@
           debug('移除盒子')
           // this.boxClose("#newSearchListBox");
           this.addItemBoxRemove('#newSearchListBox')
-
         }
-
 
         // 修改搜索 确定
         if (~targetClass.indexOf('editItemBoxEnter')) {
           this.addEditBoxEnger()
         }
-
 
         // 编辑框
         if (~e.target.className.indexOf('iqxin-set-edit')) {
@@ -4379,7 +4328,7 @@
       // 关闭所有次级窗口、菜单
       allBoxClose: function () {
         this.addItemBoxRemove() // 新的搜索添加框
-        this.addDelremove()  //  增加/删除界面
+        this.addDelremove() //  增加/删除界面
         this.editCodeBoxClose() // code编辑框
         this.addTitleEditBoxRemove() //标题编辑框
         this.addItemBoxRemove('#newSearchListBox') // 添加新的搜索列表
@@ -4516,7 +4465,7 @@
         if (this.online) return
 
         var that = this
-        var myImage = new Image
+        var myImage = new Image()
         myImage.src = 'https://www.google.com/s2/favicons?domain=www.baidu.com&' + Math.random()
         setTimeout(function () {
           // console.log("取消加载");
@@ -4526,7 +4475,6 @@
           } else {
             myImage.src = undefined
           }
-
         }, 2000)
       },
 
@@ -4608,7 +4556,6 @@
             if (data[ii].dataset.iqxindisabled) {
               obj[id][ij].disable = data[ii].dataset.iqxindisabled
             }
-
           }
         }
 
@@ -4623,7 +4570,7 @@
           engineDetails[i] = []
           engineDetails[i][0] = odetails[i].firstChild.innerHTML
           engineDetails[i][1] = odetails[i].dataset.iqxintitle
-          engineDetails[i][2] = odetails[i].dataset.xin >= 0 ? true : false
+          engineDetails[i][2] = odetails[i].dataset.xin >= 0
         }
 
         // 新标签页全局设置
@@ -5072,7 +5019,6 @@
       setBtn.addEventListener('click', setBtnStart)
     }
 
-
     // 注册菜单
     GM_registerMenuCommand('search jump 搜索跳转设置', setBtnStart)
 
@@ -5157,7 +5103,7 @@
     odom.innerHTML = text
     odom.style.opacity = 1
 
-    duration = duration ? duration : 1500
+    duration = duration || 1500
     //防止持续时间内多次触发提示
     if (!iqxinTimerGlobalTip) {
       iqxinTimerGlobalTip = setTimeout(function () {
@@ -5231,6 +5177,4 @@
     // console.log("普通插入");
     iqxinstart()
   }
-
 })()
-

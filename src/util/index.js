@@ -88,23 +88,35 @@ export function checkBody () {
 }
 
 export function getSession (name) {
-  if (window.location.hostname === 'localhost') {
-    return null
-  }
   // eslint-disable-next-line
-  return GM_getValue(name)
+  if (window.GM_getValue) {
+    // eslint-disable-next-line
+    return window.GM_getValue(name)
+  }
+  const item = window.localStorage.getItem(name)
+  if (item) {
+    return JSON.parse(item)
+  }
+  return null
 }
 
 export function setSession (name, value) {
-  if (window.location.hostname !== 'localhost') {
+  // eslint-disable-next-line
+  if (window.GM_setValue) {
     // eslint-disable-next-line
-    GM_setValue(name, value)
+    window.GM_setValue(name, value)
+  } else {
+    const item = JSON.stringify(value)
+    if (item) {
+      window.localStorage.setItem(name, item)
+    }
   }
 }
 
 export function addStyle (style) {
-  if (window.location.hostname !== 'localhost') {
+  // eslint-disable-next-line
+  if (window.GM_addStyle) {
     // eslint-disable-next-line
-    GM_addStyle(style)
+    window.GM_addStyle(style)
   }
 }
