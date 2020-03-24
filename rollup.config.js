@@ -28,8 +28,7 @@ export default {
       output: {
         beautify: true,
         preamble: meta
-      },
-      keep_fnames: true
+      }
     })
   ]
 }

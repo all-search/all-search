@@ -22,7 +22,7 @@
   'use strict'
   e = e && Object.prototype.hasOwnProperty.call(e, 'default') ? e.default : e
 
-  function normalizeComponent (e, n, t, r, s, a, o, i, l, c) {
+  function n (e, n, t, r, s, a, o, i, l, c) {
     'boolean' != typeof o && (l = i, i = o, o = !1)
     const h = 'function' == typeof t ? t.options : t
     let m
@@ -36,7 +36,7 @@
       n.call(this, i(e))
     }), m) if (h.functional) {
       const e = h.render
-      h.render = function renderWithStyleInjection (n, t) {
+      h.render = function (n, t) {
         return m.call(t), e(n, t)
       }
     } else {
@@ -46,41 +46,41 @@
     return t
   }
 
-  const n = 'undefined' != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase())
+  const t = 'undefined' != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase())
 
-  function createInjector (e) {
-    return (e, s) => function addStyle (e, s) {
-      const a = n ? s.media || 'default' : e, o = r[a] || (r[a] = {
+  function r (e) {
+    return (e, n) => function (e, n) {
+      const r = t ? n.media || 'default' : e, o = a[r] || (a[r] = {
         ids: new Set,
         styles: []
       })
       if (!o.ids.has(e)) {
         o.ids.add(e)
-        let n = s.source
-        if (s.map && (n += '\n/*# sourceURL=' + s.map.sources[0] + ' */', n += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(s.map)))) + ' */'),
+        let t = n.source
+        if (n.map && (t += '\n/*# sourceURL=' + n.map.sources[0] + ' */', t += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(n.map)))) + ' */'),
         o.element || (o.element = document.createElement('style'), o.element.type = 'text/css',
-        s.media && o.element.setAttribute('media', s.media), void 0 === t && (t = document.head || document.getElementsByTagName('head')[0]),
-          t.appendChild(o.element)), 'styleSheet' in o.element) o.styles.push(n), o.element.styleSheet.cssText = o.styles.filter(Boolean).join('\n') else {
-          const e = o.ids.size - 1, t = document.createTextNode(n), r = o.element.childNodes
-          r[e] && o.element.removeChild(r[e]), r.length ? o.element.insertBefore(t, r[e]) : o.element.appendChild(t)
+        n.media && o.element.setAttribute('media', n.media), void 0 === s && (s = document.head || document.getElementsByTagName('head')[0]),
+          s.appendChild(o.element)), 'styleSheet' in o.element) o.styles.push(t), o.element.styleSheet.cssText = o.styles.filter(Boolean).join('\n') else {
+          const e = o.ids.size - 1, n = document.createTextNode(t), r = o.element.childNodes
+          r[e] && o.element.removeChild(r[e]), r.length ? o.element.insertBefore(n, r[e]) : o.element.appendChild(n)
         }
       }
-    }(e, s)
-    }
+    }(e, n)
+  }
 
-  let t
-  const r = {}
-  const s = {
+  let s
+  const a = {}
+  const o = {
     name: 'logo'
   }
-  var __vue_render__ = function () {
+  var i = function () {
     var e = this.$createElement
     this._self._c
     return this._m(0)
   }
-  __vue_render__._withStripped = !0
-  const a = normalizeComponent({
-    render: __vue_render__,
+  i._withStripped = !0
+  const l = n({
+    render: i,
     staticRenderFns: [function () {
       var e = this.$createElement, n = this._self._c || e
       return n('a', {
@@ -94,20 +94,20 @@
       }, [this._v('\n    All Search\n  ')])])
     }]
   }, (function (e) {
-    e && e('data-v-4c237c16_0', {
-      source: '.as-title[data-v-4c237c16] {\n  text-decoration: none;\n}\n.as-title .as-title-inner[data-v-4c237c16] {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */',
+    e && e('data-v-5c453d41_0', {
+      source: '.as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */',
       map: {
         version: 3,
         sources: ['E:\\project\\all-search\\src\\components\\logo.vue', 'logo.vue'],
         names: [],
         mappings: 'AAoBA;EACA,qBAAA;ACnBA;ADqBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;ACnBA;;AAEA,mCAAmC',
         file: 'logo.vue',
-        sourcesContent: ['<template>\r\n  <a class="as-title"\r\n     href="https://github.com/endday/all-search"\r\n     target="_blank"\r\n  >\r\n    <p class="as-title-inner">\r\n      All Search\r\n    </p>\r\n  </a>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'logo\'\r\n}\r\n<\/script>\r\n\r\n<style lang="scss" scoped>\r\n  @import "../assets/common";\r\n\r\n  .as-title {\r\n    text-decoration: none;\r\n\r\n    .as-title-inner {\r\n      font-size: 18px;\r\n      width: 120px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-weight: 600;\r\n      color: #1990fc;\r\n      margin: 0;\r\n      text-align: center;\r\n      cursor: pointer;\r\n    }\r\n  }\r\n</style>\r\n', '.as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */']
+        sourcesContent: ['<template>\r\n  <a class="as-title"\r\n     href="https://github.com/endday/all-search"\r\n     target="_blank"\r\n  >\r\n    <p class="as-title-inner">\r\n      All Search\r\n    </p>\r\n  </a>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'logo\'\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-title {\r\n    text-decoration: none;\r\n\r\n    .as-title-inner {\r\n      font-size: 18px;\r\n      width: 120px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-weight: 600;\r\n      color: #1990fc;\r\n      margin: 0;\r\n      text-align: center;\r\n      cursor: pointer;\r\n    }\r\n  }\r\n</style>\r\n', '.as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */']
       },
       media: void 0
     })
-  }), s, 'data-v-4c237c16', !1, void 0, !1, createInjector, void 0, void 0)
-  var o = [{
+  }), o, void 0, !1, void 0, !1, r, void 0, void 0)
+  var c = [{
     nameZh: '默认',
     name: 'common',
     list: [{
@@ -440,7 +440,7 @@
       url: 'https://www.quora.com/search?q=%s'
     }]
   }]
-  const i = {
+  const h = {
     name: 'category',
     props: {
       value: {
@@ -449,7 +449,7 @@
       }
     },
     data: () => ({
-      engines: o,
+      engines: c,
       show: !1
     }),
     computed: {
@@ -470,7 +470,7 @@
       }
     }
   }
-  var __vue_render__$1 = function () {
+  var m = function () {
     var e = this, n = e.$createElement, t = e._self._c || n
     return t('div', {
       staticClass: 'as-select'
@@ -521,9 +521,9 @@
       }
     })]);
   };
-  __vue_render__$1._withStripped = !0
-  const l = normalizeComponent({
-    render: __vue_render__$1,
+  m._withStripped = !0
+  const u = n({
+    render: m,
     staticRenderFns: []
   }, (function (e) {
     e && e('data-v-4c707c2f_0', {
@@ -538,29 +538,29 @@
       },
       media: void 0
         });
-  }), i, void 0, !1, void 0, !1, createInjector, void 0, void 0);
-  const c = document.createElement('a')
+  }), h, void 0, !1, void 0, !1, r, void 0, void 0);
+  const p = document.createElement('a')
 
-  function parseUrl (e) {
+  function d (e) {
     let n = e
     if (n = n.toLowerCase(), n.indexOf('//') < 0) n = `//${n}` else {
-      if (!(n.indexOf('//') > -1)) return c
+      if (!(n.indexOf('//') > -1)) return p
       n.startsWith('http://') || n.startsWith('https://') || n.startsWith('ftp://') || n.startsWith('files://') || (n = n.replace(/.*\/\//, '//'))
     }
-    return c.href = n, {
-      href: c.href,
-      origin: c.origin,
-      protocol: c.protocol,
-      host: c.host,
-      hostname: c.hostname,
-      port: c.port,
-      pathname: c.pathname,
-      search: c.search,
-      hash: c.hash
+    return p.href = n, {
+      href: p.href,
+      origin: p.origin,
+      protocol: p.protocol,
+      host: p.host,
+      hostname: p.hostname,
+      port: p.port,
+      pathname: p.pathname,
+      search: p.search,
+      hash: p.hash
     }
     }
 
-  const h = {
+  const A = {
     name: 'site-menu',
     props: {
       menus: {
@@ -571,7 +571,7 @@
     data: () => ({}),
     methods: {
       getKeyword () {
-        return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function getKeyword () {
+        return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function () {
           const e = document.querySelector('input[type=\'search\'],input[type=\'text\'][autocomplete=\'off\'],input[autocomplete=\'off\']:not([type])') || document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])')
           return e ? 'INPUT' === e.nodeName || 'textarea' === e.localName ? e.value : e.textContent : ''
         }()
@@ -589,7 +589,7 @@
       }
     }
   }
-  var __vue_render__$2 = function () {
+  var g = function () {
     var e = this, n = e.$createElement, t = e._self._c || n
     return t('div', {
       staticClass: 'as-menu-container'
@@ -615,32 +615,32 @@
       })])
     })), 0)])
   }
-  __vue_render__$2._withStripped = !0
-  const m = {
+  g._withStripped = !0
+  const b = {
     name: 'all-search',
     components: {
-      logo: a,
-      category: l,
-      siteMenu: normalizeComponent({
-        render: __vue_render__$2,
+      logo: l,
+      category: u,
+      siteMenu: n({
+        render: g,
         staticRenderFns: []
       }, (function (e) {
-        e && e('data-v-138bf00a_0', {
-          source: '.as-menu-container[data-v-138bf00a] {\n  display: flex;\n}\n.as-menu[data-v-138bf00a] {\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu[data-v-138bf00a] {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.as-submenu[data-v-138bf00a]:hover {\n  color: #1890ff;\n  /*border-bottom: 2px solid #1890ff;*/\n}\n.as-submenu-title[data-v-138bf00a] {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
+        e && e('data-v-0a706ed9_0', {
+          source: '.as-menu-container {\n  display: flex;\n}\n.as-menu {\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.as-submenu:hover {\n  color: #1890ff;\n  /*border-bottom: 2px solid #1890ff;*/\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */',
           map: {
             version: 3,
             sources: ['E:\\project\\all-search\\src\\components\\menu.vue', 'menu.vue'],
             names: [],
             mappings: 'AA2DA;EACA,aAAA;AC1DA;AD6DA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AC1DA;AD6DA;EACA,kBAAA;EACA,QAAA;EACA,qBAAA;EACA,sBAAA;AC1DA;AD2DA;EACA,cAAA;EACA,oCAAA;ACzDA;AD6DA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1DA;;AAEA,mCAAmC',
             file: 'menu.vue',
-            sourcesContent: ['<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <div class="as-submenu-title"\r\n             v-text="item.nameZh">\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss" scoped>\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n  }\r\n\r\n  .as-menu {\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    position: relative;\r\n    top: 1px;\r\n    display: inline-block;\r\n    vertical-align: bottom;\r\n    &:hover {\r\n      color: #1890ff;\r\n      /*border-bottom: 2px solid #1890ff;*/\r\n    }\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n  }\r\n</style>\r\n', '.as-menu-container {\n  display: flex;\n}\n\n.as-menu {\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.as-submenu:hover {\n  color: #1890ff;\n  /*border-bottom: 2px solid #1890ff;*/\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */']
+            sourcesContent: ['<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <div class="as-submenu-title"\r\n             v-text="item.nameZh">\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n  }\r\n\r\n  .as-menu {\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    position: relative;\r\n    top: 1px;\r\n    display: inline-block;\r\n    vertical-align: bottom;\r\n    &:hover {\r\n      color: #1890ff;\r\n      /*border-bottom: 2px solid #1890ff;*/\r\n    }\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n  }\r\n</style>\r\n', '.as-menu-container {\n  display: flex;\n}\n\n.as-menu {\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  vertical-align: bottom;\n}\n.as-submenu:hover {\n  color: #1890ff;\n  /*border-bottom: 2px solid #1890ff;*/\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=menu.vue.map */']
           },
           media: void 0
         })
-      }), h, 'data-v-138bf00a', !1, void 0, !1, createInjector, void 0, void 0)
+      }), A, void 0, !1, void 0, !1, r, void 0, void 0)
     },
     data: () => ({
-      engines: o,
+      engines: c,
       categoryName: 'search'
     }),
     computed: {
@@ -650,7 +650,7 @@
       }
     },
     created () {
-      this.categoryName = function getSession (e) {
+      this.categoryName = function (e) {
         if (window.GM_getValue) return window.GM_getValue(e)
         const n = window.localStorage.getItem(e)
         return n ? JSON.parse(n) : null
@@ -661,7 +661,7 @@
         this.$emit('menu-click', e)
       },
       changeCategory (e) {
-        !function setSession (e, n) {
+        !function (e, n) {
           if (window.GM_setValue) window.GM_setValue(e, n) else {
             const t = JSON.stringify(n)
             t && window.localStorage.setItem(e, t)
@@ -670,7 +670,7 @@
       }
     }
   }
-  var __vue_render__$3 = function () {
+  var w = function () {
     var e = this.$createElement, n = this._self._c || e
     return n('header', {
       attrs: {
@@ -689,30 +689,29 @@
       }
     })], 1)
   }
-  __vue_render__$3._withStripped = !0
-  const u = normalizeComponent({
-      render: __vue_render__$3,
-      staticRenderFns: []
-    }, (function (e) {
-      e && e('data-v-5316ad40_0', {
-        source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 30px;\n  line-height: 30px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
-        map: {
-          version: 3,
-          sources: ['E:\\project\\all-search\\src\\App.vue', 'App.vue'],
-          names: [],
-          mappings: 'AAwDA;EACA,gBAAA;ACvDA;AD0DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;ACvDA;AD2DA;EACA,gBAAA;ACxDA;AD2DA;EACA,SAAA;ACzDA;AD4DA;EACA,cAAA;AC1DA;AD4DA;EACA,YAAA;EACA,iBAAA;AC1DA;;AAEA,kCAAkC',
-          file: 'App.vue',
-          sourcesContent: ['<template>\r\n  <header id="all-search">\r\n    <logo/>\r\n    <category :value="categoryName"\r\n              @change="changeCategory"/>\r\n    <site-menu :menus="menus"/>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport logo from \'./components/logo.vue\'\r\nimport category from \'./components/category.vue\'\r\nimport siteMenu from \'./components/menu.vue\'\r\nimport engines from \'./config/engines/index.js\'\r\nimport { getSession, setSession } from \'./util\'\r\n\r\nexport default {\r\n  name: \'all-search\',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: \'search\'\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list\r\n      }\r\n      return this.engines[0].list\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession(\'__allSearch__categoryName\') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit(\'menu-click\', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession(\'__allSearch__categoryName\', name)\r\n      this.categoryName = name\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "./assets/common";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, \'Noto Sans\', sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\', \'Noto Color Emoji\';\r\n  }\r\n\r\n  .el-tabs {\r\n    .el-tabs__header {\r\n      margin-bottom: 0;\r\n    }\r\n\r\n    .el-tabs__nav-wrap::after {\r\n      height: 0;\r\n    }\r\n\r\n    .el-tabs__nav {\r\n      margin: 0 20px;\r\n    }\r\n    .el-tabs__item {\r\n      height: $height;\r\n      line-height: $height;\r\n    }\r\n  }\r\n</style>\r\n', 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 30px;\n  line-height: 30px;\n}\n\n/*# sourceMappingURL=App.vue.map */']
-        },
-        media: void 0
-      })
-    }), m, void 0, !1, void 0, !1, createInjector, void 0, void 0),
-    p = ['endday.github.io', 'endday.gitee.io', 'localhost']
-  const d = {
+  w._withStripped = !0
+  const y = n({
+    render: w,
+    staticRenderFns: []
+  }, (function (e) {
+    e && e('data-v-5316ad40_0', {
+      source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 30px;\n  line-height: 30px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
+      map: {
+        version: 3,
+        sources: ['E:\\project\\all-search\\src\\App.vue', 'App.vue'],
+        names: [],
+        mappings: 'AAwDA;EACA,gBAAA;ACvDA;AD0DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;ACvDA;AD2DA;EACA,gBAAA;ACxDA;AD2DA;EACA,SAAA;ACzDA;AD4DA;EACA,cAAA;AC1DA;AD4DA;EACA,YAAA;EACA,iBAAA;AC1DA;;AAEA,kCAAkC',
+        file: 'App.vue',
+        sourcesContent: ['<template>\r\n  <header id="all-search">\r\n    <logo/>\r\n    <category :value="categoryName"\r\n              @change="changeCategory"/>\r\n    <site-menu :menus="menus"/>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport logo from \'./components/logo.vue\'\r\nimport category from \'./components/category.vue\'\r\nimport siteMenu from \'./components/menu.vue\'\r\nimport engines from \'./config/engines/index.js\'\r\nimport { getSession, setSession } from \'./util\'\r\n\r\nexport default {\r\n  name: \'all-search\',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: \'search\'\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list\r\n      }\r\n      return this.engines[0].list\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession(\'__allSearch__categoryName\') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit(\'menu-click\', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession(\'__allSearch__categoryName\', name)\r\n      this.categoryName = name\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "./assets/common";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, \'Noto Sans\', sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\', \'Noto Color Emoji\';\r\n  }\r\n\r\n  .el-tabs {\r\n    .el-tabs__header {\r\n      margin-bottom: 0;\r\n    }\r\n\r\n    .el-tabs__nav-wrap::after {\r\n      height: 0;\r\n    }\r\n\r\n    .el-tabs__nav {\r\n      margin: 0 20px;\r\n    }\r\n    .el-tabs__item {\r\n      height: $height;\r\n      line-height: $height;\r\n    }\r\n  }\r\n</style>\r\n', 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 30px;\n  line-height: 30px;\n}\n\n/*# sourceMappingURL=App.vue.map */']
+      },
+      media: void 0
+    })
+  }), b, void 0, !1, void 0, !1, r, void 0, void 0), f = ['endday.github.io', 'endday.gitee.io', 'localhost']
+  const x = {
     url: '',
     enabled: !1,
     style: ''
-  }, A = [{
+  }, C = [{
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
     enabled: !0,
     style: '.srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}'
@@ -1057,27 +1056,25 @@
     enabled: !0,
     style: ''
   }].find(e => e.url.test(window.location.href))
-  A && (d.url = A.url, d.enabled = A.enabled, d.style = A.style), e.config.productionTip = !1
-  const g = function getCurrentSite () {
+  C && (x.url = C.url, x.enabled = C.enabled, x.style = C.style), e.config.productionTip = !1
+  const v = function () {
     let e = null
-    for (const n of o) e || (e = n.list.find(e => {
-      const n = parseUrl(e.url)
+    for (const n of c) e || (e = n.list.find(e => {
+      const n = d(e.url)
       return window.location.href.includes(n.hostname + n.pathname)
     }))
     return e
   }()
-  if (d.enabled || function isWhiteList () {
-    return p.findIndex(e => e === window.location.hostname) > -1
-  }()) {
+  if (x.enabled || f.findIndex(e => e === window.location.hostname) > -1) {
     const n = document.createElement('div')
     n.id = 'all-search'
     const t = new e({
       data: () => ({
-        currentSite: g
+        currentSite: v
       }),
-      render: e => e(u)
+      render: e => e(y)
     });
-    (function checkBody () {
+    (function () {
       let e = 0
       return new Promise((n, t) => {
         if (document.body) n() else {
@@ -1089,9 +1086,8 @@
       })
     })().then(() => {
       const e = document.body.parentElement.insertBefore(n, document.body)
-      t.$mount(e), d.style && function addStyle$1 (e) {
-        window.GM_addStyle && window.GM_addStyle(e)
-      }(d.style)
+      var r
+      t.$mount(e), x.style && (r = x.style, window.GM_addStyle && window.GM_addStyle(r))
     })
   }
 }(Vue);
