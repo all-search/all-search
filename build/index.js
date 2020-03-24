@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search
-// @version      0.1.4a
+// @version      0.1.4b
 // @description  在各个引擎之间跳转的顶部菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
