@@ -1,11 +1,18 @@
+import common from './common'
 import search from './search'
 import translate from './translate'
 import developer from './developer'
 import music from './music'
 import news from './news'
 import social from './social'
+import knowledge from './knowledge'
 
 export default [
+  {
+    nameZh: '默认',
+    name: 'common',
+    list: common
+  },
   {
     nameZh: '搜索',
     name: 'search',
@@ -35,5 +42,10 @@ export default [
     nameZh: '社交',
     name: 'social',
     list: social
+  },
+  {
+    nameZh: '百科',
+    name: 'knowledge',
+    list: knowledge
   }
 ]

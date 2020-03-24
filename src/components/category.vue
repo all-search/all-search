@@ -5,6 +5,7 @@
       <span v-text="nameZh"></span>
     </div>
     <ul class="as-select-list"
+        :class="{ fadeInDown: show }"
         v-show="show">
       <li
         v-for="(item,index) in engines"
@@ -13,6 +14,10 @@
         @click="selectCategory(index,item)">
       </li>
     </ul>
+    <div class="as-select-mask"
+         @click="show = false"
+         v-show="show">
+    </div>
   </div>
 </template>
 
@@ -95,6 +100,7 @@ export default {
     box-sizing: border-box;
     margin: 5px 0;
     position: absolute;
+    z-index: 99;
     li {
       font-size: 14px;
       padding: 0 20px;
@@ -111,5 +117,13 @@ export default {
         background-color: #f5f7fa;
       }
     }
+  }
+
+  .as-select-mask {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
 </style>

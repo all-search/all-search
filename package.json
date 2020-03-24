@@ -1,8 +1,9 @@
 {
   "name": "all-search",
-  "version": "0.1.3a",
-  "license": "MIT",
+  "version": "0.1.4",
   "main": "dist/index.js",
+  "author": "endday",
+  "license": "GPL-2.0",
   "homepage": "https://github.com/endday/all-search",
   "repository": {
     "type": "git",

@@ -4,7 +4,8 @@
       <li class="as-submenu"
           v-for="(item, i) in menus"
           :key="i"
-          @click="handleClick(item)">
+          @click="handleClick(item)"
+          @mousedown="handleMouseWheelClick($event, item)">
         <div class="as-submenu-title"
              v-text="item.nameZh">
         </div>
@@ -30,15 +31,24 @@ export default {
     return {}
   },
   methods: {
+    getKeyword () {
+      if (this.$root.currentSite.keyword) {
+        return this.$root.currentSite.keyword()
+      } else {
+        return getKeyword()
+      }
+    },
     handleClick (item) {
       this.$emit('click', item)
-      let keyword = ''
-      if (this.$root.currentSite.keyword) {
-        keyword = this.$root.currentSite.keyword()
-      } else {
-        keyword = getKeyword()
-      }
+      const keyword = this.getKeyword()
       window.location.href = item.url.replace('%s', keyword)
+    },
+    handleMouseWheelClick (event, item) {
+      const btnNum = event.button
+      if (btnNum === 1) {
+        const keyword = this.getKeyword()
+        window.open(item.url.replace('%s', keyword))
+      }
     }
   }
 }
@@ -69,11 +79,10 @@ export default {
     top: 1px;
     display: inline-block;
     vertical-align: bottom;
-  }
-
-  .as-submenu-selected {
-    color: #1890ff;
-    border-bottom: 2px solid #1890ff;
+    &:hover {
+      color: #1890ff;
+      /*border-bottom: 2px solid #1890ff;*/
+    }
   }
 
   .as-submenu-title {

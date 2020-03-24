@@ -35,7 +35,6 @@ const list = [
     style: ''
   },
   {
-
     url: /^https?:\/\/searx\.me\/\?q/i,
     enabled: true,
     style: ''
@@ -97,6 +96,11 @@ const list = [
   },
   {
     url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
+    enabled: true,
+    style: ''
+  },
+  {
+    url: /^https?:\/\/www\.so\.com\/s/i,
     enabled: true,
     style: ''
   },

@@ -1,14 +1,15 @@
 import pkg from '../../package.json'
 
-const banner =
-  `// ==UserScript==
+const now = new Date()
+const meta = `// ==UserScript==
 // @name         ${pkg.name}
 // @version      ${pkg.version}
 // @description  在各个引擎之间跳转的顶部菜单，借鉴自searchEngineJump
-// @author       endday
+// @author       ${pkg.author}
+// @license      ${pkg.license}
+// @update       ${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}
 // @include      *
-// @namespace    https://github.com/endday
-// @homepage     /all-search
+// @homepageURL  ${pkg.homepage}
 
 // @require      https://cdn.jsdelivr.net/npm/vue
 // @run-at       document-body
@@ -18,6 +19,7 @@ const banner =
 // @grant        GM_addStyle
 
 // ==/UserScript==
+/* eslint-disable */
 `
 
-export default banner
+export default meta
