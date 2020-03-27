@@ -6,7 +6,7 @@ import target from './config/loadList'
 
 Vue.config.productionTip = false
 
-const currentSite = getCurrentSite()
+const currentSite = target
 
 if (target.enabled || isWhiteList()) {
   const el = document.createElement('div')

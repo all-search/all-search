@@ -282,7 +282,10 @@ const list = [
   {
     url: /^https?:\/\/fanyi\.baidu\.com/i,
     enabled: true,
-    style: ''
+    style: '',
+    keyword () {
+      return document.getElementById('baidu_translate_input').value
+    }
   },
   {
     url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/i,
@@ -434,7 +437,8 @@ const list = [
 const item = {
   url: '',
   enabled: false,
-  style: ''
+  style: '',
+  keyword: null
 }
 
 const target = list.find(item => {
@@ -445,6 +449,7 @@ if (target) {
   item.url = target.url
   item.enabled = target.enabled
   item.style = target.style
+  item.keyword = target.keyword
 }
 
 export default item

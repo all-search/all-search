@@ -6,9 +6,9 @@
           :key="i"
           @click="handleClick(item)"
           @mousedown="handleMouseWheelClick($event, item)">
-        <div class="as-submenu-title"
-             v-text="item.nameZh">
-        </div>
+        <p class="as-submenu-title"
+           v-text="item.nameZh">
+        </p>
       </li>
     </ul>
   </div>
@@ -62,6 +62,7 @@ export default {
   }
 
   .as-menu {
+    display: flex;
     line-height: $height;
     width: 100%;
     height: 100%;
@@ -75,14 +76,11 @@ export default {
   }
 
   .as-submenu {
+    flex: 1;
+    display: flex;
+    align-items: center;
     position: relative;
     top: 1px;
-    display: inline-block;
-    vertical-align: bottom;
-    &:hover {
-      color: #1890ff;
-      /*border-bottom: 2px solid #1890ff;*/
-    }
   }
 
   .as-submenu-title {
@@ -93,5 +91,9 @@ export default {
     white-space: nowrap;
     cursor: pointer;
     font-size: 14px;
+
+    &:hover {
+      color: #1890ff;
+    }
   }
 </style>

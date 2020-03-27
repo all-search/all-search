@@ -1,5 +1,3 @@
-import engines from '../config/engines'
-
 export function getQueryString (name, url) {
   url = url || window.location.href
   const r = new RegExp('(\\?|#|&)' + name + '=([^&#]*)(&|#|$)')
@@ -51,19 +49,6 @@ export function parseUrl (url) {
     search: el.search, //  'query string，?开头'
     hash: el.hash //  '#开头的fragment identifier'
   }
-}
-
-export function getCurrentSite () {
-  let currentSite = null
-  for (const module of engines) {
-    if (!currentSite) {
-      currentSite = module.list.find(item => {
-        const urlObj = parseUrl(item.url)
-        return window.location.href.includes(urlObj.hostname + urlObj.pathname)
-      })
-    }
-  }
-  return currentSite
 }
 
 export function checkBody () {
