@@ -1,455 +1,289 @@
 const list = [
   {
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
-    enabled: true,
     style: '.srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}'
   },
   {
-    url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
   },
   {
-    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
   },
   {
-    url: /^https?:\/\/[^.]*\.bing\.com\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/[^.]*\.bing\.com\/search/
   },
   {
-    url: /^https?:\/\/duckduckgo\.com\/*/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/duckduckgo\.com\/*/i
   },
   {
-    url: /^https?:\/\/search\.yahoo\.com\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/search\.yahoo\.com\/search/i
   },
   {
-    url: /^https?:\/\/tw\.search\.yahoo\.com\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/tw\.search\.yahoo\.com\/search/i
   },
   {
-    url: /^https?:\/\/searx\.me\/\?q/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/searx\.me\/\?q/i
   },
   {
     url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
-    enabled: true,
     style: '.header { top: 30px }'
   },
   {
     url: /^https?:\/\/yandex\.com\/search/i,
-    enabled: true,
     style: 'body { margin: 30px!important; }'
   },
   {
-    url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i
   },
   {
     url: /^https?:\/\/mijisou.com\/\?q/i,
-    enabled: true,
     style: '.search-page{top: 36px} .searx-navbar{top: 48px!important;}'
   },
   {
-    url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
   },
   {
-    url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i
   },
   {
-    url: /^https?:\/\/baike\.baidu\.com\/item/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/baike\.baidu\.com\/item/
   },
   {
-    url: /^https?:\/\/baike\.baidu\.com\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/baike\.baidu\.com\/search/
   },
   {
-    url: /^https?:\/\/wenku\.baidu\.com\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/wenku\.baidu\.com\/search/i
   },
   {
-    url: /^https?:\/\/zhidao\.baidu\.com\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/zhidao\.baidu\.com\/search/i
   },
   {
-    url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i
   },
   {
     url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
-    enabled: true,
-    style: ''
+    style: '.Sticky.is-fixed { transform: translateY(30px); }'
   },
   {
-    url: /^https?:\/\/www\.so\.com\/s/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.so\.com\/s/i
   },
   {
-    url: /^https?:\/\/so\.baike\.com\/doc/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/so\.baike\.com\/doc/i
   },
   {
-    url: /^https?:\/\/www\.baike\.com\/wiki/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.baike\.com\/wiki/i
   },
   {
-    url: /^https?:\/\/www\.docin\.com\/search\.do/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.docin\.com\/search\.do/
   },
   {
     url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
-    enabled: true,
-    style: '.header {top:30px}'
+    style: '.header { top:30px }'
   },
   {
-    url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
   },
   {
-    url: /^https?:\/\/www\.quora\.com\/search\?/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.quora\.com\/search\?/i
   },
   {
-    url: /^https?:\/\/stackoverflow\.com\/search\?/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/stackoverflow\.com\/search\?/i
   },
   {
-    url: /^https?:\/\/www\.soku\.com\/search_video\//,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.soku\.com\/search_video\//
   },
   {
-    url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//
   },
   {
-    url: /^https?:\/\/search\.bilibili\.com\/all/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/search\.bilibili\.com\/all/
   },
   {
-    url: /^https?:\/\/www\.acfun\.cn\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.acfun\.cn\/search/
   },
   {
-    url: /^https?:\/\/www\.youtube\.com\/results/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.youtube\.com\/results/
   },
   {
-    url: /^https?:\/\/www\.nicovideo\.jp\/search\//,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.nicovideo\.jp\/search\//
   },
   {
-    url: /^https?:\/\/so\.iqiyi\.com\/so\/q/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/so\.iqiyi\.com\/so\/q/
   },
   {
-    url: /^https?:\/\/v\.qq\.com\/x\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/v\.qq\.com\/x\/search/i
   },
   {
-    url: /^https?:\/\/music\.baidu\.com\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/music\.baidu\.com\/search/
   },
   {
-    url: /^https?:\/\/so\.1ting\.com\/all\.do/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/so\.1ting\.com\/all\.do/
   },
   {
-    url: /^https?:\/\/www\.xiami\.com\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.xiami\.com\/search/
   },
   {
-    url: /^https?:\/\/s\.music\.qq\.com/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/s\.music\.qq\.com/i
   },
   {
-    url: /^https?:\/\/music\.163\.com\/.*?#\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/music\.163\.com\/.*?#\/search/i
   },
   {
-    url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
   },
   {
-    url: /^https?:\/\/image\.baidu\.com\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/image\.baidu\.com\/search/i
   },
   {
-    url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i
   },
   {
-    url: /^https?:\/\/.*\.bing\.com\/images\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/.*\.bing\.com\/images\/search/i
   },
   {
-    url: /^https?:\/\/www\.flickr\.com\/search\//,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.flickr\.com\/search\//
   },
   {
-    url: /^http:\/\/www\.pixiv\.net\/search\.php/i,
-    enabled: true,
-    style: ''
+    url: /^http:\/\/www\.pixiv\.net\/search\.php/i
   },
   {
-    url: /^https?:\/\/huaban\.com\/search\/\?/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/huaban\.com\/search\/\?/
   },
   {
-    url: /^https?:\/\/www\.pinterest\.com\/search\//,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.pinterest\.com\/search\//
   },
   {
-    url: /^https?:\/\/thepiratebay\.org\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/thepiratebay\.org\/search/i
   },
   {
-    url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/i
   },
   {
-    url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/i
   },
   {
-    url: /^https?:\/\/www\.zimuzu\.tv\/search\//,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.zimuzu\.tv\/search\//
   },
   {
-    url: /^https?:\/\/so\.cqp\.cc\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/so\.cqp\.cc\/search/i
   },
   {
-    url: /^https?:\/\/subhd\.com\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/subhd\.com\/search/i
   },
   {
-    url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i
   },
   {
     url: /^https?:\/\/fanyi\.baidu\.com/i,
-    enabled: true,
-    style: '',
     keyword () {
       return document.getElementById('baidu_translate_input').value
     }
   },
   {
-    url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/i
   },
   {
-    url: /^https?:\/\/dict\.youdao\.com\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/dict\.youdao\.com\/search/i
   },
   {
-    url: /^https?:\/\/dict\.youdao\.com\/w/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/dict\.youdao\.com\/w/i
   },
   {
-    url: /^https?:\/\/dict\.cn\/./,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/dict\.cn\/./
   },
   {
-    url: /^https?:\/\/s\.taobao\.com\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/s\.taobao\.com\/search/
   },
   {
-    url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i
   },
   {
-    url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/i
   },
   {
-    url: /^https?:\/\/search\.jd\.com\/Search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/search\.jd\.com\/Search/
   },
   {
-    url: /^https?:\/\/search\.suning\.com/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/search\.suning\.com/i
   },
   {
-    url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/i
   },
   {
-    url: /^https?:\/\/search\.smzdm\.com\/\?/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/search\.smzdm\.com\/\?/i
   },
   {
-    url: /^https?:\/\/s\.weibo\.com\/weibo\//i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/s\.weibo\.com\/weibo\//i
   },
   {
-    url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i
   },
   {
-    url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/
   },
   {
-    url: /^https?:\/\/www\.douban\.com\/search/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.douban\.com\/search/i
   },
   {
-    url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/
   },
   {
-    url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
   },
   {
-    url: /^http:\/\/search\.cnki\.net\/search\.aspx/i,
-    enabled: true,
-    style: ''
+    url: /^http:\/\/search\.cnki\.net\/search\.aspx/i
   },
   {
-    url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i,
-    enabled: true,
-    style: ''
+    url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i
   },
   {
-    url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i
   },
   {
-    url: /^http:\/\/.*?ebscohost\.com\/.*?results/i,
-    enabled: true,
-    style: ''
+    url: /^http:\/\/.*?ebscohost\.com\/.*?results/i
   },
   {
-    url: /^http:\/\/link\.springer\.com\/search\?query=/i,
-    enabled: true,
-    style: ''
+    url: /^http:\/\/link\.springer\.com\/search\?query=/i
   },
   {
-    url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/i,
-    enabled: true,
-    style: ''
+    url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/i
   },
   {
-    url: /^https?:.*?runoob\.com\//i,
-    enabled: true,
-    style: ''
+    url: /^https?:.*?runoob\.com\//i
   },
   {
-    url: /^https?:\/\/github\.com\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/github\.com\/search/
   },
   {
-    url: /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/
   },
   {
-    url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
   },
   {
-    url: /^https?:\/\/www\.startpage\.com\/do\/search/,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/www\.startpage\.com\/do\/search/
   },
   {
-    url: /^https?:\/\/127\.0\.0\.1:8090\/./,
-    enabled: true,
-    style: ''
+    url: /^https?:\/\/endday\.github\.io/
+  },
+  {
+    url: /^https?:\/\/endday\.gitee\.io/
   }
 ]
 
-const item = {
-  url: '',
-  enabled: false,
-  style: '',
-  keyword: null
-}
+let item = {}
 
 const target = list.find(item => {
   return item.url.test(window.location.href)
 })
 
-if (target) {
+if (target && !target.disabled) {
   item.url = target.url
-  item.enabled = target.enabled
+  item.disabled = target.disabled
   item.style = target.style
   item.keyword = target.keyword
+} else {
+  item = null
 }
 
 export default item

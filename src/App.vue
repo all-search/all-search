@@ -36,9 +36,9 @@ export default {
     menus () {
       const i = this.engines.findIndex(item => item.name === this.categoryName)
       if (i > -1) {
-        return this.engines[i].list
+        return this.engines[i].list.filter(item => !item.disabled)
       }
-      return this.engines[0].list
+      return this.engines[0].list.filter(item => !item.disabled)
     }
   },
   created () {

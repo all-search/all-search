@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.4d
+// @version      0.1.4e
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -18,10 +18,10 @@
 // ==/UserScript==
 /* eslint-disable */
 
-!function(e) {
+!function(n) {
     "use strict";
-    e = e && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
-    var n = [ {
+    n = n && Object.prototype.hasOwnProperty.call(n, "default") ? n.default : n;
+    var e = [ {
         nameZh: "默认",
         name: "common",
         list: [ {
@@ -51,7 +51,8 @@
         }, {
             name: "juejin",
             nameZh: "掘金",
-            url: "https://juejin.im/search?query=%s&type=all"
+            url: "https://juejin.im/search?query=%s&type=all",
+            disabled: !0
         }, {
             name: "GitHub",
             nameZh: "GitHub",
@@ -355,56 +356,56 @@
         } ]
     } ];
     document.createElement("a");
-    function t(e, n, t, r, s, a, o, i, l, c) {
-        "boolean" != typeof o && (l = i, i = o, o = !1);
+    function t(n, e, t, r, o, s, a, i, l, c) {
+        "boolean" != typeof a && (l = i, i = a, a = !1);
         const A = "function" == typeof t ? t.options : t;
-        let d;
-        if (e && e.render && (A.render = e.render, A.staticRenderFns = e.staticRenderFns, 
-        A._compiled = !0, s && (A.functional = !0)), r && (A._scopeId = r), a ? (d = function(e) {
-            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            n && n.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(a);
-        }, A._ssrRegister = d) : n && (d = o ? function(e) {
-            n.call(this, c(e, this.$root.$options.shadowRoot));
-        } : function(e) {
-            n.call(this, i(e));
-        }), d) if (A.functional) {
-            const e = A.render;
-            A.render = function(n, t) {
-                return d.call(t), e(n, t);
+        let p;
+        if (n && n.render && (A.render = n.render, A.staticRenderFns = n.staticRenderFns, 
+        A._compiled = !0, o && (A.functional = !0)), r && (A._scopeId = r), s ? (p = function(n) {
+            (n = n || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (n = __VUE_SSR_CONTEXT__), 
+            e && e.call(this, l(n)), n && n._registeredComponents && n._registeredComponents.add(s);
+        }, A._ssrRegister = p) : e && (p = a ? function(n) {
+            e.call(this, c(n, this.$root.$options.shadowRoot));
+        } : function(n) {
+            e.call(this, i(n));
+        }), p) if (A.functional) {
+            const n = A.render;
+            A.render = function(e, t) {
+                return p.call(t), n(e, t);
             };
         } else {
-            const e = A.beforeCreate;
-            A.beforeCreate = e ? [].concat(e, d) : [ d ];
+            const n = A.beforeCreate;
+            A.beforeCreate = n ? [].concat(n, p) : [ p ];
         }
         return t;
     }
     const r = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-    function s(e) {
-        return (e, n) => function(e, n) {
-            const t = r ? n.media || "default" : e, s = o[t] || (o[t] = {
+    function o(n) {
+        return (n, e) => function(n, e) {
+            const t = r ? e.media || "default" : n, o = a[t] || (a[t] = {
                 ids: new Set,
                 styles: []
             });
-            if (!s.ids.has(e)) {
-                s.ids.add(e);
-                let t = n.source;
-                if (n.map && (t += "\n/*# sourceURL=" + n.map.sources[0] + " */", t += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(n.map)))) + " */"), 
-                s.element || (s.element = document.createElement("style"), s.element.type = "text/css", 
-                n.media && s.element.setAttribute("media", n.media), void 0 === a && (a = document.head || document.getElementsByTagName("head")[0]), 
-                a.appendChild(s.element)), "styleSheet" in s.element) s.styles.push(t), s.element.styleSheet.cssText = s.styles.filter(Boolean).join("\n"); else {
-                    const e = s.ids.size - 1, n = document.createTextNode(t), r = s.element.childNodes;
-                    r[e] && s.element.removeChild(r[e]), r.length ? s.element.insertBefore(n, r[e]) : s.element.appendChild(n);
+            if (!o.ids.has(n)) {
+                o.ids.add(n);
+                let t = e.source;
+                if (e.map && (t += "\n/*# sourceURL=" + e.map.sources[0] + " */", t += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(e.map)))) + " */"), 
+                o.element || (o.element = document.createElement("style"), o.element.type = "text/css", 
+                e.media && o.element.setAttribute("media", e.media), void 0 === s && (s = document.head || document.getElementsByTagName("head")[0]), 
+                s.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(t), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
+                    const n = o.ids.size - 1, e = document.createTextNode(t), r = o.element.childNodes;
+                    r[n] && o.element.removeChild(r[n]), r.length ? o.element.insertBefore(e, r[n]) : o.element.appendChild(e);
                 }
             }
-        }(e, n);
+        }(n, e);
     }
-    let a;
-    const o = {};
+    let s;
+    const a = {};
     const i = {
         name: "logo"
     };
     var l = function() {
-        var e = this.$createElement;
+        var n = this.$createElement;
         this._self._c;
         return this._m(0);
     };
@@ -412,19 +413,19 @@
     const c = t({
         render: l,
         staticRenderFns: [ function() {
-            var e = this.$createElement, n = this._self._c || e;
-            return n("a", {
+            var n = this.$createElement, e = this._self._c || n;
+            return e("a", {
                 staticClass: "as-title",
                 attrs: {
                     href: "https://github.com/endday/all-search",
                     target: "_blank"
                 }
-            }, [ n("p", {
+            }, [ e("p", {
                 staticClass: "as-title-inner"
             }, [ this._v("\n    All Search\n  ") ]) ]);
         } ]
-    }, (function(e) {
-        e && e("data-v-5c453d41_0", {
+    }, (function(n) {
+        n && n("data-v-5c453d41_0", {
             source: ".as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */",
             map: {
                 version: 3,
@@ -436,7 +437,7 @@
             },
             media: void 0
         });
-    }), i, void 0, !1, void 0, !1, s, void 0, void 0);
+    }), i, void 0, !1, void 0, !1, o, void 0, void 0);
     const A = {
         name: "category",
         props: {
@@ -446,84 +447,84 @@
             }
         },
         data: () => ({
-            engines: n,
+            engines: e,
             show: !1
         }),
         computed: {
             nameZh() {
-                const e = this.engines.findIndex(e => e.name === this.value);
-                return e > -1 ? this.engines[e].nameZh : this.engines[0].nameZh;
+                const n = this.engines.findIndex(n => n.name === this.value);
+                return n > -1 ? this.engines[n].nameZh : this.engines[0].nameZh;
             }
         },
         methods: {
-            handleChange(e) {
-                this.$emit("change", e);
+            handleChange(n) {
+                this.$emit("change", n);
             },
             openValue() {
                 this.show = !this.show;
             },
-            selectCategory(e, n) {
-                this.handleChange(n.name), this.show = !1;
+            selectCategory(n, e) {
+                this.handleChange(e.name), this.show = !1;
             }
         }
     };
-    var d = function() {
-        var e = this, n = e.$createElement, t = e._self._c || n;
+    var p = function() {
+        var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             staticClass: "as-select"
         }, [ t("div", {
             staticClass: "as-select-content",
             on: {
-                click: e.openValue
+                click: n.openValue
             }
         }, [ t("span", {
             domProps: {
-                textContent: e._s(e.nameZh)
+                textContent: n._s(n.nameZh)
             }
-        }) ]), e._v(" "), t("ul", {
+        }) ]), n._v(" "), t("ul", {
             directives: [ {
                 name: "show",
                 rawName: "v-show",
-                value: e.show,
+                value: n.show,
                 expression: "show"
             } ],
             staticClass: "as-select-list",
             class: {
-                fadeInDown: e.show
+                fadeInDown: n.show
             }
-        }, e._l(e.engines, (function(n, r) {
+        }, n._l(n.engines, (function(e, r) {
             return t("li", {
-                key: n.index,
+                key: e.index,
                 domProps: {
-                    textContent: e._s(n.nameZh)
+                    textContent: n._s(e.nameZh)
                 },
                 on: {
                     click: function(t) {
-                        return e.selectCategory(r, n);
+                        return n.selectCategory(r, e);
                     }
                 }
             });
-        })), 0), e._v(" "), t("div", {
+        })), 0), n._v(" "), t("div", {
             directives: [ {
                 name: "show",
                 rawName: "v-show",
-                value: e.show,
+                value: n.show,
                 expression: "show"
             } ],
             staticClass: "as-select-mask",
             on: {
-                click: function(n) {
-                    e.show = !1;
+                click: function(e) {
+                    n.show = !1;
                 }
             }
         }) ]);
     };
-    d._withStripped = !0;
-    const p = t({
-        render: d,
+    p._withStripped = !0;
+    const h = t({
+        render: p,
         staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-4c707c2f_0", {
+    }, (function(n) {
+        n && n("data-v-4c707c2f_0", {
             source: '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n.as-select-content {\n  width: 100px;\n  height: 30px;\n  line-height: 30px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.as-select-list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n  z-index: 99;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n.as-select-mask {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n/*# sourceMappingURL=category.vue.map */',
             map: {
                 version: 3,
@@ -535,8 +536,8 @@
             },
             media: void 0
         });
-    }), A, void 0, !1, void 0, !1, s, void 0, void 0);
-    const h = {
+    }), A, void 0, !1, void 0, !1, o, void 0, void 0);
+    const m = {
         name: "site-menu",
         props: {
             menus: {
@@ -548,55 +549,55 @@
         methods: {
             getKeyword() {
                 return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function() {
-                    const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
-                    return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
+                    const n = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
+                    return n ? "INPUT" === n.nodeName || "textarea" === n.localName ? n.value : n.textContent : "";
                 }();
             },
-            handleClick(e) {
-                this.$emit("click", e);
-                const n = this.getKeyword();
-                window.location.href = e.url.replace("%s", n);
+            handleClick(n) {
+                this.$emit("click", n);
+                const e = this.getKeyword();
+                window.location.href = n.url.replace("%s", e);
             },
-            handleMouseWheelClick(e, n) {
-                if (1 === e.button) {
-                    const e = this.getKeyword();
-                    window.open(n.url.replace("%s", e));
+            handleMouseWheelClick(n, e) {
+                if (1 === n.button) {
+                    const n = this.getKeyword();
+                    window.open(e.url.replace("%s", n));
                 }
             }
         }
     };
-    var m = function() {
-        var e = this, n = e.$createElement, t = e._self._c || n;
+    var d = function() {
+        var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             staticClass: "as-menu-container"
         }, [ t("ul", {
             staticClass: "as-menu"
-        }, e._l(e.menus, (function(n, r) {
+        }, n._l(n.menus, (function(e, r) {
             return t("li", {
                 key: r,
                 staticClass: "as-submenu",
                 on: {
                     click: function(t) {
-                        return e.handleClick(n);
+                        return n.handleClick(e);
                     },
                     mousedown: function(t) {
-                        return e.handleMouseWheelClick(t, n);
+                        return n.handleMouseWheelClick(t, e);
                     }
                 }
             }, [ t("p", {
                 staticClass: "as-submenu-title",
                 domProps: {
-                    textContent: e._s(n.nameZh)
+                    textContent: n._s(e.nameZh)
                 }
             }) ]);
         })), 0) ]);
     };
-    m._withStripped = !0;
+    d._withStripped = !0;
     const u = t({
-        render: m,
+        render: d,
         staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-33eabb56_0", {
+    }, (function(n) {
+        n && n("data-v-33eabb56_0", {
             source: ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */",
             map: {
                 version: 3,
@@ -608,7 +609,7 @@
             },
             media: void 0
         });
-    }), h, void 0, !1, void 0, !1, s, void 0, void 0);
+    }), m, void 0, !1, void 0, !1, o, void 0, void 0);
     const g = {
         name: "x-dialog",
         props: {
@@ -627,13 +628,13 @@
             }
         }
     };
-    var b = function() {
-        var e = this, n = e.$createElement, t = e._self._c || n;
+    var w = function() {
+        var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             directives: [ {
                 name: "show",
                 rawName: "v-show",
-                value: e.visible,
+                value: n.visible,
                 expression: "visible"
             } ],
             staticClass: "as-dialog"
@@ -643,36 +644,36 @@
             staticClass: "as-dialog__header"
         }, [ t("p", {
             domProps: {
-                textContent: e._s(e.title)
+                textContent: n._s(n.title)
             }
-        }), e._v(" "), t("span", {
+        }), n._v(" "), t("span", {
             staticClass: "as-dialog__close",
             on: {
-                click: e.handleClose
+                click: n.handleClose
             }
-        }) ]), e._v(" "), t("div", {
+        }) ]), n._v(" "), t("div", {
             staticClass: "as-dialog__body"
-        }, [ e._t("default") ], 2), e._v(" "), t("div", {
+        }, [ n._t("default") ], 2), n._v(" "), t("div", {
             staticClass: "as-dialog__footer"
-        }) ]), e._v(" "), t("div", {
+        }) ]), n._v(" "), t("div", {
             staticClass: "as-dialog__mask",
             on: {
-                click: e.handleClose
+                click: n.handleClose
             }
         }) ]);
     };
-    b._withStripped = !0;
-    const w = {
+    w._withStripped = !0;
+    const f = {
         name: "all-search",
         components: {
             logo: c,
-            category: p,
+            category: h,
             siteMenu: u,
             xDialog: t({
-                render: b,
+                render: w,
                 staticRenderFns: []
-            }, (function(e) {
-                e && e("data-v-dee8096c_0", {
+            }, (function(n) {
+                n && n("data-v-dee8096c_0", {
                     source: '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  overflow: auto;\n  margin: 0;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  opacity: 0.5;\n  background: #000;\n}\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 2px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  width: 50%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n.as-dialog__header {\n  padding: 20px 20px 10px;\n  position: relative;\n}\n.as-dialog__header p {\n  margin: 0;\n  line-height: 24px;\n  height: 24px;\n}\n.as-dialog__body {\n  padding: 30px 20px;\n  color: #606266;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}\n\n/*# sourceMappingURL=dialog.vue.map */',
                     map: {
                         version: 3,
@@ -684,82 +685,82 @@
                     },
                     media: void 0
                 });
-            }), g, void 0, !1, void 0, !1, s, void 0, void 0)
+            }), g, void 0, !1, void 0, !1, o, void 0, void 0)
         },
         data: () => ({
-            engines: n,
+            engines: e,
             categoryName: "search",
             visible: !1
         }),
         computed: {
             menus() {
-                const e = this.engines.findIndex(e => e.name === this.categoryName);
-                return e > -1 ? this.engines[e].list : this.engines[0].list;
+                const n = this.engines.findIndex(n => n.name === this.categoryName);
+                return n > -1 ? this.engines[n].list.filter(n => !n.disabled) : this.engines[0].list.filter(n => !n.disabled);
             }
         },
         created() {
-            this.categoryName = function(e) {
-                if (window.GM_getValue) return window.GM_getValue(e);
-                const n = window.localStorage.getItem(e);
-                return n ? JSON.parse(n) : null;
+            this.categoryName = function(n) {
+                if (window.GM_getValue) return window.GM_getValue(n);
+                const e = window.localStorage.getItem(n);
+                return e ? JSON.parse(e) : null;
             }("__allSearch__categoryName") || this.categoryName;
         },
         methods: {
-            handleClick(e) {
-                this.$emit("menu-click", e);
+            handleClick(n) {
+                this.$emit("menu-click", n);
             },
-            changeCategory(e) {
-                !function(e, n) {
-                    if (window.GM_setValue) window.GM_setValue(e, n); else {
-                        const t = JSON.stringify(n);
-                        t && window.localStorage.setItem(e, t);
+            changeCategory(n) {
+                !function(n, e) {
+                    if (window.GM_setValue) window.GM_setValue(n, e); else {
+                        const t = JSON.stringify(e);
+                        t && window.localStorage.setItem(n, t);
                     }
-                }("__allSearch__categoryName", e), this.categoryName = e;
+                }("__allSearch__categoryName", n), this.categoryName = n;
             },
             openSetDialog() {
                 this.visible = !0;
             }
         }
     };
-    var f = function() {
-        var e = this, n = e.$createElement, t = e._self._c || n;
+    var b = function() {
+        var n = this, e = n.$createElement, t = n._self._c || e;
         return t("header", {
             attrs: {
                 id: "all-search"
             }
-        }, [ t("logo"), e._v(" "), t("category", {
+        }, [ t("logo"), n._v(" "), t("category", {
             attrs: {
-                value: e.categoryName
+                value: n.categoryName
             },
             on: {
-                change: e.changeCategory
+                change: n.changeCategory
             }
-        }), e._v(" "), t("site-menu", {
+        }), n._v(" "), t("site-menu", {
             attrs: {
-                menus: e.menus
+                menus: n.menus
             }
-        }), e._v(" "), t("div", {
+        }), n._v(" "), t("div", {
             staticClass: "setting",
             on: {
-                click: e.openSetDialog
+                click: n.openSetDialog
             }
-        }, [ e._v("设置") ]), e._v(" "), t("x-dialog", {
+        }, [ n._v("设置") ]), n._v(" "), t("x-dialog", {
             attrs: {
-                visible: e.visible
+                visible: n.visible
             },
             on: {
-                "update:visible": function(n) {
-                    e.visible = n;
+                "update:visible": function(e) {
+                    n.visible = e;
                 }
             }
         }) ], 1);
     };
-    f._withStripped = !0;
-    const y = t({
-        render: f,
+    b._withStripped = !0;
+    const x = t({
+        render: b,
         staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-fab43328_0", {
+    }, (function(n) {
+        n && n("data-v-326571fc_0", {
             source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */',
             map: {
                 version: 3,
@@ -767,388 +768,221 @@
                 names: [],
                 mappings: "AAgEA;EACA,gBAAA;AC/DA;ADkEA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC/DA;ADkEA;EACA,eAAA;EACA,iBAAA;EACA,mBAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;EACA,aAAA;AC/DA;;AAEA,kCAAkC",
                 file: "App.vue",
-                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n    <div class=\"setting\" @click=\"openSetDialog\">设置</div>\r\n    <x-dialog :visible.sync=\"visible\"></x-dialog>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\nimport xDialog from './components/dialog.vue'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu,\r\n    xDialog\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search',\r\n      visible: false\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list\r\n      }\r\n      return this.engines[0].list\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('__allSearch__categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('__allSearch__categoryName', name)\r\n      this.categoryName = name\r\n    },\r\n    openSetDialog () {\r\n      this.visible = true\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .setting {\r\n    padding: 0 20px;\r\n    /*display: flex;*/\r\n    align-items: center;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n    display: none;\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
+                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n    <div class=\"setting\" @click=\"openSetDialog\">设置</div>\r\n    <x-dialog :visible.sync=\"visible\"></x-dialog>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\nimport xDialog from './components/dialog.vue'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu,\r\n    xDialog\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search',\r\n      visible: false\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list.filter(item => !item.disabled)\r\n      }\r\n      return this.engines[0].list.filter(item => !item.disabled)\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('__allSearch__categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('__allSearch__categoryName', name)\r\n      this.categoryName = name\r\n    },\r\n    openSetDialog () {\r\n      this.visible = true\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .setting {\r\n    padding: 0 20px;\r\n    /*display: flex;*/\r\n    align-items: center;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n    display: none;\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
             },
             media: void 0
         });
-    }), w, void 0, !1, void 0, !1, s, void 0, void 0), x = [ "endday.github.io", "endday.gitee.io", "localhost" ];
-    const C = {
-        url: "",
-        enabled: !1,
-        style: "",
-        keyword: null
-    }, v = [ {
+    }), f, void 0, !1, void 0, !1, o, void 0, void 0);
+    let C = {};
+    const v = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
-        enabled: !0,
         style: ".srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}"
     }, {
-        url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
     }, {
-        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
     }, {
-        url: /^https?:\/\/[^.]*\.bing\.com\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/[^.]*\.bing\.com\/search/
     }, {
-        url: /^https?:\/\/duckduckgo\.com\/*/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/duckduckgo\.com\/*/i
     }, {
-        url: /^https?:\/\/search\.yahoo\.com\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/search\.yahoo\.com\/search/i
     }, {
-        url: /^https?:\/\/tw\.search\.yahoo\.com\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/tw\.search\.yahoo\.com\/search/i
     }, {
-        url: /^https?:\/\/searx\.me\/\?q/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/searx\.me\/\?q/i
     }, {
         url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
-        enabled: !0,
         style: ".header { top: 30px }"
     }, {
         url: /^https?:\/\/yandex\.com\/search/i,
-        enabled: !0,
         style: "body { margin: 30px!important; }"
     }, {
-        url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i
     }, {
         url: /^https?:\/\/mijisou.com\/\?q/i,
-        enabled: !0,
         style: ".search-page{top: 36px} .searx-navbar{top: 48px!important;}"
     }, {
-        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
     }, {
-        url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i
     }, {
-        url: /^https?:\/\/baike\.baidu\.com\/item/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/baike\.baidu\.com\/item/
     }, {
-        url: /^https?:\/\/baike\.baidu\.com\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/baike\.baidu\.com\/search/
     }, {
-        url: /^https?:\/\/wenku\.baidu\.com\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/wenku\.baidu\.com\/search/i
     }, {
-        url: /^https?:\/\/zhidao\.baidu\.com\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/zhidao\.baidu\.com\/search/i
     }, {
-        url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i
     }, {
         url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
-        enabled: !0,
-        style: ""
+        style: ".Sticky.is-fixed { transform: translateY(30px); }"
     }, {
-        url: /^https?:\/\/www\.so\.com\/s/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.so\.com\/s/i
     }, {
-        url: /^https?:\/\/so\.baike\.com\/doc/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/so\.baike\.com\/doc/i
     }, {
-        url: /^https?:\/\/www\.baike\.com\/wiki/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.baike\.com\/wiki/i
     }, {
-        url: /^https?:\/\/www\.docin\.com\/search\.do/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.docin\.com\/search\.do/
     }, {
         url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
-        enabled: !0,
-        style: ".header {top:30px}"
+        style: ".header { top:30px }"
     }, {
-        url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
     }, {
-        url: /^https?:\/\/www\.quora\.com\/search\?/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.quora\.com\/search\?/i
     }, {
-        url: /^https?:\/\/stackoverflow\.com\/search\?/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/stackoverflow\.com\/search\?/i
     }, {
-        url: /^https?:\/\/www\.soku\.com\/search_video\//,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.soku\.com\/search_video\//
     }, {
-        url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//
     }, {
-        url: /^https?:\/\/search\.bilibili\.com\/all/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/search\.bilibili\.com\/all/
     }, {
-        url: /^https?:\/\/www\.acfun\.cn\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.acfun\.cn\/search/
     }, {
-        url: /^https?:\/\/www\.youtube\.com\/results/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.youtube\.com\/results/
     }, {
-        url: /^https?:\/\/www\.nicovideo\.jp\/search\//,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.nicovideo\.jp\/search\//
     }, {
-        url: /^https?:\/\/so\.iqiyi\.com\/so\/q/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/so\.iqiyi\.com\/so\/q/
     }, {
-        url: /^https?:\/\/v\.qq\.com\/x\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/v\.qq\.com\/x\/search/i
     }, {
-        url: /^https?:\/\/music\.baidu\.com\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/music\.baidu\.com\/search/
     }, {
-        url: /^https?:\/\/so\.1ting\.com\/all\.do/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/so\.1ting\.com\/all\.do/
     }, {
-        url: /^https?:\/\/www\.xiami\.com\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.xiami\.com\/search/
     }, {
-        url: /^https?:\/\/s\.music\.qq\.com/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/s\.music\.qq\.com/i
     }, {
-        url: /^https?:\/\/music\.163\.com\/.*?#\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/music\.163\.com\/.*?#\/search/i
     }, {
-        url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
     }, {
-        url: /^https?:\/\/image\.baidu\.com\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/image\.baidu\.com\/search/i
     }, {
-        url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i
     }, {
-        url: /^https?:\/\/.*\.bing\.com\/images\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/.*\.bing\.com\/images\/search/i
     }, {
-        url: /^https?:\/\/www\.flickr\.com\/search\//,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.flickr\.com\/search\//
     }, {
-        url: /^http:\/\/www\.pixiv\.net\/search\.php/i,
-        enabled: !0,
-        style: ""
+        url: /^http:\/\/www\.pixiv\.net\/search\.php/i
     }, {
-        url: /^https?:\/\/huaban\.com\/search\/\?/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/huaban\.com\/search\/\?/
     }, {
-        url: /^https?:\/\/www\.pinterest\.com\/search\//,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.pinterest\.com\/search\//
     }, {
-        url: /^https?:\/\/thepiratebay\.org\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/thepiratebay\.org\/search/i
     }, {
-        url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/i
     }, {
-        url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/i
     }, {
-        url: /^https?:\/\/www\.zimuzu\.tv\/search\//,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.zimuzu\.tv\/search\//
     }, {
-        url: /^https?:\/\/so\.cqp\.cc\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/so\.cqp\.cc\/search/i
     }, {
-        url: /^https?:\/\/subhd\.com\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/subhd\.com\/search/i
     }, {
-        url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i
     }, {
         url: /^https?:\/\/fanyi\.baidu\.com/i,
-        enabled: !0,
-        style: "",
         keyword: () => document.getElementById("baidu_translate_input").value
     }, {
-        url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/i
     }, {
-        url: /^https?:\/\/dict\.youdao\.com\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/dict\.youdao\.com\/search/i
     }, {
-        url: /^https?:\/\/dict\.youdao\.com\/w/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/dict\.youdao\.com\/w/i
     }, {
-        url: /^https?:\/\/dict\.cn\/./,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/dict\.cn\/./
     }, {
-        url: /^https?:\/\/s\.taobao\.com\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/s\.taobao\.com\/search/
     }, {
-        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i
     }, {
-        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/i
     }, {
-        url: /^https?:\/\/search\.jd\.com\/Search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/search\.jd\.com\/Search/
     }, {
-        url: /^https?:\/\/search\.suning\.com/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/search\.suning\.com/i
     }, {
-        url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/i
     }, {
-        url: /^https?:\/\/search\.smzdm\.com\/\?/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/search\.smzdm\.com\/\?/i
     }, {
-        url: /^https?:\/\/s\.weibo\.com\/weibo\//i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/s\.weibo\.com\/weibo\//i
     }, {
-        url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i
     }, {
-        url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/
     }, {
-        url: /^https?:\/\/www\.douban\.com\/search/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.douban\.com\/search/i
     }, {
-        url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/
     }, {
-        url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
     }, {
-        url: /^http:\/\/search\.cnki\.net\/search\.aspx/i,
-        enabled: !0,
-        style: ""
+        url: /^http:\/\/search\.cnki\.net\/search\.aspx/i
     }, {
-        url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i,
-        enabled: !0,
-        style: ""
+        url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i
     }, {
-        url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i
     }, {
-        url: /^http:\/\/.*?ebscohost\.com\/.*?results/i,
-        enabled: !0,
-        style: ""
+        url: /^http:\/\/.*?ebscohost\.com\/.*?results/i
     }, {
-        url: /^http:\/\/link\.springer\.com\/search\?query=/i,
-        enabled: !0,
-        style: ""
+        url: /^http:\/\/link\.springer\.com\/search\?query=/i
     }, {
-        url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/i,
-        enabled: !0,
-        style: ""
+        url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/i
     }, {
-        url: /^https?:.*?runoob\.com\//i,
-        enabled: !0,
-        style: ""
+        url: /^https?:.*?runoob\.com\//i
     }, {
-        url: /^https?:\/\/github\.com\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/github\.com\/search/
     }, {
-        url: /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/
     }, {
-        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
     }, {
-        url: /^https?:\/\/www\.startpage\.com\/do\/search/,
-        enabled: !0,
-        style: ""
+        url: /^https?:\/\/www\.startpage\.com\/do\/search/
     }, {
-        url: /^https?:\/\/127\.0\.0\.1:8090\/./,
-        enabled: !0,
-        style: ""
-    } ].find(e => e.url.test(window.location.href));
-    v && (C.url = v.url, C.enabled = v.enabled, C.style = v.style, C.keyword = v.keyword), 
-    e.config.productionTip = !1;
-    const k = C;
-    if (C.enabled || x.findIndex(e => e === window.location.hostname) > -1) {
-        const n = document.createElement("div");
-        n.id = "all-search";
-        const t = new e({
+        url: /^https?:\/\/endday\.github\.io/
+    }, {
+        url: /^https?:\/\/endday\.gitee\.io/
+    } ].find(n => n.url.test(window.location.href));
+    v && !v.disabled ? (C.url = v.url, C.disabled = v.disabled, C.style = v.style, C.keyword = v.keyword) : C = null;
+    var y = C;
+    n.config.productionTip = !1;
+    const k = y;
+    if (y) {
+        const e = document.createElement("div");
+        e.id = "all-search";
+        const t = new n({
             data: () => ({
                 currentSite: k
             }),
-            render: e => e(y)
+            render: n => n(x)
         });
         (function() {
-            let e = 0;
-            return new Promise((n, t) => {
-                if (document.body) n(); else {
+            let n = 0;
+            return new Promise((e, t) => {
+                if (document.body) e(); else {
                     const r = setInterval((function() {
-                        e += 1, document.body && (clearInterval(r), n()), 20 === e && (clearInterval(r), 
+                        n += 1, document.body && (clearInterval(r), e()), 20 === n && (clearInterval(r), 
                         t(new Error("timeOut")));
                     }), 100);
                 }
             });
         })().then(() => {
-            const e = document.body.parentElement.insertBefore(n, document.body);
+            const n = document.body.parentElement.insertBefore(e, document.body);
             var r;
-            t.$mount(e), C.style && (r = C.style, window.GM_addStyle && window.GM_addStyle(r));
+            t.$mount(n), y.style && (r = y.style, window.GM_addStyle && window.GM_addStyle(r));
         });
     }
 }(Vue);

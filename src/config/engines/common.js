@@ -32,7 +32,8 @@ export default [
   {
     name: 'juejin',
     nameZh: '掘金',
-    url: 'https://juejin.im/search?query=%s&type=all'
+    url: 'https://juejin.im/search?query=%s&type=all',
+    disabled: true
   },
   {
     name: 'GitHub',

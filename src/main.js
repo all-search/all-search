@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import { addStyle, checkBody } from './util'
-import isWhiteList from './config/whiteList'
 import target from './config/loadList'
 
 Vue.config.productionTip = false
 
 const currentSite = target
 
-if (target.enabled || isWhiteList()) {
+if (target) {
   const el = document.createElement('div')
   el.id = 'all-search'
 
