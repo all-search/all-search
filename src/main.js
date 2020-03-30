@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { addStyle, checkBody, getCurrentSite } from './util'
+import { addStyle, checkBody } from './util'
 import isWhiteList from './config/whiteList'
 import target from './config/loadList'
 

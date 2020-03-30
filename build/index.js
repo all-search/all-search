@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         all-search
-// @version      0.1.4c
-// @description  在各个引擎之间跳转的顶部菜单，借鉴自searchEngineJump
+// @name         all-search 全搜，一个搜索引擎快捷跳转菜单
+// @version      0.1.4d
+// @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/3/27
+// @update       2020/3/30
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -21,89 +21,7 @@
 !function(e) {
     "use strict";
     e = e && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
-    function n(e, n, t, r, s, a, o, i, l, c) {
-        "boolean" != typeof o && (l = i, i = o, o = !1);
-        const h = "function" == typeof t ? t.options : t;
-        let m;
-        if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
-        h._compiled = !0, s && (h.functional = !0)), r && (h._scopeId = r), a ? (m = function(e) {
-            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            n && n.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(a);
-        }, h._ssrRegister = m) : n && (m = o ? function(e) {
-            n.call(this, c(e, this.$root.$options.shadowRoot));
-        } : function(e) {
-            n.call(this, i(e));
-        }), m) if (h.functional) {
-            const e = h.render;
-            h.render = function(n, t) {
-                return m.call(t), e(n, t);
-            };
-        } else {
-            const e = h.beforeCreate;
-            h.beforeCreate = e ? [].concat(e, m) : [ m ];
-        }
-        return t;
-    }
-    const t = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-    function r(e) {
-        return (e, n) => function(e, n) {
-            const r = t ? n.media || "default" : e, o = a[r] || (a[r] = {
-                ids: new Set,
-                styles: []
-            });
-            if (!o.ids.has(e)) {
-                o.ids.add(e);
-                let t = n.source;
-                if (n.map && (t += "\n/*# sourceURL=" + n.map.sources[0] + " */", t += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(n.map)))) + " */"), 
-                o.element || (o.element = document.createElement("style"), o.element.type = "text/css", 
-                n.media && o.element.setAttribute("media", n.media), void 0 === s && (s = document.head || document.getElementsByTagName("head")[0]), 
-                s.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(t), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
-                    const e = o.ids.size - 1, n = document.createTextNode(t), r = o.element.childNodes;
-                    r[e] && o.element.removeChild(r[e]), r.length ? o.element.insertBefore(n, r[e]) : o.element.appendChild(n);
-                }
-            }
-        }(e, n);
-    }
-    let s;
-    const a = {};
-    const o = {
-        name: "logo"
-    };
-    var i = function() {
-        var e = this.$createElement;
-        this._self._c;
-        return this._m(0);
-    };
-    i._withStripped = !0;
-    const l = n({
-        render: i,
-        staticRenderFns: [ function() {
-            var e = this.$createElement, n = this._self._c || e;
-            return n("a", {
-                staticClass: "as-title",
-                attrs: {
-                    href: "https://github.com/endday/all-search",
-                    target: "_blank"
-                }
-            }, [ n("p", {
-                staticClass: "as-title-inner"
-            }, [ this._v("\n    All Search\n  ") ]) ]);
-        } ]
-    }, (function(e) {
-        e && e("data-v-0c80e266_0", {
-            source: ".as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */",
-            map: {
-                version: 3,
-                sources: [ "E:\\myProject\\all-search\\src\\components\\logo.vue", "logo.vue" ],
-                names: [],
-                mappings: "AAoBA;EACA,qBAAA;ACnBA;ADqBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;ACnBA;;AAEA,mCAAmC",
-                file: "logo.vue",
-                sourcesContent: [ '<template>\r\n  <a class="as-title"\r\n     href="https://github.com/endday/all-search"\r\n     target="_blank"\r\n  >\r\n    <p class="as-title-inner">\r\n      All Search\r\n    </p>\r\n  </a>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'logo\'\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-title {\r\n    text-decoration: none;\r\n\r\n    .as-title-inner {\r\n      font-size: 18px;\r\n      width: 120px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-weight: 600;\r\n      color: #1990fc;\r\n      margin: 0;\r\n      text-align: center;\r\n      cursor: pointer;\r\n    }\r\n  }\r\n</style>\r\n', ".as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */" ]
-            },
-            media: void 0
-        });
-    }), o, void 0, !1, void 0, !1, r, void 0, void 0);
-    var c = [ {
+    var n = [ {
         nameZh: "默认",
         name: "common",
         list: [ {
@@ -436,7 +354,90 @@
             url: "https://www.quora.com/search?q=%s"
         } ]
     } ];
-    const h = {
+    document.createElement("a");
+    function t(e, n, t, r, s, a, o, i, l, c) {
+        "boolean" != typeof o && (l = i, i = o, o = !1);
+        const A = "function" == typeof t ? t.options : t;
+        let d;
+        if (e && e.render && (A.render = e.render, A.staticRenderFns = e.staticRenderFns, 
+        A._compiled = !0, s && (A.functional = !0)), r && (A._scopeId = r), a ? (d = function(e) {
+            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
+            n && n.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(a);
+        }, A._ssrRegister = d) : n && (d = o ? function(e) {
+            n.call(this, c(e, this.$root.$options.shadowRoot));
+        } : function(e) {
+            n.call(this, i(e));
+        }), d) if (A.functional) {
+            const e = A.render;
+            A.render = function(n, t) {
+                return d.call(t), e(n, t);
+            };
+        } else {
+            const e = A.beforeCreate;
+            A.beforeCreate = e ? [].concat(e, d) : [ d ];
+        }
+        return t;
+    }
+    const r = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+    function s(e) {
+        return (e, n) => function(e, n) {
+            const t = r ? n.media || "default" : e, s = o[t] || (o[t] = {
+                ids: new Set,
+                styles: []
+            });
+            if (!s.ids.has(e)) {
+                s.ids.add(e);
+                let t = n.source;
+                if (n.map && (t += "\n/*# sourceURL=" + n.map.sources[0] + " */", t += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(n.map)))) + " */"), 
+                s.element || (s.element = document.createElement("style"), s.element.type = "text/css", 
+                n.media && s.element.setAttribute("media", n.media), void 0 === a && (a = document.head || document.getElementsByTagName("head")[0]), 
+                a.appendChild(s.element)), "styleSheet" in s.element) s.styles.push(t), s.element.styleSheet.cssText = s.styles.filter(Boolean).join("\n"); else {
+                    const e = s.ids.size - 1, n = document.createTextNode(t), r = s.element.childNodes;
+                    r[e] && s.element.removeChild(r[e]), r.length ? s.element.insertBefore(n, r[e]) : s.element.appendChild(n);
+                }
+            }
+        }(e, n);
+    }
+    let a;
+    const o = {};
+    const i = {
+        name: "logo"
+    };
+    var l = function() {
+        var e = this.$createElement;
+        this._self._c;
+        return this._m(0);
+    };
+    l._withStripped = !0;
+    const c = t({
+        render: l,
+        staticRenderFns: [ function() {
+            var e = this.$createElement, n = this._self._c || e;
+            return n("a", {
+                staticClass: "as-title",
+                attrs: {
+                    href: "https://github.com/endday/all-search",
+                    target: "_blank"
+                }
+            }, [ n("p", {
+                staticClass: "as-title-inner"
+            }, [ this._v("\n    All Search\n  ") ]) ]);
+        } ]
+    }, (function(e) {
+        e && e("data-v-5c453d41_0", {
+            source: ".as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */",
+            map: {
+                version: 3,
+                sources: [ "E:\\project\\all-search\\src\\components\\logo.vue", "logo.vue" ],
+                names: [],
+                mappings: "AAoBA;EACA,qBAAA;ACnBA;ADqBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;ACnBA;;AAEA,mCAAmC",
+                file: "logo.vue",
+                sourcesContent: [ '<template>\r\n  <a class="as-title"\r\n     href="https://github.com/endday/all-search"\r\n     target="_blank"\r\n  >\r\n    <p class="as-title-inner">\r\n      All Search\r\n    </p>\r\n  </a>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'logo\'\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-title {\r\n    text-decoration: none;\r\n\r\n    .as-title-inner {\r\n      font-size: 18px;\r\n      width: 120px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-weight: 600;\r\n      color: #1990fc;\r\n      margin: 0;\r\n      text-align: center;\r\n      cursor: pointer;\r\n    }\r\n  }\r\n</style>\r\n', ".as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */" ]
+            },
+            media: void 0
+        });
+    }), i, void 0, !1, void 0, !1, s, void 0, void 0);
+    const A = {
         name: "category",
         props: {
             value: {
@@ -445,7 +446,7 @@
             }
         },
         data: () => ({
-            engines: c,
+            engines: n,
             show: !1
         }),
         computed: {
@@ -466,7 +467,7 @@
             }
         }
     };
-    var m = function() {
+    var d = function() {
         var e = this, n = e.$createElement, t = e._self._c || n;
         return t("div", {
             staticClass: "as-select"
@@ -517,16 +518,16 @@
             }
         }) ]);
     };
-    m._withStripped = !0;
-    const u = n({
-        render: m,
+    d._withStripped = !0;
+    const p = t({
+        render: d,
         staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-393a67ba_0", {
+        e && e("data-v-4c707c2f_0", {
             source: '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n.as-select-content {\n  width: 100px;\n  height: 30px;\n  line-height: 30px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.as-select-list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n  z-index: 99;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n.as-select-mask {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n/*# sourceMappingURL=category.vue.map */',
             map: {
                 version: 3,
-                sources: [ "category.vue", "E:\\myProject\\all-search\\src\\components\\category.vue" ],
+                sources: [ "category.vue", "E:\\project\\all-search\\src\\components\\category.vue" ],
                 names: [],
                 mappings: "AAAA,gBAAgB;ACoEhB;EACA,kBAAA;ADlEA;ACmEA;EACA,gBAAA;ADjEA;ACqEA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;ADlEA;ACmEA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,eAAA;EACA,WAAA;ADjEA;ACqEA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;ADlEA;ACmEA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;ADjEA;ACkEA;EACA,yBAAA;ADhEA;ACqEA;EACA,eAAA;EACA,MAAA;EACA,SAAA;EACA,QAAA;EACA,OAAA;ADlEA;;AAEA,uCAAuC",
                 file: "category.vue",
@@ -534,9 +535,8 @@
             },
             media: void 0
         });
-    }), h, void 0, !1, void 0, !1, r, void 0, void 0);
-    document.createElement("a");
-    const p = {
+    }), A, void 0, !1, void 0, !1, s, void 0, void 0);
+    const h = {
         name: "site-menu",
         props: {
             menus: {
@@ -565,7 +565,7 @@
             }
         }
     };
-    var d = function() {
+    var m = function() {
         var e = this, n = e.$createElement, t = e._self._c || n;
         return t("div", {
             staticClass: "as-menu-container"
@@ -591,33 +591,105 @@
             }) ]);
         })), 0) ]);
     };
-    d._withStripped = !0;
-    const A = {
+    m._withStripped = !0;
+    const u = t({
+        render: m,
+        staticRenderFns: []
+    }, (function(e) {
+        e && e("data-v-33eabb56_0", {
+            source: ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */",
+            map: {
+                version: 3,
+                sources: [ "E:\\project\\all-search\\src\\components\\menu.vue", "menu.vue" ],
+                names: [],
+                mappings: "AA2DA;EACA,aAAA;EACA,OAAA;AC1DA;AD6DA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AC1DA;AD6DA;EACA,aAAA;EACA,mBAAA;EACA,kBAAA;EACA,QAAA;AC1DA;AD6DA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1DA;AD4DA;EACA,cAAA;AC1DA;;AAEA,mCAAmC",
+                file: "menu.vue",
+                sourcesContent: [ '<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <p class="as-submenu-title"\r\n           v-text="item.nameZh">\r\n        </p>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n    flex: 1;\r\n  }\r\n\r\n  .as-menu {\r\n    display: flex;\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    display: flex;\r\n    align-items: center;\r\n    position: relative;\r\n    top: 1px;\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n\r\n    &:hover {\r\n      color: #1890ff;\r\n    }\r\n  }\r\n</style>\r\n', ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */" ]
+            },
+            media: void 0
+        });
+    }), h, void 0, !1, void 0, !1, s, void 0, void 0);
+    const g = {
+        name: "x-dialog",
+        props: {
+            visible: {
+                type: Boolean,
+                default: !1
+            },
+            title: {
+                type: String,
+                default: ""
+            }
+        },
+        methods: {
+            handleClose() {
+                this.$emit("update:visible", !1);
+            }
+        }
+    };
+    var b = function() {
+        var e = this, n = e.$createElement, t = e._self._c || n;
+        return t("div", {
+            directives: [ {
+                name: "show",
+                rawName: "v-show",
+                value: e.visible,
+                expression: "visible"
+            } ],
+            staticClass: "as-dialog"
+        }, [ t("div", {
+            staticClass: "as-dialog-container"
+        }, [ t("div", {
+            staticClass: "as-dialog__header"
+        }, [ t("p", {
+            domProps: {
+                textContent: e._s(e.title)
+            }
+        }), e._v(" "), t("span", {
+            staticClass: "as-dialog__close",
+            on: {
+                click: e.handleClose
+            }
+        }) ]), e._v(" "), t("div", {
+            staticClass: "as-dialog__body"
+        }, [ e._t("default") ], 2), e._v(" "), t("div", {
+            staticClass: "as-dialog__footer"
+        }) ]), e._v(" "), t("div", {
+            staticClass: "as-dialog__mask",
+            on: {
+                click: e.handleClose
+            }
+        }) ]);
+    };
+    b._withStripped = !0;
+    const w = {
         name: "all-search",
         components: {
-            logo: l,
-            category: u,
-            siteMenu: n({
-                render: d,
+            logo: c,
+            category: p,
+            siteMenu: u,
+            xDialog: t({
+                render: b,
                 staticRenderFns: []
             }, (function(e) {
-                e && e("data-v-48c98b6e_0", {
-                    source: ".as-menu-container {\n  display: flex;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */",
+                e && e("data-v-dee8096c_0", {
+                    source: '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  overflow: auto;\n  margin: 0;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  opacity: 0.5;\n  background: #000;\n}\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 2px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  width: 50%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n.as-dialog__header {\n  padding: 20px 20px 10px;\n  position: relative;\n}\n.as-dialog__header p {\n  margin: 0;\n  line-height: 24px;\n  height: 24px;\n}\n.as-dialog__body {\n  padding: 30px 20px;\n  color: #606266;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}\n\n/*# sourceMappingURL=dialog.vue.map */',
                     map: {
                         version: 3,
-                        sources: [ "E:\\myProject\\all-search\\src\\components\\menu.vue", "menu.vue" ],
+                        sources: [ "dialog.vue", "E:\\project\\all-search\\src\\components\\dialog.vue" ],
                         names: [],
-                        mappings: "AA2DA;EACA,aAAA;AC1DA;AD6DA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AC1DA;AD6DA;EACA,OAAA;EACA,aAAA;EACA,mBAAA;EACA,kBAAA;EACA,QAAA;AC1DA;AD6DA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1DA;AD4DA;EACA,cAAA;AC1DA;;AAEA,mCAAmC",
-                        file: "menu.vue",
-                        sourcesContent: [ '<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <p class="as-submenu-title"\r\n           v-text="item.nameZh">\r\n        </p>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n  }\r\n\r\n  .as-menu {\r\n    display: flex;\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    flex: 1;\r\n    display: flex;\r\n    align-items: center;\r\n    position: relative;\r\n    top: 1px;\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n\r\n    &:hover {\r\n      color: #1890ff;\r\n    }\r\n  }\r\n</style>\r\n', ".as-menu-container {\n  display: flex;\n}\n\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */" ]
+                        mappings: "AAAA,gBAAgB;ACyChB;EACA,eAAA;EACA,MAAA;EACA,QAAA;EACA,SAAA;EACA,OAAA;EACA,cAAA;EACA,SAAA;ADvCA;AC0CA;EACA,eAAA;EACA,OAAA;EACA,MAAA;EACA,WAAA;EACA,YAAA;EACA,YAAA;EACA,gBAAA;ADvCA;AC0CA;EACA,kBAAA;EACA,gBAAA;EACA,kBAAA;EACA,wCAAA;EACA,sBAAA;EACA,UAAA;EACA,WAAA;EACA,sBAAA;EACA,2BAAA;ADvCA;AC0CA;EACA,uBAAA;EACA,kBAAA;ADvCA;ACwCA;EACA,SAAA;EACA,iBAAA;EACA,YAAA;ADtCA;AC0CA;EACA,kBAAA;EACA,cAAA;EACA,eAAA;EACA,qBAAA;ADvCA;AC0CA;EACA,uBAAA;EACA,iBAAA;EACA,sBAAA;ADvCA;AC0CA;EACA,qBAAA;EACA,kBAAA;EACA,SAAA;EACA,WAAA;EACA,UAAA;EACA,uBAAA;EACA,eAAA;EACA,eAAA;EACA,cAAA;ADvCA;ACwCA;EACA,YAAA;ADtCA;;AAEA,qCAAqC",
+                        file: "dialog.vue",
+                        sourcesContent: [ '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  overflow: auto;\n  margin: 0;\n}\n\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  opacity: 0.5;\n  background: #000;\n}\n\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 2px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  width: 50%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n\n.as-dialog__header {\n  padding: 20px 20px 10px;\n  position: relative;\n}\n.as-dialog__header p {\n  margin: 0;\n  line-height: 24px;\n  height: 24px;\n}\n\n.as-dialog__body {\n  padding: 30px 20px;\n  color: #606266;\n  font-size: 14px;\n  word-break: break-all;\n}\n\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}\n\n/*# sourceMappingURL=dialog.vue.map */', '<template>\r\n  <div class="as-dialog" v-show="visible">\r\n    <div class="as-dialog-container">\r\n      <div class="as-dialog__header">\r\n        <p v-text="title"></p>\r\n        <span class="as-dialog__close"\r\n              @click="handleClose">\r\n        </span>\r\n      </div>\r\n      <div class="as-dialog__body">\r\n        <slot></slot>\r\n      </div>\r\n      <div class="as-dialog__footer"></div>\r\n    </div>\r\n    <div class="as-dialog__mask"\r\n         @click="handleClose"></div>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'x-dialog\',\r\n  props: {\r\n    visible: {\r\n      type: Boolean,\r\n      default: false\r\n    },\r\n    title: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  methods: {\r\n    handleClose () {\r\n      this.$emit(\'update:visible\', false)\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  .as-dialog {\r\n    position: fixed;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    overflow: auto;\r\n    margin: 0;\r\n  }\r\n\r\n  .as-dialog__mask {\r\n    position: fixed;\r\n    left: 0;\r\n    top: 0;\r\n    width: 100%;\r\n    height: 100%;\r\n    opacity: .5;\r\n    background: #000;\r\n  }\r\n\r\n  .as-dialog-container {\r\n    position: relative;\r\n    background: #fff;\r\n    border-radius: 2px;\r\n    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);\r\n    box-sizing: border-box;\r\n    width: 50%;\r\n    z-index: 99;\r\n    margin: 40vh auto 50px;\r\n    transform: translateY(-40%);\r\n  }\r\n\r\n  .as-dialog__header {\r\n    padding: 20px 20px 10px;\r\n    position: relative;\r\n    p {\r\n      margin: 0;\r\n      line-height: 24px;\r\n      height: 24px;\r\n    }\r\n  }\r\n\r\n  .as-dialog__body {\r\n    padding: 30px 20px;\r\n    color: #606266;\r\n    font-size: 14px;\r\n    word-break: break-all;\r\n  }\r\n\r\n  .as-dialog__footer {\r\n    padding: 10px 20px 20px;\r\n    text-align: right;\r\n    box-sizing: border-box;\r\n  }\r\n\r\n  .as-dialog__close {\r\n    display: inline-block;\r\n    position: absolute;\r\n    top: 16px;\r\n    right: 24px;\r\n    padding: 0;\r\n    background: transparent;\r\n    cursor: pointer;\r\n    font-size: 16px;\r\n    color: #909399;\r\n    &:before {\r\n      content: "\\2716";\r\n    }\r\n  }\r\n</style>\r\n' ]
                     },
                     media: void 0
                 });
-            }), p, void 0, !1, void 0, !1, r, void 0, void 0)
+            }), g, void 0, !1, void 0, !1, s, void 0, void 0)
         },
         data: () => ({
-            engines: c,
-            categoryName: "search"
+            engines: n,
+            categoryName: "search",
+            visible: !1
         }),
         computed: {
             menus() {
@@ -643,52 +715,69 @@
                         t && window.localStorage.setItem(e, t);
                     }
                 }("__allSearch__categoryName", e), this.categoryName = e;
+            },
+            openSetDialog() {
+                this.visible = !0;
             }
         }
     };
-    var g = function() {
-        var e = this.$createElement, n = this._self._c || e;
-        return n("header", {
+    var f = function() {
+        var e = this, n = e.$createElement, t = e._self._c || n;
+        return t("header", {
             attrs: {
                 id: "all-search"
             }
-        }, [ n("logo"), this._v(" "), n("category", {
+        }, [ t("logo"), e._v(" "), t("category", {
             attrs: {
-                value: this.categoryName
+                value: e.categoryName
             },
             on: {
-                change: this.changeCategory
+                change: e.changeCategory
             }
-        }), this._v(" "), n("site-menu", {
+        }), e._v(" "), t("site-menu", {
             attrs: {
-                menus: this.menus
+                menus: e.menus
+            }
+        }), e._v(" "), t("div", {
+            staticClass: "setting",
+            on: {
+                click: e.openSetDialog
+            }
+        }, [ e._v("设置") ]), e._v(" "), t("x-dialog", {
+            attrs: {
+                visible: e.visible
+            },
+            on: {
+                "update:visible": function(n) {
+                    e.visible = n;
+                }
             }
         }) ], 1);
     };
-    g._withStripped = !0;
-    const b = n({
-        render: g,
+    f._withStripped = !0;
+    const y = t({
+        render: f,
         staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-f0ce6228_0", {
-            source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 30px;\n  line-height: 30px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
+        e && e("data-v-fab43328_0", {
+            source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */',
             map: {
                 version: 3,
-                sources: [ "E:\\myProject\\all-search\\src\\App.vue", "App.vue" ],
+                sources: [ "E:\\project\\all-search\\src\\App.vue", "App.vue" ],
                 names: [],
-                mappings: "AAwDA;EACA,gBAAA;ACvDA;AD0DA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;ACvDA;AD2DA;EACA,gBAAA;ACxDA;AD2DA;EACA,SAAA;ACzDA;AD4DA;EACA,cAAA;AC1DA;AD4DA;EACA,YAAA;EACA,iBAAA;AC1DA;;AAEA,kCAAkC",
+                mappings: "AAgEA;EACA,gBAAA;AC/DA;ADkEA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC/DA;ADkEA;EACA,eAAA;EACA,iBAAA;EACA,mBAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;EACA,aAAA;AC/DA;;AAEA,kCAAkC",
                 file: "App.vue",
-                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search'\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list\r\n      }\r\n      return this.engines[0].list\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('__allSearch__categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('__allSearch__categoryName', name)\r\n      this.categoryName = name\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .el-tabs {\r\n    .el-tabs__header {\r\n      margin-bottom: 0;\r\n    }\r\n\r\n    .el-tabs__nav-wrap::after {\r\n      height: 0;\r\n    }\r\n\r\n    .el-tabs__nav {\r\n      margin: 0 20px;\r\n    }\r\n    .el-tabs__item {\r\n      height: $height;\r\n      line-height: $height;\r\n    }\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.el-tabs .el-tabs__header {\n  margin-bottom: 0;\n}\n.el-tabs .el-tabs__nav-wrap::after {\n  height: 0;\n}\n.el-tabs .el-tabs__nav {\n  margin: 0 20px;\n}\n.el-tabs .el-tabs__item {\n  height: 30px;\n  line-height: 30px;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
+                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n    <div class=\"setting\" @click=\"openSetDialog\">设置</div>\r\n    <x-dialog :visible.sync=\"visible\"></x-dialog>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\nimport xDialog from './components/dialog.vue'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu,\r\n    xDialog\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search',\r\n      visible: false\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list\r\n      }\r\n      return this.engines[0].list\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('__allSearch__categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('__allSearch__categoryName', name)\r\n      this.categoryName = name\r\n    },\r\n    openSetDialog () {\r\n      this.visible = true\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .setting {\r\n    padding: 0 20px;\r\n    /*display: flex;*/\r\n    align-items: center;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n    display: none;\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
             },
             media: void 0
         });
-    }), A, void 0, !1, void 0, !1, r, void 0, void 0), w = [ "endday.github.io", "endday.gitee.io", "localhost" ];
-    const y = {
+    }), w, void 0, !1, void 0, !1, s, void 0, void 0), x = [ "endday.github.io", "endday.gitee.io", "localhost" ];
+    const C = {
         url: "",
         enabled: !1,
         style: "",
         keyword: null
-    }, f = [ {
+    }, v = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         enabled: !0,
         style: ".srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}"
@@ -723,11 +812,11 @@
     }, {
         url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
         enabled: !0,
-        style: ""
+        style: ".header { top: 30px }"
     }, {
         url: /^https?:\/\/yandex\.com\/search/i,
         enabled: !0,
-        style: ""
+        style: "body { margin: 30px!important; }"
     }, {
         url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i,
         enabled: !0,
@@ -787,7 +876,7 @@
     }, {
         url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
         enabled: !0,
-        style: ""
+        style: ".header {top:30px}"
     }, {
         url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/,
         enabled: !0,
@@ -1034,17 +1123,17 @@
         enabled: !0,
         style: ""
     } ].find(e => e.url.test(window.location.href));
-    f && (y.url = f.url, y.enabled = f.enabled, y.style = f.style, y.keyword = f.keyword), 
+    v && (C.url = v.url, C.enabled = v.enabled, C.style = v.style, C.keyword = v.keyword), 
     e.config.productionTip = !1;
-    const x = y;
-    if (y.enabled || w.findIndex(e => e === window.location.hostname) > -1) {
+    const k = C;
+    if (C.enabled || x.findIndex(e => e === window.location.hostname) > -1) {
         const n = document.createElement("div");
         n.id = "all-search";
         const t = new e({
             data: () => ({
-                currentSite: x
+                currentSite: k
             }),
-            render: e => e(b)
+            render: e => e(y)
         });
         (function() {
             let e = 0;
@@ -1059,7 +1148,7 @@
         })().then(() => {
             const e = document.body.parentElement.insertBefore(n, document.body);
             var r;
-            t.$mount(e), y.style && (r = y.style, window.GM_addStyle && window.GM_addStyle(r));
+            t.$mount(e), C.style && (r = C.style, window.GM_addStyle && window.GM_addStyle(r));
         });
     }
 }(Vue);

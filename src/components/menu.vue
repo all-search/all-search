@@ -59,6 +59,7 @@ export default {
 
   .as-menu-container {
     display: flex;
+    flex: 1;
   }
 
   .as-menu {
@@ -76,7 +77,6 @@ export default {
   }
 
   .as-submenu {
-    flex: 1;
     display: flex;
     align-items: center;
     position: relative;

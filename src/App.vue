@@ -4,27 +4,32 @@
     <category :value="categoryName"
               @change="changeCategory"/>
     <site-menu :menus="menus"/>
+    <div class="setting" @click="openSetDialog">设置</div>
+    <x-dialog :visible.sync="visible"></x-dialog>
   </header>
 </template>
 
 <script>
+import engines from './config/engines/index.js'
+import { getSession, setSession } from './util'
 import logo from './components/logo.vue'
 import category from './components/category.vue'
 import siteMenu from './components/menu.vue'
-import engines from './config/engines/index.js'
-import { getSession, setSession } from './util'
+import xDialog from './components/dialog.vue'
 
 export default {
   name: 'all-search',
   components: {
     logo,
     category,
-    siteMenu
+    siteMenu,
+    xDialog
   },
   data () {
     return {
       engines,
-      categoryName: 'search'
+      categoryName: 'search',
+      visible: false
     }
   },
   computed: {
@@ -46,6 +51,9 @@ export default {
     changeCategory (name) {
       setSession('__allSearch__categoryName', name)
       this.categoryName = name
+    },
+    openSetDialog () {
+      this.visible = true
     }
   }
 }
@@ -70,21 +78,13 @@ export default {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   }
 
-  .el-tabs {
-    .el-tabs__header {
-      margin-bottom: 0;
-    }
-
-    .el-tabs__nav-wrap::after {
-      height: 0;
-    }
-
-    .el-tabs__nav {
-      margin: 0 20px;
-    }
-    .el-tabs__item {
-      height: $height;
-      line-height: $height;
-    }
+  .setting {
+    padding: 0 20px;
+    /*display: flex;*/
+    align-items: center;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 14px;
+    display: none;
   }
 </style>

@@ -42,12 +42,12 @@ const list = [
   {
     url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
     enabled: true,
-    style: ''
+    style: '.header { top: 30px }'
   },
   {
     url: /^https?:\/\/yandex\.com\/search/i,
     enabled: true,
-    style: ''
+    style: 'body { margin: 30px!important; }'
   },
   {
     url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i,
@@ -122,7 +122,7 @@ const list = [
   {
     url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
     enabled: true,
-    style: ''
+    style: '.header {top:30px}'
   },
   {
     url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/,
