@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.4e
+// @version      0.1.4f
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/3/30
+// @update       2020/3/31
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -835,13 +835,16 @@
     }, {
         url: /^https?:\/\/www\.quora\.com\/search\?/i
     }, {
-        url: /^https?:\/\/stackoverflow\.com\/search\?/i
+        url: /^https?:\/\/stackoverflow\.com\/search\?/i,
+        style: ".top-bar._fixed { top: 30px }"
     }, {
         url: /^https?:\/\/www\.soku\.com\/search_video\//
     }, {
         url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//
     }, {
-        url: /^https?:\/\/search\.bilibili\.com\/all/
+        url: /^https?:\/\/search\.bilibili\.com\/all/,
+        keyword: () => document.getElementById("search-keyword").value,
+        style: "body { margin-top: 30px!important; } .fixed-top { top: 30px }"
     }, {
         url: /^https?:\/\/www\.acfun\.cn\/search/
     }, {

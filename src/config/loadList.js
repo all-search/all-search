@@ -87,7 +87,8 @@ const list = [
     url: /^https?:\/\/www\.quora\.com\/search\?/i
   },
   {
-    url: /^https?:\/\/stackoverflow\.com\/search\?/i
+    url: /^https?:\/\/stackoverflow\.com\/search\?/i,
+    style: '.top-bar._fixed { top: 30px }'
   },
   {
     url: /^https?:\/\/www\.soku\.com\/search_video\//
@@ -96,7 +97,11 @@ const list = [
     url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//
   },
   {
-    url: /^https?:\/\/search\.bilibili\.com\/all/
+    url: /^https?:\/\/search\.bilibili\.com\/all/,
+    keyword () {
+      return document.getElementById('search-keyword').value
+    },
+    style: 'body { margin-top: 30px!important; } .fixed-top { top: 30px }'
   },
   {
     url: /^https?:\/\/www\.acfun\.cn\/search/
