@@ -1,7 +1,9 @@
+const height = 30
+
 const list = [
   {
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
-    style: '.srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}'
+    style: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;} .srp .minidiv{top: ${height}px !important;}`
   },
   {
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
@@ -26,18 +28,18 @@ const list = [
   },
   {
     url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
-    style: '.header { top: 30px }'
+    style: `.header { top: ${height}px }`
   },
   {
     url: /^https?:\/\/yandex\.com\/search/i,
-    style: 'body { margin: 30px!important; }'
+    style: `body { margin: ${height}px!important; }`
   },
   {
     url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i
   },
   {
     url: /^https?:\/\/mijisou.com\/\?q/i,
-    style: '.search-page{top: 36px} .searx-navbar{top: 48px!important;}'
+    style: `.search-page{top: ${height}px} .searx-navbar{top: ${height + 12}px!important;}`
   },
   {
     url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
@@ -62,7 +64,7 @@ const list = [
   },
   {
     url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
-    style: '.Sticky.is-fixed { transform: translateY(30px); }'
+    style: `.Sticky.is-fixed { transform: translateY(${height}px); }`
   },
   {
     url: /^https?:\/\/www\.so\.com\/s/i
@@ -78,7 +80,7 @@ const list = [
   },
   {
     url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
-    style: '.header { top:30px }'
+    style: `.header { top:${height}px }`
   },
   {
     url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
@@ -88,20 +90,14 @@ const list = [
   },
   {
     url: /^https?:\/\/stackoverflow\.com\/search\?/i,
-    style: '.top-bar._fixed { top: 30px }'
-  },
-  {
-    url: /^https?:\/\/www\.soku\.com\/search_video\//
-  },
-  {
-    url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//
+    style: `.top-bar._fixed { top: ${height}px }`
   },
   {
     url: /^https?:\/\/search\.bilibili\.com\/all/,
     keyword () {
       return document.getElementById('search-keyword').value
     },
-    style: 'body { margin-top: 30px!important; } .fixed-top { top: 30px }'
+    style: `body { margin-top: ${height}px!important; } .fixed-top { top: ${height}px }`
   },
   {
     url: /^https?:\/\/www\.acfun\.cn\/search/

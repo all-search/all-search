@@ -72,13 +72,21 @@ export function checkBody () {
   })
 }
 
+function getName (name) {
+  if (name) {
+    return `__allSearch__${name}`
+  }
+  return null
+}
+
 export function getSession (name) {
+  const formatName = getName(name)
   // eslint-disable-next-line
   if (window.GM_getValue) {
     // eslint-disable-next-line
-    return window.GM_getValue(name)
+    return window.GM_getValue(formatName)
   }
-  const item = window.localStorage.getItem(name)
+  const item = window.localStorage.getItem(formatName)
   if (item) {
     return JSON.parse(item)
   }
@@ -86,14 +94,15 @@ export function getSession (name) {
 }
 
 export function setSession (name, value) {
+  const formatName = getName(name)
   // eslint-disable-next-line
   if (window.GM_setValue) {
     // eslint-disable-next-line
-    window.GM_setValue(name, value)
+    window.GM_setValue(formatName, value)
   } else {
     const item = JSON.stringify(value)
     if (item) {
-      window.localStorage.setItem(name, item)
+      window.localStorage.setItem(formatName, item)
     }
   }
 }

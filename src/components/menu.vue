@@ -7,7 +7,7 @@
           @click="handleClick(item)"
           @mousedown="handleMouseWheelClick($event, item)">
         <p class="as-submenu-title"
-           v-text="item.nameZh">
+           v-text="item.name">
         </p>
       </li>
     </ul>

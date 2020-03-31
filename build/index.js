@@ -4,7 +4,7 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/3/31
+// @update       2020/4/1
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -25,291 +25,239 @@
         nameZh: "默认",
         name: "common",
         list: [ {
-            name: "baidu",
-            nameZh: "百度",
+            name: "百度",
             url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
         }, {
-            name: "google",
-            nameZh: "谷歌",
+            name: "谷歌",
             url: "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8"
         }, {
-            name: "bing",
-            nameZh: "必应",
+            name: "必应",
             url: "https://cn.bing.com/search?q=%s"
         }, {
-            name: "baidu",
-            nameZh: "百度翻译",
+            name: "百度翻译",
             url: "http://fanyi.baidu.com/#auto/zh/%s"
         }, {
-            name: "zhihu",
-            nameZh: "知乎",
+            name: "知乎",
             url: "http://www.zhihu.com/search?q=%s"
         }, {
             name: "stackoverflow",
-            nameZh: "stackoverflow",
             url: "https://stackoverflow.com/search?q=%s"
         }, {
-            name: "juejin",
-            nameZh: "掘金",
+            name: "掘金",
             url: "https://juejin.im/search?query=%s&type=all",
             disabled: !0
         }, {
             name: "GitHub",
-            nameZh: "GitHub",
-            url: "https://github.com/search?utf8=✓&q=%s",
-            blank: !0
+            url: "https://github.com/search?utf8=✓&q=%s"
         } ]
     }, {
         nameZh: "搜索",
         name: "search",
         list: [ {
-            name: "baidu",
-            nameZh: "百度",
+            name: "百度",
             url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
         }, {
-            name: "google",
-            nameZh: "谷歌",
+            name: "谷歌",
             url: "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8"
         }, {
-            name: "bing",
-            nameZh: "必应",
+            name: "必应",
             url: "https://cn.bing.com/search?q=%s"
         }, {
             name: "DDG",
-            nameZh: "DDG",
-            url: "https://duckduckgo.com/?q=%s",
-            disable: !0
+            url: "https://duckduckgo.com/?q=%s"
         }, {
             name: "360",
-            nameZh: "360",
             url: "https://www.so.com/s?ie=utf-8&q=%s"
         }, {
-            name: "yahoo",
-            nameZh: "雅虎",
-            url: "https://search.yahoo.com/search;?p=%s",
-            disable: !0
+            name: "雅虎",
+            url: "https://search.yahoo.com/search;?p=%s"
         }, {
-            name: "sogou",
-            nameZh: "搜狗",
-            url: "https://www.sogou.com/web?query=%s",
-            disable: !1
+            name: "搜狗",
+            url: "https://www.sogou.com/web?query=%s"
         }, {
-            name: "startpage",
-            nameZh: "Startpage",
-            url: "https://www.startpage.com/do/asearch$post$query",
-            disable: !0
+            name: "Startpage",
+            url: "https://www.startpage.com/do/asearch$post$query"
         }, {
-            name: "mijisou",
-            nameZh: "秘迹搜索",
+            name: "秘迹搜索",
             url: "https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN"
         }, {
             name: "Yandex",
-            nameZh: "Yandex",
-            url: "https://yandex.com/search/?text=%s",
-            disabled: !0
+            url: "https://yandex.com/search/?text=%s"
         } ]
     }, {
         nameZh: "翻译",
         name: "translate",
         list: [ {
-            name: "google",
-            nameZh: "谷歌翻译",
+            name: "谷歌翻译",
             url: "https://translate.google.com/?q=%s"
         }, {
-            name: "baidu",
-            nameZh: "百度翻译",
+            name: "百度翻译",
             url: "http://fanyi.baidu.com/#auto/zh/%s"
         }, {
-            name: "youdao",
-            nameZh: "有道词典",
-            url: "http://dict.youdao.com/search?q=%s",
-            blank: !0
+            name: "有道词典",
+            url: "http://dict.youdao.com/search?q=%s"
         }, {
-            name: "bing",
-            nameZh: "必应翻译",
+            name: "必应翻译",
             url: "http://cn.bing.com/dict/search?q=%s"
         }, {
-            name: "forvo",
-            nameZh: "Forvo发音",
+            name: "Forvo翻译",
             url: "https://zh.forvo.com/search/%s",
             blank: !0
         }, {
-            name: "cnki",
-            nameZh: "CNKI翻译",
+            name: "CNKI翻译",
             url: "http://dict.cnki.net/dict_result.aspx?searchword=%s",
             disable: !0
         }, {
-            name: "zdic",
-            nameZh: "汉典",
+            name: "汉典",
             url: "http://www.zdic.net/sousuo/?q=%s",
             disable: !0
         }, {
-            name: "dict",
-            nameZh: "海词",
+            name: "海词",
             url: "http://dict.cn/%s"
+        } ]
+    }, {
+        nameZh: "视频",
+        name: "video",
+        list: [ {
+            name: "youtube",
+            url: "https://www.youtube.com/results?search_query=%s"
+        }, {
+            name: "bilibili",
+            url: "http://search.bilibili.com/all?keyword=%s"
+        }, {
+            name: "优酷",
+            url: "http://www.soku.com/search_video/q_%s"
+        }, {
+            name: "腾讯视频",
+            url: "https://v.qq.com/x/search/?q=%s"
+        }, {
+            name: "AcFun",
+            url: "http://www.acfun.cn/search/?#query=%s"
+        }, {
+            name: "乐视",
+            url: "http://so.letv.com/s?wd=%s"
+        }, {
+            name: "搜狐",
+            url: "http://so.tv.sohu.com/mts?wd=%s"
+        }, {
+            name: "niconico",
+            url: "http://www.nicovideo.jp/search/%s"
+        }, {
+            name: "爱奇艺",
+            url: "http://so.iqiyi.com/so/q_%s"
+        } ]
+    }, {
+        nameZh: "音乐",
+        name: "music",
+        list: [ {
+            name: "网易音乐",
+            url: "http://music.163.com/#/search/m/?s=%s"
+        }, {
+            name: "一听",
+            url: "http://so.1ting.com/all.do?q=%s"
+        }, {
+            name: "虾米音乐",
+            url: "http://www.xiami.com/search?key=%s"
+        }, {
+            name: "音悦Tai",
+            url: "http://so.yinyuetai.com/?keyword=%s"
+        }, {
+            name: "QQ音乐",
+            url: "https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%s"
+        }, {
+            name: "百度音乐",
+            url: "http://music.baidu.com/search?ie=utf-8&oe=utf-8&key=%s"
+        }, {
+            name: "酷我音乐",
+            url: "http://sou.kuwo.cn/ws/NSearch?type=all&key=%s"
+        }, {
+            name: "酷狗",
+            url: "http://search.5sing.kugou.com/?keyword=%s"
         } ]
     }, {
         nameZh: "开发者",
         name: "developer",
         list: [ {
             name: "MDN",
-            nameZh: "MDN",
             url: "https://developer.mozilla.org/zh-CN/search?q=%s"
         }, {
             name: "stackoverflow",
-            nameZh: "stackoverflow",
             url: "https://stackoverflow.com/search?q=%s"
         }, {
-            name: "juejin",
-            nameZh: "掘金",
+            name: "掘金",
             url: "https://juejin.im/search?query=%s&type=all"
         }, {
             name: "Can I Use",
-            nameZh: "Can I Use",
             url: "http://caniuse.com/#search=%s",
             blank: !0
         }, {
             name: "GitHub",
-            nameZh: "GitHub",
-            url: "https://github.com/search?utf8=✓&q=%s",
-            blank: !0
+            url: "https://github.com/search?utf8=✓&q=%s"
         }, {
             name: "w3c",
-            nameZh: "w3c",
             url: "http://www.runoob.com/?s=%s"
         }, {
             name: "GreasyFork",
-            nameZh: "GreasyFork",
-            url: "https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓",
-            blank: !0
-        } ]
-    }, {
-        nameZh: "音乐",
-        name: "music",
-        list: [ {
-            name: "NetEase",
-            nameZh: "网易音乐",
-            url: "http://music.163.com/#/search/m/?s=%s"
-        }, {
-            name: "1ting",
-            nameZh: "一听",
-            url: "http://so.1ting.com/all.do?q=%s"
-        }, {
-            name: "xiami",
-            nameZh: "虾米音乐",
-            url: "http://www.xiami.com/search?key=%s"
-        }, {
-            name: "yinyuetai",
-            nameZh: "音悦Tai",
-            url: "http://so.yinyuetai.com/?keyword=%s"
-        }, {
-            name: "qq",
-            nameZh: "QQ音乐",
-            url: "https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%s",
-            blank: !0
-        }, {
-            name: "baidu",
-            nameZh: "百度音乐",
-            url: "http://music.baidu.com/search?ie=utf-8&oe=utf-8&key=%s"
-        }, {
-            name: "kuwo",
-            nameZh: "酷我音乐",
-            url: "http://sou.kuwo.cn/ws/NSearch?type=all&key=%s",
-            blank: !0
-        }, {
-            name: "kugou",
-            nameZh: "酷狗",
-            url: "http://search.5sing.kugou.com/?keyword=%s",
-            blank: !0
+            url: "https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓"
         } ]
     }, {
         nameZh: "新闻",
         name: "news",
         list: [ {
-            name: "google",
-            nameZh: "谷歌中文",
-            url: "https://news.google.com/search?q=%s&hl=zh-CN&gl=CN&ceid=CN:zh-Hans",
-            blank: !0
+            name: "谷歌中文",
+            url: "https://news.google.com/search?q=%s&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
         }, {
-            name: "baidu",
-            nameZh: "百度新闻",
-            url: "http://news.baidu.com/ns?word=%s&tn=news&from=news&cl=2&rn=20&ct=1",
-            blank: !0
+            name: "百度新闻",
+            url: "http://news.baidu.com/ns?word=%s&tn=news&from=news&cl=2&rn=20&ct=1"
         }, {
-            name: "163-baidu",
-            nameZh: "网易-百度",
-            url: "https://www.baidu.com/s?wd=%s%20site%3Anews.163.com",
-            blank: !0
+            name: "网易-百度",
+            url: "https://www.baidu.com/s?wd=%s%20site%3Anews.163.com"
         }, {
-            name: "163-google",
-            nameZh: "网易-谷歌",
-            url: "https://www.google.com.hk/search?q=site:news.163.com+%s",
-            blank: !0
+            name: "网易-谷歌",
+            url: "https://www.google.com.hk/search?q=site:news.163.com+%s"
         }, {
-            name: "qq",
-            nameZh: "腾讯新闻",
-            url: "https://www.sogou.com/sogou?site=news.qq.com&query=%s",
-            blank: !0
+            name: "腾讯新闻",
+            url: "https://www.sogou.com/sogou?site=news.qq.com&query=%s"
         }, {
-            name: "ifeng",
-            nameZh: "凤凰新闻",
-            url: "http://search.ifeng.com/sofeng/search.action?q=%s",
-            blank: !0
+            name: "凤凰新闻",
+            url: "http://search.ifeng.com/sofeng/search.action?q=%s"
         }, {
             name: "CNN",
-            nameZh: "CNN",
-            url: "https://edition.cnn.com/search/?q=%s",
-            blank: !0
+            url: "https://edition.cnn.com/search/?q=%s"
         }, {
             name: "BBC",
-            nameZh: "BBC",
-            url: "https://www.bbc.co.uk/search?q=%s",
-            blank: !0
+            url: "https://www.bbc.co.uk/search?q=%s"
         }, {
             name: "Economis",
-            nameZh: "Economis",
-            url: "https://www.google.com/search?q=site:www.economist.com%20%s",
-            blank: !0
+            url: "https://www.google.com/search?q=site:www.economist.com%20%s"
         }, {
-            name: "toutiao",
-            nameZh: "今日头条",
-            url: "https://www.toutiao.com/search/?keyword=%E4%B8%96%E7%95%8C%E6%9D%AF",
-            blank: !0
+            name: "今日头条",
+            url: "https://www.toutiao.com/search/?keyword=%E4%B8%96%E7%95%8C%E6%9D%AF"
         } ]
     }, {
         nameZh: "社交",
         name: "social",
         list: [ {
-            name: "zhihu",
             nameZh: "知乎",
             url: "http://www.zhihu.com/search?q=%s"
         }, {
-            name: "Twitter",
             nameZh: "推特",
             url: "https://twitter.com/search/%s"
         }, {
-            name: "douban",
             nameZh: "豆瓣",
             url: "http://www.douban.com/search?source=suggest&q=%s"
         }, {
-            name: "tieba",
             nameZh: "百度贴吧",
             url: "http://tieba.baidu.com/f?kw=%s&ie=utf-8",
             blank: !0
-        }, {
-            name: "qq",
-            nameZh: "腾讯微博",
-            url: "http://search.t.qq.com/index.php?k=%s"
         }, {
             name: "sina",
             nameZh: "新浪微博",
             url: "http://s.weibo.com/weibo/%s"
         }, {
-            name: "Facebook",
             nameZh: "脸书",
             url: "https://www.facebook.com/search/results.php?q=%s"
         }, {
-            name: "weixin",
             nameZh: "微信搜索",
             url: "http://weixin.sogou.com/weixin?ie=utf8&type=2&query=%s"
         } ]
@@ -317,57 +265,76 @@
         nameZh: "百科",
         name: "knowledge",
         list: [ {
-            name: "wiki",
-            nameZh: "维基",
+            name: "维基",
             url: "http://zh.wikipedia.org/wiki/%s"
         }, {
-            name: "baike",
-            nameZh: "百度百科",
-            url: "http://baike.baidu.com/search/word?pic=1&sug=1&word=%s",
-            disable: !1
+            name: "百度百科",
+            url: "http://baike.baidu.com/search/word?pic=1&sug=1&word=%s"
         }, {
-            name: "wenku",
-            nameZh: "百度文库",
+            name: "百度文库",
             url: "http://wenku.baidu.com/search?word=%s&ie=utf-8"
         }, {
-            name: "docin",
-            nameZh: "豆丁文档",
-            url: "http://www.docin.com/search.do?searchcat=2&searchType_banner=p&nkey=%s",
-            disable: !0
+            name: "豆丁文档",
+            url: "http://www.docin.com/search.do?searchcat=2&searchType_banner=p&nkey=%s"
         }, {
-            name: "iask",
-            nameZh: "爱问知识",
-            url: "http://iask.sina.com.cn/search?searchWord=%s",
-            disable: !0
+            name: "爱问知识",
+            url: "http://iask.sina.com.cn/search?searchWord=%s"
         }, {
-            name: "moegirl",
-            nameZh: "萌娘百科",
-            url: "https://zh.moegirl.org/%s",
-            blank: !0
+            name: "萌娘百科",
+            url: "https://zh.moegirl.org/%s"
         }, {
-            name: "guokr",
-            nameZh: "果壳",
-            url: "http://www.guokr.com/search/all/?wd=%s",
-            blank: !0
+            name: "果壳",
+            url: "http://www.guokr.com/search/all/?wd=%s"
         }, {
             name: "Quora",
-            nameZh: "Quora",
             url: "https://www.quora.com/search?q=%s"
+        } ]
+    }, {
+        nameZh: "图片",
+        name: "image",
+        list: [ {
+            name: "谷歌图片",
+            url: "https://www.google.com/search?q=%s&tbm=isch"
+        }, {
+            name: "百度图片",
+            url: "http://image.baidu.com/search/index?tn=baiduimage&ie=utf-8&word=%s"
+        }, {
+            name: "必应图片",
+            url: "https://www.bing.com/images/search?q=%s"
+        }, {
+            name: "pixiv",
+            url: "http://www.pixiv.net/search.php?word=%s"
+        }, {
+            name: "flickr",
+            url: "http://www.flickr.com/search/?q=%s"
+        }, {
+            name: "花瓣",
+            url: "http://huaban.com/search/?q=%s"
+        }, {
+            name: "easyicon",
+            url: "http://www.easyicon.net/iconsearch/%s/",
+            blank: !0
+        }, {
+            name: "Pinterest",
+            url: "https://www.pinterest.com/search/pins/?q=%s&rs=typed&term_meta"
         } ]
     } ];
     document.createElement("a");
-    function t(n, e, t, r, o, s, a, i, l, c) {
-        "boolean" != typeof a && (l = i, i = a, a = !1);
+    function t(n) {
+        return n ? `__allSearch__${n}` : null;
+    }
+    function r(n, e, t, r, o, s, i, a, l, c) {
+        "boolean" != typeof i && (l = a, a = i, i = !1);
         const A = "function" == typeof t ? t.options : t;
         let p;
         if (n && n.render && (A.render = n.render, A.staticRenderFns = n.staticRenderFns, 
         A._compiled = !0, o && (A.functional = !0)), r && (A._scopeId = r), s ? (p = function(n) {
             (n = n || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (n = __VUE_SSR_CONTEXT__), 
             e && e.call(this, l(n)), n && n._registeredComponents && n._registeredComponents.add(s);
-        }, A._ssrRegister = p) : e && (p = a ? function(n) {
+        }, A._ssrRegister = p) : e && (p = i ? function(n) {
             e.call(this, c(n, this.$root.$options.shadowRoot));
         } : function(n) {
-            e.call(this, i(n));
+            e.call(this, a(n));
         }), p) if (A.functional) {
             const n = A.render;
             A.render = function(e, t) {
@@ -379,39 +346,39 @@
         }
         return t;
     }
-    const r = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-    function o(n) {
+    const o = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+    function s(n) {
         return (n, e) => function(n, e) {
-            const t = r ? e.media || "default" : n, o = a[t] || (a[t] = {
+            const t = o ? e.media || "default" : n, r = a[t] || (a[t] = {
                 ids: new Set,
                 styles: []
             });
-            if (!o.ids.has(n)) {
-                o.ids.add(n);
+            if (!r.ids.has(n)) {
+                r.ids.add(n);
                 let t = e.source;
                 if (e.map && (t += "\n/*# sourceURL=" + e.map.sources[0] + " */", t += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(e.map)))) + " */"), 
-                o.element || (o.element = document.createElement("style"), o.element.type = "text/css", 
-                e.media && o.element.setAttribute("media", e.media), void 0 === s && (s = document.head || document.getElementsByTagName("head")[0]), 
-                s.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(t), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
-                    const n = o.ids.size - 1, e = document.createTextNode(t), r = o.element.childNodes;
-                    r[n] && o.element.removeChild(r[n]), r.length ? o.element.insertBefore(e, r[n]) : o.element.appendChild(e);
+                r.element || (r.element = document.createElement("style"), r.element.type = "text/css", 
+                e.media && r.element.setAttribute("media", e.media), void 0 === i && (i = document.head || document.getElementsByTagName("head")[0]), 
+                i.appendChild(r.element)), "styleSheet" in r.element) r.styles.push(t), r.element.styleSheet.cssText = r.styles.filter(Boolean).join("\n"); else {
+                    const n = r.ids.size - 1, e = document.createTextNode(t), o = r.element.childNodes;
+                    o[n] && r.element.removeChild(o[n]), o.length ? r.element.insertBefore(e, o[n]) : r.element.appendChild(e);
                 }
             }
         }(n, e);
     }
-    let s;
+    let i;
     const a = {};
-    const i = {
+    const l = {
         name: "logo"
     };
-    var l = function() {
+    var c = function() {
         var n = this.$createElement;
         this._self._c;
         return this._m(0);
     };
-    l._withStripped = !0;
-    const c = t({
-        render: l,
+    c._withStripped = !0;
+    const A = r({
+        render: c,
         staticRenderFns: [ function() {
             var n = this.$createElement, e = this._self._c || n;
             return e("a", {
@@ -437,8 +404,8 @@
             },
             media: void 0
         });
-    }), i, void 0, !1, void 0, !1, o, void 0, void 0);
-    const A = {
+    }), l, void 0, !1, void 0, !1, s, void 0, void 0);
+    const p = {
         name: "category",
         props: {
             value: {
@@ -468,7 +435,7 @@
             }
         }
     };
-    var p = function() {
+    var h = function() {
         var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             staticClass: "as-select"
@@ -519,9 +486,9 @@
             }
         }) ]);
     };
-    p._withStripped = !0;
-    const h = t({
-        render: p,
+    h._withStripped = !0;
+    const d = r({
+        render: h,
         staticRenderFns: []
     }, (function(n) {
         n && n("data-v-4c707c2f_0", {
@@ -536,7 +503,7 @@
             },
             media: void 0
         });
-    }), A, void 0, !1, void 0, !1, o, void 0, void 0);
+    }), p, void 0, !1, void 0, !1, s, void 0, void 0);
     const m = {
         name: "site-menu",
         props: {
@@ -566,7 +533,7 @@
             }
         }
     };
-    var d = function() {
+    var u = function() {
         var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             staticClass: "as-menu-container"
@@ -587,17 +554,17 @@
             }, [ t("p", {
                 staticClass: "as-submenu-title",
                 domProps: {
-                    textContent: n._s(e.nameZh)
+                    textContent: n._s(e.name)
                 }
             }) ]);
         })), 0) ]);
     };
-    d._withStripped = !0;
-    const u = t({
-        render: d,
+    u._withStripped = !0;
+    const g = r({
+        render: u,
         staticRenderFns: []
     }, (function(n) {
-        n && n("data-v-33eabb56_0", {
+        n && n("data-v-2d5c7df2_0", {
             source: ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */",
             map: {
                 version: 3,
@@ -605,12 +572,12 @@
                 names: [],
                 mappings: "AA2DA;EACA,aAAA;EACA,OAAA;AC1DA;AD6DA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AC1DA;AD6DA;EACA,aAAA;EACA,mBAAA;EACA,kBAAA;EACA,QAAA;AC1DA;AD6DA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1DA;AD4DA;EACA,cAAA;AC1DA;;AAEA,mCAAmC",
                 file: "menu.vue",
-                sourcesContent: [ '<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <p class="as-submenu-title"\r\n           v-text="item.nameZh">\r\n        </p>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n    flex: 1;\r\n  }\r\n\r\n  .as-menu {\r\n    display: flex;\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    display: flex;\r\n    align-items: center;\r\n    position: relative;\r\n    top: 1px;\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n\r\n    &:hover {\r\n      color: #1890ff;\r\n    }\r\n  }\r\n</style>\r\n', ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */" ]
+                sourcesContent: [ '<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <p class="as-submenu-title"\r\n           v-text="item.name">\r\n        </p>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n    flex: 1;\r\n  }\r\n\r\n  .as-menu {\r\n    display: flex;\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    display: flex;\r\n    align-items: center;\r\n    position: relative;\r\n    top: 1px;\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n\r\n    &:hover {\r\n      color: #1890ff;\r\n    }\r\n  }\r\n</style>\r\n', ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */" ]
             },
             media: void 0
         });
-    }), m, void 0, !1, void 0, !1, o, void 0, void 0);
-    const g = {
+    }), m, void 0, !1, void 0, !1, s, void 0, void 0);
+    const w = {
         name: "x-dialog",
         props: {
             visible: {
@@ -628,7 +595,7 @@
             }
         }
     };
-    var w = function() {
+    var f = function() {
         var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             directives: [ {
@@ -662,15 +629,15 @@
             }
         }) ]);
     };
-    w._withStripped = !0;
-    const f = {
+    f._withStripped = !0;
+    const x = {
         name: "all-search",
         components: {
-            logo: c,
-            category: h,
-            siteMenu: u,
-            xDialog: t({
-                render: w,
+            logo: A,
+            category: d,
+            siteMenu: g,
+            xDialog: r({
+                render: f,
                 staticRenderFns: []
             }, (function(n) {
                 n && n("data-v-dee8096c_0", {
@@ -685,7 +652,7 @@
                     },
                     media: void 0
                 });
-            }), g, void 0, !1, void 0, !1, o, void 0, void 0)
+            }), w, void 0, !1, void 0, !1, s, void 0, void 0)
         },
         data: () => ({
             engines: e,
@@ -700,10 +667,11 @@
         },
         created() {
             this.categoryName = function(n) {
-                if (window.GM_getValue) return window.GM_getValue(n);
-                const e = window.localStorage.getItem(n);
-                return e ? JSON.parse(e) : null;
-            }("__allSearch__categoryName") || this.categoryName;
+                const e = t(n);
+                if (window.GM_getValue) return window.GM_getValue(e);
+                const r = window.localStorage.getItem(e);
+                return r ? JSON.parse(r) : null;
+            }("categoryName") || this.categoryName;
         },
         methods: {
             handleClick(n) {
@@ -711,11 +679,12 @@
             },
             changeCategory(n) {
                 !function(n, e) {
-                    if (window.GM_setValue) window.GM_setValue(n, e); else {
-                        const t = JSON.stringify(e);
-                        t && window.localStorage.setItem(n, t);
+                    const r = t(n);
+                    if (window.GM_setValue) window.GM_setValue(r, e); else {
+                        const n = JSON.stringify(e);
+                        n && window.localStorage.setItem(r, n);
                     }
-                }("__allSearch__categoryName", n), this.categoryName = n;
+                }("categoryName", n), this.categoryName = n;
             },
             openSetDialog() {
                 this.visible = !0;
@@ -756,11 +725,11 @@
         }) ], 1);
     };
     b._withStripped = !0;
-    const x = t({
+    const C = r({
         render: b,
         staticRenderFns: []
     }, (function(n) {
-        n && n("data-v-326571fc_0", {
+        n && n("data-v-3a3fe40c_0", {
             source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */',
             map: {
                 version: 3,
@@ -768,15 +737,15 @@
                 names: [],
                 mappings: "AAgEA;EACA,gBAAA;AC/DA;ADkEA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC/DA;ADkEA;EACA,eAAA;EACA,iBAAA;EACA,mBAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;EACA,aAAA;AC/DA;;AAEA,kCAAkC",
                 file: "App.vue",
-                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n    <div class=\"setting\" @click=\"openSetDialog\">设置</div>\r\n    <x-dialog :visible.sync=\"visible\"></x-dialog>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\nimport xDialog from './components/dialog.vue'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu,\r\n    xDialog\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search',\r\n      visible: false\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list.filter(item => !item.disabled)\r\n      }\r\n      return this.engines[0].list.filter(item => !item.disabled)\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('__allSearch__categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('__allSearch__categoryName', name)\r\n      this.categoryName = name\r\n    },\r\n    openSetDialog () {\r\n      this.visible = true\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .setting {\r\n    padding: 0 20px;\r\n    /*display: flex;*/\r\n    align-items: center;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n    display: none;\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
+                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n    <div class=\"setting\" @click=\"openSetDialog\">设置</div>\r\n    <x-dialog :visible.sync=\"visible\"></x-dialog>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\nimport xDialog from './components/dialog.vue'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu,\r\n    xDialog\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search',\r\n      visible: false\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list.filter(item => !item.disabled)\r\n      }\r\n      return this.engines[0].list.filter(item => !item.disabled)\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('categoryName', name)\r\n      this.categoryName = name\r\n    },\r\n    openSetDialog () {\r\n      this.visible = true\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .setting {\r\n    padding: 0 20px;\r\n    /*display: flex;*/\r\n    align-items: center;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n    display: none;\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
             },
             media: void 0
         });
-    }), f, void 0, !1, void 0, !1, o, void 0, void 0);
-    let C = {};
-    const v = [ {
+    }), x, void 0, !1, void 0, !1, s, void 0, void 0);
+    let v = {};
+    const y = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
-        style: ".srp #searchform:not(.minidiv){top: 56px !important;} .srp .minidiv{top: 36px !important;}"
+        style: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
     }, {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
     }, {
@@ -801,7 +770,7 @@
         url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i
     }, {
         url: /^https?:\/\/mijisou.com\/\?q/i,
-        style: ".search-page{top: 36px} .searx-navbar{top: 48px!important;}"
+        style: ".search-page{top: 30px} .searx-navbar{top: 42px!important;}"
     }, {
         url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
     }, {
@@ -837,10 +806,6 @@
     }, {
         url: /^https?:\/\/stackoverflow\.com\/search\?/i,
         style: ".top-bar._fixed { top: 30px }"
-    }, {
-        url: /^https?:\/\/www\.soku\.com\/search_video\//
-    }, {
-        url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//
     }, {
         url: /^https?:\/\/search\.bilibili\.com\/all/,
         keyword: () => document.getElementById("search-keyword").value,
@@ -959,18 +924,18 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
     } ].find(n => n.url.test(window.location.href));
-    v && !v.disabled ? (C.url = v.url, C.disabled = v.disabled, C.style = v.style, C.keyword = v.keyword) : C = null;
-    var y = C;
+    y && !y.disabled ? (v.url = y.url, v.disabled = y.disabled, v.style = y.style, v.keyword = y.keyword) : v = null;
+    var E = v;
     n.config.productionTip = !1;
-    const k = y;
-    if (y) {
+    const k = E;
+    if (E) {
         const e = document.createElement("div");
         e.id = "all-search";
         const t = new n({
             data: () => ({
                 currentSite: k
             }),
-            render: n => n(x)
+            render: n => n(C)
         });
         (function() {
             let n = 0;
@@ -985,7 +950,7 @@
         })().then(() => {
             const n = document.body.parentElement.insertBefore(e, document.body);
             var r;
-            t.$mount(n), y.style && (r = y.style, window.GM_addStyle && window.GM_addStyle(r));
+            t.$mount(n), E && E.style && (r = E.style, window.GM_addStyle && window.GM_addStyle(r));
         });
     }
 }(Vue);

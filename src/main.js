@@ -6,8 +6,9 @@ import target from './config/loadList'
 Vue.config.productionTip = false
 
 const currentSite = target
+const isDev = process.env.NODE_ENV !== 'production'
 
-if (target) {
+if (target || isDev) {
   const el = document.createElement('div')
   el.id = 'all-search'
 
@@ -24,7 +25,7 @@ if (target) {
     const mountEL = document.body.parentElement.insertBefore(el, document.body)
     // document.body.insertBefore(el, document.body.childNodes[0])
     app.$mount(mountEL)
-    if (target.style) {
+    if (target && target.style) {
       addStyle(target.style)
     }
   })

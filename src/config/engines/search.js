@@ -1,57 +1,42 @@
 export default [
   {
-    name: 'baidu',
-    nameZh: '百度',
+    name: '百度',
     url: 'https://www.baidu.com/s?wd=%s&ie=utf-8'
   },
   {
-    name: 'google',
-    nameZh: '谷歌',
+    name: '谷歌',
     url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8'
   },
   {
-    name: 'bing',
-    nameZh: '必应',
+    name: '必应',
     url: 'https://cn.bing.com/search?q=%s'
   },
   {
     name: 'DDG',
-    nameZh: 'DDG',
-    url: 'https://duckduckgo.com/?q=%s',
-    disable: true
+    url: 'https://duckduckgo.com/?q=%s'
   },
   {
     name: '360',
-    nameZh: '360',
     url: 'https://www.so.com/s?ie=utf-8&q=%s'
   },
   {
-    name: 'yahoo',
-    nameZh: '雅虎',
-    url: 'https://search.yahoo.com/search;?p=%s',
-    disable: true
+    name: '雅虎',
+    url: 'https://search.yahoo.com/search;?p=%s'
   },
   {
-    name: 'sogou',
-    nameZh: '搜狗',
-    url: 'https://www.sogou.com/web?query=%s',
-    disable: false
+    name: '搜狗',
+    url: 'https://www.sogou.com/web?query=%s'
   },
   {
-    name: 'startpage',
-    nameZh: 'Startpage',
-    url: 'https://www.startpage.com/do/asearch$post$query',
-    disable: true
+    name: 'Startpage',
+    url: 'https://www.startpage.com/do/asearch$post$query'
   },
   {
-    name: 'mijisou',
-    nameZh: '秘迹搜索',
+    name: '秘迹搜索',
     url: 'https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN'
   },
   {
     name: 'Yandex',
-    nameZh: 'Yandex',
-    url: 'https://yandex.com/search/?text=%s',
-    disabled: true
+    url: 'https://yandex.com/search/?text=%s'
   }
 ]

@@ -42,14 +42,14 @@ export default {
     }
   },
   created () {
-    this.categoryName = getSession('__allSearch__categoryName') || this.categoryName
+    this.categoryName = getSession('categoryName') || this.categoryName
   },
   methods: {
     handleClick (tab) {
       this.$emit('menu-click', tab)
     },
     changeCategory (name) {
-      setSession('__allSearch__categoryName', name)
+      setSession('categoryName', name)
       this.categoryName = name
     },
     openSetDialog () {

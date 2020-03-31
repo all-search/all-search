@@ -2,10 +2,12 @@ import common from './common'
 import search from './search'
 import translate from './translate'
 import developer from './developer'
+import video from './video'
 import music from './music'
 import news from './news'
 import social from './social'
 import knowledge from './knowledge'
+import image from './image'
 
 export default [
   {
@@ -24,14 +26,19 @@ export default [
     list: translate
   },
   {
-    nameZh: '开发者',
-    name: 'developer',
-    list: developer
+    nameZh: '视频',
+    name: 'video',
+    list: video
   },
   {
     nameZh: '音乐',
     name: 'music',
     list: music
+  },
+  {
+    nameZh: '开发者',
+    name: 'developer',
+    list: developer
   },
   {
     nameZh: '新闻',
@@ -47,5 +54,10 @@ export default [
     nameZh: '百科',
     name: 'knowledge',
     list: knowledge
+  },
+  {
+    nameZh: '图片',
+    name: 'image',
+    list: image
   }
 ]
