@@ -93,7 +93,7 @@ export default {
     font-size: 14px;
 
     &:hover {
-      color: #1890ff;
+      color: $color;
     }
   }
 </style>

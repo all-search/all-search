@@ -4,8 +4,17 @@
     <category :value="categoryName"
               @change="changeCategory"/>
     <site-menu :menus="menus"/>
-    <div class="setting" @click="openSetDialog">设置</div>
-    <x-dialog :visible.sync="visible"></x-dialog>
+    <div v-show="false"
+         class="setting"
+         @click="openSetDialog">
+      设置
+    </div>
+    <x-dialog
+      :visible.sync="visible"
+      title="设置"
+      width="1000px">
+      <setting/>
+    </x-dialog>
   </header>
 </template>
 
@@ -16,6 +25,7 @@ import logo from './components/logo.vue'
 import category from './components/category.vue'
 import siteMenu from './components/menu.vue'
 import xDialog from './components/dialog.vue'
+import setting from './components/setting.vue'
 
 export default {
   name: 'all-search',
@@ -23,7 +33,8 @@ export default {
     logo,
     category,
     siteMenu,
-    xDialog
+    xDialog,
+    setting
   },
   data () {
     return {
@@ -80,11 +91,10 @@ export default {
 
   .setting {
     padding: 0 20px;
-    /*display: flex;*/
+    display: flex;
     align-items: center;
     white-space: nowrap;
     cursor: pointer;
     font-size: 14px;
-    display: none;
   }
 </style>

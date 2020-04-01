@@ -4,7 +4,7 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/4/1
+// @update       2020/4/2
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -238,27 +238,25 @@
         nameZh: "社交",
         name: "social",
         list: [ {
-            nameZh: "知乎",
+            name: "知乎",
             url: "http://www.zhihu.com/search?q=%s"
         }, {
-            nameZh: "推特",
+            name: "推特",
             url: "https://twitter.com/search/%s"
         }, {
-            nameZh: "豆瓣",
+            name: "豆瓣",
             url: "http://www.douban.com/search?source=suggest&q=%s"
         }, {
-            nameZh: "百度贴吧",
-            url: "http://tieba.baidu.com/f?kw=%s&ie=utf-8",
-            blank: !0
+            name: "百度贴吧",
+            url: "http://tieba.baidu.com/f?kw=%s&ie=utf-8"
         }, {
-            name: "sina",
-            nameZh: "新浪微博",
+            name: "新浪微博",
             url: "http://s.weibo.com/weibo/%s"
         }, {
-            nameZh: "脸书",
+            name: "脸书",
             url: "https://www.facebook.com/search/results.php?q=%s"
         }, {
-            nameZh: "微信搜索",
+            name: "微信搜索",
             url: "http://weixin.sogou.com/weixin?ie=utf8&type=2&query=%s"
         } ]
     }, {
@@ -435,7 +433,7 @@
             }
         }
     };
-    var h = function() {
+    var d = function() {
         var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             staticClass: "as-select"
@@ -486,9 +484,9 @@
             }
         }) ]);
     };
-    h._withStripped = !0;
-    const d = r({
-        render: h,
+    d._withStripped = !0;
+    const h = r({
+        render: d,
         staticRenderFns: []
     }, (function(n) {
         n && n("data-v-4c707c2f_0", {
@@ -504,7 +502,7 @@
             media: void 0
         });
     }), p, void 0, !1, void 0, !1, s, void 0, void 0);
-    const m = {
+    const u = {
         name: "site-menu",
         props: {
             menus: {
@@ -533,7 +531,7 @@
             }
         }
     };
-    var u = function() {
+    var m = function() {
         var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             staticClass: "as-menu-container"
@@ -559,12 +557,12 @@
             }) ]);
         })), 0) ]);
     };
-    u._withStripped = !0;
+    m._withStripped = !0;
     const g = r({
-        render: u,
+        render: m,
         staticRenderFns: []
     }, (function(n) {
-        n && n("data-v-2d5c7df2_0", {
+        n && n("data-v-9eb6f43a_0", {
             source: ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */",
             map: {
                 version: 3,
@@ -572,11 +570,11 @@
                 names: [],
                 mappings: "AA2DA;EACA,aAAA;EACA,OAAA;AC1DA;AD6DA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AC1DA;AD6DA;EACA,aAAA;EACA,mBAAA;EACA,kBAAA;EACA,QAAA;AC1DA;AD6DA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1DA;AD4DA;EACA,cAAA;AC1DA;;AAEA,mCAAmC",
                 file: "menu.vue",
-                sourcesContent: [ '<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <p class="as-submenu-title"\r\n           v-text="item.name">\r\n        </p>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n    flex: 1;\r\n  }\r\n\r\n  .as-menu {\r\n    display: flex;\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    display: flex;\r\n    align-items: center;\r\n    position: relative;\r\n    top: 1px;\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n\r\n    &:hover {\r\n      color: #1890ff;\r\n    }\r\n  }\r\n</style>\r\n', ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */" ]
+                sourcesContent: [ '<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <p class="as-submenu-title"\r\n           v-text="item.name">\r\n        </p>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n    flex: 1;\r\n  }\r\n\r\n  .as-menu {\r\n    display: flex;\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    display: flex;\r\n    align-items: center;\r\n    position: relative;\r\n    top: 1px;\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n\r\n    &:hover {\r\n      color: $color;\r\n    }\r\n  }\r\n</style>\r\n', ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */" ]
             },
             media: void 0
         });
-    }), m, void 0, !1, void 0, !1, s, void 0, void 0);
+    }), u, void 0, !1, void 0, !1, s, void 0, void 0);
     const w = {
         name: "x-dialog",
         props: {
@@ -587,6 +585,16 @@
             title: {
                 type: String,
                 default: ""
+            },
+            width: {
+                type: String,
+                default: ""
+            }
+        },
+        computed: {
+            style() {
+                const n = {};
+                return this.width && (n.width = this.width), n;
             }
         },
         methods: {
@@ -595,7 +603,7 @@
             }
         }
     };
-    var f = function() {
+    var x = function() {
         var n = this, e = n.$createElement, t = n._self._c || e;
         return t("div", {
             directives: [ {
@@ -606,7 +614,8 @@
             } ],
             staticClass: "as-dialog"
         }, [ t("div", {
-            staticClass: "as-dialog-container"
+            staticClass: "as-dialog-container",
+            style: n.style
         }, [ t("div", {
             staticClass: "as-dialog__header"
         }, [ t("p", {
@@ -629,30 +638,117 @@
             }
         }) ]);
     };
-    f._withStripped = !0;
-    const x = {
-        name: "all-search",
+    x._withStripped = !0;
+    const b = r({
+        render: x,
+        staticRenderFns: []
+    }, (function(n) {
+        n && n("data-v-296f4814_0", {
+            source: '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  overflow: auto;\n  margin: 0;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  opacity: 0.5;\n  background: #000;\n}\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 2px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  min-width: 50%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n.as-dialog__header {\n  padding: 20px 20px 10px;\n  position: relative;\n}\n.as-dialog__header p {\n  margin: 0;\n  line-height: 24px;\n  height: 24px;\n}\n.as-dialog__body {\n  padding: 30px 20px;\n  color: #606266;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}\n\n/*# sourceMappingURL=dialog.vue.map */',
+            map: {
+                version: 3,
+                sources: [ "dialog.vue", "E:\\project\\all-search\\src\\components\\dialog.vue" ],
+                names: [],
+                mappings: "AAAA,gBAAgB;ACwDhB;EACA,eAAA;EACA,MAAA;EACA,QAAA;EACA,SAAA;EACA,OAAA;EACA,cAAA;EACA,SAAA;ADtDA;ACyDA;EACA,eAAA;EACA,OAAA;EACA,MAAA;EACA,WAAA;EACA,YAAA;EACA,YAAA;EACA,gBAAA;ADtDA;ACyDA;EACA,kBAAA;EACA,gBAAA;EACA,kBAAA;EACA,wCAAA;EACA,sBAAA;EACA,cAAA;EACA,WAAA;EACA,sBAAA;EACA,2BAAA;ADtDA;ACyDA;EACA,uBAAA;EACA,kBAAA;ADtDA;ACuDA;EACA,SAAA;EACA,iBAAA;EACA,YAAA;ADrDA;ACyDA;EACA,kBAAA;EACA,cAAA;EACA,eAAA;EACA,qBAAA;ADtDA;ACyDA;EACA,uBAAA;EACA,iBAAA;EACA,sBAAA;ADtDA;ACyDA;EACA,qBAAA;EACA,kBAAA;EACA,SAAA;EACA,WAAA;EACA,UAAA;EACA,uBAAA;EACA,eAAA;EACA,eAAA;EACA,cAAA;ADtDA;ACuDA;EACA,YAAA;ADrDA;;AAEA,qCAAqC",
+                file: "dialog.vue",
+                sourcesContent: [ '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  overflow: auto;\n  margin: 0;\n}\n\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  opacity: 0.5;\n  background: #000;\n}\n\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 2px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  min-width: 50%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n\n.as-dialog__header {\n  padding: 20px 20px 10px;\n  position: relative;\n}\n.as-dialog__header p {\n  margin: 0;\n  line-height: 24px;\n  height: 24px;\n}\n\n.as-dialog__body {\n  padding: 30px 20px;\n  color: #606266;\n  font-size: 14px;\n  word-break: break-all;\n}\n\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}\n\n/*# sourceMappingURL=dialog.vue.map */', '<template>\r\n  <div class="as-dialog"\r\n       v-show="visible">\r\n    <div class="as-dialog-container"\r\n         :style="style">\r\n      <div class="as-dialog__header">\r\n        <p v-text="title"></p>\r\n        <span class="as-dialog__close"\r\n              @click="handleClose">\r\n        </span>\r\n      </div>\r\n      <div class="as-dialog__body">\r\n        <slot></slot>\r\n      </div>\r\n      <div class="as-dialog__footer"></div>\r\n    </div>\r\n    <div class="as-dialog__mask"\r\n         @click="handleClose"></div>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'x-dialog\',\r\n  props: {\r\n    visible: {\r\n      type: Boolean,\r\n      default: false\r\n    },\r\n    title: {\r\n      type: String,\r\n      default: \'\'\r\n    },\r\n    width: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  computed: {\r\n    style () {\r\n      const obj = {}\r\n      if (this.width) {\r\n        obj.width = this.width\r\n      }\r\n      return obj\r\n    }\r\n  },\r\n  methods: {\r\n    handleClose () {\r\n      this.$emit(\'update:visible\', false)\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  .as-dialog {\r\n    position: fixed;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    overflow: auto;\r\n    margin: 0;\r\n  }\r\n\r\n  .as-dialog__mask {\r\n    position: fixed;\r\n    left: 0;\r\n    top: 0;\r\n    width: 100%;\r\n    height: 100%;\r\n    opacity: .5;\r\n    background: #000;\r\n  }\r\n\r\n  .as-dialog-container {\r\n    position: relative;\r\n    background: #fff;\r\n    border-radius: 2px;\r\n    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);\r\n    box-sizing: border-box;\r\n    min-width: 50%;\r\n    z-index: 99;\r\n    margin: 40vh auto 50px;\r\n    transform: translateY(-40%);\r\n  }\r\n\r\n  .as-dialog__header {\r\n    padding: 20px 20px 10px;\r\n    position: relative;\r\n    p {\r\n      margin: 0;\r\n      line-height: 24px;\r\n      height: 24px;\r\n    }\r\n  }\r\n\r\n  .as-dialog__body {\r\n    padding: 30px 20px;\r\n    color: #606266;\r\n    font-size: 14px;\r\n    word-break: break-all;\r\n  }\r\n\r\n  .as-dialog__footer {\r\n    padding: 10px 20px 20px;\r\n    text-align: right;\r\n    box-sizing: border-box;\r\n  }\r\n\r\n  .as-dialog__close {\r\n    display: inline-block;\r\n    position: absolute;\r\n    top: 16px;\r\n    right: 24px;\r\n    padding: 0;\r\n    background: transparent;\r\n    cursor: pointer;\r\n    font-size: 16px;\r\n    color: #909399;\r\n    &:before {\r\n      content: "\\2716";\r\n    }\r\n  }\r\n</style>\r\n' ]
+            },
+            media: void 0
+        });
+    }), w, void 0, !1, void 0, !1, s, void 0, void 0);
+    const f = {
+        name: "checkbox",
+        mounted() {
+            console.log(this);
+        }
+    };
+    var C = function() {
+        var n = this.$createElement, e = this._self._c || n;
+        return e("div", [ e("input", {
+            staticClass: "styled-checkbox",
+            attrs: {
+                id: this._uid,
+                type: "checkbox",
+                value: "value1"
+            }
+        }), this._v(" "), e("label", {
+            attrs: {
+                for: this._uid
+            }
+        }, [ this._t("default") ], 2) ]);
+    };
+    C._withStripped = !0;
+    const v = {
+        name: "setting",
         components: {
-            logo: A,
-            category: d,
-            siteMenu: g,
-            xDialog: r({
-                render: f,
+            checkbox: r({
+                render: C,
                 staticRenderFns: []
             }, (function(n) {
-                n && n("data-v-dee8096c_0", {
-                    source: '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  overflow: auto;\n  margin: 0;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  opacity: 0.5;\n  background: #000;\n}\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 2px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  width: 50%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n.as-dialog__header {\n  padding: 20px 20px 10px;\n  position: relative;\n}\n.as-dialog__header p {\n  margin: 0;\n  line-height: 24px;\n  height: 24px;\n}\n.as-dialog__body {\n  padding: 30px 20px;\n  color: #606266;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}\n\n/*# sourceMappingURL=dialog.vue.map */',
+                n && n("data-v-523508d8_0", {
+                    source: '.styled-checkbox {\n  position: absolute;\n  opacity: 0;\n}\n.styled-checkbox + label {\n  position: relative;\n  cursor: pointer;\n  padding: 0;\n}\n.styled-checkbox + label:before {\n  content: "";\n  margin-right: 10px;\n  display: inline-block;\n  vertical-align: text-top;\n  width: 16px;\n  height: 16px;\n  background: white;\n  border: 1px #eee solid;\n  border-radius: 2px;\n}\n.styled-checkbox:hover + label:before {\n  border-color: #1890ff;\n}\n.styled-checkbox:checked + label:before {\n  background: #1890ff;\n  border-color: #1890ff;\n}\n.styled-checkbox:disabled + label {\n  color: #b8b8b8;\n  cursor: auto;\n}\n.styled-checkbox:disabled + label:before {\n  box-shadow: none;\n  background: #ddd;\n}\n.styled-checkbox:checked + label:after {\n  content: "";\n  position: absolute;\n  left: 4px;\n  top: 8px;\n  background: white;\n  width: 2px;\n  height: 2px;\n  box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;\n  transform: rotate(45deg);\n}\n\n/*# sourceMappingURL=checkbox.vue.map */',
                     map: {
                         version: 3,
-                        sources: [ "dialog.vue", "E:\\project\\all-search\\src\\components\\dialog.vue" ],
+                        sources: [ "E:\\project\\all-search\\src\\components\\checkbox.vue", "checkbox.vue" ],
                         names: [],
-                        mappings: "AAAA,gBAAgB;ACyChB;EACA,eAAA;EACA,MAAA;EACA,QAAA;EACA,SAAA;EACA,OAAA;EACA,cAAA;EACA,SAAA;ADvCA;AC0CA;EACA,eAAA;EACA,OAAA;EACA,MAAA;EACA,WAAA;EACA,YAAA;EACA,YAAA;EACA,gBAAA;ADvCA;AC0CA;EACA,kBAAA;EACA,gBAAA;EACA,kBAAA;EACA,wCAAA;EACA,sBAAA;EACA,UAAA;EACA,WAAA;EACA,sBAAA;EACA,2BAAA;ADvCA;AC0CA;EACA,uBAAA;EACA,kBAAA;ADvCA;ACwCA;EACA,SAAA;EACA,iBAAA;EACA,YAAA;ADtCA;AC0CA;EACA,kBAAA;EACA,cAAA;EACA,eAAA;EACA,qBAAA;ADvCA;AC0CA;EACA,uBAAA;EACA,iBAAA;EACA,sBAAA;ADvCA;AC0CA;EACA,qBAAA;EACA,kBAAA;EACA,SAAA;EACA,WAAA;EACA,UAAA;EACA,uBAAA;EACA,eAAA;EACA,eAAA;EACA,cAAA;ADvCA;ACwCA;EACA,YAAA;ADtCA;;AAEA,qCAAqC",
-                        file: "dialog.vue",
-                        sourcesContent: [ '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  overflow: auto;\n  margin: 0;\n}\n\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  opacity: 0.5;\n  background: #000;\n}\n\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 2px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  width: 50%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n\n.as-dialog__header {\n  padding: 20px 20px 10px;\n  position: relative;\n}\n.as-dialog__header p {\n  margin: 0;\n  line-height: 24px;\n  height: 24px;\n}\n\n.as-dialog__body {\n  padding: 30px 20px;\n  color: #606266;\n  font-size: 14px;\n  word-break: break-all;\n}\n\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}\n\n/*# sourceMappingURL=dialog.vue.map */', '<template>\r\n  <div class="as-dialog" v-show="visible">\r\n    <div class="as-dialog-container">\r\n      <div class="as-dialog__header">\r\n        <p v-text="title"></p>\r\n        <span class="as-dialog__close"\r\n              @click="handleClose">\r\n        </span>\r\n      </div>\r\n      <div class="as-dialog__body">\r\n        <slot></slot>\r\n      </div>\r\n      <div class="as-dialog__footer"></div>\r\n    </div>\r\n    <div class="as-dialog__mask"\r\n         @click="handleClose"></div>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'x-dialog\',\r\n  props: {\r\n    visible: {\r\n      type: Boolean,\r\n      default: false\r\n    },\r\n    title: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  methods: {\r\n    handleClose () {\r\n      this.$emit(\'update:visible\', false)\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  .as-dialog {\r\n    position: fixed;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    overflow: auto;\r\n    margin: 0;\r\n  }\r\n\r\n  .as-dialog__mask {\r\n    position: fixed;\r\n    left: 0;\r\n    top: 0;\r\n    width: 100%;\r\n    height: 100%;\r\n    opacity: .5;\r\n    background: #000;\r\n  }\r\n\r\n  .as-dialog-container {\r\n    position: relative;\r\n    background: #fff;\r\n    border-radius: 2px;\r\n    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);\r\n    box-sizing: border-box;\r\n    width: 50%;\r\n    z-index: 99;\r\n    margin: 40vh auto 50px;\r\n    transform: translateY(-40%);\r\n  }\r\n\r\n  .as-dialog__header {\r\n    padding: 20px 20px 10px;\r\n    position: relative;\r\n    p {\r\n      margin: 0;\r\n      line-height: 24px;\r\n      height: 24px;\r\n    }\r\n  }\r\n\r\n  .as-dialog__body {\r\n    padding: 30px 20px;\r\n    color: #606266;\r\n    font-size: 14px;\r\n    word-break: break-all;\r\n  }\r\n\r\n  .as-dialog__footer {\r\n    padding: 10px 20px 20px;\r\n    text-align: right;\r\n    box-sizing: border-box;\r\n  }\r\n\r\n  .as-dialog__close {\r\n    display: inline-block;\r\n    position: absolute;\r\n    top: 16px;\r\n    right: 24px;\r\n    padding: 0;\r\n    background: transparent;\r\n    cursor: pointer;\r\n    font-size: 16px;\r\n    color: #909399;\r\n    &:before {\r\n      content: "\\2716";\r\n    }\r\n  }\r\n</style>\r\n' ]
+                        mappings: "AAwBA;EACA,kBAAA;EACA,UAAA;ACvBA;ADyBA;EACA,kBAAA;EACA,eAAA;EACA,UAAA;ACvBA;AD2BA;EACA,WAAA;EACA,kBAAA;EACA,qBAAA;EACA,wBAAA;EACA,WAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,kBAAA;ACzBA;AD6BA;EACA,qBAAA;AC3BA;AD+BA;EACA,mBAAA;EACA,qBAAA;AC7BA;ADiCA;EACA,cAAA;EACA,YAAA;AC/BA;ADmCA;EACA,gBAAA;EACA,gBAAA;ACjCA;ADqCA;EACA,WAAA;EACA,kBAAA;EACA,SAAA;EACA,QAAA;EACA,iBAAA;EACA,UAAA;EACA,WAAA;EACA,gHAAA;EAMA,wBAAA;ACxCA;;AAEA,uCAAuC",
+                        file: "checkbox.vue",
+                        sourcesContent: [ '<template>\r\n  <div>\r\n    <input class="styled-checkbox"\r\n           :id="_uid"\r\n           type="checkbox"\r\n           value="value1">\r\n    <label :for="_uid">\r\n      <slot></slot>\r\n    </label>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'checkbox\',\r\n  mounted () {\r\n    console.log(this)\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .styled-checkbox {\r\n    position: absolute; // take it out of document flow\r\n    opacity: 0; // hide it\r\n\r\n    & + label {\r\n      position: relative;\r\n      cursor: pointer;\r\n      padding: 0;\r\n    }\r\n\r\n    // Box.\r\n    & + label:before {\r\n      content: \'\';\r\n      margin-right: 10px;\r\n      display: inline-block;\r\n      vertical-align: text-top;\r\n      width: 16px;\r\n      height: 16px;\r\n      background: white;\r\n      border: 1px #eee solid;\r\n      border-radius: 2px;\r\n    }\r\n\r\n    // Box hover\r\n    &:hover + label:before {\r\n      border-color: $color;\r\n    }\r\n\r\n    // Box checked\r\n    &:checked + label:before {\r\n      background: $color;\r\n      border-color: $color;\r\n    }\r\n\r\n    // Disabled state label.\r\n    &:disabled + label {\r\n      color: #b8b8b8;\r\n      cursor: auto;\r\n    }\r\n\r\n    // Disabled box.\r\n    &:disabled + label:before {\r\n      box-shadow: none;\r\n      background: #ddd;\r\n    }\r\n\r\n    // Checkmark. Could be replaced with an image\r\n    &:checked + label:after {\r\n      content: \'\';\r\n      position: absolute;\r\n      left: 4px;\r\n      top: 8px;\r\n      background: white;\r\n      width: 2px;\r\n      height: 2px;\r\n      box-shadow: 2px 0 0 white,\r\n      4px 0 0 white,\r\n      4px -2px 0 white,\r\n      4px -4px 0 white,\r\n      4px -6px 0 white,\r\n      4px -8px 0 white;\r\n      transform: rotate(45deg);\r\n    }\r\n  }\r\n</style>\r\n', '.styled-checkbox {\n  position: absolute;\n  opacity: 0;\n}\n.styled-checkbox + label {\n  position: relative;\n  cursor: pointer;\n  padding: 0;\n}\n.styled-checkbox + label:before {\n  content: "";\n  margin-right: 10px;\n  display: inline-block;\n  vertical-align: text-top;\n  width: 16px;\n  height: 16px;\n  background: white;\n  border: 1px #eee solid;\n  border-radius: 2px;\n}\n.styled-checkbox:hover + label:before {\n  border-color: #1890ff;\n}\n.styled-checkbox:checked + label:before {\n  background: #1890ff;\n  border-color: #1890ff;\n}\n.styled-checkbox:disabled + label {\n  color: #b8b8b8;\n  cursor: auto;\n}\n.styled-checkbox:disabled + label:before {\n  box-shadow: none;\n  background: #ddd;\n}\n.styled-checkbox:checked + label:after {\n  content: "";\n  position: absolute;\n  left: 4px;\n  top: 8px;\n  background: white;\n  width: 2px;\n  height: 2px;\n  box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;\n  transform: rotate(45deg);\n}\n\n/*# sourceMappingURL=checkbox.vue.map */' ]
                     },
                     media: void 0
                 });
-            }), w, void 0, !1, void 0, !1, s, void 0, void 0)
+            }), f, void 0, !1, void 0, !1, s, void 0, void 0)
+        },
+        data: () => ({
+            engines: e
+        })
+    };
+    var y = function() {
+        var n = this, e = n.$createElement, t = n._self._c || e;
+        return t("div", {
+            staticClass: "as-setting"
+        }, n._l(n.engines, (function(e, r) {
+            return t("div", {
+                key: r,
+                staticClass: "as-setting-category"
+            }, [ t("p", {
+                staticClass: "as-category-name",
+                domProps: {
+                    textContent: n._s(e.nameZh)
+                }
+            }), n._v(" "), n._l(e.list, (function(e, r) {
+                return t("checkbox", {
+                    key: r,
+                    staticClass: "as-setting-menu"
+                }, [ n._v("\n      " + n._s(e.name) + "\n    ") ]);
+            })) ], 2);
+        })), 0);
+    };
+    y._withStripped = !0;
+    const E = {
+        name: "all-search",
+        components: {
+            logo: A,
+            category: h,
+            siteMenu: g,
+            xDialog: b,
+            setting: r({
+                render: y,
+                staticRenderFns: []
+            }, (function(n) {
+                n && n("data-v-181e15eb_0", {
+                    source: ".as-setting {\n  display: flex;\n  flex-wrap: wrap;\n}\n.as-setting-category {\n  flex: 20%;\n  margin-bottom: 20px;\n}\n.as-category-name {\n  font-size: 16px;\n  color: #666;\n  margin: 0 0 10px;\n}\n.as-setting-menu {\n  margin: 0 0 6px;\n}\n\n/*# sourceMappingURL=setting.vue.map */",
+                    map: {
+                        version: 3,
+                        sources: [ "E:\\project\\all-search\\src\\components\\setting.vue", "setting.vue" ],
+                        names: [],
+                        mappings: "AAkCA;EACA,aAAA;EACA,eAAA;ACjCA;ADoCA;EACA,SAAA;EACA,mBAAA;ACjCA;ADoCA;EACA,eAAA;EACA,WAAA;EACA,gBAAA;ACjCA;ADoCA;EACA,eAAA;ACjCA;;AAEA,sCAAsC",
+                        file: "setting.vue",
+                        sourcesContent: [ '<template>\r\n  <div class="as-setting">\r\n    <div v-for="(category, i) in engines"\r\n         :key="i"\r\n         class="as-setting-category">\r\n      <p class="as-category-name" v-text="category.nameZh"></p>\r\n      <checkbox\r\n        class="as-setting-menu"\r\n        v-for="(menu, j) in category.list"\r\n        :key="j">\r\n        {{menu.name}}\r\n      </checkbox>\r\n    </div>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport engines from \'../config/engines/index.js\'\r\nimport checkbox from \'../components/checkbox.vue\'\r\n\r\nexport default {\r\n  name: \'setting\',\r\n  components: {\r\n    checkbox\r\n  },\r\n  data () {\r\n    return {\r\n      engines\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  .as-setting {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n  }\r\n\r\n  .as-setting-category {\r\n    flex: 20%;\r\n    margin-bottom: 20px;\r\n  }\r\n\r\n  .as-category-name {\r\n    font-size: 16px;\r\n    color: #666;\r\n    margin: 0 0 10px;\r\n  }\r\n\r\n  .as-setting-menu {\r\n    margin: 0 0 6px;\r\n  }\r\n</style>\r\n', ".as-setting {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.as-setting-category {\n  flex: 20%;\n  margin-bottom: 20px;\n}\n\n.as-category-name {\n  font-size: 16px;\n  color: #666;\n  margin: 0 0 10px;\n}\n\n.as-setting-menu {\n  margin: 0 0 6px;\n}\n\n/*# sourceMappingURL=setting.vue.map */" ]
+                    },
+                    media: void 0
+                });
+            }), v, void 0, !1, void 0, !1, s, void 0, void 0)
         },
         data: () => ({
             engines: e,
@@ -691,7 +787,7 @@
             }
         }
     };
-    var b = function() {
+    var k = function() {
         var n = this, e = n.$createElement, t = n._self._c || e;
         return t("header", {
             attrs: {
@@ -709,41 +805,49 @@
                 menus: n.menus
             }
         }), n._v(" "), t("div", {
+            directives: [ {
+                name: "show",
+                rawName: "v-show",
+                value: !1,
+                expression: "false"
+            } ],
             staticClass: "setting",
             on: {
                 click: n.openSetDialog
             }
-        }, [ n._v("设置") ]), n._v(" "), t("x-dialog", {
+        }, [ n._v("\n    设置\n  ") ]), n._v(" "), t("x-dialog", {
             attrs: {
-                visible: n.visible
+                visible: n.visible,
+                title: "设置",
+                width: "1000px"
             },
             on: {
                 "update:visible": function(e) {
                     n.visible = e;
                 }
             }
-        }) ], 1);
+        }, [ t("setting") ], 1) ], 1);
     };
-    b._withStripped = !0;
-    const C = r({
-        render: b,
+    k._withStripped = !0;
+    const _ = r({
+        render: k,
         staticRenderFns: []
     }, (function(n) {
-        n && n("data-v-3a3fe40c_0", {
-            source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */',
+        n && n("data-v-944cd5a4_0", {
+            source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  display: flex;\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
             map: {
                 version: 3,
                 sources: [ "E:\\project\\all-search\\src\\App.vue", "App.vue" ],
                 names: [],
-                mappings: "AAgEA;EACA,gBAAA;AC/DA;ADkEA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC/DA;ADkEA;EACA,eAAA;EACA,iBAAA;EACA,mBAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;EACA,aAAA;AC/DA;;AAEA,kCAAkC",
+                mappings: "AA2EA;EACA,gBAAA;AC1EA;AD6EA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC1EA;AD6EA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1EA;;AAEA,kCAAkC",
                 file: "App.vue",
-                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n    <div class=\"setting\" @click=\"openSetDialog\">设置</div>\r\n    <x-dialog :visible.sync=\"visible\"></x-dialog>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\nimport xDialog from './components/dialog.vue'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu,\r\n    xDialog\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search',\r\n      visible: false\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list.filter(item => !item.disabled)\r\n      }\r\n      return this.engines[0].list.filter(item => !item.disabled)\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('categoryName', name)\r\n      this.categoryName = name\r\n    },\r\n    openSetDialog () {\r\n      this.visible = true\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .setting {\r\n    padding: 0 20px;\r\n    /*display: flex;*/\r\n    align-items: center;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n    display: none;\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.setting {\n  padding: 0 20px;\n  /*display: flex;*/\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: none;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
+                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n    <div v-show=\"false\"\r\n         class=\"setting\"\r\n         @click=\"openSetDialog\">\r\n      设置\r\n    </div>\r\n    <x-dialog\r\n      :visible.sync=\"visible\"\r\n      title=\"设置\"\r\n      width=\"1000px\">\r\n      <setting/>\r\n    </x-dialog>\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\nimport xDialog from './components/dialog.vue'\r\nimport setting from './components/setting.vue'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu,\r\n    xDialog,\r\n    setting\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search',\r\n      visible: false\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list.filter(item => !item.disabled)\r\n      }\r\n      return this.engines[0].list.filter(item => !item.disabled)\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('categoryName', name)\r\n      this.categoryName = name\r\n    },\r\n    openSetDialog () {\r\n      this.visible = true\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .setting {\r\n    padding: 0 20px;\r\n    display: flex;\r\n    align-items: center;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.setting {\n  padding: 0 20px;\n  display: flex;\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
             },
             media: void 0
         });
-    }), x, void 0, !1, void 0, !1, s, void 0, void 0);
-    let v = {};
-    const y = [ {
+    }), E, void 0, !1, void 0, !1, s, void 0, void 0);
+    let B = {};
+    const q = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         style: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
     }, {
@@ -924,18 +1028,18 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
     } ].find(n => n.url.test(window.location.href));
-    y && !y.disabled ? (v.url = y.url, v.disabled = y.disabled, v.style = y.style, v.keyword = y.keyword) : v = null;
-    var E = v;
+    q && !q.disabled ? (B.url = q.url, B.disabled = q.disabled, B.style = q.style, B.keyword = q.keyword) : B = null;
+    var D = B;
     n.config.productionTip = !1;
-    const k = E;
-    if (E) {
+    const S = D;
+    if (D) {
         const e = document.createElement("div");
         e.id = "all-search";
         const t = new n({
             data: () => ({
-                currentSite: k
+                currentSite: S
             }),
-            render: n => n(C)
+            render: n => n(_)
         });
         (function() {
             let n = 0;
@@ -950,7 +1054,7 @@
         })().then(() => {
             const n = document.body.parentElement.insertBefore(e, document.body);
             var r;
-            t.$mount(n), E && E.style && (r = E.style, window.GM_addStyle && window.GM_addStyle(r));
+            t.$mount(n), D && D.style && (r = D.style, window.GM_addStyle && window.GM_addStyle(r));
         });
     }
 }(Vue);

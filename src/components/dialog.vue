@@ -1,6 +1,8 @@
 <template>
-  <div class="as-dialog" v-show="visible">
-    <div class="as-dialog-container">
+  <div class="as-dialog"
+       v-show="visible">
+    <div class="as-dialog-container"
+         :style="style">
       <div class="as-dialog__header">
         <p v-text="title"></p>
         <span class="as-dialog__close"
@@ -28,6 +30,19 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    width: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    style () {
+      const obj = {}
+      if (this.width) {
+        obj.width = this.width
+      }
+      return obj
     }
   },
   methods: {
@@ -65,7 +80,7 @@ export default {
     border-radius: 2px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
     box-sizing: border-box;
-    width: 50%;
+    min-width: 50%;
     z-index: 99;
     margin: 40vh auto 50px;
     transform: translateY(-40%);
