@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.4f
+// @version      0.1.4g
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -390,11 +390,11 @@
             }, [ this._v("\n    All Search\n  ") ]) ]);
         } ]
     }, (function(n) {
-        n && n("data-v-5c453d41_0", {
+        n && n("data-v-0c80e266_0", {
             source: ".as-title {\n  text-decoration: none;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */",
             map: {
                 version: 3,
-                sources: [ "E:\\project\\all-search\\src\\components\\logo.vue", "logo.vue" ],
+                sources: [ "E:\\myProject\\all-search\\src\\components\\logo.vue", "logo.vue" ],
                 names: [],
                 mappings: "AAoBA;EACA,qBAAA;ACnBA;ADqBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;ACnBA;;AAEA,mCAAmC",
                 file: "logo.vue",
@@ -489,11 +489,11 @@
         render: d,
         staticRenderFns: []
     }, (function(n) {
-        n && n("data-v-4c707c2f_0", {
+        n && n("data-v-393a67ba_0", {
             source: '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n.as-select-content {\n  width: 100px;\n  height: 30px;\n  line-height: 30px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.as-select-list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n  z-index: 99;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n.as-select-mask {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n/*# sourceMappingURL=category.vue.map */',
             map: {
                 version: 3,
-                sources: [ "category.vue", "E:\\project\\all-search\\src\\components\\category.vue" ],
+                sources: [ "category.vue", "E:\\myProject\\all-search\\src\\components\\category.vue" ],
                 names: [],
                 mappings: "AAAA,gBAAgB;ACoEhB;EACA,kBAAA;ADlEA;ACmEA;EACA,gBAAA;ADjEA;ACqEA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;ADlEA;ACmEA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,eAAA;EACA,WAAA;ADjEA;ACqEA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;ADlEA;ACmEA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;ADjEA;ACkEA;EACA,yBAAA;ADhEA;ACqEA;EACA,eAAA;EACA,MAAA;EACA,SAAA;EACA,QAAA;EACA,OAAA;ADlEA;;AAEA,uCAAuC",
                 file: "category.vue",
@@ -562,11 +562,11 @@
         render: m,
         staticRenderFns: []
     }, (function(n) {
-        n && n("data-v-9eb6f43a_0", {
+        n && n("data-v-18c4106f_0", {
             source: ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */",
             map: {
                 version: 3,
-                sources: [ "E:\\project\\all-search\\src\\components\\menu.vue", "menu.vue" ],
+                sources: [ "E:\\myProject\\all-search\\src\\components\\menu.vue", "menu.vue" ],
                 names: [],
                 mappings: "AA2DA;EACA,aAAA;EACA,OAAA;AC1DA;AD6DA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AC1DA;AD6DA;EACA,aAAA;EACA,mBAAA;EACA,kBAAA;EACA,QAAA;AC1DA;AD6DA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1DA;AD4DA;EACA,cAAA;AC1DA;;AAEA,mCAAmC",
                 file: "menu.vue",
@@ -643,11 +643,11 @@
         render: x,
         staticRenderFns: []
     }, (function(n) {
-        n && n("data-v-296f4814_0", {
+        n && n("data-v-24c45bea_0", {
             source: '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  overflow: auto;\n  margin: 0;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  opacity: 0.5;\n  background: #000;\n}\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 2px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  min-width: 50%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n.as-dialog__header {\n  padding: 20px 20px 10px;\n  position: relative;\n}\n.as-dialog__header p {\n  margin: 0;\n  line-height: 24px;\n  height: 24px;\n}\n.as-dialog__body {\n  padding: 30px 20px;\n  color: #606266;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}\n\n/*# sourceMappingURL=dialog.vue.map */',
             map: {
                 version: 3,
-                sources: [ "dialog.vue", "E:\\project\\all-search\\src\\components\\dialog.vue" ],
+                sources: [ "dialog.vue", "E:\\myProject\\all-search\\src\\components\\dialog.vue" ],
                 names: [],
                 mappings: "AAAA,gBAAgB;ACwDhB;EACA,eAAA;EACA,MAAA;EACA,QAAA;EACA,SAAA;EACA,OAAA;EACA,cAAA;EACA,SAAA;ADtDA;ACyDA;EACA,eAAA;EACA,OAAA;EACA,MAAA;EACA,WAAA;EACA,YAAA;EACA,YAAA;EACA,gBAAA;ADtDA;ACyDA;EACA,kBAAA;EACA,gBAAA;EACA,kBAAA;EACA,wCAAA;EACA,sBAAA;EACA,cAAA;EACA,WAAA;EACA,sBAAA;EACA,2BAAA;ADtDA;ACyDA;EACA,uBAAA;EACA,kBAAA;ADtDA;ACuDA;EACA,SAAA;EACA,iBAAA;EACA,YAAA;ADrDA;ACyDA;EACA,kBAAA;EACA,cAAA;EACA,eAAA;EACA,qBAAA;ADtDA;ACyDA;EACA,uBAAA;EACA,iBAAA;EACA,sBAAA;ADtDA;ACyDA;EACA,qBAAA;EACA,kBAAA;EACA,SAAA;EACA,WAAA;EACA,UAAA;EACA,uBAAA;EACA,eAAA;EACA,eAAA;EACA,cAAA;ADtDA;ACuDA;EACA,YAAA;ADrDA;;AAEA,qCAAqC",
                 file: "dialog.vue",
@@ -685,11 +685,11 @@
                 render: C,
                 staticRenderFns: []
             }, (function(n) {
-                n && n("data-v-523508d8_0", {
+                n && n("data-v-3d71e420_0", {
                     source: '.styled-checkbox {\n  position: absolute;\n  opacity: 0;\n}\n.styled-checkbox + label {\n  position: relative;\n  cursor: pointer;\n  padding: 0;\n}\n.styled-checkbox + label:before {\n  content: "";\n  margin-right: 10px;\n  display: inline-block;\n  vertical-align: text-top;\n  width: 16px;\n  height: 16px;\n  background: white;\n  border: 1px #eee solid;\n  border-radius: 2px;\n}\n.styled-checkbox:hover + label:before {\n  border-color: #1890ff;\n}\n.styled-checkbox:checked + label:before {\n  background: #1890ff;\n  border-color: #1890ff;\n}\n.styled-checkbox:disabled + label {\n  color: #b8b8b8;\n  cursor: auto;\n}\n.styled-checkbox:disabled + label:before {\n  box-shadow: none;\n  background: #ddd;\n}\n.styled-checkbox:checked + label:after {\n  content: "";\n  position: absolute;\n  left: 4px;\n  top: 8px;\n  background: white;\n  width: 2px;\n  height: 2px;\n  box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;\n  transform: rotate(45deg);\n}\n\n/*# sourceMappingURL=checkbox.vue.map */',
                     map: {
                         version: 3,
-                        sources: [ "E:\\project\\all-search\\src\\components\\checkbox.vue", "checkbox.vue" ],
+                        sources: [ "E:\\myProject\\all-search\\src\\components\\checkbox.vue", "checkbox.vue" ],
                         names: [],
                         mappings: "AAwBA;EACA,kBAAA;EACA,UAAA;ACvBA;ADyBA;EACA,kBAAA;EACA,eAAA;EACA,UAAA;ACvBA;AD2BA;EACA,WAAA;EACA,kBAAA;EACA,qBAAA;EACA,wBAAA;EACA,WAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,kBAAA;ACzBA;AD6BA;EACA,qBAAA;AC3BA;AD+BA;EACA,mBAAA;EACA,qBAAA;AC7BA;ADiCA;EACA,cAAA;EACA,YAAA;AC/BA;ADmCA;EACA,gBAAA;EACA,gBAAA;ACjCA;ADqCA;EACA,WAAA;EACA,kBAAA;EACA,SAAA;EACA,QAAA;EACA,iBAAA;EACA,UAAA;EACA,WAAA;EACA,gHAAA;EAMA,wBAAA;ACxCA;;AAEA,uCAAuC",
                         file: "checkbox.vue",
@@ -736,11 +736,11 @@
                 render: y,
                 staticRenderFns: []
             }, (function(n) {
-                n && n("data-v-181e15eb_0", {
+                n && n("data-v-6b9b8242_0", {
                     source: ".as-setting {\n  display: flex;\n  flex-wrap: wrap;\n}\n.as-setting-category {\n  flex: 20%;\n  margin-bottom: 20px;\n}\n.as-category-name {\n  font-size: 16px;\n  color: #666;\n  margin: 0 0 10px;\n}\n.as-setting-menu {\n  margin: 0 0 6px;\n}\n\n/*# sourceMappingURL=setting.vue.map */",
                     map: {
                         version: 3,
-                        sources: [ "E:\\project\\all-search\\src\\components\\setting.vue", "setting.vue" ],
+                        sources: [ "E:\\myProject\\all-search\\src\\components\\setting.vue", "setting.vue" ],
                         names: [],
                         mappings: "AAkCA;EACA,aAAA;EACA,eAAA;ACjCA;ADoCA;EACA,SAAA;EACA,mBAAA;ACjCA;ADoCA;EACA,eAAA;EACA,WAAA;EACA,gBAAA;ACjCA;ADoCA;EACA,eAAA;ACjCA;;AAEA,sCAAsC",
                         file: "setting.vue",
@@ -833,11 +833,11 @@
         render: k,
         staticRenderFns: []
     }, (function(n) {
-        n && n("data-v-944cd5a4_0", {
+        n && n("data-v-a053d1bc_0", {
             source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  display: flex;\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
             map: {
                 version: 3,
-                sources: [ "E:\\project\\all-search\\src\\App.vue", "App.vue" ],
+                sources: [ "E:\\myProject\\all-search\\src\\App.vue", "App.vue" ],
                 names: [],
                 mappings: "AA2EA;EACA,gBAAA;AC1EA;AD6EA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC1EA;AD6EA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1EA;;AAEA,kCAAkC",
                 file: "App.vue",
@@ -891,7 +891,7 @@
         url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i
     }, {
         url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
-        style: ".Sticky.is-fixed { transform: translateY(30px); }"
+        style: ".AppHeader.is-fixed { top: 30px!important; }"
     }, {
         url: /^https?:\/\/www\.so\.com\/s/i
     }, {

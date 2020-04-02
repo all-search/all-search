@@ -64,7 +64,7 @@ const list = [
   },
   {
     url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
-    style: `.Sticky.is-fixed { transform: translateY(${height}px); }`
+    style: `.AppHeader.is-fixed { top: ${height}px!important; }`
   },
   {
     url: /^https?:\/\/www\.so\.com\/s/i
