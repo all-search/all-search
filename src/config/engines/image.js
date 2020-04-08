@@ -31,5 +31,9 @@ export default [
   {
     name: 'Pinterest',
     url: 'https://www.pinterest.com/search/pins/?q=%s&rs=typed&term_meta'
+  },
+  {
+    name: 'yandex',
+    url: 'https://yandex.com/images/search?text=%s'
   }
 ]

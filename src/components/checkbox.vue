@@ -14,7 +14,7 @@
 export default {
   name: 'checkbox',
   mounted () {
-    console.log(this)
+
   }
 }
 </script>

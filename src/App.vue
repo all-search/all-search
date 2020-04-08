@@ -4,7 +4,7 @@
     <category :value="categoryName"
               @change="changeCategory"/>
     <site-menu :menus="menus"/>
-    <div v-show="false"
+<!--    <div v-show="false"
          class="setting"
          @click="openSetDialog">
       设置
@@ -14,7 +14,7 @@
       title="设置"
       width="1000px">
       <setting/>
-    </x-dialog>
+    </x-dialog>-->
   </header>
 </template>
 
@@ -24,17 +24,17 @@ import { getSession, setSession } from './util'
 import logo from './components/logo.vue'
 import category from './components/category.vue'
 import siteMenu from './components/menu.vue'
-import xDialog from './components/dialog.vue'
-import setting from './components/setting.vue'
+// import xDialog from './components/dialog.vue'
+// import setting from './components/setting.vue'
 
 export default {
   name: 'all-search',
   components: {
     logo,
     category,
-    siteMenu,
-    xDialog,
-    setting
+    siteMenu
+    // xDialog,
+    // setting
   },
   data () {
     return {
