@@ -45,7 +45,8 @@ const list = [
     url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
   },
   {
-    url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i
+    url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
+    style: `#header_wrapper{ top: ${height}px!important }`
   },
   {
     url: /^https?:\/\/baike\.baidu\.com\/item/

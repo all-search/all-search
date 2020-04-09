@@ -12,6 +12,10 @@ export default [
     url: 'https://cn.bing.com/search?q=%s'
   },
   {
+    name: '多吉',
+    url: 'https://www.dogedoge.com/results?q=%s'
+  },
+  {
     name: 'DDG',
     url: 'https://duckduckgo.com/?q=%s'
   },

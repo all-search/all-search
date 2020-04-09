@@ -1,7 +1,7 @@
 {
   "name": "all-search",
   "description": "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
-  "version": "0.1.4h",
+  "version": "0.1.4j",
   "main": "dist/index.js",
   "author": "endday",
   "license": "GPL-2.0",

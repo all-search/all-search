@@ -20,7 +20,9 @@ export default {
 
   .as-title {
     text-decoration: none;
-
+    padding: 0;
+    margin: 0;
+    
     .as-title-inner {
       font-size: 18px;
       width: 120px;
