@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.4j
+// @version      0.1.4k
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/4/9
+// @update       2020/4/10
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -396,11 +396,11 @@
             }, [ this._v("\n    All Search\n  ") ]) ]);
         } ]
     }, (function(e) {
-        e && e("data-v-1587a898_0", {
+        e && e("data-v-78be21a8_0", {
             source: ".as-title {\n  text-decoration: none;\n  padding: 0;\n  margin: 0;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */",
             map: {
                 version: 3,
-                sources: [ "E:\\project\\all-search\\src\\components\\logo.vue", "logo.vue" ],
+                sources: [ "E:\\myProject\\all-search\\src\\components\\logo.vue", "logo.vue" ],
                 names: [],
                 mappings: "AAoBA;EACA,qBAAA;EACA,UAAA;EACA,SAAA;ACnBA;ADqBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;ACnBA;;AAEA,mCAAmC",
                 file: "logo.vue",
@@ -495,11 +495,11 @@
         render: m,
         staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-4c707c2f_0", {
+        e && e("data-v-393a67ba_0", {
             source: '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n.as-select-content {\n  width: 100px;\n  height: 30px;\n  line-height: 30px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.as-select-list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n  z-index: 99;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n.as-select-mask {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n/*# sourceMappingURL=category.vue.map */',
             map: {
                 version: 3,
-                sources: [ "category.vue", "E:\\project\\all-search\\src\\components\\category.vue" ],
+                sources: [ "category.vue", "E:\\myProject\\all-search\\src\\components\\category.vue" ],
                 names: [],
                 mappings: "AAAA,gBAAgB;ACoEhB;EACA,kBAAA;ADlEA;ACmEA;EACA,gBAAA;ADjEA;ACqEA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;ADlEA;ACmEA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,eAAA;EACA,WAAA;ADjEA;ACqEA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;ADlEA;ACmEA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;ADjEA;ACkEA;EACA,yBAAA;ADhEA;ACqEA;EACA,eAAA;EACA,MAAA;EACA,SAAA;EACA,QAAA;EACA,OAAA;ADlEA;;AAEA,uCAAuC",
                 file: "category.vue",
@@ -573,11 +573,11 @@
                 render: d,
                 staticRenderFns: []
             }, (function(e) {
-                e && e("data-v-9eb6f43a_0", {
+                e && e("data-v-18c4106f_0", {
                     source: ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */",
                     map: {
                         version: 3,
-                        sources: [ "E:\\project\\all-search\\src\\components\\menu.vue", "menu.vue" ],
+                        sources: [ "E:\\myProject\\all-search\\src\\components\\menu.vue", "menu.vue" ],
                         names: [],
                         mappings: "AA2DA;EACA,aAAA;EACA,OAAA;AC1DA;AD6DA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AC1DA;AD6DA;EACA,aAAA;EACA,mBAAA;EACA,kBAAA;EACA,QAAA;AC1DA;AD6DA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1DA;AD4DA;EACA,cAAA;AC1DA;;AAEA,mCAAmC",
                         file: "menu.vue",
@@ -648,11 +648,11 @@
         render: w,
         staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-09ce8e3f_0", {
+        e && e("data-v-431c099a_0", {
             source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  display: flex;\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
             map: {
                 version: 3,
-                sources: [ "E:\\project\\all-search\\src\\App.vue", "App.vue" ],
+                sources: [ "E:\\myProject\\all-search\\src\\App.vue", "App.vue" ],
                 names: [],
                 mappings: "AA2EA;EACA,gBAAA;AC1EA;AD6EA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC1EA;AD6EA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1EA;;AAEA,kCAAkC",
                 file: "App.vue",
@@ -661,8 +661,8 @@
             media: void 0
         });
     }), g, void 0, !1, void 0, !1, o, void 0, void 0);
-    let x = {};
-    const y = [ {
+    let y = {};
+    const x = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         style: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
     }, {
@@ -792,7 +792,8 @@
     }, {
         url: /^https?:\/\/dict\.cn\/./
     }, {
-        url: /^https?:\/\/s\.taobao\.com\/search/
+        url: /^https?:\/\/s\.taobao\.com\/search/,
+        style: ".m-header-fixed .header-inner { top: 30px !important;}"
     }, {
         url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i
     }, {
@@ -844,8 +845,8 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
     } ].find(e => e.url.test(window.location.href));
-    y && !y.disabled ? (x.url = y.url, x.disabled = y.disabled, x.style = y.style, x.keyword = y.keyword) : x = null;
-    var b = x;
+    x && !x.disabled ? (y.url = x.url, y.disabled = x.disabled, y.style = x.style, y.keyword = x.keyword) : y = null;
+    var b = y;
     e.config.productionTip = !1;
     const C = b;
     if (b) {
