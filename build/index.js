@@ -569,7 +569,7 @@
             }
         }
     };
-    var d = function() {
+    var w = function() {
         var t = this.$createElement, e = this._self._c || t;
         return e("header", {
             attrs: {
@@ -588,9 +588,9 @@
             }
         }) ], 1);
     };
-    d._withStripped = !0;
-    const w = a({
-        render: d,
+    w._withStripped = !0;
+    const d = a({
+        render: w,
         staticRenderFns: []
     }, void 0, p, void 0, !1, void 0, !1, void 0, void 0, void 0);
     let g = {};
@@ -600,12 +600,7 @@
     }, {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
     }, {
-        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu|#(ie=UTF-8&)*wd=)/,
-        mounted() {
-            setTimeout(() => {
-                navigator.userAgent.toLowerCase().indexOf("edge") > 0 && window.location.reload();
-            });
-        }
+        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
     }, {
         url: /^https?:\/\/[^.]*\.bing\.com\/search/
     }, {
@@ -797,7 +792,7 @@
             data: () => ({
                 currentSite: f
             }),
-            render: t => t(w)
+            render: t => t(d)
         });
         (function() {
             let t = 0;
@@ -811,7 +806,7 @@
             });
         })().then(() => {
             const t = document.body.parentElement.insertBefore(e, document.body);
-            b && b.mounted && b.mounted(), s.$mount(t), b && b.style && o(b.style);
+            s.$mount(t), b && b.style && o(b.style);
         });
     }
 }(Vue);
