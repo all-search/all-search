@@ -11,6 +11,7 @@ const meta = `// ==UserScript==
 // @include      *
 // @homepageURL  ${pkg.homepage}
 
+// @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
 // @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=${pkg.version}
 // @run-at       document-body
@@ -18,6 +19,7 @@ const meta = `// ==UserScript==
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
+// @grant        GM_getResourceText
 
 // ==/UserScript==
 /* eslint-disable */

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.4j
+// @version      0.1.4k
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -8,13 +8,15 @@
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
+// @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
-// @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.4j
+// @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.4k
 // @run-at       document-body
 
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
+// @grant        GM_getResourceText
 
 // ==/UserScript==
 /* eslint-disable */
@@ -328,7 +330,10 @@
     function s(t) {
         return t ? `__allSearch__${t}` : null;
     }
-    function o(t, e, s, o, a, r, n, i, c, h) {
+    function o(t) {
+        window.GM_addStyle && window.GM_addStyle(t);
+    }
+    function a(t, e, s, o, a, r, n, i, c, h) {
         "boolean" != typeof n && (c = i, i = n, n = !1);
         const l = "function" == typeof s ? s.options : s;
         let u;
@@ -351,17 +356,17 @@
         }
         return s;
     }
-    const a = {
+    const r = {
         name: "logo"
     };
-    var r = function() {
+    var n = function() {
         var t = this.$createElement;
         this._self._c;
         return this._m(0);
     };
-    r._withStripped = !0;
-    const n = o({
-        render: r,
+    n._withStripped = !0;
+    const i = a({
+        render: n,
         staticRenderFns: [ function() {
             var t = this.$createElement, e = this._self._c || t;
             return e("a", {
@@ -374,8 +379,8 @@
                 staticClass: "as-title-inner"
             }, [ this._v("\n    All Search\n  ") ]) ]);
         } ]
-    }, void 0, a, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const i = {
+    }, void 0, r, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const c = {
         name: "category",
         props: {
             value: {
@@ -405,7 +410,7 @@
             }
         }
     };
-    var c = function() {
+    var h = function() {
         var t = this, e = t.$createElement, s = t._self._c || e;
         return s("div", {
             staticClass: "as-select"
@@ -456,12 +461,12 @@
             }
         }) ]);
     };
-    c._withStripped = !0;
-    const h = o({
-        render: c,
+    h._withStripped = !0;
+    const l = a({
+        render: h,
         staticRenderFns: []
-    }, void 0, i, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const l = {
+    }, void 0, c, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const u = {
         name: "site-menu",
         props: {
             menus: {
@@ -490,7 +495,7 @@
             }
         }
     };
-    var u = function() {
+    var m = function() {
         var t = this, e = t.$createElement, s = t._self._c || e;
         return s("div", {
             staticClass: "as-menu-container"
@@ -516,16 +521,16 @@
             }) ]);
         })), 0) ]);
     };
-    u._withStripped = !0;
-    const m = {
+    m._withStripped = !0;
+    const p = {
         name: "all-search",
         components: {
-            logo: n,
-            category: h,
-            siteMenu: o({
-                render: u,
+            logo: i,
+            category: l,
+            siteMenu: a({
+                render: m,
                 staticRenderFns: []
-            }, void 0, l, void 0, !1, void 0, !1, void 0, void 0, void 0)
+            }, void 0, u, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         data: () => ({
             engines: e,
@@ -564,7 +569,7 @@
             }
         }
     };
-    var p = function() {
+    var d = function() {
         var t = this.$createElement, e = this._self._c || t;
         return e("header", {
             attrs: {
@@ -583,19 +588,24 @@
             }
         }) ], 1);
     };
-    p._withStripped = !0;
-    const w = o({
-        render: p,
+    d._withStripped = !0;
+    const w = a({
+        render: d,
         staticRenderFns: []
-    }, void 0, m, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    let d = {};
-    const g = [ {
+    }, void 0, p, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    let g = {};
+    const y = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         style: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
     }, {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
     }, {
-        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu|#(ie=UTF-8&)*wd=)/
+        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu|#(ie=UTF-8&)*wd=)/,
+        mounted() {
+            setTimeout(() => {
+                navigator.userAgent.toLowerCase().indexOf("edge") > 0 && window.location.reload();
+            });
+        }
     }, {
         url: /^https?:\/\/[^.]*\.bing\.com\/search/
     }, {
@@ -719,7 +729,8 @@
     }, {
         url: /^https?:\/\/dict\.cn\/./
     }, {
-        url: /^https?:\/\/s\.taobao\.com\/search/
+        url: /^https?:\/\/s\.taobao\.com\/search/,
+        style: ".m-header-fixed .header-inner { top: 30px !important;}"
     }, {
         url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i
     }, {
@@ -771,16 +782,20 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
     } ].find(t => t.url.test(window.location.href));
-    g && !g.disabled ? (d.url = g.url, d.disabled = g.disabled, d.style = g.style, d.keyword = g.keyword) : d = null;
-    var y = d;
+    y && !y.disabled ? (g.url = y.url, g.disabled = y.disabled, g.style = y.style, g.keyword = y.keyword, 
+    g.create = y.create, g.mounted = y.mounted) : g = null;
+    var b = g;
     t.config.productionTip = !1;
-    const b = y;
-    if (y) {
+    const f = b;
+    if (function(t) {
+        let e = "";
+        window.GM_getResourceText && (e = window.GM_getResourceText(t)), o(e);
+    }("asStyle"), b) {
         const e = document.createElement("div");
         e.id = "all-search";
         const s = new t({
             data: () => ({
-                currentSite: b
+                currentSite: f
             }),
             render: t => t(w)
         });
@@ -796,8 +811,7 @@
             });
         })().then(() => {
             const t = document.body.parentElement.insertBefore(e, document.body);
-            var o;
-            s.$mount(t), y && y.style && (o = y.style, window.GM_addStyle && window.GM_addStyle(o));
+            b && b.mounted && b.mounted(), s.$mount(t), b && b.style && o(b.style);
         });
     }
 }(Vue);

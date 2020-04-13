@@ -9,7 +9,7 @@ const list = [
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
   },
   {
-    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu|#(ie=UTF-8&)*wd=)/
+    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
   },
   {
     url: /^https?:\/\/[^.]*\.bing\.com\/search/
@@ -285,6 +285,8 @@ if (target && !target.disabled) {
   item.disabled = target.disabled
   item.style = target.style
   item.keyword = target.keyword
+  item.create = target.create
+  item.mounted = target.mounted
 } else {
   item = null
 }

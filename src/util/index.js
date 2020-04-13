@@ -115,8 +115,10 @@ export function addStyle (style) {
   }
 }
 
-export function hashChange (callback) {
-  window.addEventListener('hashchange', () => {
-
-  })
+export function addStyleResource (name) {
+  let styleContent = ''
+  if (window.GM_getResourceText) {
+    styleContent = window.GM_getResourceText(name)
+  }
+  addStyle(styleContent)
 }

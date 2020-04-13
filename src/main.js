@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { addStyle, checkBody } from './util'
+import { addStyle, addStyleResource, checkBody } from './util'
 import target from './config/loadList'
 
 Vue.config.productionTip = false
 
 const currentSite = target
 const isDev = process.env.NODE_ENV !== 'production'
+
+addStyleResource('asStyle')
 
 if (target || isDev) {
   const el = document.createElement('div')
