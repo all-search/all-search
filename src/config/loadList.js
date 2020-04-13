@@ -194,7 +194,8 @@ const list = [
     url: /^https?:\/\/dict\.cn\/./
   },
   {
-    url: /^https?:\/\/s\.taobao\.com\/search/
+    url: /^https?:\/\/s\.taobao\.com\/search/,
+    style: `.m-header-fixed .header-inner { top: ${height}px !important;}`
   },
   {
     url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i
