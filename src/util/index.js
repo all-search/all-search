@@ -114,3 +114,9 @@ export function addStyle (style) {
     window.GM_addStyle(style)
   }
 }
+
+export function hashChange (callback) {
+  window.addEventListener('hashchange', () => {
+
+  })
+}

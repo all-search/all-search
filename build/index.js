@@ -4,11 +4,12 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/4/9
+// @update       2020/4/14
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
 // @require      https://cdn.jsdelivr.net/npm/vue
+// @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.4j
 // @run-at       document-body
 
 // @grant        GM_getValue
@@ -18,10 +19,10 @@
 // ==/UserScript==
 /* eslint-disable */
 
-!function(e) {
+!function(t) {
     "use strict";
-    e = e && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
-    var n = [ {
+    t = t && Object.prototype.hasOwnProperty.call(t, "default") ? t.default : t;
+    var e = [ {
         nameZh: "默认",
         name: "common",
         list: [ {
@@ -324,92 +325,57 @@
         } ]
     } ];
     document.createElement("a");
-    function t(e) {
-        return e ? `__allSearch__${e}` : null;
+    function s(t) {
+        return t ? `__allSearch__${t}` : null;
     }
-    function r(e, n, t, r, s, o, i, a, l, c) {
-        "boolean" != typeof i && (l = a, a = i, i = !1);
-        const p = "function" == typeof t ? t.options : t;
-        let h;
-        if (e && e.render && (p.render = e.render, p.staticRenderFns = e.staticRenderFns, 
-        p._compiled = !0, s && (p.functional = !0)), r && (p._scopeId = r), o ? (h = function(e) {
-            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            n && n.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(o);
-        }, p._ssrRegister = h) : n && (h = i ? function(e) {
-            n.call(this, c(e, this.$root.$options.shadowRoot));
-        } : function(e) {
-            n.call(this, a(e));
-        }), h) if (p.functional) {
-            const e = p.render;
-            p.render = function(n, t) {
-                return h.call(t), e(n, t);
+    function o(t, e, s, o, a, r, n, i, c, h) {
+        "boolean" != typeof n && (c = i, i = n, n = !1);
+        const l = "function" == typeof s ? s.options : s;
+        let u;
+        if (t && t.render && (l.render = t.render, l.staticRenderFns = t.staticRenderFns, 
+        l._compiled = !0, a && (l.functional = !0)), o && (l._scopeId = o), r ? (u = function(t) {
+            (t = t || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (t = __VUE_SSR_CONTEXT__), 
+            e && e.call(this, c(t)), t && t._registeredComponents && t._registeredComponents.add(r);
+        }, l._ssrRegister = u) : e && (u = n ? function(t) {
+            e.call(this, h(t, this.$root.$options.shadowRoot));
+        } : function(t) {
+            e.call(this, i(t));
+        }), u) if (l.functional) {
+            const t = l.render;
+            l.render = function(e, s) {
+                return u.call(s), t(e, s);
             };
         } else {
-            const e = p.beforeCreate;
-            p.beforeCreate = e ? [].concat(e, h) : [ h ];
+            const t = l.beforeCreate;
+            l.beforeCreate = t ? [].concat(t, u) : [ u ];
         }
-        return t;
+        return s;
     }
-    const s = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-    function o(e) {
-        return (e, n) => function(e, n) {
-            const t = s ? n.media || "default" : e, r = a[t] || (a[t] = {
-                ids: new Set,
-                styles: []
-            });
-            if (!r.ids.has(e)) {
-                r.ids.add(e);
-                let t = n.source;
-                if (n.map && (t += "\n/*# sourceURL=" + n.map.sources[0] + " */", t += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(n.map)))) + " */"), 
-                r.element || (r.element = document.createElement("style"), r.element.type = "text/css", 
-                n.media && r.element.setAttribute("media", n.media), void 0 === i && (i = document.head || document.getElementsByTagName("head")[0]), 
-                i.appendChild(r.element)), "styleSheet" in r.element) r.styles.push(t), r.element.styleSheet.cssText = r.styles.filter(Boolean).join("\n"); else {
-                    const e = r.ids.size - 1, n = document.createTextNode(t), s = r.element.childNodes;
-                    s[e] && r.element.removeChild(s[e]), s.length ? r.element.insertBefore(n, s[e]) : r.element.appendChild(n);
-                }
-            }
-        }(e, n);
-    }
-    let i;
-    const a = {};
-    const l = {
+    const a = {
         name: "logo"
     };
-    var c = function() {
-        var e = this.$createElement;
+    var r = function() {
+        var t = this.$createElement;
         this._self._c;
         return this._m(0);
     };
-    c._withStripped = !0;
-    const p = r({
-        render: c,
+    r._withStripped = !0;
+    const n = o({
+        render: r,
         staticRenderFns: [ function() {
-            var e = this.$createElement, n = this._self._c || e;
-            return n("a", {
+            var t = this.$createElement, e = this._self._c || t;
+            return e("a", {
                 staticClass: "as-title",
                 attrs: {
                     href: "https://github.com/endday/all-search",
                     target: "_blank"
                 }
-            }, [ n("p", {
+            }, [ e("p", {
                 staticClass: "as-title-inner"
             }, [ this._v("\n    All Search\n  ") ]) ]);
         } ]
-    }, (function(e) {
-        e && e("data-v-1587a898_0", {
-            source: ".as-title {\n  text-decoration: none;\n  padding: 0;\n  margin: 0;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */",
-            map: {
-                version: 3,
-                sources: [ "E:\\project\\all-search\\src\\components\\logo.vue", "logo.vue" ],
-                names: [],
-                mappings: "AAoBA;EACA,qBAAA;EACA,UAAA;EACA,SAAA;ACnBA;ADqBA;EACA,eAAA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,gBAAA;EACA,cAAA;EACA,SAAA;EACA,kBAAA;EACA,eAAA;ACnBA;;AAEA,mCAAmC",
-                file: "logo.vue",
-                sourcesContent: [ '<template>\r\n  <a class="as-title"\r\n     href="https://github.com/endday/all-search"\r\n     target="_blank"\r\n  >\r\n    <p class="as-title-inner">\r\n      All Search\r\n    </p>\r\n  </a>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  name: \'logo\'\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-title {\r\n    text-decoration: none;\r\n    padding: 0;\r\n    margin: 0;\r\n    \r\n    .as-title-inner {\r\n      font-size: 18px;\r\n      width: 120px;\r\n      height: $height;\r\n      line-height: $height;\r\n      font-weight: 600;\r\n      color: #1990fc;\r\n      margin: 0;\r\n      text-align: center;\r\n      cursor: pointer;\r\n    }\r\n  }\r\n</style>\r\n', ".as-title {\n  text-decoration: none;\n  padding: 0;\n  margin: 0;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 120px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  text-align: center;\n  cursor: pointer;\n}\n\n/*# sourceMappingURL=logo.vue.map */" ]
-            },
-            media: void 0
-        });
-    }), l, void 0, !1, void 0, !1, o, void 0, void 0);
-    const h = {
+    }, void 0, a, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const i = {
         name: "category",
         props: {
             value: {
@@ -418,97 +384,84 @@
             }
         },
         data: () => ({
-            engines: n,
+            engines: e,
             show: !1
         }),
         computed: {
             nameZh() {
-                const e = this.engines.findIndex(e => e.name === this.value);
-                return e > -1 ? this.engines[e].nameZh : this.engines[0].nameZh;
+                const t = this.engines.findIndex(t => t.name === this.value);
+                return t > -1 ? this.engines[t].nameZh : this.engines[0].nameZh;
             }
         },
         methods: {
-            handleChange(e) {
-                this.$emit("change", e);
+            handleChange(t) {
+                this.$emit("change", t);
             },
             openValue() {
                 this.show = !this.show;
             },
-            selectCategory(e, n) {
-                this.handleChange(n.name), this.show = !1;
+            selectCategory(t, e) {
+                this.handleChange(e.name), this.show = !1;
             }
         }
     };
-    var m = function() {
-        var e = this, n = e.$createElement, t = e._self._c || n;
-        return t("div", {
+    var c = function() {
+        var t = this, e = t.$createElement, s = t._self._c || e;
+        return s("div", {
             staticClass: "as-select"
-        }, [ t("div", {
+        }, [ s("div", {
             staticClass: "as-select-content",
             on: {
-                click: e.openValue
+                click: t.openValue
             }
-        }, [ t("span", {
+        }, [ s("span", {
             domProps: {
-                textContent: e._s(e.nameZh)
+                textContent: t._s(t.nameZh)
             }
-        }) ]), e._v(" "), t("ul", {
+        }) ]), t._v(" "), s("ul", {
             directives: [ {
                 name: "show",
                 rawName: "v-show",
-                value: e.show,
+                value: t.show,
                 expression: "show"
             } ],
             staticClass: "as-select-list",
             class: {
-                fadeInDown: e.show
+                fadeInDown: t.show
             }
-        }, e._l(e.engines, (function(n, r) {
-            return t("li", {
-                key: n.index,
+        }, t._l(t.engines, (function(e, o) {
+            return s("li", {
+                key: e.index,
                 domProps: {
-                    textContent: e._s(n.nameZh)
+                    textContent: t._s(e.nameZh)
                 },
                 on: {
-                    click: function(t) {
-                        return e.selectCategory(r, n);
+                    click: function(s) {
+                        return t.selectCategory(o, e);
                     }
                 }
             });
-        })), 0), e._v(" "), t("div", {
+        })), 0), t._v(" "), s("div", {
             directives: [ {
                 name: "show",
                 rawName: "v-show",
-                value: e.show,
+                value: t.show,
                 expression: "show"
             } ],
             staticClass: "as-select-mask",
             on: {
-                click: function(n) {
-                    e.show = !1;
+                click: function(e) {
+                    t.show = !1;
                 }
             }
         }) ]);
     };
-    m._withStripped = !0;
-    const u = r({
-        render: m,
+    c._withStripped = !0;
+    const h = o({
+        render: c,
         staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-4c707c2f_0", {
-            source: '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n.as-select-content {\n  width: 100px;\n  height: 30px;\n  line-height: 30px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n.as-select-list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n  z-index: 99;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n.as-select-mask {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n/*# sourceMappingURL=category.vue.map */',
-            map: {
-                version: 3,
-                sources: [ "category.vue", "E:\\project\\all-search\\src\\components\\category.vue" ],
-                names: [],
-                mappings: "AAAA,gBAAgB;ACoEhB;EACA,kBAAA;ADlEA;ACmEA;EACA,gBAAA;ADjEA;ACqEA;EACA,YAAA;EACA,YAAA;EACA,iBAAA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,kBAAA;ADlEA;ACmEA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,eAAA;EACA,WAAA;ADjEA;ACqEA;EACA,cAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;EACA,sBAAA;EACA,2CAAA;EACA,sBAAA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;ADlEA;ACmEA;EACA,eAAA;EACA,eAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;EACA,uBAAA;EACA,cAAA;EACA,YAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;ADjEA;ACkEA;EACA,yBAAA;ADhEA;ACqEA;EACA,eAAA;EACA,MAAA;EACA,SAAA;EACA,QAAA;EACA,OAAA;ADlEA;;AAEA,uCAAuC",
-                file: "category.vue",
-                sourcesContent: [ '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n\n.as-select-content {\n  width: 100px;\n  height: 30px;\n  line-height: 30px;\n  font-size: 14px;\n  cursor: pointer;\n  padding-left: 10px;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 12px;\n  font-size: 24px;\n  color: #999;\n}\n\n.as-select-list {\n  padding: 4px 0;\n  min-width: 100px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n  z-index: 99;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n\n.as-select-mask {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}\n\n/*# sourceMappingURL=category.vue.map */', '<template>\r\n  <div class="as-select">\r\n    <div class="as-select-content"\r\n         @click="openValue">\r\n      <span v-text="nameZh"></span>\r\n    </div>\r\n    <ul class="as-select-list"\r\n        :class="{ fadeInDown: show }"\r\n        v-show="show">\r\n      <li\r\n        v-for="(item,index) in engines"\r\n        :key="item.index"\r\n        v-text="item.nameZh"\r\n        @click="selectCategory(index,item)">\r\n      </li>\r\n    </ul>\r\n    <div class="as-select-mask"\r\n         @click="show = false"\r\n         v-show="show">\r\n    </div>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport engines from \'../config/engines\'\r\n\r\nexport default {\r\n  name: \'category\',\r\n  props: {\r\n    value: {\r\n      type: String,\r\n      default: \'\'\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      show: false\r\n    }\r\n  },\r\n  computed: {\r\n    nameZh () {\r\n      const i = this.engines.findIndex(item => item.name === this.value)\r\n      if (i > -1) {\r\n        return this.engines[i].nameZh\r\n      } else {\r\n        return this.engines[0].nameZh\r\n      }\r\n    }\r\n  },\r\n  methods: {\r\n    handleChange (val) {\r\n      this.$emit(\'change\', val)\r\n    },\r\n    openValue () {\r\n      this.show = !this.show\r\n    },\r\n    selectCategory (index, item) {\r\n      this.handleChange(item.name)\r\n      this.show = false\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-select {\r\n    position: relative;\r\n    ul li {\r\n      list-style: none;\r\n    }\r\n  }\r\n\r\n  .as-select-content {\r\n    width: 100px;\r\n    height: $height;\r\n    line-height: $height;\r\n    font-size: 14px;\r\n    cursor: pointer;\r\n    padding-left: 10px;\r\n    position: relative;\r\n    &::after {\r\n      content: \' ▾\';\r\n      position: absolute;\r\n      right: 12px;\r\n      font-size: 24px;\r\n      color: #999;\r\n    }\r\n  }\r\n\r\n  .as-select-list {\r\n    padding: 4px 0;\r\n    min-width: 100px;\r\n    border: 1px solid #e4e7ed;\r\n    border-radius: 4px;\r\n    background-color: #fff;\r\n    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);\r\n    box-sizing: border-box;\r\n    margin: 5px 0;\r\n    position: absolute;\r\n    z-index: 99;\r\n    li {\r\n      font-size: 14px;\r\n      padding: 0 20px;\r\n      position: relative;\r\n      white-space: nowrap;\r\n      overflow: hidden;\r\n      text-overflow: ellipsis;\r\n      color: #606266;\r\n      height: 34px;\r\n      line-height: 34px;\r\n      box-sizing: border-box;\r\n      cursor: pointer;\r\n      &:hover {\r\n        background-color: #f5f7fa;\r\n      }\r\n    }\r\n  }\r\n\r\n  .as-select-mask {\r\n    position: fixed;\r\n    top: 0;\r\n    bottom: 0;\r\n    right: 0;\r\n    left: 0;\r\n  }\r\n</style>\r\n' ]
-            },
-            media: void 0
-        });
-    }), h, void 0, !1, void 0, !1, o, void 0, void 0);
-    const A = {
+    }, void 0, i, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const l = {
         name: "site-menu",
         props: {
             menus: {
@@ -520,155 +473,129 @@
         methods: {
             getKeyword() {
                 return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function() {
-                    const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
-                    return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
+                    const t = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
+                    return t ? "INPUT" === t.nodeName || "textarea" === t.localName ? t.value : t.textContent : "";
                 }();
             },
-            handleClick(e) {
-                this.$emit("click", e);
-                const n = this.getKeyword();
-                window.location.href = e.url.replace("%s", n);
+            handleClick(t) {
+                this.$emit("click", t);
+                const e = this.getKeyword();
+                window.location.href = t.url.replace("%s", e);
             },
-            handleMouseWheelClick(e, n) {
-                if (1 === e.button) {
-                    const e = this.getKeyword();
-                    window.open(n.url.replace("%s", e));
+            handleMouseWheelClick(t, e) {
+                if (1 === t.button) {
+                    const t = this.getKeyword();
+                    window.open(e.url.replace("%s", t));
                 }
             }
         }
     };
-    var d = function() {
-        var e = this, n = e.$createElement, t = e._self._c || n;
-        return t("div", {
+    var u = function() {
+        var t = this, e = t.$createElement, s = t._self._c || e;
+        return s("div", {
             staticClass: "as-menu-container"
-        }, [ t("ul", {
+        }, [ s("ul", {
             staticClass: "as-menu"
-        }, e._l(e.menus, (function(n, r) {
-            return t("li", {
-                key: r,
+        }, t._l(t.menus, (function(e, o) {
+            return s("li", {
+                key: o,
                 staticClass: "as-submenu",
                 on: {
-                    click: function(t) {
-                        return e.handleClick(n);
+                    click: function(s) {
+                        return t.handleClick(e);
                     },
-                    mousedown: function(t) {
-                        return e.handleMouseWheelClick(t, n);
+                    mousedown: function(s) {
+                        return t.handleMouseWheelClick(s, e);
                     }
                 }
-            }, [ t("p", {
+            }, [ s("p", {
                 staticClass: "as-submenu-title",
                 domProps: {
-                    textContent: e._s(n.name)
+                    textContent: t._s(e.name)
                 }
             }) ]);
         })), 0) ]);
     };
-    d._withStripped = !0;
-    const g = {
+    u._withStripped = !0;
+    const m = {
         name: "all-search",
         components: {
-            logo: p,
-            category: u,
-            siteMenu: r({
-                render: d,
+            logo: n,
+            category: h,
+            siteMenu: o({
+                render: u,
                 staticRenderFns: []
-            }, (function(e) {
-                e && e("data-v-9eb6f43a_0", {
-                    source: ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */",
-                    map: {
-                        version: 3,
-                        sources: [ "E:\\project\\all-search\\src\\components\\menu.vue", "menu.vue" ],
-                        names: [],
-                        mappings: "AA2DA;EACA,aAAA;EACA,OAAA;AC1DA;AD6DA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;EACA,gBAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,sBAAA;AC1DA;AD6DA;EACA,aAAA;EACA,mBAAA;EACA,kBAAA;EACA,QAAA;AC1DA;AD6DA;EACA,kBAAA;EACA,cAAA;EACA,SAAA;EACA,eAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1DA;AD4DA;EACA,cAAA;AC1DA;;AAEA,mCAAmC",
-                        file: "menu.vue",
-                        sourcesContent: [ '<template>\r\n  <div class="as-menu-container">\r\n    <ul class="as-menu">\r\n      <li class="as-submenu"\r\n          v-for="(item, i) in menus"\r\n          :key="i"\r\n          @click="handleClick(item)"\r\n          @mousedown="handleMouseWheelClick($event, item)">\r\n        <p class="as-submenu-title"\r\n           v-text="item.name">\r\n        </p>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { getKeyword } from \'../util\'\r\n\r\nexport default {\r\n  name: \'site-menu\',\r\n  props: {\r\n    menus: {\r\n      type: Array,\r\n      default () {\r\n        return []\r\n      }\r\n    }\r\n  },\r\n  data () {\r\n    return {}\r\n  },\r\n  methods: {\r\n    getKeyword () {\r\n      if (this.$root.currentSite.keyword) {\r\n        return this.$root.currentSite.keyword()\r\n      } else {\r\n        return getKeyword()\r\n      }\r\n    },\r\n    handleClick (item) {\r\n      this.$emit(\'click\', item)\r\n      const keyword = this.getKeyword()\r\n      window.location.href = item.url.replace(\'%s\', keyword)\r\n    },\r\n    handleMouseWheelClick (event, item) {\r\n      const btnNum = event.button\r\n      if (btnNum === 1) {\r\n        const keyword = this.getKeyword()\r\n        window.open(item.url.replace(\'%s\', keyword))\r\n      }\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang="scss">\r\n  @import "../assets/common";\r\n\r\n  .as-menu-container {\r\n    display: flex;\r\n    flex: 1;\r\n  }\r\n\r\n  .as-menu {\r\n    display: flex;\r\n    line-height: $height;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 0;\r\n    margin-top: -1px;\r\n    margin-bottom: 0;\r\n    white-space: nowrap;\r\n    border: 0;\r\n    box-shadow: none;\r\n    background-color: #fff;\r\n  }\r\n\r\n  .as-submenu {\r\n    display: flex;\r\n    align-items: center;\r\n    position: relative;\r\n    top: 1px;\r\n  }\r\n\r\n  .as-submenu-title {\r\n    position: relative;\r\n    display: block;\r\n    margin: 0;\r\n    padding: 0 20px;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n\r\n    &:hover {\r\n      color: $color;\r\n    }\r\n  }\r\n</style>\r\n', ".as-menu-container {\n  display: flex;\n  flex: 1;\n}\n\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}\n\n/*# sourceMappingURL=menu.vue.map */" ]
-                    },
-                    media: void 0
-                });
-            }), A, void 0, !1, void 0, !1, o, void 0, void 0)
+            }, void 0, l, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         data: () => ({
-            engines: n,
+            engines: e,
             categoryName: "search",
             visible: !1
         }),
         computed: {
             menus() {
-                const e = this.engines.findIndex(e => e.name === this.categoryName);
-                return e > -1 ? this.engines[e].list.filter(e => !e.disabled) : this.engines[0].list.filter(e => !e.disabled);
+                const t = this.engines.findIndex(t => t.name === this.categoryName);
+                return t > -1 ? this.engines[t].list.filter(t => !t.disabled) : this.engines[0].list.filter(t => !t.disabled);
             }
         },
         created() {
-            this.categoryName = function(e) {
-                const n = t(e);
-                if (window.GM_getValue) return window.GM_getValue(n);
-                const r = window.localStorage.getItem(n);
-                return r ? JSON.parse(r) : null;
+            this.categoryName = function(t) {
+                const e = s(t);
+                if (window.GM_getValue) return window.GM_getValue(e);
+                const o = window.localStorage.getItem(e);
+                return o ? JSON.parse(o) : null;
             }("categoryName") || this.categoryName;
         },
         methods: {
-            handleClick(e) {
-                this.$emit("menu-click", e);
+            handleClick(t) {
+                this.$emit("menu-click", t);
             },
-            changeCategory(e) {
-                !function(e, n) {
-                    const r = t(e);
-                    if (window.GM_setValue) window.GM_setValue(r, n); else {
-                        const e = JSON.stringify(n);
-                        e && window.localStorage.setItem(r, e);
+            changeCategory(t) {
+                !function(t, e) {
+                    const o = s(t);
+                    if (window.GM_setValue) window.GM_setValue(o, e); else {
+                        const t = JSON.stringify(e);
+                        t && window.localStorage.setItem(o, t);
                     }
-                }("categoryName", e), this.categoryName = e;
+                }("categoryName", t), this.categoryName = t;
             },
             openSetDialog() {
                 this.visible = !0;
             }
         }
     };
-    var w = function() {
-        var e = this.$createElement, n = this._self._c || e;
-        return n("header", {
+    var p = function() {
+        var t = this.$createElement, e = this._self._c || t;
+        return e("header", {
             attrs: {
                 id: "all-search"
             }
-        }, [ n("logo"), this._v(" "), n("category", {
+        }, [ e("logo"), this._v(" "), e("category", {
             attrs: {
                 value: this.categoryName
             },
             on: {
                 change: this.changeCategory
             }
-        }), this._v(" "), n("site-menu", {
+        }), this._v(" "), e("site-menu", {
             attrs: {
                 menus: this.menus
             }
         }) ], 1);
     };
-    w._withStripped = !0;
-    const f = r({
-        render: w,
+    p._withStripped = !0;
+    const w = o({
+        render: p,
         staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-09ce8e3f_0", {
-            source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  display: flex;\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=App.vue.map */',
-            map: {
-                version: 3,
-                sources: [ "E:\\project\\all-search\\src\\App.vue", "App.vue" ],
-                names: [],
-                mappings: "AA2EA;EACA,gBAAA;AC1EA;AD6EA;EACA,YAAA;EACA,WAAA;EACA,eAAA;EACA,MAAA;EACA,eAAA;EACA,aAAA;EACA,gCAAA;EACA,sBAAA;EACA,kMAAA;AC1EA;AD6EA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;AC1EA;;AAEA,kCAAkC",
-                file: "App.vue",
-                sourcesContent: [ "<template>\r\n  <header id=\"all-search\">\r\n    <logo/>\r\n    <category :value=\"categoryName\"\r\n              @change=\"changeCategory\"/>\r\n    <site-menu :menus=\"menus\"/>\r\n\x3c!--    <div v-show=\"false\"\r\n         class=\"setting\"\r\n         @click=\"openSetDialog\">\r\n      设置\r\n    </div>\r\n    <x-dialog\r\n      :visible.sync=\"visible\"\r\n      title=\"设置\"\r\n      width=\"1000px\">\r\n      <setting/>\r\n    </x-dialog>--\x3e\r\n  </header>\r\n</template>\r\n\r\n<script>\r\nimport engines from './config/engines/index.js'\r\nimport { getSession, setSession } from './util'\r\nimport logo from './components/logo.vue'\r\nimport category from './components/category.vue'\r\nimport siteMenu from './components/menu.vue'\r\n// import xDialog from './components/dialog.vue'\r\n// import setting from './components/setting.vue'\r\n\r\nexport default {\r\n  name: 'all-search',\r\n  components: {\r\n    logo,\r\n    category,\r\n    siteMenu\r\n    // xDialog,\r\n    // setting\r\n  },\r\n  data () {\r\n    return {\r\n      engines,\r\n      categoryName: 'search',\r\n      visible: false\r\n    }\r\n  },\r\n  computed: {\r\n    menus () {\r\n      const i = this.engines.findIndex(item => item.name === this.categoryName)\r\n      if (i > -1) {\r\n        return this.engines[i].list.filter(item => !item.disabled)\r\n      }\r\n      return this.engines[0].list.filter(item => !item.disabled)\r\n    }\r\n  },\r\n  created () {\r\n    this.categoryName = getSession('categoryName') || this.categoryName\r\n  },\r\n  methods: {\r\n    handleClick (tab) {\r\n      this.$emit('menu-click', tab)\r\n    },\r\n    changeCategory (name) {\r\n      setSession('categoryName', name)\r\n      this.categoryName = name\r\n    },\r\n    openSetDialog () {\r\n      this.visible = true\r\n    }\r\n  }\r\n}\r\n<\/script>\r\n\r\n<style lang=\"scss\">\r\n  @import \"./assets/common\";\r\n\r\n  body {\r\n    margin-top: $height;\r\n  }\r\n\r\n  #all-search {\r\n    height: $height;\r\n    width: 100%;\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 999999;\r\n    display: flex;\r\n    border-bottom: 1px #e8e8e8 solid;\r\n    background-color: #fff;\r\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';\r\n  }\r\n\r\n  .setting {\r\n    padding: 0 20px;\r\n    display: flex;\r\n    align-items: center;\r\n    white-space: nowrap;\r\n    cursor: pointer;\r\n    font-size: 14px;\r\n  }\r\n</style>\r\n", 'body {\n  margin-top: 30px;\n}\n\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n.setting {\n  padding: 0 20px;\n  display: flex;\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n\n/*# sourceMappingURL=App.vue.map */' ]
-            },
-            media: void 0
-        });
-    }), g, void 0, !1, void 0, !1, o, void 0, void 0);
-    let x = {};
-    const y = [ {
+    }, void 0, m, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    let d = {};
+    const g = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         style: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
     }, {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
     }, {
-        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
+        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu|#(ie=UTF-8&)*wd=)/
     }, {
         url: /^https?:\/\/[^.]*\.bing\.com\/search/
     }, {
@@ -843,34 +770,34 @@
         url: /^https?:\/\/endday\.github\.io/
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
-    } ].find(e => e.url.test(window.location.href));
-    y && !y.disabled ? (x.url = y.url, x.disabled = y.disabled, x.style = y.style, x.keyword = y.keyword) : x = null;
-    var b = x;
-    e.config.productionTip = !1;
-    const C = b;
-    if (b) {
-        const n = document.createElement("div");
-        n.id = "all-search";
-        const t = new e({
+    } ].find(t => t.url.test(window.location.href));
+    g && !g.disabled ? (d.url = g.url, d.disabled = g.disabled, d.style = g.style, d.keyword = g.keyword) : d = null;
+    var y = d;
+    t.config.productionTip = !1;
+    const b = y;
+    if (y) {
+        const e = document.createElement("div");
+        e.id = "all-search";
+        const s = new t({
             data: () => ({
-                currentSite: C
+                currentSite: b
             }),
-            render: e => e(f)
+            render: t => t(w)
         });
         (function() {
-            let e = 0;
-            return new Promise((n, t) => {
-                if (document.body) n(); else {
-                    const r = setInterval((function() {
-                        e += 1, document.body && (clearInterval(r), n()), 20 === e && (clearInterval(r), 
-                        t(new Error("timeOut")));
+            let t = 0;
+            return new Promise((e, s) => {
+                if (document.body) e(); else {
+                    const o = setInterval((function() {
+                        t += 1, document.body && (clearInterval(o), e()), 20 === t && (clearInterval(o), 
+                        s(new Error("timeOut")));
                     }), 100);
                 }
             });
         })().then(() => {
-            const e = document.body.parentElement.insertBefore(n, document.body);
-            var r;
-            t.$mount(e), b && b.style && (r = b.style, window.GM_addStyle && window.GM_addStyle(r));
+            const t = document.body.parentElement.insertBefore(e, document.body);
+            var o;
+            s.$mount(t), y && y.style && (o = y.style, window.GM_addStyle && window.GM_addStyle(o));
         });
     }
 }(Vue);

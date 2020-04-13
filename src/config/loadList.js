@@ -9,7 +9,7 @@ const list = [
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
   },
   {
-    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
+    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu|#(ie=UTF-8&)*wd=)/
   },
   {
     url: /^https?:\/\/[^.]*\.bing\.com\/search/
