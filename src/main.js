@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
 import { addStyle, addStyleResource, checkBody } from './util'
+import replaceGoogleCdn from './util/replaceGoogleCdn'
 import target from './config/loadList'
 
 Vue.config.productionTip = false
 
 const currentSite = target
 const isDev = process.env.NODE_ENV !== 'production'
+
+replaceGoogleCdn()
 
 if (target || isDev) {
   const el = document.createElement('div')

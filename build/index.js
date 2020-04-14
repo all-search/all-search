@@ -4,14 +4,14 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/4/14
+// @update       2020/4/15
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
 // @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.5
-// @run-at       document-body
+// @run-at       document-start
 
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -21,10 +21,10 @@
 // ==/UserScript==
 /* eslint-disable */
 
-!function(t) {
+!function(e) {
     "use strict";
-    t = t && Object.prototype.hasOwnProperty.call(t, "default") ? t.default : t;
-    var e = [ {
+    e = e && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
+    var t = [ {
         nameZh: "默认",
         name: "common",
         list: [ {
@@ -106,20 +106,8 @@
             name: "必应翻译",
             url: "http://cn.bing.com/dict/search?q=%s"
         }, {
-            name: "Forvo翻译",
-            url: "https://zh.forvo.com/search/%s",
-            blank: !0
-        }, {
-            name: "CNKI翻译",
-            url: "http://dict.cnki.net/dict_result.aspx?searchword=%s",
-            disable: !0
-        }, {
-            name: "汉典",
-            url: "http://www.zdic.net/sousuo/?q=%s",
-            disable: !0
-        }, {
-            name: "海词",
-            url: "http://dict.cn/%s"
+            name: "DeepL",
+            url: "https://www.deepl.com/translator#zh/en/%s"
         } ]
     }, {
         nameZh: "视频",
@@ -327,60 +315,60 @@
         } ]
     } ];
     document.createElement("a");
-    function s(t) {
-        return t ? `__allSearch__${t}` : null;
+    function s(e) {
+        return e ? `__allSearch__${e}` : null;
     }
-    function o(t) {
-        window.GM_addStyle && window.GM_addStyle(t);
+    function o(e) {
+        window.GM_addStyle && window.GM_addStyle(e);
     }
-    function a(t, e, s, o, a, r, n, i, c, h) {
-        "boolean" != typeof n && (c = i, i = n, n = !1);
-        const l = "function" == typeof s ? s.options : s;
+    function r(e, t, s, o, r, a, n, c, i, l) {
+        "boolean" != typeof n && (i = c, c = n, n = !1);
+        const h = "function" == typeof s ? s.options : s;
         let u;
-        if (t && t.render && (l.render = t.render, l.staticRenderFns = t.staticRenderFns, 
-        l._compiled = !0, a && (l.functional = !0)), o && (l._scopeId = o), r ? (u = function(t) {
-            (t = t || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (t = __VUE_SSR_CONTEXT__), 
-            e && e.call(this, c(t)), t && t._registeredComponents && t._registeredComponents.add(r);
-        }, l._ssrRegister = u) : e && (u = n ? function(t) {
-            e.call(this, h(t, this.$root.$options.shadowRoot));
-        } : function(t) {
-            e.call(this, i(t));
-        }), u) if (l.functional) {
-            const t = l.render;
-            l.render = function(e, s) {
-                return u.call(s), t(e, s);
+        if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
+        h._compiled = !0, r && (h.functional = !0)), o && (h._scopeId = o), a ? (u = function(e) {
+            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
+            t && t.call(this, i(e)), e && e._registeredComponents && e._registeredComponents.add(a);
+        }, h._ssrRegister = u) : t && (u = n ? function(e) {
+            t.call(this, l(e, this.$root.$options.shadowRoot));
+        } : function(e) {
+            t.call(this, c(e));
+        }), u) if (h.functional) {
+            const e = h.render;
+            h.render = function(t, s) {
+                return u.call(s), e(t, s);
             };
         } else {
-            const t = l.beforeCreate;
-            l.beforeCreate = t ? [].concat(t, u) : [ u ];
+            const e = h.beforeCreate;
+            h.beforeCreate = e ? [].concat(e, u) : [ u ];
         }
         return s;
     }
-    const r = {
+    const a = {
         name: "logo"
     };
     var n = function() {
-        var t = this.$createElement;
+        var e = this.$createElement;
         this._self._c;
         return this._m(0);
     };
     n._withStripped = !0;
-    const i = a({
+    const c = r({
         render: n,
         staticRenderFns: [ function() {
-            var t = this.$createElement, e = this._self._c || t;
-            return e("a", {
+            var e = this.$createElement, t = this._self._c || e;
+            return t("a", {
                 staticClass: "as-title",
                 attrs: {
                     href: "https://github.com/endday/all-search",
                     target: "_blank"
                 }
-            }, [ e("p", {
+            }, [ t("p", {
                 staticClass: "as-title-inner"
             }, [ this._v("\n    All Search\n  ") ]) ]);
         } ]
-    }, void 0, r, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const c = {
+    }, void 0, a, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const i = {
         name: "category",
         props: {
             value: {
@@ -389,83 +377,83 @@
             }
         },
         data: () => ({
-            engines: e,
+            engines: t,
             show: !1
         }),
         computed: {
             nameZh() {
-                const t = this.engines.findIndex(t => t.name === this.value);
-                return t > -1 ? this.engines[t].nameZh : this.engines[0].nameZh;
+                const e = this.engines.findIndex(e => e.name === this.value);
+                return e > -1 ? this.engines[e].nameZh : this.engines[0].nameZh;
             }
         },
         methods: {
-            handleChange(t) {
-                this.$emit("change", t);
+            handleChange(e) {
+                this.$emit("change", e);
             },
             openValue() {
                 this.show = !this.show;
             },
-            selectCategory(t, e) {
-                this.handleChange(e.name), this.show = !1;
+            selectCategory(e, t) {
+                this.handleChange(t.name), this.show = !1;
             }
         }
     };
-    var h = function() {
-        var t = this, e = t.$createElement, s = t._self._c || e;
+    var l = function() {
+        var e = this, t = e.$createElement, s = e._self._c || t;
         return s("div", {
             staticClass: "as-select"
         }, [ s("div", {
             staticClass: "as-select-content",
             on: {
-                click: t.openValue
+                click: e.openValue
             }
         }, [ s("span", {
             domProps: {
-                textContent: t._s(t.nameZh)
+                textContent: e._s(e.nameZh)
             }
-        }) ]), t._v(" "), s("ul", {
+        }) ]), e._v(" "), s("ul", {
             directives: [ {
                 name: "show",
                 rawName: "v-show",
-                value: t.show,
+                value: e.show,
                 expression: "show"
             } ],
             staticClass: "as-select-list",
             class: {
-                fadeInDown: t.show
+                fadeInDown: e.show
             }
-        }, t._l(t.engines, (function(e, o) {
+        }, e._l(e.engines, (function(t, o) {
             return s("li", {
-                key: e.index,
+                key: t.index,
                 domProps: {
-                    textContent: t._s(e.nameZh)
+                    textContent: e._s(t.nameZh)
                 },
                 on: {
                     click: function(s) {
-                        return t.selectCategory(o, e);
+                        return e.selectCategory(o, t);
                     }
                 }
             });
-        })), 0), t._v(" "), s("div", {
+        })), 0), e._v(" "), s("div", {
             directives: [ {
                 name: "show",
                 rawName: "v-show",
-                value: t.show,
+                value: e.show,
                 expression: "show"
             } ],
             staticClass: "as-select-mask",
             on: {
-                click: function(e) {
-                    t.show = !1;
+                click: function(t) {
+                    e.show = !1;
                 }
             }
         }) ]);
     };
-    h._withStripped = !0;
-    const l = a({
-        render: h,
+    l._withStripped = !0;
+    const h = r({
+        render: l,
         staticRenderFns: []
-    }, void 0, c, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    }, void 0, i, void 0, !1, void 0, !1, void 0, void 0, void 0);
     const u = {
         name: "site-menu",
         props: {
@@ -478,45 +466,45 @@
         methods: {
             getKeyword() {
                 return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function() {
-                    const t = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
-                    return t ? "INPUT" === t.nodeName || "textarea" === t.localName ? t.value : t.textContent : "";
+                    const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
+                    return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
                 }();
             },
-            handleClick(t) {
-                this.$emit("click", t);
-                const e = this.getKeyword();
-                window.location.href = t.url.replace("%s", e);
+            handleClick(e) {
+                this.$emit("click", e);
+                const t = this.getKeyword();
+                window.location.href = e.url.replace("%s", t);
             },
-            handleMouseWheelClick(t, e) {
-                if (1 === t.button) {
-                    const t = this.getKeyword();
-                    window.open(e.url.replace("%s", t));
+            handleMouseWheelClick(e, t) {
+                if (1 === e.button) {
+                    const e = this.getKeyword();
+                    window.open(t.url.replace("%s", e));
                 }
             }
         }
     };
     var m = function() {
-        var t = this, e = t.$createElement, s = t._self._c || e;
+        var e = this, t = e.$createElement, s = e._self._c || t;
         return s("div", {
             staticClass: "as-menu-container"
         }, [ s("ul", {
             staticClass: "as-menu"
-        }, t._l(t.menus, (function(e, o) {
+        }, e._l(e.menus, (function(t, o) {
             return s("li", {
                 key: o,
                 staticClass: "as-submenu",
                 on: {
                     click: function(s) {
-                        return t.handleClick(e);
+                        return e.handleClick(t);
                     },
                     mousedown: function(s) {
-                        return t.handleMouseWheelClick(s, e);
+                        return e.handleMouseWheelClick(s, t);
                     }
                 }
             }, [ s("p", {
                 staticClass: "as-submenu-title",
                 domProps: {
-                    textContent: t._s(e.name)
+                    textContent: e._s(t.name)
                 }
             }) ]);
         })), 0) ]);
@@ -525,44 +513,44 @@
     const p = {
         name: "all-search",
         components: {
-            logo: i,
-            category: l,
-            siteMenu: a({
+            logo: c,
+            category: h,
+            siteMenu: r({
                 render: m,
                 staticRenderFns: []
             }, void 0, u, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         data: () => ({
-            engines: e,
+            engines: t,
             categoryName: "search",
             visible: !1
         }),
         computed: {
             menus() {
-                const t = this.engines.findIndex(t => t.name === this.categoryName);
-                return t > -1 ? this.engines[t].list.filter(t => !t.disabled) : this.engines[0].list.filter(t => !t.disabled);
+                const e = this.engines.findIndex(e => e.name === this.categoryName);
+                return e > -1 ? this.engines[e].list.filter(e => !e.disabled) : this.engines[0].list.filter(e => !e.disabled);
             }
         },
         created() {
-            this.categoryName = function(t) {
-                const e = s(t);
-                if (window.GM_getValue) return window.GM_getValue(e);
-                const o = window.localStorage.getItem(e);
+            this.categoryName = function(e) {
+                const t = s(e);
+                if (window.GM_getValue) return window.GM_getValue(t);
+                const o = window.localStorage.getItem(t);
                 return o ? JSON.parse(o) : null;
             }("categoryName") || this.categoryName;
         },
         methods: {
-            handleClick(t) {
-                this.$emit("menu-click", t);
+            handleClick(e) {
+                this.$emit("menu-click", e);
             },
-            changeCategory(t) {
-                !function(t, e) {
-                    const o = s(t);
-                    if (window.GM_setValue) window.GM_setValue(o, e); else {
-                        const t = JSON.stringify(e);
-                        t && window.localStorage.setItem(o, t);
+            changeCategory(e) {
+                !function(e, t) {
+                    const o = s(e);
+                    if (window.GM_setValue) window.GM_setValue(o, t); else {
+                        const e = JSON.stringify(t);
+                        e && window.localStorage.setItem(o, e);
                     }
-                }("categoryName", t), this.categoryName = t;
+                }("categoryName", e), this.categoryName = e;
             },
             openSetDialog() {
                 this.visible = !0;
@@ -570,26 +558,26 @@
         }
     };
     var w = function() {
-        var t = this.$createElement, e = this._self._c || t;
-        return e("header", {
+        var e = this.$createElement, t = this._self._c || e;
+        return t("header", {
             attrs: {
                 id: "all-search"
             }
-        }, [ e("logo"), this._v(" "), e("category", {
+        }, [ t("logo"), this._v(" "), t("category", {
             attrs: {
                 value: this.categoryName
             },
             on: {
                 change: this.changeCategory
             }
-        }), this._v(" "), e("site-menu", {
+        }), this._v(" "), t("site-menu", {
             attrs: {
                 menus: this.menus
             }
         }) ], 1);
     };
     w._withStripped = !0;
-    const d = a({
+    const d = r({
         render: w,
         staticRenderFns: []
     }, void 0, p, void 0, !1, void 0, !1, void 0, void 0, void 0);
@@ -776,37 +764,45 @@
         url: /^https?:\/\/endday\.github\.io/
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
-    } ].find(t => t.url.test(window.location.href));
+    } ].find(e => e.url.test(window.location.href));
     y && !y.disabled ? (g.url = y.url, g.disabled = y.disabled, g.style = y.style, g.keyword = y.keyword, 
     g.create = y.create, g.mounted = y.mounted) : g = null;
-    var b = g;
-    t.config.productionTip = !1;
-    const f = b;
-    if (b) {
-        const e = document.createElement("div");
-        e.id = "all-search";
-        const s = new t({
+    var f = g;
+    e.config.productionTip = !1;
+    const b = f;
+    if (document.querySelectorAll("script").forEach((function(e) {
+        if (e.src.indexOf("googleapis.com") >= 0 || e.src.indexOf("themes.googleusercontent.com") >= 0 || e.src.indexOf("www.google.com/recaptcha/") >= 0) {
+            let t = e.src.replace("http://", "https://").replace("googleapis.com", "proxy.ustclug.org").replace("themes.googleusercontent.com", "google-themes.lug.ustc.edu.cn").replace("www.google.com/recaptcha/", "www.recaptcha.net/recaptcha/");
+            e.parentNode.replaceChild(function(e) {
+                let t = document.createElement("script");
+                return t.src = e, t;
+            }(t), e);
+        }
+    })), f) {
+        const t = document.createElement("div");
+        t.id = "all-search";
+        const s = new e({
             data: () => ({
-                currentSite: f
+                currentSite: b
             }),
-            render: t => t(d)
+            render: e => e(d)
         });
-        !function(t) {
-            let e = "";
-            window.GM_getResourceText && (e = window.GM_getResourceText(t)), o(e);
+        !function(e) {
+            let t = "";
+            window.GM_getResourceText && (t = window.GM_getResourceText(e)), o(t);
         }("asStyle"), function() {
-            let t = 0;
-            return new Promise((e, s) => {
-                if (document.body) e(); else {
+            let e = 0;
+            return new Promise((t, s) => {
+                if (document && document.body) t(); else {
                     const o = setInterval((function() {
-                        t += 1, document.body && (clearInterval(o), e()), 20 === t && (clearInterval(o), 
+                        e += 1, document && document.body && (clearInterval(o), t()), 20 === e && (clearInterval(o), 
                         s(new Error("timeOut")));
                     }), 100);
                 }
             });
         }().then(() => {
-            const t = document.body.parentElement.insertBefore(e, document.body);
-            s.$mount(t), b && b.style && o(b.style);
+            const e = document.body.parentElement.insertBefore(t, document.body);
+            s.$mount(e), f && f.style && o(f.style);
         });
     }
 }(Vue);

@@ -14,7 +14,7 @@ const meta = `// ==UserScript==
 // @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
 // @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=${pkg.version}
-// @run-at       document-body
+// @run-at       document-start
 
 // @grant        GM_getValue
 // @grant        GM_setValue

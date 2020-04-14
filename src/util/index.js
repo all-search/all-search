@@ -54,12 +54,12 @@ export function parseUrl (url) {
 export function checkBody () {
   let time = 0
   return new Promise((resolve, reject) => {
-    if (document.body) {
+    if (document && document.body) {
       resolve()
     } else {
       const id = setInterval(function () {
         time += 1
-        if (document.body) {
+        if (document && document.body) {
           clearInterval(id)
           resolve()
         }
