@@ -20,4 +20,4 @@ after_script:
 - git config user.email "845426454@qq.com" --{Github账户邮箱}
 - git add .
 - git commit -m "deploy project"
-- git push --force --quiet "https://github.com/endday/all-search@${GH_REF}" master:gh-pages
+- git push --force --quiet "https://${GH_TOKEN}@github.com/endday/all-search" master:gh-pages

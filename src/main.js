@@ -9,8 +9,14 @@ const currentSite = target
 const isDev = process.env.NODE_ENV !== 'production'
 
 if (target || isDev) {
-  const el = document.createElement('div')
-  el.id = 'all-search'
+  let el = null
+  const asEl = document.getElementById('all-search')
+  if (asEl) {
+    el = asEl
+  } else {
+    el = document.createElement('div')
+    el.id = 'all-search'
+  }
   const app = new Vue({
     data () {
       return {
