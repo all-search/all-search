@@ -16,8 +16,8 @@ script:
 after_script:
 - cd dist
 - git init
-- git config user.name "${U_NAME}" --{GitHub账户名称}
-- git config user.email "${U_EMAIL}" --{Github账户邮箱}
+- git config user.name "endday" --{GitHub账户名称}
+- git config user.email "845426454@qq.com" --{Github账户邮箱}
 - git add .
 - git commit -m "deploy project"
-- git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages
+- git push --force --quiet "https://github.com/endday/all-search@${GH_REF}" master:gh-pages
