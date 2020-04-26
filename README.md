@@ -11,9 +11,6 @@ A top fixed menu that allows you to jump between various search engines. Learn f
 ## 脚本地址
 [greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)
 
-## 新功能
-* 添加了谷歌cdn替换功能（即检查到为谷歌js库的script标签，src会替换为中科大的cdn）
-
 ## 待完成
 * 支持手动添加网址
 * 支持改变菜单排序
