@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.6
+// @version      0.1.6a
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -10,7 +10,7 @@
 
 // @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
-// @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.6
+// @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.6a
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -318,26 +318,26 @@
     function s(t) {
         return t ? `__allSearch__${t}` : null;
     }
-    function o(t, e, s, o, a, r, n, i, c, l) {
+    function o(t, e, s, o, a, r, n, i, c, h) {
         "boolean" != typeof n && (c = i, i = n, n = !1);
-        const h = "function" == typeof s ? s.options : s;
+        const l = "function" == typeof s ? s.options : s;
         let u;
-        if (t && t.render && (h.render = t.render, h.staticRenderFns = t.staticRenderFns, 
-        h._compiled = !0, a && (h.functional = !0)), o && (h._scopeId = o), r ? (u = function(t) {
+        if (t && t.render && (l.render = t.render, l.staticRenderFns = t.staticRenderFns, 
+        l._compiled = !0, a && (l.functional = !0)), o && (l._scopeId = o), r ? (u = function(t) {
             (t = t || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (t = __VUE_SSR_CONTEXT__), 
             e && e.call(this, c(t)), t && t._registeredComponents && t._registeredComponents.add(r);
-        }, h._ssrRegister = u) : e && (u = n ? function(t) {
-            e.call(this, l(t, this.$root.$options.shadowRoot));
+        }, l._ssrRegister = u) : e && (u = n ? function(t) {
+            e.call(this, h(t, this.$root.$options.shadowRoot));
         } : function(t) {
             e.call(this, i(t));
-        }), u) if (h.functional) {
-            const t = h.render;
-            h.render = function(e, s) {
+        }), u) if (l.functional) {
+            const t = l.render;
+            l.render = function(e, s) {
                 return u.call(s), t(e, s);
             };
         } else {
-            const t = h.beforeCreate;
-            h.beforeCreate = t ? [].concat(t, u) : [ u ];
+            const t = l.beforeCreate;
+            l.beforeCreate = t ? [].concat(t, u) : [ u ];
         }
         return s;
     }
@@ -447,11 +447,11 @@
         }) ]);
     };
     c._withStripped = !0;
-    const l = o({
+    const h = o({
         render: c,
         staticRenderFns: []
     }, void 0, i, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const h = {
+    const l = {
         name: "site-menu",
         props: {
             menus: {
@@ -511,11 +511,11 @@
         name: "all-search",
         components: {
             logo: n,
-            category: l,
+            category: h,
             siteMenu: o({
                 render: u,
                 staticRenderFns: []
-            }, void 0, h, void 0, !1, void 0, !1, void 0, void 0, void 0)
+            }, void 0, l, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         data: () => ({
             engines: e,
@@ -779,7 +779,7 @@
             }),
             render: t => t(d)
         });
-        console.log(window.getComputedStyle(e)), function() {
+        (function() {
             let t = 0;
             return new Promise((e, s) => {
                 if (document && document.body) e(); else {
@@ -789,11 +789,10 @@
                     }), 100);
                 }
             });
-        }().then(() => {
+        })().then(() => {
             const t = document.body.parentElement.insertBefore(e, document.body);
             var s;
-            o.$mount(t), y && y.style && (s = y.style, window.GM_addStyle && window.GM_addStyle(s)), 
-            console.log(window.getComputedStyle(e));
+            o.$mount(t), y && y.style && (s = y.style, window.GM_addStyle && window.GM_addStyle(s));
         }).catch(t => {
             console.error(t);
         }), console.log(window.getComputedStyle(e).height);

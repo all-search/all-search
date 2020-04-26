@@ -115,32 +115,37 @@ export function addStyle (style) {
   }
 }
 
-let addStyleTimes = 0
-let addStyleId = null
-
-export function addStyleResource (name) {
+export function addStyleResource () {
   let styleContent = ''
   if (window.GM_getResourceText) {
-    styleContent = window.GM_getResourceText(name)
+    styleContent = window.GM_getResourceText('asStyle')
   }
-  // addStyle(styleContent)
   const style = document.createElement('style')
-  const text = document.createTextNode(styleContent) /* 这里编写css代码 */
-  style.appendChild(text)
+  style.id = 'as-style'
+  style.innerHTML = styleContent
   const head = document.getElementsByTagName('head')[0]
+  head.appendChild(style)
+}
 
-  addStyleId = setInterval(() => {
-    const el = document.getElementById('all-search')
-    let height = null
-    if (el) {
-      height = window.getComputedStyle(el).height
+// 监听head的节点移除，防止style被干掉
+export function domObserve () {
+  const MutationObserverCopy = window.MutationObserver
+  const targetNode = document.getElementsByTagName('head')[0]
+  const config = { childList: true }
+  const callback = function (mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.removedNodes.length &&
+        mutation.removedNodes[0].id === 'as-style') {
+        addStyleResource()
+      }
     }
-    if (height !== '30px' || addStyleTimes <= 20) {
-      addStyleTimes += 1
-      head.appendChild(style)
-      el.style.display = 'flex'
-    } else {
-      clearInterval(addStyleId)
-    }
-  }, 200)
+  }
+  let observer
+  if (MutationObserver) {
+    observer = new MutationObserver(callback)
+  } else {
+    observer = new MutationObserverCopy(callback)
+  }
+  observer.observe(targetNode, config)
+  // observer.disconnect()
 }

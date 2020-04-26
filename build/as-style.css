@@ -57,7 +57,24 @@ body {
   color: #1890ff;
 }
 
-/*# sourceMappingURL=menu.vue.map */@charset "UTF-8";
+/*# sourceMappingURL=menu.vue.map */.as-title {
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+}
+.as-title .as-title-inner {
+  font-size: 18px;
+  width: 120px;
+  height: 30px;
+  line-height: 30px;
+  font-weight: 600;
+  color: #1990fc;
+  margin: 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=logo.vue.map */@charset "UTF-8";
 .as-select {
   position: relative;
 }
@@ -116,21 +133,4 @@ body {
   left: 0;
 }
 
-/*# sourceMappingURL=category.vue.map */.as-title {
-  text-decoration: none;
-  padding: 0;
-  margin: 0;
-}
-.as-title .as-title-inner {
-  font-size: 18px;
-  width: 120px;
-  height: 30px;
-  line-height: 30px;
-  font-weight: 600;
-  color: #1990fc;
-  margin: 0;
-  text-align: center;
-  cursor: pointer;
-}
-
-/*# sourceMappingURL=logo.vue.map */
+/*# sourceMappingURL=category.vue.map */
