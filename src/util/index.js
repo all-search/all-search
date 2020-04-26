@@ -115,10 +115,32 @@ export function addStyle (style) {
   }
 }
 
+let addStyleTimes = 0
+let addStyleId = null
+
 export function addStyleResource (name) {
   let styleContent = ''
   if (window.GM_getResourceText) {
     styleContent = window.GM_getResourceText(name)
   }
-  addStyle(styleContent)
+  // addStyle(styleContent)
+  const style = document.createElement('style')
+  const text = document.createTextNode(styleContent) /* 这里编写css代码 */
+  style.appendChild(text)
+  const head = document.getElementsByTagName('head')[0]
+
+  addStyleId = setInterval(() => {
+    const el = document.getElementById('all-search')
+    let height = null
+    if (el) {
+      height = window.getComputedStyle(el).height
+    }
+    if (height !== '30px' || addStyleTimes <= 20) {
+      addStyleTimes += 1
+      head.appendChild(style)
+      el.style.display = 'flex'
+    } else {
+      clearInterval(addStyleId)
+    }
+  }, 200)
 }

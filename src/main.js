@@ -26,7 +26,8 @@ if (target || isDev) {
     render: h => h(App)
   })
   // 添加样式
-  addStyleResource('asStyle')
+  // addStyleResource('asStyle')
+  console.log(window.getComputedStyle(el))
   checkBody().then(() => {
     const mountEL = document.body.parentElement.insertBefore(el, document.body)
     // document.body.insertBefore(el, document.body.childNodes[0])
@@ -34,5 +35,9 @@ if (target || isDev) {
     if (target && target.style) {
       addStyle(target.style)
     }
+    console.log(window.getComputedStyle(el))
+  }).catch(err => {
+    console.error(err)
   })
+  console.log(window.getComputedStyle(el).height)
 }

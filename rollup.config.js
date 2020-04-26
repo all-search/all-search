@@ -12,6 +12,7 @@ export default {
     name: 'allSearch',
     file: 'build/index.js',
     format: 'iife',
+    // sourceMap: true,
     globals: {
       vue: 'Vue'
     }

@@ -1,20 +1,22 @@
 <template>
-  <header id="all-search">
+  <header
+    id="all-search"
+    ref="all-search">
     <logo/>
     <category :value="categoryName"
               @change="changeCategory"/>
     <site-menu :menus="menus"/>
-<!--    <div v-show="false"
-         class="setting"
-         @click="openSetDialog">
-      设置
-    </div>
-    <x-dialog
-      :visible.sync="visible"
-      title="设置"
-      width="1000px">
-      <setting/>
-    </x-dialog>-->
+    <!--    <div v-show="false"
+             class="setting"
+             @click="openSetDialog">
+          设置
+        </div>
+        <x-dialog
+          :visible.sync="visible"
+          title="设置"
+          width="1000px">
+          <setting/>
+        </x-dialog>-->
   </header>
 </template>
 

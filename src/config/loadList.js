@@ -12,7 +12,8 @@ const list = [
     url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
   },
   {
-    url: /^https?:\/\/[^.]*\.bing\.com\/search/
+    url: /^https?:\/\/[^.]*\.bing\.com\/search/,
+    style: `body { padding-top: ${height}px }`
   },
   {
     url: /^https?:\/\/duckduckgo\.com\/*/i
