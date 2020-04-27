@@ -57,6 +57,12 @@ export default {
 <style lang="scss">
   @import "../assets/common";
 
+  @media screen and (max-width: 768px) {
+    .as-menu-container {
+      overflow: auto;
+    }
+  }
+
   .as-menu-container {
     display: flex;
     flex: 1;

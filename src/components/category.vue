@@ -74,17 +74,16 @@ export default {
   }
 
   .as-select-content {
-    width: 100px;
+    width: 65px;
     height: $height;
     line-height: $height;
     font-size: 14px;
     cursor: pointer;
-    padding-left: 10px;
     position: relative;
     &::after {
       content: ' ▾';
       position: absolute;
-      right: 12px;
+      right: 10px;
       font-size: 24px;
       color: #999;
     }
@@ -92,7 +91,7 @@ export default {
 
   .as-select-list {
     padding: 4px 0;
-    min-width: 100px;
+    min-width: 90px;
     border: 1px solid #e4e7ed;
     border-radius: 4px;
     background-color: #fff;
@@ -100,6 +99,7 @@ export default {
     box-sizing: border-box;
     margin: 5px 0;
     position: absolute;
+    right: -4px;
     z-index: 99;
     li {
       font-size: 14px;

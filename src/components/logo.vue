@@ -1,7 +1,8 @@
 <template>
-  <a class="as-title"
-     href="https://github.com/endday/all-search"
-     target="_blank"
+  <a
+    class="as-title"
+    href="https://github.com/endday/all-search"
+    target="_blank"
   >
     <p class="as-title-inner">
       All Search
@@ -18,19 +19,26 @@ export default {
 <style lang="scss">
   @import "../assets/common";
 
+  @media screen and (max-width: 768px) {
+    .as-title {
+      display: none;
+    }
+  }
+
   .as-title {
     text-decoration: none;
     padding: 0;
     margin: 0;
-    
+
     .as-title-inner {
       font-size: 18px;
-      width: 120px;
+      width: 110px;
       height: $height;
       line-height: $height;
       font-weight: 600;
       color: #1990fc;
       margin: 0;
+      padding-right: 10px;
       text-align: center;
       cursor: pointer;
     }

@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.7b
+// @version      0.1.7c
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/4/27
+// @update       2020/4/28
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
-// @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.7b
+// @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.7c
 // @run-at       document-start
 
 // @grant        GM_getValue

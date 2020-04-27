@@ -21,24 +21,12 @@ body {
   font-size: 14px;
 }
 
-/*# sourceMappingURL=App.vue.map */.as-title {
-  text-decoration: none;
-  padding: 0;
-  margin: 0;
+/*# sourceMappingURL=App.vue.map */@media screen and (max-width: 768px) {
+.as-menu-container {
+    overflow: auto;
 }
-.as-title .as-title-inner {
-  font-size: 18px;
-  width: 120px;
-  height: 30px;
-  line-height: 30px;
-  font-weight: 600;
-  color: #1990fc;
-  margin: 0;
-  text-align: center;
-  cursor: pointer;
 }
-
-/*# sourceMappingURL=logo.vue.map */.as-menu-container {
+.as-menu-container {
   display: flex;
   flex: 1;
 }
@@ -74,7 +62,30 @@ body {
   color: #1890ff;
 }
 
-/*# sourceMappingURL=menu.vue.map */@charset "UTF-8";
+/*# sourceMappingURL=menu.vue.map */@media screen and (max-width: 768px) {
+.as-title {
+    display: none;
+}
+}
+.as-title {
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+}
+.as-title .as-title-inner {
+  font-size: 18px;
+  width: 110px;
+  height: 30px;
+  line-height: 30px;
+  font-weight: 600;
+  color: #1990fc;
+  margin: 0;
+  padding-right: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=logo.vue.map */@charset "UTF-8";
 .as-select {
   position: relative;
 }
@@ -82,24 +93,23 @@ body {
   list-style: none;
 }
 .as-select-content {
-  width: 100px;
+  width: 65px;
   height: 30px;
   line-height: 30px;
   font-size: 14px;
   cursor: pointer;
-  padding-left: 10px;
   position: relative;
 }
 .as-select-content::after {
   content: " ▾";
   position: absolute;
-  right: 12px;
+  right: 10px;
   font-size: 24px;
   color: #999;
 }
 .as-select-list {
   padding: 4px 0;
-  min-width: 100px;
+  min-width: 90px;
   border: 1px solid #e4e7ed;
   border-radius: 4px;
   background-color: #fff;
@@ -107,6 +117,7 @@ body {
   box-sizing: border-box;
   margin: 5px 0;
   position: absolute;
+  right: -4px;
   z-index: 99;
 }
 .as-select-list li {
