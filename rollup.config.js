@@ -4,6 +4,7 @@ import VuePlugin from 'rollup-plugin-vue'
 import replace from 'rollup-plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 import css from 'rollup-plugin-css-only'
+import json from '@rollup/plugin-json'
 import meta from './src/config/meta'
 
 export default {
@@ -21,6 +22,7 @@ export default {
   plugins: [
     resolve(),
     commonjs(),
+    json(),
     VuePlugin({
       css: false
     }),

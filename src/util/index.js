@@ -1,3 +1,5 @@
+import pkg from '../../package.json'
+
 export function getQueryString (name, url) {
   url = url || window.location.href
   const r = new RegExp('(\\?|#|&)' + name + '=([^&#]*)(&|#|$)')
@@ -115,16 +117,17 @@ export function addStyle (style) {
   }
 }
 
-export function addStyleResource () {
-  let styleContent = ''
-  if (window.GM_getResourceText) {
-    styleContent = window.GM_getResourceText('asStyle')
+export function addStyleResource (el) {
+  if (window.location.hostname === 'localhost') {
+    return
   }
-  const style = document.createElement('style')
-  style.id = 'as-style'
-  style.innerHTML = styleContent
+  const link = document.createElement('link')
+  link.id = 'as-style'
+  link.rel = 'stylesheet'
+  link.type = 'text/css'
+  link.href = `https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=${pkg.version}`
   const head = document.getElementsByTagName('head')[0]
-  head.appendChild(style)
+  head.appendChild(link)
 }
 
 // 监听head的节点移除，防止style被干掉

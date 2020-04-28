@@ -7,7 +7,7 @@ body {
   position: fixed;
   top: 0;
   z-index: 999999;
-  display: flex;
+  display: flex !important;
   border-bottom: 1px #e8e8e8 solid;
   background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -22,6 +22,29 @@ body {
 }
 
 /*# sourceMappingURL=App.vue.map */@media screen and (max-width: 768px) {
+.as-title {
+    display: none;
+}
+}
+.as-title {
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+}
+.as-title .as-title-inner {
+  font-size: 18px;
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  font-weight: 600;
+  color: #1990fc;
+  margin: 0;
+  padding-left: 15px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=logo.vue.map */@media screen and (max-width: 768px) {
 .as-menu-container {
     overflow: auto;
 }
@@ -62,30 +85,7 @@ body {
   color: #1890ff;
 }
 
-/*# sourceMappingURL=menu.vue.map */@media screen and (max-width: 768px) {
-.as-title {
-    display: none;
-}
-}
-.as-title {
-  text-decoration: none;
-  padding: 0;
-  margin: 0;
-}
-.as-title .as-title-inner {
-  font-size: 18px;
-  width: 110px;
-  height: 30px;
-  line-height: 30px;
-  font-weight: 600;
-  color: #1990fc;
-  margin: 0;
-  padding-right: 10px;
-  text-align: center;
-  cursor: pointer;
-}
-
-/*# sourceMappingURL=logo.vue.map */@charset "UTF-8";
+/*# sourceMappingURL=menu.vue.map */@charset "UTF-8";
 .as-select {
   position: relative;
 }
@@ -96,6 +96,7 @@ body {
   width: 65px;
   height: 30px;
   line-height: 30px;
+  padding-left: 20px;
   font-size: 14px;
   cursor: pointer;
   position: relative;

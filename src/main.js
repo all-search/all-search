@@ -17,6 +17,7 @@ if (target || isDev) {
     el = document.createElement('div')
     el.id = 'all-search'
   }
+  el.style.display = 'none'
   const app = new Vue({
     data () {
       return {
@@ -26,7 +27,7 @@ if (target || isDev) {
     render: h => h(App)
   })
   // 添加样式
-  addStyleResource()
+  addStyleResource(el)
   domObserve()
   checkBody().then(() => {
     const mountEL = document.body.parentElement.insertBefore(el, document.body)

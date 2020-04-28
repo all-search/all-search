@@ -77,6 +77,7 @@ export default {
     width: 65px;
     height: $height;
     line-height: $height;
+    padding-left: 20px;
     font-size: 14px;
     cursor: pointer;
     position: relative;

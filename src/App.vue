@@ -85,7 +85,7 @@ export default {
     position: fixed;
     top: 0;
     z-index: 999999;
-    display: flex;
+    display: flex !important;
     border-bottom: 1px #e8e8e8 solid;
     background-color: #fff;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';

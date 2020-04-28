@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.7c
+// @version      0.1.7d
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -10,13 +10,11 @@
 
 // @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
-// @resource     asStyle  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=0.1.7c
 // @run-at       document-start
 
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
-// @grant        GM_getResourceText
 
 // ==/UserScript==
 /* eslint-disable */
@@ -313,18 +311,18 @@
             name: "yandex",
             url: "https://yandex.com/images/search?text=%s"
         } ]
-    } ];
+    } ], s = "0.1.7d";
     document.createElement("a");
-    function s(e) {
+    function o(e) {
         return e ? `__allSearch__${e}` : null;
     }
-    function o() {
-        let e = "";
-        window.GM_getResourceText && (e = window.GM_getResourceText("asStyle"));
-        const t = document.createElement("style");
-        t.id = "as-style", t.innerHTML = e, document.getElementsByTagName("head")[0].appendChild(t);
+    function a(e) {
+        if ("localhost" === window.location.hostname) return;
+        const t = document.createElement("link");
+        t.id = "as-style", t.rel = "stylesheet", t.type = "text/css", t.href = `https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=${s}`, 
+        document.getElementsByTagName("head")[0].appendChild(t);
     }
-    function a(e, t, s, o, a, r, n, i, c, l) {
+    function r(e, t, s, o, a, r, n, i, c, l) {
         "boolean" != typeof n && (c = i, i = n, n = !1);
         const h = "function" == typeof s ? s.options : s;
         let u;
@@ -347,17 +345,17 @@
         }
         return s;
     }
-    const r = {
+    const n = {
         name: "logo"
     };
-    var n = function() {
+    var i = function() {
         var e = this.$createElement;
         this._self._c;
         return this._m(0);
     };
-    n._withStripped = !0;
-    const i = a({
-        render: n,
+    i._withStripped = !0;
+    const c = r({
+        render: i,
         staticRenderFns: [ function() {
             var e = this.$createElement, t = this._self._c || e;
             return t("a", {
@@ -370,8 +368,8 @@
                 staticClass: "as-title-inner"
             }, [ this._v("\n    All Search\n  ") ]) ]);
         } ]
-    }, void 0, r, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const c = {
+    }, void 0, n, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const l = {
         name: "category",
         props: {
             value: {
@@ -401,7 +399,7 @@
             }
         }
     };
-    var l = function() {
+    var h = function() {
         var e = this, t = e.$createElement, s = e._self._c || t;
         return s("div", {
             staticClass: "as-select"
@@ -452,12 +450,12 @@
             }
         }) ]);
     };
-    l._withStripped = !0;
-    const h = a({
-        render: l,
+    h._withStripped = !0;
+    const u = r({
+        render: h,
         staticRenderFns: []
-    }, void 0, c, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const u = {
+    }, void 0, l, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const m = {
         name: "site-menu",
         props: {
             menus: {
@@ -486,7 +484,7 @@
             }
         }
     };
-    var m = function() {
+    var p = function() {
         var e = this, t = e.$createElement, s = e._self._c || t;
         return s("div", {
             staticClass: "as-menu-container"
@@ -512,16 +510,16 @@
             }) ]);
         })), 0) ]);
     };
-    m._withStripped = !0;
-    const p = {
+    p._withStripped = !0;
+    const d = {
         name: "all-search",
         components: {
-            logo: i,
-            category: h,
-            siteMenu: a({
-                render: m,
+            logo: c,
+            category: u,
+            siteMenu: r({
+                render: p,
                 staticRenderFns: []
-            }, void 0, u, void 0, !1, void 0, !1, void 0, void 0, void 0)
+            }, void 0, m, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         data: () => ({
             engines: t,
@@ -536,10 +534,10 @@
         },
         created() {
             this.categoryName = function(e) {
-                const t = s(e);
+                const t = o(e);
                 if (window.GM_getValue) return window.GM_getValue(t);
-                const o = window.localStorage.getItem(t);
-                return o ? JSON.parse(o) : null;
+                const s = window.localStorage.getItem(t);
+                return s ? JSON.parse(s) : null;
             }("categoryName") || this.categoryName;
         },
         methods: {
@@ -548,10 +546,10 @@
             },
             changeCategory(e) {
                 !function(e, t) {
-                    const o = s(e);
-                    if (window.GM_setValue) window.GM_setValue(o, t); else {
+                    const s = o(e);
+                    if (window.GM_setValue) window.GM_setValue(s, t); else {
                         const e = JSON.stringify(t);
-                        e && window.localStorage.setItem(o, e);
+                        e && window.localStorage.setItem(s, e);
                     }
                 }("categoryName", e), this.categoryName = e;
             },
@@ -560,7 +558,7 @@
             }
         }
     };
-    var d = function() {
+    var w = function() {
         var e = this.$createElement, t = this._self._c || e;
         return t("header", {
             ref: "all-search",
@@ -580,13 +578,13 @@
             }
         }) ], 1);
     };
-    d._withStripped = !0;
-    const w = a({
-        render: d,
+    w._withStripped = !0;
+    const g = r({
+        render: w,
         staticRenderFns: []
-    }, void 0, p, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    let g = {};
-    const y = [ {
+    }, void 0, d, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    let y = {};
+    const f = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         style: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
     }, {
@@ -770,27 +768,27 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
     } ].find(e => e.url.test(window.location.href));
-    y && !y.disabled ? (g.url = y.url, g.disabled = y.disabled, g.style = y.style, g.keyword = y.keyword, 
-    g.create = y.create, g.mounted = y.mounted) : g = null;
-    var b = g;
+    f && !f.disabled ? (y.url = f.url, y.disabled = f.disabled, y.style = f.style, y.keyword = f.keyword, 
+    y.create = f.create, y.mounted = f.mounted) : y = null;
+    var b = y;
     e.config.productionTip = !1;
-    const f = b;
+    const v = b;
     if (b) {
         let t = null;
         const s = document.getElementById("all-search");
-        s ? t = s : (t = document.createElement("div"), t.id = "all-search");
-        const a = new e({
+        s ? t = s : (t = document.createElement("div"), t.id = "all-search"), t.style.display = "none";
+        const o = new e({
             data: () => ({
-                currentSite: f
+                currentSite: v
             }),
-            render: e => e(w)
+            render: e => e(g)
         });
-        o(), function() {
+        a(), function() {
             const e = window.MutationObserver, t = document.getElementsByTagName("head")[0], s = function(e, t) {
-                for (const t of e) t.removedNodes.length && "as-style" === t.removedNodes[0].id && o();
+                for (const t of e) t.removedNodes.length && "as-style" === t.removedNodes[0].id && a();
             };
-            let a;
-            a = MutationObserver ? new MutationObserver(s) : new e(s), a.observe(t, {
+            let o;
+            o = MutationObserver ? new MutationObserver(s) : new e(s), o.observe(t, {
                 childList: !0
             });
         }(), function() {
@@ -806,7 +804,7 @@
         }().then(() => {
             const e = document.body.parentElement.insertBefore(t, document.body);
             var s;
-            a.$mount(e), b && b.style && (s = b.style, window.GM_addStyle && window.GM_addStyle(s));
+            o.$mount(e), b && b.style && (s = b.style, window.GM_addStyle && window.GM_addStyle(s));
         }).catch(e => {
             console.error(e);
         });

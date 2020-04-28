@@ -32,13 +32,13 @@ export default {
 
     .as-title-inner {
       font-size: 18px;
-      width: 110px;
+      width: 90px;
       height: $height;
       line-height: $height;
       font-weight: 600;
       color: #1990fc;
       margin: 0;
-      padding-right: 10px;
+      padding-left: 15px;
       text-align: center;
       cursor: pointer;
     }
