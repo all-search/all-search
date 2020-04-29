@@ -1,5 +1,3 @@
-import pkg from '../../package.json'
-
 export function getQueryString (name, url) {
   url = url || window.location.href
   const r = new RegExp('(\\?|#|&)' + name + '=([^&#]*)(&|#|$)')
@@ -65,11 +63,11 @@ export function checkBody () {
           clearInterval(id)
           resolve()
         }
-        if (time === 20) {
+        if (time === 50) {
           clearInterval(id)
           reject(new Error('timeOut'))
         }
-      }, 100)
+      }, 200)
     }
   })
 }
@@ -117,38 +115,20 @@ export function addStyle (style) {
   }
 }
 
-export function addStyleResource (el) {
-  if (window.location.hostname === 'localhost') {
-    return
-  }
-  const link = document.createElement('link')
-  link.id = 'as-style'
-  link.rel = 'stylesheet'
-  link.type = 'text/css'
-  link.href = `https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=${pkg.version}`
-  const head = document.getElementsByTagName('head')[0]
-  head.appendChild(link)
-}
-
 // 监听head的节点移除，防止style被干掉
 export function domObserve () {
-  const MutationObserverCopy = window.MutationObserver
   const targetNode = document.getElementsByTagName('head')[0]
   const config = { childList: true }
-  const callback = function (mutationsList, observer) {
+  const callback = function (mutationsList) {
     for (const mutation of mutationsList) {
-      if (mutation.removedNodes.length &&
-        mutation.removedNodes[0].id === 'as-style') {
-        addStyleResource()
+      if (mutation.removedNodes.length && mutation.removedNodes[0].nodeName === 'STYLE') {
+        addStyle(mutation.removedNodes[0].innerText)
       }
     }
   }
   let observer
   if (MutationObserver) {
     observer = new MutationObserver(callback)
-  } else {
-    observer = new MutationObserverCopy(callback)
+    observer.observe(targetNode, config)
   }
-  observer.observe(targetNode, config)
-  // observer.disconnect()
 }

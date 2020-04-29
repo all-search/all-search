@@ -1,7 +1,7 @@
 {
   "name": "all-search",
   "description": "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
-  "version": "0.1.7d",
+  "version": "0.1.7e",
   "main": "dist/index.js",
   "author": "endday",
   "license": "GPL-2.0",
@@ -22,13 +22,13 @@
     "@babel/polyfill": "^7.4.3",
     "axios": "^0.19.0",
     "element-ui": "^2.12.0",
-    "rollup-plugin-css-only": "^2.0.0",
     "vue": "^2.5.21",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "workbox-webpack-plugin": "^4.3.1"
   },
   "devDependencies": {
+    "rollup-plugin-css-only": "^2.0.0",
     "@rollup/plugin-json": "^4.0.3",
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
@@ -46,6 +46,7 @@
     "node-sass": "^4.9.0",
     "rollup": "^1.32.0",
     "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-delete": "^1.2.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-terser": "^5.2.0",

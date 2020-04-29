@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.7d
+// @version      0.1.7e
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/4/28
+// @update       2020/4/29
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -311,26 +311,23 @@
             name: "yandex",
             url: "https://yandex.com/images/search?text=%s"
         } ]
-    } ], s = "0.1.7d";
+    } ];
     document.createElement("a");
-    function o(e) {
+    function s(e) {
         return e ? `__allSearch__${e}` : null;
     }
-    function a(e) {
-        if ("localhost" === window.location.hostname) return;
-        const t = document.createElement("link");
-        t.id = "as-style", t.rel = "stylesheet", t.type = "text/css", t.href = `https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=${s}`, 
-        document.getElementsByTagName("head")[0].appendChild(t);
+    function n(e) {
+        window.GM_addStyle && window.GM_addStyle(e);
     }
-    function r(e, t, s, o, a, r, n, i, c, l) {
-        "boolean" != typeof n && (c = i, i = n, n = !1);
+    function o(e, t, s, n, o, a, r, i, c, l) {
+        "boolean" != typeof r && (c = i, i = r, r = !1);
         const h = "function" == typeof s ? s.options : s;
         let u;
         if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
-        h._compiled = !0, a && (h.functional = !0)), o && (h._scopeId = o), r ? (u = function(e) {
+        h._compiled = !0, o && (h.functional = !0)), n && (h._scopeId = n), a ? (u = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(r);
-        }, h._ssrRegister = u) : t && (u = n ? function(e) {
+            t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(a);
+        }, h._ssrRegister = u) : t && (u = r ? function(e) {
             t.call(this, l(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, i(e));
@@ -345,17 +342,39 @@
         }
         return s;
     }
-    const n = {
+    const a = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+    function r(e) {
+        return (e, t) => function(e, t) {
+            const s = a ? t.media || "default" : e, n = c[s] || (c[s] = {
+                ids: new Set,
+                styles: []
+            });
+            if (!n.ids.has(e)) {
+                n.ids.add(e);
+                let s = t.source;
+                if (t.map && (s += "\n/*# sourceURL=" + t.map.sources[0] + " */", s += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(t.map)))) + " */"), 
+                n.element || (n.element = document.createElement("style"), n.element.type = "text/css", 
+                t.media && n.element.setAttribute("media", t.media), void 0 === i && (i = document.head || document.getElementsByTagName("head")[0]), 
+                i.appendChild(n.element)), "styleSheet" in n.element) n.styles.push(s), n.element.styleSheet.cssText = n.styles.filter(Boolean).join("\n"); else {
+                    const e = n.ids.size - 1, t = document.createTextNode(s), o = n.element.childNodes;
+                    o[e] && n.element.removeChild(o[e]), o.length ? n.element.insertBefore(t, o[e]) : n.element.appendChild(t);
+                }
+            }
+        }(e, t);
+    }
+    let i;
+    const c = {};
+    const l = {
         name: "logo"
     };
-    var i = function() {
+    var h = function() {
         var e = this.$createElement;
         this._self._c;
         return this._m(0);
     };
-    i._withStripped = !0;
-    const c = r({
-        render: i,
+    h._withStripped = !0;
+    const u = o({
+        render: h,
         staticRenderFns: [ function() {
             var e = this.$createElement, t = this._self._c || e;
             return t("a", {
@@ -368,8 +387,14 @@
                 staticClass: "as-title-inner"
             }, [ this._v("\n    All Search\n  ") ]) ]);
         } ]
-    }, void 0, n, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const l = {
+    }, (function(e) {
+        e && e("data-v-080671f6_0", {
+            source: "@media screen and (max-width: 768px) {\n.as-title {\n    display: none;\n}\n}\n.as-title {\n  text-decoration: none;\n  padding: 0;\n  margin: 0;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 90px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  padding-left: 15px;\n  text-align: center;\n  cursor: pointer;\n}",
+            map: void 0,
+            media: void 0
+        });
+    }), l, void 0, !1, void 0, !1, r, void 0, void 0);
+    const m = {
         name: "category",
         props: {
             value: {
@@ -399,7 +424,7 @@
             }
         }
     };
-    var h = function() {
+    var p = function() {
         var e = this, t = e.$createElement, s = e._self._c || t;
         return s("div", {
             staticClass: "as-select"
@@ -423,7 +448,7 @@
             class: {
                 fadeInDown: e.show
             }
-        }, e._l(e.engines, (function(t, o) {
+        }, e._l(e.engines, (function(t, n) {
             return s("li", {
                 key: t.index,
                 domProps: {
@@ -431,7 +456,7 @@
                 },
                 on: {
                     click: function(s) {
-                        return e.selectCategory(o, t);
+                        return e.selectCategory(n, t);
                     }
                 }
             });
@@ -450,12 +475,18 @@
             }
         }) ]);
     };
-    h._withStripped = !0;
-    const u = r({
-        render: h,
+    p._withStripped = !0;
+    const d = o({
+        render: p,
         staticRenderFns: []
-    }, void 0, l, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const m = {
+    }, (function(e) {
+        e && e("data-v-b2fc85ca_0", {
+            source: '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n.as-select-content {\n  width: 65px;\n  height: 30px;\n  line-height: 30px;\n  padding-left: 20px;\n  font-size: 14px;\n  cursor: pointer;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 10px;\n  font-size: 24px;\n  color: #999;\n}\n.as-select-list {\n  padding: 4px 0;\n  min-width: 90px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n  right: -4px;\n  z-index: 99;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n.as-select-mask {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}',
+            map: void 0,
+            media: void 0
+        });
+    }), m, void 0, !1, void 0, !1, r, void 0, void 0);
+    const w = {
         name: "site-menu",
         props: {
             menus: {
@@ -484,15 +515,15 @@
             }
         }
     };
-    var p = function() {
+    var g = function() {
         var e = this, t = e.$createElement, s = e._self._c || t;
         return s("div", {
             staticClass: "as-menu-container"
         }, [ s("ul", {
             staticClass: "as-menu"
-        }, e._l(e.menus, (function(t, o) {
+        }, e._l(e.menus, (function(t, n) {
             return s("li", {
-                key: o,
+                key: n,
                 staticClass: "as-submenu",
                 on: {
                     click: function(s) {
@@ -510,16 +541,22 @@
             }) ]);
         })), 0) ]);
     };
-    p._withStripped = !0;
-    const d = {
+    g._withStripped = !0;
+    const f = {
         name: "all-search",
         components: {
-            logo: c,
-            category: u,
-            siteMenu: r({
-                render: p,
+            logo: u,
+            category: d,
+            siteMenu: o({
+                render: g,
                 staticRenderFns: []
-            }, void 0, m, void 0, !1, void 0, !1, void 0, void 0, void 0)
+            }, (function(e) {
+                e && e("data-v-b9378046_0", {
+                    source: "@media screen and (max-width: 768px) {\n.as-menu-container {\n    overflow: auto;\n}\n}\n.as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}",
+                    map: void 0,
+                    media: void 0
+                });
+            }), w, void 0, !1, void 0, !1, r, void 0, void 0)
         },
         data: () => ({
             engines: t,
@@ -534,10 +571,10 @@
         },
         created() {
             this.categoryName = function(e) {
-                const t = o(e);
+                const t = s(e);
                 if (window.GM_getValue) return window.GM_getValue(t);
-                const s = window.localStorage.getItem(t);
-                return s ? JSON.parse(s) : null;
+                const n = window.localStorage.getItem(t);
+                return n ? JSON.parse(n) : null;
             }("categoryName") || this.categoryName;
         },
         methods: {
@@ -546,10 +583,10 @@
             },
             changeCategory(e) {
                 !function(e, t) {
-                    const s = o(e);
-                    if (window.GM_setValue) window.GM_setValue(s, t); else {
+                    const n = s(e);
+                    if (window.GM_setValue) window.GM_setValue(n, t); else {
                         const e = JSON.stringify(t);
-                        e && window.localStorage.setItem(s, e);
+                        e && window.localStorage.setItem(n, e);
                     }
                 }("categoryName", e), this.categoryName = e;
             },
@@ -558,7 +595,7 @@
             }
         }
     };
-    var w = function() {
+    var y = function() {
         var e = this.$createElement, t = this._self._c || e;
         return t("header", {
             ref: "all-search",
@@ -578,13 +615,19 @@
             }
         }) ], 1);
     };
-    w._withStripped = !0;
-    const g = r({
-        render: w,
+    y._withStripped = !0;
+    const b = o({
+        render: y,
         staticRenderFns: []
-    }, void 0, d, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    let y = {};
-    const f = [ {
+    }, (function(e) {
+        e && e("data-v-010cc4e0_0", {
+            source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex !important;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  padding: 0 20px;\n  display: flex;\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}',
+            map: void 0,
+            media: void 0
+        });
+    }), f, void 0, !1, void 0, !1, r, void 0, void 0);
+    let x = {};
+    const v = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         style: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
     }, {
@@ -768,43 +811,42 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
     } ].find(e => e.url.test(window.location.href));
-    f && !f.disabled ? (y.url = f.url, y.disabled = f.disabled, y.style = f.style, y.keyword = f.keyword, 
-    y.create = f.create, y.mounted = f.mounted) : y = null;
-    var b = y;
+    v && !v.disabled ? (x.url = v.url, x.disabled = v.disabled, x.style = v.style, x.keyword = v.keyword, 
+    x.create = v.create, x.mounted = v.mounted) : x = null;
+    var k = x;
     e.config.productionTip = !1;
-    const v = b;
-    if (b) {
+    const q = k;
+    if (k) {
         let t = null;
         const s = document.getElementById("all-search");
         s ? t = s : (t = document.createElement("div"), t.id = "all-search"), t.style.display = "none";
         const o = new e({
             data: () => ({
-                currentSite: v
+                currentSite: q
             }),
-            render: e => e(g)
+            render: e => e(b)
         });
-        a(), function() {
-            const e = window.MutationObserver, t = document.getElementsByTagName("head")[0], s = function(e, t) {
-                for (const t of e) t.removedNodes.length && "as-style" === t.removedNodes[0].id && a();
-            };
-            let o;
-            o = MutationObserver ? new MutationObserver(s) : new e(s), o.observe(t, {
+        !function() {
+            const e = document.getElementsByTagName("head")[0], t = {
                 childList: !0
-            });
+            };
+            let s;
+            MutationObserver && (s = new MutationObserver((function(e) {
+                for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && n(t.removedNodes[0].innerText);
+            })), s.observe(e, t));
         }(), function() {
             let e = 0;
             return new Promise((t, s) => {
                 if (document && document.body) t(); else {
-                    const o = setInterval((function() {
-                        e += 1, document && document.body && (clearInterval(o), t()), 20 === e && (clearInterval(o), 
+                    const n = setInterval((function() {
+                        e += 1, document && document.body && (clearInterval(n), t()), 50 === e && (clearInterval(n), 
                         s(new Error("timeOut")));
-                    }), 100);
+                    }), 200);
                 }
             });
         }().then(() => {
             const e = document.body.parentElement.insertBefore(t, document.body);
-            var s;
-            o.$mount(e), b && b.style && (s = b.style, window.GM_addStyle && window.GM_addStyle(s));
+            o.$mount(e), k && k.style && n(k.style);
         }).catch(e => {
             console.error(e);
         });

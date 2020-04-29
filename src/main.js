@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { addStyle, addStyleResource, checkBody, domObserve } from './util'
+import { addStyle, checkBody, domObserve } from './util'
 import target from './config/loadList'
 
 Vue.config.productionTip = false
@@ -27,7 +27,7 @@ if (target || isDev) {
     render: h => h(App)
   })
   // 添加样式
-  addStyleResource(el)
+  // addStyleResource()
   domObserve()
   checkBody().then(() => {
     const mountEL = document.body.parentElement.insertBefore(el, document.body)

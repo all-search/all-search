@@ -1,6 +1,7 @@
 import pkg from '../../package.json'
 
 const now = new Date()
+
 const meta = `// ==UserScript==
 // @name         ${pkg.name} 全搜，一个搜索引擎快捷跳转菜单
 // @version      ${pkg.version}
