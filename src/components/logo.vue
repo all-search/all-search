@@ -38,7 +38,7 @@ export default {
       font-weight: 600;
       color: #1990fc;
       margin: 0;
-      padding-left: 15px;
+      margin-left: 15px;
       text-align: center;
       cursor: pointer;
     }

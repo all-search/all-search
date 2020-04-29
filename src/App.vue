@@ -92,7 +92,7 @@ export default {
   }
 
   .setting {
-    padding: 0 20px;
+    margin: 0 20px;
     display: flex;
     align-items: center;
     white-space: nowrap;
