@@ -37,8 +37,7 @@ export default {
       line-height: $height;
       font-weight: 600;
       color: #1990fc;
-      margin: 0;
-      margin-left: 15px;
+      margin: 0 15px;
       text-align: center;
       cursor: pointer;
     }

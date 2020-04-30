@@ -66,6 +66,12 @@ export default {
 <style lang="scss">
   @import "../assets/common";
 
+  @media screen and (max-width: 768px) {
+    .as-select-content {
+      padding-left: 20px;
+    }
+  }
+
   .as-select {
     position: relative;
     ul li {
@@ -74,10 +80,10 @@ export default {
   }
 
   .as-select-content {
+    box-sizing: content-box;
     width: 65px;
     height: $height;
     line-height: $height;
-    margin-left: 20px;
     font-size: 14px;
     cursor: pointer;
     position: relative;

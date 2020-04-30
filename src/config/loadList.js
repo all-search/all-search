@@ -3,7 +3,9 @@ const height = 30
 const list = [
   {
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
-    style: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;} .srp .minidiv{top: ${height}px !important;}`
+    style: {
+      1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;} .srp .minidiv{top: ${height}px !important;}`
+    }
   },
   {
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
@@ -13,7 +15,9 @@ const list = [
   },
   {
     url: /^https?:\/\/[^.]*\.bing\.com\/search/,
-    style: `body { padding-top: ${height}px }`
+    style: {
+      1: `body { padding-top: ${height}px }`
+    }
   },
   {
     url: /^https?:\/\/duckduckgo\.com\/*/i
@@ -29,25 +33,33 @@ const list = [
   },
   {
     url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
-    style: `.header { top: ${height}px }`
+    style: {
+      1: `.header { top: ${height}px }`
+    }
   },
   {
     url: /^https?:\/\/yandex\.com\/search/i,
-    style: `body { margin: ${height}px!important; }`
+    style: {
+      1: `body { margin: ${height}px!important; }`
+    }
   },
   {
     url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i
   },
   {
     url: /^https?:\/\/mijisou.com\/\?q/i,
-    style: `.search-page{top: ${height}px} .searx-navbar{top: ${height + 12}px!important;}`
+    style: {
+      1: `.search-page{top: ${height}px} .searx-navbar{top: ${height + 12}px!important;}`
+    }
   },
   {
     url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
   },
   {
     url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
-    style: `#header_wrapper{ top: ${height}px!important }`
+    style: {
+      1: `#header_wrapper{ top: ${height}px!important }`
+    }
   },
   {
     url: /^https?:\/\/baike\.baidu\.com\/item/
@@ -66,7 +78,9 @@ const list = [
   },
   {
     url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
-    style: `.AppHeader.is-fixed { top: ${height}px!important; }`
+    style: {
+      1: `.AppHeader.is-fixed { top: ${height}px!important; }`
+    }
   },
   {
     url: /^https?:\/\/www\.so\.com\/s/i
@@ -82,7 +96,9 @@ const list = [
   },
   {
     url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
-    style: `.header { top:${height}px }`
+    style: {
+      1: `.header { top:${height}px }`
+    }
   },
   {
     url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
@@ -92,14 +108,18 @@ const list = [
   },
   {
     url: /^https?:\/\/stackoverflow\.com\/search\?/i,
-    style: `.top-bar._fixed { top: ${height}px }`
+    style: {
+      1: `.top-bar._fixed { top: ${height}px }`
+    }
   },
   {
     url: /^https?:\/\/search\.bilibili\.com\/all/,
     keyword () {
       return document.getElementById('search-keyword').value
     },
-    style: `body { margin-top: ${height}px!important; } .fixed-top { top: ${height}px }`
+    style: {
+      1: `body { margin-top: ${height}px!important; } .fixed-top { top: ${height}px }`
+    }
   },
   {
     url: /^https?:\/\/www\.acfun\.cn\/search/
@@ -196,7 +216,9 @@ const list = [
   },
   {
     url: /^https?:\/\/s\.taobao\.com\/search/,
-    style: `.m-header-fixed .header-inner { top: ${height}px !important;}`
+    style: {
+      1: `.m-header-fixed .header-inner { top: ${height}px !important;}`
+    }
   },
   {
     url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i
