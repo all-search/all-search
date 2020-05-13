@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import { addStyle, checkBody, domObserve } from './util'
 import target from './config/loadList'
+import './assets/iconfont'
 
 Vue.config.productionTip = false
 

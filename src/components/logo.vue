@@ -3,6 +3,7 @@
     class="as-title"
     href="https://github.com/endday/all-search"
     target="_blank"
+    :class="`as-title-${mode}`"
   >
     <p class="as-title-inner">
       All Search
@@ -12,7 +13,30 @@
 
 <script>
 export default {
-  name: 'logo'
+  name: 'logo',
+  props: {
+    mode: {
+      type: String,
+      default: 'horizontal',
+      validator: val => ['horizontal', 'vertical'].includes(val)
+    }
+  },
+  data: () => ({
+    widthMap: {
+      horizontal: {
+        width: '90px',
+        margin: '0 10px'
+      },
+      vertical: {
+        width: '100%'
+      }
+    }
+  }),
+  computed: {
+    style () {
+      return this.widthMap[this.mode]
+    }
+  }
 }
 </script>
 
@@ -25,6 +49,15 @@ export default {
     }
   }
 
+  .as-title-horizontal {
+    width: 90px;
+    margin: 0 10px;
+  }
+
+  .as-title-vertical {
+    width: 100%;
+  }
+
   .as-title {
     text-decoration: none;
     padding: 0;
@@ -32,12 +65,11 @@ export default {
 
     .as-title-inner {
       font-size: 18px;
-      width: 90px;
       height: $height;
       line-height: $height;
       font-weight: 600;
       color: #1990fc;
-      margin: 0 15px;
+      margin: 0 auto;
       text-align: center;
       cursor: pointer;
     }

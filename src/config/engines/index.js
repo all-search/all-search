@@ -1,4 +1,3 @@
-import common from './common'
 import search from './search'
 import translate from './translate'
 import developer from './developer'
@@ -10,11 +9,6 @@ import knowledge from './knowledge'
 import image from './image'
 
 export default [
-  {
-    nameZh: '默认',
-    name: 'common',
-    list: common
-  },
   {
     nameZh: '搜索',
     name: 'search',
@@ -36,7 +30,7 @@ export default [
     list: music
   },
   {
-    nameZh: '开发者',
+    nameZh: '开发',
     name: 'developer',
     list: developer
   },

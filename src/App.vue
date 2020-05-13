@@ -1,21 +1,98 @@
 <template>
-  <!--<asHeader/>-->
-  <sidebar/>
+  <div
+    id="all-search"
+    :class="asClass">
+    <logo :mode="mode"/>
+    <as-menu
+      :mode="mode"
+      :value="categoryName"
+      @change="changeCategory"/>
+  </div>
 </template>
 
 <script>
-// import asHeader from './theme/header.vue'
-import sidebar from './theme/sidebar.vue'
+import engines from './config/engines/index.js'
+import { getSession, setSession } from './util'
+import logo from './components/logo.vue'
+import asMenu from './components/menu.vue'
 
 export default {
   name: 'all-search',
   components: {
-    // asHeader,
-    sidebar
+    logo,
+    asMenu
+  },
+  data () {
+    return {
+      engines,
+      categoryName: 'search',
+      mode: 'vertical'
+      // mode: 'horizontal'
+    }
+  },
+  watch: {
+    mode: {
+      handler (val, oldVal) {
+        document.body.classList.remove(`body-${oldVal}`)
+        document.body.classList.add(`body-${val}`)
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    asClass () {
+      return {
+        'as-horizontal': this.mode === 'horizontal',
+        'as-vertical': this.mode === 'vertical'
+      }
+    }
+  },
+  created () {
+    this.categoryName = getSession('categoryName') || this.categoryName
+  },
+  methods: {
+    changeCategory (name) {
+      setSession('categoryName', name)
+      this.categoryName = name
+    }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+  @import "./assets/common";
 
+  .body-horizontal {
+    margin-top: $horizontalHeight;
+  }
+
+  .body-vertical {
+    margin-left: $verticalWidth;
+  }
+
+  #all-search {
+    position: fixed;
+    display: flex !important;
+    background-color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  }
+
+  .as-horizontal {
+    height: $horizontalHeight;
+    width: 100%;
+    top: 0;
+    z-index: 999999;
+    border-bottom: 1px #e8e8e8 solid;
+    flex-direction: row;
+  }
+
+  .as-vertical {
+    height: 100%;
+    width: $verticalWidth;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    border-right: 1px #e8e8e8 solid;
+    flex-direction: column;
+  }
 </style>
