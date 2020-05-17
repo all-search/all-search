@@ -98,7 +98,7 @@ export default {
 
   .as-dialog__body {
     padding: 30px 20px;
-    color: #606266;
+    color: $color;
     font-size: 14px;
     word-break: break-all;
   }

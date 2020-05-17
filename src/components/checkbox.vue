@@ -47,13 +47,13 @@ export default {
 
     // Box hover
     &:hover + label:before {
-      border-color: $color;
+      border-color: $active-color;
     }
 
     // Box checked
     &:checked + label:before {
-      background: $color;
-      border-color: $color;
+      background: $active-color;
+      border-color: $active-color;
     }
 
     // Disabled state label.

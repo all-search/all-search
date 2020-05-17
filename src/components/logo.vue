@@ -50,7 +50,7 @@ export default {
   }
 
   .as-title-horizontal {
-    width: 90px;
+    width: 100px;
     margin: 0 10px;
   }
 
@@ -59,7 +59,7 @@ export default {
   }
 
   .as-title {
-    text-decoration: none;
+    text-decoration: none !important;
     padding: 0;
     margin: 0;
 

@@ -5,8 +5,13 @@
     <logo :mode="mode"/>
     <as-menu
       :mode="mode"
+      :inline="inline"
       :value="categoryName"
       @change="changeCategory"/>
+    <div class="as-setting"
+         @click="changeMode">
+      切换模式
+    </div>
   </div>
 </template>
 
@@ -26,8 +31,9 @@ export default {
     return {
       engines,
       categoryName: 'search',
-      mode: 'vertical'
-      // mode: 'horizontal'
+      // mode: 'vertical',
+      mode: 'horizontal',
+      inline: false
     }
   },
   watch: {
@@ -49,11 +55,20 @@ export default {
   },
   created () {
     this.categoryName = getSession('categoryName') || this.categoryName
+    this.mode = getSession('mode') || this.mode
   },
   methods: {
     changeCategory (name) {
       setSession('categoryName', name)
       this.categoryName = name
+    },
+    changeMode () {
+      if (this.mode === 'horizontal') {
+        this.mode = 'vertical'
+      } else {
+        this.mode = 'horizontal'
+      }
+      setSession('mode', this.mode)
     }
   }
 }
@@ -63,7 +78,7 @@ export default {
   @import "./assets/common";
 
   .body-horizontal {
-    margin-top: $horizontalHeight;
+    margin-top: $height;
   }
 
   .body-vertical {
@@ -78,7 +93,7 @@ export default {
   }
 
   .as-horizontal {
-    height: $horizontalHeight;
+    height: $height;
     width: 100%;
     top: 0;
     z-index: 999999;
@@ -94,5 +109,19 @@ export default {
     z-index: 999999;
     border-right: 1px #e8e8e8 solid;
     flex-direction: column;
+  }
+
+  .as-setting {
+    line-height: $height;
+    padding: 0 16px;
+    position: relative;
+    margin: 0;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 14px;
+    color: $color;
+    &:hover {
+      color: $active-color;
+    }
   }
 </style>

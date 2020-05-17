@@ -4,6 +4,7 @@
     :class="menuClass">
     <menu-item
       class="as-menu-item"
+      :class="{ 'as-menu-item-active': item.show }"
       v-for="item in engines"
       :key="item.index"
       @show="handleMenuShow($event, item)">
@@ -31,8 +32,8 @@
 <script>
 import { getKeyword } from '../util'
 import engines from '../config/engines'
-import menuItem from './menuItem'
-import icon from '../components/icon'
+import menuItem from './menuItem.vue'
+import icon from '../components/icon.vue'
 
 export default {
   name: 'as-menu',
@@ -45,6 +46,10 @@ export default {
       type: String,
       default: 'horizontal',
       validator: val => ['horizontal', 'vertical'].includes(val)
+    },
+    inline: {
+      type: Boolean,
+      default: true
     },
     value: {
       type: String,
@@ -126,10 +131,11 @@ export default {
       }
     },
     handleMenuShow (value, item) {
-      item.show = value
+      if (!this.inline) {
+        item.show = value
+      }
     },
     close () {
-      console.log(1)
       this.engines.forEach(item => {
         item.show = false
       })
@@ -167,9 +173,8 @@ export default {
 
   .as-menu--horizontal {
     flex-direction: row;
-    .as-menu-item {
-      height: $horizontalHeight;
-      line-height: $horizontalHeight;
+    .as-menu-item-active {
+      border-bottom: 2px solid $active-color;
     }
     .as-subMenu-container {
       left: -22px;
@@ -180,27 +185,31 @@ export default {
   .as-menu--vertical {
     flex-direction: column;
     .as-menu-item {
-      height: $verticalHeight;
-      line-height: $verticalHeight;
+      margin: 5px 0;
+    }
+    .as-menu-item-active {
+      border-right: 2px solid $active-color;
     }
     .as-subMenu-container {
       left: $verticalWidth - 15px;
-      top: -10px;
+      top: -16px;
     }
   }
 
   .as-menu-item {
+    height: $height;
+    line-height: $height;
     list-style: none;
     position: relative;
-
+    transition: border-color .3s cubic-bezier(.645, .045, .355, 1);
   }
 
   .as-menu-item-icon {
-    margin: 2px 6px 0 -2px;
+    margin: 2px 10px 0 -2px;
   }
 
   .as-menu-item-title {
-    padding: 0 20px;
+    padding: 0 16px;
     position: relative;
     margin: 0;
     white-space: nowrap;
@@ -208,12 +217,21 @@ export default {
     font-size: 14px;
     display: flex;
     align-items: center;
-
+    color: $color;
+    border-bottom: 2px solid transparent;
+    transition: color .3s cubic-bezier(.645, .045, .355, 1);
     &:hover {
-      color: $color;
-      .as-menu-item-icon {
-        color: $color;
-      }
+      color: $active-color;
+    }
+  }
+
+  .as-menu-item-active {
+    color: $active-color;
+    .as-menu-item-icon {
+      color: $active-color;
+    }
+    .as-menu-item-title {
+      color: $active-color;
     }
   }
 
@@ -241,19 +259,20 @@ export default {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: #606266;
+      color: $color;
       height: 34px;
       line-height: 34px;
       box-sizing: border-box;
       cursor: pointer;
       &:hover {
         background-color: #f5f7fa;
+        color: $active-color;
       }
     }
   }
 
   .drop-enter-active, .drop-leave-active {
-    transition: all 0.2s ease-out;
+    transition: all 0.2s cubic-bezier(.645, .045, .355, 1);
   }
 
   .drop-enter, .drop-leave-to {
@@ -262,10 +281,18 @@ export default {
   }
 
   .fade-enter-active, .fade-leave-active {
-    transition: all 0.2s ease-out;
+    transition: all 0.2s cubic-bezier(.645, .045, .355, 1);
   }
 
   .fade-enter, .fade-leave-to {
     opacity: 0;
+  }
+
+  .as-subMenu-group-list {
+    list-style: none;
+    padding: 0;
+    .as-menu-item-title {
+      padding-left: 44px;
+    }
   }
 </style>

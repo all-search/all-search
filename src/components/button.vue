@@ -18,7 +18,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+  @import "../assets/common";
+
   .as-button {
     display: inline-block;
     line-height: 1;
@@ -26,7 +28,7 @@ export default {
     cursor: pointer;
     background: #fff;
     border: 1px solid #dcdfe6;
-    color: #606266;
+    color: $color;
     text-align: center;
     box-sizing: border-box;
     outline: none;
