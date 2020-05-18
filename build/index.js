@@ -4,7 +4,7 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/4/30
+// @update       2020/5/19
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -23,35 +23,6 @@
     "use strict";
     e = e && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
     var t = [ {
-        nameZh: "默认",
-        name: "common",
-        list: [ {
-            name: "百度",
-            url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
-        }, {
-            name: "谷歌",
-            url: "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8"
-        }, {
-            name: "必应",
-            url: "https://cn.bing.com/search?q=%s"
-        }, {
-            name: "百度翻译",
-            url: "http://fanyi.baidu.com/#auto/zh/%s"
-        }, {
-            name: "知乎",
-            url: "http://www.zhihu.com/search?q=%s"
-        }, {
-            name: "stackoverflow",
-            url: "https://stackoverflow.com/search?q=%s"
-        }, {
-            name: "掘金",
-            url: "https://juejin.im/search?query=%s&type=all",
-            disabled: !0
-        }, {
-            name: "GitHub",
-            url: "https://github.com/search?utf8=✓&q=%s"
-        } ]
-    }, {
         nameZh: "搜索",
         name: "search",
         list: [ {
@@ -167,7 +138,7 @@
             url: "http://search.5sing.kugou.com/?keyword=%s"
         } ]
     }, {
-        nameZh: "开发者",
+        nameZh: "开发",
         name: "developer",
         list: [ {
             name: "MDN",
@@ -313,104 +284,258 @@
         } ]
     } ];
     document.createElement("a");
-    function s(e) {
+    function n(e) {
         return e ? `__allSearch__${e}` : null;
     }
-    function n(e) {
+    function o(e) {
+        const t = n(e);
+        if (window.GM_getValue) return window.GM_getValue(t);
+        const o = window.localStorage.getItem(t);
+        return o ? JSON.parse(o) : null;
+    }
+    function s(e, t) {
+        const o = n(e);
+        if (window.GM_setValue) window.GM_setValue(o, t); else {
+            const e = JSON.stringify(t);
+            e && window.localStorage.setItem(o, e);
+        }
+    }
+    function a(e) {
         window.GM_addStyle && window.GM_addStyle(e);
     }
-    function o(e, t, s, n, o, a, r, i, c, l) {
-        "boolean" != typeof r && (c = i, i = r, r = !1);
-        const h = "function" == typeof s ? s.options : s;
+    var i = {
+        name: "logo",
+        props: {
+            mode: {
+                type: String,
+                default: "horizontal",
+                validator: e => [ "horizontal", "vertical" ].includes(e)
+            }
+        },
+        data: () => ({
+            widthMap: {
+                horizontal: {
+                    width: "90px",
+                    margin: "0 10px"
+                },
+                vertical: {
+                    width: "100%"
+                }
+            }
+        }),
+        computed: {
+            style() {
+                return this.widthMap[this.mode];
+            }
+        }
+    };
+    function r(e, t, n, o, s, a, i, r, c, l) {
+        "boolean" != typeof i && (c = r, r = i, i = !1);
+        const m = "function" == typeof n ? n.options : n;
         let u;
-        if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns,
-        h._compiled = !0, o && (h.functional = !0)), n && (h._scopeId = n), a ? (u = function(e) {
-            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__),
+        if (e && e.render && (m.render = e.render, m.staticRenderFns = e.staticRenderFns, 
+        m._compiled = !0, s && (m.functional = !0)), o && (m._scopeId = o), a ? (u = function(e) {
+            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
             t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(a);
-        }, h._ssrRegister = u) : t && (u = r ? function(e) {
+        }, m._ssrRegister = u) : t && (u = i ? function(e) {
             t.call(this, l(e, this.$root.$options.shadowRoot));
         } : function(e) {
-            t.call(this, i(e));
-        }), u) if (h.functional) {
-            const e = h.render;
-            h.render = function(t, s) {
-                return u.call(s), e(t, s);
+            t.call(this, r(e));
+        }), u) if (m.functional) {
+            const e = m.render;
+            m.render = function(t, n) {
+                return u.call(n), e(t, n);
             };
         } else {
-            const e = h.beforeCreate;
-            h.beforeCreate = e ? [].concat(e, u) : [ u ];
+            const e = m.beforeCreate;
+            m.beforeCreate = e ? [].concat(e, u) : [ u ];
         }
-        return s;
+        return n;
     }
-    const a = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-    function r(e) {
+    const c = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+    function l(e) {
         return (e, t) => function(e, t) {
-            const s = a ? t.media || "default" : e, n = c[s] || (c[s] = {
+            const n = c ? t.media || "default" : e, o = u[n] || (u[n] = {
                 ids: new Set,
                 styles: []
             });
-            if (!n.ids.has(e)) {
-                n.ids.add(e);
-                let s = t.source;
-                if (t.map && (s += "\n/*# sourceURL=" + t.map.sources[0] + " */", s += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(t.map)))) + " */"),
-                n.element || (n.element = document.createElement("style"), n.element.type = "text/css",
-                t.media && n.element.setAttribute("media", t.media), void 0 === i && (i = document.head || document.getElementsByTagName("head")[0]),
-                i.appendChild(n.element)), "styleSheet" in n.element) n.styles.push(s), n.element.styleSheet.cssText = n.styles.filter(Boolean).join("\n"); else {
-                    const e = n.ids.size - 1, t = document.createTextNode(s), o = n.element.childNodes;
-                    o[e] && n.element.removeChild(o[e]), o.length ? n.element.insertBefore(t, o[e]) : n.element.appendChild(t);
+            if (!o.ids.has(e)) {
+                o.ids.add(e);
+                let n = t.source;
+                if (t.map && (n += "\n/*# sourceURL=" + t.map.sources[0] + " */", n += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(t.map)))) + " */"), 
+                o.element || (o.element = document.createElement("style"), o.element.type = "text/css", 
+                t.media && o.element.setAttribute("media", t.media), void 0 === m && (m = document.head || document.getElementsByTagName("head")[0]), 
+                m.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(n), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
+                    const e = o.ids.size - 1, t = document.createTextNode(n), s = o.element.childNodes;
+                    s[e] && o.element.removeChild(s[e]), s.length ? o.element.insertBefore(t, s[e]) : o.element.appendChild(t);
                 }
             }
         }(e, t);
     }
-    let i;
-    const c = {};
-    const l = {
-        name: "logo"
+    let m;
+    const u = {};
+    const h = i;
+    var d = function() {
+        var e = this.$createElement, t = this._self._c || e;
+        return t("a", {
+            staticClass: "as-title",
+            class: "as-title-" + this.mode,
+            attrs: {
+                href: "https://github.com/endday/all-search",
+                target: "_blank"
+            }
+        }, [ t("p", {
+            staticClass: "as-title-inner"
+        }, [ this._v("\n    All Search\n  ") ]) ]);
     };
-    var h = function() {
-        var e = this.$createElement;
-        this._self._c;
-        return this._m(0);
-    };
-    h._withStripped = !0;
-    const u = o({
-        render: h,
-        staticRenderFns: [ function() {
-            var e = this.$createElement, t = this._self._c || e;
-            return t("a", {
-                staticClass: "as-title",
-                attrs: {
-                    href: "https://github.com/endday/all-search",
-                    target: "_blank"
-                }
-            }, [ t("p", {
-                staticClass: "as-title-inner"
-            }, [ this._v("\n    All Search\n  ") ]) ]);
-        } ]
+    d._withStripped = !0;
+    const p = r({
+        render: d,
+        staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-52766f7f_0", {
-            source: "@media screen and (max-width: 768px) {\n.as-title {\n    display: none;\n}\n}\n.as-title {\n  text-decoration: none;\n  padding: 0;\n  margin: 0;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  width: 90px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0;\n  margin-left: 15px;\n  text-align: center;\n  cursor: pointer;\n}",
+        e && e("data-v-13ecd3d2_0", {
+            source: "@media screen and (max-width: 768px) {\n.as-title {\n    display: none;\n}\n}\n.as-title-horizontal {\n  width: 100px;\n  margin: 0 10px;\n}\n.as-title-vertical {\n  width: 100%;\n}\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}",
             map: void 0,
             media: void 0
         });
-    }), l, void 0, !1, void 0, !1, r, void 0, void 0);
-    const m = {
-        name: "category",
+    }), h, void 0, !1, void 0, !1, l, void 0, void 0);
+    const w = {
+        name: "menuItem",
         props: {
+            showTimeout: {
+                type: Number,
+                default: 200
+            },
+            hideTimeout: {
+                type: Number,
+                default: 200
+            }
+        },
+        data: () => ({
+            timeout: null
+        }),
+        methods: {
+            handleMenuClick(e) {
+                clearTimeout(this.timeout), this.$emit("show", !0);
+            },
+            handleMouseEnter(e) {
+                clearTimeout(this.timeout), this.timeout = setTimeout(() => {
+                    this.$emit("show", !0);
+                }, this.showTimeout);
+            },
+            handleMouseLeave(e, t) {
+                clearTimeout(this.timeout), this.timeout = setTimeout(() => {
+                    this.$emit("show", !1);
+                }, this.hideTimeout);
+            }
+        }
+    };
+    var g = function() {
+        var e = this, t = e.$createElement;
+        return (e._self._c || t)("li", {
+            on: {
+                click: function(t) {
+                    return e.handleMenuClick(t);
+                },
+                mouseenter: function(t) {
+                    return e.handleMouseEnter(t);
+                },
+                mouseleave: function(t) {
+                    return e.handleMouseLeave(t);
+                }
+            }
+        }, [ e._t("default") ], 2);
+    };
+    g._withStripped = !0;
+    const f = r({
+        render: g,
+        staticRenderFns: []
+    }, (function(e) {
+        e && e("data-v-7407f0ef_0", {
+            source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+            map: void 0,
+            media: void 0
+        });
+    }), w, void 0, !1, void 0, !1, l, void 0, void 0);
+    const b = {
+        name: "icon",
+        props: {
+            name: {
+                type: String,
+                default: ""
+            }
+        }
+    };
+    var y = function() {
+        var e = this.$createElement;
+        return (this._self._c || e)("i", {
+            staticClass: "as-menu-item-icon",
+            class: "icon-" + this.name
+        });
+    };
+    y._withStripped = !0;
+    const v = {
+        name: "as-menu",
+        components: {
+            menuItem: f,
+            icon: r({
+                render: y,
+                staticRenderFns: []
+            }, (function(e) {
+                e && e("data-v-0f053f2e_0", {
+                    source: '.as-menu-item-icon {\n  font-family: "iconfont" !important;\n  font-size: 20px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}',
+                    map: void 0,
+                    media: void 0
+                });
+            }), b, void 0, !1, void 0, !1, l, void 0, void 0)
+        },
+        props: {
+            mode: {
+                type: String,
+                default: "horizontal",
+                validator: e => [ "horizontal", "vertical" ].includes(e)
+            },
+            inline: {
+                type: Boolean,
+                default: !0
+            },
             value: {
                 type: String,
                 default: ""
             }
         },
-        data: () => ({
-            engines: t,
-            show: !1
-        }),
         computed: {
+            menuClass() {
+                return {
+                    "as-menu--horizontal": "horizontal" === this.mode,
+                    "as-menu--vertical": "vertical" === this.mode
+                };
+            },
+            transition() {
+                return "horizontal" === this.mode ? "drop" : "fade";
+            },
             nameZh() {
                 const e = this.engines.findIndex(e => e.name === this.value);
                 return e > -1 ? this.engines[e].nameZh : this.engines[0].nameZh;
+            },
+            menus() {
+                const e = this.engines.findIndex(e => e.name === this.value);
+                return e > -1 ? this.engines[e].list.filter(e => !e.disabled) : this.engines[0].list.filter(e => !e.disabled);
             }
+        },
+        data: () => ({
+            engines: [],
+            show: !1,
+            asSubMenuStyle: {
+                top: 0,
+                left: 0
+            }
+        }),
+        created() {
+            this.engines = t.map(e => ({
+                ...e,
+                show: !1
+            }));
         },
         methods: {
             handleChange(e) {
@@ -421,81 +546,7 @@
             },
             selectCategory(e, t) {
                 this.handleChange(t.name), this.show = !1;
-            }
-        }
-    };
-    var p = function() {
-        var e = this, t = e.$createElement, s = e._self._c || t;
-        return s("div", {
-            staticClass: "as-select"
-        }, [ s("div", {
-            staticClass: "as-select-content",
-            on: {
-                click: e.openValue
-            }
-        }, [ s("span", {
-            domProps: {
-                textContent: e._s(e.nameZh)
-            }
-        }) ]), e._v(" "), s("ul", {
-            directives: [ {
-                name: "show",
-                rawName: "v-show",
-                value: e.show,
-                expression: "show"
-            } ],
-            staticClass: "as-select-list",
-            class: {
-                fadeInDown: e.show
-            }
-        }, e._l(e.engines, (function(t, n) {
-            return s("li", {
-                key: t.index,
-                domProps: {
-                    textContent: e._s(t.nameZh)
-                },
-                on: {
-                    click: function(s) {
-                        return e.selectCategory(n, t);
-                    }
-                }
-            });
-        })), 0), e._v(" "), s("div", {
-            directives: [ {
-                name: "show",
-                rawName: "v-show",
-                value: e.show,
-                expression: "show"
-            } ],
-            staticClass: "as-select-mask",
-            on: {
-                click: function(t) {
-                    e.show = !1;
-                }
-            }
-        }) ]);
-    };
-    p._withStripped = !0;
-    const d = o({
-        render: p,
-        staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-32831b88_0", {
-            source: '@charset "UTF-8";\n.as-select {\n  position: relative;\n}\n.as-select ul li {\n  list-style: none;\n}\n.as-select-content {\n  width: 65px;\n  height: 30px;\n  line-height: 30px;\n  margin-left: 20px;\n  font-size: 14px;\n  cursor: pointer;\n  position: relative;\n}\n.as-select-content::after {\n  content: " ▾";\n  position: absolute;\n  right: 10px;\n  font-size: 24px;\n  color: #999;\n}\n.as-select-list {\n  padding: 4px 0;\n  min-width: 90px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 5px 0;\n  position: absolute;\n  right: -4px;\n  z-index: 99;\n}\n.as-select-list li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-select-list li:hover {\n  background-color: #f5f7fa;\n}\n.as-select-mask {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n}',
-            map: void 0,
-            media: void 0
-        });
-    }), m, void 0, !1, void 0, !1, r, void 0, void 0);
-    const w = {
-        name: "site-menu",
-        props: {
-            menus: {
-                type: Array,
-                default: () => []
-            }
-        },
-        data: () => ({}),
-        methods: {
+            },
             getKeyword() {
                 return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function() {
                     const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
@@ -512,131 +563,177 @@
                     const e = this.getKeyword();
                     window.open(t.url.replace("%s", e));
                 }
+            },
+            handleMenuShow(e, t) {
+                this.inline || (t.show = e);
+            },
+            close() {
+                this.engines.forEach(e => {
+                    e.show = !1;
+                }), this.show = !1;
             }
         }
     };
-    var g = function() {
-        var e = this, t = e.$createElement, s = e._self._c || t;
-        return s("div", {
-            staticClass: "as-menu-container"
-        }, [ s("ul", {
-            staticClass: "as-menu"
-        }, e._l(e.menus, (function(t, n) {
-            return s("li", {
-                key: n,
-                staticClass: "as-submenu",
+    var x = function() {
+        var e = this, t = e.$createElement, n = e._self._c || t;
+        return n("ul", {
+            staticClass: "as-menu",
+            class: e.menuClass
+        }, e._l(e.engines, (function(t) {
+            return n("menu-item", {
+                key: t.index,
+                staticClass: "as-menu-item",
+                class: {
+                    "as-menu-item-active": t.show
+                },
                 on: {
-                    click: function(s) {
-                        return e.handleClick(t);
-                    },
-                    mousedown: function(s) {
-                        return e.handleMouseWheelClick(s, t);
+                    show: function(n) {
+                        return e.handleMenuShow(n, t);
                     }
                 }
-            }, [ s("p", {
-                staticClass: "as-submenu-title",
-                domProps: {
-                    textContent: e._s(t.name)
+            }, [ n("div", {
+                staticClass: "as-menu-item-title"
+            }, [ n("icon", {
+                attrs: {
+                    name: t.name
                 }
-            }) ]);
-        })), 0) ]);
+            }), e._v(" "), n("span", {
+                domProps: {
+                    textContent: e._s(t.nameZh)
+                }
+            }) ], 1), e._v(" "), n("transition", {
+                attrs: {
+                    name: e.transition
+                }
+            }, [ n("div", {
+                directives: [ {
+                    name: "show",
+                    rawName: "v-show",
+                    value: t.show,
+                    expression: "item.show"
+                } ],
+                staticClass: "as-subMenu-container"
+            }, [ n("ul", {
+                staticClass: "as-subMenu"
+            }, e._l(t.list, (function(t, o) {
+                return n("li", {
+                    key: o,
+                    domProps: {
+                        textContent: e._s(t.name)
+                    },
+                    on: {
+                        click: function(n) {
+                            return e.handleClick(t);
+                        }
+                    }
+                });
+            })), 0) ]) ]) ], 1);
+        })), 1);
     };
-    g._withStripped = !0;
-    const f = {
+    x._withStripped = !0;
+    const k = {
         name: "all-search",
         components: {
-            logo: u,
-            category: d,
-            siteMenu: o({
-                render: g,
+            logo: p,
+            asMenu: r({
+                render: x,
                 staticRenderFns: []
             }, (function(e) {
-                e && e("data-v-b9378046_0", {
-                    source: "@media screen and (max-width: 768px) {\n.as-menu-container {\n    overflow: auto;\n}\n}\n.as-menu-container {\n  display: flex;\n  flex: 1;\n}\n.as-menu {\n  display: flex;\n  line-height: 30px;\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin-top: -1px;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n}\n.as-submenu {\n  display: flex;\n  align-items: center;\n  position: relative;\n  top: 1px;\n}\n.as-submenu-title {\n  position: relative;\n  display: block;\n  margin: 0;\n  padding: 0 20px;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}\n.as-submenu-title:hover {\n  color: #1890ff;\n}",
+                e && e("data-v-1d425f9e_0", {
+                    source: '.as-menu {\n  flex: 1;\n}\n.as-menu::before, .as-menu::after {\n  display: table;\n  content: "";\n}\n.as-menu::after {\n  clear: both;\n}\n.as-menu {\n  width: 100%;\n  padding: 0;\n  margin-top: 0;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n  display: flex;\n}\n.as-menu--horizontal {\n  flex-direction: row;\n}\n.as-menu--horizontal .as-menu-item-active {\n  border-bottom: 2px solid #1890ff;\n}\n.as-menu--horizontal .as-subMenu-container {\n  left: -22px;\n  top: 24px;\n}\n.as-menu--vertical {\n  flex-direction: column;\n}\n.as-menu--vertical .as-menu-item {\n  margin: 5px 0;\n}\n.as-menu--vertical .as-menu-item-active {\n  border-right: 2px solid #1890ff;\n}\n.as-menu--vertical .as-subMenu-container {\n  left: 85px;\n  top: -16px;\n}\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  transition: border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-icon {\n  margin: 1.25px 10px 0 0;\n  line-height: 28.75px;\n}\n.as-menu-item-title {\n  height: 100%;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  color: #606266;\n  border-bottom: 2px solid rgba(255, 255, 255, 0);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-title:hover {\n  color: #1890ff;\n}\n.as-menu-item-active {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-icon {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-title {\n  color: #1890ff;\n}\n.as-subMenu-container {\n  padding: 0 20px 20px;\n  position: absolute;\n  z-index: 99;\n  transform-origin: 30% 0 0;\n}\n.as-subMenu {\n  list-style: none;\n  padding: 4px 0;\n  min-width: 90px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 10px 0;\n}\n.as-subMenu li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-subMenu li:hover {\n  background-color: #f5f7fa;\n  color: #1890ff;\n}\n.drop-enter-active, .drop-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.drop-enter, .drop-leave-to {\n  opacity: 0;\n  transform: scaleY(0.0001);\n}\n.fade-enter-active, .fade-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.fade-enter, .fade-leave-to {\n  opacity: 0;\n}\n.as-subMenu-group-list {\n  list-style: none;\n  padding: 0;\n}\n.as-subMenu-group-list .as-menu-item-title {\n  padding-left: 44px;\n}',
                     map: void 0,
                     media: void 0
                 });
-            }), w, void 0, !1, void 0, !1, r, void 0, void 0)
+            }), v, void 0, !1, void 0, !1, l, void 0, void 0)
         },
         data: () => ({
             engines: t,
             categoryName: "search",
-            visible: !1
+            mode: "horizontal",
+            inline: !1
         }),
+        watch: {
+            mode: {
+                handler(e, t) {
+                    document.body.classList.remove(`body-${t}`), document.body.classList.add(`body-${e}`);
+                },
+                immediate: !0
+            }
+        },
         computed: {
-            menus() {
-                const e = this.engines.findIndex(e => e.name === this.categoryName);
-                return e > -1 ? this.engines[e].list.filter(e => !e.disabled) : this.engines[0].list.filter(e => !e.disabled);
+            asClass() {
+                return {
+                    "as-horizontal": "horizontal" === this.mode,
+                    "as-vertical": "vertical" === this.mode
+                };
             }
         },
         created() {
-            this.categoryName = function(e) {
-                const t = s(e);
-                if (window.GM_getValue) return window.GM_getValue(t);
-                const n = window.localStorage.getItem(t);
-                return n ? JSON.parse(n) : null;
-            }("categoryName") || this.categoryName;
+            this.categoryName = o("categoryName") || this.categoryName, this.mode = o("mode") || this.mode;
         },
         methods: {
-            handleClick(e) {
-                this.$emit("menu-click", e);
-            },
             changeCategory(e) {
-                !function(e, t) {
-                    const n = s(e);
-                    if (window.GM_setValue) window.GM_setValue(n, t); else {
-                        const e = JSON.stringify(t);
-                        e && window.localStorage.setItem(n, e);
-                    }
-                }("categoryName", e), this.categoryName = e;
+                s("categoryName", e), this.categoryName = e;
             },
-            openSetDialog() {
-                this.visible = !0;
+            changeMode() {
+                "horizontal" === this.mode ? this.mode = "vertical" : this.mode = "horizontal", 
+                s("mode", this.mode), window.location.reload();
             }
         }
     };
-    var y = function() {
-        var e = this.$createElement, t = this._self._c || e;
-        return t("header", {
-            ref: "all-search",
+    var _ = function() {
+        var e = this, t = e.$createElement, n = e._self._c || t;
+        return n("div", {
+            class: e.asClass,
             attrs: {
                 id: "all-search"
             }
-        }, [ t("logo"), this._v(" "), t("category", {
+        }, [ n("logo", {
             attrs: {
-                value: this.categoryName
+                mode: e.mode
+            }
+        }), e._v(" "), n("as-menu", {
+            attrs: {
+                mode: e.mode,
+                inline: e.inline,
+                value: e.categoryName
             },
             on: {
-                change: this.changeCategory
+                change: e.changeCategory
             }
-        }), this._v(" "), t("site-menu", {
-            attrs: {
-                menus: this.menus
+        }), e._v(" "), n("div", {
+            staticClass: "as-setting",
+            on: {
+                click: e.changeMode
             }
-        }) ], 1);
+        }, [ e._v("\n    切换模式\n  ") ]) ], 1);
     };
-    y._withStripped = !0;
-    const b = o({
-        render: y,
+    _._withStripped = !0;
+    const q = r({
+        render: _,
         staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-b0321456_0", {
-            source: 'body {\n  margin-top: 30px;\n}\n#all-search {\n  height: 30px;\n  width: 100%;\n  position: fixed;\n  top: 0;\n  z-index: 999999;\n  display: flex !important;\n  border-bottom: 1px #e8e8e8 solid;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.setting {\n  margin: 0 20px;\n  display: flex;\n  align-items: center;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n}',
+        e && e("data-v-d27901b4_0", {
+            source: '.body-horizontal {\n  margin-top: 30px;\n}\n.body-vertical {\n  margin-left: 100px;\n}\n#all-search {\n  position: fixed;\n  display: flex !important;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  z-index: 999999;\n  border-bottom: 1px #e8e8e8 solid;\n  flex-direction: row;\n}\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  z-index: 999999;\n  border-right: 1px #e8e8e8 solid;\n  flex-direction: column;\n}\n.as-setting {\n  line-height: 30px;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: #606266;\n}\n.as-setting:hover {\n  color: #1890ff;\n}',
             map: void 0,
             media: void 0
         });
-    }), f, void 0, !1, void 0, !1, r, void 0, void 0);
-    let x = {};
-    const v = [ {
+    }), k, void 0, !1, void 0, !1, l, void 0, void 0);
+    let z = {};
+    const C = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
-        style: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
+        style: {
+            1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
+        }
     }, {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
     }, {
-        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
+        url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
+        style: {
+            2: "#u { right: 110px; }"
+        }
     }, {
-        url: /^https?:\/\/[^.]*\.bing\.com\/search/,
-        style: "body { padding-top: 30px }"
+        url: /^https?:\/\/[^.]*\.bing\.com\/search/
     }, {
         url: /^https?:\/\/duckduckgo\.com\/*/i
     }, {
@@ -647,20 +744,28 @@
         url: /^https?:\/\/searx\.me\/\?q/i
     }, {
         url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
-        style: ".header { top: 30px }"
+        style: {
+            1: ".header { top: 30px }"
+        }
     }, {
         url: /^https?:\/\/yandex\.com\/search/i,
-        style: "body { margin: 30px!important; }"
+        style: {
+            1: "body { margin: 30px!important; }"
+        }
     }, {
         url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i
     }, {
         url: /^https?:\/\/mijisou.com\/\?q/i,
-        style: ".search-page{top: 30px} .searx-navbar{top: 42px!important;}"
+        style: {
+            1: ".search-page{top: 30px} .searx-navbar{top: 42px!important;}"
+        }
     }, {
         url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
     }, {
         url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
-        style: "#header_wrapper{ top: 30px!important }"
+        style: {
+            1: "#header_wrapper{ top: 30px!important }"
+        }
     }, {
         url: /^https?:\/\/baike\.baidu\.com\/item/
     }, {
@@ -673,7 +778,9 @@
         url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i
     }, {
         url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
-        style: ".AppHeader.is-fixed { top: 30px!important; }"
+        style: {
+            1: ".AppHeader.is-fixed { top: 30px!important; }"
+        }
     }, {
         url: /^https?:\/\/www\.so\.com\/s/i
     }, {
@@ -684,18 +791,24 @@
         url: /^https?:\/\/www\.docin\.com\/search\.do/
     }, {
         url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
-        style: ".header { top:30px }"
+        style: {
+            1: ".header { top:30px }"
+        }
     }, {
         url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
     }, {
         url: /^https?:\/\/www\.quora\.com\/search\?/i
     }, {
         url: /^https?:\/\/stackoverflow\.com\/search\?/i,
-        style: ".top-bar._fixed { top: 30px }"
+        style: {
+            1: ".top-bar._fixed { top: 30px }"
+        }
     }, {
         url: /^https?:\/\/search\.bilibili\.com\/all/,
         keyword: () => document.getElementById("search-keyword").value,
-        style: "body { margin-top: 30px!important; } .fixed-top { top: 30px }"
+        style: {
+            1: "body { margin-top: 30px!important; } .fixed-top { top: 30px }"
+        }
     }, {
         url: /^https?:\/\/www\.acfun\.cn\/search/
     }, {
@@ -759,7 +872,9 @@
         url: /^https?:\/\/dict\.cn\/./
     }, {
         url: /^https?:\/\/s\.taobao\.com\/search/,
-        style: ".m-header-fixed .header-inner { top: 30px !important;}"
+        style: {
+            1: ".m-header-fixed .header-inner { top: 30px !important;}"
+        }
     }, {
         url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i
     }, {
@@ -811,42 +926,49 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
     } ].find(e => e.url.test(window.location.href));
-    v && !v.disabled ? (x.url = v.url, x.disabled = v.disabled, x.style = v.style, x.keyword = v.keyword,
-    x.create = v.create, x.mounted = v.mounted) : x = null;
-    var k = x;
+    C && !C.disabled ? (z.url = C.url, z.disabled = C.disabled, z.style = C.style, z.keyword = C.keyword, 
+    z.create = C.create, z.mounted = C.mounted) : z = null;
+    var S = z;
     e.config.productionTip = !1;
-    const q = k;
-    if (k) {
+    const N = S;
+    if (S) {
         let t = null;
-        const s = document.getElementById("all-search");
-        s ? t = s : (t = document.createElement("div"), t.id = "all-search"), t.style.display = "none";
-        const o = new e({
+        const n = document.getElementById("all-search");
+        n ? t = n : (t = document.createElement("div"), t.id = "all-search"), t.style.display = "none";
+        const s = new e({
             data: () => ({
-                currentSite: q
+                currentSite: N
             }),
-            render: e => e(b)
+            render: e => e(q)
         });
+        !function(e) {
+            const t = document.createElement("link");
+            t.href = e, t.rel = "stylesheet", t.type = "text/css", t.crossorigin = "anonymous", 
+            document.getElementsByTagName("head")[0].appendChild(t);
+        }("//at.alicdn.com/t/font_1817653_pg2och5rgof.css");
+        const i = o("mode") || "horizontal";
         !function() {
             const e = document.getElementsByTagName("head")[0], t = {
                 childList: !0
             };
-            let s;
-            MutationObserver && (s = new MutationObserver((function(e) {
-                for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && n(t.removedNodes[0].innerText);
-            })), s.observe(e, t));
+            let n;
+            MutationObserver && (n = new MutationObserver((function(e) {
+                for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && a(t.removedNodes[0].innerText);
+            })), n.observe(e, t));
         }(), function() {
             let e = 0;
-            return new Promise((t, s) => {
+            return new Promise((t, n) => {
                 if (document && document.body) t(); else {
-                    const n = setInterval((function() {
-                        e += 1, document && document.body && (clearInterval(n), t()), 50 === e && (clearInterval(n),
-                        s(new Error("timeOut")));
+                    const o = setInterval((function() {
+                        e += 1, document && document.body && (clearInterval(o), t()), 50 === e && (clearInterval(o), 
+                        n(new Error("timeOut")));
                     }), 200);
                 }
             });
         }().then(() => {
             const e = document.body.parentElement.insertBefore(t, document.body);
-            o.$mount(e), k && k.style && n(k.style);
+            s.$mount(e), S && S.style && (S.style[1] && "horizontal" === i && a(S.style[1]), 
+            S.style[2] && "vertical" === i && a(S.style[2]));
         }).catch(e => {
             console.error(e);
         });

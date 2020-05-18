@@ -1,4 +1,5 @@
 const height = 30
+const width = 110
 
 const list = [
   {
@@ -11,13 +12,13 @@ const list = [
     url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
   },
   {
-    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/
+    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
+    style: {
+      2: `#u { right: ${width}px; }`
+    }
   },
   {
-    url: /^https?:\/\/[^.]*\.bing\.com\/search/,
-    style: {
-      1: `body { padding-top: ${height}px }`
-    }
+    url: /^https?:\/\/[^.]*\.bing\.com\/search/
   },
   {
     url: /^https?:\/\/duckduckgo\.com\/*/i

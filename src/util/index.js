@@ -132,3 +132,13 @@ export function domObserve () {
     observer.observe(targetNode, config)
   }
 }
+
+export function addLink (url) {
+  const link = document.createElement('link')
+  link.href = url
+  link.rel = 'stylesheet'
+  link.type = 'text/css'
+  link.crossorigin = 'anonymous'
+  const head = document.getElementsByTagName('head')[0]
+  head.appendChild(link)
+}
