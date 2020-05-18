@@ -205,10 +205,12 @@ export default {
   }
 
   .as-menu-item-icon {
-    margin: 2px 10px 0 -2px;
+    margin: 1.25px 10px 0 0;
+    line-height: $height - 1.25px;
   }
 
   .as-menu-item-title {
+    height: 100%;
     padding: 0 16px;
     position: relative;
     margin: 0;
@@ -218,7 +220,7 @@ export default {
     display: flex;
     align-items: center;
     color: $color;
-    border-bottom: 2px solid transparent;
+    border-bottom: 2px solid rgba(255, 255, 255, 0);
     transition: color .3s cubic-bezier(.645, .045, .355, 1);
     &:hover {
       color: $active-color;

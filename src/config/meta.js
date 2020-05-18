@@ -14,7 +14,6 @@ const meta = `// ==UserScript==
 
 // @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
-// @require      https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont_v1.js?v=0.01
 // @run-at       document-start
 
 // @grant        GM_getValue

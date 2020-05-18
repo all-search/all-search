@@ -69,6 +69,7 @@ export default {
         this.mode = 'horizontal'
       }
       setSession('mode', this.mode)
+      window.location.reload()
     }
   }
 }
