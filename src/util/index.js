@@ -107,11 +107,19 @@ export function setSession (name, value) {
   }
 }
 
-export function addStyle (style) {
+export function addStyle (styleContent) {
+  if (!styleContent) {
+    return
+  }
   // eslint-disable-next-line
   if (window.GM_addStyle) {
     // eslint-disable-next-line
-    window.GM_addStyle(style)
+    window.GM_addStyle(styleContent)
+  } else {
+    const style = document.createElement('style')
+    style.innerHTML = styleContent
+    const head = document.getElementsByTagName('head')[0]
+    head.appendChild(style)
   }
 }
 
@@ -134,6 +142,9 @@ export function domObserve () {
 }
 
 export function addLink (url) {
+  if (!url) {
+    return
+  }
   const link = document.createElement('link')
   link.href = url
   link.rel = 'stylesheet'
@@ -141,4 +152,16 @@ export function addLink (url) {
   link.crossorigin = 'anonymous'
   const head = document.getElementsByTagName('head')[0]
   head.appendChild(link)
+}
+
+export function addStyleResource (name, link) {
+  let styleContent
+  if (window.GM_getResourceText) {
+    styleContent = window.GM_getResourceText(name)
+  }
+  if (styleContent) {
+    addStyle(styleContent)
+  } else {
+    addLink(link)
+  }
 }

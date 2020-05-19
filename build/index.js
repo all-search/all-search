@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.1.7f
+// @version      0.2.0
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -10,11 +10,13 @@
 
 // @noframes
 // @require      https://cdn.jsdelivr.net/npm/vue
+// @resource     iconFont  https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css
 // @run-at       document-start
 
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
+// @grant        GM_getResourceText
 
 // ==/UserScript==
 /* eslint-disable */
@@ -301,7 +303,10 @@
         }
     }
     function a(e) {
-        window.GM_addStyle && window.GM_addStyle(e);
+        if (e) if (window.GM_addStyle) window.GM_addStyle(e); else {
+            const t = document.createElement("style");
+            t.innerHTML = e, document.getElementsByTagName("head")[0].appendChild(t);
+        }
     }
     var i = {
         name: "logo",
@@ -331,31 +336,31 @@
     };
     function r(e, t, n, o, s, a, i, r, c, l) {
         "boolean" != typeof i && (c = r, r = i, i = !1);
-        const m = "function" == typeof n ? n.options : n;
-        let u;
-        if (e && e.render && (m.render = e.render, m.staticRenderFns = e.staticRenderFns, 
-        m._compiled = !0, s && (m.functional = !0)), o && (m._scopeId = o), a ? (u = function(e) {
+        const u = "function" == typeof n ? n.options : n;
+        let m;
+        if (e && e.render && (u.render = e.render, u.staticRenderFns = e.staticRenderFns, 
+        u._compiled = !0, s && (u.functional = !0)), o && (u._scopeId = o), a ? (m = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
             t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(a);
-        }, m._ssrRegister = u) : t && (u = i ? function(e) {
+        }, u._ssrRegister = m) : t && (m = i ? function(e) {
             t.call(this, l(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, r(e));
-        }), u) if (m.functional) {
-            const e = m.render;
-            m.render = function(t, n) {
-                return u.call(n), e(t, n);
+        }), m) if (u.functional) {
+            const e = u.render;
+            u.render = function(t, n) {
+                return m.call(n), e(t, n);
             };
         } else {
-            const e = m.beforeCreate;
-            m.beforeCreate = e ? [].concat(e, u) : [ u ];
+            const e = u.beforeCreate;
+            u.beforeCreate = e ? [].concat(e, m) : [ m ];
         }
         return n;
     }
     const c = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
     function l(e) {
         return (e, t) => function(e, t) {
-            const n = c ? t.media || "default" : e, o = u[n] || (u[n] = {
+            const n = c ? t.media || "default" : e, o = m[n] || (m[n] = {
                 ids: new Set,
                 styles: []
             });
@@ -364,16 +369,16 @@
                 let n = t.source;
                 if (t.map && (n += "\n/*# sourceURL=" + t.map.sources[0] + " */", n += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(t.map)))) + " */"), 
                 o.element || (o.element = document.createElement("style"), o.element.type = "text/css", 
-                t.media && o.element.setAttribute("media", t.media), void 0 === m && (m = document.head || document.getElementsByTagName("head")[0]), 
-                m.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(n), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
+                t.media && o.element.setAttribute("media", t.media), void 0 === u && (u = document.head || document.getElementsByTagName("head")[0]), 
+                u.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(n), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
                     const e = o.ids.size - 1, t = document.createTextNode(n), s = o.element.childNodes;
                     s[e] && o.element.removeChild(s[e]), s.length ? o.element.insertBefore(t, s[e]) : o.element.appendChild(t);
                 }
             }
         }(e, t);
     }
-    let m;
-    const u = {};
+    let u;
+    const m = {};
     const h = i;
     var d = function() {
         var e = this.$createElement, t = this._self._c || e;
@@ -457,7 +462,7 @@
             media: void 0
         });
     }), w, void 0, !1, void 0, !1, l, void 0, void 0);
-    const b = {
+    const y = {
         name: "icon",
         props: {
             name: {
@@ -466,20 +471,20 @@
             }
         }
     };
-    var y = function() {
+    var b = function() {
         var e = this.$createElement;
         return (this._self._c || e)("i", {
             staticClass: "as-menu-item-icon",
             class: "icon-" + this.name
         });
     };
-    y._withStripped = !0;
+    b._withStripped = !0;
     const v = {
         name: "as-menu",
         components: {
             menuItem: f,
             icon: r({
-                render: y,
+                render: b,
                 staticRenderFns: []
             }, (function(e) {
                 e && e("data-v-0f053f2e_0", {
@@ -487,7 +492,7 @@
                     map: void 0,
                     media: void 0
                 });
-            }), b, void 0, !1, void 0, !1, l, void 0, void 0)
+            }), y, void 0, !1, void 0, !1, l, void 0, void 0)
         },
         props: {
             mode: {
@@ -941,11 +946,15 @@
             }),
             render: e => e(q)
         });
-        !function(e) {
-            const t = document.createElement("link");
-            t.href = e, t.rel = "stylesheet", t.type = "text/css", t.crossorigin = "anonymous", 
-            document.getElementsByTagName("head")[0].appendChild(t);
-        }("//at.alicdn.com/t/font_1817653_pg2och5rgof.css");
+        !function(e, t) {
+            let n;
+            window.GM_getResourceText && (n = window.GM_getResourceText(e)), n ? a(n) : function(e) {
+                if (!e) return;
+                const t = document.createElement("link");
+                t.href = e, t.rel = "stylesheet", t.type = "text/css", t.crossorigin = "anonymous", 
+                document.getElementsByTagName("head")[0].appendChild(t);
+            }(t);
+        }("iconFont", "https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css");
         const i = o("mode") || "horizontal";
         !function() {
             const e = document.getElementsByTagName("head")[0], t = {

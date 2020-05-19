@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { addStyle, checkBody, domObserve, getSession, addLink } from './util'
+import { addStyle, checkBody, domObserve, getSession, addStyleResource } from './util'
 import target from './config/loadList'
 
 Vue.config.productionTip = false
@@ -27,8 +27,7 @@ if (target || isDev) {
     render: h => h(App)
   })
   // 添加样式
-  // addStyleResource()
-  addLink('//at.alicdn.com/t/font_1817653_pg2och5rgof.css')
+  addStyleResource('iconFont', 'https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css')
   const mode = getSession('mode') || 'horizontal'
   domObserve()
   checkBody().then(() => {
