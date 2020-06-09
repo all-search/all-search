@@ -162,8 +162,7 @@ export default {
   .as-menu {
     width: 100%;
     padding: 0;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: 0;
     white-space: nowrap;
     border: 0;
     box-shadow: none;
@@ -205,6 +204,7 @@ export default {
   }
 
   .as-menu-item-icon {
+    color: $color;
     margin: 1.25px 10px 0 0;
     line-height: $height - 1.25px;
   }

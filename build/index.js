@@ -336,31 +336,31 @@
     };
     function r(e, t, n, o, s, a, i, r, c, l) {
         "boolean" != typeof i && (c = r, r = i, i = !1);
-        const u = "function" == typeof n ? n.options : n;
-        let m;
-        if (e && e.render && (u.render = e.render, u.staticRenderFns = e.staticRenderFns, 
-        u._compiled = !0, s && (u.functional = !0)), o && (u._scopeId = o), a ? (m = function(e) {
+        const h = "function" == typeof n ? n.options : n;
+        let u;
+        if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
+        h._compiled = !0, s && (h.functional = !0)), o && (h._scopeId = o), a ? (u = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
             t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(a);
-        }, u._ssrRegister = m) : t && (m = i ? function(e) {
+        }, h._ssrRegister = u) : t && (u = i ? function(e) {
             t.call(this, l(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, r(e));
-        }), m) if (u.functional) {
-            const e = u.render;
-            u.render = function(t, n) {
-                return m.call(n), e(t, n);
+        }), u) if (h.functional) {
+            const e = h.render;
+            h.render = function(t, n) {
+                return u.call(n), e(t, n);
             };
         } else {
-            const e = u.beforeCreate;
-            u.beforeCreate = e ? [].concat(e, m) : [ m ];
+            const e = h.beforeCreate;
+            h.beforeCreate = e ? [].concat(e, u) : [ u ];
         }
         return n;
     }
     const c = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
     function l(e) {
         return (e, t) => function(e, t) {
-            const n = c ? t.media || "default" : e, o = m[n] || (m[n] = {
+            const n = c ? t.media || "default" : e, o = u[n] || (u[n] = {
                 ids: new Set,
                 styles: []
             });
@@ -369,17 +369,17 @@
                 let n = t.source;
                 if (t.map && (n += "\n/*# sourceURL=" + t.map.sources[0] + " */", n += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(t.map)))) + " */"), 
                 o.element || (o.element = document.createElement("style"), o.element.type = "text/css", 
-                t.media && o.element.setAttribute("media", t.media), void 0 === u && (u = document.head || document.getElementsByTagName("head")[0]), 
-                u.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(n), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
+                t.media && o.element.setAttribute("media", t.media), void 0 === h && (h = document.head || document.getElementsByTagName("head")[0]), 
+                h.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(n), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
                     const e = o.ids.size - 1, t = document.createTextNode(n), s = o.element.childNodes;
                     s[e] && o.element.removeChild(s[e]), s.length ? o.element.insertBefore(t, s[e]) : o.element.appendChild(t);
                 }
             }
         }(e, t);
     }
-    let u;
-    const m = {};
-    const h = i;
+    let h;
+    const u = {};
+    const m = i;
     var d = function() {
         var e = this.$createElement, t = this._self._c || e;
         return t("a", {
@@ -403,7 +403,7 @@
             map: void 0,
             media: void 0
         });
-    }), h, void 0, !1, void 0, !1, l, void 0, void 0);
+    }), m, void 0, !1, void 0, !1, l, void 0, void 0);
     const w = {
         name: "menuItem",
         props: {
@@ -636,7 +636,7 @@
         })), 1);
     };
     x._withStripped = !0;
-    const k = {
+    const _ = {
         name: "all-search",
         components: {
             logo: p,
@@ -644,8 +644,8 @@
                 render: x,
                 staticRenderFns: []
             }, (function(e) {
-                e && e("data-v-1d425f9e_0", {
-                    source: '.as-menu {\n  flex: 1;\n}\n.as-menu::before, .as-menu::after {\n  display: table;\n  content: "";\n}\n.as-menu::after {\n  clear: both;\n}\n.as-menu {\n  width: 100%;\n  padding: 0;\n  margin-top: 0;\n  margin-bottom: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n  display: flex;\n}\n.as-menu--horizontal {\n  flex-direction: row;\n}\n.as-menu--horizontal .as-menu-item-active {\n  border-bottom: 2px solid #1890ff;\n}\n.as-menu--horizontal .as-subMenu-container {\n  left: -22px;\n  top: 24px;\n}\n.as-menu--vertical {\n  flex-direction: column;\n}\n.as-menu--vertical .as-menu-item {\n  margin: 5px 0;\n}\n.as-menu--vertical .as-menu-item-active {\n  border-right: 2px solid #1890ff;\n}\n.as-menu--vertical .as-subMenu-container {\n  left: 85px;\n  top: -16px;\n}\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  transition: border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-icon {\n  margin: 1.25px 10px 0 0;\n  line-height: 28.75px;\n}\n.as-menu-item-title {\n  height: 100%;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  color: #606266;\n  border-bottom: 2px solid rgba(255, 255, 255, 0);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-title:hover {\n  color: #1890ff;\n}\n.as-menu-item-active {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-icon {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-title {\n  color: #1890ff;\n}\n.as-subMenu-container {\n  padding: 0 20px 20px;\n  position: absolute;\n  z-index: 99;\n  transform-origin: 30% 0 0;\n}\n.as-subMenu {\n  list-style: none;\n  padding: 4px 0;\n  min-width: 90px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 10px 0;\n}\n.as-subMenu li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-subMenu li:hover {\n  background-color: #f5f7fa;\n  color: #1890ff;\n}\n.drop-enter-active, .drop-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.drop-enter, .drop-leave-to {\n  opacity: 0;\n  transform: scaleY(0.0001);\n}\n.fade-enter-active, .fade-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.fade-enter, .fade-leave-to {\n  opacity: 0;\n}\n.as-subMenu-group-list {\n  list-style: none;\n  padding: 0;\n}\n.as-subMenu-group-list .as-menu-item-title {\n  padding-left: 44px;\n}',
+                e && e("data-v-19d03e9c_0", {
+                    source: '.as-menu {\n  flex: 1;\n}\n.as-menu::before, .as-menu::after {\n  display: table;\n  content: "";\n}\n.as-menu::after {\n  clear: both;\n}\n.as-menu {\n  width: 100%;\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n  display: flex;\n}\n.as-menu--horizontal {\n  flex-direction: row;\n}\n.as-menu--horizontal .as-menu-item-active {\n  border-bottom: 2px solid #1890ff;\n}\n.as-menu--horizontal .as-subMenu-container {\n  left: -22px;\n  top: 24px;\n}\n.as-menu--vertical {\n  flex-direction: column;\n}\n.as-menu--vertical .as-menu-item {\n  margin: 5px 0;\n}\n.as-menu--vertical .as-menu-item-active {\n  border-right: 2px solid #1890ff;\n}\n.as-menu--vertical .as-subMenu-container {\n  left: 85px;\n  top: -16px;\n}\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  transition: border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-icon {\n  color: #606266;\n  margin: 1.25px 10px 0 0;\n  line-height: 28.75px;\n}\n.as-menu-item-title {\n  height: 100%;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  color: #606266;\n  border-bottom: 2px solid rgba(255, 255, 255, 0);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-title:hover {\n  color: #1890ff;\n}\n.as-menu-item-active {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-icon {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-title {\n  color: #1890ff;\n}\n.as-subMenu-container {\n  padding: 0 20px 20px;\n  position: absolute;\n  z-index: 99;\n  transform-origin: 30% 0 0;\n}\n.as-subMenu {\n  list-style: none;\n  padding: 4px 0;\n  min-width: 90px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 10px 0;\n}\n.as-subMenu li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-subMenu li:hover {\n  background-color: #f5f7fa;\n  color: #1890ff;\n}\n.drop-enter-active, .drop-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.drop-enter, .drop-leave-to {\n  opacity: 0;\n  transform: scaleY(0.0001);\n}\n.fade-enter-active, .fade-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.fade-enter, .fade-leave-to {\n  opacity: 0;\n}\n.as-subMenu-group-list {\n  list-style: none;\n  padding: 0;\n}\n.as-subMenu-group-list .as-menu-item-title {\n  padding-left: 44px;\n}',
                     map: void 0,
                     media: void 0
                 });
@@ -686,7 +686,7 @@
             }
         }
     };
-    var _ = function() {
+    var k = function() {
         var e = this, t = e.$createElement, n = e._self._c || t;
         return n("div", {
             class: e.asClass,
@@ -713,9 +713,9 @@
             }
         }, [ e._v("\n    切换模式\n  ") ]) ], 1);
     };
-    _._withStripped = !0;
+    k._withStripped = !0;
     const q = r({
-        render: _,
+        render: k,
         staticRenderFns: []
     }, (function(e) {
         e && e("data-v-d27901b4_0", {
@@ -723,7 +723,7 @@
             map: void 0,
             media: void 0
         });
-    }), k, void 0, !1, void 0, !1, l, void 0, void 0);
+    }), _, void 0, !1, void 0, !1, l, void 0, void 0);
     let z = {};
     const C = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
@@ -750,7 +750,8 @@
     }, {
         url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
         style: {
-            1: ".header { top: 30px }"
+            1: ".header { top: 30px }",
+            2: ".header { right: 110px }"
         }
     }, {
         url: /^https?:\/\/yandex\.com\/search/i,
@@ -762,14 +763,16 @@
     }, {
         url: /^https?:\/\/mijisou.com\/\?q/i,
         style: {
-            1: ".search-page{top: 30px} .searx-navbar{top: 42px!important;}"
+            1: ".search-page{top: 30px;} .searx-navbar{top: 42px!important;}",
+            2: ".search-page{right: 110px!important;}"
         }
     }, {
         url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
     }, {
         url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
         style: {
-            1: "#header_wrapper{ top: 30px!important }"
+            1: "#header_wrapper{top: 30px!important;}",
+            2: "#header_wrapper{right: 110px!important;}"
         }
     }, {
         url: /^https?:\/\/baike\.baidu\.com\/item/
@@ -784,7 +787,7 @@
     }, {
         url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
         style: {
-            1: ".AppHeader.is-fixed { top: 30px!important; }"
+            1: ".AppHeader.is-fixed {top: 30px!important;}"
         }
     }, {
         url: /^https?:\/\/www\.so\.com\/s/i
@@ -806,7 +809,8 @@
     }, {
         url: /^https?:\/\/stackoverflow\.com\/search\?/i,
         style: {
-            1: ".top-bar._fixed { top: 30px }"
+            1: ".top-bar._fixed { top: 30px }",
+            2: ".top-bar._fixed { right: 110px }"
         }
     }, {
         url: /^https?:\/\/search\.bilibili\.com\/all/,

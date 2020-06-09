@@ -35,7 +35,8 @@ const list = [
   {
     url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
     style: {
-      1: `.header { top: ${height}px }`
+      1: `.header { top: ${height}px }`,
+      2: `.header { right: ${width}px }`
     }
   },
   {
@@ -50,7 +51,8 @@ const list = [
   {
     url: /^https?:\/\/mijisou.com\/\?q/i,
     style: {
-      1: `.search-page{top: ${height}px} .searx-navbar{top: ${height + 12}px!important;}`
+      1: `.search-page{top: ${height}px;} .searx-navbar{top: ${height + 12}px!important;}`,
+      2: `.search-page{right: ${width}px!important;}`
     }
   },
   {
@@ -59,7 +61,8 @@ const list = [
   {
     url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
     style: {
-      1: `#header_wrapper{ top: ${height}px!important }`
+      1: `#header_wrapper{top: ${height}px!important;}`,
+      2: `#header_wrapper{right: ${width}px!important;}`
     }
   },
   {
@@ -80,7 +83,7 @@ const list = [
   {
     url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
     style: {
-      1: `.AppHeader.is-fixed { top: ${height}px!important; }`
+      1: `.AppHeader.is-fixed {top: ${height}px!important;}`
     }
   },
   {
@@ -110,7 +113,8 @@ const list = [
   {
     url: /^https?:\/\/stackoverflow\.com\/search\?/i,
     style: {
-      1: `.top-bar._fixed { top: ${height}px }`
+      1: `.top-bar._fixed { top: ${height}px }`,
+      2: `.top-bar._fixed { right: ${width}px }`
     }
   },
   {
