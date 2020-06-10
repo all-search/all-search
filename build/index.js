@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.1a
+// @version      0.2.1b
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/5/19
+// @update       2020/6/10
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -283,6 +283,12 @@
         }, {
             name: "yandex",
             url: "https://yandex.com/images/search?text=%s"
+        }, {
+            name: "pixabay",
+            url: "https://pixabay.com/images/search/%s/"
+        }, {
+            name: "unsplash",
+            url: "https://unsplash.com/s/photos/%s"
         } ]
     } ];
     document.createElement("a");
@@ -337,30 +343,30 @@
     function r(e, t, n, o, s, a, i, r, c, l) {
         "boolean" != typeof i && (c = r, r = i, i = !1);
         const h = "function" == typeof n ? n.options : n;
-        let u;
+        let m;
         if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
-        h._compiled = !0, s && (h.functional = !0)), o && (h._scopeId = o), a ? (u = function(e) {
+        h._compiled = !0, s && (h.functional = !0)), o && (h._scopeId = o), a ? (m = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
             t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(a);
-        }, h._ssrRegister = u) : t && (u = i ? function(e) {
+        }, h._ssrRegister = m) : t && (m = i ? function(e) {
             t.call(this, l(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, r(e));
-        }), u) if (h.functional) {
+        }), m) if (h.functional) {
             const e = h.render;
             h.render = function(t, n) {
-                return u.call(n), e(t, n);
+                return m.call(n), e(t, n);
             };
         } else {
             const e = h.beforeCreate;
-            h.beforeCreate = e ? [].concat(e, u) : [ u ];
+            h.beforeCreate = e ? [].concat(e, m) : [ m ];
         }
         return n;
     }
     const c = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
     function l(e) {
         return (e, t) => function(e, t) {
-            const n = c ? t.media || "default" : e, o = u[n] || (u[n] = {
+            const n = c ? t.media || "default" : e, o = m[n] || (m[n] = {
                 ids: new Set,
                 styles: []
             });
@@ -378,8 +384,8 @@
         }(e, t);
     }
     let h;
-    const u = {};
-    const m = i;
+    const m = {};
+    const u = i;
     var d = function() {
         var e = this.$createElement, t = this._self._c || e;
         return t("a", {
@@ -403,7 +409,7 @@
             map: void 0,
             media: void 0
         });
-    }), m, void 0, !1, void 0, !1, l, void 0, void 0);
+    }), u, void 0, !1, void 0, !1, l, void 0, void 0);
     const w = {
         name: "menuItem",
         props: {
@@ -735,7 +741,7 @@
     }, {
         url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
         style: {
-            2: "#u { right: 110px; }"
+            2: "#u { right: 100px; }"
         }
     }, {
         url: /^https?:\/\/[^.]*\.bing\.com\/search/
@@ -751,7 +757,7 @@
         url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
         style: {
             1: ".header { top: 30px }",
-            2: ".header { right: 110px }"
+            2: ".header { right: 100px }"
         }
     }, {
         url: /^https?:\/\/yandex\.com\/search/i,
@@ -764,7 +770,7 @@
         url: /^https?:\/\/mijisou.com\/\?q/i,
         style: {
             1: ".search-page{top: 30px;} .searx-navbar{top: 42px!important;}",
-            2: ".search-page{right: 110px!important;}"
+            2: ".search-page{right: 100px!important;}"
         }
     }, {
         url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
@@ -772,7 +778,7 @@
         url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
         style: {
             1: "#header_wrapper{top: 30px!important;}",
-            2: "#header_wrapper{right: 110px!important;}"
+            2: "#header_wrapper{right: 100px!important;}"
         }
     }, {
         url: /^https?:\/\/baike\.baidu\.com\/item/
@@ -810,18 +816,22 @@
         url: /^https?:\/\/stackoverflow\.com\/search\?/i,
         style: {
             1: ".top-bar._fixed { top: 30px }",
-            2: ".top-bar._fixed { right: 110px }"
+            2: ".top-bar._fixed { right: 100px }"
         }
     }, {
         url: /^https?:\/\/search\.bilibili\.com\/all/,
         keyword: () => document.getElementById("search-keyword").value,
         style: {
-            1: "body { margin-top: 30px!important; } .fixed-top { top: 30px }"
+            1: "body { margin-top: 30px!important; } .fixed-top {top: 30px;}"
         }
     }, {
         url: /^https?:\/\/www\.acfun\.cn\/search/
     }, {
-        url: /^https?:\/\/www\.youtube\.com\/results/
+        url: /^https?:\/\/www\.youtube\.com\/results/,
+        style: {
+            1: "#masthead-container.ytd-app {top:30px;} html:not(.style-scope) {--ytd-toolbar-height:86px;}",
+            2: "ytd-app {margin-left:100px;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:100px;}#masthead-container.ytd-app {width: calc(100% - 100px);}"
+        }
     }, {
         url: /^https?:\/\/www\.nicovideo\.jp\/search\//
     }, {
@@ -841,7 +851,10 @@
     }, {
         url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
     }, {
-        url: /^https?:\/\/image\.baidu\.com\/search/i
+        url: /^https?:\/\/image\.baidu\.com\/search/i,
+        style: {
+            1: "#search .s_search { top: 30px; }"
+        }
     }, {
         url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i
     }, {

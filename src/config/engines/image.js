@@ -35,5 +35,13 @@ export default [
   {
     name: 'yandex',
     url: 'https://yandex.com/images/search?text=%s'
+  },
+  {
+    name: 'pixabay',
+    url: 'https://pixabay.com/images/search/%s/'
+  },
+  {
+    name: 'unsplash',
+    url: 'https://unsplash.com/s/photos/%s'
   }
 ]

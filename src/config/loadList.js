@@ -1,5 +1,5 @@
 const height = 30
-const width = 110
+const width = 100
 
 const list = [
   {
@@ -123,14 +123,18 @@ const list = [
       return document.getElementById('search-keyword').value
     },
     style: {
-      1: `body { margin-top: ${height}px!important; } .fixed-top { top: ${height}px }`
+      1: `body { margin-top: ${height}px!important; } .fixed-top {top: ${height}px;}`
     }
   },
   {
     url: /^https?:\/\/www\.acfun\.cn\/search/
   },
   {
-    url: /^https?:\/\/www\.youtube\.com\/results/
+    url: /^https?:\/\/www\.youtube\.com\/results/,
+    style: {
+      1: `#masthead-container.ytd-app {top:${height}px;} html:not(.style-scope) {--ytd-toolbar-height:${height + 56}px;}`,
+      2: `ytd-app {margin-left:${width}px;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
+    }
   },
   {
     url: /^https?:\/\/www\.nicovideo\.jp\/search\//
@@ -160,7 +164,10 @@ const list = [
     url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
   },
   {
-    url: /^https?:\/\/image\.baidu\.com\/search/i
+    url: /^https?:\/\/image\.baidu\.com\/search/i,
+    style: {
+      1: `#search .s_search { top: ${height}px; }`
+    }
   },
   {
     url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i
