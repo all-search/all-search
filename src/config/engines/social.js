@@ -17,7 +17,7 @@ export default [
   },
   {
     name: '新浪微博',
-    url: 'http://s.weibo.com/weibo/%s'
+    url: 'http://s.weibo.com/weibo?q=%s'
   },
   {
     name: '脸书',

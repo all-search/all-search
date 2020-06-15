@@ -111,16 +111,11 @@ export function addStyle (styleContent) {
   if (!styleContent) {
     return
   }
-  // eslint-disable-next-line
-  if (window.GM_addStyle) {
-    // eslint-disable-next-line
-    window.GM_addStyle(styleContent)
-  } else {
-    const style = document.createElement('style')
-    style.innerHTML = styleContent
-    const head = document.getElementsByTagName('head')[0]
-    head.appendChild(style)
-  }
+  const style = document.createElement('style')
+  style.innerHTML = styleContent
+  style.class = 'all-search-style'
+  const head = document.getElementsByTagName('head')[0]
+  head.appendChild(style)
 }
 
 // 监听head的节点移除，防止style被干掉
@@ -129,7 +124,10 @@ export function domObserve () {
   const config = { childList: true }
   const callback = function (mutationsList) {
     for (const mutation of mutationsList) {
-      if (mutation.removedNodes.length && mutation.removedNodes[0].nodeName === 'STYLE') {
+      if (mutation.removedNodes.length &&
+        mutation.removedNodes[0].nodeName === 'STYLE' &&
+        mutation.removedNodes[0].class === 'all-search-style'
+      ) {
         addStyle(mutation.removedNodes[0].innerText)
       }
     }

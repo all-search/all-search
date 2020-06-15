@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.1b
+// @version      0.2.1c
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/6/10
+// @update       2020/6/16
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -216,7 +216,7 @@
             url: "http://tieba.baidu.com/f?kw=%s&ie=utf-8"
         }, {
             name: "新浪微博",
-            url: "http://s.weibo.com/weibo/%s"
+            url: "http://s.weibo.com/weibo?q=%s"
         }, {
             name: "脸书",
             url: "https://www.facebook.com/search/results.php?q=%s"
@@ -309,10 +309,9 @@
         }
     }
     function a(e) {
-        if (e) if (window.GM_addStyle) window.GM_addStyle(e); else {
-            const t = document.createElement("style");
-            t.innerHTML = e, document.getElementsByTagName("head")[0].appendChild(t);
-        }
+        if (!e) return;
+        const t = document.createElement("style");
+        t.innerHTML = e, t.class = "all-search-style", document.getElementsByTagName("head")[0].appendChild(t);
     }
     var i = {
         name: "logo",
@@ -340,16 +339,16 @@
             }
         }
     };
-    function r(e, t, n, o, s, a, i, r, c, l) {
-        "boolean" != typeof i && (c = r, r = i, i = !1);
+    function r(e, t, n, o, s, a, i, r, l, c) {
+        "boolean" != typeof i && (l = r, r = i, i = !1);
         const h = "function" == typeof n ? n.options : n;
         let m;
         if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
         h._compiled = !0, s && (h.functional = !0)), o && (h._scopeId = o), a ? (m = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(a);
+            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(a);
         }, h._ssrRegister = m) : t && (m = i ? function(e) {
-            t.call(this, l(e, this.$root.$options.shadowRoot));
+            t.call(this, c(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, r(e));
         }), m) if (h.functional) {
@@ -363,10 +362,10 @@
         }
         return n;
     }
-    const c = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-    function l(e) {
+    const l = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+    function c(e) {
         return (e, t) => function(e, t) {
-            const n = c ? t.media || "default" : e, o = m[n] || (m[n] = {
+            const n = l ? t.media || "default" : e, o = m[n] || (m[n] = {
                 ids: new Set,
                 styles: []
             });
@@ -409,7 +408,7 @@
             map: void 0,
             media: void 0
         });
-    }), u, void 0, !1, void 0, !1, l, void 0, void 0);
+    }), u, void 0, !1, void 0, !1, c, void 0, void 0);
     const w = {
         name: "menuItem",
         props: {
@@ -467,7 +466,7 @@
             map: void 0,
             media: void 0
         });
-    }), w, void 0, !1, void 0, !1, l, void 0, void 0);
+    }), w, void 0, !1, void 0, !1, c, void 0, void 0);
     const y = {
         name: "icon",
         props: {
@@ -498,7 +497,7 @@
                     map: void 0,
                     media: void 0
                 });
-            }), y, void 0, !1, void 0, !1, l, void 0, void 0)
+            }), y, void 0, !1, void 0, !1, c, void 0, void 0)
         },
         props: {
             mode: {
@@ -655,7 +654,7 @@
                     map: void 0,
                     media: void 0
                 });
-            }), v, void 0, !1, void 0, !1, l, void 0, void 0)
+            }), v, void 0, !1, void 0, !1, c, void 0, void 0)
         },
         data: () => ({
             engines: t,
@@ -729,7 +728,7 @@
             map: void 0,
             media: void 0
         });
-    }), _, void 0, !1, void 0, !1, l, void 0, void 0);
+    }), _, void 0, !1, void 0, !1, c, void 0, void 0);
     let z = {};
     const C = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
@@ -837,7 +836,10 @@
     }, {
         url: /^https?:\/\/so\.iqiyi\.com\/so\/q/
     }, {
-        url: /^https?:\/\/v\.qq\.com\/x\/search/i
+        url: /^https?:\/\/v\.qq\.com\/x\/search/i,
+        style: {
+            1: ".site_head {top: 30px;}"
+        }
     }, {
         url: /^https?:\/\/music\.baidu\.com\/search/
     }, {
@@ -910,7 +912,10 @@
     }, {
         url: /^https?:\/\/search\.smzdm\.com\/\?/i
     }, {
-        url: /^https?:\/\/s\.weibo\.com\/weibo\//i
+        url: /^https?:\/\/s\.weibo\.com\/weibo\?q=/i,
+        style: {
+            1: ".WB_global_nav { top: 30px !important;}"
+        }
     }, {
         url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i
     }, {
@@ -979,7 +984,7 @@
             };
             let n;
             MutationObserver && (n = new MutationObserver((function(e) {
-                for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && a(t.removedNodes[0].innerText);
+                for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "all-search-style" === t.removedNodes[0].class && a(t.removedNodes[0].innerText);
             })), n.observe(e, t));
         }(), function() {
             let e = 0;

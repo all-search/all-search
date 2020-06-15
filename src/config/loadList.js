@@ -143,7 +143,10 @@ const list = [
     url: /^https?:\/\/so\.iqiyi\.com\/so\/q/
   },
   {
-    url: /^https?:\/\/v\.qq\.com\/x\/search/i
+    url: /^https?:\/\/v\.qq\.com\/x\/search/i,
+    style: {
+      1: `.site_head {top: ${height}px;}`
+    }
   },
   {
     url: /^https?:\/\/music\.baidu\.com\/search/
@@ -251,7 +254,10 @@ const list = [
     url: /^https?:\/\/search\.smzdm\.com\/\?/i
   },
   {
-    url: /^https?:\/\/s\.weibo\.com\/weibo\//i
+    url: /^https?:\/\/s\.weibo\.com\/weibo\?q=/i,
+    style: {
+      1: `.WB_global_nav { top: ${height}px !important;}`
+    }
   },
   {
     url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i
