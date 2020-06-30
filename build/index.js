@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.1c
+// @version      0.2.1d
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/6/16
+// @update       2020/6/30
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
@@ -740,7 +740,8 @@
     }, {
         url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
         style: {
-            2: "#u { right: 100px; }"
+            1: ".fix-head { top: 30px !important; }",
+            2: ".fix-head #u { right: 100px; }"
         }
     }, {
         url: /^https?:\/\/[^.]*\.bing\.com\/search/

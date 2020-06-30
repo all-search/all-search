@@ -14,7 +14,8 @@ const list = [
   {
     url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
     style: {
-      2: `#u { right: ${width}px; }`
+      1: `.fix-head { top: ${height}px !important; }`,
+      2: `.fix-head #u { right: ${width}px; }`
     }
   },
   {
