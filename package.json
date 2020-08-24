@@ -22,13 +22,12 @@
     "@babel/polyfill": "^7.4.3",
     "axios": "^0.19.0",
     "element-ui": "^2.12.0",
-    "vue": "^2.5.21",
+    "vue": "^2.6.12",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "workbox-webpack-plugin": "^4.3.1"
   },
   "devDependencies": {
-    "rollup-plugin-css-only": "^2.0.0",
     "@rollup/plugin-json": "^4.0.3",
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
@@ -46,13 +45,14 @@
     "node-sass": "^4.9.0",
     "rollup": "^1.32.0",
     "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-css-only": "^2.0.0",
     "rollup-plugin-delete": "^1.2.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-vue": "^5.1.6",
     "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.6.10",
+    "vue-template-compiler": "^2.6.12",
     "webpack": "^4.29.6"
   }
 }

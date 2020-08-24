@@ -21,6 +21,7 @@ const meta = `// ==UserScript==
 // @noframes
 // @require      https://lib.baomitu.com/vue/2.6.11/vue.js
 // @resource     iconFont  https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue

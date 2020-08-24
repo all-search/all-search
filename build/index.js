@@ -4,12 +4,13 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/8/24
+// @update       2020/8/25
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://lib.baomitu.com/vue/2.6.11/vue.js
 // @resource     iconFont  https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -377,28 +378,93 @@
         } ]
     } ];
     document.createElement("a");
-    function n(e) {
+    function s(e) {
         return e ? `__allSearch__${e}` : null;
     }
     function o(e) {
-        const t = n(e);
+        const t = s(e);
         if (window.GM_getValue) return window.GM_getValue(t);
         const o = window.localStorage.getItem(t);
         return o ? JSON.parse(o) : null;
     }
-    function s(e, t) {
-        const o = n(e);
+    function a(e, t) {
+        const o = s(e);
         if (window.GM_setValue) window.GM_setValue(o, t); else {
             const e = JSON.stringify(t);
             e && window.localStorage.setItem(o, e);
         }
     }
-    function a(e) {
+    function r(e) {
         if (!e) return;
         const t = document.createElement("style");
         t.innerHTML = e, t.class = "all-search-style", document.getElementsByTagName("head")[0].appendChild(t);
     }
-    var i = {
+    function n(e, t) {
+        let s;
+        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? i(s) : function(e) {
+            if (!e) return;
+            const t = document.createElement("link");
+            t.href = e, t.rel = "stylesheet", t.type = "text/css", t.crossorigin = "anonymous", 
+            document.getElementsByTagName("head")[0].appendChild(t);
+        }(t);
+    }
+    function i(e, t, s, o, a) {
+        !function(e, t, s) {
+            const o = t / 1e3 * 60;
+            let a = 0;
+            if (!0 === s) {
+                if (e()) return;
+            }
+            requestAnimationFrame((function t() {
+                if (a < o) a++, requestAnimationFrame(t); else {
+                    e() || !1 || (a = 0, requestAnimationFrame(t));
+                }
+            }));
+        }((function() {
+            let r = document.querySelector(s);
+            if (void 0 === s && (r = document.head || document.body || document.documentElement || document), 
+            o = o || !1, a = a || "text/css", void 0 === s || void 0 !== s && null != document.querySelector(s)) if (!0 === o) !function(e) {
+                try {
+                    if ("string" == typeof e) {
+                        let t = document.querySelectorAll(e);
+                        for (let e = 0; e < t.length; e++) t[e].remove();
+                    } else "function" == typeof e ? e() : console.log("未知命令：" + e);
+                } catch (e) {}
+            }("." + t); else if (!1 === o && null != document.querySelector("." + t)) ; else {
+                let s = document.createElement("style");
+                null != t && (s.className = t), s.setAttribute("type", a), s.innerHTML = e;
+                try {
+                    r.appendChild(s);
+                } catch (e) {
+                    console.log(e.message);
+                }
+            }
+        }), 20, !0);
+    }
+    function l(e, t, s, o, a, r, n, i, l, c) {
+        "boolean" != typeof n && (l = i, i = n, n = !1);
+        const u = "function" == typeof s ? s.options : s;
+        let h;
+        if (e && e.render && (u.render = e.render, u.staticRenderFns = e.staticRenderFns, 
+        u._compiled = !0, a && (u.functional = !0)), o && (u._scopeId = o), r ? (h = function(e) {
+            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
+            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(r);
+        }, u._ssrRegister = h) : t && (h = n ? function(e) {
+            t.call(this, c(e, this.$root.$options.shadowRoot));
+        } : function(e) {
+            t.call(this, i(e));
+        }), h) if (u.functional) {
+            const e = u.render;
+            u.render = function(t, s) {
+                return h.call(s), e(t, s);
+            };
+        } else {
+            const e = u.beforeCreate;
+            u.beforeCreate = e ? [].concat(e, h) : [ h ];
+        }
+        return s;
+    }
+    const c = {
         name: "logo",
         props: {
             mode: {
@@ -424,53 +490,7 @@
             }
         }
     };
-    function r(e, t, n, o, s, a, i, r, c, l) {
-        "boolean" != typeof i && (c = r, r = i, i = !1);
-        const h = "function" == typeof n ? n.options : n;
-        let m;
-        if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
-        h._compiled = !0, s && (h.functional = !0)), o && (h._scopeId = o), a ? (m = function(e) {
-            (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(a);
-        }, h._ssrRegister = m) : t && (m = i ? function(e) {
-            t.call(this, l(e, this.$root.$options.shadowRoot));
-        } : function(e) {
-            t.call(this, r(e));
-        }), m) if (h.functional) {
-            const e = h.render;
-            h.render = function(t, n) {
-                return m.call(n), e(t, n);
-            };
-        } else {
-            const e = h.beforeCreate;
-            h.beforeCreate = e ? [].concat(e, m) : [ m ];
-        }
-        return n;
-    }
-    const c = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-    function l(e) {
-        return (e, t) => function(e, t) {
-            const n = c ? t.media || "default" : e, o = m[n] || (m[n] = {
-                ids: new Set,
-                styles: []
-            });
-            if (!o.ids.has(e)) {
-                o.ids.add(e);
-                let n = t.source;
-                if (t.map && (n += "\n/*# sourceURL=" + t.map.sources[0] + " */", n += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(t.map)))) + " */"), 
-                o.element || (o.element = document.createElement("style"), o.element.type = "text/css", 
-                t.media && o.element.setAttribute("media", t.media), void 0 === h && (h = document.head || document.getElementsByTagName("head")[0]), 
-                h.appendChild(o.element)), "styleSheet" in o.element) o.styles.push(n), o.element.styleSheet.cssText = o.styles.filter(Boolean).join("\n"); else {
-                    const e = o.ids.size - 1, t = document.createTextNode(n), s = o.element.childNodes;
-                    s[e] && o.element.removeChild(s[e]), s.length ? o.element.insertBefore(t, s[e]) : o.element.appendChild(t);
-                }
-            }
-        }(e, t);
-    }
-    let h;
-    const m = {};
-    const u = i;
-    var d = function() {
+    var u = function() {
         var e = this.$createElement, t = this._self._c || e;
         return t("a", {
             staticClass: "as-title",
@@ -483,18 +503,12 @@
             staticClass: "as-title-inner"
         }, [ this._v("\n    All Search\n  ") ]) ]);
     };
-    d._withStripped = !0;
-    const p = r({
-        render: d,
+    u._withStripped = !0;
+    const h = l({
+        render: u,
         staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-34886da3_0", {
-            source: "@media screen and (max-width: 768px) {\n.as-title {\n    display: none;\n}\n}\n.as-title-horizontal {\n  width: 100px;\n  margin: 0 10px;\n}\n.as-title-vertical {\n  width: 100%;\n}\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}",
-            map: void 0,
-            media: void 0
-        });
-    }), u, void 0, !1, void 0, !1, l, void 0, void 0);
-    const w = {
+    }, void 0, c, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const m = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -525,7 +539,7 @@
             }
         }
     };
-    var g = function() {
+    var d = function() {
         var e = this, t = e.$createElement;
         return (e._self._c || t)("li", {
             on: {
@@ -541,18 +555,12 @@
             }
         }, [ e._t("default") ], 2);
     };
-    g._withStripped = !0;
-    const f = r({
-        render: g,
+    d._withStripped = !0;
+    const p = l({
+        render: d,
         staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-886c6b0a_0", {
-            source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
-            map: void 0,
-            media: void 0
-        });
-    }), w, void 0, !1, void 0, !1, l, void 0, void 0);
-    const y = {
+    }, void 0, m, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const w = {
         name: "icon",
         props: {
             name: {
@@ -561,28 +569,22 @@
             }
         }
     };
-    var b = function() {
+    var g = function() {
         var e = this.$createElement;
         return (this._self._c || e)("i", {
             staticClass: "as-menu-item-icon",
             class: "icon-" + this.name
         });
     };
-    b._withStripped = !0;
-    const v = {
+    g._withStripped = !0;
+    const y = {
         name: "as-menu",
         components: {
-            menuItem: f,
-            icon: r({
-                render: b,
+            menuItem: p,
+            icon: l({
+                render: g,
                 staticRenderFns: []
-            }, (function(e) {
-                e && e("data-v-99ce3dbc_0", {
-                    source: '.as-menu-item-icon {\n  font-family: "iconfont" !important;\n  font-size: 20px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}',
-                    map: void 0,
-                    media: void 0
-                });
-            }), y, void 0, !1, void 0, !1, l, void 0, void 0)
+            }, void 0, w, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         props: {
             mode: {
@@ -669,38 +671,38 @@
             }
         }
     };
-    var x = function() {
-        var e = this, t = e.$createElement, n = e._self._c || t;
-        return n("ul", {
+    var v = function() {
+        var e = this, t = e.$createElement, s = e._self._c || t;
+        return s("ul", {
             staticClass: "as-menu",
             class: e.menuClass
         }, e._l(e.engines, (function(t) {
-            return n("menu-item", {
+            return s("menu-item", {
                 key: t.index,
                 staticClass: "as-menu-item",
                 class: {
                     "as-menu-item-active": t.show
                 },
                 on: {
-                    show: function(n) {
-                        return e.handleMenuShow(n, t);
+                    show: function(s) {
+                        return e.handleMenuShow(s, t);
                     }
                 }
-            }, [ n("div", {
+            }, [ s("div", {
                 staticClass: "as-menu-item-title"
-            }, [ n("icon", {
+            }, [ s("icon", {
                 attrs: {
                     name: t.name
                 }
-            }), e._v(" "), n("span", {
+            }), e._v(" "), s("span", {
                 domProps: {
                     textContent: e._s(t.nameZh)
                 }
-            }) ], 1), e._v(" "), n("transition", {
+            }) ], 1), e._v(" "), s("transition", {
                 attrs: {
                     name: e.transition
                 }
-            }, [ n("div", {
+            }, [ s("div", {
                 directives: [ {
                     name: "show",
                     rawName: "v-show",
@@ -708,16 +710,16 @@
                     expression: "item.show"
                 } ],
                 staticClass: "as-subMenu-container"
-            }, [ n("ul", {
+            }, [ s("ul", {
                 staticClass: "as-subMenu"
             }, e._l(t.list, (function(t, o) {
-                return n("li", {
+                return s("li", {
                     key: o,
                     domProps: {
                         textContent: e._s(t.name)
                     },
                     on: {
-                        click: function(n) {
+                        click: function(s) {
                             return e.handleClick(t);
                         }
                     }
@@ -725,21 +727,15 @@
             })), 0) ]) ]) ], 1);
         })), 1);
     };
-    x._withStripped = !0;
-    const _ = {
+    v._withStripped = !0;
+    const f = {
         name: "all-search",
         components: {
-            logo: p,
-            asMenu: r({
-                render: x,
+            logo: h,
+            asMenu: l({
+                render: v,
                 staticRenderFns: []
-            }, (function(e) {
-                e && e("data-v-169d09a6_0", {
-                    source: '.as-menu {\n  flex: 1;\n}\n.as-menu::before, .as-menu::after {\n  display: table;\n  content: "";\n}\n.as-menu::after {\n  clear: both;\n}\n.as-menu {\n  width: 100%;\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n  display: flex;\n}\n.as-menu--horizontal {\n  flex-direction: row;\n}\n.as-menu--horizontal .as-menu-item-active {\n  border-bottom: 2px solid #1890ff;\n}\n.as-menu--horizontal .as-subMenu-container {\n  left: -22px;\n  top: 24px;\n}\n.as-menu--vertical {\n  flex-direction: column;\n}\n.as-menu--vertical .as-menu-item {\n  margin: 5px 0;\n}\n.as-menu--vertical .as-menu-item-active {\n  border-right: 2px solid #1890ff;\n}\n.as-menu--vertical .as-subMenu-container {\n  left: 85px;\n  top: -16px;\n}\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  transition: border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-icon {\n  color: #606266;\n  margin: 1.25px 10px 0 0;\n  line-height: 28.75px;\n}\n.as-menu-item-title {\n  height: 100%;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  color: #606266;\n  border-bottom: 2px solid rgba(255, 255, 255, 0);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-title:hover {\n  color: #1890ff;\n}\n.as-menu-item-active {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-icon {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-title {\n  color: #1890ff;\n}\n.as-subMenu-container {\n  padding: 0 20px 20px;\n  position: absolute;\n  z-index: 99;\n  transform-origin: 30% 0 0;\n}\n.as-subMenu {\n  list-style: none;\n  padding: 4px 0;\n  min-width: 90px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 10px 0;\n}\n.as-subMenu li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-subMenu li:hover {\n  background-color: #f5f7fa;\n  color: #1890ff;\n}\n.drop-enter-active, .drop-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.drop-enter, .drop-leave-to {\n  opacity: 0;\n  transform: scaleY(0.0001);\n}\n.fade-enter-active, .fade-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.fade-enter, .fade-leave-to {\n  opacity: 0;\n}\n.as-subMenu-group-list {\n  list-style: none;\n  padding: 0;\n}\n.as-subMenu-group-list .as-menu-item-title {\n  padding-left: 44px;\n}',
-                    map: void 0,
-                    media: void 0
-                });
-            }), v, void 0, !1, void 0, !1, l, void 0, void 0)
+            }, void 0, y, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         data: () => ({
             engines: t,
@@ -768,26 +764,26 @@
         },
         methods: {
             changeCategory(e) {
-                s("categoryName", e), this.categoryName = e;
+                a("categoryName", e), this.categoryName = e;
             },
             changeMode() {
                 "horizontal" === this.mode ? this.mode = "vertical" : this.mode = "horizontal", 
-                s("mode", this.mode), window.location.reload();
+                a("mode", this.mode), window.location.reload();
             }
         }
     };
-    var k = function() {
-        var e = this, t = e.$createElement, n = e._self._c || t;
-        return n("div", {
+    var b = function() {
+        var e = this, t = e.$createElement, s = e._self._c || t;
+        return s("div", {
             class: e.asClass,
             attrs: {
                 id: "all-search"
             }
-        }, [ n("logo", {
+        }, [ s("logo", {
             attrs: {
                 mode: e.mode
             }
-        }), e._v(" "), n("as-menu", {
+        }), e._v(" "), s("as-menu", {
             attrs: {
                 mode: e.mode,
                 inline: e.inline,
@@ -796,24 +792,18 @@
             on: {
                 change: e.changeCategory
             }
-        }), e._v(" "), n("div", {
+        }), e._v(" "), s("div", {
             staticClass: "as-setting",
             on: {
                 click: e.changeMode
             }
         }, [ e._v("\n    切换模式\n  ") ]) ], 1);
     };
-    k._withStripped = !0;
-    const q = r({
-        render: k,
+    b._withStripped = !0;
+    const x = l({
+        render: b,
         staticRenderFns: []
-    }, (function(e) {
-        e && e("data-v-ff3bb9cc_0", {
-            source: '.body-horizontal {\n  margin-top: 30px;\n}\n.body-vertical {\n  margin-left: 100px;\n}\n#all-search {\n  position: fixed;\n  display: flex !important;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  z-index: 999999;\n  border-bottom: 1px #e8e8e8 solid;\n  flex-direction: row;\n}\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  z-index: 999999;\n  border-right: 1px #e8e8e8 solid;\n  flex-direction: column;\n}\n.as-setting {\n  line-height: 30px;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: #606266;\n}\n.as-setting:hover {\n  color: #1890ff;\n}',
-            map: void 0,
-            media: void 0
-        });
-    }), _, void 0, !1, void 0, !1, l, void 0, void 0), z = [ {
+    }, void 0, f, void 0, !1, void 0, !1, void 0, void 0, void 0), q = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -1037,9 +1027,67 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
     } ];
+    const k = {
+        name: "all-search",
+        description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
+        version: "0.2.1e",
+        main: "dist/index.js",
+        author: "endday",
+        license: "GPL-2.0",
+        homepage: "https://github.com/endday/all-search",
+        repository: {
+            type: "git",
+            url: "git@github.com:endday/all-search.git"
+        },
+        scripts: {
+            serve: "vue-cli-service serve --fix",
+            build: "vue-cli-service build",
+            buildScript: "rollup -c",
+            lint: "vue-cli-service lint",
+            report: "vue-cli-service build --report",
+            sourceMap: "vue-cli-service build --sourceMap"
+        },
+        dependencies: {
+            "@babel/polyfill": "^7.4.3",
+            axios: "^0.19.0",
+            "element-ui": "^2.12.0",
+            vue: "^2.6.12",
+            "vue-router": "^3.0.1",
+            vuex: "^3.0.1",
+            "workbox-webpack-plugin": "^4.3.1"
+        },
+        devDependencies: {
+            "@rollup/plugin-json": "^4.0.3",
+            "@vue/cli-plugin-babel": "^3.10.0",
+            "@vue/cli-plugin-eslint": "^3.10.0",
+            "@vue/cli-service": "^3.10.0",
+            "@vue/eslint-config-standard": "^4.0.0",
+            "babel-eslint": "^10.0.1",
+            "babel-plugin-component": "^1.1.1",
+            "babel-plugin-import": "^1.11.0",
+            "babel-plugin-transform-modules": "^0.1.1",
+            "babel-preset-env": "^1.7.0",
+            eslint: "^5.16.0",
+            "eslint-plugin-vue": "^5.0.0",
+            "file-loader": "^3.0.1",
+            "html-webpack-inline-source-plugin": "0.0.10",
+            "node-sass": "^4.9.0",
+            rollup: "^1.32.0",
+            "rollup-plugin-commonjs": "^10.1.0",
+            "rollup-plugin-css-only": "^2.0.0",
+            "rollup-plugin-delete": "^1.2.0",
+            "rollup-plugin-node-resolve": "^5.2.0",
+            "rollup-plugin-replace": "^2.2.0",
+            "rollup-plugin-terser": "^5.2.0",
+            "rollup-plugin-vue": "^5.1.6",
+            "sass-loader": "^7.0.1",
+            "vue-template-compiler": "^2.6.12",
+            webpack: "^4.29.6"
+        }
+    }.version.replace(/\./g, "");
     e.config.productionTip = !1;
-    const C = function() {
-        const e = z.find(e => e.url.test(window.location.href));
+    const _ = function() {
+        const e = q.find(e => e.url.test(window.location.href));
         return e && !e.disabled ? {
             url: e.url,
             disabled: e.disabled,
@@ -1049,47 +1097,40 @@
             mounted: e.mounted
         } : null;
     }();
-    let S = null;
-    const N = document.getElementById("all-search");
-    N ? S = N : (S = document.createElement("div"), S.id = "all-search"), S.style.display = "none";
-    const M = new e({
+    let C = null;
+    const S = document.getElementById("all-search");
+    S ? C = S : (C = document.createElement("div"), C.id = "all-search"), C.style.display = "none";
+    const z = new e({
         data: () => ({
-            currentSite: C
+            currentSite: _
         }),
-        render: e => e(q)
+        render: e => e(x)
     });
-    !function(e, t) {
-        let n;
-        window.GM_getResourceText && (n = window.GM_getResourceText(e)), n ? a(n) : function(e) {
-            if (!e) return;
-            const t = document.createElement("link");
-            t.href = e, t.rel = "stylesheet", t.type = "text/css", t.crossorigin = "anonymous", 
-            document.getElementsByTagName("head")[0].appendChild(t);
-        }(t);
-    }("iconFont", "https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css");
-    const E = o("mode") || "horizontal";
+    n("iconFont", "https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css"), 
+    n("as-style", `https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=${k}`);
+    const N = o("mode") || "horizontal";
     !function() {
         const e = document.getElementsByTagName("head")[0], t = {
             childList: !0
         };
-        let n;
-        MutationObserver && (n = new MutationObserver((function(e) {
-            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "all-search-style" === t.removedNodes[0].class && a(t.removedNodes[0].innerText);
-        })), n.observe(e, t));
+        let s;
+        MutationObserver && (s = new MutationObserver((function(e) {
+            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "all-search-style" === t.removedNodes[0].class && r(t.removedNodes[0].innerText);
+        })), s.observe(e, t));
     }(), function() {
         let e = 0;
-        return new Promise((t, n) => {
+        return new Promise((t, s) => {
             if (document && document.body) t(); else {
                 const o = setInterval((function() {
                     e += 1, document && document.body && (clearInterval(o), t()), 50 === e && (clearInterval(o), 
-                    n(new Error("timeOut")));
+                    s(new Error("timeOut")));
                 }), 200);
             }
         });
     }().then(() => {
-        const e = document.body.parentElement.insertBefore(S, document.body);
-        M.$mount(e), C && C.style && (C.style[1] && "horizontal" === E && a(C.style[1]), 
-        C.style[2] && "vertical" === E && a(C.style[2]));
+        const e = document.body.parentElement.insertBefore(C, document.body);
+        z.$mount(e), _ && _.style && (_.style[1] && "horizontal" === N && i(_.style[1]), 
+        _.style[2] && "vertical" === N && i(_.style[2]));
     }).catch(e => {
         console.error(e);
     });

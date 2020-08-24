@@ -107,16 +107,6 @@ export function setSession (name, value) {
   }
 }
 
-export function addStyle (styleContent) {
-  if (!styleContent) {
-    return
-  }
-  const style = document.createElement('style')
-  style.innerHTML = styleContent
-  style.class = 'all-search-style'
-  const head = document.getElementsByTagName('head')[0]
-  head.appendChild(style)
-}
 
 // 监听head的节点移除，防止style被干掉
 export function domObserve () {
@@ -139,6 +129,17 @@ export function domObserve () {
   }
 }
 
+export function addStyle (styleContent) {
+  if (!styleContent) {
+    return
+  }
+  const style = document.createElement('style')
+  style.innerHTML = styleContent
+  style.class = 'all-search-style'
+  const head = document.getElementsByTagName('head')[0]
+  head.appendChild(style)
+}
+
 export function addLink (url) {
   if (!url) {
     return
@@ -158,8 +159,92 @@ export function addStyleResource (name, link) {
     styleContent = window.GM_getResourceText(name)
   }
   if (styleContent) {
-    addStyle(styleContent)
+    ACAddStyle(styleContent)
   } else {
     addLink(link)
   }
+}
+
+function RAFInterval (callback, period, runNow) {
+  // 一秒60次，对应1秒1000ms
+  const needCount = period / 1000 * 60
+  let times = 0 // 已经计数的数量
+
+  if (runNow === true) { // 对于立即执行函数的立即判定，否则进行
+    const shouldFinish = callback()
+    if (shouldFinish) {
+      return
+    }
+  }
+
+  function step () {
+    if (times < needCount) {
+      // 计数未结束-继续计数
+      times++
+      requestAnimationFrame(step)
+    } else {
+      // 计数结束-停止计数，判定结果
+      const shouldFinish = callback() || false
+      if (!shouldFinish) {
+        // 返回值为false，重启计数器
+        times = 0
+        requestAnimationFrame(step)
+      }
+    }
+  }
+
+  requestAnimationFrame(step)
+}
+
+function safeRemove (cssSelectorOrFunction) {
+  try {
+    if (typeof (cssSelectorOrFunction) === 'string') {
+      let removeNodes = document.querySelectorAll(cssSelectorOrFunction)
+      for (let i = 0; i < removeNodes.length; i++) {
+        removeNodes[i].remove()
+      }
+    } else if (typeof (cssSelectorOrFunction) === 'function') {
+      cssSelectorOrFunction()
+    } else {
+      console.log('未知命令：' + cssSelectorOrFunction)
+    }
+  } catch (e) {
+
+  }
+}
+
+export function ACAddStyle (css, className, addToTarget, isReload, initType) { // 添加CSS代码，不考虑文本载入时间，只执行一次-无论成功与否，带有className
+  RAFInterval(function () {
+    /**
+     * addToTarget这里不要使用head标签,head标签的css会在html载入时加载，
+     * html加载后似乎不会再次加载，body会自动加载
+     * **/
+    let addTo = document.querySelector(addToTarget)
+    if (typeof (addToTarget) === 'undefined') {
+      addTo = (document.head || document.body || document.documentElement || document)
+    }
+    isReload = isReload || false // 默认是非加载型
+    initType = initType || 'text/css'
+    // 如果没有目标节点(则直接加) || 有目标节点且找到了节点(进行新增)
+    if (typeof (addToTarget) === 'undefined' || (typeof (addToTarget) !== 'undefined' && document.querySelector(addToTarget) != null)) {
+      // clearInterval(tout);
+      // 如果true 强行覆盖，不管有没有--先删除
+      // 如果false，不覆盖，但是如果有的话，要退出，不存在则新增--无需删除
+      if (isReload === true) {
+        safeRemove('.' + className)
+      } else if (isReload === false && document.querySelector('.' + className) != null) {
+        // 节点存在 && 不准备覆盖
+      } else {
+        let cssNode = document.createElement('style')
+        if (className != null) cssNode.className = className
+        cssNode.setAttribute('type', initType)
+        cssNode.innerHTML = css
+        try {
+          addTo.appendChild(cssNode)
+        } catch (e) {
+          console.log(e.message)
+        }
+      }
+    }
+  }, 20, true)
 }
