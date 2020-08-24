@@ -316,21 +316,21 @@ const list = [
   }
 ]
 
-let item = {}
-
-const target = list.find(item => {
-  return item.url.test(window.location.href)
-})
-
-if (target && !target.disabled) {
-  item.url = target.url
-  item.disabled = target.disabled
-  item.style = target.style
-  item.keyword = target.keyword
-  item.create = target.create
-  item.mounted = target.mounted
-} else {
-  item = null
+const targetSite = function () {
+  const target = list.find(item => {
+    return item.url.test(window.location.href)
+  })
+  if (target && !target.disabled) {
+    return {
+      url: target.url,
+      disabled: target.disabled,
+      style: target.style,
+      keyword: target.keyword,
+      create: target.create,
+      mounted: target.mounted
+    }
+  }
+  return null
 }
 
-export default item
+export { targetSite, list }
