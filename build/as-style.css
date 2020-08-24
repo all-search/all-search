@@ -1,114 +1,133 @@
-body {
+.body-horizontal {
   margin-top: 30px;
 }
+.body-vertical {
+  margin-left: 100px;
+}
 #all-search {
-  height: 30px;
-  width: 100%;
   position: fixed;
-  top: 0;
-  z-index: 999999;
   display: flex !important;
-  border-bottom: 1px #e8e8e8 solid;
   background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-.setting {
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
+.as-horizontal {
+  height: 30px;
+  width: 100%;
+  top: 0;
+  z-index: 999999;
+  border-bottom: 1px #e8e8e8 solid;
+  flex-direction: row;
+}
+.as-vertical {
+  height: 100%;
+  width: 100px;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  border-right: 1px #e8e8e8 solid;
+  flex-direction: column;
+}
+.as-setting {
+  line-height: 30px;
+  padding: 0 16px;
+  position: relative;
+  margin: 0;
   white-space: nowrap;
   cursor: pointer;
   font-size: 14px;
+  color: #606266;
 }
-
-/*# sourceMappingURL=App.vue.map */@media screen and (max-width: 768px) {
-.as-title {
-    display: none;
-}
-}
-.as-title {
-  text-decoration: none;
-  padding: 0;
-  margin: 0;
-}
-.as-title .as-title-inner {
-  font-size: 18px;
-  width: 90px;
-  height: 30px;
-  line-height: 30px;
-  font-weight: 600;
-  color: #1990fc;
-  margin: 0;
-  padding-left: 15px;
-  text-align: center;
-  cursor: pointer;
-}
-
-/*# sourceMappingURL=logo.vue.map */@media screen and (max-width: 768px) {
-.as-menu-container {
-    overflow: auto;
-}
-}
-.as-menu-container {
-  display: flex;
+.as-setting:hover {
+  color: #1890ff;
+}.as-menu {
   flex: 1;
 }
+.as-menu::before, .as-menu::after {
+  display: table;
+  content: "";
+}
+.as-menu::after {
+  clear: both;
+}
 .as-menu {
-  display: flex;
-  line-height: 30px;
   width: 100%;
-  height: 100%;
   padding: 0;
-  margin-top: -1px;
-  margin-bottom: 0;
+  margin: 0;
   white-space: nowrap;
   border: 0;
   box-shadow: none;
   background-color: #fff;
-}
-.as-submenu {
   display: flex;
-  align-items: center;
-  position: relative;
-  top: 1px;
 }
-.as-submenu-title {
+.as-menu--horizontal {
+  flex-direction: row;
+}
+.as-menu--horizontal .as-menu-item-active {
+  border-bottom: 2px solid #1890ff;
+}
+.as-menu--horizontal .as-subMenu-container {
+  left: -22px;
+  top: 24px;
+}
+.as-menu--vertical {
+  flex-direction: column;
+}
+.as-menu--vertical .as-menu-item {
+  margin: 5px 0;
+}
+.as-menu--vertical .as-menu-item-active {
+  border-right: 2px solid #1890ff;
+}
+.as-menu--vertical .as-subMenu-container {
+  left: 85px;
+  top: -16px;
+}
+.as-menu-item {
+  height: 30px;
+  line-height: 30px;
+  list-style: none;
   position: relative;
-  display: block;
+  transition: border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.as-menu-item-icon {
+  color: #606266;
+  margin: 1.25px 10px 0 0;
+  line-height: 28.75px;
+}
+.as-menu-item-title {
+  height: 100%;
+  padding: 0 16px;
+  position: relative;
   margin: 0;
-  padding: 0 20px;
   white-space: nowrap;
   cursor: pointer;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  color: #606266;
+  border-bottom: 2px solid rgba(255, 255, 255, 0);
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
-.as-submenu-title:hover {
+.as-menu-item-title:hover {
   color: #1890ff;
 }
-
-/*# sourceMappingURL=menu.vue.map */@charset "UTF-8";
-.as-select {
-  position: relative;
+.as-menu-item-active {
+  color: #1890ff;
 }
-.as-select ul li {
-  list-style: none;
+.as-menu-item-active .as-menu-item-icon {
+  color: #1890ff;
 }
-.as-select-content {
-  width: 65px;
-  height: 30px;
-  line-height: 30px;
-  padding-left: 20px;
-  font-size: 14px;
-  cursor: pointer;
-  position: relative;
+.as-menu-item-active .as-menu-item-title {
+  color: #1890ff;
 }
-.as-select-content::after {
-  content: " ▾";
+.as-subMenu-container {
+  padding: 0 20px 20px;
   position: absolute;
-  right: 10px;
-  font-size: 24px;
-  color: #999;
+  z-index: 99;
+  transform-origin: 30% 0 0;
 }
-.as-select-list {
+.as-subMenu {
+  list-style: none;
   padding: 4px 0;
   min-width: 90px;
   border: 1px solid #e4e7ed;
@@ -116,12 +135,9 @@ body {
   background-color: #fff;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  margin: 5px 0;
-  position: absolute;
-  right: -4px;
-  z-index: 99;
+  margin: 10px 0;
 }
-.as-select-list li {
+.as-subMenu li {
   font-size: 14px;
   padding: 0 20px;
   position: relative;
@@ -134,15 +150,107 @@ body {
   box-sizing: border-box;
   cursor: pointer;
 }
-.as-select-list li:hover {
+.as-subMenu li:hover {
   background-color: #f5f7fa;
+  color: #1890ff;
 }
-.as-select-mask {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
+.drop-enter-active, .drop-leave-active {
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.drop-enter, .drop-leave-to {
+  opacity: 0;
+  transform: scaleY(0.0001);
+}
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+.as-subMenu-group-list {
+  list-style: none;
+  padding: 0;
+}
+.as-subMenu-group-list .as-menu-item-title {
+  padding-left: 44px;
+}@media screen and (max-width: 768px) {
+.as-title {
+    display: none;
+}
+}
+.as-title-horizontal {
+  width: 100px;
+  margin: 0 10px;
+}
+.as-title-vertical {
+  width: 100%;
+}
+.as-title {
+  text-decoration: none !important;
+  padding: 0;
+  margin: 0;
+}
+.as-title .as-title-inner {
+  font-size: 18px;
+  height: 30px;
+  line-height: 30px;
+  font-weight: 600;
+  color: #1990fc;
+  margin: 0 auto;
+  text-align: center;
+  cursor: pointer;
 }
 
-/*# sourceMappingURL=category.vue.map */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.as-menu-item-icon {
+  font-family: "iconfont" !important;
+  font-size: 20px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
