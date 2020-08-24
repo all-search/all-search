@@ -1,15 +1,15 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.1d
+// @version      0.2.1e
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/6/30
+// @update       2020/8/24
 // @include      *
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
-// @require      https://cdn.jsdelivr.net/npm/vue
+// @require      https://lib.baomitu.com/vue/2.6.11/vue.js
 // @resource     iconFont  https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css
 // @run-at       document-start
 
@@ -339,16 +339,16 @@
             }
         }
     };
-    function r(e, t, n, o, s, a, i, r, l, c) {
-        "boolean" != typeof i && (l = r, r = i, i = !1);
+    function r(e, t, n, o, s, a, i, r, c, l) {
+        "boolean" != typeof i && (c = r, r = i, i = !1);
         const h = "function" == typeof n ? n.options : n;
         let m;
         if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
         h._compiled = !0, s && (h.functional = !0)), o && (h._scopeId = o), a ? (m = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(a);
+            t && t.call(this, c(e)), e && e._registeredComponents && e._registeredComponents.add(a);
         }, h._ssrRegister = m) : t && (m = i ? function(e) {
-            t.call(this, c(e, this.$root.$options.shadowRoot));
+            t.call(this, l(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, r(e));
         }), m) if (h.functional) {
@@ -362,10 +362,10 @@
         }
         return n;
     }
-    const l = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-    function c(e) {
+    const c = "undefined" != typeof navigator && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+    function l(e) {
         return (e, t) => function(e, t) {
-            const n = l ? t.media || "default" : e, o = m[n] || (m[n] = {
+            const n = c ? t.media || "default" : e, o = m[n] || (m[n] = {
                 ids: new Set,
                 styles: []
             });
@@ -403,12 +403,12 @@
         render: d,
         staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-13ecd3d2_0", {
+        e && e("data-v-34886da3_0", {
             source: "@media screen and (max-width: 768px) {\n.as-title {\n    display: none;\n}\n}\n.as-title-horizontal {\n  width: 100px;\n  margin: 0 10px;\n}\n.as-title-vertical {\n  width: 100%;\n}\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n}\n.as-title .as-title-inner {\n  font-size: 18px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: #1990fc;\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}",
             map: void 0,
             media: void 0
         });
-    }), u, void 0, !1, void 0, !1, c, void 0, void 0);
+    }), u, void 0, !1, void 0, !1, l, void 0, void 0);
     const w = {
         name: "menuItem",
         props: {
@@ -461,12 +461,12 @@
         render: g,
         staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-7407f0ef_0", {
+        e && e("data-v-886c6b0a_0", {
             source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
             map: void 0,
             media: void 0
         });
-    }), w, void 0, !1, void 0, !1, c, void 0, void 0);
+    }), w, void 0, !1, void 0, !1, l, void 0, void 0);
     const y = {
         name: "icon",
         props: {
@@ -492,12 +492,12 @@
                 render: b,
                 staticRenderFns: []
             }, (function(e) {
-                e && e("data-v-0f053f2e_0", {
+                e && e("data-v-99ce3dbc_0", {
                     source: '.as-menu-item-icon {\n  font-family: "iconfont" !important;\n  font-size: 20px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}',
                     map: void 0,
                     media: void 0
                 });
-            }), y, void 0, !1, void 0, !1, c, void 0, void 0)
+            }), y, void 0, !1, void 0, !1, l, void 0, void 0)
         },
         props: {
             mode: {
@@ -649,12 +649,12 @@
                 render: x,
                 staticRenderFns: []
             }, (function(e) {
-                e && e("data-v-19d03e9c_0", {
+                e && e("data-v-169d09a6_0", {
                     source: '.as-menu {\n  flex: 1;\n}\n.as-menu::before, .as-menu::after {\n  display: table;\n  content: "";\n}\n.as-menu::after {\n  clear: both;\n}\n.as-menu {\n  width: 100%;\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: #fff;\n  display: flex;\n}\n.as-menu--horizontal {\n  flex-direction: row;\n}\n.as-menu--horizontal .as-menu-item-active {\n  border-bottom: 2px solid #1890ff;\n}\n.as-menu--horizontal .as-subMenu-container {\n  left: -22px;\n  top: 24px;\n}\n.as-menu--vertical {\n  flex-direction: column;\n}\n.as-menu--vertical .as-menu-item {\n  margin: 5px 0;\n}\n.as-menu--vertical .as-menu-item-active {\n  border-right: 2px solid #1890ff;\n}\n.as-menu--vertical .as-subMenu-container {\n  left: 85px;\n  top: -16px;\n}\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  transition: border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-icon {\n  color: #606266;\n  margin: 1.25px 10px 0 0;\n  line-height: 28.75px;\n}\n.as-menu-item-title {\n  height: 100%;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  color: #606266;\n  border-bottom: 2px solid rgba(255, 255, 255, 0);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.as-menu-item-title:hover {\n  color: #1890ff;\n}\n.as-menu-item-active {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-icon {\n  color: #1890ff;\n}\n.as-menu-item-active .as-menu-item-title {\n  color: #1890ff;\n}\n.as-subMenu-container {\n  padding: 0 20px 20px;\n  position: absolute;\n  z-index: 99;\n  transform-origin: 30% 0 0;\n}\n.as-subMenu {\n  list-style: none;\n  padding: 4px 0;\n  min-width: 90px;\n  border: 1px solid #e4e7ed;\n  border-radius: 4px;\n  background-color: #fff;\n  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);\n  box-sizing: border-box;\n  margin: 10px 0;\n}\n.as-subMenu li {\n  font-size: 14px;\n  padding: 0 20px;\n  position: relative;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #606266;\n  height: 34px;\n  line-height: 34px;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.as-subMenu li:hover {\n  background-color: #f5f7fa;\n  color: #1890ff;\n}\n.drop-enter-active, .drop-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.drop-enter, .drop-leave-to {\n  opacity: 0;\n  transform: scaleY(0.0001);\n}\n.fade-enter-active, .fade-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.fade-enter, .fade-leave-to {\n  opacity: 0;\n}\n.as-subMenu-group-list {\n  list-style: none;\n  padding: 0;\n}\n.as-subMenu-group-list .as-menu-item-title {\n  padding-left: 44px;\n}',
                     map: void 0,
                     media: void 0
                 });
-            }), v, void 0, !1, void 0, !1, c, void 0, void 0)
+            }), v, void 0, !1, void 0, !1, l, void 0, void 0)
         },
         data: () => ({
             engines: t,
@@ -723,12 +723,12 @@
         render: k,
         staticRenderFns: []
     }, (function(e) {
-        e && e("data-v-d27901b4_0", {
+        e && e("data-v-ff3bb9cc_0", {
             source: '.body-horizontal {\n  margin-top: 30px;\n}\n.body-vertical {\n  margin-left: 100px;\n}\n#all-search {\n  position: fixed;\n  display: flex !important;\n  background-color: #fff;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  z-index: 999999;\n  border-bottom: 1px #e8e8e8 solid;\n  flex-direction: row;\n}\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  z-index: 999999;\n  border-right: 1px #e8e8e8 solid;\n  flex-direction: column;\n}\n.as-setting {\n  line-height: 30px;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: #606266;\n}\n.as-setting:hover {\n  color: #1890ff;\n}',
             map: void 0,
             media: void 0
         });
-    }), _, void 0, !1, void 0, !1, c, void 0, void 0);
+    }), _, void 0, !1, void 0, !1, l, void 0, void 0);
     let z = {};
     const C = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,

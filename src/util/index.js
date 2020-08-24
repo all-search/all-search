@@ -22,15 +22,15 @@ const el = document.createElement('a')
 
 export function parseUrl (url) {
   let val = url
-  val = val.toLowerCase()
   if (val.indexOf('//') < 0) {
     val = `//${val}`
   } else if (val.indexOf('//') > -1) {
+    const lowerCaseVal = val.toLowerCase()
     if (
-      !val.startsWith('http://') &&
-      !val.startsWith('https://') &&
-      !val.startsWith('ftp://') &&
-      !val.startsWith('files://')
+      !lowerCaseVal.startsWith('http://') &&
+      !lowerCaseVal.startsWith('https://') &&
+      !lowerCaseVal.startsWith('ftp://') &&
+      !lowerCaseVal.startsWith('files://')
     ) {
       val = val.replace(/.*\/\//, '//')
     }

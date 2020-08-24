@@ -13,7 +13,7 @@ const meta = `// ==UserScript==
 // @homepageURL  ${pkg.homepage}
 
 // @noframes
-// @require      https://cdn.jsdelivr.net/npm/vue
+// @require      https://lib.baomitu.com/vue/2.6.11/vue.js
 // @resource     iconFont  https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css
 // @run-at       document-start
 
