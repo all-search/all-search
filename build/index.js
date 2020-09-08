@@ -4,13 +4,13 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/8/25
+// @update       2020/9/7
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://lib.baomitu.com/vue/2.6.11/vue.js
 // @resource     iconFont  https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css
+// @resource     as-style  https://raw.githubusercontent.com/endday/all-search/master/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -401,14 +401,14 @@
     }
     function n(e, t) {
         let s;
-        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? i(s) : function(e) {
+        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? i(s, e) : function(e) {
             if (!e) return;
             const t = document.createElement("link");
             t.href = e, t.rel = "stylesheet", t.type = "text/css", t.crossorigin = "anonymous", 
             document.getElementsByTagName("head")[0].appendChild(t);
         }(t);
     }
-    function i(e, t, s, o, a) {
+    function i(e, t, s, o) {
         !function(e, t, s) {
             const o = t / 1e3 * 60;
             let a = 0;
@@ -421,23 +421,30 @@
                 }
             }));
         }((function() {
-            let r = document.querySelector(s);
-            if (void 0 === s && (r = document.head || document.body || document.documentElement || document), 
-            o = o || !1, a = a || "text/css", void 0 === s || void 0 !== s && null != document.querySelector(s)) if (!0 === o) !function(e) {
-                try {
-                    if ("string" == typeof e) {
-                        let t = document.querySelectorAll(e);
-                        for (let e = 0; e < t.length; e++) t[e].remove();
-                    } else "function" == typeof e ? e() : console.log("未知命令：" + e);
-                } catch (e) {}
-            }("." + t); else if (!1 === o && null != document.querySelector("." + t)) ; else {
-                let s = document.createElement("style");
-                null != t && (s.className = t), s.setAttribute("type", a), s.innerHTML = e;
-                try {
-                    r.appendChild(s);
-                } catch (e) {
-                    console.log(e.message);
+            let a = document.querySelector(s);
+            if (void 0 === s && (a = document.body || document.head || document.documentElement || document), 
+            o = o || !1, void 0 === s || void 0 !== s && null !== document.querySelector(s)) {
+                if (!0 !== o) {
+                    if (!1 === o && null != document.querySelector("." + t)) return !0;
+                    {
+                        let s = document.createElement("style");
+                        null != t && (s.className = t), s.setAttribute("type", "text/css"), s.innerHTML = e;
+                        try {
+                            a.appendChild(s);
+                        } catch (e) {
+                            console.log(e.message);
+                        }
+                        return !0;
+                    }
                 }
+                !function(e) {
+                    try {
+                        if ("string" == typeof e) {
+                            let t = document.querySelectorAll(e);
+                            for (let e = 0; e < t.length; e++) t[e].remove();
+                        } else "function" == typeof e ? e() : console.log("未知命令：" + e);
+                    } catch (e) {}
+                }("." + t);
             }
         }), 20, !0);
     }
@@ -728,7 +735,7 @@
         })), 1);
     };
     v._withStripped = !0;
-    const f = {
+    const b = {
         name: "all-search",
         components: {
             logo: h,
@@ -772,7 +779,7 @@
             }
         }
     };
-    var b = function() {
+    var f = function() {
         var e = this, t = e.$createElement, s = e._self._c || t;
         return s("div", {
             class: e.asClass,
@@ -799,11 +806,11 @@
             }
         }, [ e._v("\n    切换模式\n  ") ]) ], 1);
     };
-    b._withStripped = !0;
+    f._withStripped = !0;
     const x = l({
-        render: b,
+        render: f,
         staticRenderFns: []
-    }, void 0, f, void 0, !1, void 0, !1, void 0, void 0, void 0), q = [ {
+    }, void 0, b, void 0, !1, void 0, !1, void 0, void 0, void 0), q = [ {
         url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -1098,25 +1105,25 @@
         } : null;
     }();
     let C = null;
-    const S = document.getElementById("all-search");
-    S ? C = S : (C = document.createElement("div"), C.id = "all-search"), C.style.display = "none";
-    const z = new e({
+    const z = document.getElementById("all-search");
+    z ? C = z : (C = document.createElement("div"), C.id = "all-search"), C.style.display = "none";
+    const S = new e({
         data: () => ({
             currentSite: _
         }),
         render: e => e(x)
     });
     n("iconFont", "https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css"), 
-    n("as-style", `https://cdn.jsdelivr.net/gh/endday/all-search/build/as-style.css?v=${k}`);
+    n("as-style", `https://raw.githubusercontent.com/endday/all-search/master/build/as-style.css?v=${k}`);
     const N = o("mode") || "horizontal";
     !function() {
         const e = document.getElementsByTagName("head")[0], t = {
             childList: !0
+        }, s = function(e) {
+            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "as-style" === t.removedNodes[0].class && r(t.removedNodes[0].innerText);
         };
-        let s;
-        MutationObserver && (s = new MutationObserver((function(e) {
-            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "all-search-style" === t.removedNodes[0].class && r(t.removedNodes[0].innerText);
-        })), s.observe(e, t));
+        let o, a = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        a && (o = new a(s), o.observe(e, t));
     }(), function() {
         let e = 0;
         return new Promise((t, s) => {
@@ -1129,8 +1136,8 @@
         });
     }().then(() => {
         const e = document.body.parentElement.insertBefore(C, document.body);
-        z.$mount(e), _ && _.style && (_.style[1] && "horizontal" === N && i(_.style[1]), 
-        _.style[2] && "vertical" === N && i(_.style[2]));
+        S.$mount(e), _ && _.style && (_.style[1] && "horizontal" === N && i(_.style[1], "as-horizontal"), 
+        _.style[2] && "vertical" === N && i(_.style[2], "as-vertical"));
     }).catch(e => {
         console.error(e);
     });

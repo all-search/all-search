@@ -18,6 +18,14 @@ export function getKeyword () {
   return ''
 }
 
+export function addListenerOnInput (cb) {
+  const el = document.querySelector('input[type=\'search\'],input[type=\'text\'][autocomplete=\'off\'],input[autocomplete=\'off\']:not([type])') ||
+    document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])')
+  if (el) {
+    el.onclick = cb
+  }
+}
+
 const el = document.createElement('a')
 
 export function parseUrl (url) {
@@ -107,7 +115,6 @@ export function setSession (name, value) {
   }
 }
 
-
 // 监听head的节点移除，防止style被干掉
 export function domObserve () {
   const targetNode = document.getElementsByTagName('head')[0]
@@ -116,15 +123,16 @@ export function domObserve () {
     for (const mutation of mutationsList) {
       if (mutation.removedNodes.length &&
         mutation.removedNodes[0].nodeName === 'STYLE' &&
-        mutation.removedNodes[0].class === 'all-search-style'
+        mutation.removedNodes[0].class === 'as-style'
       ) {
         addStyle(mutation.removedNodes[0].innerText)
       }
     }
   }
+  let MO = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
   let observer
-  if (MutationObserver) {
-    observer = new MutationObserver(callback)
+  if (MO) {
+    observer = new MO(callback)
     observer.observe(targetNode, config)
   }
 }
@@ -159,7 +167,7 @@ export function addStyleResource (name, link) {
     styleContent = window.GM_getResourceText(name)
   }
   if (styleContent) {
-    ACAddStyle(styleContent)
+    ACAddStyle(styleContent, name)
   } else {
     addLink(link)
   }
@@ -213,7 +221,7 @@ function safeRemove (cssSelectorOrFunction) {
   }
 }
 
-export function ACAddStyle (css, className, addToTarget, isReload, initType) { // 添加CSS代码，不考虑文本载入时间，只执行一次-无论成功与否，带有className
+export function ACAddStyle (css, className, addToTarget, isReload) { // 添加CSS代码，不考虑文本载入时间，只执行一次-无论成功与否，带有className
   RAFInterval(function () {
     /**
      * addToTarget这里不要使用head标签,head标签的css会在html载入时加载，
@@ -221,12 +229,13 @@ export function ACAddStyle (css, className, addToTarget, isReload, initType) { /
      * **/
     let addTo = document.querySelector(addToTarget)
     if (typeof (addToTarget) === 'undefined') {
-      addTo = (document.head || document.body || document.documentElement || document)
+      addTo = (document.body || document.head || document.documentElement || document)
     }
     isReload = isReload || false // 默认是非加载型
-    initType = initType || 'text/css'
     // 如果没有目标节点(则直接加) || 有目标节点且找到了节点(进行新增)
-    if (typeof (addToTarget) === 'undefined' || (typeof (addToTarget) !== 'undefined' && document.querySelector(addToTarget) != null)) {
+    if (typeof (addToTarget) === 'undefined' ||
+      (typeof (addToTarget) !== 'undefined' && document.querySelector(addToTarget) !== null)
+    ) {
       // clearInterval(tout);
       // 如果true 强行覆盖，不管有没有--先删除
       // 如果false，不覆盖，但是如果有的话，要退出，不存在则新增--无需删除
@@ -234,16 +243,18 @@ export function ACAddStyle (css, className, addToTarget, isReload, initType) { /
         safeRemove('.' + className)
       } else if (isReload === false && document.querySelector('.' + className) != null) {
         // 节点存在 && 不准备覆盖
+        return true
       } else {
         let cssNode = document.createElement('style')
         if (className != null) cssNode.className = className
-        cssNode.setAttribute('type', initType)
+        cssNode.setAttribute('type', 'text/css')
         cssNode.innerHTML = css
         try {
           addTo.appendChild(cssNode)
         } catch (e) {
           console.log(e.message)
         }
+        return true
       }
     }
   }, 20, true)
