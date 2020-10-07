@@ -1,6 +1,7 @@
 <template>
   <div
     id="all-search"
+    :style="{display: 'none'}"
     :class="asClass">
     <logo :mode="mode"/>
     <as-menu

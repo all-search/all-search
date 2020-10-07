@@ -7,6 +7,7 @@ import news from './news'
 import social from './social'
 import knowledge from './knowledge'
 import image from './image'
+import shopping from './shopping'
 
 export default [
   {
@@ -23,6 +24,11 @@ export default [
     nameZh: '视频',
     name: 'video',
     list: video
+  },
+  {
+    nameZh: '购物',
+    name: 'shopping',
+    list: shopping
   },
   {
     nameZh: '音乐',

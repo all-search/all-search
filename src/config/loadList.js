@@ -3,16 +3,17 @@ const width = 100
 
 const list = [
   {
-    url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?!tbm=)(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
+    url: /^https?:\/\/www\.google\.com\/search/,
     style: {
       1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;} .srp .minidiv{top: ${height}px !important;}`
     }
   },
   {
-    url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/
+    url: /^https?:\/\/www\.baidu\.com\/$/,
+    disabled: true
   },
   {
-    url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
+    url: /^https?:\/\/www\.baidu\.com\/s/,
     style: {
       1: `.fix-head { top: ${height}px !important; }`,
       2: `.fix-head #u { right: ${width}px; }`
@@ -79,22 +80,22 @@ const list = [
     url: /^https?:\/\/zhidao\.baidu\.com\/search/i
   },
   {
-    url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i
+    url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/
   },
   {
-    url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
+    url: /^https?:\/\/www\.zhihu\.com\/search\?/,
     style: {
       1: `.AppHeader.is-fixed {top: ${height}px!important;}`
     }
   },
   {
-    url: /^https?:\/\/www\.so\.com\/s/i
+    url: /^https?:\/\/www\.so\.com\/s/
   },
   {
-    url: /^https?:\/\/so\.baike\.com\/doc/i
+    url: /^https?:\/\/so\.baike\.com\/doc/
   },
   {
-    url: /^https?:\/\/www\.baike\.com\/wiki/i
+    url: /^https?:\/\/www\.baike\.com\/wiki/
   },
   {
     url: /^https?:\/\/www\.docin\.com\/search\.do/
@@ -109,10 +110,10 @@ const list = [
     url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
   },
   {
-    url: /^https?:\/\/www\.quora\.com\/search\?/i
+    url: /^https?:\/\/www\.quora\.com\/search\?/
   },
   {
-    url: /^https?:\/\/stackoverflow\.com\/search\?/i,
+    url: /^https?:\/\/stackoverflow\.com\/search\?/,
     style: {
       1: `.top-bar._fixed { top: ${height}px }`,
       2: `.top-bar._fixed { right: ${width}px }`
@@ -144,7 +145,7 @@ const list = [
     url: /^https?:\/\/so\.iqiyi\.com\/so\/q/
   },
   {
-    url: /^https?:\/\/v\.qq\.com\/x\/search/i,
+    url: /^https?:\/\/v\.qq\.com\/x\/search/,
     style: {
       1: `.site_head {top: ${height}px;}`
     }
@@ -159,31 +160,31 @@ const list = [
     url: /^https?:\/\/www\.xiami\.com\/search/
   },
   {
-    url: /^https?:\/\/s\.music\.qq\.com/i
+    url: /^https?:\/\/s\.music\.qq\.com/
   },
   {
-    url: /^https?:\/\/music\.163\.com\/.*?#\/search/i
+    url: /^https?:\/\/music\.163\.com\/.*?#\/search/
   },
   {
     url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
   },
   {
-    url: /^https?:\/\/image\.baidu\.com\/search/i,
+    url: /^https?:\/\/image\.baidu\.com\/search/,
     style: {
       1: `#search .s_search { top: ${height}px; }`
     }
   },
   {
-    url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i
+    url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
   },
   {
-    url: /^https?:\/\/.*\.bing\.com\/images\/search/i
+    url: /^https?:\/\/.*\.bing\.com\/images\/search/
   },
   {
     url: /^https?:\/\/www\.flickr\.com\/search\//
   },
   {
-    url: /^http:\/\/www\.pixiv\.net\/search\.php/i
+    url: /^http:\/\/www\.pixiv\.net\/search\.php/
   },
   {
     url: /^https?:\/\/huaban\.com\/search\/\?/
@@ -192,40 +193,40 @@ const list = [
     url: /^https?:\/\/www\.pinterest\.com\/search\//
   },
   {
-    url: /^https?:\/\/thepiratebay\.org\/search/i
+    url: /^https?:\/\/thepiratebay\.org\/search/
   },
   {
-    url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/i
+    url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/
   },
   {
-    url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/i
+    url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/
   },
   {
     url: /^https?:\/\/www\.zimuzu\.tv\/search\//
   },
   {
-    url: /^https?:\/\/so\.cqp\.cc\/search/i
+    url: /^https?:\/\/so\.cqp\.cc\/search/
   },
   {
-    url: /^https?:\/\/subhd\.com\/search/i
+    url: /^https?:\/\/subhd\.com\/search/
   },
   {
-    url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i
+    url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/
   },
   {
-    url: /^https?:\/\/fanyi\.baidu\.com/i,
+    url: /^https?:\/\/fanyi\.baidu\.com/,
     keyword () {
       return document.getElementById('baidu_translate_input').value
     }
   },
   {
-    url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/i
+    url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/
   },
   {
-    url: /^https?:\/\/dict\.youdao\.com\/search/i
+    url: /^https?:\/\/dict\.youdao\.com\/search/
   },
   {
-    url: /^https?:\/\/dict\.youdao\.com\/w/i
+    url: /^https?:\/\/dict\.youdao\.com\/w/
   },
   {
     url: /^https?:\/\/dict\.cn\/./
@@ -237,37 +238,37 @@ const list = [
     }
   },
   {
-    url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/i
+    url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
   },
   {
-    url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/i
+    url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/
   },
   {
     url: /^https?:\/\/search\.jd\.com\/Search/
   },
   {
-    url: /^https?:\/\/search\.suning\.com/i
+    url: /^https?:\/\/search\.suning\.com/
   },
   {
-    url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/i
+    url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/
   },
   {
-    url: /^https?:\/\/search\.smzdm\.com\/\?/i
+    url: /^https?:\/\/search\.smzdm\.com\/\?/
   },
   {
-    url: /^https?:\/\/s\.weibo\.com\/weibo\?q=/i,
+    url: /^https?:\/\/s\.weibo\.com\/weibo\?q=/,
     style: {
       1: `.WB_global_nav { top: ${height}px !important;}`
     }
   },
   {
-    url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i
+    url: /^https?:\/\/tieba\.baidu\.com\/f\/search/
   },
   {
     url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/
   },
   {
-    url: /^https?:\/\/www\.douban\.com\/search/i
+    url: /^https?:\/\/www\.douban\.com\/search/
   },
   {
     url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/
@@ -276,25 +277,25 @@ const list = [
     url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
   },
   {
-    url: /^http:\/\/search\.cnki\.net\/search\.aspx/i
+    url: /^http:\/\/search\.cnki\.net\/search\.aspx/
   },
   {
-    url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i
+    url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/
   },
   {
-    url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i
+    url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/
   },
   {
-    url: /^http:\/\/.*?ebscohost\.com\/.*?results/i
+    url: /^http:\/\/.*?ebscohost\.com\/.*?results/
   },
   {
-    url: /^http:\/\/link\.springer\.com\/search\?query=/i
+    url: /^http:\/\/link\.springer\.com\/search\?query=/
   },
   {
-    url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/i
+    url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/
   },
   {
-    url: /^https?:.*?runoob\.com\//i
+    url: /^https?:.*?runoob\.com\//
   },
   {
     url: /^https?:\/\/github\.com\/search/
@@ -320,7 +321,7 @@ const targetSite = function () {
   const target = list.find(item => {
     return item.url.test(window.location.href)
   })
-  if (target && !target.disabled) {
+  if (target) {
     return {
       url: target.url,
       disabled: target.disabled,

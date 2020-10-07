@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { ACAddStyle, addListenerOnInput, addStyleResource, checkBody, domObserve, getSession } from './util'
+import { ACAddStyle, addStyleResource, checkBody, domObserve, getAsEl, getSession, RAFInterval } from './util'
 import { targetSite } from './config/loadList'
 import pkg from '../package.json'
 
@@ -10,15 +10,6 @@ Vue.config.productionTip = false
 
 const currentSite = targetSite()
 
-let el = null
-const asEl = document.getElementById('all-search')
-if (asEl) {
-  el = asEl
-} else {
-  el = document.createElement('div')
-  el.id = 'all-search'
-}
-el.style.display = 'none'
 const app = new Vue({
   data () {
     return {
@@ -28,29 +19,40 @@ const app = new Vue({
   render: h => h(App)
 })
 
+console.log('all-search-run')
+
 // 添加样式
-addStyleResource('iconFont', 'https://cdn.jsdelivr.net/gh/endday/all-search/src/assets/iconfont.css')
-addStyleResource('as-style', `https://raw.githubusercontent.com/endday/all-search/master/build/as-style.css?v=${version}`)
+const initStyle = function () {
+  addStyleResource('iconFont', 'https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css')
+  addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${version}`)
+}
 
 const mode = getSession('mode') || 'horizontal'
 
+if (currentSite && currentSite.style) {
+  if (currentSite.style[1] && mode === 'horizontal') {
+    ACAddStyle(currentSite.style[1], 'as-special')
+  }
+  if (currentSite.style[2] && mode === 'vertical') {
+    ACAddStyle(currentSite.style[2], 'as-special')
+  }
+}
+
 domObserve()
 
-addListenerOnInput(() => {
-  console.log('input')
-})
-
 checkBody().then(() => {
-  const mountEL = document.body.parentElement.insertBefore(el, document.body)
-  app.$mount(mountEL)
-  if (currentSite && currentSite.style) {
-    if (currentSite.style[1] && mode === 'horizontal') {
-      ACAddStyle(currentSite.style[1], 'as-horizontal')
+  RAFInterval(() => {
+    const currentSite = targetSite()
+    if (!currentSite.disabled) {
+      initStyle()
+      const asEl = document.getElementById('all-search')
+      if (!asEl) {
+        const el = getAsEl()
+        const mountEL = document.body.parentElement.insertBefore(el, document.body)
+        app.$mount(mountEL)
+      }
     }
-    if (currentSite.style[2] && mode === 'vertical') {
-      ACAddStyle(currentSite.style[2], 'as-vertical')
-    }
-  }
+  }, 800, true)
 }).catch(err => {
   console.error(err)
 })

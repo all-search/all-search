@@ -1,7 +1,7 @@
 export default [
   {
     name: '知乎',
-    url: 'http://www.zhihu.com/search?q=%s'
+    url: 'https://www.zhihu.com/search?q=%s&type=content'
   },
   {
     name: '推特',
@@ -9,15 +9,15 @@ export default [
   },
   {
     name: '豆瓣',
-    url: 'http://www.douban.com/search?source=suggest&q=%s'
+    url: 'https://www.douban.com/search?source=suggest&q=%s'
   },
   {
     name: '百度贴吧',
-    url: 'http://tieba.baidu.com/f?kw=%s&ie=utf-8'
+    url: 'https://tieba.baidu.com/f?kw=%s&ie=utf-8'
   },
   {
     name: '新浪微博',
-    url: 'http://s.weibo.com/weibo?q=%s'
+    url: 'https://s.weibo.com/weibo?q=%s'
   },
   {
     name: '脸书',

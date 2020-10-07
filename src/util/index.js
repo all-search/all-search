@@ -18,14 +18,6 @@ export function getKeyword () {
   return ''
 }
 
-export function addListenerOnInput (cb) {
-  const el = document.querySelector('input[type=\'search\'],input[type=\'text\'][autocomplete=\'off\'],input[autocomplete=\'off\']:not([type])') ||
-    document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])')
-  if (el) {
-    el.onclick = cb
-  }
-}
-
 const el = document.createElement('a')
 
 export function parseUrl (url) {
@@ -125,6 +117,7 @@ export function domObserve () {
         mutation.removedNodes[0].nodeName === 'STYLE' &&
         mutation.removedNodes[0].class === 'as-style'
       ) {
+        console.log(mutation)
         addStyle(mutation.removedNodes[0].innerText)
       }
     }
@@ -173,7 +166,7 @@ export function addStyleResource (name, link) {
   }
 }
 
-function RAFInterval (callback, period, runNow) {
+export function RAFInterval (callback, period, runNow) {
   // 一秒60次，对应1秒1000ms
   const needCount = period / 1000 * 60
   let times = 0 // 已经计数的数量
@@ -258,4 +251,18 @@ export function ACAddStyle (css, className, addToTarget, isReload) { // 添加CS
       }
     }
   }, 20, true)
+}
+
+export function getAsEl () {
+  let el = null
+  const asEl = document.getElementById('all-search')
+  if (asEl) {
+    el = asEl
+  } else {
+    el = document.createElement('div')
+    el.id = 'all-search'
+  }
+
+  el.style.display = 'none'
+  return el
 }
