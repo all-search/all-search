@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.1g
+// @version      0.2.1h
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -1085,7 +1085,7 @@ var allSearch = function(e) {
     };
     const C = {
         name: "all-search",
-        version: "0.2.1g",
+        version: "0.2.1h",
         description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
         author: "endday",
         scripts: {
