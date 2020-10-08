@@ -107,7 +107,7 @@
 // ==/UserScript==
 /* eslint-disable */
 
-!function(e) {
+var allSearch = function(e) {
     "use strict";
     e = e && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
     var t = [ {
@@ -428,12 +428,12 @@
             e && window.localStorage.setItem(o, e);
         }
     }
-    function n(e) {
+    function r(e) {
         if (!e) return;
         const t = document.createElement("style");
         t.innerHTML = e, t.class = "all-search-style", document.getElementsByTagName("head")[0].appendChild(t);
     }
-    function r(e, t) {
+    function n(e, t) {
         let s;
         window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? l(s, e) : function(e) {
             if (!e) return;
@@ -483,15 +483,15 @@
             }
         }), 20, !0);
     }
-    function c(e, t, s, o, a, n, r, i, l, c) {
-        "boolean" != typeof r && (l = i, i = r, r = !1);
+    function c(e, t, s, o, a, r, n, i, l, c) {
+        "boolean" != typeof n && (l = i, i = n, n = !1);
         const u = "function" == typeof s ? s.options : s;
         let h;
         if (e && e.render && (u.render = e.render, u.staticRenderFns = e.staticRenderFns, 
-        u._compiled = !0, a && (u.functional = !0)), o && (u._scopeId = o), n ? (h = function(e) {
+        u._compiled = !0, a && (u.functional = !0)), o && (u._scopeId = o), r ? (h = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(n);
-        }, u._ssrRegister = h) : t && (h = r ? function(e) {
+            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(r);
+        }, u._ssrRegister = h) : t && (h = n ? function(e) {
             t.call(this, c(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, i(e));
@@ -1085,30 +1085,24 @@
     };
     const C = {
         name: "all-search",
-        description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
         version: "0.2.1g",
-        main: "dist/index.js",
+        description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
         author: "endday",
-        license: "GPL-2.0",
-        homepage: "https://github.com/endday/all-search",
-        repository: {
-            type: "git",
-            url: "git@github.com:endday/all-search.git"
-        },
         scripts: {
             serve: "vue-cli-service serve --fix",
             build: "vue-cli-service build",
-            buildScript: "rollup -c",
             lint: "vue-cli-service lint",
+            buildScript: "rollup -c",
             report: "vue-cli-service build --report",
             sourceMap: "vue-cli-service build --sourceMap"
         },
+        main: "dist/index.js",
         dependencies: {
             "@babel/polyfill": "^7.4.3",
             axios: "^0.19.0",
-            "element-ui": "^2.12.0",
             vue: "^2.6.12",
             "vue-router": "^3.0.1",
+            vuetify: "^2.2.11",
             vuex: "^3.0.1",
             "workbox-webpack-plugin": "^4.3.1"
         },
@@ -1136,9 +1130,18 @@
             "rollup-plugin-replace": "^2.2.0",
             "rollup-plugin-terser": "^5.2.0",
             "rollup-plugin-vue": "^5.1.6",
-            "sass-loader": "^7.0.1",
+            sass: "^1.19.0",
+            "sass-loader": "^8.0.0",
+            "vue-cli-plugin-vuetify": "~2.0.7",
             "vue-template-compiler": "^2.6.12",
+            "vuetify-loader": "^1.3.0",
             webpack: "^4.29.6"
+        },
+        homepage: "https://github.com/endday/all-search",
+        license: "GPL-2.0",
+        repository: {
+            type: "git",
+            url: "git@github.com:endday/all-search.git"
         }
     }.version.replace(/\./g, "");
     e.config.productionTip = !1;
@@ -1150,13 +1153,13 @@
     });
     console.log("all-search-run");
     const N = o("mode") || "horizontal";
-    S && S.style && (S.style[1] && "horizontal" === N && l(S.style[1], "as-special"), 
+    return S && S.style && (S.style[1] && "horizontal" === N && l(S.style[1], "as-special"), 
     S.style[2] && "vertical" === N && l(S.style[2], "as-special")), function() {
         const e = document.getElementsByTagName("head")[0], t = {
             childList: !0
         }, s = function(e) {
             for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "as-style" === t.removedNodes[0].class && (console.log(t), 
-            n(t.removedNodes[0].innerText));
+            r(t.removedNodes[0].innerText));
         };
         let o, a = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         a && (o = new a(s), o.observe(e, t));
@@ -1173,8 +1176,8 @@
     }().then(() => {
         i(() => {
             if (!q().disabled) {
-                if (r("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-                r("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${C}`), 
+                if (n("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+                n("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${C}`), 
                 !document.getElementById("all-search")) {
                     const e = function() {
                         let e = null;
@@ -1188,5 +1191,5 @@
         }, 800, !0);
     }).catch(e => {
         console.error(e);
-    });
+    }), z;
 }(Vue);
