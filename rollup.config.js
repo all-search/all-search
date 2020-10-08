@@ -9,7 +9,7 @@ import del from 'rollup-plugin-delete'
 import meta from './src/config/meta'
 
 export default {
-  input: 'src/main.js',
+  input: 'src/as-script/main.js',
   output: {
     name: 'allSearch',
     file: 'build/index.js',

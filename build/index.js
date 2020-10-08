@@ -4,7 +4,7 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/10/7
+// @update       2020/10/8
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
@@ -948,8 +948,8 @@
     }, {
         url: /^https?:\/\/www\.youtube\.com\/results/,
         style: {
-            1: "#masthead-container.ytd-app {top:30px;} html:not(.style-scope) {--ytd-toolbar-height:86px;}",
-            2: "ytd-app {margin-left:100px;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:100px;}#masthead-container.ytd-app {width: calc(100% - 100px);}"
+            1: "#masthead-container.ytd-app {top:30px !important;} html:not(.style-scope) {--ytd-toolbar-height:86px !important;}",
+            2: "ytd-app {margin-left:100px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:100px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}"
         }
     }, {
         url: /^https?:\/\/www\.nicovideo\.jp\/search\//
