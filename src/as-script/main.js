@@ -19,7 +19,7 @@ const app = new Vue({
   render: h => h(index)
 })
 
-console.log('all-search-run')
+console.log('all-search running 全搜运行中')
 
 // 添加样式
 const initStyle = function () {
@@ -40,19 +40,28 @@ if (currentSite && currentSite.style) {
 
 domObserve()
 
-checkBody().then(() => {
-  RAFInterval(() => {
-    const currentSite = targetSite()
-    if (!currentSite.disabled) {
+function init () {
+  const currentSite = targetSite()
+  if (!currentSite.disabled) {
+    if (!currentSite.invisible) {
       initStyle()
-      const asEl = document.getElementById('all-search')
-      if (!asEl) {
-        const el = getAsEl()
-        const mountEL = document.body.parentElement.insertBefore(el, document.body)
-        app.$mount(mountEL)
-      }
     }
-  }, 800, true)
+    const asEl = document.getElementById('all-search')
+    if (!asEl) {
+      const el = getAsEl()
+      const mountEL = document.body.parentElement.insertBefore(el, document.body)
+      app.$mount(mountEL)
+    }
+  }
+}
+
+checkBody().then(() => {
+  // 百度比较特殊，搜索没有发生页面请求，所以需要轮询
+  if (window.location.hostname === 'www.baidu.com') {
+    RAFInterval(() => init(), 800, true)
+  } else {
+    init()
+  }
 }).catch(err => {
   console.error(err)
 })

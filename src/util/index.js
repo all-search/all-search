@@ -117,7 +117,6 @@ export function domObserve () {
         mutation.removedNodes[0].nodeName === 'STYLE' &&
         mutation.removedNodes[0].class === 'as-style'
       ) {
-        console.log(mutation)
         addStyle(mutation.removedNodes[0].innerText)
       }
     }
@@ -141,9 +140,17 @@ export function addStyle (styleContent) {
   head.appendChild(style)
 }
 
-export function addLink (url) {
+export function addLink (url, name) {
   if (!url) {
     return
+  }
+  if (name) {
+    const list = document.styleSheets
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].ownerNode.className === name) {
+        return
+      }
+    }
   }
   const link = document.createElement('link')
   link.href = url
@@ -162,7 +169,7 @@ export function addStyleResource (name, link) {
   if (styleContent) {
     ACAddStyle(styleContent, name)
   } else {
-    addLink(link)
+    addLink(link, name)
   }
 }
 

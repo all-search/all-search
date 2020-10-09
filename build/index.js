@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.1h
+// @version      0.2.2
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/10/8
+// @update       2020/10/9
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
@@ -428,19 +428,23 @@ var allSearch = function(e) {
             e && window.localStorage.setItem(o, e);
         }
     }
-    function r(e) {
+    function n(e) {
         if (!e) return;
         const t = document.createElement("style");
         t.innerHTML = e, t.class = "all-search-style", document.getElementsByTagName("head")[0].appendChild(t);
     }
-    function n(e, t) {
+    function r(e, t) {
         let s;
-        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? l(s, e) : function(e) {
+        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? l(s, e) : function(e, t) {
             if (!e) return;
-            const t = document.createElement("link");
-            t.href = e, t.rel = "stylesheet", t.type = "text/css", t.crossorigin = "anonymous", 
-            document.getElementsByTagName("head")[0].appendChild(t);
-        }(t);
+            if (t) {
+                const e = document.styleSheets;
+                for (let s = 0; s < e.length; s++) if (e[s].ownerNode.className === t) return;
+            }
+            const s = document.createElement("link");
+            s.href = e, s.rel = "stylesheet", s.type = "text/css", s.crossorigin = "anonymous", 
+            document.getElementsByTagName("head")[0].appendChild(s);
+        }(t, e);
     }
     function i(e, t, s) {
         const o = t / 1e3 * 60;
@@ -483,15 +487,15 @@ var allSearch = function(e) {
             }
         }), 20, !0);
     }
-    function c(e, t, s, o, a, r, n, i, l, c) {
-        "boolean" != typeof n && (l = i, i = n, n = !1);
+    function c(e, t, s, o, a, n, r, i, l, c) {
+        "boolean" != typeof r && (l = i, i = r, r = !1);
         const u = "function" == typeof s ? s.options : s;
         let h;
         if (e && e.render && (u.render = e.render, u.staticRenderFns = e.staticRenderFns, 
-        u._compiled = !0, a && (u.functional = !0)), o && (u._scopeId = o), r ? (h = function(e) {
+        u._compiled = !0, a && (u.functional = !0)), o && (u._scopeId = o), n ? (h = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(r);
-        }, u._ssrRegister = h) : t && (h = n ? function(e) {
+            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(n);
+        }, u._ssrRegister = h) : t && (h = r ? function(e) {
             t.call(this, c(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, i(e));
@@ -855,7 +859,7 @@ var allSearch = function(e) {
         }
     }, {
         url: /^https?:\/\/www\.baidu\.com\/$/,
-        disabled: !0
+        invisible: !0
     }, {
         url: /^https?:\/\/www\.baidu\.com\/s/,
         style: {
@@ -1076,6 +1080,7 @@ var allSearch = function(e) {
         const e = k.find(e => e.url.test(window.location.href));
         return e ? {
             url: e.url,
+            invisible: e.invisible,
             disabled: e.disabled,
             style: e.style,
             keyword: e.keyword,
@@ -1085,7 +1090,7 @@ var allSearch = function(e) {
     };
     const C = {
         name: "all-search",
-        version: "0.2.1h",
+        version: "0.2.2",
         description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
         author: "endday",
         scripts: {
@@ -1145,21 +1150,36 @@ var allSearch = function(e) {
         }
     }.version.replace(/\./g, "");
     e.config.productionTip = !1;
-    const S = q(), z = new e({
+    const S = q(), N = new e({
         data: () => ({
             currentSite: S
         }),
         render: e => e(_)
     });
-    console.log("all-search-run");
-    const N = o("mode") || "horizontal";
-    return S && S.style && (S.style[1] && "horizontal" === N && l(S.style[1], "as-special"), 
-    S.style[2] && "vertical" === N && l(S.style[2], "as-special")), function() {
+    console.log("all-search running 全搜运行中");
+    const z = o("mode") || "horizontal";
+    function E() {
+        const e = q();
+        if (!e.disabled) {
+            if (e.invisible || (r("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+            r("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${C}`)), 
+            !document.getElementById("all-search")) {
+                const e = function() {
+                    let e = null;
+                    const t = document.getElementById("all-search");
+                    return t ? e = t : (e = document.createElement("div"), e.id = "all-search"), e.style.display = "none", 
+                    e;
+                }(), t = document.body.parentElement.insertBefore(e, document.body);
+                N.$mount(t);
+            }
+        }
+    }
+    return S && S.style && (S.style[1] && "horizontal" === z && l(S.style[1], "as-special"), 
+    S.style[2] && "vertical" === z && l(S.style[2], "as-special")), function() {
         const e = document.getElementsByTagName("head")[0], t = {
             childList: !0
         }, s = function(e) {
-            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "as-style" === t.removedNodes[0].class && (console.log(t), 
-            r(t.removedNodes[0].innerText));
+            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "as-style" === t.removedNodes[0].class && n(t.removedNodes[0].innerText);
         };
         let o, a = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         a && (o = new a(s), o.observe(e, t));
@@ -1174,22 +1194,8 @@ var allSearch = function(e) {
             }
         });
     }().then(() => {
-        i(() => {
-            if (!q().disabled) {
-                if (n("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-                n("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${C}`), 
-                !document.getElementById("all-search")) {
-                    const e = function() {
-                        let e = null;
-                        const t = document.getElementById("all-search");
-                        return t ? e = t : (e = document.createElement("div"), e.id = "all-search"), e.style.display = "none", 
-                        e;
-                    }(), t = document.body.parentElement.insertBefore(e, document.body);
-                    z.$mount(t);
-                }
-            }
-        }, 800, !0);
+        "www.baidu.com" === window.location.hostname ? i(() => E(), 800, !0) : E();
     }).catch(e => {
         console.error(e);
-    }), z;
+    }), N;
 }(Vue);

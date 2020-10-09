@@ -10,7 +10,7 @@ const list = [
   },
   {
     url: /^https?:\/\/www\.baidu\.com\/$/,
-    disabled: true
+    invisible: true
   },
   {
     url: /^https?:\/\/www\.baidu\.com\/s/,
@@ -324,6 +324,7 @@ const targetSite = function () {
   if (target) {
     return {
       url: target.url,
+      invisible: target.invisible,
       disabled: target.disabled,
       style: target.style,
       keyword: target.keyword,
