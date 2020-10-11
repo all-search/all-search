@@ -17,10 +17,9 @@
 </template>
 
 <script>
-import engines from '../config/engines/index.js'
 import { getSession, setSession } from '../util'
-import logo from '../components/logo.vue'
-import asMenu from '../components/menu.vue'
+import logo from './components/logo.vue'
+import asMenu from './components/menu.vue'
 
 export default {
   name: 'all-search',
@@ -30,7 +29,6 @@ export default {
   },
   data () {
     return {
-      engines,
       categoryName: 'search',
       // mode: 'vertical',
       mode: 'horizontal',

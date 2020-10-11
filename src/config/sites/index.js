@@ -9,7 +9,7 @@ import knowledge from './knowledge'
 import image from './image'
 import shopping from './shopping'
 
-export default [
+const list = [
   {
     nameZh: '搜索',
     name: 'search',
@@ -59,5 +59,19 @@ export default [
     nameZh: '图片',
     name: 'image',
     list: image
+  },
+  {
+    nameZh: '个人',
+    name: 'personal',
+    list: []
   }
-]
+].map(item => ({
+  ...item,
+  list: item.list.map(child => ({
+    ...child,
+    visible: true
+  })),
+  visible: true
+}))
+
+export default list

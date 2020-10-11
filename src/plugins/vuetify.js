@@ -1,6 +1,10 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify/lib'
+import Vuetify, { VTabs } from 'vuetify/lib'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  components: {
+    VTabs
+  }
+})
 
 export default new Vuetify({})

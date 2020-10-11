@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const argv = require('minimist')(process.argv.slice(2))
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 const srcFiles = fs.readdirSync(path.resolve(__dirname, 'src/'))
 // 项目名称
 const projectName = path.resolve(__dirname).split(path.sep).pop()
@@ -31,11 +32,9 @@ module.exports = {
   },
   configureWebpack: config => {
     config.entry.app[0] = entryPath
+    config.plugins.push(new VuetifyLoaderPlugin())
   },
   css: {
     extract: false
-  },
-  transpileDependencies: [
-    'vuetify'
-  ]
+  }
 }

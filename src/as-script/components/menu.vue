@@ -5,7 +5,7 @@
     <menu-item
       class="as-menu-item"
       :class="{ 'as-menu-item-active': item.show }"
-      v-for="item in engines"
+      v-for="item in sites"
       :key="item.index"
       @show="handleMenuShow($event, item)">
       <div class="as-menu-item-title">
@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import { getKeyword } from '../util'
-import engines from '../config/engines'
+import { getKeyword } from '../../util'
+import sites from '../../config/sites'
 import menuItem from './menuItem.vue'
 import icon from '../components/icon.vue'
 
@@ -71,23 +71,23 @@ export default {
       }
     },
     nameZh () {
-      const i = this.engines.findIndex(item => item.name === this.value)
+      const i = this.sites.findIndex(item => item.name === this.value)
       if (i > -1) {
-        return this.engines[i].nameZh
+        return this.sites[i].nameZh
       } else {
-        return this.engines[0].nameZh
+        return this.sites[0].nameZh
       }
     },
     menus () {
-      const i = this.engines.findIndex(item => item.name === this.value)
+      const i = this.sites.findIndex(item => item.name === this.value)
       if (i > -1) {
-        return this.engines[i].list.filter(item => !item.disabled)
+        return this.sites[i].list.filter(item => !item.disabled)
       }
-      return this.engines[0].list.filter(item => !item.disabled)
+      return this.sites[0].list.filter(item => !item.disabled)
     }
   },
   data: () => ({
-    engines: [],
+    sites: [],
     show: false,
     asSubMenuStyle: {
       top: 0,
@@ -95,7 +95,7 @@ export default {
     }
   }),
   created () {
-    this.engines = engines.map(item => ({
+    this.sites = sites.map(item => ({
       ...item,
       show: false
     }))
@@ -136,7 +136,7 @@ export default {
       }
     },
     close () {
-      this.engines.forEach(item => {
+      this.sites.forEach(item => {
         item.show = false
       })
       this.show = false
@@ -146,7 +146,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../assets/common";
+  @import "../../assets/common";
 
   .as-menu {
     flex: 1;

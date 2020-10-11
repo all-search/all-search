@@ -1,47 +1,47 @@
 export default [
   {
-    name: '谷歌图片',
+    nameZh: '谷歌图片',
     url: 'https://www.google.com/search?q=%s&tbm=isch'
   },
   {
-    name: '百度图片',
+    nameZh: '百度图片',
     url: 'http://image.baidu.com/search/index?tn=baiduimage&ie=utf-8&word=%s'
   },
   {
-    name: '必应图片',
+    nameZh: '必应图片',
     url: 'https://www.bing.com/images/search?q=%s'
   },
   {
-    name: 'pixiv',
+    nameZh: 'pixiv',
     url: 'http://www.pixiv.net/search.php?word=%s'
   },
   {
-    name: 'flickr',
+    nameZh: 'flickr',
     url: 'http://www.flickr.com/search/?q=%s'
   },
   {
-    name: '花瓣',
+    nameZh: '花瓣',
     url: 'http://huaban.com/search/?q=%s'
   },
   {
-    name: 'easyicon',
+    nameZh: 'easyicon',
     url: 'http://www.easyicon.net/iconsearch/%s/',
     blank: true
   },
   {
-    name: 'Pinterest',
+    nameZh: 'Pinterest',
     url: 'https://www.pinterest.com/search/pins/?q=%s&rs=typed&term_meta'
   },
   {
-    name: 'yandex',
+    nameZh: 'yandex',
     url: 'https://yandex.com/images/search?text=%s'
   },
   {
-    name: 'pixabay',
+    nameZh: 'pixabay',
     url: 'https://pixabay.com/images/search/%s/'
   },
   {
-    name: 'unsplash',
+    nameZh: 'unsplash',
     url: 'https://unsplash.com/s/photos/%s'
   }
 ]

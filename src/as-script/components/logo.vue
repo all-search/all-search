@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../assets/common";
+  @import "../../assets/common";
 
   @media screen and (max-width: 768px) {
     .as-title {
