@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.2
+// @version      0.2.3
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/10/9
+// @update       2020/10/19
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
@@ -22,20 +22,20 @@
 // @include      /^https?:\/\/www\.baidu\.com\/$/
 // @include      /^https?:\/\/www\.baidu\.com\/s/
 // @include      /^https?:\/\/[^.]*\.bing\.com\/search/
-// @include      /^https?:\/\/duckduckgo\.com\/*/i
-// @include      /^https?:\/\/search\.yahoo\.com\/search/i
-// @include      /^https?:\/\/tw\.search\.yahoo\.com\/search/i
-// @include      /^https?:\/\/searx\.me\/\?q/i
+// @include      /^https?:\/\/duckduckgo\.com\/*/
+// @include      /^https?:\/\/search\.yahoo\.com\/search/
+// @include      /^https?:\/\/tw\.search\.yahoo\.com\/search/
+// @include      /^https?:\/\/searx\.me\/\?q/
 // @include      /^https?:\/\/www\.sogou\.com\/(?:web|s)/
-// @include      /^https?:\/\/yandex\.com\/search/i
-// @include      /^https?:\/\/www\.startpage\.com\/do\/asearch/i
-// @include      /^https?:\/\/mijisou.com\/\?q/i
-// @include      /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
-// @include      /^https?:\/\/www\.dogedoge\.com\/results\?q/i
+// @include      /^https?:\/\/yandex\.com\/search/
+// @include      /^https?:\/\/www\.startpage\.com\/do\/asearch/
+// @include      /^https?:\/\/mijisou.com\/\?q/
+// @include      /^https?:\/\/google\.infinitynewtab\.com\/\?q/
+// @include      /^https?:\/\/www\.dogedoge\.com\/results\?q/
 // @include      /^https?:\/\/baike\.baidu\.com\/item/
 // @include      /^https?:\/\/baike\.baidu\.com\/search/
-// @include      /^https?:\/\/wenku\.baidu\.com\/search/i
-// @include      /^https?:\/\/zhidao\.baidu\.com\/search/i
+// @include      /^https?:\/\/wenku\.baidu\.com\/search/
+// @include      /^https?:\/\/zhidao\.baidu\.com\/search/
 // @include      /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/
 // @include      /^https?:\/\/www\.zhihu\.com\/search\?/
 // @include      /^https?:\/\/www\.so\.com\/s/
@@ -869,13 +869,13 @@ var allSearch = function(e) {
     }, {
         url: /^https?:\/\/[^.]*\.bing\.com\/search/
     }, {
-        url: /^https?:\/\/duckduckgo\.com\/*/i
+        url: /^https?:\/\/duckduckgo\.com\/*/
     }, {
-        url: /^https?:\/\/search\.yahoo\.com\/search/i
+        url: /^https?:\/\/search\.yahoo\.com\/search/
     }, {
-        url: /^https?:\/\/tw\.search\.yahoo\.com\/search/i
+        url: /^https?:\/\/tw\.search\.yahoo\.com\/search/
     }, {
-        url: /^https?:\/\/searx\.me\/\?q/i
+        url: /^https?:\/\/searx\.me\/\?q/
     }, {
         url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
         style: {
@@ -883,22 +883,22 @@ var allSearch = function(e) {
             2: ".header { right: 100px }"
         }
     }, {
-        url: /^https?:\/\/yandex\.com\/search/i,
+        url: /^https?:\/\/yandex\.com\/search/,
         style: {
             1: "body { margin: 30px!important; }"
         }
     }, {
-        url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i
+        url: /^https?:\/\/www\.startpage\.com\/do\/asearch/
     }, {
-        url: /^https?:\/\/mijisou.com\/\?q/i,
+        url: /^https?:\/\/mijisou.com\/\?q/,
         style: {
             1: ".search-page{top: 30px;} .searx-navbar{top: 42px!important;}",
             2: ".search-page{right: 100px!important;}"
         }
     }, {
-        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
+        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
     }, {
-        url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
+        url: /^https?:\/\/www\.dogedoge\.com\/results\?q/,
         style: {
             1: "#header_wrapper{top: 30px!important;}",
             2: "#header_wrapper{right: 100px!important;}"
@@ -908,9 +908,9 @@ var allSearch = function(e) {
     }, {
         url: /^https?:\/\/baike\.baidu\.com\/search/
     }, {
-        url: /^https?:\/\/wenku\.baidu\.com\/search/i
+        url: /^https?:\/\/wenku\.baidu\.com\/search/
     }, {
-        url: /^https?:\/\/zhidao\.baidu\.com\/search/i
+        url: /^https?:\/\/zhidao\.baidu\.com\/search/
     }, {
         url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/
     }, {
@@ -1090,7 +1090,7 @@ var allSearch = function(e) {
     };
     const C = {
         name: "all-search",
-        version: "0.2.2",
+        version: "0.2.3",
         description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
         author: "endday",
         scripts: {

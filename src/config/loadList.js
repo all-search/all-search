@@ -23,16 +23,16 @@ const list = [
     url: /^https?:\/\/[^.]*\.bing\.com\/search/
   },
   {
-    url: /^https?:\/\/duckduckgo\.com\/*/i
+    url: /^https?:\/\/duckduckgo\.com\/*/
   },
   {
-    url: /^https?:\/\/search\.yahoo\.com\/search/i
+    url: /^https?:\/\/search\.yahoo\.com\/search/
   },
   {
-    url: /^https?:\/\/tw\.search\.yahoo\.com\/search/i
+    url: /^https?:\/\/tw\.search\.yahoo\.com\/search/
   },
   {
-    url: /^https?:\/\/searx\.me\/\?q/i
+    url: /^https?:\/\/searx\.me\/\?q/
   },
   {
     url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
@@ -42,26 +42,26 @@ const list = [
     }
   },
   {
-    url: /^https?:\/\/yandex\.com\/search/i,
+    url: /^https?:\/\/yandex\.com\/search/,
     style: {
       1: `body { margin: ${height}px!important; }`
     }
   },
   {
-    url: /^https?:\/\/www\.startpage\.com\/do\/asearch/i
+    url: /^https?:\/\/www\.startpage\.com\/do\/asearch/
   },
   {
-    url: /^https?:\/\/mijisou.com\/\?q/i,
+    url: /^https?:\/\/mijisou.com\/\?q/,
     style: {
       1: `.search-page{top: ${height}px;} .searx-navbar{top: ${height + 12}px!important;}`,
       2: `.search-page{right: ${width}px!important;}`
     }
   },
   {
-    url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/i
+    url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
   },
   {
-    url: /^https?:\/\/www\.dogedoge\.com\/results\?q/i,
+    url: /^https?:\/\/www\.dogedoge\.com\/results\?q/,
     style: {
       1: `#header_wrapper{top: ${height}px!important;}`,
       2: `#header_wrapper{right: ${width}px!important;}`
@@ -74,10 +74,10 @@ const list = [
     url: /^https?:\/\/baike\.baidu\.com\/search/
   },
   {
-    url: /^https?:\/\/wenku\.baidu\.com\/search/i
+    url: /^https?:\/\/wenku\.baidu\.com\/search/
   },
   {
-    url: /^https?:\/\/zhidao\.baidu\.com\/search/i
+    url: /^https?:\/\/zhidao\.baidu\.com\/search/
   },
   {
     url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/

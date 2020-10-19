@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
   "author": "endday",
   "scripts": {
