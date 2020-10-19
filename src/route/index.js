@@ -12,6 +12,12 @@ export default new Router({
       name: 'index',
       component: () => import('../views/sites.vue'),
       meta: {}
+    },
+    {
+      path: '/other',
+      name: 'other',
+      component: () => import('../views/sites.vue'),
+      meta: {}
     }
   ]
 })

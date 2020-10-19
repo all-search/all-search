@@ -40,11 +40,11 @@
     <v-main>
       <v-container fluid>
         <router-view></router-view>
+        <v-footer app>
+          <!-- -->
+        </v-footer>
       </v-container>
     </v-main>
-    <v-footer app>
-      <!-- -->
-    </v-footer>
   </v-app>
 </template>
 

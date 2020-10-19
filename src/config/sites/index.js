@@ -61,7 +61,7 @@ const list = [
     list: image
   },
   {
-    nameZh: '个人',
+    nameZh: '常用',
     name: 'personal',
     list: []
   }
