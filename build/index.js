@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.3
+// @version      0.2.3a
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -21,6 +21,7 @@
 // @include      /^https?:\/\/www\.google\.com\/search/
 // @include      /^https?:\/\/www\.baidu\.com\/$/
 // @include      /^https?:\/\/www\.baidu\.com\/s/
+// @include      /^https?:\/\/www\.baidu\.com\/baidu\?wd/
 // @include      /^https?:\/\/[^.]*\.bing\.com\/search/
 // @include      /^https?:\/\/duckduckgo\.com\/*/
 // @include      /^https?:\/\/search\.yahoo\.com\/search/
@@ -867,6 +868,12 @@ var allSearch = function(e) {
             2: ".fix-head #u { right: 100px; }"
         }
     }, {
+        url: /^https?:\/\/www\.baidu\.com\/baidu\?wd/,
+        style: {
+            1: ".fix-head { top: 30px !important; }",
+            2: ".fix-head #u { right: 100px; }"
+        }
+    }, {
         url: /^https?:\/\/[^.]*\.bing\.com\/search/
     }, {
         url: /^https?:\/\/duckduckgo\.com\/*/
@@ -1090,7 +1097,7 @@ var allSearch = function(e) {
     };
     const C = {
         name: "all-search",
-        version: "0.2.3",
+        version: "0.2.3a",
         description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
         author: "endday",
         scripts: {

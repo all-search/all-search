@@ -20,6 +20,13 @@ const list = [
     }
   },
   {
+    url: /^https?:\/\/www\.baidu\.com\/baidu\?wd/,
+    style: {
+      1: `.fix-head { top: ${height}px !important; }`,
+      2: `.fix-head #u { right: ${width}px; }`
+    }
+  },
+  {
     url: /^https?:\/\/[^.]*\.bing\.com\/search/
   },
   {

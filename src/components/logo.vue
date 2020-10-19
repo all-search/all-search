@@ -64,6 +64,7 @@ export default {
     margin: 0;
 
     .as-title-inner {
+      padding: 0;
       font-size: 18px;
       height: $height;
       line-height: $height;
