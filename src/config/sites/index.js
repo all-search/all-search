@@ -1,3 +1,4 @@
+import { parseUrl } from '../../util'
 import search from './search'
 import translate from './translate'
 import developer from './developer'
@@ -67,10 +68,14 @@ const list = [
   }
 ].map(item => ({
   ...item,
-  list: item.list.map(child => ({
-    ...child,
-    visible: true
-  })),
+  list: item.list.map(child => {
+    const { hostname } = parseUrl(child.url)
+    return {
+      ...child,
+      id: `${item.name}-${hostname}`,
+      visible: true
+    }
+  }),
   visible: true
 }))
 
