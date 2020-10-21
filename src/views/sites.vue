@@ -28,6 +28,10 @@
               <v-list-item-title
                 v-text="group.nameZh"
               />
+              <v-list-item-subtitle
+                v-if="group.name !== 'personal'">
+                点击收藏可将该网址添加到常用列表中
+              </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn
@@ -55,24 +59,33 @@
                     v-text="site.url"
                   />
                 </v-list-item-content>
-                <v-list-item-action>
+                <v-list-item-action
+                  v-if="group.name === 'personal'">
                   <v-btn
-                    v-if="group.name === 'personal'"
                     text
-                    @click="del(j)"
-                  >
+                    @click="del(j)">
                     <v-icon left>mdi-delete</v-icon>
                     删除
                   </v-btn>
-                  <v-btn
-                    v-else
-                    text
-                    @click=changeVisible(site)
-                  >
-                    <v-icon left v-text="site.visible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"/>
-                    {{site.visible ? '显示' : '隐藏'}}
-                  </v-btn>
                 </v-list-item-action>
+                <template v-else>
+                  <v-list-item-action>
+                    <v-btn
+                      text
+                      @click="addToPersonal(site)">
+                      <v-icon left v-text="'mdi-plus-circle'"/>
+                      收藏
+                    </v-btn>
+                  </v-list-item-action>
+                  <v-list-item-action>
+                    <v-btn
+                      text
+                      @click=changeVisible(site)>
+                      <v-icon left v-text="site.visible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"/>
+                      {{site.visible ? '显示' : '隐藏'}}
+                    </v-btn>
+                  </v-list-item-action>
+                </template>
               </v-list-item>
               <v-divider :key="`divider-${j}`"/>
             </template>
@@ -81,21 +94,10 @@
         <div class="pa-3"
              v-if="group.name === 'personal'">
           <v-btn
-            class="mr-2"
-            color="primary"
-            size="large"
-            @click.stop="dialog = true">
-            添加网址
-          </v-btn>
-          <v-btn
             color="primary"
             size="large">
             新建网址
           </v-btn>
-          <selectDialog
-            :list="group.list"
-            v-model="dialog"
-            @confirm="savePersonalList"/>
         </div>
       </v-tab-item>
     </v-tabs-items>
@@ -105,13 +107,11 @@
 <script>
 import draggable from 'vuedraggable'
 import sites from '../config/sites'
-import selectDialog from '../components/select-dialog'
 
 export default {
   name: 'sites',
   components: {
-    draggable,
-    selectDialog
+    draggable
   },
   data: () => ({
     sites,
@@ -141,14 +141,13 @@ export default {
     changeVisible (item) {
       item.visible = !item.visible
     },
+    addToPersonal (item) {
+      const i = this.sites.findIndex(item => item.name === 'personal')
+      this.sites[i].list.push(item)
+    },
     del (j) {
       const i = this.sites.findIndex(item => item.name === 'personal')
       this.sites[i].list.splice(j, 1)
-    },
-    savePersonalList (list) {
-      console.log(list)
-      const i = this.sites.findIndex(item => item.name === 'personal')
-      this.sites[i].list = list
     }
   }
 }
