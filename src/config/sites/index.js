@@ -73,10 +73,14 @@ const list = [
     return {
       ...child,
       id: `${item.name}-${hostname}`,
-      visible: true
+      data: {
+        visible: true
+      }
     }
   }),
-  visible: true
+  data: {
+    visible: true
+  }
 }))
 
 export default list

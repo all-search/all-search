@@ -13,8 +13,7 @@ export default [
   },
   {
     nameZh: 'Can I Use',
-    url: 'http://caniuse.com/#search=%s',
-    blank: true
+    url: 'http://caniuse.com/#search=%s'
   },
   {
     nameZh: 'GitHub',

@@ -5,6 +5,7 @@
     :class="asClass">
     <logo :mode="mode"/>
     <as-menu
+      :sites="sites"
       :mode="mode"
       :inline="inline"
       :value="categoryName"
@@ -18,6 +19,7 @@
 
 <script>
 import { getSession, setSession } from '../util'
+import sites from '../config/sites'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
 
@@ -29,8 +31,8 @@ export default {
   },
   data () {
     return {
+      sites: [],
       categoryName: 'search',
-      // mode: 'vertical',
       mode: 'horizontal',
       inline: false
     }
@@ -53,6 +55,16 @@ export default {
     }
   },
   created () {
+    this.sites = sites
+      .filter(item => {
+        return item.list &&
+          item.list.length > 0 &&
+          item.data.visible
+      })
+      .map(item => ({
+        ...item,
+        show: false
+      }))
     this.categoryName = getSession('categoryName') || this.categoryName
     this.mode = getSession('mode') || this.mode
   },

@@ -19,7 +19,8 @@
             <li
               v-for="(child, index) in item.list"
               :key="index"
-              v-text="child.name"
+              v-show="child.data.visible"
+              v-text="child.nameZh"
               @click="handleClick(child)">
             </li>
           </ul>
@@ -31,7 +32,6 @@
 
 <script>
 import { getKeyword } from '../../util'
-import sites from '../../config/sites'
 import menuItem from './menuItem.vue'
 import icon from '../components/icon.vue'
 
@@ -42,6 +42,12 @@ export default {
     icon
   },
   props: {
+    sites: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
     mode: {
       type: String,
       default: 'horizontal',
@@ -69,47 +75,14 @@ export default {
       } else {
         return 'fade'
       }
-    },
-    nameZh () {
-      const i = this.sites.findIndex(item => item.name === this.value)
-      if (i > -1) {
-        return this.sites[i].nameZh
-      } else {
-        return this.sites[0].nameZh
-      }
-    },
-    menus () {
-      const i = this.sites.findIndex(item => item.name === this.value)
-      if (i > -1) {
-        return this.sites[i].list.filter(item => !item.disabled)
-      }
-      return this.sites[0].list.filter(item => !item.disabled)
     }
   },
   data: () => ({
-    sites: [],
-    show: false,
-    asSubMenuStyle: {
-      top: 0,
-      left: 0
-    }
+    show: false
   }),
-  created () {
-    this.sites = sites.map(item => ({
-      ...item,
-      show: false
-    }))
-  },
   methods: {
     handleChange (val) {
       this.$emit('change', val)
-    },
-    openValue () {
-      this.show = !this.show
-    },
-    selectCategory (index, item) {
-      this.handleChange(item.name)
-      this.show = false
     },
     getKeyword () {
       if (this.$root.currentSite.keyword) {
@@ -134,12 +107,6 @@ export default {
       if (!this.inline) {
         item.show = value
       }
-    },
-    close () {
-      this.sites.forEach(item => {
-        item.show = false
-      })
-      this.show = false
     }
   }
 }

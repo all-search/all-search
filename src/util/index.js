@@ -273,3 +273,37 @@ export function getAsEl () {
   el.style.display = 'none'
   return el
 }
+
+export function mergeSites (a, b) {
+  const oldSites = JSON.parse(JSON.stringify(a))
+  let newSites = JSON.parse(JSON.stringify(b.filter(item => item.name !== 'personal')))
+
+  newSites.forEach(newCate => {
+    const oldCate = oldSites.find(oldCate => oldCate.name === newCate.name)
+    if (oldCate) {
+      newCate.list.forEach(newSite => {
+        const i = oldCate.list.findIndex(oldSite => oldSite.id === newSite.id)
+        if (i > -1) {
+          Object.keys(newSite).forEach(key => {
+            if (key !== 'data') {
+              oldCate.list[i][key] = newSite[key]
+            }
+          })
+          newSite.isAdd = true
+        }
+      })
+      newCate.list = newCate.list.filter(item => !item.isAdd)
+      if (newCate.list.length) {
+        oldCate.list = oldCate.list.concat(newCate.list)
+      }
+      newCate.isAdd = true
+    }
+  })
+
+  newSites = newSites.filter(item => !item.isAdd)
+  if (newSites.length) {
+    oldSites.push(...newSites)
+  }
+  return oldSites
+}
+

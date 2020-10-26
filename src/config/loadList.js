@@ -321,6 +321,10 @@ const list = [
   },
   {
     url: /^https?:\/\/endday\.gitee\.io/
+  },
+  {
+    url: /^http:\/\/localhost:8080\/all-search\//,
+    invisible: true
   }
 ]
 

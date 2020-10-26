@@ -25,8 +25,7 @@ export default [
   },
   {
     nameZh: 'easyicon',
-    url: 'http://www.easyicon.net/iconsearch/%s/',
-    blank: true
+    url: 'http://www.easyicon.net/iconsearch/%s/'
   },
   {
     nameZh: 'Pinterest',

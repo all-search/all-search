@@ -4,13 +4,13 @@
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/10/19
+// @update       2020/10/26
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://lib.baomitu.com/vue/2.6.11/vue.js
-// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css
+// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.3a
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.3a
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -104,6 +104,7 @@
 // @include      /^https?:\/\/www\.startpage\.com\/do\/search/
 // @include      /^https?:\/\/endday\.github\.io/
 // @include      /^https?:\/\/endday\.gitee\.io/
+// @include      /^http:\/\/localhost:8080\/all-search\//
 
 // ==/UserScript==
 /* eslint-disable */
@@ -111,308 +112,7 @@
 var allSearch = function(e) {
     "use strict";
     e = e && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
-    var t = [ {
-        nameZh: "搜索",
-        name: "search",
-        list: [ {
-            name: "百度",
-            url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
-        }, {
-            name: "谷歌",
-            url: "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8"
-        }, {
-            name: "必应",
-            url: "https://cn.bing.com/search?q=%s"
-        }, {
-            name: "多吉",
-            url: "https://www.dogedoge.com/results?q=%s"
-        }, {
-            name: "DDG",
-            url: "https://duckduckgo.com/?q=%s"
-        }, {
-            name: "360",
-            url: "https://www.so.com/s?ie=utf-8&q=%s"
-        }, {
-            name: "雅虎",
-            url: "https://search.yahoo.com/search;?p=%s"
-        }, {
-            name: "搜狗",
-            url: "https://www.sogou.com/web?query=%s"
-        }, {
-            name: "Startpage",
-            url: "https://www.startpage.com/do/asearch$post$query"
-        }, {
-            name: "秘迹搜索",
-            url: "https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN"
-        }, {
-            name: "Yandex",
-            url: "https://yandex.com/search/?text=%s"
-        } ]
-    }, {
-        nameZh: "翻译",
-        name: "translate",
-        list: [ {
-            name: "谷歌翻译",
-            url: "https://translate.google.com/?q=%s"
-        }, {
-            name: "百度翻译",
-            url: "http://fanyi.baidu.com/#auto/zh/%s"
-        }, {
-            name: "有道词典",
-            url: "http://dict.youdao.com/search?q=%s"
-        }, {
-            name: "必应翻译",
-            url: "http://cn.bing.com/dict/search?q=%s"
-        }, {
-            name: "DeepL",
-            url: "https://www.deepl.com/translator#zh/en/%s"
-        } ]
-    }, {
-        nameZh: "视频",
-        name: "video",
-        list: [ {
-            name: "youtube",
-            url: "https://www.youtube.com/results?search_query=%s"
-        }, {
-            name: "bilibili",
-            url: "http://search.bilibili.com/all?keyword=%s"
-        }, {
-            name: "优酷",
-            url: "http://www.soku.com/search_video/q_%s"
-        }, {
-            name: "腾讯视频",
-            url: "https://v.qq.com/x/search/?q=%s"
-        }, {
-            name: "AcFun",
-            url: "http://www.acfun.cn/search/?#query=%s"
-        }, {
-            name: "乐视",
-            url: "http://so.letv.com/s?wd=%s"
-        }, {
-            name: "搜狐",
-            url: "http://so.tv.sohu.com/mts?wd=%s"
-        }, {
-            name: "niconico",
-            url: "http://www.nicovideo.jp/search/%s"
-        }, {
-            name: "爱奇艺",
-            url: "http://so.iqiyi.com/so/q_%s"
-        } ]
-    }, {
-        nameZh: "购物",
-        name: "shopping",
-        list: [ {
-            name: "淘宝",
-            url: "http://s.taobao.com/search?q=%s"
-        }, {
-            name: "京东",
-            url: "http://search.jd.com/Search?keyword=%s&enc=utf-8"
-        }, {
-            name: "苏宁",
-            url: "http://search.suning.com/%s/"
-        }, {
-            name: "亚马逊",
-            url: "http://www.amazon.cn/s/ref=nb_sb_noss?field-keywords=%s"
-        }, {
-            name: "天猫",
-            url: "http://list.tmall.com/search_product.htm?q=%s"
-        }, {
-            name: "1号店",
-            url: "http://search.yhd.com/c0-0/k%s"
-        }, {
-            name: "闲鱼",
-            url: "https://s.2.taobao.com/list/list.htm?q=%s&search_type=item&_input_charset=utf8"
-        }, {
-            name: "值得买",
-            url: "http://search.smzdm.com/?c=home&s=%s"
-        }, {
-            name: "当当网",
-            url: "http://search.dangdang.com/?key=%s"
-        }, {
-            name: "1688",
-            url: "https://s.1688.com/selloffer/offer_search.htm?keywords=%s"
-        } ]
-    }, {
-        nameZh: "音乐",
-        name: "music",
-        list: [ {
-            name: "网易音乐",
-            url: "http://music.163.com/#/search/m/?s=%s"
-        }, {
-            name: "一听",
-            url: "http://so.1ting.com/all.do?q=%s"
-        }, {
-            name: "虾米音乐",
-            url: "http://www.xiami.com/search?key=%s"
-        }, {
-            name: "音悦Tai",
-            url: "http://so.yinyuetai.com/?keyword=%s"
-        }, {
-            name: "QQ音乐",
-            url: "https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%s"
-        }, {
-            name: "百度音乐",
-            url: "http://music.baidu.com/search?ie=utf-8&oe=utf-8&key=%s"
-        }, {
-            name: "酷我音乐",
-            url: "http://sou.kuwo.cn/ws/NSearch?type=all&key=%s"
-        }, {
-            name: "酷狗",
-            url: "http://search.5sing.kugou.com/?keyword=%s"
-        } ]
-    }, {
-        nameZh: "开发",
-        name: "developer",
-        list: [ {
-            name: "MDN",
-            url: "https://developer.mozilla.org/zh-CN/search?q=%s"
-        }, {
-            name: "stackoverflow",
-            url: "https://stackoverflow.com/search?q=%s"
-        }, {
-            name: "掘金",
-            url: "https://juejin.im/search?query=%s&type=all"
-        }, {
-            name: "Can I Use",
-            url: "http://caniuse.com/#search=%s",
-            blank: !0
-        }, {
-            name: "GitHub",
-            url: "https://github.com/search?utf8=✓&q=%s"
-        }, {
-            name: "w3c",
-            url: "http://www.runoob.com/?s=%s"
-        }, {
-            name: "GreasyFork",
-            url: "https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓"
-        } ]
-    }, {
-        nameZh: "新闻",
-        name: "news",
-        list: [ {
-            name: "谷歌中文",
-            url: "https://news.google.com/search?q=%s&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
-        }, {
-            name: "百度新闻",
-            url: "http://news.baidu.com/ns?word=%s&tn=news&from=news&cl=2&rn=20&ct=1"
-        }, {
-            name: "网易-百度",
-            url: "https://www.baidu.com/s?wd=%s%20site%3Anews.163.com"
-        }, {
-            name: "网易-谷歌",
-            url: "https://www.google.com.hk/search?q=site:news.163.com+%s"
-        }, {
-            name: "腾讯新闻",
-            url: "https://www.sogou.com/sogou?site=news.qq.com&query=%s"
-        }, {
-            name: "凤凰新闻",
-            url: "http://search.ifeng.com/sofeng/search.action?q=%s"
-        }, {
-            name: "CNN",
-            url: "https://edition.cnn.com/search/?q=%s"
-        }, {
-            name: "BBC",
-            url: "https://www.bbc.co.uk/search?q=%s"
-        }, {
-            name: "Economis",
-            url: "https://www.google.com/search?q=site:www.economist.com%20%s"
-        }, {
-            name: "今日头条",
-            url: "https://www.toutiao.com/search/?keyword=%E4%B8%96%E7%95%8C%E6%9D%AF"
-        } ]
-    }, {
-        nameZh: "社交",
-        name: "social",
-        list: [ {
-            name: "知乎",
-            url: "https://www.zhihu.com/search?q=%s&type=content"
-        }, {
-            name: "推特",
-            url: "https://twitter.com/search/%s"
-        }, {
-            name: "豆瓣",
-            url: "https://www.douban.com/search?source=suggest&q=%s"
-        }, {
-            name: "百度贴吧",
-            url: "https://tieba.baidu.com/f?kw=%s&ie=utf-8"
-        }, {
-            name: "新浪微博",
-            url: "https://s.weibo.com/weibo?q=%s"
-        }, {
-            name: "脸书",
-            url: "https://www.facebook.com/search/results.php?q=%s"
-        }, {
-            name: "微信搜索",
-            url: "http://weixin.sogou.com/weixin?ie=utf8&type=2&query=%s"
-        } ]
-    }, {
-        nameZh: "百科",
-        name: "knowledge",
-        list: [ {
-            name: "维基",
-            url: "http://zh.wikipedia.org/wiki/%s"
-        }, {
-            name: "百度百科",
-            url: "http://baike.baidu.com/search/word?pic=1&sug=1&word=%s"
-        }, {
-            name: "百度文库",
-            url: "http://wenku.baidu.com/search?word=%s&ie=utf-8"
-        }, {
-            name: "豆丁文档",
-            url: "http://www.docin.com/search.do?searchcat=2&searchType_banner=p&nkey=%s"
-        }, {
-            name: "爱问知识",
-            url: "http://iask.sina.com.cn/search?searchWord=%s"
-        }, {
-            name: "萌娘百科",
-            url: "https://zh.moegirl.org/%s"
-        }, {
-            name: "果壳",
-            url: "http://www.guokr.com/search/all/?wd=%s"
-        }, {
-            name: "Quora",
-            url: "https://www.quora.com/search?q=%s"
-        } ]
-    }, {
-        nameZh: "图片",
-        name: "image",
-        list: [ {
-            name: "谷歌图片",
-            url: "https://www.google.com/search?q=%s&tbm=isch"
-        }, {
-            name: "百度图片",
-            url: "http://image.baidu.com/search/index?tn=baiduimage&ie=utf-8&word=%s"
-        }, {
-            name: "必应图片",
-            url: "https://www.bing.com/images/search?q=%s"
-        }, {
-            name: "pixiv",
-            url: "http://www.pixiv.net/search.php?word=%s"
-        }, {
-            name: "flickr",
-            url: "http://www.flickr.com/search/?q=%s"
-        }, {
-            name: "花瓣",
-            url: "http://huaban.com/search/?q=%s"
-        }, {
-            name: "easyicon",
-            url: "http://www.easyicon.net/iconsearch/%s/",
-            blank: !0
-        }, {
-            name: "Pinterest",
-            url: "https://www.pinterest.com/search/pins/?q=%s&rs=typed&term_meta"
-        }, {
-            name: "yandex",
-            url: "https://yandex.com/images/search?text=%s"
-        }, {
-            name: "pixabay",
-            url: "https://pixabay.com/images/search/%s/"
-        }, {
-            name: "unsplash",
-            url: "https://unsplash.com/s/photos/%s"
-        } ]
-    } ];
-    document.createElement("a");
+    const t = document.createElement("a");
     function s(e) {
         return e ? `__allSearch__${e}` : null;
     }
@@ -429,12 +129,12 @@ var allSearch = function(e) {
             e && window.localStorage.setItem(o, e);
         }
     }
-    function n(e) {
+    function r(e) {
         if (!e) return;
         const t = document.createElement("style");
         t.innerHTML = e, t.class = "all-search-style", document.getElementsByTagName("head")[0].appendChild(t);
     }
-    function r(e, t) {
+    function n(e, t) {
         let s;
         window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? l(s, e) : function(e, t) {
             if (!e) return;
@@ -488,26 +188,357 @@ var allSearch = function(e) {
             }
         }), 20, !0);
     }
-    function c(e, t, s, o, a, n, r, i, l, c) {
-        "boolean" != typeof r && (l = i, i = r, r = !1);
-        const u = "function" == typeof s ? s.options : s;
-        let h;
-        if (e && e.render && (u.render = e.render, u.staticRenderFns = e.staticRenderFns, 
-        u._compiled = !0, a && (u.functional = !0)), o && (u._scopeId = o), n ? (h = function(e) {
+    const c = [ {
+        nameZh: "搜索",
+        name: "search",
+        list: [ {
+            nameZh: "百度",
+            url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
+        }, {
+            nameZh: "谷歌",
+            url: "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8"
+        }, {
+            nameZh: "必应",
+            url: "https://cn.bing.com/search?q=%s"
+        }, {
+            nameZh: "多吉",
+            url: "https://www.dogedoge.com/results?q=%s"
+        }, {
+            nameZh: "DDG",
+            url: "https://duckduckgo.com/?q=%s"
+        }, {
+            nameZh: "360",
+            url: "https://www.so.com/s?ie=utf-8&q=%s"
+        }, {
+            nameZh: "雅虎",
+            url: "https://search.yahoo.com/search;?p=%s"
+        }, {
+            nameZh: "搜狗",
+            url: "https://www.sogou.com/web?query=%s"
+        }, {
+            nameZh: "秘迹搜索",
+            url: "https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN"
+        }, {
+            nameZh: "Yandex",
+            url: "https://yandex.com/search/?text=%s"
+        } ]
+    }, {
+        nameZh: "翻译",
+        name: "translate",
+        list: [ {
+            nameZh: "百度翻译",
+            url: "http://fanyi.baidu.com/#auto/zh/%s"
+        }, {
+            nameZh: "DeepL",
+            url: "https://www.deepl.com/translator#zh/en/%s"
+        }, {
+            nameZh: "谷歌翻译",
+            url: "https://translate.google.com/?q=%s"
+        }, {
+            nameZh: "有道词典",
+            url: "http://dict.youdao.com/search?q=%s"
+        }, {
+            nameZh: "必应翻译",
+            url: "http://cn.bing.com/dict/search?q=%s"
+        } ]
+    }, {
+        nameZh: "视频",
+        name: "video",
+        list: [ {
+            nameZh: "youtube",
+            url: "https://www.youtube.com/results?search_query=%s"
+        }, {
+            nameZh: "bilibili",
+            url: "http://search.bilibili.com/all?keyword=%s"
+        }, {
+            nameZh: "优酷",
+            url: "http://www.soku.com/search_video/q_%s"
+        }, {
+            nameZh: "腾讯视频",
+            url: "https://v.qq.com/x/search/?q=%s"
+        }, {
+            nameZh: "AcFun",
+            url: "http://www.acfun.cn/search/?#query=%s"
+        }, {
+            nameZh: "乐视",
+            url: "http://so.letv.com/s?wd=%s"
+        }, {
+            nameZh: "搜狐",
+            url: "http://so.tv.sohu.com/mts?wd=%s"
+        }, {
+            nameZh: "niconico",
+            url: "http://www.nicovideo.jp/search/%s"
+        }, {
+            nameZh: "爱奇艺",
+            url: "http://so.iqiyi.com/so/q_%s"
+        } ]
+    }, {
+        nameZh: "购物",
+        name: "shopping",
+        list: [ {
+            nameZh: "淘宝",
+            url: "http://s.taobao.com/search?q=%s"
+        }, {
+            nameZh: "京东",
+            url: "http://search.jd.com/Search?keyword=%s&enc=utf-8"
+        }, {
+            nameZh: "苏宁",
+            url: "http://search.suning.com/%s/"
+        }, {
+            nameZh: "亚马逊",
+            url: "http://www.amazon.cn/s/ref=nb_sb_noss?field-keywords=%s"
+        }, {
+            nameZh: "天猫",
+            url: "http://list.tmall.com/search_product.htm?q=%s"
+        }, {
+            nameZh: "1号店",
+            url: "http://search.yhd.com/c0-0/k%s"
+        }, {
+            nameZh: "闲鱼",
+            url: "https://s.2.taobao.com/list/list.htm?q=%s&search_type=item&_input_charset=utf8"
+        }, {
+            nameZh: "值得买",
+            url: "http://search.smzdm.com/?c=home&s=%s"
+        }, {
+            nameZh: "当当网",
+            url: "http://search.dangdang.com/?key=%s"
+        }, {
+            nameZh: "1688",
+            url: "https://s.1688.com/selloffer/offer_search.htm?keywords=%s"
+        } ]
+    }, {
+        nameZh: "音乐",
+        name: "music",
+        list: [ {
+            nameZh: "网易音乐",
+            url: "http://music.163.com/#/search/m/?s=%s"
+        }, {
+            nameZh: "一听",
+            url: "http://so.1ting.com/all.do?q=%s"
+        }, {
+            nameZh: "虾米音乐",
+            url: "http://www.xiami.com/search?key=%s"
+        }, {
+            nameZh: "音悦Tai",
+            url: "http://so.yinyuetai.com/?keyword=%s"
+        }, {
+            nameZh: "QQ音乐",
+            url: "https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%s"
+        }, {
+            nameZh: "百度音乐",
+            url: "http://music.baidu.com/search?ie=utf-8&oe=utf-8&key=%s"
+        }, {
+            nameZh: "酷我音乐",
+            url: "http://sou.kuwo.cn/ws/NSearch?type=all&key=%s"
+        }, {
+            nameZh: "酷狗",
+            url: "http://search.5sing.kugou.com/?keyword=%s"
+        } ]
+    }, {
+        nameZh: "开发",
+        name: "developer",
+        list: [ {
+            nameZh: "MDN",
+            url: "https://developer.mozilla.org/zh-CN/search?q=%s"
+        }, {
+            nameZh: "stackoverflow",
+            url: "https://stackoverflow.com/search?q=%s"
+        }, {
+            nameZh: "掘金",
+            url: "https://juejin.im/search?query=%s&type=all"
+        }, {
+            nameZh: "Can I Use",
+            url: "http://caniuse.com/#search=%s"
+        }, {
+            nameZh: "GitHub",
+            url: "https://github.com/search?utf8=✓&q=%s"
+        }, {
+            nameZh: "w3c",
+            url: "http://www.runoob.com/?s=%s"
+        }, {
+            nameZh: "GreasyFork",
+            url: "https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓"
+        } ]
+    }, {
+        nameZh: "新闻",
+        name: "news",
+        list: [ {
+            nameZh: "谷歌中文",
+            url: "https://news.google.com/search?q=%s&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
+        }, {
+            nameZh: "百度新闻",
+            url: "http://news.baidu.com/ns?word=%s&tn=news&from=news&cl=2&rn=20&ct=1"
+        }, {
+            nameZh: "网易-百度",
+            url: "https://www.baidu.com/s?wd=%s%20site%3Anews.163.com"
+        }, {
+            nameZh: "网易-谷歌",
+            url: "https://www.google.com.hk/search?q=site:news.163.com+%s"
+        }, {
+            nameZh: "腾讯新闻",
+            url: "https://www.sogou.com/sogou?site=news.qq.com&query=%s"
+        }, {
+            nameZh: "凤凰新闻",
+            url: "http://search.ifeng.com/sofeng/search.action?q=%s"
+        }, {
+            nameZh: "CNN",
+            url: "https://edition.cnn.com/search/?q=%s"
+        }, {
+            nameZh: "BBC",
+            url: "https://www.bbc.co.uk/search?q=%s"
+        }, {
+            nameZh: "Economis",
+            url: "https://www.google.com/search?q=site:www.economist.com%20%s"
+        }, {
+            nameZh: "今日头条",
+            url: "https://www.toutiao.com/search/?keyword=%E4%B8%96%E7%95%8C%E6%9D%AF"
+        } ]
+    }, {
+        nameZh: "社交",
+        name: "social",
+        list: [ {
+            nameZh: "知乎",
+            url: "https://www.zhihu.com/search?q=%s&type=content"
+        }, {
+            nameZh: "推特",
+            url: "https://twitter.com/search/%s"
+        }, {
+            nameZh: "豆瓣",
+            url: "https://www.douban.com/search?source=suggest&q=%s"
+        }, {
+            nameZh: "百度贴吧",
+            url: "https://tieba.baidu.com/f?kw=%s&ie=utf-8"
+        }, {
+            nameZh: "新浪微博",
+            url: "https://s.weibo.com/weibo?q=%s"
+        }, {
+            nameZh: "脸书",
+            url: "https://www.facebook.com/search/results.php?q=%s"
+        }, {
+            nameZh: "微信搜索",
+            url: "http://weixin.sogou.com/weixin?ie=utf8&type=2&query=%s"
+        } ]
+    }, {
+        nameZh: "百科",
+        name: "knowledge",
+        list: [ {
+            nameZh: "维基",
+            url: "http://zh.wikipedia.org/wiki/%s"
+        }, {
+            nameZh: "百度百科",
+            url: "http://baike.baidu.com/search/word?pic=1&sug=1&word=%s"
+        }, {
+            nameZh: "百度文库",
+            url: "http://wenku.baidu.com/search?word=%s&ie=utf-8"
+        }, {
+            nameZh: "豆丁文档",
+            url: "http://www.docin.com/search.do?searchcat=2&searchType_banner=p&nkey=%s"
+        }, {
+            nameZh: "爱问知识",
+            url: "http://iask.sina.com.cn/search?searchWord=%s"
+        }, {
+            nameZh: "萌娘百科",
+            url: "https://zh.moegirl.org/%s"
+        }, {
+            nameZh: "果壳",
+            url: "http://www.guokr.com/search/all/?wd=%s"
+        }, {
+            nameZh: "Quora",
+            url: "https://www.quora.com/search?q=%s"
+        } ]
+    }, {
+        nameZh: "图片",
+        name: "image",
+        list: [ {
+            nameZh: "谷歌图片",
+            url: "https://www.google.com/search?q=%s&tbm=isch"
+        }, {
+            nameZh: "百度图片",
+            url: "http://image.baidu.com/search/index?tn=baiduimage&ie=utf-8&word=%s"
+        }, {
+            nameZh: "必应图片",
+            url: "https://www.bing.com/images/search?q=%s"
+        }, {
+            nameZh: "pixiv",
+            url: "http://www.pixiv.net/search.php?word=%s"
+        }, {
+            nameZh: "flickr",
+            url: "http://www.flickr.com/search/?q=%s"
+        }, {
+            nameZh: "花瓣",
+            url: "http://huaban.com/search/?q=%s"
+        }, {
+            nameZh: "easyicon",
+            url: "http://www.easyicon.net/iconsearch/%s/"
+        }, {
+            nameZh: "Pinterest",
+            url: "https://www.pinterest.com/search/pins/?q=%s&rs=typed&term_meta"
+        }, {
+            nameZh: "yandex",
+            url: "https://yandex.com/images/search?text=%s"
+        }, {
+            nameZh: "pixabay",
+            url: "https://pixabay.com/images/search/%s/"
+        }, {
+            nameZh: "unsplash",
+            url: "https://unsplash.com/s/photos/%s"
+        } ]
+    }, {
+        nameZh: "常用",
+        name: "personal",
+        list: []
+    } ].map(e => ({
+        ...e,
+        list: e.list.map(s => {
+            const {hostname: o} = function(e) {
+                let s = e;
+                if (s.indexOf("//") < 0) s = `//${s}`; else {
+                    if (!(s.indexOf("//") > -1)) return t;
+                    {
+                        const e = s.toLowerCase();
+                        e.startsWith("http://") || e.startsWith("https://") || e.startsWith("ftp://") || e.startsWith("files://") || (s = s.replace(/.*\/\//, "//"));
+                    }
+                }
+                return t.href = s, {
+                    href: t.href,
+                    origin: t.origin,
+                    protocol: t.protocol,
+                    host: t.host,
+                    hostname: t.hostname,
+                    port: t.port,
+                    pathname: t.pathname,
+                    search: t.search,
+                    hash: t.hash
+                };
+            }(s.url);
+            return {
+                ...s,
+                id: `${e.name}-${o}`,
+                visible: !0
+            };
+        }),
+        visible: !0
+    }));
+    function h(e, t, s, o, a, r, n, i, l, c) {
+        "boolean" != typeof n && (l = i, i = n, n = !1);
+        const h = "function" == typeof s ? s.options : s;
+        let u;
+        if (e && e.render && (h.render = e.render, h.staticRenderFns = e.staticRenderFns, 
+        h._compiled = !0, a && (h.functional = !0)), o && (h._scopeId = o), r ? (u = function(e) {
             (e = e || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (e = __VUE_SSR_CONTEXT__), 
-            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(n);
-        }, u._ssrRegister = h) : t && (h = r ? function(e) {
+            t && t.call(this, l(e)), e && e._registeredComponents && e._registeredComponents.add(r);
+        }, h._ssrRegister = u) : t && (u = n ? function(e) {
             t.call(this, c(e, this.$root.$options.shadowRoot));
         } : function(e) {
             t.call(this, i(e));
-        }), h) if (u.functional) {
-            const e = u.render;
-            u.render = function(t, s) {
-                return h.call(s), e(t, s);
+        }), u) if (h.functional) {
+            const e = h.render;
+            h.render = function(t, s) {
+                return u.call(s), e(t, s);
             };
         } else {
-            const e = u.beforeCreate;
-            u.beforeCreate = e ? [].concat(e, h) : [ h ];
+            const e = h.beforeCreate;
+            h.beforeCreate = e ? [].concat(e, u) : [ u ];
         }
         return s;
     }
@@ -537,7 +568,7 @@ var allSearch = function(e) {
             }
         }
     };
-    var h = function() {
+    var m = function() {
         var e = this.$createElement, t = this._self._c || e;
         return t("a", {
             staticClass: "as-title",
@@ -550,12 +581,12 @@ var allSearch = function(e) {
             staticClass: "as-title-inner"
         }, [ this._v("\n    All Search\n  ") ]) ]);
     };
-    h._withStripped = !0;
-    const m = c({
-        render: h,
+    m._withStripped = !0;
+    const p = h({
+        render: m,
         staticRenderFns: []
     }, void 0, u, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const p = {
+    const d = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -586,7 +617,7 @@ var allSearch = function(e) {
             }
         }
     };
-    var d = function() {
+    var w = function() {
         var e = this, t = e.$createElement;
         return (e._self._c || t)("li", {
             on: {
@@ -602,12 +633,12 @@ var allSearch = function(e) {
             }
         }, [ e._t("default") ], 2);
     };
-    d._withStripped = !0;
-    const w = c({
-        render: d,
+    w._withStripped = !0;
+    const g = h({
+        render: w,
         staticRenderFns: []
-    }, void 0, p, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const g = {
+    }, void 0, d, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const y = {
         name: "icon",
         props: {
             name: {
@@ -616,24 +647,28 @@ var allSearch = function(e) {
             }
         }
     };
-    var y = function() {
+    var f = function() {
         var e = this.$createElement;
         return (this._self._c || e)("i", {
             staticClass: "as-menu-item-icon",
             class: "icon-" + this.name
         });
     };
-    y._withStripped = !0;
-    const f = {
+    f._withStripped = !0;
+    const v = {
         name: "as-menu",
         components: {
-            menuItem: w,
-            icon: c({
-                render: y,
+            menuItem: g,
+            icon: h({
+                render: f,
                 staticRenderFns: []
-            }, void 0, g, void 0, !1, void 0, !1, void 0, void 0, void 0)
+            }, void 0, y, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         props: {
+            sites: {
+                type: Array,
+                default: () => []
+            },
             mode: {
                 type: String,
                 default: "horizontal",
@@ -657,39 +692,14 @@ var allSearch = function(e) {
             },
             transition() {
                 return "horizontal" === this.mode ? "drop" : "fade";
-            },
-            nameZh() {
-                const e = this.engines.findIndex(e => e.name === this.value);
-                return e > -1 ? this.engines[e].nameZh : this.engines[0].nameZh;
-            },
-            menus() {
-                const e = this.engines.findIndex(e => e.name === this.value);
-                return e > -1 ? this.engines[e].list.filter(e => !e.disabled) : this.engines[0].list.filter(e => !e.disabled);
             }
         },
         data: () => ({
-            engines: [],
-            show: !1,
-            asSubMenuStyle: {
-                top: 0,
-                left: 0
-            }
+            show: !1
         }),
-        created() {
-            this.engines = t.map(e => ({
-                ...e,
-                show: !1
-            }));
-        },
         methods: {
             handleChange(e) {
                 this.$emit("change", e);
-            },
-            openValue() {
-                this.show = !this.show;
-            },
-            selectCategory(e, t) {
-                this.handleChange(t.name), this.show = !1;
             },
             getKeyword() {
                 return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function() {
@@ -710,20 +720,15 @@ var allSearch = function(e) {
             },
             handleMenuShow(e, t) {
                 this.inline || (t.show = e);
-            },
-            close() {
-                this.engines.forEach(e => {
-                    e.show = !1;
-                }), this.show = !1;
             }
         }
     };
-    var v = function() {
+    var b = function() {
         var e = this, t = e.$createElement, s = e._self._c || t;
         return s("ul", {
             staticClass: "as-menu",
             class: e.menuClass
-        }, e._l(e.engines, (function(t) {
+        }, e._l(e.sites, (function(t) {
             return s("menu-item", {
                 key: t.index,
                 staticClass: "as-menu-item",
@@ -763,7 +768,7 @@ var allSearch = function(e) {
                 return s("li", {
                     key: o,
                     domProps: {
-                        textContent: e._s(t.name)
+                        textContent: e._s(t.nameZh)
                     },
                     on: {
                         click: function(s) {
@@ -774,18 +779,18 @@ var allSearch = function(e) {
             })), 0) ]) ]) ], 1);
         })), 1);
     };
-    v._withStripped = !0;
-    const b = {
+    b._withStripped = !0;
+    const Z = {
         name: "all-search",
         components: {
-            logo: m,
-            asMenu: c({
-                render: v,
+            logo: p,
+            asMenu: h({
+                render: b,
                 staticRenderFns: []
-            }, void 0, f, void 0, !1, void 0, !1, void 0, void 0, void 0)
+            }, void 0, v, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         data: () => ({
-            engines: t,
+            sites: [],
             categoryName: "search",
             mode: "horizontal",
             inline: !1
@@ -807,7 +812,10 @@ var allSearch = function(e) {
             }
         },
         created() {
-            this.categoryName = o("categoryName") || this.categoryName, this.mode = o("mode") || this.mode;
+            this.sites = c.filter(e => e.list && e.list.length > 0).map(e => ({
+                ...e,
+                show: !1
+            })), this.categoryName = o("categoryName") || this.categoryName, this.mode = o("mode") || this.mode;
         },
         methods: {
             changeCategory(e) {
@@ -835,6 +843,7 @@ var allSearch = function(e) {
             }
         }), e._v(" "), s("as-menu", {
             attrs: {
+                sites: e.sites,
                 mode: e.mode,
                 inline: e.inline,
                 value: e.categoryName
@@ -850,10 +859,10 @@ var allSearch = function(e) {
         }, [ e._v("\n    切换模式\n  ") ]) ], 1);
     };
     x._withStripped = !0;
-    const _ = c({
+    const _ = h({
         render: x,
         staticRenderFns: []
-    }, void 0, b, void 0, !1, void 0, !1, void 0, void 0, void 0), k = [ {
+    }, void 0, Z, void 0, !1, void 0, !1, void 0, void 0, void 0), k = [ {
         url: /^https?:\/\/www\.google\.com\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -1083,6 +1092,9 @@ var allSearch = function(e) {
         url: /^https?:\/\/endday\.github\.io/
     }, {
         url: /^https?:\/\/endday\.gitee\.io/
+    }, {
+        url: /^http:\/\/localhost:8080\/all-search\//,
+        invisible: !0
     } ], q = function() {
         const e = k.find(e => e.url.test(window.location.href));
         return e ? {
@@ -1113,8 +1125,10 @@ var allSearch = function(e) {
             "@babel/polyfill": "^7.4.3",
             axios: "^0.19.0",
             vue: "^2.6.12",
-            "vue-router": "^3.0.1",
+            "vue-router": "^3.4.6",
+            vuedraggable: "^2.24.1",
             vuetify: "^2.2.11",
+            "vuetify-loader": "^1.6.0",
             vuex: "^3.0.1",
             "workbox-webpack-plugin": "^4.3.1"
         },
@@ -1144,9 +1158,7 @@ var allSearch = function(e) {
             "rollup-plugin-vue": "^5.1.6",
             sass: "^1.19.0",
             "sass-loader": "^8.0.0",
-            "vue-cli-plugin-vuetify": "~2.0.7",
             "vue-template-compiler": "^2.6.12",
-            "vuetify-loader": "^1.3.0",
             webpack: "^4.29.6"
         },
         homepage: "https://github.com/endday/all-search",
@@ -1168,8 +1180,8 @@ var allSearch = function(e) {
     function E() {
         const e = q();
         if (!e.disabled) {
-            if (e.invisible || (r("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-            r("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${C}`)), 
+            if (e.invisible || (n("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+            n("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${C}`)), 
             !document.getElementById("all-search")) {
                 const e = function() {
                     let e = null;
@@ -1177,7 +1189,16 @@ var allSearch = function(e) {
                     return t ? e = t : (e = document.createElement("div"), e.id = "all-search"), e.style.display = "none", 
                     e;
                 }(), t = document.body.parentElement.insertBefore(e, document.body);
-                N.$mount(t);
+                N.$mount(t), [ /^https?:\/\/endday\.github\.io/, /^https?:\/\/endday\.gitee\.io/, /^http:\/\/localhost:8080\/all-search\// ].some(e => e.test(location.href)) && i(() => {
+                    const e = document.getElementById("save-btn");
+                    if (e) {
+                        e.style.display = "unset";
+                        const t = e.onclick;
+                        return e.onclick = () => {
+                            t && t(), a("sites", window.localStorage.getItem("__allSearch__sites")), a("sites-version", C);
+                        }, !0;
+                    }
+                }, 800);
             }
         }
     }
@@ -1186,7 +1207,7 @@ var allSearch = function(e) {
         const e = document.getElementsByTagName("head")[0], t = {
             childList: !0
         }, s = function(e) {
-            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "as-style" === t.removedNodes[0].class && n(t.removedNodes[0].innerText);
+            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "as-style" === t.removedNodes[0].class && r(t.removedNodes[0].innerText);
         };
         let o, a = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         a && (o = new a(s), o.observe(e, t));
