@@ -14,10 +14,10 @@
         v-model="tab">
         <draggable
           class="v-slide-group__content v-tabs-bar__content"
-          v-model="sites"
+          v-model="localSites"
         >
           <v-tab
-            v-for="(group, i) in sitesCopy"
+            v-for="(group, i) in localSites"
             :key="i"
             @change="tabChange(group.name)"
           >
@@ -29,7 +29,7 @@
         </draggable>
         <v-tabs-items v-model="tab">
           <v-tab-item
-            v-for="(group, i) in sitesCopy"
+            v-for="(group, i) in localSites"
             :key="i"
           >
             <v-list>
@@ -175,7 +175,8 @@
       <v-btn
         color="error"
         large
-        text>
+        text
+        @click="reset">
         重置
       </v-btn>
       <v-spacer/>
@@ -206,8 +207,7 @@
 </template>
 
 <script>
-import '../util/test'
-import { setSession } from '../util'
+import { version, initSites, setSession } from '../util'
 import draggable from 'vuedraggable'
 import sites from '../config/sites'
 
@@ -218,7 +218,7 @@ export default {
   },
   data: () => ({
     sites,
-    sitesCopy: [],
+    localSites: [],
     tab: '',
     tabName: '',
     dragging: false,
@@ -228,14 +228,17 @@ export default {
   }),
   computed: {
     personalCategory () {
-      return this.sitesCopy.filter(item => item.name === 'personal')
+      return this.localSites.filter(item => item.name === 'personal')
     }
   },
   mounted () {
-    this.sitesCopy = JSON.parse(JSON.stringify(this.sites))
-    this.tabName = this.sitesCopy[0].name
+    this.initSites()
   },
   methods: {
+    initSites () {
+      this.localSites = initSites()
+      this.tabName = this.localSites[0].name
+    },
     tabChange (value) {
       this.tabName = value
     },
@@ -254,7 +257,7 @@ export default {
       data.visible = !data.visible
     },
     addCategory () {
-      sites.push({
+      this.localSites.push({
         nameZh: '新分类',
         name: 'personal',
         list: []
@@ -265,25 +268,32 @@ export default {
       this.showSnackbar('添加成功')
     },
     del (j) {
-      const i = this.sitesCopy.findIndex(item => item.name === 'personal')
-      this.sitesCopy[i].list.splice(j, 1)
+      const i = this.localSites.findIndex(item => item.name === 'personal')
+      this.localSites[i].list.splice(j, 1)
     },
     delGroup (i) {
-      this.sitesCopy.splice(i, 1)
+      this.localSites.splice(i, 1)
       this.showSnackbar('删除成功')
     },
     addNewUrl (group) {
       group.list.push({
         nameZh: '新网址',
-        url: 'https://www.baidu.com/s?wd=%s&ie=utf-8'
+        url: 'https://www.baidu.com/s?wd=%s&ie=utf-8',
+        data: {
+          visible: true
+        }
       })
     },
     showSnackbar (text) {
       this.tipsText = text
       this.snackbar = true
     },
+    reset () {
+      this.localSites = JSON.parse(JSON.stringify(this.sites))
+    },
     save () {
-      setSession('sites', this.sitesCopy)
+      setSession('sites', this.localSites)
+      setSession('sites-version', version)
       this.showSnackbar('保存成功')
     }
   }

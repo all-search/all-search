@@ -39,33 +39,6 @@
 }
 .as-setting:hover {
   color: #1890ff;
-}@media screen and (max-width: 768px) {
-.as-title {
-    display: none;
-}
-}
-.as-title-horizontal {
-  min-width: 100px;
-  margin: 0 10px;
-}
-.as-title-vertical {
-  width: 100%;
-}
-.as-title {
-  text-decoration: none !important;
-  padding: 0;
-  margin: 0;
-}
-.as-title .as-title-inner {
-  padding: 0;
-  font-size: 18px;
-  height: 30px;
-  line-height: 30px;
-  font-weight: 600;
-  color: #1990fc;
-  margin: 0 auto;
-  text-align: center;
-  cursor: pointer;
 }.as-menu {
   flex: 1;
 }
@@ -200,6 +173,33 @@
 }
 .as-subMenu-group-list .as-menu-item-title {
   padding-left: 44px;
+}@media screen and (max-width: 768px) {
+.as-title {
+    display: none;
+}
+}
+.as-title-horizontal {
+  min-width: 100px;
+  margin: 0 10px;
+}
+.as-title-vertical {
+  width: 100%;
+}
+.as-title {
+  text-decoration: none !important;
+  padding: 0;
+  margin: 0;
+}
+.as-title .as-title-inner {
+  padding: 0;
+  font-size: 18px;
+  height: 30px;
+  line-height: 30px;
+  font-weight: 600;
+  color: #1990fc;
+  margin: 0 auto;
+  text-align: center;
+  cursor: pointer;
 }.as-menu-item-icon {
   font-family: "iconfont" !important;
   font-size: 20px;

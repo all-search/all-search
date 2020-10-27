@@ -1,3 +1,8 @@
+import sites from '../config/sites'
+import pkg from '../../package.json'
+
+export const version = pkg.version.replace(/\./g, '')
+
 export function getQueryString (name, url) {
   url = url || window.location.href
   const r = new RegExp('(\\?|#|&)' + name + '=([^&#]*)(&|#|$)')
@@ -16,39 +21,6 @@ export function getKeyword () {
     }
   }
   return ''
-}
-
-const el = document.createElement('a')
-
-export function parseUrl (url) {
-  let val = url
-  if (val.indexOf('//') < 0) {
-    val = `//${val}`
-  } else if (val.indexOf('//') > -1) {
-    const lowerCaseVal = val.toLowerCase()
-    if (
-      !lowerCaseVal.startsWith('http://') &&
-      !lowerCaseVal.startsWith('https://') &&
-      !lowerCaseVal.startsWith('ftp://') &&
-      !lowerCaseVal.startsWith('files://')
-    ) {
-      val = val.replace(/.*\/\//, '//')
-    }
-  } else {
-    return el
-  }
-  el.href = val
-  return {
-    href: el.href, // '包含完整的url'
-    origin: el.origin, // '包含协议到pathname之前的内容'
-    protocol: el.protocol, //  'url使用的协议，包含末尾的:'
-    host: el.host, //  '完整主机名，包含:和端口'
-    hostname: el.hostname, //  '主机名，不包含端口'
-    port: el.port, //  '端口号'
-    pathname: el.pathname, //  '服务器上访问资源的路径/开头'
-    search: el.search, //  'query string，?开头'
-    hash: el.hash //  '#开头的fragment identifier'
-  }
 }
 
 export function checkBody () {
@@ -79,16 +51,33 @@ function getName (name) {
   return null
 }
 
+function isJSON (str) {
+  if (typeof str === 'string') {
+    try {
+      let obj = JSON.parse(str)
+      return !!(typeof obj === 'object' && obj)
+    } catch (e) {
+      return false
+    }
+  }
+}
+
 export function getSession (name) {
   const formatName = getName(name)
+  let item
   // eslint-disable-next-line
   if (window.GM_getValue) {
     // eslint-disable-next-line
-    return window.GM_getValue(formatName)
+    item = window.GM_getValue(formatName)
+  } else {
+    item = window.localStorage.getItem(formatName)
   }
-  const item = window.localStorage.getItem(formatName)
   if (item) {
-    return JSON.parse(item)
+    try {
+      return JSON.parse(item)
+    } catch (e) {
+      return item
+    }
   }
   return null
 }
@@ -307,3 +296,33 @@ export function mergeSites (a, b) {
   return oldSites
 }
 
+export function initSites (type) {
+  let sitesData = sites
+  const localSites = getSession('sites')
+  const sitesVersion = getSession('sites-version')
+  if (localSites) {
+    sitesData = localSites
+    if (
+      localSites &&
+      sitesVersion &&
+      (sitesVersion !== version || type !== 'tm')
+    ) {
+      sitesData = mergeSites(localSites, sites)
+      setSession('sites', sitesData)
+      setSession('sites-version', version)
+    }
+  }
+  console.log(typeof sitesData)
+  if (type === 'tm') {
+    sitesData = sitesData
+      .filter(item =>
+        item.list &&
+        item.list.length > 0 &&
+        item.data.visible)
+      .map(item => ({
+        ...item,
+        show: false
+      }))
+  }
+  return sitesData
+}

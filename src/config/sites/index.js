@@ -1,4 +1,4 @@
-import { parseUrl } from '../../util'
+import parseUrl from '../../util/parseUrl'
 import search from './search'
 import translate from './translate'
 import developer from './developer'

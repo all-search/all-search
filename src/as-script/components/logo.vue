@@ -1,7 +1,7 @@
 <template>
   <a
     class="as-title"
-    href="https://github.com/endday/all-search"
+    href="https://endday.github.io/all-search/"
     target="_blank"
     :class="`as-title-${mode}`"
   >

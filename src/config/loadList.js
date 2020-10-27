@@ -317,10 +317,12 @@ const list = [
     url: /^https?:\/\/www\.startpage\.com\/do\/search/
   },
   {
-    url: /^https?:\/\/endday\.github\.io/
+    url: /^https?:\/\/endday\.github\.io/,
+    invisible: true
   },
   {
-    url: /^https?:\/\/endday\.gitee\.io/
+    url: /^https?:\/\/endday\.gitee\.io/,
+    invisible: true
   },
   {
     url: /^http:\/\/localhost:8080\/all-search\//,

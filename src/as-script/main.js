@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import index from './index.vue'
 import {
+  version,
   ACAddStyle,
   addStyleResource,
   checkBody,
@@ -11,9 +12,6 @@ import {
   RAFInterval
 } from '../util'
 import { targetSite } from '../config/loadList'
-import pkg from '../../package.json'
-
-const version = pkg.version.replace(/\./g, '')
 
 Vue.config.productionTip = false
 

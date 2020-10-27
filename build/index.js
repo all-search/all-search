@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.3a
+// @version      0.2.4
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/10/26
+// @update       2020/10/28
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://lib.baomitu.com/vue/2.6.11/vue.js
-// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.3a
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.3a
+// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.4
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.4
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -112,83 +112,8 @@
 var allSearch = function(e) {
     "use strict";
     e = e && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
-    const t = document.createElement("a");
-    function s(e) {
-        return e ? `__allSearch__${e}` : null;
-    }
-    function o(e) {
-        const t = s(e);
-        if (window.GM_getValue) return window.GM_getValue(t);
-        const o = window.localStorage.getItem(t);
-        return o ? JSON.parse(o) : null;
-    }
-    function a(e, t) {
-        const o = s(e);
-        if (window.GM_setValue) window.GM_setValue(o, t); else {
-            const e = JSON.stringify(t);
-            e && window.localStorage.setItem(o, e);
-        }
-    }
-    function r(e) {
-        if (!e) return;
-        const t = document.createElement("style");
-        t.innerHTML = e, t.class = "all-search-style", document.getElementsByTagName("head")[0].appendChild(t);
-    }
-    function n(e, t) {
-        let s;
-        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? l(s, e) : function(e, t) {
-            if (!e) return;
-            if (t) {
-                const e = document.styleSheets;
-                for (let s = 0; s < e.length; s++) if (e[s].ownerNode.className === t) return;
-            }
-            const s = document.createElement("link");
-            s.href = e, s.rel = "stylesheet", s.type = "text/css", s.crossorigin = "anonymous", 
-            document.getElementsByTagName("head")[0].appendChild(s);
-        }(t, e);
-    }
-    function i(e, t, s) {
-        const o = t / 1e3 * 60;
-        let a = 0;
-        if (!0 === s) {
-            if (e()) return;
-        }
-        requestAnimationFrame((function t() {
-            if (a < o) a++, requestAnimationFrame(t); else {
-                e() || !1 || (a = 0, requestAnimationFrame(t));
-            }
-        }));
-    }
-    function l(e, t, s, o) {
-        i((function() {
-            let a = document.querySelector(s);
-            if (void 0 === s && (a = document.body || document.head || document.documentElement || document), 
-            o = o || !1, void 0 === s || void 0 !== s && null !== document.querySelector(s)) {
-                if (!0 !== o) {
-                    if (!1 === o && null != document.querySelector("." + t)) return !0;
-                    {
-                        let s = document.createElement("style");
-                        null != t && (s.className = t), s.setAttribute("type", "text/css"), s.innerHTML = e;
-                        try {
-                            a.appendChild(s);
-                        } catch (e) {
-                            console.log(e.message);
-                        }
-                        return !0;
-                    }
-                }
-                !function(e) {
-                    try {
-                        if ("string" == typeof e) {
-                            let t = document.querySelectorAll(e);
-                            for (let e = 0; e < t.length; e++) t[e].remove();
-                        } else "function" == typeof e ? e() : console.log("未知命令：" + e);
-                    } catch (e) {}
-                }("." + t);
-            }
-        }), 20, !0);
-    }
-    const c = [ {
+    let t = document.createElement("a");
+    const s = [ {
         nameZh: "搜索",
         name: "search",
         list: [ {
@@ -514,12 +439,178 @@ var allSearch = function(e) {
             return {
                 ...s,
                 id: `${e.name}-${o}`,
-                visible: !0
+                data: {
+                    visible: !0
+                }
             };
         }),
-        visible: !0
+        data: {
+            visible: !0
+        }
     }));
-    function h(e, t, s, o, a, r, n, i, l, c) {
+    const o = {
+        name: "all-search",
+        version: "0.2.4",
+        description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
+        author: "endday",
+        scripts: {
+            serve: "vue-cli-service serve --fix",
+            build: "vue-cli-service build",
+            lint: "vue-cli-service lint",
+            buildScript: "rollup -c",
+            report: "vue-cli-service build --report",
+            sourceMap: "vue-cli-service build --sourceMap"
+        },
+        main: "dist/index.js",
+        dependencies: {
+            "@babel/polyfill": "^7.4.3",
+            axios: "^0.19.0",
+            vue: "^2.6.12",
+            "vue-router": "^3.4.6",
+            vuedraggable: "^2.24.1",
+            vuetify: "^2.2.11",
+            "vuetify-loader": "^1.6.0",
+            vuex: "^3.0.1",
+            "workbox-webpack-plugin": "^4.3.1"
+        },
+        devDependencies: {
+            "@rollup/plugin-json": "^4.0.3",
+            "@vue/cli-plugin-babel": "^3.10.0",
+            "@vue/cli-plugin-eslint": "^3.10.0",
+            "@vue/cli-service": "^3.10.0",
+            "@vue/eslint-config-standard": "^4.0.0",
+            "babel-eslint": "^10.0.1",
+            "babel-plugin-component": "^1.1.1",
+            "babel-plugin-import": "^1.11.0",
+            "babel-plugin-transform-modules": "^0.1.1",
+            "babel-preset-env": "^1.7.0",
+            eslint: "^5.16.0",
+            "eslint-plugin-vue": "^5.0.0",
+            "file-loader": "^3.0.1",
+            "html-webpack-inline-source-plugin": "0.0.10",
+            "node-sass": "^4.9.0",
+            rollup: "^1.32.0",
+            "rollup-plugin-commonjs": "^10.1.0",
+            "rollup-plugin-css-only": "^2.0.0",
+            "rollup-plugin-delete": "^1.2.0",
+            "rollup-plugin-node-resolve": "^5.2.0",
+            "rollup-plugin-replace": "^2.2.0",
+            "rollup-plugin-terser": "^5.2.0",
+            "rollup-plugin-vue": "^5.1.6",
+            sass: "^1.19.0",
+            "sass-loader": "^8.0.0",
+            "vue-template-compiler": "^2.6.12",
+            webpack: "^4.29.6"
+        },
+        homepage: "https://github.com/endday/all-search",
+        license: "GPL-2.0",
+        repository: {
+            type: "git",
+            url: "git@github.com:endday/all-search.git"
+        }
+    }.version.replace(/\./g, "");
+    function a(e) {
+        return e ? `__allSearch__${e}` : null;
+    }
+    function r(e) {
+        const t = a(e);
+        let s;
+        if (s = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
+        s) try {
+            return JSON.parse(s);
+        } catch (e) {
+            return s;
+        }
+        return null;
+    }
+    function n(e, t) {
+        const s = a(e);
+        if (window.GM_setValue) window.GM_setValue(s, t); else {
+            const e = JSON.stringify(t);
+            e && window.localStorage.setItem(s, e);
+        }
+    }
+    function i(e) {
+        if (!e) return;
+        const t = document.createElement("style");
+        t.innerHTML = e, t.class = "all-search-style", document.getElementsByTagName("head")[0].appendChild(t);
+    }
+    function l(e, t) {
+        let s;
+        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? h(s, e) : function(e, t) {
+            if (!e) return;
+            if (t) {
+                const e = document.styleSheets;
+                for (let s = 0; s < e.length; s++) if (e[s].ownerNode.className === t) return;
+            }
+            const s = document.createElement("link");
+            s.href = e, s.rel = "stylesheet", s.type = "text/css", s.crossorigin = "anonymous", 
+            document.getElementsByTagName("head")[0].appendChild(s);
+        }(t, e);
+    }
+    function c(e, t, s) {
+        const o = t / 1e3 * 60;
+        let a = 0;
+        if (!0 === s) {
+            if (e()) return;
+        }
+        requestAnimationFrame((function t() {
+            if (a < o) a++, requestAnimationFrame(t); else {
+                e() || !1 || (a = 0, requestAnimationFrame(t));
+            }
+        }));
+    }
+    function h(e, t, s, o) {
+        c((function() {
+            let a = document.querySelector(s);
+            if (void 0 === s && (a = document.body || document.head || document.documentElement || document), 
+            o = o || !1, void 0 === s || void 0 !== s && null !== document.querySelector(s)) {
+                if (!0 !== o) {
+                    if (!1 === o && null != document.querySelector("." + t)) return !0;
+                    {
+                        let s = document.createElement("style");
+                        null != t && (s.className = t), s.setAttribute("type", "text/css"), s.innerHTML = e;
+                        try {
+                            a.appendChild(s);
+                        } catch (e) {
+                            console.log(e.message);
+                        }
+                        return !0;
+                    }
+                }
+                !function(e) {
+                    try {
+                        if ("string" == typeof e) {
+                            let t = document.querySelectorAll(e);
+                            for (let e = 0; e < t.length; e++) t[e].remove();
+                        } else "function" == typeof e ? e() : console.log("未知命令：" + e);
+                    } catch (e) {}
+                }("." + t);
+            }
+        }), 20, !0);
+    }
+    function u(e) {
+        let t = s;
+        const a = r("sites"), i = r("sites-version");
+        return a && (t = a, a && i && (i !== o || "tm" !== e) && (t = function(e, t) {
+            const s = JSON.parse(JSON.stringify(e));
+            let o = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
+            return o.forEach(e => {
+                const t = s.find(t => t.name === e.name);
+                t && (e.list.forEach(e => {
+                    const s = t.list.findIndex(t => t.id === e.id);
+                    s > -1 && (Object.keys(e).forEach(o => {
+                        "data" !== o && (t.list[s][o] = e[o]);
+                    }), e.isAdd = !0);
+                }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
+                e.isAdd = !0);
+            }), o = o.filter(e => !e.isAdd), o.length && s.push(...o), s;
+        }(a, s), n("sites", t), n("sites-version", o))), console.log(typeof t), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data.visible).map(e => ({
+            ...e,
+            show: !1
+        }))), t;
+    }
+    function m(e, t, s, o, a, r, n, i, l, c) {
         "boolean" != typeof n && (l = i, i = n, n = !1);
         const h = "function" == typeof s ? s.options : s;
         let u;
@@ -542,7 +633,7 @@ var allSearch = function(e) {
         }
         return s;
     }
-    const u = {
+    const p = {
         name: "logo",
         props: {
             mode: {
@@ -568,25 +659,25 @@ var allSearch = function(e) {
             }
         }
     };
-    var m = function() {
+    var d = function() {
         var e = this.$createElement, t = this._self._c || e;
         return t("a", {
             staticClass: "as-title",
             class: "as-title-" + this.mode,
             attrs: {
-                href: "https://github.com/endday/all-search",
+                href: "https://endday.github.io/all-search/",
                 target: "_blank"
             }
         }, [ t("p", {
             staticClass: "as-title-inner"
         }, [ this._v("\n    All Search\n  ") ]) ]);
     };
-    m._withStripped = !0;
-    const p = h({
-        render: m,
+    d._withStripped = !0;
+    const w = m({
+        render: d,
         staticRenderFns: []
-    }, void 0, u, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const d = {
+    }, void 0, p, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const g = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -617,7 +708,7 @@ var allSearch = function(e) {
             }
         }
     };
-    var w = function() {
+    var y = function() {
         var e = this, t = e.$createElement;
         return (e._self._c || t)("li", {
             on: {
@@ -633,12 +724,12 @@ var allSearch = function(e) {
             }
         }, [ e._t("default") ], 2);
     };
-    w._withStripped = !0;
-    const g = h({
-        render: w,
+    y._withStripped = !0;
+    const f = m({
+        render: y,
         staticRenderFns: []
-    }, void 0, d, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const y = {
+    }, void 0, g, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const v = {
         name: "icon",
         props: {
             name: {
@@ -647,22 +738,22 @@ var allSearch = function(e) {
             }
         }
     };
-    var f = function() {
+    var b = function() {
         var e = this.$createElement;
         return (this._self._c || e)("i", {
             staticClass: "as-menu-item-icon",
             class: "icon-" + this.name
         });
     };
-    f._withStripped = !0;
-    const v = {
+    b._withStripped = !0;
+    const Z = {
         name: "as-menu",
         components: {
-            menuItem: g,
-            icon: h({
-                render: f,
+            menuItem: f,
+            icon: m({
+                render: b,
                 staticRenderFns: []
-            }, void 0, y, void 0, !1, void 0, !1, void 0, void 0, void 0)
+            }, void 0, v, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         props: {
             sites: {
@@ -723,7 +814,7 @@ var allSearch = function(e) {
             }
         }
     };
-    var b = function() {
+    var x = function() {
         var e = this, t = e.$createElement, s = e._self._c || t;
         return s("ul", {
             staticClass: "as-menu",
@@ -766,6 +857,12 @@ var allSearch = function(e) {
                 staticClass: "as-subMenu"
             }, e._l(t.list, (function(t, o) {
                 return s("li", {
+                    directives: [ {
+                        name: "show",
+                        rawName: "v-show",
+                        value: t.data.visible,
+                        expression: "child.data.visible"
+                    } ],
                     key: o,
                     domProps: {
                         textContent: e._s(t.nameZh)
@@ -779,15 +876,15 @@ var allSearch = function(e) {
             })), 0) ]) ]) ], 1);
         })), 1);
     };
-    b._withStripped = !0;
-    const Z = {
+    x._withStripped = !0;
+    const _ = {
         name: "all-search",
         components: {
-            logo: p,
-            asMenu: h({
-                render: b,
+            logo: w,
+            asMenu: m({
+                render: x,
                 staticRenderFns: []
-            }, void 0, v, void 0, !1, void 0, !1, void 0, void 0, void 0)
+            }, void 0, Z, void 0, !1, void 0, !1, void 0, void 0, void 0)
         },
         data: () => ({
             sites: [],
@@ -812,22 +909,25 @@ var allSearch = function(e) {
             }
         },
         created() {
-            this.sites = c.filter(e => e.list && e.list.length > 0).map(e => ({
-                ...e,
-                show: !1
-            })), this.categoryName = o("categoryName") || this.categoryName, this.mode = o("mode") || this.mode;
+            this.initSites(), this.categoryName = r("categoryName") || this.categoryName, this.mode = r("mode") || this.mode;
         },
         methods: {
+            initSites() {
+                this.sites = u("tm");
+            },
             changeCategory(e) {
-                a("categoryName", e), this.categoryName = e;
+                n("categoryName", e), this.categoryName = e;
             },
             changeMode() {
                 "horizontal" === this.mode ? this.mode = "vertical" : this.mode = "horizontal", 
-                a("mode", this.mode), window.location.reload();
+                n("mode", this.mode), window.location.reload();
+            },
+            openSet() {
+                window.open("https://endday.github.io/all-search/");
             }
         }
     };
-    var x = function() {
+    var k = function() {
         var e = this, t = e.$createElement, s = e._self._c || t;
         return s("div", {
             class: e.asClass,
@@ -856,13 +956,18 @@ var allSearch = function(e) {
             on: {
                 click: e.changeMode
             }
-        }, [ e._v("\n    切换模式\n  ") ]) ], 1);
+        }, [ e._v("\n    切换模式\n  ") ]), e._v(" "), s("div", {
+            staticClass: "as-setting",
+            on: {
+                click: e.openSet
+            }
+        }, [ e._v("\n    设置\n  ") ]) ], 1);
     };
-    x._withStripped = !0;
-    const _ = h({
-        render: x,
+    k._withStripped = !0;
+    const q = m({
+        render: k,
         staticRenderFns: []
-    }, void 0, Z, void 0, !1, void 0, !1, void 0, void 0, void 0), k = [ {
+    }, void 0, _, void 0, !1, void 0, !1, void 0, void 0, void 0), S = [ {
         url: /^https?:\/\/www\.google\.com\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -1089,14 +1194,16 @@ var allSearch = function(e) {
     }, {
         url: /^https?:\/\/www\.startpage\.com\/do\/search/
     }, {
-        url: /^https?:\/\/endday\.github\.io/
+        url: /^https?:\/\/endday\.github\.io/,
+        invisible: !0
     }, {
-        url: /^https?:\/\/endday\.gitee\.io/
+        url: /^https?:\/\/endday\.gitee\.io/,
+        invisible: !0
     }, {
         url: /^http:\/\/localhost:8080\/all-search\//,
         invisible: !0
-    } ], q = function() {
-        const e = k.find(e => e.url.test(window.location.href));
+    } ], C = function() {
+        const e = S.find(e => e.url.test(window.location.href));
         return e ? {
             url: e.url,
             invisible: e.invisible,
@@ -1107,81 +1214,20 @@ var allSearch = function(e) {
             mounted: e.mounted
         } : null;
     };
-    const C = {
-        name: "all-search",
-        version: "0.2.3a",
-        description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
-        author: "endday",
-        scripts: {
-            serve: "vue-cli-service serve --fix",
-            build: "vue-cli-service build",
-            lint: "vue-cli-service lint",
-            buildScript: "rollup -c",
-            report: "vue-cli-service build --report",
-            sourceMap: "vue-cli-service build --sourceMap"
-        },
-        main: "dist/index.js",
-        dependencies: {
-            "@babel/polyfill": "^7.4.3",
-            axios: "^0.19.0",
-            vue: "^2.6.12",
-            "vue-router": "^3.4.6",
-            vuedraggable: "^2.24.1",
-            vuetify: "^2.2.11",
-            "vuetify-loader": "^1.6.0",
-            vuex: "^3.0.1",
-            "workbox-webpack-plugin": "^4.3.1"
-        },
-        devDependencies: {
-            "@rollup/plugin-json": "^4.0.3",
-            "@vue/cli-plugin-babel": "^3.10.0",
-            "@vue/cli-plugin-eslint": "^3.10.0",
-            "@vue/cli-service": "^3.10.0",
-            "@vue/eslint-config-standard": "^4.0.0",
-            "babel-eslint": "^10.0.1",
-            "babel-plugin-component": "^1.1.1",
-            "babel-plugin-import": "^1.11.0",
-            "babel-plugin-transform-modules": "^0.1.1",
-            "babel-preset-env": "^1.7.0",
-            eslint: "^5.16.0",
-            "eslint-plugin-vue": "^5.0.0",
-            "file-loader": "^3.0.1",
-            "html-webpack-inline-source-plugin": "0.0.10",
-            "node-sass": "^4.9.0",
-            rollup: "^1.32.0",
-            "rollup-plugin-commonjs": "^10.1.0",
-            "rollup-plugin-css-only": "^2.0.0",
-            "rollup-plugin-delete": "^1.2.0",
-            "rollup-plugin-node-resolve": "^5.2.0",
-            "rollup-plugin-replace": "^2.2.0",
-            "rollup-plugin-terser": "^5.2.0",
-            "rollup-plugin-vue": "^5.1.6",
-            sass: "^1.19.0",
-            "sass-loader": "^8.0.0",
-            "vue-template-compiler": "^2.6.12",
-            webpack: "^4.29.6"
-        },
-        homepage: "https://github.com/endday/all-search",
-        license: "GPL-2.0",
-        repository: {
-            type: "git",
-            url: "git@github.com:endday/all-search.git"
-        }
-    }.version.replace(/\./g, "");
     e.config.productionTip = !1;
-    const S = q(), N = new e({
+    const N = C(), z = new e({
         data: () => ({
-            currentSite: S
+            currentSite: N
         }),
-        render: e => e(_)
+        render: e => e(q)
     });
     console.log("all-search running 全搜运行中");
-    const z = o("mode") || "horizontal";
-    function E() {
-        const e = q();
+    const E = r("mode") || "horizontal";
+    function M() {
+        const e = C();
         if (!e.disabled) {
-            if (e.invisible || (n("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-            n("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${C}`)), 
+            if (e.invisible || (l("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+            l("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${o}`)), 
             !document.getElementById("all-search")) {
                 const e = function() {
                     let e = null;
@@ -1189,25 +1235,25 @@ var allSearch = function(e) {
                     return t ? e = t : (e = document.createElement("div"), e.id = "all-search"), e.style.display = "none", 
                     e;
                 }(), t = document.body.parentElement.insertBefore(e, document.body);
-                N.$mount(t), [ /^https?:\/\/endday\.github\.io/, /^https?:\/\/endday\.gitee\.io/, /^http:\/\/localhost:8080\/all-search\// ].some(e => e.test(location.href)) && i(() => {
+                z.$mount(t), [ /^https?:\/\/endday\.github\.io/, /^https?:\/\/endday\.gitee\.io/, /^http:\/\/localhost:8080\/all-search\// ].some(e => e.test(location.href)) && c(() => {
                     const e = document.getElementById("save-btn");
                     if (e) {
                         e.style.display = "unset";
                         const t = e.onclick;
                         return e.onclick = () => {
-                            t && t(), a("sites", window.localStorage.getItem("__allSearch__sites")), a("sites-version", C);
+                            t && t(), n("sites", window.localStorage.getItem("__allSearch__sites")), n("sites-version", o);
                         }, !0;
                     }
                 }, 800);
             }
         }
     }
-    return S && S.style && (S.style[1] && "horizontal" === z && l(S.style[1], "as-special"), 
-    S.style[2] && "vertical" === z && l(S.style[2], "as-special")), function() {
+    return N && N.style && (N.style[1] && "horizontal" === E && h(N.style[1], "as-special"), 
+    N.style[2] && "vertical" === E && h(N.style[2], "as-special")), function() {
         const e = document.getElementsByTagName("head")[0], t = {
             childList: !0
         }, s = function(e) {
-            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "as-style" === t.removedNodes[0].class && r(t.removedNodes[0].innerText);
+            for (const t of e) t.removedNodes.length && "STYLE" === t.removedNodes[0].nodeName && "as-style" === t.removedNodes[0].class && i(t.removedNodes[0].innerText);
         };
         let o, a = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         a && (o = new a(s), o.observe(e, t));
@@ -1222,8 +1268,8 @@ var allSearch = function(e) {
             }
         });
     }().then(() => {
-        "www.baidu.com" === window.location.hostname ? i(() => E(), 800, !0) : E();
+        "www.baidu.com" === window.location.hostname ? c(() => M(), 800, !0) : M();
     }).catch(e => {
         console.error(e);
-    }), N;
+    }), z;
 }(Vue);

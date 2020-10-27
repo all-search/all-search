@@ -14,12 +14,15 @@
          @click="changeMode">
       切换模式
     </div>
+    <div class="as-setting"
+         @click="openSet">
+      设置
+    </div>
   </div>
 </template>
 
 <script>
-import { getSession, setSession } from '../util'
-import sites from '../config/sites'
+import { getSession, initSites, setSession } from '../util'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
 
@@ -55,20 +58,14 @@ export default {
     }
   },
   created () {
-    this.sites = sites
-      .filter(item => {
-        return item.list &&
-          item.list.length > 0 &&
-          item.data.visible
-      })
-      .map(item => ({
-        ...item,
-        show: false
-      }))
+    this.initSites()
     this.categoryName = getSession('categoryName') || this.categoryName
     this.mode = getSession('mode') || this.mode
   },
   methods: {
+    initSites () {
+      this.sites = initSites('tm')
+    },
     changeCategory (name) {
       setSession('categoryName', name)
       this.categoryName = name
@@ -81,6 +78,9 @@ export default {
       }
       setSession('mode', this.mode)
       window.location.reload()
+    },
+    openSet () {
+      window.open('https://endday.github.io/all-search/')
     }
   }
 }
