@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.5
-// @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
+// @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      0.2.5a
+// @description  2020年10月28日更新 新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。
 // @author       endday
 // @license      GPL-2.0
 // @update       2020/10/28
@@ -9,8 +9,8 @@
 
 // @noframes
 // @require      https://lib.baomitu.com/vue/2.6.11/vue.js
-// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.5
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.5
+// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.5a
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.5a
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -450,8 +450,8 @@ var allSearch = function(e) {
     }));
     const o = {
         name: "all-search",
-        version: "0.2.5",
-        description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
+        version: "0.2.5a",
+        description: "新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。",
         author: "endday",
         scripts: {
             serve: "vue-cli-service serve --fix",
@@ -633,7 +633,7 @@ var allSearch = function(e) {
         }
         return s;
     }
-    const p = {
+    const d = {
         name: "logo",
         props: {
             mode: {
@@ -659,7 +659,7 @@ var allSearch = function(e) {
             }
         }
     };
-    var d = function() {
+    var p = function() {
         var e = this.$createElement, t = this._self._c || e;
         return t("a", {
             staticClass: "as-title",
@@ -672,11 +672,11 @@ var allSearch = function(e) {
             staticClass: "as-title-inner"
         }, [ this._v("\n    All Search\n  ") ]) ]);
     };
-    d._withStripped = !0;
+    p._withStripped = !0;
     const w = m({
-        render: d,
+        render: p,
         staticRenderFns: []
-    }, void 0, p, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    }, void 0, d, void 0, !1, void 0, !1, void 0, void 0, void 0);
     const g = {
         name: "menuItem",
         props: {
@@ -840,6 +840,14 @@ var allSearch = function(e) {
             }), e._v(" "), s("span", {
                 domProps: {
                     textContent: e._s(t.nameZh)
+                },
+                on: {
+                    click: function(s) {
+                        return e.handleClick(t.list[0]);
+                    },
+                    mousedown: function(s) {
+                        return e.handleMouseWheelClick(s, t.list[0]);
+                    }
                 }
             }) ], 1), e._v(" "), s("transition", {
                 attrs: {
@@ -870,6 +878,9 @@ var allSearch = function(e) {
                     on: {
                         click: function(s) {
                             return e.handleClick(t);
+                        },
+                        mousedown: function(s) {
+                            return e.handleMouseWheelClick(s, t);
                         }
                     }
                 });
@@ -967,7 +978,7 @@ var allSearch = function(e) {
     const q = m({
         render: k,
         staticRenderFns: []
-    }, void 0, _, void 0, !1, void 0, !1, void 0, void 0, void 0), S = [ {
+    }, void 0, _, void 0, !1, void 0, !1, void 0, void 0, void 0), C = [ {
         url: /^https?:\/\/www\.google\.com\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -1202,8 +1213,8 @@ var allSearch = function(e) {
     }, {
         url: /^http:\/\/localhost:8080\/all-search\//,
         invisible: !0
-    } ], C = function() {
-        const e = S.find(e => e.url.test(window.location.href));
+    } ], S = function() {
+        const e = C.find(e => e.url.test(window.location.href));
         return e ? {
             url: e.url,
             invisible: e.invisible,
@@ -1215,7 +1226,7 @@ var allSearch = function(e) {
         } : null;
     };
     e.config.productionTip = !1;
-    const N = C(), z = new e({
+    const N = S(), z = new e({
         data: () => ({
             currentSite: N
         }),
@@ -1224,7 +1235,7 @@ var allSearch = function(e) {
     console.log("all-search running 全搜运行中");
     const E = r("mode") || "horizontal";
     function M() {
-        const e = C();
+        const e = S();
         if (!e.disabled) {
             if (e.invisible || (l("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
             l("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${o}`)), 

@@ -1,7 +1,7 @@
 {
   "name": "all-search",
-  "version": "0.2.5",
-  "description": "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
+  "version": "0.2.5a",
+  "description": "新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。",
   "author": "endday",
   "scripts": {
     "serve": "vue-cli-service serve --fix",

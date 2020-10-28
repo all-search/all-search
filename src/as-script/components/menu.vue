@@ -10,7 +10,9 @@
       @show="handleMenuShow($event, item)">
       <div class="as-menu-item-title">
         <icon :name="item.name"/>
-        <span v-text="item.nameZh"></span>
+        <span v-text="item.nameZh"
+              @click="handleClick(item.list[0])"
+              @mousedown="handleMouseWheelClick($event, item.list[0])"/>
       </div>
       <transition :name="transition">
         <div class="as-subMenu-container"
@@ -21,7 +23,8 @@
               :key="index"
               v-show="child.data.visible"
               v-text="child.nameZh"
-              @click="handleClick(child)">
+              @click="handleClick(child)"
+              @mousedown="handleMouseWheelClick($event, child)">
             </li>
           </ul>
         </div>

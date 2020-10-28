@@ -10,9 +10,9 @@ const includeList = list
   .join(endOfLine)
 
 const meta = `// ==UserScript==
-// @name         ${pkg.name} 全搜，一个搜索引擎快捷跳转菜单
+// @name         ${pkg.name} 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      ${pkg.version}
-// @description  ${pkg.description}
+// @description  ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日更新 ${pkg.description}
 // @author       ${pkg.author}
 // @license      ${pkg.license}
 // @update       ${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}
