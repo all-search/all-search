@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单
-// @version      0.2.4
+// @version      0.2.5
 // @description  在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump
 // @author       endday
 // @license      GPL-2.0
@@ -9,8 +9,8 @@
 
 // @noframes
 // @require      https://lib.baomitu.com/vue/2.6.11/vue.js
-// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.4
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.4
+// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.5
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.5
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -450,7 +450,7 @@ var allSearch = function(e) {
     }));
     const o = {
         name: "all-search",
-        version: "0.2.4",
+        version: "0.2.5",
         description: "在各个引擎之间跳转的顶部固定菜单，借鉴自searchEngineJump",
         author: "endday",
         scripts: {
@@ -605,7 +605,7 @@ var allSearch = function(e) {
                 }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
                 e.isAdd = !0);
             }), o = o.filter(e => !e.isAdd), o.length && s.push(...o), s;
-        }(a, s), n("sites", t), n("sites-version", o))), console.log(typeof t), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data.visible).map(e => ({
+        }(a, s), n("sites", t), n("sites-version", o))), console.log(typeof t), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
             ...e,
             show: !1
         }))), t;

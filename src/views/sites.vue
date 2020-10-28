@@ -260,7 +260,10 @@ export default {
       this.localSites.push({
         nameZh: '新分类',
         name: 'personal',
-        list: []
+        list: [],
+        data: {
+          visible: true
+        }
       })
     },
     addToPersonal (item, group) {

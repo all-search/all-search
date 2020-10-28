@@ -51,17 +51,6 @@ function getName (name) {
   return null
 }
 
-function isJSON (str) {
-  if (typeof str === 'string') {
-    try {
-      let obj = JSON.parse(str)
-      return !!(typeof obj === 'object' && obj)
-    } catch (e) {
-      return false
-    }
-  }
-}
-
 export function getSession (name) {
   const formatName = getName(name)
   let item
@@ -318,6 +307,7 @@ export function initSites (type) {
       .filter(item =>
         item.list &&
         item.list.length > 0 &&
+        item.data &&
         item.data.visible)
       .map(item => ({
         ...item,
