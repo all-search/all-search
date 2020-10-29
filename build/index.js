@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      0.2.5a
-// @description  2020年10月28日更新 新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。
+// @description  2020年10月29日更新 新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/10/28
+// @update       2020/10/29
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
@@ -18,7 +18,7 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 
-// @include      /^https?:\/\/www\.google\.com\/search/
+// @include      /^https?:\/\/www\.google\.com(.hk)?\/search/
 // @include      /^https?:\/\/www\.baidu\.com\/$/
 // @include      /^https?:\/\/www\.baidu\.com\/s/
 // @include      /^https?:\/\/www\.baidu\.com\/baidu\?wd/
@@ -979,7 +979,7 @@ var allSearch = function(e) {
         render: k,
         staticRenderFns: []
     }, void 0, _, void 0, !1, void 0, !1, void 0, void 0, void 0), C = [ {
-        url: /^https?:\/\/www\.google\.com\/search/,
+        url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
         }
