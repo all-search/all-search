@@ -5,6 +5,8 @@ import replace from 'rollup-plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 import css from 'rollup-plugin-css-only'
 import json from '@rollup/plugin-json'
+import CleanCSS from 'clean-css' // 压缩css
+import { writeFileSync } from 'fs' // 写文件
 import del from 'rollup-plugin-delete'
 import meta from './src/config/meta'
 
@@ -33,7 +35,11 @@ export default {
       css: false,
       needMap: false
     }),
-    css({ output: `build/as-style.css` }),
+    css({
+      output (style) {
+        writeFileSync('build/as-style.css', new CleanCSS().minify(style).styles)
+      }
+    }),
     terser({
       output: {
         beautify: true,

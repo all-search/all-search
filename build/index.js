@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      0.2.5a
+// @version      0.2.5b
 // @description  2020年10月29日更新 新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。
 // @author       endday
 // @license      GPL-2.0
@@ -9,8 +9,8 @@
 
 // @noframes
 // @require      https://lib.baomitu.com/vue/2.6.11/vue.js
-// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.5a
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.5a
+// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=0.2.5b
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=0.2.5b
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -450,7 +450,7 @@ var allSearch = function(e) {
     }));
     const o = {
         name: "all-search",
-        version: "0.2.5a",
+        version: "0.2.5b",
         description: "新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。",
         author: "endday",
         scripts: {
