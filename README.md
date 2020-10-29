@@ -21,8 +21,11 @@ A top fixed menu that allows you to jump between various search engines, build b
 ## 待完成
 * 谷歌插件化
 
-
 ## 如何贡献
+
+#### 反馈与交流
+[qq群地址](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
+
 #### 本地开发
 ```
 npm run serve
@@ -33,4 +36,3 @@ npm run serve
 ```
 npm run buildScript
 ```
-
