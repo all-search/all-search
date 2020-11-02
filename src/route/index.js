@@ -9,13 +9,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'index',
-      component: () => import('../views/sites.vue'),
+      name: 'setting',
+      component: () => import('../views/setting.vue'),
       meta: {}
     },
     {
-      path: '/other',
-      name: 'other',
+      path: '/sites',
+      name: 'index',
       component: () => import('../views/sites.vue'),
       meta: {}
     }

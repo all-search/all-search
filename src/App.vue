@@ -28,6 +28,17 @@
       >
         <v-list-item
           link
+          to="/"
+        >
+          <v-list-item-content>
+            <v-list-item-title>
+              样式设置
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          link
+          to="/sites"
         >
           <v-list-item-content>
             <v-list-item-title>

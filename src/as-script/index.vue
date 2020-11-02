@@ -11,10 +11,6 @@
       :value="categoryName"
       @change="changeCategory"/>
     <div class="as-setting"
-         @click="changeMode">
-      切换模式
-    </div>
-    <div class="as-setting"
          @click="openSet">
       设置
     </div>

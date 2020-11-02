@@ -1,7 +1,6 @@
 <template>
   <v-card
-    class="mx-auto"
-  >
+    class="mx-auto">
     <v-list-item three-line>
       <v-list-item-content>
         <v-list-item-title>网址配置</v-list-item-title>
@@ -100,6 +99,7 @@
                           required
                           singleLine
                           label="网址链接"
+                          messages="将搜索的内容替换为'%s'"
                           v-model="site.url"/>
                       </v-col>
                     </v-row>
@@ -141,7 +141,7 @@
                             :key="index"
                             @click="addToPersonal(site, item)"
                           >
-                            <v-list-item-title>{{ item.nameZh }}</v-list-item-title>
+                            <v-list-item-title v-text="item.nameZh"/>
                           </v-list-item>
                         </v-list>
                       </v-menu>
