@@ -65,6 +65,9 @@ export default {
   name: 'App',
   data: () => ({
     drawer: true
-  })
+  }),
+  mounted () {
+
+  }
 }
 </script>

@@ -207,7 +207,7 @@
 </template>
 
 <script>
-import { version, initSites, setSession } from '../util'
+import { version, initSites, setSession, getSession } from '../util'
 import draggable from 'vuedraggable'
 import sites from '../config/sites'
 
@@ -313,9 +313,5 @@ export default {
 
   .border-bottom {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  }
-
-  .save-btn {
-    display: none;
   }
 </style>

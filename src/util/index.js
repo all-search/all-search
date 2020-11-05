@@ -51,7 +51,7 @@ function getName (name) {
   return null
 }
 
-export function getSession (name) {
+export let getSession = function (name) {
   const formatName = getName(name)
   let item
   // eslint-disable-next-line
@@ -71,7 +71,7 @@ export function getSession (name) {
   return null
 }
 
-export function setSession (name, value) {
+export let setSession = function (name, value) {
   const formatName = getName(name)
   // eslint-disable-next-line
   if (window.GM_setValue) {
@@ -288,6 +288,7 @@ export function mergeSites (a, b) {
 export function initSites (type) {
   let sitesData = sites
   const localSites = getSession('sites')
+  console.log(localSites)
   const sitesVersion = getSession('sites-version')
   if (localSites) {
     sitesData = localSites
@@ -301,7 +302,6 @@ export function initSites (type) {
       setSession('sites-version', version)
     }
   }
-  console.log(typeof sitesData)
   if (type === 'tm') {
     sitesData = sitesData
       .filter(item =>
@@ -315,4 +315,26 @@ export function initSites (type) {
       }))
   }
   return sitesData
+}
+
+const scriptLoaded = getName('script-loaded')
+const pageLoaded = getName('page-loaded')
+
+export function passTmMethods () {
+  document.addEventListener(pageLoaded, function () {
+    document.dispatchEvent(new CustomEvent(scriptLoaded, {
+      detail: {
+        getSession,
+        setSession
+      }
+    }))
+  })
+}
+
+export function getTmMethods () {
+  document.addEventListener(scriptLoaded, (event) => {
+    getSession = event.detail.getSession
+    setSession = event.detail.setSession
+  })
+  document.dispatchEvent(new Event(pageLoaded))
 }

@@ -326,7 +326,7 @@ const list = [
   },
   {
     url: /^http:\/\/localhost:8080\/all-search\//,
-    invisible: true
+    // invisible: true
   }
 ]
 

@@ -21,6 +21,20 @@
         </v-radio-group>
       </v-list-item-action>
     </v-list-item>
+    <v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>菜单方向</v-list-item-title>
+      </v-list-item-content>
+      <v-list-item-action>
+        <v-btn
+          color="primary"
+          large
+          @click="test"
+        >
+          测试
+        </v-btn>
+      </v-list-item-action>
+    </v-list-item>
   </v-card>
 </template>
 
@@ -30,7 +44,8 @@ export default {
   name: 'setting',
   data: () => ({
     mode: 'vertical'
-  })
+  }),
+  methods: {}
 }
 </script>
 <style>

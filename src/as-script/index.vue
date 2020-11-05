@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { getSession, initSites, setSession } from '../util'
+import { getSession, initSites, setSession, passTmMethods } from '../util'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
 

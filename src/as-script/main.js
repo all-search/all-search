@@ -8,7 +8,7 @@ import {
   domObserve,
   getAsEl,
   getSession,
-  setSession,
+  passTmMethods,
   RAFInterval
 } from '../util'
 import { targetSite } from '../config/loadList'
@@ -47,6 +47,7 @@ if (currentSite && currentSite.style) {
 
 domObserve()
 
+/*
 function initSaveBtn () {
   const list = [
     /^https?:\/\/endday\.github\.io/,
@@ -73,6 +74,7 @@ function initSaveBtn () {
     }, 800)
   }
 }
+*/
 
 function init () {
   const currentSite = targetSite()
@@ -85,7 +87,8 @@ function init () {
       const el = getAsEl()
       const mountEL = document.body.parentElement.insertBefore(el, document.body)
       app.$mount(mountEL)
-      initSaveBtn()
+      // initSaveBtn()
+      passTmMethods()
     }
   }
 }
