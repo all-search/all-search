@@ -1,3 +1,5 @@
+![all-search](https://socialify.git.ci/endday/all-search/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern=Plus&stargazers=1&theme=Light)
+
 ## all-search 全搜，一个搜索引擎快捷跳转菜单
 
 一个让你可以方便的在各个搜索引擎之间跳转的顶部固定菜单，基于vue，使用rollup构建。
@@ -21,8 +23,11 @@ A top fixed menu that allows you to jump between various search engines, build b
 ## 待完成
 * 谷歌插件化
 
-
 ## 如何贡献
+
+#### 反馈与交流
+[qq群地址](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
+
 #### 本地开发
 ```
 npm run serve
@@ -33,4 +38,3 @@ npm run serve
 ```
 npm run buildScript
 ```
-

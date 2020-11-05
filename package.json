@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "0.2.5a",
+  "version": "0.2.5b",
   "description": "新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。",
   "author": "endday",
   "scripts": {
@@ -22,7 +22,8 @@
     "vuetify": "^2.2.11",
     "vuetify-loader": "^1.6.0",
     "vuex": "^3.0.1",
-    "workbox-webpack-plugin": "^4.3.1"
+    "workbox-webpack-plugin": "^4.3.1",
+    "clean-css": "latest"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^4.0.3",

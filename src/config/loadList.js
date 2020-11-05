@@ -3,7 +3,7 @@ const width = 100
 
 const list = [
   {
-    url: /^https?:\/\/www\.google\.com\/search/,
+    url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
     style: {
       1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;} .srp .minidiv{top: ${height}px !important;}`
     }
