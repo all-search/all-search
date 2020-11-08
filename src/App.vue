@@ -25,31 +25,44 @@
     >
       <v-list
         nav
+        shaped
       >
-        <v-list-item
-          link
-          to="/"
+        <v-list-item-group
+          v-model="selectedItem"
+          color="primary"
         >
-          <v-list-item-content>
-            <v-list-item-title>
-              样式设置
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item
-          link
-          to="/sites"
-        >
-          <v-list-item-content>
-            <v-list-item-title>
-              网址配置
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+          <v-list-item
+            link
+            to="/"
+          >
+            <v-list-item-icon>
+              <v-icon right>mdi-cog</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                基础设置
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            link
+            to="/sites"
+          >
+            <v-list-item-icon>
+              <v-icon right>mdi-application</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                网址配置
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
     <v-main>
       <v-container fluid>
+        <version-alert/>
         <router-view></router-view>
         <v-footer app>
           <!-- -->
@@ -60,14 +73,17 @@
 </template>
 
 <script>
+import versionAlert from './components/version-alert'
 
 export default {
   name: 'App',
+  components: {
+    versionAlert
+  },
   data: () => ({
-    drawer: true
+    drawer: true,
+    selectedItem: 1
   }),
-  mounted () {
-
-  }
+  methods: {}
 }
 </script>

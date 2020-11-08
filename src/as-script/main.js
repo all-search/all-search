@@ -47,35 +47,6 @@ if (currentSite && currentSite.style) {
 
 domObserve()
 
-/*
-function initSaveBtn () {
-  const list = [
-    /^https?:\/\/endday\.github\.io/,
-    /^https?:\/\/endday\.gitee\.io/,
-    /^http:\/\/localhost:8080\/all-search\//
-  ]
-  const isLoaded = list.some(item => item.test(location.href))
-  if (isLoaded) {
-    RAFInterval(() => {
-      const btn = document.getElementById('save-btn')
-      if (btn) {
-        btn.style.display = 'unset'
-        const fn = btn.onclick
-        btn.onclick = () => {
-          if (fn) {
-            fn()
-          }
-          const sites = window.localStorage.getItem('__allSearch__sites')
-          setSession('sites', sites)
-          setSession('sites-version', version)
-        }
-        return true
-      }
-    }, 800)
-  }
-}
-*/
-
 function init () {
   const currentSite = targetSite()
   if (!currentSite.disabled) {
@@ -87,7 +58,6 @@ function init () {
       const el = getAsEl()
       const mountEL = document.body.parentElement.insertBefore(el, document.body)
       app.$mount(mountEL)
-      // initSaveBtn()
       passTmMethods()
     }
   }

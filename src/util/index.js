@@ -1,7 +1,8 @@
 import sites from '../config/sites'
 import pkg from '../../package.json'
+import store from './store'
 
-export const version = pkg.version.replace(/\./g, '')
+export const version = pkg.version
 
 export function getQueryString (name, url) {
   url = url || window.location.href
@@ -288,7 +289,6 @@ export function mergeSites (a, b) {
 export function initSites (type) {
   let sitesData = sites
   const localSites = getSession('sites')
-  console.log(localSites)
   const sitesVersion = getSession('sites-version')
   if (localSites) {
     sitesData = localSites
@@ -321,18 +321,22 @@ const scriptLoaded = getName('script-loaded')
 const pageLoaded = getName('page-loaded')
 
 export function passTmMethods () {
-  document.addEventListener(pageLoaded, function () {
+  const emit = function () {
     document.dispatchEvent(new CustomEvent(scriptLoaded, {
       detail: {
+        version,
         getSession,
         setSession
       }
     }))
-  })
+  }
+  document.addEventListener(pageLoaded, emit)
+  emit()
 }
 
 export function getTmMethods () {
   document.addEventListener(scriptLoaded, (event) => {
+    store.tmVersion = event.detail.version
     getSession = event.detail.getSession
     setSession = event.detail.setSession
   })

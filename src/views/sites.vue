@@ -1,5 +1,6 @@
 <template>
   <v-card
+    :elevation="0"
     class="mx-auto">
     <v-list-item three-line>
       <v-list-item-content>
@@ -48,22 +49,34 @@
                   />
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-btn
+                  <v-tooltip
                     v-if="group.name === 'personal'"
-                    text
-                    @click="delGroup(i)"
-                  >
-                    <v-icon left>mdi-delete</v-icon>
-                    删除
-                  </v-btn>
-                  <v-btn
+                    bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        text
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="delGroup(i)">
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>删除</span>
+                  </v-tooltip>
+                  <v-tooltip
                     v-else
-                    text
-                    @click=changeVisible(group.data)
-                  >
-                    <v-icon left v-text="group.data.visible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"/>
-                    {{group.data.visible ? '显示' : '隐藏'}}
-                  </v-btn>
+                    bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        text
+                        v-bind="attrs"
+                        v-on="on"
+                        @click=changeVisible(group.data)>
+                        <v-icon v-text="group.data.visible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"/>
+                      </v-btn>
+                    </template>
+                    <span>{{group.data.visible ? '显示' : '隐藏'}}</span>
+                  </v-tooltip>
                 </v-list-item-action>
               </v-list-item>
               <v-divider/>
@@ -106,21 +119,28 @@
                   </v-list-item-content>
                   <v-list-item-content
                     v-else>
-                    <v-list-item-title
-                      v-text="site.nameZh"
-                    />
-                    <v-list-item-subtitle
-                      v-text="site.url"
-                    />
+                    <v-list-item-title>
+                      <div class="d-flex">
+                        <p class="mb-0 mr-6 text-body-2" v-text="site.nameZh"></p>
+                        <p class="mb-0 text-body-2 text--lighten-1" v-text="site.url"></p>
+                      </div>
+                    </v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action
                     v-if="group.name === 'personal'">
-                    <v-btn
-                      text
-                      @click="del(j)">
-                      <v-icon left>mdi-delete</v-icon>
-                      删除
-                    </v-btn>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          text
+                          small
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="del(j)">
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>删除</span>
+                    </v-tooltip>
                   </v-list-item-action>
                   <template v-else>
                     <v-list-item-action>
@@ -131,8 +151,7 @@
                             v-bind="attrs"
                             v-on="on"
                           >
-                            <v-icon left v-text="'mdi-plus-circle'"/>
-                            收藏
+                            <v-icon v-text="'mdi-plus-circle'"/>
                           </v-btn>
                         </template>
                         <v-list>
@@ -147,12 +166,18 @@
                       </v-menu>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-btn
-                        text
-                        @click=changeVisible(site.data)>
-                        <v-icon left v-text="site.data.visible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"/>
-                        {{site.data.visible ? '显示' : '隐藏'}}
-                      </v-btn>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            text
+                            v-bind="attrs"
+                            v-on="on"
+                            @click=changeVisible(site.data)>
+                            <v-icon v-text="site.data.visible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"/>
+                          </v-btn>
+                        </template>
+                        <span>{{site.data.visible ? '显示' : '隐藏'}}</span>
+                      </v-tooltip>
                     </v-list-item-action>
                   </template>
                 </v-list-item>

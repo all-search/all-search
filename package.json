@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "0.2.5b",
+  "version": "0.2.6",
   "description": "新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。",
   "author": "endday",
   "scripts": {
