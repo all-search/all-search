@@ -43,7 +43,7 @@ export default {
     store,
     version: pkg.version,
     tmLoading: true,
-    tmScriptLink: 'https://greasyfork.org/scripts/397993/code/all-search.user.js'
+    tmScriptLink: 'https://greasyfork.org/zh-CN/scripts/397993-all-search-%E5%85%A8%E6%90%9C-%E4%B8%80%E4%B8%AA%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E5%BF%AB%E6%8D%B7%E8%B7%B3%E8%BD%AC%E8%8F%9C%E5%8D%95-%E6%94%AF%E6%8C%81%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E8%87%AA%E5%AE%9A%E4%B9%89'
   }),
   mounted () {
     setTimeout(() => {
