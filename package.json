@@ -5,6 +5,7 @@
   "author": "endday",
   "scripts": {
     "serve": "vue-cli-service serve --fix",
+    "tmServe": "vue-cli-service serve --fix --tm",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "buildScript": "rollup -c",

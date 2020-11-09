@@ -12,7 +12,7 @@
         <icon :name="item.name"/>
         <span v-text="item.nameZh"
               @click="handleClick(item.list[0])"
-              @mousedown="handleMouseWheelClick($event, item.list[0])"/>
+              @click.middle="handleMouseWheelClick(item.list[0])"/>
       </div>
       <transition :name="transition">
         <div class="as-subMenu-container"
@@ -24,7 +24,7 @@
               v-show="child.data.visible"
               v-text="child.nameZh"
               @click="handleClick(child)"
-              @mousedown="handleMouseWheelClick($event, child)">
+              @click.middle="handleMouseWheelClick(child)">
             </li>
           </ul>
         </div>
@@ -95,16 +95,12 @@ export default {
       }
     },
     handleClick (item) {
-      this.$emit('click', item)
       const keyword = this.getKeyword()
       window.location.href = item.url.replace('%s', keyword)
     },
-    handleMouseWheelClick (event, item) {
-      const btnNum = event.button
-      if (btnNum === 1) {
-        const keyword = this.getKeyword()
-        window.open(item.url.replace('%s', keyword))
-      }
+    handleMouseWheelClick (item) {
+      const keyword = this.getKeyword()
+      window.open(item.url.replace('%s', keyword))
     },
     handleMenuShow (value, item) {
       if (!this.inline) {

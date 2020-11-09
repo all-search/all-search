@@ -22,6 +22,10 @@
 <script>
 export default {
   name: 'x-dialog',
+  model: {
+    prop: 'visible',
+    event: 'change'
+  },
   props: {
     visible: {
       type: Boolean,
@@ -47,7 +51,7 @@ export default {
   },
   methods: {
     handleClose () {
-      this.$emit('update:visible', false)
+      this.$emit('change', false)
     }
   }
 }
@@ -62,65 +66,64 @@ export default {
     left: 0;
     overflow: auto;
     margin: 0;
-  }
-
-  .as-dialog__mask {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    opacity: .5;
-    background: #000;
-  }
-
-  .as-dialog-container {
-    position: relative;
-    background: #fff;
-    border-radius: 2px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
-    box-sizing: border-box;
-    min-width: 50%;
-    z-index: 99;
-    margin: 40vh auto 50px;
-    transform: translateY(-40%);
-  }
-
-  .as-dialog__header {
-    padding: 20px 20px 10px;
-    position: relative;
-    p {
-      margin: 0;
-      line-height: 24px;
-      height: 24px;
+    &__mask {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .5;
+      background: #000;
     }
-  }
 
-  .as-dialog__body {
-    padding: 30px 20px;
-    color: $color;
-    font-size: 14px;
-    word-break: break-all;
-  }
+    &-container {
+      position: relative;
+      background: #fff;
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+      box-sizing: border-box;
+      min-width: 50%;
+      z-index: 99;
+      margin: 40vh auto 50px;
+      transform: translateY(-40%);
+    }
 
-  .as-dialog__footer {
-    padding: 10px 20px 20px;
-    text-align: right;
-    box-sizing: border-box;
-  }
+    &__header {
+      padding: 20px 20px 10px;
+      position: relative;
+      p {
+        margin: 0;
+        line-height: 24px;
+        height: 24px;
+      }
+    }
 
-  .as-dialog__close {
-    display: inline-block;
-    position: absolute;
-    top: 16px;
-    right: 24px;
-    padding: 0;
-    background: transparent;
-    cursor: pointer;
-    font-size: 16px;
-    color: #909399;
-    &:before {
-      content: "\2716";
+    &__body {
+      padding: 30px 20px;
+      color: #666;
+      font-size: 14px;
+      word-break: break-all;
+    }
+
+    &__footer {
+      padding: 10px 20px 20px;
+      text-align: right;
+      box-sizing: border-box;
+    }
+
+    &__close {
+      display: inline-block;
+      position: absolute;
+      top: 16px;
+      right: 24px;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 16px;
+      color: #909399;
+      &:before {
+        content: "\2716";
+      }
     }
   }
 </style>

@@ -7,33 +7,37 @@
     <as-menu
       :sites="sites"
       :mode="mode"
-      :inline="inline"
-      :value="categoryName"
-      @change="changeCategory"/>
+      :inline="inline"/>
     <div class="as-setting"
          @click="openSet">
       设置
     </div>
+    <as-dialog v-model="dialog">
+      123
+    </as-dialog>
   </div>
 </template>
 
 <script>
-import { getSession, initSites, setSession, passTmMethods } from '../util'
+import { initSites } from '../util'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
+import asDialog from './components/dialog'
 
 export default {
   name: 'all-search',
   components: {
     logo,
-    asMenu
+    asMenu,
+    asDialog
   },
   data () {
     return {
       sites: [],
       categoryName: 'search',
       mode: 'horizontal',
-      inline: false
+      inline: true,
+      dialog: false
     }
   },
   watch: {
@@ -55,28 +59,30 @@ export default {
   },
   created () {
     this.initSites()
-    this.categoryName = getSession('categoryName') || this.categoryName
-    this.mode = getSession('mode') || this.mode
+    this.listenKey()
   },
   methods: {
     initSites () {
       this.sites = initSites('tm')
     },
-    changeCategory (name) {
-      setSession('categoryName', name)
-      this.categoryName = name
-    },
-    changeMode () {
-      if (this.mode === 'horizontal') {
-        this.mode = 'vertical'
-      } else {
-        this.mode = 'horizontal'
-      }
-      setSession('mode', this.mode)
-      window.location.reload()
-    },
     openSet () {
       window.open('https://endday.github.io/all-search/')
+    },
+    showDialog () {
+      this.dialog = !this.dialog
+    },
+    listenKey () {
+      document.onkeyup = (e) => {
+        // const ctrlKey = e.ctrlKey || e.metaKey
+        if (e.altKey && e.key === 'a') {
+          this.showDialog()
+        }
+        e.preventDefault()
+        return false
+      }
+      this.$once('hook:beforeDestroy', function () {
+        document.onkeypress = null
+      })
     }
   }
 }

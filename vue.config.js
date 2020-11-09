@@ -31,8 +31,12 @@ module.exports = {
     }
   },
   configureWebpack: config => {
-    config.entry.app[0] = entryPath
-    config.plugins.push(new VuetifyLoaderPlugin())
+    if (argv.tm) {
+      config.entry.app[0] = './src/as-script/main.js'
+    } else {
+      config.entry.app[0] = entryPath
+      config.plugins.push(new VuetifyLoaderPlugin())
+    }
   },
   css: {
     extract: false
