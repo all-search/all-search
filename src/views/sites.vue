@@ -1,245 +1,144 @@
 <template>
-  <v-card
-    :elevation="0"
-    class="mx-auto">
-    <v-list-item three-line>
-      <v-list-item-content>
-        <v-list-item-title>网址配置</v-list-item-title>
-        <v-list-item-subtitle>分类和网址可拖动排序，可以添加分类和添加网址，收藏可将网址添加到自定义分类中</v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-    <v-card-text>
-      <v-tabs
-        vertical
-        v-model="tab">
+  <div class="sites">
+    <el-tabs
+      type="border-card"
+      v-model="tabName"
+      @tab-remove="removeTab">
+      <el-tab-pane
+        v-for="(cate, index) in localSites"
+        :key="`${cate.name}-${index}`"
+        :label="cate.nameZhBackup"
+        :name="cate.name"
+        :closable="isPersonal(cate)">
+        <div class="url-item">
+          <div class="bd">
+            <el-input
+              v-if="isPersonal(cate)"
+              class="cate-input"
+              v-model="cate.nameZh">
+            </el-input>
+            <p v-else
+               class="cate-name"
+               v-text="cate.nameZh"/>
+          </div>
+          <div class="ft">
+            <el-button-group>
+              <el-button
+                icon="el-icon-arrow-left"
+                @click="moveLeft(index)"
+              />
+              <el-button
+                icon="el-icon-arrow-right"
+                @click="moveRight(index)"
+              />
+            </el-button-group>
+            <el-button
+              icon="el-icon-view"
+              @click="changeVisible(cate)">
+              {{cate.visible ? '隐藏': '展示'}}
+            </el-button>
+          </div>
+        </div>
         <draggable
-          class="v-slide-group__content v-tabs-bar__content"
-          v-model="localSites"
-        >
-          <v-tab
-            v-for="(group, i) in localSites"
-            :key="i"
-            @change="tabChange(group.name)"
-          >
-            <i class="group-icon"
-               :class="`icon-${group.name}`">
-            </i>
-            {{group.nameZh}}
-          </v-tab>
-        </draggable>
-        <v-tabs-items v-model="tab">
-          <v-tab-item
-            v-for="(group, i) in localSites"
-            :key="i"
-          >
-            <v-list>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-text-field
-                    v-if="group.name === 'personal'"
-                    label="分类名称"
-                    dense
-                    outlined
-                    required
-                    singleLine
-                    v-model="group.nameZh"/>
-                  <v-list-item-title
-                    v-else
-                    v-text="group.nameZh"
-                  />
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-tooltip
-                    v-if="group.name === 'personal'"
-                    bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        text
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="delGroup(i)">
-                        <v-icon>mdi-delete</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>删除</span>
-                  </v-tooltip>
-                  <v-tooltip
-                    v-else
-                    bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        text
-                        v-bind="attrs"
-                        v-on="on"
-                        @click=changeVisible(group.data)>
-                        <v-icon v-text="group.data.visible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"/>
-                      </v-btn>
-                    </template>
-                    <span>{{group.data.visible ? '显示' : '隐藏'}}</span>
-                  </v-tooltip>
-                </v-list-item-action>
-              </v-list-item>
-              <v-divider/>
-              <draggable
-                v-model="group.list"
-              >
-                <v-list-item
-                  class="border-bottom"
-                  v-for="(site, j) in group.list"
-                  :key="j"
-                >
-                  <v-list-item-content
-                    v-if="group.name === 'personal'">
-                    <v-row>
-                      <v-col
-                        class="pt-0 pb-0"
-                        cols="4">
-                        <v-text-field
-                          class="mr-2"
-                          dense
-                          outlined
-                          required
-                          singleLine
-                          label="网址名称"
-                          v-model="site.nameZh"/>
-                      </v-col>
-                      <v-col
-                        class="pt-0 pb-0"
-                        cols="20">
-                        <v-text-field
-                          dense
-                          outlined
-                          required
-                          singleLine
-                          label="网址链接"
-                          messages="将搜索的内容替换为'%s'"
-                          v-model="site.url"/>
-                      </v-col>
-                    </v-row>
-                  </v-list-item-content>
-                  <v-list-item-content
-                    v-else>
-                    <v-list-item-title>
-                      <div class="d-flex">
-                        <p class="mb-0 mr-6 text-body-2" v-text="site.nameZh"></p>
-                        <p class="mb-0 text-body-2 text--lighten-1" v-text="site.url"></p>
-                      </div>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action
-                    v-if="group.name === 'personal'">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          text
-                          small
-                          v-bind="attrs"
-                          v-on="on"
-                          @click="del(j)">
-                          <v-icon>mdi-delete</v-icon>
-                        </v-btn>
-                      </template>
-                      <span>删除</span>
-                    </v-tooltip>
-                  </v-list-item-action>
-                  <template v-else>
-                    <v-list-item-action>
-                      <v-menu offset-y>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            text
-                            v-bind="attrs"
-                            v-on="on"
-                          >
-                            <v-icon v-text="'mdi-plus-circle'"/>
-                          </v-btn>
-                        </template>
-                        <v-list>
-                          <v-list-item
-                            v-for="(item, index) in personalCategory"
-                            :key="index"
-                            @click="addToPersonal(site, item)"
-                          >
-                            <v-list-item-title v-text="item.nameZh"/>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            text
-                            v-bind="attrs"
-                            v-on="on"
-                            @click=changeVisible(site.data)>
-                            <v-icon v-text="site.data.visible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"/>
-                          </v-btn>
-                        </template>
-                        <span>{{site.data.visible ? '显示' : '隐藏'}}</span>
-                      </v-tooltip>
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
-              </draggable>
-            </v-list>
-            <div class="pa-3"
-                 v-if="group.name === 'personal'">
-              <v-btn
-                color="primary"
-                size="large"
-                @click="addNewUrl(group)">
-                新建网址
-              </v-btn>
+          handle=".move-icon"
+          v-model="cate.list">
+          <div
+            v-for="(item, j) in cate.list"
+            :key="j"
+            class="url-item">
+            <el-button
+              class="move-icon"
+              type="text"
+              icon="el-icon-d-caret"/>
+            <div class="hd">
+              <el-input
+                v-if="isPersonal(cate)"
+                class="input"
+                v-model="item.nameZh"/>
+              <p v-else
+                 class="name"
+                 v-text="item.nameZh"/>
             </div>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-tabs>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn
-        color="error"
-        large
-        text
+            <div class="bd">
+              <el-input
+                v-if="isPersonal(cate)"
+                class="input"
+                v-model="item.url"/>
+              <p v-else
+                 class="input"
+                 v-text="item.url"/>
+            </div>
+            <div class="ft">
+              <el-dropdown
+                v-if="!isPersonal(cate) && personalCategory.length"
+                trigger="click"
+                @command="addToPersonal(cate.list, $event)">
+                <el-button
+                  icon="el-icon-plus">
+                  添加
+                </el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item
+                      v-for="(pItem, i) in personalCategory"
+                      :key="i"
+                      :command="pItem">
+                      {{pItem.nameZh}}
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+              <el-button
+                icon="el-icon-view"
+                @click="changeVisible(item)">
+                {{item.visible ? '隐藏': '展示'}}
+              </el-button>
+            </div>
+          </div>
+        </draggable>
+        <div
+          v-if="isPersonal(cate)"
+          class="url-item">
+          <el-button
+            @click="addNewUrl(cate)">
+            添加网址
+          </el-button>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
+    <el-button
+      class="add-cate-btn"
+      icon="el-icon-plus"
+      size="mini"
+      @click="addCategory"/>
+  </div>
+  <div class="fixed-footer">
+    <div class="btn-container">
+      <el-button
+        size="small"
+        type="primary"
         @click="reset">
         重置
-      </v-btn>
-      <v-spacer/>
-      <v-btn
-        large
-        text
-        @click="addCategory">
-        添加分类
-      </v-btn>
-      <v-btn
-        id="save-btn"
-        color="primary"
-        large
-        text
-        class="save-btn"
+      </el-button>
+      <el-button
+        size="small"
+        type="success"
         @click="save">
         保存
-      </v-btn>
-    </v-card-actions>
-    <v-snackbar
-      :top="true"
-      :timeout="2000"
-      v-model="snackbar"
-    >
-      {{tipsText}}
-    </v-snackbar>
-  </v-card>
+      </el-button>
+    </div>
+  </div>
 </template>
 
 <script>
-import { version, initSites, setSession, getSession } from '../util'
-import draggable from 'vuedraggable'
+import { VueDraggableNext } from 'vue-draggable-next'
+import { initSites, setSession, version } from '../util'
 import sites from '../config/sites'
 
 export default {
   name: 'sites',
   components: {
-    draggable
+    draggable: VueDraggableNext
   },
   data: () => ({
     sites,
@@ -249,11 +148,12 @@ export default {
     dragging: false,
     dialog: false,
     tipsText: '',
-    snackbar: false
+    isModifyCateName: false,
+    cateNameZh: ''
   }),
   computed: {
     personalCategory () {
-      return this.localSites.filter(item => item.name === 'personal')
+      return this.localSites.filter(item => item.name.indexOf('personal') > -1)
     }
   },
   mounted () {
@@ -261,50 +161,42 @@ export default {
   },
   methods: {
     initSites () {
-      this.localSites = initSites()
+      this.localSites = initSites().map(item => ({
+        ...item,
+        nameZhBackup: item.nameZh
+      }))
       this.tabName = this.localSites[0].name
     },
     tabChange (value) {
       this.tabName = value
     },
-    getComponentData () {
-      return {
-        on: {
-          change: this.tabChange
-        },
-        props: {
-          value: this.tab,
-          dense: true
-        }
-      }
-    },
     changeVisible (data) {
       data.visible = !data.visible
     },
     addCategory () {
+      const i = this.personalCategory.length
       this.localSites.push({
         nameZh: '新分类',
-        name: 'personal',
+        nameZhBackup: '新分类',
+        name: `personal-${i + 1}`,
         list: [],
         data: {
           visible: true
         }
       })
+      this.tabName = `personal-${i + 1}`
+      console.log(this.localSites)
     },
-    addToPersonal (item, group) {
-      group.list.push(item)
-      this.showSnackbar('添加成功')
+    addToPersonal (cate, item) {
+      cate.list.push(item)
+      this.$message('添加成功')
     },
     del (j) {
       const i = this.localSites.findIndex(item => item.name === 'personal')
       this.localSites[i].list.splice(j, 1)
     },
-    delGroup (i) {
-      this.localSites.splice(i, 1)
-      this.showSnackbar('删除成功')
-    },
-    addNewUrl (group) {
-      group.list.push({
+    addNewUrl (cate) {
+      cate.list.push({
         nameZh: '新网址',
         url: 'https://www.baidu.com/s?wd=%s&ie=utf-8',
         data: {
@@ -312,31 +204,182 @@ export default {
         }
       })
     },
-    showSnackbar (text) {
-      this.tipsText = text
-      this.snackbar = true
+    removeTab (targetName) {
+      this.$confirm('确定要删除这个分类吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const tabs = this.localSites
+        if (this.tabName === targetName) {
+          tabs.forEach((tab, index) => {
+            if (tab.name === targetName) {
+              let nextTab = tabs[index + 1] || tabs[index - 1]
+              if (nextTab) {
+                this.tabName = nextTab.name
+              }
+            }
+          })
+        }
+        const i = this.localSites.findIndex(item => item.name === targetName)
+        if (i > -1) {
+          this.localSites.splice(i, 1)
+        }
+      }).catch(() => {
+
+      })
+    },
+    isPersonal (cate) {
+      return cate.name.indexOf('personal') > -1
+    },
+    moveLeft (i) {
+      const j = i - 1
+      if (j >= 0) {
+        const list = this.localSites.splice(i, 1)
+        this.localSites.splice(j, 0, list[0])
+      }
+    },
+    moveRight (i) {
+      const j = i + 1
+      if (j < this.localSites.length) {
+        const list = this.localSites.splice(i, 1)
+        this.localSites.splice(j, 0, list[0])
+      }
     },
     reset () {
       this.localSites = JSON.parse(JSON.stringify(this.sites))
     },
+    formatSites () {
+      return this.localSites.map(item => ({
+        nameZh: item.nameZh,
+        name: item.name,
+        list: item.list.map(child => ({
+          nameZh: child.nameZh,
+          url: child.url
+        }))
+      }))
+    },
     save () {
-      setSession('sites', this.localSites)
+      setSession('sites', this.formatSites())
       setSession('sites-version', version)
       this.showSnackbar('保存成功')
     }
   }
 }
 </script>
-<style>
-  .group-icon {
-    font-family: "iconfont" !important;
-    font-size: 20px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+
+<style lang="scss">
+  .sites {
+    border-radius: 4px;
+    box-shadow: none;
+    position: relative;
   }
 
   .border-bottom {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   }
+
+  .el-button {
+    vertical-align: middle;
+  }
+
+  .add-cate-btn {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+  }
+
+  .url-item {
+    display: flex;
+    background-color: #fff;
+    font-size: 14px;
+    color: #606266;
+    align-items: center;
+    padding: 12px 20px 12px 10px;
+    transition: background-color .25s ease;
+
+    &:hover {
+      background-color: #f5f7fa;
+    }
+
+    & + & {
+      border-top: 1px solid #ebeef5;
+    }
+
+    .move-icon {
+      padding: 6px 10px;
+      font-size: 18px;
+      color: #999;
+      cursor: move;
+    }
+
+    .name {
+      width: 100px;
+      margin: 0;
+    }
+
+    .hd {
+      margin-right: 10px;
+    }
+
+    .bd {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .input {
+      margin: 0 20px 0 0;
+    }
+
+    .cate-name {
+      flex: 1;
+      font-size: 16px;
+      margin: 0 0 0 15px;
+    }
+
+    .el-button-group {
+      margin-right: 10px;
+    }
+  }
+
+  .el-dropdown + .el-button {
+    margin-left: 10px;
+  }
+
+  .fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: right;
+    width: 100%;
+
+    .btn-container {
+      box-shadow: 0 -2px 8px #f0f1f2;
+      margin-left: 220px;
+      margin-right: 20px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 3px 3px 0 0;
+    }
+
+    .el-button {
+      /*border-radius: 0;*/
+    }
+  }
+
+  .category {
+    display: flex;
+    align-items: center;
+
+    .label {
+      margin: 0;
+      font-size: 16px;
+    }
+  }
+
+</style>
+
+<style>
+
 </style>

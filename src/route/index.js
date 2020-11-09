@@ -1,23 +1,27 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
-Vue.use(Router)
-
-export default new Router({
-  mode: 'history',
-  base: '/all-search/',
+export default createRouter({
+  history: createWebHistory('/all-search/'),
   routes: [
     {
       path: '/',
       name: 'setting',
       component: () => import('../views/setting.vue'),
-      meta: {}
+      meta: {
+        nameZh: '基础配置'
+      }
     },
     {
       path: '/sites',
       name: 'index',
       component: () => import('../views/sites.vue'),
-      meta: {}
+      meta: {
+        nameZh: '网址配置'
+      }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/'
     }
   ]
 })

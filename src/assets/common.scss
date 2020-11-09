@@ -1,5 +1,19 @@
 $height: 30px;
 $verticalHeight: 40px;
 $verticalWidth: 100px;
-$active-color: #1890ff;
 $color: #606266;
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent
+}
+
+a {
+  text-decoration: none;
+  color: #409eff;
+}

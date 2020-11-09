@@ -1,6 +1,5 @@
 <template>
   <li
-    @click="handleMenuClick($event)"
     @mouseenter="handleMouseEnter($event)"
     @mouseleave="handleMouseLeave($event)">
     <slot></slot>
@@ -8,37 +7,51 @@
 </template>
 
 <script>
+
 export default {
   name: 'menuItem',
   props: {
     showTimeout: {
       type: Number,
-      default: 200
+      default: 100
     },
     hideTimeout: {
       type: Number,
       default: 200
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
-  data: () => ({
-    timeout: null
-  }),
-  methods: {
-    handleMenuClick (e) {
-      clearTimeout(this.timeout)
-      this.$emit('show', true)
-    },
-    handleMouseEnter (e) {
-      clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => {
-        this.$emit('show', true)
-      }, this.showTimeout)
-    },
-    handleMouseLeave (e, item) {
-      clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => {
-        this.$emit('show', false)
-      }, this.hideTimeout)
+  setup (props, context) {
+    let timeout = null
+    const clear = () => {
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+    }
+    const handleMouseEnter = (e) => {
+      if (props.disabled) {
+        return
+      }
+      clear()
+      timeout = setTimeout(() => {
+        context.emit('show', true)
+      }, props.showTimeout)
+    }
+    const handleMouseLeave = (e) => {
+      if (props.disabled) {
+        return
+      }
+      clear()
+      timeout = setTimeout(() => {
+        context.emit('show', false)
+      }, props.hideTimeout)
+    }
+    return {
+      handleMouseEnter,
+      handleMouseLeave
     }
   }
 }

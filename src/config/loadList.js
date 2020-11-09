@@ -1,7 +1,7 @@
 const height = 30
 const width = 100
 
-const list = [
+export const list = [
   {
     url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
     style: {
@@ -326,11 +326,11 @@ const list = [
   },
   {
     url: /^http:\/\/localhost:8080\/all-search\//,
-    invisible: true
+    invisible: false
   }
 ]
 
-const targetSite = function () {
+export const siteInfo = function () {
   const target = list.find(item => {
     return item.url.test(window.location.href)
   })
@@ -347,5 +347,3 @@ const targetSite = function () {
   }
   return null
 }
-
-export { targetSite, list }

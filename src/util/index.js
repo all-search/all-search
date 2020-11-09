@@ -86,28 +86,6 @@ export let setSession = function (name, value) {
   }
 }
 
-// 监听head的节点移除，防止style被干掉
-export function domObserve () {
-  const targetNode = document.getElementsByTagName('head')[0]
-  const config = { childList: true }
-  const callback = function (mutationsList) {
-    for (const mutation of mutationsList) {
-      if (mutation.removedNodes.length &&
-        mutation.removedNodes[0].nodeName === 'STYLE' &&
-        mutation.removedNodes[0].class === 'as-style'
-      ) {
-        addStyle(mutation.removedNodes[0].innerText)
-      }
-    }
-  }
-  let MO = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
-  let observer
-  if (MO) {
-    observer = new MO(callback)
-    observer.observe(targetNode, config)
-  }
-}
-
 export function addStyle (styleContent) {
   if (!styleContent) {
     return

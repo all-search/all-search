@@ -1,21 +1,23 @@
 <template>
   <ul
-    class="as-menu"
-    :class="menuClass">
+    class="as-menu">
     <menu-item
       class="as-menu-item"
-      :class="{ 'as-menu-item-active': item.show }"
       v-for="item in sites"
       :key="item.index"
+      :showTimeout="data.showTimeout"
+      :hideTimeout="data.hideTimeout"
       @show="handleMenuShow($event, item)">
       <div class="as-menu-item-title">
         <icon :name="item.name"/>
         <span v-text="item.nameZh"
               @click="handleClick(item.list[0])"
-              @mousedown="handleMouseWheelClick($event, item.list[0])"/>
+              @click.middle="handleClick(item.list[0], true)">
+        </span>
       </div>
       <transition :name="transition">
         <div class="as-subMenu-container"
+             v-if="item.list && item.list.length"
              v-show="item.show">
           <ul class="as-subMenu">
             <li
@@ -24,7 +26,7 @@
               v-show="child.data.visible"
               v-text="child.nameZh"
               @click="handleClick(child)"
-              @mousedown="handleMouseWheelClick($event, child)">
+              @click.middle="handleClick(child, true)">
             </li>
           </ul>
         </div>
@@ -34,7 +36,9 @@
 </template>
 
 <script>
+import { computed, reactive } from 'vue'
 import { getKeyword } from '../../util'
+import { siteInfo } from '../../config/loadList'
 import menuItem from './menuItem.vue'
 import icon from '../components/icon.vue'
 
@@ -55,61 +59,34 @@ export default {
       type: String,
       default: 'horizontal',
       validator: val => ['horizontal', 'vertical'].includes(val)
-    },
-    inline: {
-      type: Boolean,
-      default: true
-    },
-    value: {
-      type: String,
-      default: ''
     }
   },
-  computed: {
-    menuClass () {
-      return {
-        'as-menu--horizontal': this.mode === 'horizontal',
-        'as-menu--vertical': this.mode === 'vertical'
-      }
-    },
-    transition () {
-      if (this.mode === 'horizontal') {
-        return 'drop'
-      } else {
-        return 'fade'
-      }
-    }
-  },
-  data: () => ({
-    show: false
-  }),
-  methods: {
-    handleChange (val) {
-      this.$emit('change', val)
-    },
-    getKeyword () {
-      if (this.$root.currentSite.keyword) {
-        return this.$root.currentSite.keyword()
-      } else {
-        return getKeyword()
-      }
-    },
-    handleClick (item) {
-      this.$emit('click', item)
-      const keyword = this.getKeyword()
-      window.location.href = item.url.replace('%s', keyword)
-    },
-    handleMouseWheelClick (event, item) {
-      const btnNum = event.button
-      if (btnNum === 1) {
-        const keyword = this.getKeyword()
+  setup (props) {
+    const currentSite = siteInfo()
+    const data = reactive({
+      showTimeout: 50,
+      hideTimeout: 200
+    })
+    const transition = computed(() =>
+      props.mode === 'horizontal' ? 'drop' : 'fade'
+    )
+    const defaultKeyword = () => currentSite.keyword ? currentSite.keyword() : getKeyword()
+    const handleClick = (item, isOpen) => {
+      const keyword = defaultKeyword()
+      if (isOpen) {
         window.open(item.url.replace('%s', keyword))
+      } else {
+        window.location.href = item.url.replace('%s', keyword)
       }
-    },
-    handleMenuShow (value, item) {
-      if (!this.inline) {
-        item.show = value
-      }
+    }
+    const handleMenuShow = (value, item) => {
+      item.show = value
+    }
+    return {
+      data,
+      transition,
+      handleClick,
+      handleMenuShow
     }
   }
 }
@@ -120,16 +97,6 @@ export default {
 
   .as-menu {
     flex: 1;
-    &::before, &::after {
-      display: table;
-      content: "";
-    }
-    &::after {
-      clear: both
-    }
-  }
-
-  .as-menu {
     width: 100%;
     padding: 0;
     margin: 0;
@@ -138,12 +105,24 @@ export default {
     box-shadow: none;
     background-color: #fff;
     display: flex;
+
+    &::before, &::after {
+      display: table;
+      content: "";
+    }
+    &::after {
+      clear: both
+    }
+
   }
 
-  .as-menu--horizontal {
-    flex-direction: row;
-    .as-menu-item-active {
-      border-bottom: 2px solid $active-color;
+  .as-horizontal {
+    .as-menu {
+      flex-direction: row;
+    }
+
+    .as-menu-item {
+      border-bottom: 2px solid transparent;
     }
     .as-subMenu-container {
       left: -22px;
@@ -151,13 +130,14 @@ export default {
     }
   }
 
-  .as-menu--vertical {
-    flex-direction: column;
+  .as-vertical {
+    .as-menu {
+      flex-direction: column;
+    }
+
     .as-menu-item {
       margin: 5px 0;
-    }
-    .as-menu-item-active {
-      border-right: 2px solid $active-color;
+      border-right: 2px solid transparent;
     }
     .as-subMenu-container {
       left: $verticalWidth - 15px;
@@ -170,7 +150,14 @@ export default {
     line-height: $height;
     list-style: none;
     position: relative;
-    transition: border-color .3s cubic-bezier(.645, .045, .355, 1);
+    transition: color .3s cubic-bezier(.645, .045, .355, 1), border-color .3s cubic-bezier(.645, .045, .355, 1), background .3s cubic-bezier(.645, .045, .355, 1);
+    box-sizing: border-box;
+    &:hover {
+      border-color: var(--as-primary-color);
+      .as-menu-item-icon, .as-menu-item-title {
+        color: var(--as-primary-color);
+      }
+    }
   }
 
   .as-menu-item-icon {
@@ -190,21 +177,6 @@ export default {
     display: flex;
     align-items: center;
     color: $color;
-    border-bottom: 2px solid rgba(255, 255, 255, 0);
-    transition: color .3s cubic-bezier(.645, .045, .355, 1);
-    &:hover {
-      color: $active-color;
-    }
-  }
-
-  .as-menu-item-active {
-    color: $active-color;
-    .as-menu-item-icon {
-      color: $active-color;
-    }
-    .as-menu-item-title {
-      color: $active-color;
-    }
   }
 
   .as-subMenu-container {
@@ -219,11 +191,14 @@ export default {
     padding: 4px 0;
     min-width: 90px;
     border: 1px solid #e4e7ed;
-    border-radius: 4px;
+    border-radius: 2px;
     background-color: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12),
+    0 6px 16px 0 rgba(0, 0, 0, .08),
+    0 9px 28px 8px rgba(0, 0, 0, .05);
     box-sizing: border-box;
     margin: 10px 0;
+
     li {
       font-size: 14px;
       padding: 0 20px;
@@ -238,7 +213,7 @@ export default {
       cursor: pointer;
       &:hover {
         background-color: #f5f7fa;
-        color: $active-color;
+        color: var(--as-primary-color);
       }
     }
   }

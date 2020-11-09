@@ -1,7 +1,5 @@
-import Vue from 'vue'
+import { reactive } from 'vue'
 
-export default new Vue({
-  data: {
-    tmVersion: null
-  }
+export default reactive({
+  tmVersion: ''
 })

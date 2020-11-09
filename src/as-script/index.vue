@@ -1,89 +1,72 @@
 <template>
   <div
     id="all-search"
-    :style="{display: 'none'}"
+    style="display: none"
     :class="asClass">
     <logo :mode="mode"/>
     <as-menu
       :sites="sites"
-      :mode="mode"
-      :inline="inline"
-      :value="categoryName"
-      @change="changeCategory"/>
+      :mode="mode"/>
     <div class="as-setting"
          @click="openSet">
       设置
     </div>
+    <searchDialog/>
   </div>
 </template>
 
 <script>
-import { getSession, initSites, setSession, passTmMethods } from '../util'
+import { computed, reactive, ref, watch } from 'vue'
+import { initSites } from '../util'
+import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
+import searchDialog from './components/search-dialog.vue'
 
 export default {
   name: 'all-search',
   components: {
     logo,
-    asMenu
+    asMenu,
+    searchDialog
   },
-  data () {
-    return {
-      sites: [],
-      categoryName: 'search',
-      mode: 'horizontal',
-      inline: false
-    }
-  },
-  watch: {
-    mode: {
-      handler (val, oldVal) {
-        document.body.classList.remove(`body-${oldVal}`)
-        document.body.classList.add(`body-${val}`)
-      },
-      immediate: true
-    }
-  },
-  computed: {
-    asClass () {
-      return {
-        'as-horizontal': this.mode === 'horizontal',
-        'as-vertical': this.mode === 'vertical'
-      }
-    }
-  },
-  created () {
-    this.initSites()
-    this.categoryName = getSession('categoryName') || this.categoryName
-    this.mode = getSession('mode') || this.mode
-  },
-  methods: {
-    initSites () {
-      this.sites = initSites('tm')
-    },
-    changeCategory (name) {
-      setSession('categoryName', name)
-      this.categoryName = name
-    },
-    changeMode () {
-      if (this.mode === 'horizontal') {
-        this.mode = 'vertical'
-      } else {
-        this.mode = 'horizontal'
-      }
-      setSession('mode', this.mode)
-      window.location.reload()
-    },
-    openSet () {
+  setup () {
+    const currentSite = siteInfo()
+    const mode = ref('horizontal')
+    const sites = reactive(initSites('tm'))
+    const openSet = () => {
       window.open('https://endday.github.io/all-search/')
+    }
+    const changeMode = (val, oldVal) => {
+      if (currentSite.invisible) {
+        return
+      }
+      document.body.classList.remove(`body-${oldVal}`)
+      document.body.classList.add(`body-${val}`)
+    }
+
+    watch(mode, changeMode)
+
+    const asClass = computed(() => ({
+      'as-horizontal': mode.value === 'horizontal',
+      'as-vertical': mode.value === 'vertical'
+    }))
+
+    changeMode()
+
+    return {
+      currentSite,
+      sites,
+      mode,
+      openSet,
+      asClass
     }
   }
 }
 </script>
 
 <style lang="scss">
-  @import "../assets/common";
+  @import "../assets/common.scss";
 
   .body-horizontal {
     margin-top: $height;
@@ -94,6 +77,7 @@ export default {
   }
 
   #all-search {
+    --as-primary-color: #1890ff;
     position: fixed;
     display: flex !important;
     background-color: #fff;
@@ -129,7 +113,7 @@ export default {
     font-size: 14px;
     color: $color;
     &:hover {
-      color: $active-color;
+      color: var(--as-primary-color);
     }
   }
 </style>

@@ -1,37 +1,31 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import index from './index.vue'
 import {
-  version,
   ACAddStyle,
   addStyleResource,
   checkBody,
-  domObserve,
   getAsEl,
   getSession,
   passTmMethods,
-  RAFInterval
-} from '../util'
-import { targetSite } from '../config/loadList'
+  RAFInterval,
+  version
+} from '../util/index.js'
+import { siteInfo } from '../config/loadList.js'
 
-Vue.config.productionTip = false
+const currentSite = siteInfo()
 
-const currentSite = targetSite()
+const isDev = process.env.NODE_ENV === 'development'
 
-const app = new Vue({
-  data () {
-    return {
-      currentSite
-    }
-  },
-  render: h => h(index)
-})
+const app = createApp(index)
 
-console.log('all-search running 全搜运行中')
+console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 
 // 添加样式
 const initStyle = function () {
   addStyleResource('iconFont', 'https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css')
-  addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${version}`)
+  if (isDev) {
+    addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${version}`)
+  }
 }
 
 const mode = getSession('mode') || 'horizontal'
@@ -45,21 +39,23 @@ if (currentSite && currentSite.style) {
   }
 }
 
-domObserve()
-
 function init () {
-  const currentSite = targetSite()
-  if (!currentSite.disabled) {
+  if (isDev) {
+    initStyle()
+  } else {
+    if (currentSite.disabled) {
+      return
+    }
     if (!currentSite.invisible) {
       initStyle()
     }
-    const asEl = document.getElementById('all-search')
-    if (!asEl) {
-      const el = getAsEl()
-      const mountEL = document.body.parentElement.insertBefore(el, document.body)
-      app.$mount(mountEL)
-      passTmMethods()
-    }
+  }
+  const asEl = document.getElementById('all-search')
+  if (!asEl) {
+    const el = getAsEl()
+    const mountEL = document.body.parentElement.insertBefore(el, document.body)
+    app.mount(mountEL)
+    passTmMethods()
   }
 }
 
@@ -73,5 +69,3 @@ checkBody().then(() => {
 }).catch(err => {
   console.error(err)
 })
-
-export default app
