@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import index from './index.vue'
 import {
-  version,
   ACAddStyle,
   addStyleResource,
   checkBody,
-  domObserve,
   getAsEl,
   getSession,
   passTmMethods,
-  RAFInterval
+  RAFInterval,
+  version
 } from '../util'
 import { targetSite } from '../config/loadList'
 
@@ -31,7 +30,9 @@ console.log('all-search running 全搜运行中')
 // 添加样式
 const initStyle = function () {
   addStyleResource('iconFont', 'https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css')
-  addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${version}`)
+  if (process.env.NODE_ENV !== 'development') {
+    addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${version}`)
+  }
 }
 
 const mode = getSession('mode') || 'horizontal'
@@ -45,21 +46,20 @@ if (currentSite && currentSite.style) {
   }
 }
 
-domObserve()
-
 function init () {
   const currentSite = targetSite()
-  if (!currentSite.disabled) {
-    if (!currentSite.invisible) {
-      initStyle()
-    }
-    const asEl = document.getElementById('all-search')
-    if (!asEl) {
-      const el = getAsEl()
-      const mountEL = document.body.parentElement.insertBefore(el, document.body)
-      app.$mount(mountEL)
-      passTmMethods()
-    }
+  if (currentSite.disabled) {
+    return
+  }
+  if (!currentSite.invisible) {
+    initStyle()
+  }
+  const asEl = document.getElementById('all-search')
+  if (!asEl) {
+    const el = getAsEl()
+    const mountEL = document.body.parentElement.insertBefore(el, document.body)
+    app.$mount(mountEL)
+    passTmMethods()
   }
 }
 

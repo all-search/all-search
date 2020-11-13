@@ -6,8 +6,7 @@
     <logo :mode="mode"/>
     <as-menu
       :sites="sites"
-      :mode="mode"
-      :inline="inline"/>
+      :mode="mode"/>
     <div class="as-setting"
          @click="openSet">
       设置
@@ -35,8 +34,8 @@ export default {
     return {
       sites: [],
       categoryName: 'search',
+      // mode: 'vertical',
       mode: 'horizontal',
-      inline: true,
       dialog: false
     }
   },
@@ -59,7 +58,7 @@ export default {
   },
   created () {
     this.initSites()
-    this.listenKey()
+    // this.listenKey()
   },
   methods: {
     initSites () {
@@ -72,7 +71,7 @@ export default {
       this.dialog = !this.dialog
     },
     listenKey () {
-      document.onkeyup = (e) => {
+      document.onkeydown = (e) => {
         // const ctrlKey = e.ctrlKey || e.metaKey
         if (e.altKey && e.key === 'a') {
           this.showDialog()
@@ -100,6 +99,7 @@ export default {
   }
 
   #all-search {
+    --as-primary-color: #1890ff;
     position: fixed;
     display: flex !important;
     background-color: #fff;
@@ -135,7 +135,7 @@ export default {
     font-size: 14px;
     color: $color;
     &:hover {
-      color: $active-color;
+      color: var(--as-primary-color);
     }
   }
 </style>

@@ -69,7 +69,7 @@ export default {
       height: $height;
       line-height: $height;
       font-weight: 600;
-      color: #1990fc;
+      color: var(--as-primary-color);
       margin: 0 auto;
       text-align: center;
       cursor: pointer;

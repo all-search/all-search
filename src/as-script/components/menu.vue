@@ -4,7 +4,6 @@
     :class="menuClass">
     <menu-item
       class="as-menu-item"
-      :class="{ 'as-menu-item-active': item.show }"
       v-for="item in sites"
       :key="item.index"
       @show="handleMenuShow($event, item)">
@@ -16,6 +15,7 @@
       </div>
       <transition :name="transition">
         <div class="as-subMenu-container"
+             v-if="item.list && item.list.length"
              v-show="item.show">
           <ul class="as-subMenu">
             <li
@@ -55,10 +55,6 @@ export default {
       type: String,
       default: 'horizontal',
       validator: val => ['horizontal', 'vertical'].includes(val)
-    },
-    inline: {
-      type: Boolean,
-      default: true
     },
     value: {
       type: String,
@@ -103,9 +99,7 @@ export default {
       window.open(item.url.replace('%s', keyword))
     },
     handleMenuShow (value, item) {
-      if (!this.inline) {
-        item.show = value
-      }
+      item.show = value
     }
   }
 }
@@ -116,16 +110,6 @@ export default {
 
   .as-menu {
     flex: 1;
-    &::before, &::after {
-      display: table;
-      content: "";
-    }
-    &::after {
-      clear: both
-    }
-  }
-
-  .as-menu {
     width: 100%;
     padding: 0;
     margin: 0;
@@ -134,12 +118,21 @@ export default {
     box-shadow: none;
     background-color: #fff;
     display: flex;
+
+    &::before, &::after {
+      display: table;
+      content: "";
+    }
+    &::after {
+      clear: both
+    }
+
   }
 
   .as-menu--horizontal {
     flex-direction: row;
-    .as-menu-item-active {
-      border-bottom: 2px solid $active-color;
+    .as-menu-item {
+      border-bottom: 2px solid transparent;
     }
     .as-subMenu-container {
       left: -22px;
@@ -151,9 +144,7 @@ export default {
     flex-direction: column;
     .as-menu-item {
       margin: 5px 0;
-    }
-    .as-menu-item-active {
-      border-right: 2px solid $active-color;
+      border-right: 2px solid transparent;
     }
     .as-subMenu-container {
       left: $verticalWidth - 15px;
@@ -166,7 +157,14 @@ export default {
     line-height: $height;
     list-style: none;
     position: relative;
-    transition: border-color .3s cubic-bezier(.645, .045, .355, 1);
+    transition: color .3s cubic-bezier(.645, .045, .355, 1), border-color .3s cubic-bezier(.645, .045, .355, 1), background .3s cubic-bezier(.645, .045, .355, 1);
+    box-sizing: border-box;
+    &:hover {
+      border-color: var(--as-primary-color);
+      .as-menu-item-icon, .as-menu-item-title {
+        color: var(--as-primary-color);
+      }
+    }
   }
 
   .as-menu-item-icon {
@@ -186,21 +184,6 @@ export default {
     display: flex;
     align-items: center;
     color: $color;
-    border-bottom: 2px solid rgba(255, 255, 255, 0);
-    transition: color .3s cubic-bezier(.645, .045, .355, 1);
-    &:hover {
-      color: $active-color;
-    }
-  }
-
-  .as-menu-item-active {
-    color: $active-color;
-    .as-menu-item-icon {
-      color: $active-color;
-    }
-    .as-menu-item-title {
-      color: $active-color;
-    }
   }
 
   .as-subMenu-container {
@@ -215,11 +198,14 @@ export default {
     padding: 4px 0;
     min-width: 90px;
     border: 1px solid #e4e7ed;
-    border-radius: 4px;
+    border-radius: 2px;
     background-color: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12),
+    0 6px 16px 0 rgba(0, 0, 0, .08),
+    0 9px 28px 8px rgba(0, 0, 0, .05);
     box-sizing: border-box;
     margin: 10px 0;
+
     li {
       font-size: 14px;
       padding: 0 20px;
@@ -234,7 +220,7 @@ export default {
       cursor: pointer;
       &:hover {
         background-color: #f5f7fa;
-        color: $active-color;
+        color: var(--as-primary-color);
       }
     }
   }

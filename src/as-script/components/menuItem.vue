@@ -13,29 +13,44 @@ export default {
   props: {
     showTimeout: {
       type: Number,
-      default: 200
+      default: 100
     },
     hideTimeout: {
       type: Number,
       default: 200
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
     timeout: null
   }),
   methods: {
+    clear () {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
+    },
     handleMenuClick (e) {
-      clearTimeout(this.timeout)
+      this.clear()
       this.$emit('show', true)
     },
     handleMouseEnter (e) {
-      clearTimeout(this.timeout)
+      if (this.disabled) {
+        return
+      }
+      this.clear()
       this.timeout = setTimeout(() => {
         this.$emit('show', true)
       }, this.showTimeout)
     },
-    handleMouseLeave (e, item) {
-      clearTimeout(this.timeout)
+    handleMouseLeave (e) {
+      if (this.disabled) {
+        return
+      }
+      this.clear()
       this.timeout = setTimeout(() => {
         this.$emit('show', false)
       }, this.hideTimeout)
