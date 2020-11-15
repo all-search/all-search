@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'x-dialog',
+  name: 'as-dialog',
   model: {
     prop: 'visible',
     event: 'change'

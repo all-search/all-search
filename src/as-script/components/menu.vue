@@ -84,8 +84,8 @@ export default {
       this.$emit('change', val)
     },
     getKeyword () {
-      if (this.$root.currentSite.keyword) {
-        return this.$root.currentSite.keyword()
+      if (this.$root.siteInfo.keyword) {
+        return this.$root.siteInfo.keyword()
       } else {
         return getKeyword()
       }

@@ -1,7 +1,7 @@
 <template>
   <div
     id="all-search"
-    :style="{display: 'none'}"
+    style="display: none"
     :class="asClass">
     <logo :mode="mode"/>
     <as-menu
@@ -11,77 +11,55 @@
          @click="openSet">
       设置
     </div>
-    <as-dialog v-model="dialog">
-      123
-    </as-dialog>
+    <searchDialog/>
   </div>
 </template>
 
 <script>
+import { computed, reactive, ref, watch } from '@vue/composition-api'
 import { initSites } from '../util'
+import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
-import asDialog from './components/dialog'
+import searchDialog from './components/search-dialog.vue'
 
 export default {
   name: 'all-search',
   components: {
     logo,
     asMenu,
-    asDialog
+    searchDialog
   },
-  data () {
-    return {
-      sites: [],
-      categoryName: 'search',
-      // mode: 'vertical',
-      mode: 'horizontal',
-      dialog: false
-    }
-  },
-  watch: {
-    mode: {
-      handler (val, oldVal) {
-        document.body.classList.remove(`body-${oldVal}`)
-        document.body.classList.add(`body-${val}`)
-      },
-      immediate: true
-    }
-  },
-  computed: {
-    asClass () {
-      return {
-        'as-horizontal': this.mode === 'horizontal',
-        'as-vertical': this.mode === 'vertical'
-      }
-    }
-  },
-  created () {
-    this.initSites()
-    // this.listenKey()
-  },
-  methods: {
-    initSites () {
-      this.sites = initSites('tm')
-    },
-    openSet () {
+  setup () {
+    const currentSite = reactive(siteInfo)
+    const mode = ref('horizontal')
+    const sites = reactive(initSites('tm'))
+    const openSet = () => {
       window.open('https://endday.github.io/all-search/')
-    },
-    showDialog () {
-      this.dialog = !this.dialog
-    },
-    listenKey () {
-      document.onkeydown = (e) => {
-        // const ctrlKey = e.ctrlKey || e.metaKey
-        if (e.altKey && e.key === 'a') {
-          this.showDialog()
-        }
-        e.preventDefault()
-        return false
+    }
+    const changeMode = (val, oldVal) => {
+      if (currentSite.invisible) {
+        return
       }
-      this.$once('hook:beforeDestroy', function () {
-        document.onkeypress = null
-      })
+      document.body.classList.remove(`body-${oldVal}`)
+      document.body.classList.add(`body-${val}`)
+    }
+
+    watch(mode, changeMode)
+
+    const asClass = computed(() => ({
+      'as-horizontal': mode.value === 'horizontal',
+      'as-vertical': mode.value === 'vertical'
+    }))
+
+    changeMode()
+    
+    return {
+      currentSite,
+      sites,
+      mode,
+      openSet,
+      asClass
     }
   }
 }

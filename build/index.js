@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      0.2.6
-// @description  2020年11月8日更新 新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。
+// @description  2020年11月14日更新 新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/11/8
+// @update       2020/11/14
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
@@ -104,7 +104,6 @@
 // @include      /^https?:\/\/www\.startpage\.com\/do\/search/
 // @include      /^https?:\/\/endday\.github\.io/
 // @include      /^https?:\/\/endday\.gitee\.io/
-// @include      /^http:\/\/localhost:8080\/all-search\//
 
 // ==/UserScript==
 /* eslint-disable */
@@ -475,14 +474,9 @@ var allSearch = function(t) {
             t && window.localStorage.setItem(s, t);
         }
     };
-    function h(t) {
-        if (!t) return;
-        const e = document.createElement("style");
-        e.innerHTML = t, e.class = "all-search-style", document.getElementsByTagName("head")[0].appendChild(e);
-    }
-    function c(t, e) {
+    function l(t, e) {
         let s;
-        window.GM_getResourceText && (s = window.GM_getResourceText(t)), s ? u(s, t) : function(t, e) {
+        window.GM_getResourceText && (s = window.GM_getResourceText(t)), s ? h(s, t) : function(t, e) {
             if (!t) return;
             if (e) {
                 const t = document.styleSheets;
@@ -493,7 +487,7 @@ var allSearch = function(t) {
             document.getElementsByTagName("head")[0].appendChild(s);
         }(e, t);
     }
-    function l(t, e, s) {
+    function c(t, e, s) {
         const o = e / 1e3 * 60;
         let a = 0;
         if (!0 === s) {
@@ -505,8 +499,8 @@ var allSearch = function(t) {
             }
         }));
     }
-    function u(t, e, s, o) {
-        l((function() {
+    function h(t, e, s, o) {
+        c((function() {
             let a = document.querySelector(s);
             if (void 0 === s && (a = document.body || document.head || document.documentElement || document), 
             o = o || !1, void 0 === s || void 0 !== s && null !== document.querySelector(s)) {
@@ -534,7 +528,7 @@ var allSearch = function(t) {
             }
         }), 20, !0);
     }
-    function m(t) {
+    function u(t) {
         let e = s;
         const o = r("sites"), n = r("sites-version");
         return o && (e = o, o && n && (n !== a || "tm" !== t) && (e = function(t, e) {
@@ -555,371 +549,8 @@ var allSearch = function(t) {
             show: !1
         }))), e;
     }
-    const d = n("script-loaded"), p = n("page-loaded");
-    function w(t, e, s, o, a, n, r, i, h, c) {
-        "boolean" != typeof r && (h = i, i = r, r = !1);
-        const l = "function" == typeof s ? s.options : s;
-        let u;
-        if (t && t.render && (l.render = t.render, l.staticRenderFns = t.staticRenderFns, 
-        l._compiled = !0, a && (l.functional = !0)), o && (l._scopeId = o), n ? (u = function(t) {
-            (t = t || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (t = __VUE_SSR_CONTEXT__), 
-            e && e.call(this, h(t)), t && t._registeredComponents && t._registeredComponents.add(n);
-        }, l._ssrRegister = u) : e && (u = r ? function(t) {
-            e.call(this, c(t, this.$root.$options.shadowRoot));
-        } : function(t) {
-            e.call(this, i(t));
-        }), u) if (l.functional) {
-            const t = l.render;
-            l.render = function(e, s) {
-                return u.call(s), t(e, s);
-            };
-        } else {
-            const t = l.beforeCreate;
-            l.beforeCreate = t ? [].concat(t, u) : [ u ];
-        }
-        return s;
-    }
-    const y = {
-        name: "logo",
-        props: {
-            mode: {
-                type: String,
-                default: "horizontal",
-                validator: t => [ "horizontal", "vertical" ].includes(t)
-            }
-        },
-        data: () => ({
-            widthMap: {
-                horizontal: {
-                    width: "90px",
-                    margin: "0 10px"
-                },
-                vertical: {
-                    width: "100%"
-                }
-            }
-        }),
-        computed: {
-            style() {
-                return this.widthMap[this.mode];
-            }
-        }
-    };
-    var f = function() {
-        var t = this.$createElement, e = this._self._c || t;
-        return e("a", {
-            staticClass: "as-title",
-            class: "as-title-" + this.mode,
-            attrs: {
-                href: "https://endday.github.io/all-search/",
-                target: "_blank"
-            }
-        }, [ e("p", {
-            staticClass: "as-title-inner"
-        }, [ this._v("\n    All Search\n  ") ]) ]);
-    };
-    f._withStripped = !0;
-    const g = w({
-        render: f,
-        staticRenderFns: []
-    }, void 0, y, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const v = {
-        name: "menuItem",
-        props: {
-            showTimeout: {
-                type: Number,
-                default: 200
-            },
-            hideTimeout: {
-                type: Number,
-                default: 200
-            }
-        },
-        data: () => ({
-            timeout: null
-        }),
-        methods: {
-            handleMenuClick(t) {
-                clearTimeout(this.timeout), this.$emit("show", !0);
-            },
-            handleMouseEnter(t) {
-                clearTimeout(this.timeout), this.timeout = setTimeout(() => {
-                    this.$emit("show", !0);
-                }, this.showTimeout);
-            },
-            handleMouseLeave(t, e) {
-                clearTimeout(this.timeout), this.timeout = setTimeout(() => {
-                    this.$emit("show", !1);
-                }, this.hideTimeout);
-            }
-        }
-    };
-    var b = function() {
-        var t = this, e = t.$createElement;
-        return (t._self._c || e)("li", {
-            on: {
-                click: function(e) {
-                    return t.handleMenuClick(e);
-                },
-                mouseenter: function(e) {
-                    return t.handleMouseEnter(e);
-                },
-                mouseleave: function(e) {
-                    return t.handleMouseLeave(e);
-                }
-            }
-        }, [ t._t("default") ], 2);
-    };
-    b._withStripped = !0;
-    const Z = w({
-        render: b,
-        staticRenderFns: []
-    }, void 0, v, void 0, !1, void 0, !1, void 0, void 0, void 0);
-    const x = {
-        name: "icon",
-        props: {
-            name: {
-                type: String,
-                default: ""
-            }
-        }
-    };
-    var _ = function() {
-        var t = this.$createElement;
-        return (this._self._c || t)("i", {
-            staticClass: "as-menu-item-icon",
-            class: "icon-" + this.name
-        });
-    };
-    _._withStripped = !0;
-    const k = {
-        name: "as-menu",
-        components: {
-            menuItem: Z,
-            icon: w({
-                render: _,
-                staticRenderFns: []
-            }, void 0, x, void 0, !1, void 0, !1, void 0, void 0, void 0)
-        },
-        props: {
-            sites: {
-                type: Array,
-                default: () => []
-            },
-            mode: {
-                type: String,
-                default: "horizontal",
-                validator: t => [ "horizontal", "vertical" ].includes(t)
-            },
-            inline: {
-                type: Boolean,
-                default: !0
-            },
-            value: {
-                type: String,
-                default: ""
-            }
-        },
-        computed: {
-            menuClass() {
-                return {
-                    "as-menu--horizontal": "horizontal" === this.mode,
-                    "as-menu--vertical": "vertical" === this.mode
-                };
-            },
-            transition() {
-                return "horizontal" === this.mode ? "drop" : "fade";
-            }
-        },
-        data: () => ({
-            show: !1
-        }),
-        methods: {
-            handleChange(t) {
-                this.$emit("change", t);
-            },
-            getKeyword() {
-                return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function() {
-                    const t = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
-                    return t ? "INPUT" === t.nodeName || "textarea" === t.localName ? t.value : t.textContent : "";
-                }();
-            },
-            handleClick(t) {
-                this.$emit("click", t);
-                const e = this.getKeyword();
-                window.location.href = t.url.replace("%s", e);
-            },
-            handleMouseWheelClick(t, e) {
-                if (1 === t.button) {
-                    const t = this.getKeyword();
-                    window.open(e.url.replace("%s", t));
-                }
-            },
-            handleMenuShow(t, e) {
-                this.inline || (e.show = t);
-            }
-        }
-    };
-    var q = function() {
-        var t = this, e = t.$createElement, s = t._self._c || e;
-        return s("ul", {
-            staticClass: "as-menu",
-            class: t.menuClass
-        }, t._l(t.sites, (function(e) {
-            return s("menu-item", {
-                key: e.index,
-                staticClass: "as-menu-item",
-                class: {
-                    "as-menu-item-active": e.show
-                },
-                on: {
-                    show: function(s) {
-                        return t.handleMenuShow(s, e);
-                    }
-                }
-            }, [ s("div", {
-                staticClass: "as-menu-item-title"
-            }, [ s("icon", {
-                attrs: {
-                    name: e.name
-                }
-            }), t._v(" "), s("span", {
-                domProps: {
-                    textContent: t._s(e.nameZh)
-                },
-                on: {
-                    click: function(s) {
-                        return t.handleClick(e.list[0]);
-                    },
-                    mousedown: function(s) {
-                        return t.handleMouseWheelClick(s, e.list[0]);
-                    }
-                }
-            }) ], 1), t._v(" "), s("transition", {
-                attrs: {
-                    name: t.transition
-                }
-            }, [ s("div", {
-                directives: [ {
-                    name: "show",
-                    rawName: "v-show",
-                    value: e.show,
-                    expression: "item.show"
-                } ],
-                staticClass: "as-subMenu-container"
-            }, [ s("ul", {
-                staticClass: "as-subMenu"
-            }, t._l(e.list, (function(e, o) {
-                return s("li", {
-                    directives: [ {
-                        name: "show",
-                        rawName: "v-show",
-                        value: e.data.visible,
-                        expression: "child.data.visible"
-                    } ],
-                    key: o,
-                    domProps: {
-                        textContent: t._s(e.nameZh)
-                    },
-                    on: {
-                        click: function(s) {
-                            return t.handleClick(e);
-                        },
-                        mousedown: function(s) {
-                            return t.handleMouseWheelClick(s, e);
-                        }
-                    }
-                });
-            })), 0) ]) ]) ], 1);
-        })), 1);
-    };
-    q._withStripped = !0;
-    const C = {
-        name: "all-search",
-        components: {
-            logo: g,
-            asMenu: w({
-                render: q,
-                staticRenderFns: []
-            }, void 0, k, void 0, !1, void 0, !1, void 0, void 0, void 0)
-        },
-        data: () => ({
-            sites: [],
-            categoryName: "search",
-            mode: "horizontal",
-            inline: !1
-        }),
-        watch: {
-            mode: {
-                handler(t, e) {
-                    document.body.classList.remove(`body-${e}`), document.body.classList.add(`body-${t}`);
-                },
-                immediate: !0
-            }
-        },
-        computed: {
-            asClass() {
-                return {
-                    "as-horizontal": "horizontal" === this.mode,
-                    "as-vertical": "vertical" === this.mode
-                };
-            }
-        },
-        created() {
-            this.initSites(), this.categoryName = r("categoryName") || this.categoryName, this.mode = r("mode") || this.mode;
-        },
-        methods: {
-            initSites() {
-                this.sites = m("tm");
-            },
-            changeCategory(t) {
-                i("categoryName", t), this.categoryName = t;
-            },
-            changeMode() {
-                "horizontal" === this.mode ? this.mode = "vertical" : this.mode = "horizontal", 
-                i("mode", this.mode), window.location.reload();
-            },
-            openSet() {
-                window.open("https://endday.github.io/all-search/");
-            }
-        }
-    };
-    var S = function() {
-        var t = this, e = t.$createElement, s = t._self._c || e;
-        return s("div", {
-            class: t.asClass,
-            style: {
-                display: "none"
-            },
-            attrs: {
-                id: "all-search"
-            }
-        }, [ s("logo", {
-            attrs: {
-                mode: t.mode
-            }
-        }), t._v(" "), s("as-menu", {
-            attrs: {
-                sites: t.sites,
-                mode: t.mode,
-                inline: t.inline,
-                value: t.categoryName
-            },
-            on: {
-                change: t.changeCategory
-            }
-        }), t._v(" "), s("div", {
-            staticClass: "as-setting",
-            on: {
-                click: t.openSet
-            }
-        }, [ t._v("\n    设置\n  ") ]) ], 1);
-    };
-    S._withStripped = !0;
-    const N = w({
-        render: S,
-        staticRenderFns: []
-    }, void 0, C, void 0, !1, void 0, !1, void 0, void 0, void 0), z = [ {
+    const m = n("script-loaded"), d = n("page-loaded");
+    const p = [ {
         url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -1151,11 +782,8 @@ var allSearch = function(t) {
     }, {
         url: /^https?:\/\/endday\.gitee\.io/,
         invisible: !0
-    }, {
-        url: /^http:\/\/localhost:8080\/all-search\//,
-        invisible: !0
-    } ], E = function() {
-        const t = z.find(t => t.url.test(window.location.href));
+    } ], w = function() {
+        const t = p.find(t => t.url.test(window.location.href));
         return t ? {
             url: t.url,
             invisible: t.invisible,
@@ -1166,52 +794,482 @@ var allSearch = function(t) {
             mounted: t.mounted
         } : null;
     };
-    t.config.productionTip = !1;
-    const M = E(), $ = new t({
+    function f(t, e, s, o, a, n, r, i, l, c) {
+        "boolean" != typeof r && (l = i, i = r, r = !1);
+        const h = "function" == typeof s ? s.options : s;
+        let u;
+        if (t && t.render && (h.render = t.render, h.staticRenderFns = t.staticRenderFns, 
+        h._compiled = !0, a && (h.functional = !0)), o && (h._scopeId = o), n ? (u = function(t) {
+            (t = t || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (t = __VUE_SSR_CONTEXT__), 
+            e && e.call(this, l(t)), t && t._registeredComponents && t._registeredComponents.add(n);
+        }, h._ssrRegister = u) : e && (u = r ? function(t) {
+            e.call(this, c(t, this.$root.$options.shadowRoot));
+        } : function(t) {
+            e.call(this, i(t));
+        }), u) if (h.functional) {
+            const t = h.render;
+            h.render = function(e, s) {
+                return u.call(s), t(e, s);
+            };
+        } else {
+            const t = h.beforeCreate;
+            h.beforeCreate = t ? [].concat(t, u) : [ u ];
+        }
+        return s;
+    }
+    const y = {
+        name: "logo",
+        props: {
+            mode: {
+                type: String,
+                default: "horizontal",
+                validator: t => [ "horizontal", "vertical" ].includes(t)
+            }
+        },
         data: () => ({
-            currentSite: M
+            widthMap: {
+                horizontal: {
+                    width: "90px",
+                    margin: "0 10px"
+                },
+                vertical: {
+                    width: "100%"
+                }
+            }
         }),
-        render: t => t(N)
-    });
-    console.log("all-search running 全搜运行中");
-    const T = r("mode") || "horizontal";
-    function O() {
-        const t = E();
-        if (!t.disabled) {
-            if (t.invisible || (c("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-            c("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${a}`)), 
-            !document.getElementById("all-search")) {
-                const t = function() {
-                    let t = null;
-                    const e = document.getElementById("all-search");
-                    return e ? t = e : (t = document.createElement("div"), t.id = "all-search"), t.style.display = "none", 
-                    t;
-                }(), e = document.body.parentElement.insertBefore(t, document.body);
-                $.$mount(e), function() {
-                    const t = function() {
-                        document.dispatchEvent(new CustomEvent(d, {
-                            detail: {
-                                version: a,
-                                getSession: r,
-                                setSession: i
-                            }
-                        }));
-                    };
-                    document.addEventListener(p, t), t();
-                }();
+        computed: {
+            style() {
+                return this.widthMap[this.mode];
             }
         }
+    };
+    var g = function() {
+        var t = this.$createElement, e = this._self._c || t;
+        return e("a", {
+            staticClass: "as-title",
+            class: "as-title-" + this.mode,
+            attrs: {
+                href: "https://endday.github.io/all-search/",
+                target: "_blank"
+            }
+        }, [ e("p", {
+            staticClass: "as-title-inner"
+        }, [ this._v("\n    All Search\n  ") ]) ]);
+    };
+    g._withStripped = !0;
+    const v = f({
+        render: g,
+        staticRenderFns: []
+    }, void 0, y, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const b = {
+        name: "menuItem",
+        props: {
+            showTimeout: {
+                type: Number,
+                default: 100
+            },
+            hideTimeout: {
+                type: Number,
+                default: 200
+            },
+            disabled: {
+                type: Boolean,
+                default: !1
+            }
+        },
+        data: () => ({
+            timeout: null
+        }),
+        methods: {
+            clear() {
+                this.timeout && clearTimeout(this.timeout);
+            },
+            handleMenuClick(t) {
+                this.clear(), this.$emit("show", !0);
+            },
+            handleMouseEnter(t) {
+                this.disabled || (this.clear(), this.timeout = setTimeout(() => {
+                    this.$emit("show", !0);
+                }, this.showTimeout));
+            },
+            handleMouseLeave(t) {
+                this.disabled || (this.clear(), this.timeout = setTimeout(() => {
+                    this.$emit("show", !1);
+                }, this.hideTimeout));
+            }
+        }
+    };
+    var _ = function() {
+        var t = this, e = t.$createElement;
+        return (t._self._c || e)("li", {
+            on: {
+                click: function(e) {
+                    return t.handleMenuClick(e);
+                },
+                mouseenter: function(e) {
+                    return t.handleMouseEnter(e);
+                },
+                mouseleave: function(e) {
+                    return t.handleMouseLeave(e);
+                }
+            }
+        }, [ t._t("default") ], 2);
+    };
+    _._withStripped = !0;
+    const Z = f({
+        render: _,
+        staticRenderFns: []
+    }, void 0, b, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const x = {
+        name: "icon",
+        props: {
+            name: {
+                type: String,
+                default: ""
+            }
+        }
+    };
+    var k = function() {
+        var t = this.$createElement;
+        return (this._self._c || t)("i", {
+            staticClass: "as-menu-item-icon",
+            class: "icon-" + this.name
+        });
+    };
+    k._withStripped = !0;
+    const q = {
+        name: "as-menu",
+        components: {
+            menuItem: Z,
+            icon: f({
+                render: k,
+                staticRenderFns: []
+            }, void 0, x, void 0, !1, void 0, !1, void 0, void 0, void 0)
+        },
+        props: {
+            sites: {
+                type: Array,
+                default: () => []
+            },
+            mode: {
+                type: String,
+                default: "horizontal",
+                validator: t => [ "horizontal", "vertical" ].includes(t)
+            },
+            value: {
+                type: String,
+                default: ""
+            }
+        },
+        computed: {
+            menuClass() {
+                return {
+                    "as-menu--horizontal": "horizontal" === this.mode,
+                    "as-menu--vertical": "vertical" === this.mode
+                };
+            },
+            transition() {
+                return "horizontal" === this.mode ? "drop" : "fade";
+            }
+        },
+        data: () => ({
+            show: !1
+        }),
+        methods: {
+            handleChange(t) {
+                this.$emit("change", t);
+            },
+            getKeyword() {
+                return this.$root.currentSite.keyword ? this.$root.currentSite.keyword() : function() {
+                    const t = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
+                    return t ? "INPUT" === t.nodeName || "textarea" === t.localName ? t.value : t.textContent : "";
+                }();
+            },
+            handleClick(t) {
+                const e = this.getKeyword();
+                window.location.href = t.url.replace("%s", e);
+            },
+            handleMouseWheelClick(t) {
+                const e = this.getKeyword();
+                window.open(t.url.replace("%s", e));
+            },
+            handleMenuShow(t, e) {
+                e.show = t;
+            }
+        }
+    };
+    var C = function() {
+        var t = this, e = t.$createElement, s = t._self._c || e;
+        return s("ul", {
+            staticClass: "as-menu",
+            class: t.menuClass
+        }, t._l(t.sites, (function(e) {
+            return s("menu-item", {
+                key: e.index,
+                staticClass: "as-menu-item",
+                on: {
+                    show: function(s) {
+                        return t.handleMenuShow(s, e);
+                    }
+                }
+            }, [ s("div", {
+                staticClass: "as-menu-item-title"
+            }, [ s("icon", {
+                attrs: {
+                    name: e.name
+                }
+            }), t._v(" "), s("span", {
+                domProps: {
+                    textContent: t._s(e.nameZh)
+                },
+                on: {
+                    click: function(s) {
+                        return t.handleClick(e.list[0]);
+                    },
+                    mouseup: function(s) {
+                        return "button" in s && 1 !== s.button ? null : t.handleMouseWheelClick(e.list[0]);
+                    }
+                }
+            }) ], 1), t._v(" "), s("transition", {
+                attrs: {
+                    name: t.transition
+                }
+            }, [ e.list && e.list.length ? s("div", {
+                directives: [ {
+                    name: "show",
+                    rawName: "v-show",
+                    value: e.show,
+                    expression: "item.show"
+                } ],
+                staticClass: "as-subMenu-container"
+            }, [ s("ul", {
+                staticClass: "as-subMenu"
+            }, t._l(e.list, (function(e, o) {
+                return s("li", {
+                    directives: [ {
+                        name: "show",
+                        rawName: "v-show",
+                        value: e.data.visible,
+                        expression: "child.data.visible"
+                    } ],
+                    key: o,
+                    domProps: {
+                        textContent: t._s(e.nameZh)
+                    },
+                    on: {
+                        click: function(s) {
+                            return t.handleClick(e);
+                        },
+                        mouseup: function(s) {
+                            return "button" in s && 1 !== s.button ? null : t.handleMouseWheelClick(e);
+                        }
+                    }
+                });
+            })), 0) ]) : t._e() ]) ], 1);
+        })), 1);
+    };
+    C._withStripped = !0;
+    const S = f({
+        render: C,
+        staticRenderFns: []
+    }, void 0, q, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    const z = {
+        name: "x-dialog",
+        model: {
+            prop: "visible",
+            event: "change"
+        },
+        props: {
+            visible: {
+                type: Boolean,
+                default: !1
+            },
+            title: {
+                type: String,
+                default: ""
+            },
+            width: {
+                type: String,
+                default: ""
+            }
+        },
+        computed: {
+            style() {
+                const t = {};
+                return this.width && (t.width = this.width), t;
+            }
+        },
+        methods: {
+            handleClose() {
+                this.$emit("change", !1);
+            }
+        }
+    };
+    var E = function() {
+        var t = this, e = t.$createElement, s = t._self._c || e;
+        return s("div", {
+            directives: [ {
+                name: "show",
+                rawName: "v-show",
+                value: t.visible,
+                expression: "visible"
+            } ],
+            staticClass: "as-dialog"
+        }, [ s("div", {
+            staticClass: "as-dialog-container",
+            style: t.style
+        }, [ s("div", {
+            staticClass: "as-dialog__header"
+        }, [ s("p", {
+            domProps: {
+                textContent: t._s(t.title)
+            }
+        }), t._v(" "), s("span", {
+            staticClass: "as-dialog__close",
+            on: {
+                click: t.handleClose
+            }
+        }) ]), t._v(" "), s("div", {
+            staticClass: "as-dialog__body"
+        }, [ t._t("default") ], 2), t._v(" "), s("div", {
+            staticClass: "as-dialog__footer"
+        }) ]), t._v(" "), s("div", {
+            staticClass: "as-dialog__mask",
+            on: {
+                click: t.handleClose
+            }
+        }) ]);
+    };
+    E._withStripped = !0;
+    const N = {
+        name: "all-search",
+        components: {
+            logo: v,
+            asMenu: S,
+            asDialog: f({
+                render: E,
+                staticRenderFns: []
+            }, void 0, z, void 0, !1, void 0, !1, void 0, void 0, void 0)
+        },
+        data: () => ({
+            currentSite: w(),
+            sites: [],
+            categoryName: "search",
+            mode: "horizontal",
+            dialog: !1
+        }),
+        watch: {
+            mode: {
+                handler(t, e) {
+                    this.currentSite.invisible || (document.body.classList.remove(`body-${e}`), document.body.classList.add(`body-${t}`));
+                },
+                immediate: !0
+            }
+        },
+        computed: {
+            asClass() {
+                return {
+                    "as-horizontal": "horizontal" === this.mode,
+                    "as-vertical": "vertical" === this.mode
+                };
+            }
+        },
+        created() {
+            this.initSites();
+        },
+        methods: {
+            initSites() {
+                this.sites = u("tm");
+            },
+            openSet() {
+                window.open("https://endday.github.io/all-search/");
+            },
+            showDialog() {
+                this.dialog = !this.dialog;
+            },
+            listenKey() {
+                document.onkeydown = t => (t.altKey && "a" === t.key && this.showDialog(), t.preventDefault(), 
+                !1), this.$once("hook:beforeDestroy", (function() {
+                    document.onkeypress = null;
+                }));
+            }
+        }
+    };
+    var $ = function() {
+        var t = this, e = t.$createElement, s = t._self._c || e;
+        return s("div", {
+            class: t.asClass,
+            staticStyle: {
+                display: "none"
+            },
+            attrs: {
+                id: "all-search"
+            }
+        }, [ s("logo", {
+            attrs: {
+                mode: t.mode
+            }
+        }), t._v(" "), s("as-menu", {
+            attrs: {
+                sites: t.sites,
+                mode: t.mode
+            }
+        }), t._v(" "), s("div", {
+            staticClass: "as-setting",
+            on: {
+                click: t.openSet
+            }
+        }, [ t._v("\n    设置\n  ") ]), t._v(" "), s("as-dialog", {
+            model: {
+                value: t.dialog,
+                callback: function(e) {
+                    t.dialog = e;
+                },
+                expression: "dialog"
+            }
+        }, [ t._v("\n    123\n  ") ]) ], 1);
+    };
+    $._withStripped = !0;
+    const M = f({
+        render: $,
+        staticRenderFns: []
+    }, void 0, N, void 0, !1, void 0, !1, void 0, void 0, void 0);
+    t.config.productionTip = !1;
+    const T = w(), A = new t({
+        data: () => ({
+            currentSite: T
+        }),
+        render: t => t(M)
+    });
+    console.log("all-search running 全搜运行中");
+    const F = r("mode") || "horizontal";
+    function I() {
+        const t = w();
+        if (!t.disabled && (t.invisible || (l("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+        l("as-style", `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${a}`)), 
+        !document.getElementById("all-search"))) {
+            const t = function() {
+                let t = null;
+                const e = document.getElementById("all-search");
+                return e ? t = e : (t = document.createElement("div"), t.id = "all-search"), t.style.display = "none", 
+                t;
+            }(), e = document.body.parentElement.insertBefore(t, document.body);
+            A.$mount(e), function() {
+                const t = function() {
+                    document.dispatchEvent(new CustomEvent(m, {
+                        detail: {
+                            version: a,
+                            getSession: r,
+                            setSession: i
+                        }
+                    }));
+                };
+                document.addEventListener(d, t), t();
+            }();
+        }
     }
-    return M && M.style && (M.style[1] && "horizontal" === T && u(M.style[1], "as-special"), 
-    M.style[2] && "vertical" === T && u(M.style[2], "as-special")), function() {
-        const t = document.getElementsByTagName("head")[0], e = {
-            childList: !0
-        }, s = function(t) {
-            for (const e of t) e.removedNodes.length && "STYLE" === e.removedNodes[0].nodeName && "as-style" === e.removedNodes[0].class && h(e.removedNodes[0].innerText);
-        };
-        let o, a = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-        a && (o = new a(s), o.observe(t, e));
-    }(), function() {
+    return T && T.style && (T.style[1] && "horizontal" === F && h(T.style[1], "as-special"), 
+    T.style[2] && "vertical" === F && h(T.style[2], "as-special")), function() {
         let t = 0;
         return new Promise((e, s) => {
             if (document && document.body) e(); else {
@@ -1222,8 +1280,8 @@ var allSearch = function(t) {
             }
         });
     }().then(() => {
-        "www.baidu.com" === window.location.hostname ? l(() => O(), 800, !0) : O();
+        "www.baidu.com" === window.location.hostname ? c(() => I(), 800, !0) : I();
     }).catch(t => {
         console.error(t);
-    }), $;
+    }), A;
 }(Vue);
