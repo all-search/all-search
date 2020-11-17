@@ -12,6 +12,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'logo',
   props: {
@@ -19,22 +20,6 @@ export default {
       type: String,
       default: 'horizontal',
       validator: val => ['horizontal', 'vertical'].includes(val)
-    }
-  },
-  data: () => ({
-    widthMap: {
-      horizontal: {
-        width: '90px',
-        margin: '0 10px'
-      },
-      vertical: {
-        width: '100%'
-      }
-    }
-  }),
-  computed: {
-    style () {
-      return this.widthMap[this.mode]
     }
   }
 }

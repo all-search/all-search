@@ -53,7 +53,7 @@ export default {
     }))
 
     changeMode()
-    
+
     return {
       currentSite,
       sites,

@@ -9,8 +9,8 @@ export function onKeyDown () {
       if (e.altKey && e.key === 'a') {
         visible.value = !visible.value
       }
-      e.preventDefault()
-      return false
+      // e.preventDefault()
+      // return false
     }
   })
 
