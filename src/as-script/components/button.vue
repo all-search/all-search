@@ -19,8 +19,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../assets/common";
-
   .as-button {
     display: inline-block;
     line-height: 1;
@@ -43,7 +41,7 @@ export default {
 
   .as-button.as-button__text {
     border-color: transparent;
-    color: #409eff;
+    color: var(--as-primary-color);
     background: transparent;
     padding-left: 0;
     padding-right: 0;
@@ -51,8 +49,8 @@ export default {
 
   .as-button.as-button__primary {
     color: #fff;
-    background-color: #409eff;
-    border-color: #409eff;
+    background-color: var(--as-primary-color);
+    border-color: var(--as-primary-color);
   }
 
 </style>

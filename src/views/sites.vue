@@ -232,7 +232,7 @@
 </template>
 
 <script>
-import { version, initSites, setSession, getSession } from '../util'
+import { version, initSites, setSession } from '../util'
 import draggable from 'vuedraggable'
 import sites from '../config/sites'
 

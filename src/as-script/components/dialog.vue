@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { computed } from '@vue/composition-api'
+
 export default {
   name: 'as-dialog',
   model: {
@@ -40,18 +42,20 @@ export default {
       default: ''
     }
   },
-  computed: {
-    style () {
+  setup (props, context) {
+    const style = computed(() => {
       const obj = {}
-      if (this.width) {
-        obj.width = this.width
+      if (props.width) {
+        obj.width = props.width
       }
       return obj
+    })
+    const handleClose = () => {
+      context.emit('change', false)
     }
-  },
-  methods: {
-    handleClose () {
-      this.$emit('change', false)
+    return {
+      style,
+      handleClose
     }
   }
 }

@@ -1,17 +1,19 @@
 <template>
   <ul
-    class="as-menu"
-    :class="menuClass">
+    class="as-menu">
     <menu-item
       class="as-menu-item"
       v-for="item in sites"
       :key="item.index"
+      :showTimeout="data.showTimeout"
+      :hideTimeout="data.hideTimeout"
       @show="handleMenuShow($event, item)">
       <div class="as-menu-item-title">
         <icon :name="item.name"/>
         <span v-text="item.nameZh"
               @click="handleClick(item.list[0])"
-              @click.middle="handleMouseWheelClick(item.list[0])"/>
+              @click.middle="handleClick(item.list[0], true)">
+        </span>
       </div>
       <transition :name="transition">
         <div class="as-subMenu-container"
@@ -24,7 +26,7 @@
               v-show="child.data.visible"
               v-text="child.nameZh"
               @click="handleClick(child)"
-              @click.middle="handleMouseWheelClick(child)">
+              @click.middle="handleClick(child, true)">
             </li>
           </ul>
         </div>
@@ -34,7 +36,9 @@
 </template>
 
 <script>
+import { computed, reactive } from '@vue/composition-api'
 import { getKeyword } from '../../util'
+import { siteInfo } from '../../config/loadList'
 import menuItem from './menuItem.vue'
 import icon from '../components/icon.vue'
 
@@ -55,51 +59,33 @@ export default {
       type: String,
       default: 'horizontal',
       validator: val => ['horizontal', 'vertical'].includes(val)
-    },
-    value: {
-      type: String,
-      default: ''
     }
   },
-  computed: {
-    menuClass () {
-      return {
-        'as-menu--horizontal': this.mode === 'horizontal',
-        'as-menu--vertical': this.mode === 'vertical'
-      }
-    },
-    transition () {
-      if (this.mode === 'horizontal') {
-        return 'drop'
+  setup (props) {
+    const data = reactive({
+      showTimeout: 50,
+      hideTimeout: 200
+    })
+    const transition = computed(() =>
+      props.mode === 'horizontal' ? 'drop' : 'fade'
+    )
+    const defaultKeyword = () => siteInfo.keyword ? siteInfo.keyword() : getKeyword()
+    const handleClick = (item, isOpen) => {
+      const keyword = defaultKeyword()
+      if (isOpen) {
+        window.open(item.url.replace('%s', keyword))
       } else {
-        return 'fade'
+        window.location.href = item.url.replace('%s', keyword)
       }
     }
-  },
-  data: () => ({
-    show: false
-  }),
-  methods: {
-    handleChange (val) {
-      this.$emit('change', val)
-    },
-    getKeyword () {
-      if (this.$root.siteInfo.keyword) {
-        return this.$root.siteInfo.keyword()
-      } else {
-        return getKeyword()
-      }
-    },
-    handleClick (item) {
-      const keyword = this.getKeyword()
-      window.location.href = item.url.replace('%s', keyword)
-    },
-    handleMouseWheelClick (item) {
-      const keyword = this.getKeyword()
-      window.open(item.url.replace('%s', keyword))
-    },
-    handleMenuShow (value, item) {
+    const handleMenuShow = (value, item) => {
       item.show = value
+    }
+    return {
+      data,
+      transition,
+      handleClick,
+      handleMenuShow
     }
   }
 }
@@ -129,8 +115,11 @@ export default {
 
   }
 
-  .as-menu--horizontal {
-    flex-direction: row;
+  .as-horizontal {
+    .as-menu {
+      flex-direction: row;
+    }
+
     .as-menu-item {
       border-bottom: 2px solid transparent;
     }
@@ -140,8 +129,11 @@ export default {
     }
   }
 
-  .as-menu--vertical {
-    flex-direction: column;
+  .as-vertical {
+    .as-menu {
+      flex-direction: column;
+    }
+
     .as-menu-item {
       margin: 5px 0;
       border-right: 2px solid transparent;
