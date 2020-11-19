@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { computed, reactive } from '@vue/composition-api'
+import { computed, reactive } from 'vue'
 import { getKeyword } from '../../util'
 import { siteInfo } from '../../config/loadList'
 import menuItem from './menuItem.vue'

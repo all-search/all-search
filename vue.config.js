@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const argv = require('minimist')(process.argv.slice(2))
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+// const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 const srcFiles = fs.readdirSync(path.resolve(__dirname, 'src/'))
 // 项目名称
 const projectName = path.resolve(__dirname).split(path.sep).pop()
@@ -13,7 +13,7 @@ const entryPath = './src/main.js'
 module.exports = {
   outputDir: 'dist/',
   indexPath: indexPath,
-  publicPath: `${projectName}/`,
+  publicPath: `/${projectName}/`,
   lintOnSave: process.env.NODE_ENV !== 'production',
   runtimeCompiler: true,
   productionSourceMap: !!argv.sourceMap,
@@ -26,16 +26,16 @@ module.exports = {
         args[0].template = path.join(__dirname, `src/${indexPath}`)
         return args
       })
-    config.externals = {
-      vue: 'Vue'
-    }
+    // config.externals = {
+    //   vue: 'Vue'
+    // }
   },
   configureWebpack: config => {
     if (argv.tm) {
       config.entry.app[0] = './src/as-script/main.js'
     } else {
       config.entry.app[0] = entryPath
-      config.plugins.push(new VuetifyLoaderPlugin())
+      // config.plugins.push(new VuetifyLoaderPlugin())
     }
   },
   css: {

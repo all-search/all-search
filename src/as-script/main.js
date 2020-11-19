@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import VueCompositionAPI from '@vue/composition-api'
+import { createApp } from 'vue'
 import index from './index.vue'
 import {
   ACAddStyle,
@@ -15,18 +14,7 @@ import { siteInfo } from '../config/loadList'
 
 const isDev = process.env.NODE_ENV === 'development'
 
-Vue.use(VueCompositionAPI)
-
-Vue.config.productionTip = false
-
-const app = new Vue({
-  data () {
-    return {
-      siteInfo
-    }
-  },
-  render: h => h(index)
-})
+const app = createApp(index)
 
 console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 
@@ -64,7 +52,7 @@ function init () {
   if (!asEl) {
     const el = getAsEl()
     const mountEL = document.body.parentElement.insertBefore(el, document.body)
-    app.$mount(mountEL)
+    app.mount(mountEL)
     passTmMethods()
   }
 }
@@ -79,5 +67,3 @@ checkBody().then(() => {
 }).catch(err => {
   console.error(err)
 })
-
-export default app

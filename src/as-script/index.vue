@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { computed, reactive, ref, watch } from '@vue/composition-api'
+import { computed, reactive, ref, watch } from 'vue'
 import { initSites } from '../util'
 import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'
