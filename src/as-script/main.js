@@ -23,7 +23,7 @@ console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 // 添加样式
 const initStyle = function () {
   addStyleResource('iconFont', 'https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css')
-  if (isDev) {
+  if (!isDev) {
     addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${version}`)
   }
 }
