@@ -1,45 +1,15 @@
 <template>
-  <v-card
-    :elevation="0"
-    class="">
-    <v-list>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>
-            <v-row align="center" no-gutters>
-              <v-col class="grow">
-                应用版本
-              </v-col>
-              <v-col class="shrink">
-                {{tmVersion}}
-              </v-col>
-            </v-row>
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>菜单方向</v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-radio-group
-            :value="mode"
-            @change="changeMode"
-            row
-          >
-            <v-radio
-              label="竖向"
-              value="vertical"
-            />
-            <v-radio
-              label="横向"
-              value="horizontal"
-            />
-          </v-radio-group>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
-  </v-card>
+  <el-form
+    ref="form"
+    label-width="80px">
+    <el-form-item label="应用版本">
+      <p v-text="tmVersion"></p>
+    </el-form-item>
+    <el-form-item label="菜单方向">
+      <el-radio v-model="mode" label="horizontal">横向</el-radio>
+      <el-radio v-model="mode" label="vertical">竖向</el-radio>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
@@ -47,12 +17,18 @@ import { getSession, setSession } from '../util'
 import store from '../util/store'
 import pkg from '../../package.json'
 
+const options = [
+  { label: '竖向', value: 'vertical' },
+  { label: '横向', value: 'horizontal' }
+]
+
 export default {
   name: 'setting',
   data: () => ({
     tmVersion: store.tmVersion,
     version: pkg.version,
-    mode: 'horizontal'
+    mode: 'horizontal',
+    options
   }),
   mounted () {
     this.mode = getSession('mode') || 'horizontal'

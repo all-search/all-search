@@ -31,7 +31,7 @@ export default {
     searchDialog
   },
   setup () {
-    const currentSite = reactive(siteInfo)
+    const currentSite = siteInfo()
     const mode = ref('horizontal')
     const sites = reactive(initSites('tm'))
     const openSet = () => {
@@ -66,7 +66,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../assets/common";
+  @import "../assets/common.scss";
 
   .body-horizontal {
     margin-top: $height;

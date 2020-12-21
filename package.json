@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "0.2.6",
+  "version": "1.0.0",
   "description": "新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。",
   "author": "endday",
   "homepage": "https://github.com/endday/all-search",
@@ -17,18 +17,32 @@
     "buildScript": "rollup -c"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "vue": "^3.0.2"
+    "core-js": "^3.8.1",
+    "element-plus": "^1.0.1-beta.8",
+    "vue": "^3.0.4",
+    "vue-draggable-next": "^2.0.0",
+    "vue-router": "^4.0.1"
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^4.0.3",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/compiler-sfc": "^3.0.4",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-import": "^1.13.3",
+    "clean-css": "^4.2.3",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0-0",
-    "sass": "^1.29.0",
+    "eslint-plugin-vue": "^7.2.0",
+    "rollup": "^1.32.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-delete": "^1.2.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-scss": "^2.6.1",
+    "rollup-plugin-terser": "^5.2.0",
+    "rollup-plugin-vue": "^6.0.0",
+    "sass": "^1.30.0",
     "sass-loader": "^10.1.0"
   }
 }

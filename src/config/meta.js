@@ -19,7 +19,7 @@ const meta = `// ==UserScript==
 // @homepageURL  ${pkg.homepage}
 
 // @noframes
-// @require      https://lib.baomitu.com/vue/2.6.11/vue.js
+// @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=${pkg.version}
 // @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=${pkg.version}
 // @run-at       document-start

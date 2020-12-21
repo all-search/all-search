@@ -9,8 +9,10 @@ import {
   passTmMethods,
   RAFInterval,
   version
-} from '../util'
-import { siteInfo } from '../config/loadList'
+} from '../util/index.js'
+import { siteInfo } from '../config/loadList.js'
+
+const currentSite = siteInfo()
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -28,12 +30,12 @@ const initStyle = function () {
 
 const mode = getSession('mode') || 'horizontal'
 
-if (siteInfo && siteInfo.style) {
-  if (siteInfo.style[1] && mode === 'horizontal') {
-    ACAddStyle(siteInfo.style[1], 'as-special')
+if (currentSite && currentSite.style) {
+  if (currentSite.style[1] && mode === 'horizontal') {
+    ACAddStyle(currentSite.style[1], 'as-special')
   }
-  if (siteInfo.style[2] && mode === 'vertical') {
-    ACAddStyle(siteInfo.style[2], 'as-special')
+  if (currentSite.style[2] && mode === 'vertical') {
+    ACAddStyle(currentSite.style[2], 'as-special')
   }
 }
 
@@ -41,10 +43,10 @@ function init () {
   if (isDev) {
     initStyle()
   } else {
-    if (siteInfo.disabled) {
+    if (currentSite.disabled) {
       return
     }
-    if (!siteInfo.invisible) {
+    if (!currentSite.invisible) {
       initStyle()
     }
   }

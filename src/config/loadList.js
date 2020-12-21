@@ -330,7 +330,7 @@ export const list = [
   }
 ]
 
-const getTargetSite = function () {
+export const siteInfo = function () {
   const target = list.find(item => {
     return item.url.test(window.location.href)
   })
@@ -347,5 +347,3 @@ const getTargetSite = function () {
   }
   return null
 }
-
-export const siteInfo = getTargetSite()
