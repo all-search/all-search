@@ -1,22 +1,17 @@
 <template>
-  <div
-    id="all-search"
-    style="display: none"
-    :class="asClass">
-    <logo :mode="mode"/>
-    <as-menu
-      :sites="sites"
-      :mode="mode"/>
-    <div class="as-setting"
-         @click="openSet">
-      设置
-    </div>
-    <searchDialog/>
+  <logo :mode="mode" />
+  <as-menu
+    :sites="sites"
+    :mode="mode" />
+  <div class="as-setting"
+       @click="openSet">
+    设置
   </div>
+  <searchDialog />
 </template>
 
 <script>
-import { computed, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { initSites } from '../util'
 import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'
@@ -37,29 +32,28 @@ export default {
     const openSet = () => {
       window.open('https://endday.github.io/all-search/')
     }
-    const changeMode = (val, oldVal) => {
+    const body = document.body
+    const asEl = document.getElementById('all-search')
+
+    watch(mode, (val) => {
       if (currentSite.invisible) {
         return
       }
-      document.body.classList.remove(`body-${oldVal}`)
-      document.body.classList.add(`body-${val}`)
-    }
+      body.classList.remove(`body-horizontal`)
+      body.classList.remove(`body-vertical`)
+      body.classList.add(`body-${val}`)
+      asEl.classList.remove('as-horizontal')
+      asEl.classList.remove('as-vertical')
+      asEl.classList.add(`as-${val}`)
+    })
 
-    watch(mode, changeMode)
-
-    const asClass = computed(() => ({
-      'as-horizontal': mode.value === 'horizontal',
-      'as-vertical': mode.value === 'vertical'
-    }))
-
-    changeMode()
+    body.classList.add('body-horizontal')
 
     return {
       currentSite,
       sites,
       mode,
-      openSet,
-      asClass
+      openSet
     }
   }
 }
@@ -112,6 +106,7 @@ export default {
     cursor: pointer;
     font-size: 14px;
     color: $color;
+
     &:hover {
       color: var(--as-primary-color);
     }

@@ -228,6 +228,7 @@ export function getAsEl () {
   }
 
   el.style.display = 'none'
+  el.classList.add('as-horizontal')
   return el
 }
 

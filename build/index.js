@@ -795,7 +795,7 @@
             mounted: e.mounted
         } : null;
     };
-    var y = {
+    var g = {
         name: "logo",
         props: {
             mode: {
@@ -805,16 +805,16 @@
             }
         }
     };
-    const g = e.createVNode("p", {
+    const y = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    y.render = function(t, s, o, a, r, n) {
+    g.render = function(t, s, o, a, r, n) {
         return e.openBlock(), e.createBlock("a", {
             class: [ "as-title", "as-title-" + o.mode ],
             href: "https://endday.github.io/all-search/",
             target: "_blank"
-        }, [ g ], 2);
-    }, y.__file = "src/as-script/components/logo.vue";
+        }, [ y ], 2);
+    }, g.__file = "src/as-script/components/logo.vue";
     var f = {
         name: "menuItem",
         props: {
@@ -1036,39 +1036,29 @@
     var E = {
         name: "all-search",
         components: {
-            logo: y,
+            logo: g,
             asMenu: v,
             searchDialog: z
         },
         setup() {
-            const t = w(), s = e.ref("horizontal"), o = e.reactive(u("tm")), a = (e, s) => {
-                t.invisible || (document.body.classList.remove("body-" + s), document.body.classList.add("body-" + e));
-            };
-            e.watch(s, a);
-            const r = e.computed(() => ({
-                "as-horizontal": "horizontal" === s.value,
-                "as-vertical": "vertical" === s.value
-            }));
-            return a(), {
+            const t = w(), s = e.ref("horizontal"), o = e.reactive(u("tm")), a = document.body, r = document.getElementById("all-search");
+            return e.watch(s, e => {
+                t.invisible || (a.classList.remove("body-horizontal"), a.classList.remove("body-vertical"), 
+                a.classList.add("body-" + e), r.classList.remove("as-horizontal"), r.classList.remove("as-vertical"), 
+                r.classList.add("as-" + e));
+            }), a.classList.add("body-horizontal"), {
                 currentSite: t,
                 sites: o,
                 mode: s,
                 openSet: () => {
                     window.open("https://endday.github.io/all-search/");
-                },
-                asClass: r
+                }
             };
         }
     };
     E.render = function(t, s, o, a, r, n) {
         const l = e.resolveComponent("logo"), c = e.resolveComponent("as-menu"), i = e.resolveComponent("searchDialog");
-        return e.openBlock(), e.createBlock("div", {
-            id: "all-search",
-            style: {
-                display: "none"
-            },
-            class: a.asClass
-        }, [ e.createVNode(l, {
+        return e.openBlock(), e.createBlock(e.Fragment, null, [ e.createVNode(l, {
             mode: a.mode
         }, null, 8, [ "mode" ]), e.createVNode(c, {
             sites: a.sites,
@@ -1076,12 +1066,12 @@
         }, null, 8, [ "sites", "mode" ]), e.createVNode("div", {
             class: "as-setting",
             onClick: s[1] || (s[1] = (...e) => a.openSet && a.openSet(...e))
-        }, " 设置 "), e.createVNode(i) ], 2);
+        }, " 设置 "), e.createVNode(i) ], 64);
     }, E.__file = "src/as-script/index.vue";
     const V = w(), T = e.createApp(E);
     console.log("all-search running 全搜运行中(production)");
     const D = n("mode") || "horizontal";
-    function A() {
+    function I() {
         if (V.disabled) return;
         V.invisible || (c("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
         c("as-style", "https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=" + a));
@@ -1090,7 +1080,7 @@
                 let e = null;
                 const t = document.getElementById("all-search");
                 return t ? e = t : (e = document.createElement("div"), e.id = "all-search"), e.style.display = "none", 
-                e;
+                e.classList.add("as-horizontal"), e;
             }();
             document.body.parentElement.insertBefore(e, document.body), T.mount("#all-search"), 
             function() {
@@ -1119,7 +1109,7 @@
             }
         });
     }().then(() => {
-        "www.baidu.com" === window.location.hostname ? i(() => A(), 800, !0) : A();
+        "www.baidu.com" === window.location.hostname ? i(() => I(), 800, !0) : I();
     }).catch(e => {
         console.error(e);
     });
