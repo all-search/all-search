@@ -9,14 +9,8 @@ import { getTmMethods } from './util'
 import router from './route'
 import App from './App.vue'
 
-
-// eslint-disable-next-line no-new
-
 const app = createApp(App)
-
 app.use(router)
 app.use(ElementPlus)
-
 app.mount('#app')
-
 getTmMethods()

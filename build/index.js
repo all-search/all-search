@@ -795,7 +795,7 @@
             mounted: e.mounted
         } : null;
     };
-    var g = {
+    var y = {
         name: "logo",
         props: {
             mode: {
@@ -805,16 +805,16 @@
             }
         }
     };
-    const y = e.createVNode("p", {
+    const g = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    g.render = function(t, s, o, a, r, n) {
+    y.render = function(t, s, o, a, r, n) {
         return e.openBlock(), e.createBlock("a", {
             class: [ "as-title", "as-title-" + o.mode ],
             href: "https://endday.github.io/all-search/",
             target: "_blank"
-        }, [ y ], 2);
-    }, g.__file = "src/as-script/components/logo.vue";
+        }, [ g ], 2);
+    }, y.__file = "src/as-script/components/logo.vue";
     var f = {
         name: "menuItem",
         props: {
@@ -1036,7 +1036,7 @@
     var E = {
         name: "all-search",
         components: {
-            logo: g,
+            logo: y,
             asMenu: v,
             searchDialog: z
         },
@@ -1083,15 +1083,17 @@
     const D = n("mode") || "horizontal";
     function A() {
         if (V.disabled) return;
-        V.invisible || c("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css");
+        V.invisible || (c("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+        c("as-style", "https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=" + a));
         if (!document.getElementById("all-search")) {
             const e = function() {
                 let e = null;
                 const t = document.getElementById("all-search");
                 return t ? e = t : (e = document.createElement("div"), e.id = "all-search"), e.style.display = "none", 
                 e;
-            }(), t = document.body.parentElement.insertBefore(e, document.body);
-            T.mount(t), function() {
+            }();
+            document.body.parentElement.insertBefore(e, document.body), T.mount("#all-search"), 
+            function() {
                 const e = function() {
                     document.dispatchEvent(new CustomEvent(m, {
                         detail: {

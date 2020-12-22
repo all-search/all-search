@@ -53,8 +53,8 @@ function init () {
   const asEl = document.getElementById('all-search')
   if (!asEl) {
     const el = getAsEl()
-    const mountEL = document.body.parentElement.insertBefore(el, document.body)
-    app.mount(mountEL)
+    document.body.parentElement.insertBefore(el, document.body)
+    app.mount('#all-search')
     passTmMethods()
   }
 }
