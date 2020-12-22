@@ -17,9 +17,7 @@
         <side-bar/>
         <el-main class="page-mainer">
           <version-alert/>
-          <el-card shadow="never">
-            <router-view/>
-          </el-card>
+          <router-view/>
           <el-footer></el-footer>
         </el-main>
       </el-container>

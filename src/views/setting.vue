@@ -1,15 +1,17 @@
 <template>
-  <el-form
-    ref="form"
-    label-width="80px">
-    <el-form-item label="应用版本">
-      <p v-text="tmVersion"></p>
-    </el-form-item>
-    <el-form-item label="菜单方向">
-      <el-radio v-model="mode" label="horizontal">横向</el-radio>
-      <el-radio v-model="mode" label="vertical">竖向</el-radio>
-    </el-form-item>
-  </el-form>
+  <el-card shadow="never">
+    <el-form
+      ref="form"
+      label-width="80px">
+      <el-form-item label="应用版本">
+        <p v-text="tmVersion"></p>
+      </el-form-item>
+      <el-form-item label="菜单方向">
+        <el-radio v-model="mode" label="horizontal">横向</el-radio>
+        <el-radio v-model="mode" label="vertical">竖向</el-radio>
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 
 <script>

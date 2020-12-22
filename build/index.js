@@ -782,7 +782,7 @@
         invisible: !0
     }, {
         url: /^http:\/\/localhost:8080\/all-search\//,
-        invisible: !1
+        invisible: !0
     } ], w = function() {
         const e = d.find(e => e.url.test(window.location.href));
         return e ? {

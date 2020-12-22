@@ -34,8 +34,8 @@
             </el-button-group>
             <el-button
               icon="el-icon-view"
-              @click="changeVisible(cate)">
-              {{cate.visible ? '隐藏': '展示'}}
+              @click="changeVisible(cate.data)">
+              {{cate.data.visible ? '隐藏': '展示'}}
             </el-button>
           </div>
         </div>
@@ -72,7 +72,7 @@
               <el-dropdown
                 v-if="!isPersonal(cate) && personalCategory.length"
                 trigger="click"
-                @command="addToPersonal(cate.list, $event)">
+                @command="addToPersonal($event, item)">
                 <el-button
                   icon="el-icon-plus">
                   添加
@@ -90,8 +90,8 @@
               </el-dropdown>
               <el-button
                 icon="el-icon-view"
-                @click="changeVisible(item)">
-                {{item.visible ? '隐藏': '展示'}}
+                @click="changeVisible(item.data)">
+                {{item.data.visible ? '隐藏': '展示'}}
               </el-button>
             </div>
           </div>
@@ -165,6 +165,7 @@ export default {
         ...item,
         nameZhBackup: item.nameZh
       }))
+      console.log(this.localSites)
       this.tabName = this.localSites[0].name
     },
     tabChange (value) {
@@ -185,7 +186,6 @@ export default {
         }
       })
       this.tabName = `personal-${i + 1}`
-      console.log(this.localSites)
     },
     addToPersonal (cate, item) {
       cate.list.push(item)
@@ -247,22 +247,36 @@ export default {
       }
     },
     reset () {
-      this.localSites = JSON.parse(JSON.stringify(this.sites))
+      this.$confirm('重置操作将还原所有网址数据，确定要重置吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const localSites = JSON.parse(JSON.stringify(this.sites))
+        this.localSites = localSites.map(item => ({
+          ...item,
+          nameZhBackup: item.nameZh
+        }))
+        this.$message.success('重置成功')
+      })
     },
     formatSites () {
       return this.localSites.map(item => ({
         nameZh: item.nameZh,
         name: item.name,
         list: item.list.map(child => ({
+          id: child.id,
           nameZh: child.nameZh,
-          url: child.url
-        }))
+          url: child.url,
+          data: child.data
+        })),
+        data: item.data
       }))
     },
     save () {
       setSession('sites', this.formatSites())
       setSession('sites-version', version)
-      this.showSnackbar('保存成功')
+      this.$message.success('保存成功')
     }
   }
 }
@@ -273,6 +287,7 @@ export default {
     border-radius: 4px;
     box-shadow: none;
     position: relative;
+    margin-bottom: 20px;
   }
 
   .border-bottom {
