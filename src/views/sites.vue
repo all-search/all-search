@@ -1,6 +1,7 @@
 <template>
   <div class="sites">
     <el-tabs
+      class="sites-tabs"
       type="border-card"
       v-model="tabName"
       @tab-remove="removeTab">
@@ -165,7 +166,6 @@ export default {
         ...item,
         nameZhBackup: item.nameZh
       }))
-      console.log(this.localSites)
       this.tabName = this.localSites[0].name
     },
     tabChange (value) {
@@ -288,6 +288,11 @@ export default {
     box-shadow: none;
     position: relative;
     margin-bottom: 20px;
+  }
+
+  .sites-tabs {
+    border: 1px solid #eee;
+    box-shadow: none;
   }
 
   .border-bottom {

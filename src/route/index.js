@@ -5,19 +5,33 @@ export default createRouter({
   routes: [
     {
       path: '/',
-      name: 'setting',
-      component: () => import('../views/setting.vue'),
+      name: 'index',
+      component: () => import('../views/index.vue'),
       meta: {
-        nameZh: '基础配置'
+        nameZh: '全搜'
       }
     },
     {
-      path: '/sites',
-      name: 'index',
-      component: () => import('../views/sites.vue'),
-      meta: {
-        nameZh: '网址配置'
-      }
+      path: '/config/',
+      component: () => import('../views/config.vue'),
+      children: [
+        {
+          path: 'setting',
+          name: 'setting',
+          component: () => import('../views/setting.vue'),
+          meta: {
+            nameZh: '基础配置'
+          }
+        },
+        {
+          path: 'sites',
+          name: 'sites',
+          component: () => import('../views/sites.vue'),
+          meta: {
+            nameZh: '网址配置'
+          }
+        }
+      ]
     },
     {
       path: '/:pathMatch(.*)*',

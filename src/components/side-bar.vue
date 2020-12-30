@@ -7,7 +7,7 @@
       <el-menu
         router>
         <router-link
-          to="/"
+          to="setting"
           custom
           v-slot="{ navigate, route, isActive }">
           <el-menu-item
@@ -19,7 +19,7 @@
           </el-menu-item>
         </router-link>
         <router-link
-          to="/sites"
+          to="sites"
           custom
           active-class="is-active"
           v-slot="{ navigate, route, isActive }">
