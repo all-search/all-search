@@ -1,13 +1,22 @@
 <template>
   <section class="container">
-    <input
-      class="search_keywords"
-      name="q"
-      type="search"
-      tabindex="1"
-      autocomplete="off"
-      autocapitalize="off"
-      autocorrect="off">
+    <form class="search-form">
+      <input
+        class="search-input"
+        type="search"
+        autocomplete="off"
+        autocapitalize="off"
+        autocorrect="off">
+      <span
+        class="search-reset">
+        <i class="el-icon-menu"></i>
+      </span>
+      <button
+        class="search-submit"
+        type="submit">
+        <i class="el-icon-search"></i>
+      </button>
+    </form>
   </section>
 </template>
 
@@ -19,9 +28,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  $primary: #646464;
+
   .container {
     position: absolute;
-    top: 18%;
+    top: 30%;
     left: 0;
     right: 0;
     width: 100%;
@@ -31,19 +42,70 @@ export default {
     text-align: center;
   }
 
-  .search_keywords {
+  .search-form {
+    position: relative;
+  }
+
+  .search-reset {
+    top: 0;
+    bottom: 0;
+    right: 3.375rem;
+    margin: auto 0;
+    padding-left: .625rem;
+    padding-right: 1.125rem;
+    text-align: center;
+    color: $primary;
+    cursor: pointer;
+    visibility: hidden;
+    background: 0 0;
+    position: absolute;
+  }
+
+  .icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    overflow: hidden;
+  }
+
+  .search-input {
     width: 100%;
-    height: 2.125rem;
+    height: 50px;
     font-family: inherit;
     font-size: inherit;
-    padding: 0 .875rem;
+    padding: 0 10px;
     color: rgba(0, 0, 0, .69);
-    background: rgba(0, 0, 0, .05);
+    background: #E7E7E7;
     border: none;
-    border-radius: .125rem;
-    -webkit-appearance: none;
+    border-radius: 3px;
+    appearance: none;
     &:focus, &:hover, &:active {
       outline: 0;
     }
+  }
+
+  .search-submit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 60px;
+    border-radius: 0 3px 3px 0;
+    .el-icon-search {
+      font-size: 24px;
+      color: #666;
+    }
+
+    &:hover {
+      background-color: #fff;
+    }
+  }
+
+  button, input[type=button], input[type=reset], input[type=submit] {
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    appearance: none;
   }
 </style>
