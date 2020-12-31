@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  $primary: #646464;
+  $primary: #505050;
 
   .container {
     position: absolute;
@@ -61,14 +61,6 @@ export default {
     position: absolute;
   }
 
-  .icon {
-    width: 1em;
-    height: 1em;
-    vertical-align: middle;
-    fill: currentColor;
-    overflow: hidden;
-  }
-
   .search-input {
     width: 100%;
     height: 50px;
@@ -76,7 +68,7 @@ export default {
     font-size: inherit;
     padding: 0 10px;
     color: rgba(0, 0, 0, .69);
-    background: #E7E7E7;
+    background: #efefef;
     border: none;
     border-radius: 3px;
     appearance: none;
@@ -98,7 +90,10 @@ export default {
     }
 
     &:hover {
-      background-color: #fff;
+      background-color: $primary;
+      .el-icon-search {
+        color: #fff;
+      }
     }
   }
 
