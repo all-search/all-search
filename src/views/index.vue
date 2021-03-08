@@ -4,6 +4,7 @@
       <input
         class="search-input"
         type="search"
+        maxlength="100"
         autocomplete="off"
         autocapitalize="off"
         autocorrect="off">
@@ -23,7 +24,18 @@
 <script>
 
 export default {
-  name: 'index'
+  name: 'index',
+  mounted () {
+    this.getBindImg()
+  },
+  methods: {
+    getBindImg () {
+      this.$fetch('http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1')
+        .then(res => {
+          console.log(res)
+        })
+    }
+  }
 }
 </script>
 

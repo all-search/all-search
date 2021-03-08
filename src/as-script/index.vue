@@ -30,7 +30,7 @@ export default {
     const mode = ref('horizontal')
     const sites = reactive(initSites('tm'))
     const openSet = () => {
-      window.open('https://endday.github.io/all-search/')
+      window.open('https://endday.gitee.io/all-search/')
     }
     const body = document.body
     const asEl = document.getElementById('all-search')
@@ -39,11 +39,9 @@ export default {
       if (currentSite.invisible) {
         return
       }
-      body.classList.remove(`body-horizontal`)
-      body.classList.remove(`body-vertical`)
+      body.classList.remove('body-horizontal', 'body-vertical')
       body.classList.add(`body-${val}`)
-      asEl.classList.remove('as-horizontal')
-      asEl.classList.remove('as-vertical')
+      asEl.classList.remove('as-vertical', 'as-horizontal')
       asEl.classList.add(`as-${val}`)
     })
 

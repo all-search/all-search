@@ -17,6 +17,7 @@
     "buildScript": "rollup -c"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "core-js": "^3.8.1",
     "element-plus": "^1.0.1-beta.8",
     "vue": "^3.0.4",

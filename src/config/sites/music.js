@@ -8,10 +8,6 @@ export default [
     url: 'http://so.1ting.com/all.do?q=%s'
   },
   {
-    nameZh: '虾米音乐',
-    url: 'http://www.xiami.com/search?key=%s'
-  },
-  {
     nameZh: '音悦Tai',
     url: 'http://so.yinyuetai.com/?keyword=%s'
   },
