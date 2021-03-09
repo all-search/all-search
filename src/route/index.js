@@ -3,13 +3,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 export default createRouter({
   history: createWebHistory('/all-search/'),
   routes: [
+    /*    {
+          path: '/',
+          name: 'index',
+          component: () => import('../views/index.vue'),
+          meta: {
+            nameZh: '全搜'
+          }
+        },*/
     {
       path: '/',
-      name: 'index',
-      component: () => import('../views/index.vue'),
-      meta: {
-        nameZh: '全搜'
-      }
+      redirect: '/config/sites'
     },
     {
       path: '/config/',
