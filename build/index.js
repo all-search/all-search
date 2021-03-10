@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.0
-// @description  2020年12月22日更新 新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。
+// @version      1.0.2
+// @description  2021年3月11日更新 新增功能，支持图形界面自定义设置分类和添加链接，无需直接修改源代码。
 // @author       endday
 // @license      GPL-2.0
-// @update       2020/12/22
+// @update       2021/3/11
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
-// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css?v=1.0.0
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=1.0.0
+// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.2/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -240,9 +240,6 @@
             nameZh: "一听",
             url: "http://so.1ting.com/all.do?q=%s"
         }, {
-            nameZh: "虾米音乐",
-            url: "http://www.xiami.com/search?key=%s"
-        }, {
             nameZh: "音悦Tai",
             url: "http://so.yinyuetai.com/?keyword=%s"
         }, {
@@ -447,7 +444,7 @@
             visible: !0
         }
     }));
-    var o = "1.0.0";
+    var o = "1.0.2";
     e.reactive({
         tmVersion: ""
     });
@@ -1043,15 +1040,14 @@
         setup() {
             const t = w(), s = e.ref("horizontal"), o = e.reactive(u("tm")), a = document.body, r = document.getElementById("all-search");
             return e.watch(s, e => {
-                t.invisible || (a.classList.remove("body-horizontal"), a.classList.remove("body-vertical"), 
-                a.classList.add("body-" + e), r.classList.remove("as-horizontal"), r.classList.remove("as-vertical"), 
-                r.classList.add("as-" + e));
+                t.invisible || (a.classList.remove("body-horizontal", "body-vertical"), a.classList.add("body-" + e), 
+                r.classList.remove("as-vertical", "as-horizontal"), r.classList.add("as-" + e));
             }), a.classList.add("body-horizontal"), {
                 currentSite: t,
                 sites: o,
                 mode: s,
                 openSet: () => {
-                    window.open("https://endday.github.io/all-search/");
+                    window.open("https://endday.gitee.io/all-search/");
                 }
             };
         }
@@ -1074,7 +1070,7 @@
     function I() {
         if (V.disabled) return;
         V.invisible || (c("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-        c("as-style", "https://cdn.jsdelivr.net/npm/all-search/build/as-style.css?v=" + a));
+        c("as-style", `https://cdn.jsdelivr.net/npm/all-search@${a}/build/as-style.css`));
         if (!document.getElementById("all-search")) {
             const e = function() {
                 let e = null;
