@@ -40,11 +40,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import "../assets/common";
   #logo {
     height: 64px;
     line-height: 64px;
     float: left;
     font-size: 18px;
+    text-decoration: none !important;
+    &:visited {
+      color: $primary;
+    }
   }
 
   .container {
