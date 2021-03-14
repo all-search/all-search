@@ -47,6 +47,7 @@ export default {
     text-decoration: none !important;
     padding: 0;
     margin: 0;
+    color: $primary;
 
     .as-title-inner {
       padding: 0;

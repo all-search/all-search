@@ -69,7 +69,7 @@ export default {
   }
 
   #all-search {
-    --as-primary-color: $primary;
+    --as-primary-color: #1890ff;
     position: fixed;
     display: flex !important;
     background-color: #fff;
