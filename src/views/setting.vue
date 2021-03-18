@@ -7,27 +7,34 @@
         <p v-text="tmVersion"></p>
       </el-form-item>
       <el-form-item label="菜单方向">
-        <el-radio v-model="mode" label="horizontal">横向</el-radio>
-        <el-radio v-model="mode" label="vertical">竖向</el-radio>
+        <el-radio-group
+          v-model="mode"
+          @change="changeMode">
+          <el-radio
+            v-for="item in options"
+            :key="item.value"
+            :label="item.value">
+            {{item.label}}
+          </el-radio>
+        </el-radio-group>
       </el-form-item>
     </el-form>
   </el-card>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { getSession, setSession } from '../util'
 import store from '../util/store'
-
-// const options = [
-//   { label: '竖向', value: 'vertical' },
-//   { label: '横向', value: 'horizontal' }
-// ]
 
 export default {
   name: 'setting',
   setup () {
     const mode = ref(getSession('mode') || 'horizontal')
+    const options = reactive([
+      { label: '竖向', value: 'vertical' },
+      { label: '横向', value: 'horizontal' }
+    ])
     const changeMode = (value) => {
       setSession('mode', value)
       mode.value = value
@@ -35,6 +42,7 @@ export default {
     return {
       mode,
       tmVersion: store.tmVersion,
+      options,
       changeMode
     }
   }
