@@ -22,11 +22,17 @@
           <ul class="as-subMenu">
             <li
               v-for="(child, index) in item.list"
-              :key="index"
               v-show="child.data.visible"
-              v-text="child.nameZh"
               @click="handleClick(child)"
               @click.middle="handleClick(child, true)">
+              <div class="as-url-icon">
+                <img
+                  :src="getFavicon(child.url)"
+                  onerror="this.classList.add('error')">
+              </div>
+              <p class="as-subMenu-text"
+                 v-text="child.nameZh">
+              </p>
             </li>
           </ul>
         </div>
@@ -37,7 +43,8 @@
 
 <script>
 import { computed, reactive } from 'vue'
-import { getKeyword } from '../../util'
+import { getKeyword, initSites } from '../../util'
+import parseUrl from '../../util/parseUrl'
 import { siteInfo } from '../../config/loadList'
 import menuItem from './menuItem.vue'
 import icon from '../components/icon.vue'
@@ -49,12 +56,6 @@ export default {
     icon
   },
   props: {
-    sites: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
     mode: {
       type: String,
       default: 'horizontal',
@@ -62,6 +63,7 @@ export default {
     }
   },
   setup (props) {
+    const sites = reactive(initSites('tm'))
     const currentSite = siteInfo()
     const data = reactive({
       showTimeout: 50,
@@ -82,11 +84,19 @@ export default {
     const handleMenuShow = (value, item) => {
       item.show = value
     }
+
+    function getFavicon (url) {
+      const obj = parseUrl(url)
+      return `https://ico.ihuan.me/${obj.host}/cdn.ico`
+    }
+
     return {
+      sites,
       data,
       transition,
       handleClick,
-      handleMenuShow
+      handleMenuShow,
+      getFavicon
     }
   }
 }
@@ -105,15 +115,6 @@ export default {
     box-shadow: none;
     background-color: #fff;
     display: flex;
-
-    &::before, &::after {
-      display: table;
-      content: "";
-    }
-    &::after {
-      clear: both
-    }
-
   }
 
   .as-horizontal {
@@ -122,8 +123,24 @@ export default {
     }
 
     .as-menu-item {
-      border-bottom: 2px solid transparent;
+      position: relative;
+      &::after {
+        content: "";
+        transform: scaleX(0);
+        opacity: 0;
+        transition: transform .15s cubic-bezier(.645, .045, .355, 1), opacity .15s cubic-bezier(.645, .045, .355, 1);
+        position: absolute;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        border-bottom: 2px solid var(--as-primary-color);
+      }
+      &:hover::after {
+        transform: scaleX(1);
+        opacity: 1;
+      }
     }
+
     .as-subMenu-container {
       left: -22px;
       top: 24px;
@@ -137,7 +154,22 @@ export default {
 
     .as-menu-item {
       margin: 5px 0;
-      border-right: 2px solid transparent;
+      position: relative;
+      &::after {
+        content: "";
+        transform: scaleY(0);
+        opacity: 0;
+        transition: transform .15s cubic-bezier(.645, .045, .355, 1), opacity .15s cubic-bezier(.645, .045, .355, 1);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        border-right: 2.5px solid var(--as-primary-color);
+      }
+      &:hover::after {
+        transform: scaleY(1);
+        opacity: 1;
+      }
     }
     .as-subMenu-container {
       left: $verticalWidth - 15px;
@@ -200,20 +232,76 @@ export default {
     margin: 10px 0;
 
     li {
-      font-size: 14px;
-      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
       position: relative;
-      white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
-      color: $color;
       height: 34px;
-      line-height: 34px;
       box-sizing: border-box;
       cursor: pointer;
       &:hover {
         background-color: #f5f7fa;
         color: var(--as-primary-color);
+      }
+    }
+
+    .as-subMenu-text {
+      flex: 1;
+      font-size: 14px;
+      text-overflow: ellipsis;
+      color: $color;
+      white-space: nowrap;
+      margin: 0;
+      line-height: 34px;
+    }
+
+    .as-url-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 10px;
+      border: none;
+      position: relative;
+      font-size: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      img.error {
+        display: inline-block;
+        transform: scale(1);
+        content: '';
+        color: transparent;
+      }
+
+      img.error {
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background: #f5f5f5 no-repeat center / 50% 50%;
+        }
+        &::after {
+          content: attr(alt);
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          line-height: 2;
+          background-color: rgba(0, 0, 0, .5);
+          color: white;
+          font-size: 12px;
+          text-align: center;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
     }
   }
@@ -242,4 +330,6 @@ export default {
       padding-left: 44px;
     }
   }
+
+
 </style>

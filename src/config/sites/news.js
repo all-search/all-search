@@ -12,16 +12,12 @@ export default [
     url: 'https://www.baidu.com/s?wd=%s%20site%3Anews.163.com'
   },
   {
-    nameZh: '网易-谷歌',
-    url: 'https://www.google.com.hk/search?q=site:news.163.com+%s'
-  },
-  {
     nameZh: '腾讯新闻',
     url: 'https://www.sogou.com/sogou?site=news.qq.com&query=%s'
   },
   {
     nameZh: '凤凰新闻',
-    url: 'http://search.ifeng.com/sofeng/search.action?q=%s'
+    url: 'https://so.ifeng.com/?q=%s&c=1'
   },
   {
     nameZh: 'CNN',
@@ -32,11 +28,7 @@ export default [
     url: 'https://www.bbc.co.uk/search?q=%s'
   },
   {
-    nameZh: 'Economis',
-    url: 'https://www.google.com/search?q=site:www.economist.com%20%s'
-  },
-  {
     nameZh: '今日头条',
-    url: 'https://www.toutiao.com/search/?keyword=%E4%B8%96%E7%95%8C%E6%9D%AF'
+    url: 'https://www.toutiao.com/search/?keyword=%s'
   }
 ]

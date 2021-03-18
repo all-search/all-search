@@ -226,9 +226,6 @@ export function getAsEl () {
     el = document.createElement('div')
     el.id = 'all-search'
   }
-
-  el.style.display = 'none'
-  el.classList.add('as-horizontal')
   return el
 }
 

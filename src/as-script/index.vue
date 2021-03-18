@@ -1,57 +1,64 @@
 <template>
-  <logo :mode="mode" />
-  <as-menu
-    :sites="sites"
-    :mode="mode" />
-  <div class="as-setting"
-       @click="openSet">
-    设置
+  <div class="as-container"
+       :class="classList">
+    <logo :mode="mode"/>
+    <as-menu
+      :mode="mode"/>
+    <div class="as-setting"
+         @click="openSet">
+      设置
+    </div>
   </div>
-  <searchDialog />
 </template>
 
 <script>
-import { reactive, ref, watch } from 'vue'
-import { initSites } from '../util'
+import { onMounted, ref, computed } from 'vue'
+import { getSession } from '../util'
 import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
-import searchDialog from './components/search-dialog.vue'
 
 export default {
   name: 'all-search',
   components: {
     logo,
-    asMenu,
-    searchDialog
+    asMenu
   },
   setup () {
     const currentSite = siteInfo()
-    const mode = ref('horizontal')
-    const sites = reactive(initSites('tm'))
-    const openSet = () => {
+    const mode = ref(getSession('mode') || 'horizontal')
+    const visible = ref(false)
+    const classList = computed(() => [
+      `as-${mode.value}`,
+      {
+        [`as-${mode.value}-hidden`]: !visible.value
+      }
+    ])
+    const openSet = (e) => {
       window.open('https://endday.gitee.io/all-search/')
     }
-    const body = document.body
-    const asEl = document.getElementById('all-search')
 
-    watch(mode, (val) => {
-      if (currentSite.invisible) {
-        return
-      }
+    function initBody () {
+      const body = document.body
+      const asEl = document.getElementById('all-search')
       body.classList.remove('body-horizontal', 'body-vertical')
-      body.classList.add(`body-${val}`)
-      asEl.classList.remove('as-vertical', 'as-horizontal')
-      asEl.classList.add(`as-${val}`)
-    })
+      body.classList.add(`body-${mode.value}`)
+    }
 
-    body.classList.add('body-horizontal')
+    function showBar () {
+      visible.value = true
+    }
+
+    onMounted(() => {
+      initBody()
+    })
 
     return {
       currentSite,
-      sites,
       mode,
-      openSet
+      classList,
+      openSet,
+      showBar
     }
   }
 }
@@ -70,9 +77,6 @@ export default {
 
   #all-search {
     --as-primary-color: #1890ff;
-    position: fixed;
-    display: flex !important;
-    background-color: #fff;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   }
 
@@ -85,6 +89,10 @@ export default {
     flex-direction: row;
   }
 
+  .as-horizontal-hidden {
+    // transform: translateY(-30px);
+  }
+
   .as-vertical {
     height: 100%;
     width: $verticalWidth;
@@ -93,6 +101,12 @@ export default {
     z-index: 999999;
     border-right: 1px #e8e8e8 solid;
     flex-direction: column;
+  }
+
+  .as-container {
+    position: fixed;
+    display: flex !important;
+    background-color: #fff;
   }
 
   .as-setting {

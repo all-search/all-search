@@ -31,7 +31,7 @@ export default {
         clearTimeout(timeout)
       }
     }
-    const handleMouseEnter = (e) => {
+    const handleMouseEnter = () => {
       if (props.disabled) {
         return
       }
@@ -40,7 +40,7 @@ export default {
         context.emit('show', true)
       }, props.showTimeout)
     }
-    const handleMouseLeave = (e) => {
+    const handleMouseLeave = () => {
       if (props.disabled) {
         return
       }

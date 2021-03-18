@@ -20,14 +20,6 @@ export default [
     url: 'http://list.tmall.com/search_product.htm?q=%s'
   },
   {
-    nameZh: '1号店',
-    url: 'http://search.yhd.com/c0-0/k%s'
-  },
-  {
-    nameZh: '闲鱼',
-    url: 'https://s.2.taobao.com/list/list.htm?q=%s&search_type=item&_input_charset=utf8'
-  },
-  {
     nameZh: '值得买',
     url: 'http://search.smzdm.com/?c=home&s=%s'
   },

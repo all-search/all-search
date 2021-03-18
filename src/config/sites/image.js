@@ -12,6 +12,10 @@ export default [
     url: 'https://www.bing.com/images/search?q=%s'
   },
   {
+    nameZh: '搜狗图片',
+    url: 'https://pic.sogou.com/pics?query=%s'
+  },
+  {
     nameZh: 'pixiv',
     url: 'http://www.pixiv.net/search.php?word=%s'
   },
