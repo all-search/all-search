@@ -15,30 +15,27 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import { getSession, setSession } from '../util'
 import store from '../util/store'
-import pkg from '../../package.json'
 
-const options = [
-  { label: '竖向', value: 'vertical' },
-  { label: '横向', value: 'horizontal' }
-]
+// const options = [
+//   { label: '竖向', value: 'vertical' },
+//   { label: '横向', value: 'horizontal' }
+// ]
 
 export default {
   name: 'setting',
-  data: () => ({
-    tmVersion: store.tmVersion,
-    version: pkg.version,
-    mode: 'horizontal',
-    options
-  }),
-  mounted () {
-    this.mode = getSession('mode') || 'horizontal'
-  },
-  methods: {
-    changeMode (value) {
+  setup () {
+    const mode = ref(getSession('mode') || 'horizontal')
+    const changeMode = (value) => {
       setSession('mode', value)
-      this.mode = value
+      mode.value = value
+    }
+    return {
+      mode,
+      tmVersion: store.tmVersion,
+      changeMode
     }
   }
 }
