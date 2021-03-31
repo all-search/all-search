@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.0.5
-// @description  2021年3月31日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @description  2021年4月1日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/3/31
+// @update       2021/4/1
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
@@ -1000,20 +1000,20 @@
                 const t = document.getElementById("all-search");
                 return t ? e = t : (e = document.createElement("div"), e.id = "all-search"), e;
             }();
-            document.body.parentElement.insertBefore(e, document.body);
+            document.body.parentElement.insertBefore(e, document.body), B.mount("#all-search"), 
+            function() {
+                const e = function() {
+                    document.dispatchEvent(new CustomEvent(p, {
+                        detail: {
+                            version: r,
+                            getSession: c,
+                            setSession: l
+                        }
+                    }));
+                };
+                document.addEventListener(d, e), e();
+            }();
         }
-        B.mount("#all-search"), function() {
-            const e = function() {
-                document.dispatchEvent(new CustomEvent(p, {
-                    detail: {
-                        version: r,
-                        getSession: c,
-                        setSession: l
-                    }
-                }));
-            };
-            document.addEventListener(d, e), e();
-        }();
     }
     C && C.style && (C.style[1] && "horizontal" === z && u(C.style[1], "as-special"), 
     C.style[2] && "vertical" === z && u(C.style[2], "as-special")), function() {

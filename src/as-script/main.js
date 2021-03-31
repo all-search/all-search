@@ -55,9 +55,9 @@ function init () {
   if (!asEl) {
     const el = getAsEl()
     document.body.parentElement.insertBefore(el, document.body)
+    app.mount('#all-search')
+    passTmMethods()
   }
-  app.mount('#all-search')
-  passTmMethods()
 }
 
 checkBody().then(() => {
