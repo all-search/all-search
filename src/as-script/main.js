@@ -4,15 +4,16 @@ import {
   ACAddStyle,
   addStyleResource,
   checkBody,
-  getAsEl,
+  createAsRoot,
   getSession,
+  getAsRoot,
   passTmMethods,
-  RAFInterval,
   version
 } from '../util/index.js'
+import { withHookAfter, withHookBefore } from '../util/hook'
 import { siteInfo } from '../config/loadList.js'
 
-const currentSite = siteInfo()
+let currentSite = siteInfo()
 
 const isDev = process.env.NODE_ENV === 'development'
 const isPro = process.env.NODE_ENV === 'production'
@@ -23,7 +24,7 @@ console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 
 // 添加样式
 const initStyle = function () {
-  addStyleResource('iconFont', `https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css`)
+  addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css`)
   if (isPro) {
     addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search@${version}/build/as-style.css`)
   }
@@ -41,6 +42,7 @@ if (currentSite && currentSite.style) {
 }
 
 function init () {
+  currentSite = siteInfo()
   if (isDev) {
     initStyle()
   } else {
@@ -51,22 +53,28 @@ function init () {
       initStyle()
     }
   }
-  const asEl = document.getElementById('all-search')
-  if (!asEl) {
-    const el = getAsEl()
-    document.body.parentElement.insertBefore(el, document.body)
-    app.mount('#all-search')
+  const el = getAsRoot()
+  if (el) {
+    el.style.display = currentSite.invisible ? 'none' : 'unset'
+  } else {
+    const el = createAsRoot()
+    const mountEL = document.body.parentElement.insertBefore(el, document.body)
+    app.mount(mountEL)
     passTmMethods()
   }
 }
 
-checkBody().then(() => {
-  // 百度比较特殊，搜索没有发生页面请求，所以需要轮询
-  if (window.location.hostname === 'www.baidu.com') {
-    RAFInterval(() => init(), 800, true)
-  } else {
-    init()
+history.pushState = withHookAfter(history.pushState, init)
+history.replaceState = withHookAfter(history.replaceState, init)
+Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, (e) => {
+  if (e && e.tagName === 'STYLE') {
+    return !(e.classList.contains('as-icon') || e.classList.contains('as-style'))
   }
+  return true
+})
+
+checkBody().then(() => {
+  init()
 }).catch(err => {
   console.error(err)
 })

@@ -87,7 +87,15 @@ export default {
 
     function getFavicon (url) {
       const obj = parseUrl(url)
-      return `https://ico.ihuan.me/${obj.host}/cdn.ico`
+      const arr = obj.host.split('.')
+      let mainDomain = obj.host
+      if (arr.length > 2) {
+        mainDomain = arr.slice(1).join('.')
+      }
+      return `https://ico.ihuan.me/${mainDomain}/cdn.ico`
+      // return `https://api.iowen.cn/favicon/${mainDomain}.png`
+      // return `http://statics.dnspod.cn/proxy_favicon/_/favicon?domain=${mainDomain}`
+      // return `https://api.jxcxin.cn/api/Favicon/api.php?url=${mainDomain}`
     }
 
     return {

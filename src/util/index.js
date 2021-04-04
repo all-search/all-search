@@ -217,15 +217,13 @@ export function ACAddStyle (css, className, addToTarget, isReload) { // 添加CS
   }, 20, true)
 }
 
-export function getAsEl () {
-  let el = null
-  const asEl = document.getElementById('all-search')
-  if (asEl) {
-    el = asEl
-  } else {
-    el = document.createElement('div')
-    el.id = 'all-search'
-  }
+export function getAsRoot () {
+  return document.getElementById('all-search')
+}
+
+export function createAsRoot () {
+  let el = document.createElement('div')
+  el.id = 'all-search'
   return el
 }
 

@@ -1,6 +1,7 @@
 <template>
   <div class="as-container"
-       :class="classList">
+       :class="classList"
+       style="display: none">
     <logo :mode="mode"/>
     <as-menu
       :mode="mode"/>
@@ -12,7 +13,7 @@
 </template>
 
 <script>
-import { onMounted, ref, computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { getSession } from '../util'
 import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'

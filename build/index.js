@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.5
-// @description  2021年4月1日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.6
+// @description  2021年4月4日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/4/1
+// @update       2021/4/4
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
-// @resource     iconFont  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.5/build/as-style.css
+// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.6/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -436,7 +436,7 @@
             visible: !0
         }
     }));
-    var a = "1.0.5";
+    var a = "1.0.6";
     e.reactive({
         tmVersion: ""
     });
@@ -444,7 +444,7 @@
     function n(e) {
         return e ? "__allSearch__" + e : null;
     }
-    let c = function(e) {
+    let i = function(e) {
         const t = n(e);
         let s;
         if (s = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
@@ -454,16 +454,16 @@
             return s;
         }
         return null;
-    }, l = function(e, t) {
+    }, c = function(e, t) {
         const s = n(e);
         if (window.GM_setValue) window.GM_setValue(s, t); else {
             const e = JSON.stringify(t);
             e && window.localStorage.setItem(s, e);
         }
     };
-    function i(e, t) {
+    function l(e, t) {
         let s;
-        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? u(s, e) : function(e, t) {
+        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? h(s, e) : function(e, t) {
             if (!e) return;
             if (t) {
                 const e = document.styleSheets;
@@ -474,20 +474,19 @@
             document.getElementsByTagName("head")[0].appendChild(s);
         }(t, e);
     }
-    function h(e, t, s) {
-        const o = t / 1e3 * 60;
-        let a = 0;
-        if (!0 === s) {
-            if (e()) return;
-        }
-        requestAnimationFrame((function t() {
-            if (a < o) a++, requestAnimationFrame(t); else {
-                e() || !1 || (a = 0, requestAnimationFrame(t));
+    function h(e, t, s, o) {
+        !function(e, t, s) {
+            const o = t / 1e3 * 60;
+            let a = 0;
+            if (!0 === s) {
+                if (e()) return;
             }
-        }));
-    }
-    function u(e, t, s, o) {
-        h((function() {
+            requestAnimationFrame((function t() {
+                if (a < o) a++, requestAnimationFrame(t); else {
+                    e() || !1 || (a = 0, requestAnimationFrame(t));
+                }
+            }));
+        }((function() {
             let a = document.querySelector(s);
             if (void 0 === s && (a = document.body || document.head || document.documentElement || document), 
             o = o || !1, void 0 === s || void 0 !== s && null !== document.querySelector(s)) {
@@ -515,9 +514,9 @@
             }
         }), 20, !0);
     }
-    function m(e) {
+    function u(e) {
         let t = o;
-        const s = c("sites"), a = c("sites-version");
+        const s = i("sites"), a = i("sites-version");
         return s && (t = s, s && a && (a !== r || "tm" !== e) && (t = function(e, t) {
             const s = JSON.parse(JSON.stringify(e));
             let o = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
@@ -531,13 +530,13 @@
                 }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
                 e.isAdd = !0);
             }), o = o.filter(e => !e.isAdd), o.length && s.push(...o), s;
-        }(s, o), l("sites", t), l("sites-version", r))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
+        }(s, o), c("sites", t), c("sites-version", r))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
             ...e,
             show: !1
         }))), t;
     }
-    const p = n("script-loaded"), d = n("page-loaded");
-    const w = [ {
+    const m = n("script-loaded"), p = n("page-loaded");
+    const d = [ {
         url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -675,7 +674,10 @@
     }, {
         url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
     }, {
-        url: /^https?:\/\/.*\.bing\.com\/images\/search/
+        url: /^https?:\/\/.*\.bing\.com\/images\/search/,
+        style: {
+            1: "#miniheader {padding: 30px;}"
+        }
     }, {
         url: /^https?:\/\/www\.flickr\.com\/search\//
     }, {
@@ -772,8 +774,8 @@
     }, {
         url: /^http:\/\/localhost:8080\/all-search\//,
         invisible: !0
-    } ], y = function() {
-        const e = w.find(e => e.url.test(window.location.href));
+    } ], w = function() {
+        const e = d.find(e => e.url.test(window.location.href));
         return e ? {
             url: e.url,
             invisible: e.invisible,
@@ -784,7 +786,7 @@
             mounted: e.mounted
         } : null;
     };
-    var g = {
+    var y = {
         name: "logo",
         props: {
             mode: {
@@ -797,14 +799,14 @@
     const f = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    g.render = function(t, s, o, a, r, n) {
+    y.render = function(t, s, o, a, r, n) {
         return e.openBlock(), e.createBlock("a", {
             class: [ "as-title", "as-title-" + o.mode ],
             href: "https://endday.github.io/all-search/",
             target: "_blank"
         }, [ f ], 2);
-    }, g.__file = "src/as-script/components/logo.vue";
-    var b = {
+    }, y.__file = "src/as-script/components/logo.vue";
+    var g = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -839,13 +841,13 @@
             };
         }
     };
-    b.render = function(t, s, o, a, r, n) {
+    g.render = function(t, s, o, a, r, n) {
         return e.openBlock(), e.createBlock("li", {
             onMouseenter: s[1] || (s[1] = e => a.handleMouseEnter(e)),
             onMouseleave: s[2] || (s[2] = e => a.handleMouseLeave(e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, b.__file = "src/as-script/components/menuItem.vue";
-    var v = {
+    }, g.__file = "src/as-script/components/menuItem.vue";
+    var b = {
         name: "icon",
         props: {
             name: {
@@ -854,16 +856,16 @@
             }
         }
     };
-    v.render = function(t, s, o, a, r, n) {
+    b.render = function(t, s, o, a, r, n) {
         return e.openBlock(), e.createBlock("i", {
             class: [ "as-menu-item-icon", "icon-" + o.name ]
         }, null, 2);
-    }, v.__file = "src/as-script/components/icon.vue";
-    var k = {
+    }, b.__file = "src/as-script/components/icon.vue";
+    var v = {
         name: "as-menu",
         components: {
-            menuItem: b,
-            icon: v
+            menuItem: g,
+            icon: b
         },
         props: {
             mode: {
@@ -873,10 +875,10 @@
             }
         },
         setup(t) {
-            const o = e.reactive(m("tm")), a = y(), r = e.reactive({
+            const o = e.reactive(u("tm")), a = w(), r = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
-            }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), c = () => a.keyword ? a.keyword() : function() {
+            }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), i = () => a.keyword ? a.keyword() : function() {
                 const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
                 return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
             }();
@@ -885,41 +887,43 @@
                 data: r,
                 transition: n,
                 handleClick: (e, t) => {
-                    const s = c();
+                    const s = i();
                     t ? window.open(e.url.replace("%s", s)) : window.location.href = e.url.replace("%s", s);
                 },
                 handleMenuShow: (e, t) => {
                     t.show = e;
                 },
                 getFavicon: function(e) {
-                    return `https://ico.ihuan.me/${s(e).host}/cdn.ico`;
+                    const t = s(e), o = t.host.split(".");
+                    let a = t.host;
+                    return o.length > 2 && (a = o.slice(1).join(".")), `https://ico.ihuan.me/${a}/cdn.ico`;
                 }
             };
         }
     };
-    const Z = {
+    const k = {
         class: "as-menu"
-    }, x = {
+    }, Z = {
         class: "as-menu-item-title"
-    }, q = {
+    }, x = {
         key: 0,
         class: "as-subMenu-container"
-    }, _ = {
+    }, q = {
         class: "as-subMenu"
-    }, S = {
+    }, _ = {
         class: "as-url-icon"
     };
-    k.render = function(t, s, o, a, r, n) {
-        const c = e.resolveComponent("icon"), l = e.resolveComponent("menu-item");
-        return e.openBlock(), e.createBlock("ul", Z, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
-        e.createBlock(l, {
+    v.render = function(t, s, o, a, r, n) {
+        const i = e.resolveComponent("icon"), c = e.resolveComponent("menu-item");
+        return e.openBlock(), e.createBlock("ul", k, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
+        e.createBlock(c, {
             class: "as-menu-item",
             key: t.index,
             showTimeout: a.data.showTimeout,
             hideTimeout: a.data.hideTimeout,
             onShow: e => a.handleMenuShow(e, t)
         }, {
-            default: e.withCtx(() => [ e.createVNode("div", x, [ e.createVNode(c, {
+            default: e.withCtx(() => [ e.createVNode("div", Z, [ e.createVNode(i, {
                 name: t.name
             }, null, 8, [ "name" ]), e.createVNode("span", {
                 textContent: e.toDisplayString(t.nameZh),
@@ -929,11 +933,11 @@
                 name: a.transition
             }, {
                 default: e.withCtx(() => [ t.list && t.list.length ? e.withDirectives((e.openBlock(), 
-                e.createBlock("div", q, [ e.createVNode("ul", _, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, s) => e.withDirectives((e.openBlock(), 
+                e.createBlock("div", x, [ e.createVNode("ul", q, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, s) => e.withDirectives((e.openBlock(), 
                 e.createBlock("li", {
                     onClick: e => a.handleClick(t),
                     onMouseup: e.withModifiers(e => a.handleClick(t, !0), [ "middle" ])
-                }, [ e.createVNode("div", S, [ e.createVNode("img", {
+                }, [ e.createVNode("div", _, [ e.createVNode("img", {
                     src: a.getFavicon(t.url),
                     onerror: "this.classList.add('error')"
                 }, null, 8, [ "src" ]) ]), e.createVNode("p", {
@@ -944,15 +948,15 @@
             }, 1032, [ "name" ]) ]),
             _: 2
         }, 1032, [ "showTimeout", "hideTimeout", "onShow" ]))), 128)) ]);
-    }, k.__file = "src/as-script/components/menu.vue";
-    var N = {
+    }, v.__file = "src/as-script/components/menu.vue";
+    var S = {
         name: "all-search",
         components: {
-            logo: g,
-            asMenu: k
+            logo: y,
+            asMenu: v
         },
         setup() {
-            const t = y(), s = e.ref(c("mode") || "horizontal"), o = e.ref(!1), a = e.computed(() => [ "as-" + s.value, {
+            const t = w(), s = e.ref(i("mode") || "horizontal"), o = e.ref(!1), a = e.computed(() => [ "as-" + s.value, {
                 [`as-${s.value}-hidden`]: !o.value
             } ]);
             return e.onMounted(() => {
@@ -974,49 +978,64 @@
             };
         }
     };
-    N.render = function(t, s, o, a, r, n) {
-        const c = e.resolveComponent("logo"), l = e.resolveComponent("as-menu");
+    function N(e, t) {
+        return function() {
+            const s = e.apply(this, arguments);
+            return t.apply(this, arguments), s;
+        };
+    }
+    S.render = function(t, s, o, a, r, n) {
+        const i = e.resolveComponent("logo"), c = e.resolveComponent("as-menu");
         return e.openBlock(), e.createBlock("div", {
-            class: [ "as-container", a.classList ]
-        }, [ e.createVNode(c, {
+            class: [ "as-container", a.classList ],
+            style: {
+                display: "none"
+            }
+        }, [ e.createVNode(i, {
             mode: a.mode
-        }, null, 8, [ "mode" ]), e.createVNode(l, {
+        }, null, 8, [ "mode" ]), e.createVNode(c, {
             mode: a.mode
         }, null, 8, [ "mode" ]), e.createVNode("div", {
             class: "as-setting",
             onClick: s[1] || (s[1] = (...e) => a.openSet && a.openSet(...e))
         }, " 设置 ") ], 2);
-    }, N.__file = "src/as-script/index.vue";
-    const C = y(), B = e.createApp(N);
+    }, S.__file = "src/as-script/index.vue";
+    let C = w();
+    const B = e.createApp(S);
     console.log("all-search running 全搜运行中(production)");
-    const z = c("mode") || "horizontal";
+    const z = i("mode") || "horizontal";
     function M() {
-        if (C.disabled) return;
-        C.invisible || (i("iconFont", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-        i("as-style", `https://cdn.jsdelivr.net/npm/all-search@${r}/build/as-style.css`));
-        if (!document.getElementById("all-search")) {
+        if (C = w(), C.disabled) return;
+        C.invisible || (l("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+        l("as-style", `https://cdn.jsdelivr.net/npm/all-search@${r}/build/as-style.css`));
+        const e = document.getElementById("all-search");
+        if (e) e.style.display = C.invisible ? "none" : "unset"; else {
             const e = function() {
-                let e = null;
-                const t = document.getElementById("all-search");
-                return t ? e = t : (e = document.createElement("div"), e.id = "all-search"), e;
-            }();
-            document.body.parentElement.insertBefore(e, document.body), B.mount("#all-search"), 
-            function() {
+                let e = document.createElement("div");
+                return e.id = "all-search", e;
+            }(), t = document.body.parentElement.insertBefore(e, document.body);
+            B.mount(t), function() {
                 const e = function() {
-                    document.dispatchEvent(new CustomEvent(p, {
+                    document.dispatchEvent(new CustomEvent(m, {
                         detail: {
                             version: r,
-                            getSession: c,
-                            setSession: l
+                            getSession: i,
+                            setSession: c
                         }
                     }));
                 };
-                document.addEventListener(d, e), e();
+                document.addEventListener(p, e), e();
             }();
         }
     }
-    C && C.style && (C.style[1] && "horizontal" === z && u(C.style[1], "as-special"), 
-    C.style[2] && "vertical" === z && u(C.style[2], "as-special")), function() {
+    var T, E;
+    C && C.style && (C.style[1] && "horizontal" === z && h(C.style[1], "as-special"), 
+    C.style[2] && "vertical" === z && h(C.style[2], "as-special")), history.pushState = N(history.pushState, M), 
+    history.replaceState = N(history.replaceState, M), Node.prototype.removeChild = (T = Node.prototype.removeChild, 
+    E = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
+    function() {
+        if (!1 !== E.apply(this, arguments)) return T.apply(this, arguments);
+    }), function() {
         let e = 0;
         return new Promise((t, s) => {
             if (document && document.body) t(); else {
@@ -1027,7 +1046,7 @@
             }
         });
     }().then(() => {
-        "www.baidu.com" === window.location.hostname ? h(() => M(), 800, !0) : M();
+        M();
     }).catch(e => {
         console.error(e);
     });

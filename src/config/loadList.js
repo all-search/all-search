@@ -185,7 +185,10 @@ export const list = [
     url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
   },
   {
-    url: /^https?:\/\/.*\.bing\.com\/images\/search/
+    url: /^https?:\/\/.*\.bing\.com\/images\/search/,
+    style: {
+      1: `#miniheader {padding: ${height}px;}`
+    }
   },
   {
     url: /^https?:\/\/www\.flickr\.com\/search\//
