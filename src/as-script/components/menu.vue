@@ -21,7 +21,8 @@
              v-show="item.show">
           <ul class="as-subMenu">
             <li
-              v-for="(child, index) in item.list"
+              v-for="(child, i) in item.list"
+              :key="i"
               v-show="child.data.visible"
               @click="handleClick(child)"
               @click.middle="handleClick(child, true)">

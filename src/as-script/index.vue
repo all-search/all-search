@@ -35,13 +35,12 @@ export default {
         [`as-${mode.value}-hidden`]: !visible.value
       }
     ])
-    const openSet = (e) => {
+    const openSet = () => {
       window.open('https://endday.gitee.io/all-search/')
     }
 
     function initBody () {
       const body = document.body
-      const asEl = document.getElementById('all-search')
       body.classList.remove('body-horizontal', 'body-vertical')
       body.classList.add(`body-${mode.value}`)
     }
