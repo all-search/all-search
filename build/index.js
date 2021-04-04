@@ -676,7 +676,7 @@
     }, {
         url: /^https?:\/\/.*\.bing\.com\/images\/search/,
         style: {
-            1: "#miniheader {padding: 30px;}"
+            1: "#miniheader {padding-top: 30px;}"
         }
     }, {
         url: /^https?:\/\/www\.flickr\.com\/search\//

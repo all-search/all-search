@@ -187,7 +187,7 @@ export const list = [
   {
     url: /^https?:\/\/.*\.bing\.com\/images\/search/,
     style: {
-      1: `#miniheader {padding: ${height}px;}`
+      1: `#miniheader {padding-top: ${height}px;}`
     }
   },
   {
