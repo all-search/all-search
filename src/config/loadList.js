@@ -1,3 +1,5 @@
+import { getQueryString } from '../util/index.js'
+
 const height = 30
 const width = 100
 
@@ -221,7 +223,10 @@ export const list = [
     url: /^https?:\/\/subhd\.com\/search/
   },
   {
-    url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/
+    url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/,
+    keyword () {
+      return getQueryString('text')
+    }
   },
   {
     url: /^https?:\/\/fanyi\.baidu\.com/,

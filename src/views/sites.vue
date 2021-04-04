@@ -133,7 +133,8 @@
 
 <script>
 import { VueDraggableNext } from 'vue-draggable-next'
-import { initSites, setSession, version } from '../util'
+import { setSession, version } from '../util'
+import { initSites } from '../util/sites'
 import sites from '../config/sites'
 
 export default {

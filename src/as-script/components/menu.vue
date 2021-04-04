@@ -43,7 +43,8 @@
 
 <script>
 import { computed, reactive } from 'vue'
-import { getKeyword, initSites } from '../../util'
+import { getKeyword } from '../../util'
+import { initSites } from '../../util/sites'
 import parseUrl from '../../util/parseUrl'
 import { siteInfo } from '../../config/loadList'
 import menuItem from './menuItem.vue'

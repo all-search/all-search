@@ -111,29 +111,383 @@
 
 !function(e) {
     "use strict";
-    let t = document.createElement("a");
-    function s(e) {
-        let s = e;
-        if (s.indexOf("//") < 0) s = "//" + s; else {
-            if (!(s.indexOf("//") > -1)) return t;
-            {
-                const e = s.toLowerCase();
-                e.startsWith("http://") || e.startsWith("https://") || e.startsWith("ftp://") || e.startsWith("files://") || (s = s.replace(/.*\/\//, "//"));
+    var t = "1.0.6";
+    e.reactive({
+        tmVersion: ""
+    });
+    const s = t;
+    function o(e) {
+        return e ? "__allSearch__" + e : null;
+    }
+    let a = function(e) {
+        const t = o(e);
+        let s;
+        if (s = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
+        s) try {
+            return JSON.parse(s);
+        } catch (e) {
+            return s;
+        }
+        return null;
+    }, r = function(e, t) {
+        const s = o(e);
+        if (window.GM_setValue) window.GM_setValue(s, t); else {
+            const e = JSON.stringify(t);
+            e && window.localStorage.setItem(s, e);
+        }
+    };
+    function n(e, t) {
+        let s;
+        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? c(s, e) : function(e, t) {
+            if (!e) return;
+            if (t) {
+                const e = document.styleSheets;
+                for (let s = 0; s < e.length; s++) if (e[s].ownerNode.className === t) return;
+            }
+            const s = document.createElement("link");
+            s.href = e, s.rel = "stylesheet", s.type = "text/css", s.crossorigin = "anonymous", 
+            document.getElementsByTagName("head")[0].appendChild(s);
+        }(t, e);
+    }
+    function c(e, t, s, o) {
+        !function(e, t, s) {
+            const o = t / 1e3 * 60;
+            let a = 0;
+            if (!0 === s) {
+                if (e()) return;
+            }
+            requestAnimationFrame((function t() {
+                if (a < o) a++, requestAnimationFrame(t); else {
+                    e() || !1 || (a = 0, requestAnimationFrame(t));
+                }
+            }));
+        }((function() {
+            let a = document.querySelector(s);
+            if (void 0 === s && (a = document.body || document.head || document.documentElement || document), 
+            o = o || !1, void 0 === s || void 0 !== s && null !== document.querySelector(s)) {
+                if (!0 !== o) {
+                    if (!1 === o && null != document.querySelector("." + t)) return !0;
+                    {
+                        let s = document.createElement("style");
+                        null != t && (s.className = t), s.setAttribute("type", "text/css"), s.innerHTML = e;
+                        try {
+                            a.appendChild(s);
+                        } catch (e) {
+                            console.log(e.message);
+                        }
+                        return !0;
+                    }
+                }
+                !function(e) {
+                    try {
+                        if ("string" == typeof e) {
+                            let t = document.querySelectorAll(e);
+                            for (let e = 0; e < t.length; e++) t[e].remove();
+                        } else "function" == typeof e ? e() : console.log("未知命令：" + e);
+                    } catch (e) {}
+                }("." + t);
+            }
+        }), 20, !0);
+    }
+    const i = o("script-loaded"), l = o("page-loaded");
+    const h = [ {
+        url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
+        style: {
+            1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
+        }
+    }, {
+        url: /^https?:\/\/www\.baidu\.com\/$/,
+        invisible: !0
+    }, {
+        url: /^https?:\/\/www\.baidu\.com\/s/,
+        style: {
+            1: ".fix-head { top: 30px !important; }",
+            2: ".fix-head #u { right: 100px; }"
+        }
+    }, {
+        url: /^https?:\/\/www\.baidu\.com\/baidu\?wd/,
+        style: {
+            1: ".fix-head { top: 30px !important; }",
+            2: ".fix-head #u { right: 100px; }"
+        }
+    }, {
+        url: /^https?:\/\/[^.]*\.bing\.com\/search/
+    }, {
+        url: /^https?:\/\/duckduckgo\.com\/*/
+    }, {
+        url: /^https?:\/\/search\.yahoo\.com\/search/
+    }, {
+        url: /^https?:\/\/tw\.search\.yahoo\.com\/search/
+    }, {
+        url: /^https?:\/\/searx\.me\/\?q/
+    }, {
+        url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
+        style: {
+            1: ".header { top: 30px }",
+            2: ".header { right: 100px }"
+        }
+    }, {
+        url: /^https?:\/\/yandex\.com\/search/,
+        style: {
+            1: "body { margin: 30px!important; }"
+        }
+    }, {
+        url: /^https?:\/\/www\.startpage\.com\/do\/asearch/
+    }, {
+        url: /^https?:\/\/mijisou.com\/\?q/,
+        style: {
+            1: ".search-page{top: 30px;} .searx-navbar{top: 42px!important;}",
+            2: ".search-page{right: 100px!important;}"
+        }
+    }, {
+        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
+    }, {
+        url: /^https?:\/\/www\.dogedoge\.com\/results\?q/,
+        style: {
+            1: "#header_wrapper{top: 30px!important;}",
+            2: "#header_wrapper{right: 100px!important;}"
+        }
+    }, {
+        url: /^https?:\/\/baike\.baidu\.com\/item/
+    }, {
+        url: /^https?:\/\/baike\.baidu\.com\/search/
+    }, {
+        url: /^https?:\/\/wenku\.baidu\.com\/search/
+    }, {
+        url: /^https?:\/\/zhidao\.baidu\.com\/search/
+    }, {
+        url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/
+    }, {
+        url: /^https?:\/\/www\.zhihu\.com\/search\?/,
+        style: {
+            1: ".AppHeader.is-fixed {top: 30px!important;}"
+        }
+    }, {
+        url: /^https?:\/\/www\.so\.com\/s/
+    }, {
+        url: /^https?:\/\/so\.baike\.com\/doc/
+    }, {
+        url: /^https?:\/\/www\.baike\.com\/wiki/
+    }, {
+        url: /^https?:\/\/www\.docin\.com\/search\.do/
+    }, {
+        url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
+        style: {
+            1: ".header { top:30px }"
+        }
+    }, {
+        url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
+    }, {
+        url: /^https?:\/\/www\.quora\.com\/search\?/
+    }, {
+        url: /^https?:\/\/stackoverflow\.com\/search\?/,
+        style: {
+            1: ".top-bar._fixed { top: 30px }",
+            2: ".top-bar._fixed { right: 100px }"
+        }
+    }, {
+        url: /^https?:\/\/search\.bilibili\.com\/all/,
+        keyword: () => document.getElementById("search-keyword").value,
+        style: {
+            1: "body { margin-top: 30px!important; } .fixed-top {top: 30px;}"
+        }
+    }, {
+        url: /^https?:\/\/www\.acfun\.cn\/search/
+    }, {
+        url: /^https?:\/\/www\.youtube\.com\/results/,
+        style: {
+            1: "#masthead-container.ytd-app {top:30px !important;} html:not(.style-scope) {--ytd-toolbar-height:86px !important;}",
+            2: "ytd-app {margin-left:100px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:100px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}"
+        }
+    }, {
+        url: /^https?:\/\/www\.nicovideo\.jp\/search\//
+    }, {
+        url: /^https?:\/\/so\.iqiyi\.com\/so\/q/
+    }, {
+        url: /^https?:\/\/v\.qq\.com\/x\/search/,
+        style: {
+            1: ".site_head {top: 30px;}"
+        }
+    }, {
+        url: /^https?:\/\/music\.baidu\.com\/search/
+    }, {
+        url: /^https?:\/\/so\.1ting\.com\/all\.do/
+    }, {
+        url: /^https?:\/\/www\.xiami\.com\/search/
+    }, {
+        url: /^https?:\/\/s\.music\.qq\.com/
+    }, {
+        url: /^https?:\/\/music\.163\.com\/.*?#\/search/
+    }, {
+        url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
+    }, {
+        url: /^https?:\/\/image\.baidu\.com\/search/,
+        style: {
+            1: "#search .s_search { top: 30px; }"
+        }
+    }, {
+        url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
+    }, {
+        url: /^https?:\/\/.*\.bing\.com\/images\/search/,
+        style: {
+            1: "#miniheader {padding-top: 30px;}"
+        }
+    }, {
+        url: /^https?:\/\/www\.flickr\.com\/search\//
+    }, {
+        url: /^http:\/\/www\.pixiv\.net\/search\.php/
+    }, {
+        url: /^https?:\/\/huaban\.com\/search\/\?/
+    }, {
+        url: /^https?:\/\/www\.pinterest\.com\/search\//
+    }, {
+        url: /^https?:\/\/thepiratebay\.org\/search/
+    }, {
+        url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/
+    }, {
+        url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/
+    }, {
+        url: /^https?:\/\/www\.zimuzu\.tv\/search\//
+    }, {
+        url: /^https?:\/\/so\.cqp\.cc\/search/
+    }, {
+        url: /^https?:\/\/subhd\.com\/search/
+    }, {
+        url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/,
+        keyword: () => function(e, t) {
+            t = t || window.location.href;
+            const s = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), o = t.match(s);
+            return decodeURIComponent(o ? o[2] : "");
+        }("text")
+    }, {
+        url: /^https?:\/\/fanyi\.baidu\.com/,
+        keyword: () => document.getElementById("baidu_translate_input").value
+    }, {
+        url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/
+    }, {
+        url: /^https?:\/\/dict\.youdao\.com\/search/
+    }, {
+        url: /^https?:\/\/dict\.youdao\.com\/w/
+    }, {
+        url: /^https?:\/\/dict\.cn\/./
+    }, {
+        url: /^https?:\/\/s\.taobao\.com\/search/,
+        style: {
+            1: ".m-header-fixed .header-inner { top: 30px !important;}"
+        }
+    }, {
+        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
+    }, {
+        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/
+    }, {
+        url: /^https?:\/\/search\.jd\.com\/Search/
+    }, {
+        url: /^https?:\/\/search\.suning\.com/
+    }, {
+        url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/
+    }, {
+        url: /^https?:\/\/search\.smzdm\.com\/\?/
+    }, {
+        url: /^https?:\/\/s\.weibo\.com\/weibo\?q=/,
+        style: {
+            1: ".WB_global_nav { top: 30px !important;}"
+        }
+    }, {
+        url: /^https?:\/\/tieba\.baidu\.com\/f\/search/
+    }, {
+        url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/
+    }, {
+        url: /^https?:\/\/www\.douban\.com\/search/
+    }, {
+        url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/
+    }, {
+        url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
+    }, {
+        url: /^http:\/\/search\.cnki\.net\/search\.aspx/
+    }, {
+        url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/
+    }, {
+        url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/
+    }, {
+        url: /^http:\/\/.*?ebscohost\.com\/.*?results/
+    }, {
+        url: /^http:\/\/link\.springer\.com\/search\?query=/
+    }, {
+        url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/
+    }, {
+        url: /^https?:.*?runoob\.com\//
+    }, {
+        url: /^https?:\/\/github\.com\/search/
+    }, {
+        url: /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/
+    }, {
+        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
+    }, {
+        url: /^https?:\/\/www\.startpage\.com\/do\/search/
+    }, {
+        url: /^https?:\/\/endday\.github\.io/,
+        invisible: !0
+    }, {
+        url: /^https?:\/\/endday\.gitee\.io/,
+        invisible: !0
+    }, {
+        url: /^http:\/\/localhost:8080\/all-search\//,
+        invisible: !0
+    } ], u = function() {
+        const e = h.find(e => e.url.test(window.location.href));
+        return e ? {
+            url: e.url,
+            invisible: e.invisible,
+            disabled: e.disabled,
+            style: e.style,
+            keyword: e.keyword,
+            create: e.create,
+            mounted: e.mounted
+        } : null;
+    };
+    var m = {
+        name: "logo",
+        props: {
+            mode: {
+                type: String,
+                default: "horizontal",
+                validator: e => [ "horizontal", "vertical" ].includes(e)
             }
         }
-        return t.href = s, {
-            href: t.href,
-            origin: t.origin,
-            protocol: t.protocol,
-            host: t.host,
-            hostname: t.hostname,
-            port: t.port,
-            pathname: t.pathname,
-            search: t.search,
-            hash: t.hash
+    };
+    const p = e.createVNode("p", {
+        class: "as-title-inner"
+    }, " All Search ", -1);
+    m.render = function(t, s, o, a, r, n) {
+        return e.openBlock(), e.createBlock("a", {
+            class: [ "as-title", "as-title-" + o.mode ],
+            href: "https://endday.github.io/all-search/",
+            target: "_blank"
+        }, [ p ], 2);
+    }, m.__file = "src/as-script/components/logo.vue";
+    let d = document.createElement("a");
+    function w(e) {
+        let t = e;
+        if (t.indexOf("//") < 0) t = "//" + t; else {
+            if (!(t.indexOf("//") > -1)) return d;
+            {
+                const e = t.toLowerCase();
+                e.startsWith("http://") || e.startsWith("https://") || e.startsWith("ftp://") || e.startsWith("files://") || (t = t.replace(/.*\/\//, "//"));
+            }
+        }
+        return d.href = t, {
+            href: d.href,
+            origin: d.origin,
+            protocol: d.protocol,
+            host: d.host,
+            hostname: d.hostname,
+            port: d.port,
+            pathname: d.pathname,
+            search: d.search,
+            hash: d.hash
         };
     }
-    const o = [ {
+    const y = [ {
         nameZh: "搜索",
         name: "search",
         list: [ {
@@ -423,10 +777,10 @@
     } ].map(e => ({
         ...e,
         list: e.list.map(t => {
-            const {hostname: o} = s(t.url);
+            const {hostname: s} = w(t.url);
             return {
                 ...t,
-                id: `${e.name}-${o}`,
+                id: `${e.name}-${s}`,
                 data: {
                     visible: !0
                 }
@@ -436,88 +790,10 @@
             visible: !0
         }
     }));
-    var a = "1.0.6";
-    e.reactive({
-        tmVersion: ""
-    });
-    const r = a;
-    function n(e) {
-        return e ? "__allSearch__" + e : null;
-    }
-    let i = function(e) {
-        const t = n(e);
-        let s;
-        if (s = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
-        s) try {
-            return JSON.parse(s);
-        } catch (e) {
-            return s;
-        }
-        return null;
-    }, c = function(e, t) {
-        const s = n(e);
-        if (window.GM_setValue) window.GM_setValue(s, t); else {
-            const e = JSON.stringify(t);
-            e && window.localStorage.setItem(s, e);
-        }
-    };
-    function l(e, t) {
-        let s;
-        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? h(s, e) : function(e, t) {
-            if (!e) return;
-            if (t) {
-                const e = document.styleSheets;
-                for (let s = 0; s < e.length; s++) if (e[s].ownerNode.className === t) return;
-            }
-            const s = document.createElement("link");
-            s.href = e, s.rel = "stylesheet", s.type = "text/css", s.crossorigin = "anonymous", 
-            document.getElementsByTagName("head")[0].appendChild(s);
-        }(t, e);
-    }
-    function h(e, t, s, o) {
-        !function(e, t, s) {
-            const o = t / 1e3 * 60;
-            let a = 0;
-            if (!0 === s) {
-                if (e()) return;
-            }
-            requestAnimationFrame((function t() {
-                if (a < o) a++, requestAnimationFrame(t); else {
-                    e() || !1 || (a = 0, requestAnimationFrame(t));
-                }
-            }));
-        }((function() {
-            let a = document.querySelector(s);
-            if (void 0 === s && (a = document.body || document.head || document.documentElement || document), 
-            o = o || !1, void 0 === s || void 0 !== s && null !== document.querySelector(s)) {
-                if (!0 !== o) {
-                    if (!1 === o && null != document.querySelector("." + t)) return !0;
-                    {
-                        let s = document.createElement("style");
-                        null != t && (s.className = t), s.setAttribute("type", "text/css"), s.innerHTML = e;
-                        try {
-                            a.appendChild(s);
-                        } catch (e) {
-                            console.log(e.message);
-                        }
-                        return !0;
-                    }
-                }
-                !function(e) {
-                    try {
-                        if ("string" == typeof e) {
-                            let t = document.querySelectorAll(e);
-                            for (let e = 0; e < t.length; e++) t[e].remove();
-                        } else "function" == typeof e ? e() : console.log("未知命令：" + e);
-                    } catch (e) {}
-                }("." + t);
-            }
-        }), 20, !0);
-    }
-    function u(e) {
-        let t = o;
-        const s = i("sites"), a = i("sites-version");
-        return s && (t = s, s && a && (a !== r || "tm" !== e) && (t = function(e, t) {
+    function f(e) {
+        let t = y;
+        const o = a("sites"), n = a("sites-version");
+        return o && (t = o, o && n && (n !== s || "tm" !== e) && (t = function(e, t) {
             const s = JSON.parse(JSON.stringify(e));
             let o = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
             return o.forEach(e => {
@@ -530,282 +806,11 @@
                 }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
                 e.isAdd = !0);
             }), o = o.filter(e => !e.isAdd), o.length && s.push(...o), s;
-        }(s, o), c("sites", t), c("sites-version", r))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
+        }(o, y), r("sites", t), r("sites-version", s))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
             ...e,
             show: !1
         }))), t;
     }
-    const m = n("script-loaded"), p = n("page-loaded");
-    const d = [ {
-        url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
-        style: {
-            1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
-        }
-    }, {
-        url: /^https?:\/\/www\.baidu\.com\/$/,
-        invisible: !0
-    }, {
-        url: /^https?:\/\/www\.baidu\.com\/s/,
-        style: {
-            1: ".fix-head { top: 30px !important; }",
-            2: ".fix-head #u { right: 100px; }"
-        }
-    }, {
-        url: /^https?:\/\/www\.baidu\.com\/baidu\?wd/,
-        style: {
-            1: ".fix-head { top: 30px !important; }",
-            2: ".fix-head #u { right: 100px; }"
-        }
-    }, {
-        url: /^https?:\/\/[^.]*\.bing\.com\/search/
-    }, {
-        url: /^https?:\/\/duckduckgo\.com\/*/
-    }, {
-        url: /^https?:\/\/search\.yahoo\.com\/search/
-    }, {
-        url: /^https?:\/\/tw\.search\.yahoo\.com\/search/
-    }, {
-        url: /^https?:\/\/searx\.me\/\?q/
-    }, {
-        url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
-        style: {
-            1: ".header { top: 30px }",
-            2: ".header { right: 100px }"
-        }
-    }, {
-        url: /^https?:\/\/yandex\.com\/search/,
-        style: {
-            1: "body { margin: 30px!important; }"
-        }
-    }, {
-        url: /^https?:\/\/www\.startpage\.com\/do\/asearch/
-    }, {
-        url: /^https?:\/\/mijisou.com\/\?q/,
-        style: {
-            1: ".search-page{top: 30px;} .searx-navbar{top: 42px!important;}",
-            2: ".search-page{right: 100px!important;}"
-        }
-    }, {
-        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
-    }, {
-        url: /^https?:\/\/www\.dogedoge\.com\/results\?q/,
-        style: {
-            1: "#header_wrapper{top: 30px!important;}",
-            2: "#header_wrapper{right: 100px!important;}"
-        }
-    }, {
-        url: /^https?:\/\/baike\.baidu\.com\/item/
-    }, {
-        url: /^https?:\/\/baike\.baidu\.com\/search/
-    }, {
-        url: /^https?:\/\/wenku\.baidu\.com\/search/
-    }, {
-        url: /^https?:\/\/zhidao\.baidu\.com\/search/
-    }, {
-        url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/
-    }, {
-        url: /^https?:\/\/www\.zhihu\.com\/search\?/,
-        style: {
-            1: ".AppHeader.is-fixed {top: 30px!important;}"
-        }
-    }, {
-        url: /^https?:\/\/www\.so\.com\/s/
-    }, {
-        url: /^https?:\/\/so\.baike\.com\/doc/
-    }, {
-        url: /^https?:\/\/www\.baike\.com\/wiki/
-    }, {
-        url: /^https?:\/\/www\.docin\.com\/search\.do/
-    }, {
-        url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
-        style: {
-            1: ".header { top:30px }"
-        }
-    }, {
-        url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
-    }, {
-        url: /^https?:\/\/www\.quora\.com\/search\?/
-    }, {
-        url: /^https?:\/\/stackoverflow\.com\/search\?/,
-        style: {
-            1: ".top-bar._fixed { top: 30px }",
-            2: ".top-bar._fixed { right: 100px }"
-        }
-    }, {
-        url: /^https?:\/\/search\.bilibili\.com\/all/,
-        keyword: () => document.getElementById("search-keyword").value,
-        style: {
-            1: "body { margin-top: 30px!important; } .fixed-top {top: 30px;}"
-        }
-    }, {
-        url: /^https?:\/\/www\.acfun\.cn\/search/
-    }, {
-        url: /^https?:\/\/www\.youtube\.com\/results/,
-        style: {
-            1: "#masthead-container.ytd-app {top:30px !important;} html:not(.style-scope) {--ytd-toolbar-height:86px !important;}",
-            2: "ytd-app {margin-left:100px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:100px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}"
-        }
-    }, {
-        url: /^https?:\/\/www\.nicovideo\.jp\/search\//
-    }, {
-        url: /^https?:\/\/so\.iqiyi\.com\/so\/q/
-    }, {
-        url: /^https?:\/\/v\.qq\.com\/x\/search/,
-        style: {
-            1: ".site_head {top: 30px;}"
-        }
-    }, {
-        url: /^https?:\/\/music\.baidu\.com\/search/
-    }, {
-        url: /^https?:\/\/so\.1ting\.com\/all\.do/
-    }, {
-        url: /^https?:\/\/www\.xiami\.com\/search/
-    }, {
-        url: /^https?:\/\/s\.music\.qq\.com/
-    }, {
-        url: /^https?:\/\/music\.163\.com\/.*?#\/search/
-    }, {
-        url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
-    }, {
-        url: /^https?:\/\/image\.baidu\.com\/search/,
-        style: {
-            1: "#search .s_search { top: 30px; }"
-        }
-    }, {
-        url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
-    }, {
-        url: /^https?:\/\/.*\.bing\.com\/images\/search/,
-        style: {
-            1: "#miniheader {padding-top: 30px;}"
-        }
-    }, {
-        url: /^https?:\/\/www\.flickr\.com\/search\//
-    }, {
-        url: /^http:\/\/www\.pixiv\.net\/search\.php/
-    }, {
-        url: /^https?:\/\/huaban\.com\/search\/\?/
-    }, {
-        url: /^https?:\/\/www\.pinterest\.com\/search\//
-    }, {
-        url: /^https?:\/\/thepiratebay\.org\/search/
-    }, {
-        url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/
-    }, {
-        url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/
-    }, {
-        url: /^https?:\/\/www\.zimuzu\.tv\/search\//
-    }, {
-        url: /^https?:\/\/so\.cqp\.cc\/search/
-    }, {
-        url: /^https?:\/\/subhd\.com\/search/
-    }, {
-        url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/
-    }, {
-        url: /^https?:\/\/fanyi\.baidu\.com/,
-        keyword: () => document.getElementById("baidu_translate_input").value
-    }, {
-        url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/
-    }, {
-        url: /^https?:\/\/dict\.youdao\.com\/search/
-    }, {
-        url: /^https?:\/\/dict\.youdao\.com\/w/
-    }, {
-        url: /^https?:\/\/dict\.cn\/./
-    }, {
-        url: /^https?:\/\/s\.taobao\.com\/search/,
-        style: {
-            1: ".m-header-fixed .header-inner { top: 30px !important;}"
-        }
-    }, {
-        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
-    }, {
-        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/
-    }, {
-        url: /^https?:\/\/search\.jd\.com\/Search/
-    }, {
-        url: /^https?:\/\/search\.suning\.com/
-    }, {
-        url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/
-    }, {
-        url: /^https?:\/\/search\.smzdm\.com\/\?/
-    }, {
-        url: /^https?:\/\/s\.weibo\.com\/weibo\?q=/,
-        style: {
-            1: ".WB_global_nav { top: 30px !important;}"
-        }
-    }, {
-        url: /^https?:\/\/tieba\.baidu\.com\/f\/search/
-    }, {
-        url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/
-    }, {
-        url: /^https?:\/\/www\.douban\.com\/search/
-    }, {
-        url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/
-    }, {
-        url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
-    }, {
-        url: /^http:\/\/search\.cnki\.net\/search\.aspx/
-    }, {
-        url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/
-    }, {
-        url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/
-    }, {
-        url: /^http:\/\/.*?ebscohost\.com\/.*?results/
-    }, {
-        url: /^http:\/\/link\.springer\.com\/search\?query=/
-    }, {
-        url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/
-    }, {
-        url: /^https?:.*?runoob\.com\//
-    }, {
-        url: /^https?:\/\/github\.com\/search/
-    }, {
-        url: /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/
-    }, {
-        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
-    }, {
-        url: /^https?:\/\/www\.startpage\.com\/do\/search/
-    }, {
-        url: /^https?:\/\/endday\.github\.io/,
-        invisible: !0
-    }, {
-        url: /^https?:\/\/endday\.gitee\.io/,
-        invisible: !0
-    }, {
-        url: /^http:\/\/localhost:8080\/all-search\//,
-        invisible: !0
-    } ], w = function() {
-        const e = d.find(e => e.url.test(window.location.href));
-        return e ? {
-            url: e.url,
-            invisible: e.invisible,
-            disabled: e.disabled,
-            style: e.style,
-            keyword: e.keyword,
-            create: e.create,
-            mounted: e.mounted
-        } : null;
-    };
-    var y = {
-        name: "logo",
-        props: {
-            mode: {
-                type: String,
-                default: "horizontal",
-                validator: e => [ "horizontal", "vertical" ].includes(e)
-            }
-        }
-    };
-    const f = e.createVNode("p", {
-        class: "as-title-inner"
-    }, " All Search ", -1);
-    y.render = function(t, s, o, a, r, n) {
-        return e.openBlock(), e.createBlock("a", {
-            class: [ "as-title", "as-title-" + o.mode ],
-            href: "https://endday.github.io/all-search/",
-            target: "_blank"
-        }, [ f ], 2);
-    }, y.__file = "src/as-script/components/logo.vue";
     var g = {
         name: "menuItem",
         props: {
@@ -875,28 +880,28 @@
             }
         },
         setup(t) {
-            const o = e.reactive(u("tm")), a = w(), r = e.reactive({
+            const s = e.reactive(f("tm")), o = u(), a = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
-            }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), i = () => a.keyword ? a.keyword() : function() {
+            }), r = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), n = () => o.keyword ? o.keyword() : function() {
                 const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
                 return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
             }();
             return {
-                sites: o,
-                data: r,
-                transition: n,
+                sites: s,
+                data: a,
+                transition: r,
                 handleClick: (e, t) => {
-                    const s = i();
+                    const s = n();
                     t ? window.open(e.url.replace("%s", s)) : window.location.href = e.url.replace("%s", s);
                 },
                 handleMenuShow: (e, t) => {
                     t.show = e;
                 },
                 getFavicon: function(e) {
-                    const t = s(e), o = t.host.split(".");
-                    let a = t.host;
-                    return o.length > 2 && (a = o.slice(1).join(".")), `https://ico.ihuan.me/${a}/cdn.ico`;
+                    const t = w(e), s = t.host.split(".");
+                    let o = t.host;
+                    return s.length > 2 && (o = s.slice(1).join(".")), `https://ico.ihuan.me/${o}/cdn.ico`;
                 }
             };
         }
@@ -914,16 +919,16 @@
         class: "as-url-icon"
     };
     v.render = function(t, s, o, a, r, n) {
-        const i = e.resolveComponent("icon"), c = e.resolveComponent("menu-item");
+        const c = e.resolveComponent("icon"), i = e.resolveComponent("menu-item");
         return e.openBlock(), e.createBlock("ul", k, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
-        e.createBlock(c, {
+        e.createBlock(i, {
             class: "as-menu-item",
             key: t.index,
             showTimeout: a.data.showTimeout,
             hideTimeout: a.data.hideTimeout,
             onShow: e => a.handleMenuShow(e, t)
         }, {
-            default: e.withCtx(() => [ e.createVNode("div", Z, [ e.createVNode(i, {
+            default: e.withCtx(() => [ e.createVNode("div", Z, [ e.createVNode(c, {
                 name: t.name
             }, null, 8, [ "name" ]), e.createVNode("span", {
                 textContent: e.toDisplayString(t.nameZh),
@@ -952,11 +957,11 @@
     var S = {
         name: "all-search",
         components: {
-            logo: y,
+            logo: m,
             asMenu: v
         },
         setup() {
-            const t = w(), s = e.ref(i("mode") || "horizontal"), o = e.ref(!1), a = e.computed(() => [ "as-" + s.value, {
+            const t = u(), s = e.ref(a("mode") || "horizontal"), o = e.ref(!1), r = e.computed(() => [ "as-" + s.value, {
                 [`as-${s.value}-hidden`]: !o.value
             } ]);
             return e.onMounted(() => {
@@ -968,7 +973,7 @@
             }), {
                 currentSite: t,
                 mode: s,
-                classList: a,
+                classList: r,
                 openSet: e => {
                     window.open("https://endday.gitee.io/all-search/");
                 },
@@ -985,29 +990,29 @@
         };
     }
     S.render = function(t, s, o, a, r, n) {
-        const i = e.resolveComponent("logo"), c = e.resolveComponent("as-menu");
+        const c = e.resolveComponent("logo"), i = e.resolveComponent("as-menu");
         return e.openBlock(), e.createBlock("div", {
             class: [ "as-container", a.classList ],
             style: {
                 display: "none"
             }
-        }, [ e.createVNode(i, {
+        }, [ e.createVNode(c, {
             mode: a.mode
-        }, null, 8, [ "mode" ]), e.createVNode(c, {
+        }, null, 8, [ "mode" ]), e.createVNode(i, {
             mode: a.mode
         }, null, 8, [ "mode" ]), e.createVNode("div", {
             class: "as-setting",
             onClick: s[1] || (s[1] = (...e) => a.openSet && a.openSet(...e))
         }, " 设置 ") ], 2);
     }, S.__file = "src/as-script/index.vue";
-    let C = w();
+    let C = u();
     const B = e.createApp(S);
     console.log("all-search running 全搜运行中(production)");
-    const z = i("mode") || "horizontal";
+    const z = a("mode") || "horizontal";
     function M() {
-        if (C = w(), C.disabled) return;
-        C.invisible || (l("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-        l("as-style", `https://cdn.jsdelivr.net/npm/all-search@${r}/build/as-style.css`));
+        if (C = u(), C.disabled) return;
+        C.invisible || (n("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+        n("as-style", `https://cdn.jsdelivr.net/npm/all-search@${s}/build/as-style.css`));
         const e = document.getElementById("all-search");
         if (e) e.style.display = C.invisible ? "none" : "unset"; else {
             const e = function() {
@@ -1016,21 +1021,21 @@
             }(), t = document.body.parentElement.insertBefore(e, document.body);
             B.mount(t), function() {
                 const e = function() {
-                    document.dispatchEvent(new CustomEvent(m, {
+                    document.dispatchEvent(new CustomEvent(i, {
                         detail: {
-                            version: r,
-                            getSession: i,
-                            setSession: c
+                            version: s,
+                            getSession: a,
+                            setSession: r
                         }
                     }));
                 };
-                document.addEventListener(p, e), e();
+                document.addEventListener(l, e), e();
             }();
         }
     }
     var T, E;
-    C && C.style && (C.style[1] && "horizontal" === z && h(C.style[1], "as-special"), 
-    C.style[2] && "vertical" === z && h(C.style[2], "as-special")), history.pushState = N(history.pushState, M), 
+    C && C.style && (C.style[1] && "horizontal" === z && c(C.style[1], "as-special"), 
+    C.style[2] && "vertical" === z && c(C.style[2], "as-special")), history.pushState = N(history.pushState, M), 
     history.replaceState = N(history.replaceState, M), Node.prototype.removeChild = (T = Node.prototype.removeChild, 
     E = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
     function() {
