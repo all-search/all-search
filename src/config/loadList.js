@@ -225,7 +225,7 @@ export const list = [
   {
     url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/,
     keyword () {
-      return getQueryString('text')
+      return getQueryString('text') || getQueryString('q')
     }
   },
   {

@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.6
-// @description  2021年4月4日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.7
+// @description  2021年4月5日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/4/4
+// @update       2021/4/5
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.6/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.7/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -111,16 +111,21 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.6";
+    var t = "1.0.7";
     e.reactive({
         tmVersion: ""
     });
     const s = t;
-    function o(e) {
+    function o(e, t) {
+        t = t || window.location.href;
+        const s = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), o = t.match(s);
+        return decodeURIComponent(o ? o[2] : "");
+    }
+    function a(e) {
         return e ? "__allSearch__" + e : null;
     }
-    let a = function(e) {
-        const t = o(e);
+    let r = function(e) {
+        const t = a(e);
         let s;
         if (s = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
         s) try {
@@ -129,14 +134,14 @@
             return s;
         }
         return null;
-    }, r = function(e, t) {
-        const s = o(e);
+    }, n = function(e, t) {
+        const s = a(e);
         if (window.GM_setValue) window.GM_setValue(s, t); else {
             const e = JSON.stringify(t);
             e && window.localStorage.setItem(s, e);
         }
     };
-    function n(e, t) {
+    function i(e, t) {
         let s;
         window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? c(s, e) : function(e, t) {
             if (!e) return;
@@ -189,8 +194,8 @@
             }
         }), 20, !0);
     }
-    const i = o("script-loaded"), l = o("page-loaded");
-    const h = [ {
+    const l = a("script-loaded"), h = a("page-loaded");
+    const u = [ {
         url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -354,11 +359,7 @@
         url: /^https?:\/\/subhd\.com\/search/
     }, {
         url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/,
-        keyword: () => function(e, t) {
-            t = t || window.location.href;
-            const s = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), o = t.match(s);
-            return decodeURIComponent(o ? o[2] : "");
-        }("text")
+        keyword: () => o("text") || o("q")
     }, {
         url: /^https?:\/\/fanyi\.baidu\.com/,
         keyword: () => document.getElementById("baidu_translate_input").value
@@ -433,8 +434,8 @@
     }, {
         url: /^http:\/\/localhost:8080\/all-search\//,
         invisible: !0
-    } ], u = function() {
-        const e = h.find(e => e.url.test(window.location.href));
+    } ], m = function() {
+        const e = u.find(e => e.url.test(window.location.href));
         return e ? {
             url: e.url,
             invisible: e.invisible,
@@ -445,7 +446,7 @@
             mounted: e.mounted
         } : null;
     };
-    var m = {
+    var p = {
         name: "logo",
         props: {
             mode: {
@@ -455,39 +456,39 @@
             }
         }
     };
-    const p = e.createVNode("p", {
+    const d = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    m.render = function(t, s, o, a, r, n) {
+    p.render = function(t, s, o, a, r, n) {
         return e.openBlock(), e.createBlock("a", {
             class: [ "as-title", "as-title-" + o.mode ],
             href: "https://endday.github.io/all-search/",
             target: "_blank"
-        }, [ p ], 2);
-    }, m.__file = "src/as-script/components/logo.vue";
-    let d = document.createElement("a");
-    function w(e) {
+        }, [ d ], 2);
+    }, p.__file = "src/as-script/components/logo.vue";
+    let w = document.createElement("a");
+    function y(e) {
         let t = e;
         if (t.indexOf("//") < 0) t = "//" + t; else {
-            if (!(t.indexOf("//") > -1)) return d;
+            if (!(t.indexOf("//") > -1)) return w;
             {
                 const e = t.toLowerCase();
                 e.startsWith("http://") || e.startsWith("https://") || e.startsWith("ftp://") || e.startsWith("files://") || (t = t.replace(/.*\/\//, "//"));
             }
         }
-        return d.href = t, {
-            href: d.href,
-            origin: d.origin,
-            protocol: d.protocol,
-            host: d.host,
-            hostname: d.hostname,
-            port: d.port,
-            pathname: d.pathname,
-            search: d.search,
-            hash: d.hash
+        return w.href = t, {
+            href: w.href,
+            origin: w.origin,
+            protocol: w.protocol,
+            host: w.host,
+            hostname: w.hostname,
+            port: w.port,
+            pathname: w.pathname,
+            search: w.search,
+            hash: w.hash
         };
     }
-    const y = [ {
+    const f = [ {
         nameZh: "搜索",
         name: "search",
         list: [ {
@@ -777,7 +778,7 @@
     } ].map(e => ({
         ...e,
         list: e.list.map(t => {
-            const {hostname: s} = w(t.url);
+            const {hostname: s} = y(t.url);
             return {
                 ...t,
                 id: `${e.name}-${s}`,
@@ -790,10 +791,10 @@
             visible: !0
         }
     }));
-    function f(e) {
-        let t = y;
-        const o = a("sites"), n = a("sites-version");
-        return o && (t = o, o && n && (n !== s || "tm" !== e) && (t = function(e, t) {
+    function g(e) {
+        let t = f;
+        const o = r("sites"), a = r("sites-version");
+        return o && (t = o, o && a && (a !== s || "tm" !== e) && (t = function(e, t) {
             const s = JSON.parse(JSON.stringify(e));
             let o = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
             return o.forEach(e => {
@@ -806,12 +807,12 @@
                 }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
                 e.isAdd = !0);
             }), o = o.filter(e => !e.isAdd), o.length && s.push(...o), s;
-        }(o, y), r("sites", t), r("sites-version", s))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
+        }(o, f), n("sites", t), n("sites-version", s))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
             ...e,
             show: !1
         }))), t;
     }
-    var g = {
+    var b = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -846,13 +847,13 @@
             };
         }
     };
-    g.render = function(t, s, o, a, r, n) {
+    b.render = function(t, s, o, a, r, n) {
         return e.openBlock(), e.createBlock("li", {
             onMouseenter: s[1] || (s[1] = e => a.handleMouseEnter(e)),
             onMouseleave: s[2] || (s[2] = e => a.handleMouseLeave(e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, g.__file = "src/as-script/components/menuItem.vue";
-    var b = {
+    }, b.__file = "src/as-script/components/menuItem.vue";
+    var v = {
         name: "icon",
         props: {
             name: {
@@ -861,16 +862,16 @@
             }
         }
     };
-    b.render = function(t, s, o, a, r, n) {
+    v.render = function(t, s, o, a, r, n) {
         return e.openBlock(), e.createBlock("i", {
             class: [ "as-menu-item-icon", "icon-" + o.name ]
         }, null, 2);
-    }, b.__file = "src/as-script/components/icon.vue";
-    var v = {
+    }, v.__file = "src/as-script/components/icon.vue";
+    var k = {
         name: "as-menu",
         components: {
-            menuItem: g,
-            icon: b
+            menuItem: b,
+            icon: v
         },
         props: {
             mode: {
@@ -880,7 +881,7 @@
             }
         },
         setup(t) {
-            const s = e.reactive(f("tm")), o = u(), a = e.reactive({
+            const s = e.reactive(g("tm")), o = m(), a = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
             }), r = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), n = () => o.keyword ? o.keyword() : function() {
@@ -899,36 +900,36 @@
                     t.show = e;
                 },
                 getFavicon: function(e) {
-                    const t = w(e), s = t.host.split(".");
+                    const t = y(e), s = t.host.split(".");
                     let o = t.host;
                     return s.length > 2 && (o = s.slice(1).join(".")), `https://ico.ihuan.me/${o}/cdn.ico`;
                 }
             };
         }
     };
-    const k = {
+    const Z = {
         class: "as-menu"
-    }, Z = {
-        class: "as-menu-item-title"
     }, x = {
+        class: "as-menu-item-title"
+    }, q = {
         key: 0,
         class: "as-subMenu-container"
-    }, q = {
-        class: "as-subMenu"
     }, _ = {
+        class: "as-subMenu"
+    }, S = {
         class: "as-url-icon"
     };
-    v.render = function(t, s, o, a, r, n) {
-        const c = e.resolveComponent("icon"), i = e.resolveComponent("menu-item");
-        return e.openBlock(), e.createBlock("ul", k, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
-        e.createBlock(i, {
+    k.render = function(t, s, o, a, r, n) {
+        const i = e.resolveComponent("icon"), c = e.resolveComponent("menu-item");
+        return e.openBlock(), e.createBlock("ul", Z, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
+        e.createBlock(c, {
             class: "as-menu-item",
             key: t.index,
             showTimeout: a.data.showTimeout,
             hideTimeout: a.data.hideTimeout,
             onShow: e => a.handleMenuShow(e, t)
         }, {
-            default: e.withCtx(() => [ e.createVNode("div", Z, [ e.createVNode(c, {
+            default: e.withCtx(() => [ e.createVNode("div", x, [ e.createVNode(i, {
                 name: t.name
             }, null, 8, [ "name" ]), e.createVNode("span", {
                 textContent: e.toDisplayString(t.nameZh),
@@ -938,43 +939,43 @@
                 name: a.transition
             }, {
                 default: e.withCtx(() => [ t.list && t.list.length ? e.withDirectives((e.openBlock(), 
-                e.createBlock("div", x, [ e.createVNode("ul", q, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, s) => e.withDirectives((e.openBlock(), 
+                e.createBlock("div", q, [ e.createVNode("ul", _, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, s) => e.withDirectives((e.openBlock(), 
                 e.createBlock("li", {
+                    key: s,
                     onClick: e => a.handleClick(t),
                     onMouseup: e.withModifiers(e => a.handleClick(t, !0), [ "middle" ])
-                }, [ e.createVNode("div", _, [ e.createVNode("img", {
+                }, [ e.createVNode("div", S, [ e.createVNode("img", {
                     src: a.getFavicon(t.url),
                     onerror: "this.classList.add('error')"
                 }, null, 8, [ "src" ]) ]), e.createVNode("p", {
                     class: "as-subMenu-text",
                     textContent: e.toDisplayString(t.nameZh)
-                }, null, 8, [ "textContent" ]) ], 40, [ "onClick", "onMouseup" ])), [ [ e.vShow, t.data.visible ] ])), 256)) ]) ], 512)), [ [ e.vShow, t.show ] ]) : e.createCommentVNode("v-if", !0) ]),
+                }, null, 8, [ "textContent" ]) ], 40, [ "onClick", "onMouseup" ])), [ [ e.vShow, t.data.visible ] ])), 128)) ]) ], 512)), [ [ e.vShow, t.show ] ]) : e.createCommentVNode("v-if", !0) ]),
                 _: 2
             }, 1032, [ "name" ]) ]),
             _: 2
         }, 1032, [ "showTimeout", "hideTimeout", "onShow" ]))), 128)) ]);
-    }, v.__file = "src/as-script/components/menu.vue";
-    var S = {
+    }, k.__file = "src/as-script/components/menu.vue";
+    var N = {
         name: "all-search",
         components: {
-            logo: m,
-            asMenu: v
+            logo: p,
+            asMenu: k
         },
         setup() {
-            const t = u(), s = e.ref(a("mode") || "horizontal"), o = e.ref(!1), r = e.computed(() => [ "as-" + s.value, {
+            const t = m(), s = e.ref(r("mode") || "horizontal"), o = e.ref(!1), a = e.computed(() => [ "as-" + s.value, {
                 [`as-${s.value}-hidden`]: !o.value
             } ]);
             return e.onMounted(() => {
                 !function() {
                     const e = document.body;
-                    document.getElementById("all-search"), e.classList.remove("body-horizontal", "body-vertical"), 
-                    e.classList.add("body-" + s.value);
+                    e.classList.remove("body-horizontal", "body-vertical"), e.classList.add("body-" + s.value);
                 }();
             }), {
                 currentSite: t,
                 mode: s,
-                classList: r,
-                openSet: e => {
+                classList: a,
+                openSet: () => {
                     window.open("https://endday.gitee.io/all-search/");
                 },
                 showBar: function() {
@@ -983,63 +984,63 @@
             };
         }
     };
-    function N(e, t) {
+    function C(e, t) {
         return function() {
             const s = e.apply(this, arguments);
             return t.apply(this, arguments), s;
         };
     }
-    S.render = function(t, s, o, a, r, n) {
-        const c = e.resolveComponent("logo"), i = e.resolveComponent("as-menu");
+    N.render = function(t, s, o, a, r, n) {
+        const i = e.resolveComponent("logo"), c = e.resolveComponent("as-menu");
         return e.openBlock(), e.createBlock("div", {
             class: [ "as-container", a.classList ],
             style: {
                 display: "none"
             }
-        }, [ e.createVNode(c, {
+        }, [ e.createVNode(i, {
             mode: a.mode
-        }, null, 8, [ "mode" ]), e.createVNode(i, {
+        }, null, 8, [ "mode" ]), e.createVNode(c, {
             mode: a.mode
         }, null, 8, [ "mode" ]), e.createVNode("div", {
             class: "as-setting",
             onClick: s[1] || (s[1] = (...e) => a.openSet && a.openSet(...e))
         }, " 设置 ") ], 2);
-    }, S.__file = "src/as-script/index.vue";
-    let C = u();
-    const B = e.createApp(S);
+    }, N.__file = "src/as-script/index.vue";
+    let z = m();
+    const B = e.createApp(N);
     console.log("all-search running 全搜运行中(production)");
-    const z = a("mode") || "horizontal";
-    function M() {
-        if (C = u(), C.disabled) return;
-        C.invisible || (n("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-        n("as-style", `https://cdn.jsdelivr.net/npm/all-search@${s}/build/as-style.css`));
+    const M = r("mode") || "horizontal";
+    function T() {
+        if (z = m(), z.disabled) return;
+        z.invisible || (i("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+        i("as-style", `https://cdn.jsdelivr.net/npm/all-search@${s}/build/as-style.css`));
         const e = document.getElementById("all-search");
-        if (e) e.style.display = C.invisible ? "none" : "unset"; else {
+        if (e) e.style.display = z.invisible ? "none" : "unset"; else {
             const e = function() {
                 let e = document.createElement("div");
                 return e.id = "all-search", e;
             }(), t = document.body.parentElement.insertBefore(e, document.body);
             B.mount(t), function() {
                 const e = function() {
-                    document.dispatchEvent(new CustomEvent(i, {
+                    document.dispatchEvent(new CustomEvent(l, {
                         detail: {
                             version: s,
-                            getSession: a,
-                            setSession: r
+                            getSession: r,
+                            setSession: n
                         }
                     }));
                 };
-                document.addEventListener(l, e), e();
+                document.addEventListener(h, e), e();
             }();
         }
     }
-    var T, E;
-    C && C.style && (C.style[1] && "horizontal" === z && c(C.style[1], "as-special"), 
-    C.style[2] && "vertical" === z && c(C.style[2], "as-special")), history.pushState = N(history.pushState, M), 
-    history.replaceState = N(history.replaceState, M), Node.prototype.removeChild = (T = Node.prototype.removeChild, 
-    E = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
+    var E, V;
+    z && z.style && (z.style[1] && "horizontal" === M && c(z.style[1], "as-special"), 
+    z.style[2] && "vertical" === M && c(z.style[2], "as-special")), history.pushState = C(history.pushState, T), 
+    history.replaceState = C(history.replaceState, T), Node.prototype.removeChild = (E = Node.prototype.removeChild, 
+    V = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
     function() {
-        if (!1 !== E.apply(this, arguments)) return T.apply(this, arguments);
+        if (!1 !== V.apply(this, arguments)) return E.apply(this, arguments);
     }), function() {
         let e = 0;
         return new Promise((t, s) => {
@@ -1051,7 +1052,7 @@
             }
         });
     }().then(() => {
-        M();
+        T();
     }).catch(e => {
         console.error(e);
     });
