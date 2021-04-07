@@ -21,12 +21,16 @@ A top fixed menu that allows you to jump between various search engines, build b
 * 鼠标中键点击地址可以打开新窗口
 
 ## 待完成
+
+* 全局弹窗
+* 文字选中工具栏
 * 谷歌插件化
 
 ## 如何贡献
 
 #### 反馈与交流
-[qq群地址](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
+[QQ群地址](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
+QQ群号 148498263
 
 #### 本地开发
 ```
