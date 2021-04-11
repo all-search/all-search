@@ -15,6 +15,7 @@
 <script>
 import { computed, onMounted, ref } from 'vue'
 import { getSession } from '../util'
+import { debounce } from '../util/debounce'
 import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
@@ -41,8 +42,14 @@ export default {
 
     function initBody () {
       const body = document.body
-      body.classList.remove('body-horizontal', 'body-vertical')
-      body.classList.add(`body-${mode.value}`)
+      const map = new Map([
+        ['body-horizontal', 'body-vertical'],
+        ['body-vertical', 'body-horizontal']
+      ])
+      const newValue = `body-${mode.value}`
+      const oldValue = map.get(newValue)
+      body.classList.toggle(oldValue, false)
+      body.classList.toggle(newValue, true)
     }
 
     function showBar () {
@@ -52,6 +59,10 @@ export default {
     onMounted(() => {
       initBody()
     })
+
+    window.addEventListener('resize', debounce(() => {
+      initBody()
+    }), false)
 
     return {
       currentSite,

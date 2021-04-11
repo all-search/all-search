@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.7
-// @description  2021年4月5日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.8
+// @description  2021年4月11日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/4/5
+// @update       2021/4/11
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.7/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.8/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -111,7 +111,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.7";
+    var t = "1.0.8";
     e.reactive({
         tmVersion: ""
     });
@@ -966,12 +966,22 @@
             const t = m(), s = e.ref(r("mode") || "horizontal"), o = e.ref(!1), a = e.computed(() => [ "as-" + s.value, {
                 [`as-${s.value}-hidden`]: !o.value
             } ]);
+            function n() {
+                const e = document.body, t = new Map([ [ "body-horizontal", "body-vertical" ], [ "body-vertical", "body-horizontal" ] ]), o = "body-" + s.value, a = t.get(o);
+                e.classList.toggle(a, !1), e.classList.toggle(o, !0);
+            }
             return e.onMounted(() => {
-                !function() {
-                    const e = document.body;
-                    e.classList.remove("body-horizontal", "body-vertical"), e.classList.add("body-" + s.value);
-                }();
-            }), {
+                n();
+            }), window.addEventListener("resize", function(e, t = 500) {
+                let s = null;
+                return function() {
+                    clearTimeout(s), s = setTimeout(() => {
+                        e.apply(this, arguments);
+                    }, t);
+                };
+            }(() => {
+                n();
+            }), !1), {
                 currentSite: t,
                 mode: s,
                 classList: a,
