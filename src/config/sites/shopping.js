@@ -5,7 +5,7 @@ export default [
   },
   {
     nameZh: '京东',
-    url: 'http://search.jd.com/Search?keyword=%s&enc=utf-8'
+    url: 'http://search.jd.com/search?keyword=%s&enc=utf-8'
   },
   {
     nameZh: '苏宁',

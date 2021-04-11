@@ -5,8 +5,8 @@ import {
   addStyleResource,
   checkBody,
   createAsRoot,
-  getSession,
   getAsRoot,
+  getSession,
   passTmMethods,
   version
 } from '../util/index.js'
@@ -43,6 +43,9 @@ if (currentSite && currentSite.style) {
 
 function init () {
   currentSite = siteInfo()
+  if (!currentSite) {
+    return
+  }
   if (isDev) {
     initStyle()
   } else {

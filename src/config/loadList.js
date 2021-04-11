@@ -259,7 +259,7 @@ export const list = [
     url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/
   },
   {
-    url: /^https?:\/\/search\.jd\.com\/Search/
+    url: /^https?:\/\/search\.jd\.com\/search/
   },
   {
     url: /^https?:\/\/search\.suning\.com/
@@ -340,7 +340,7 @@ export const list = [
 
 export const siteInfo = function () {
   const target = list.find(item => {
-    return item.url.test(window.location.href)
+    return item.url.test(window.location.href.toLowerCase())
   })
   if (target) {
     return {

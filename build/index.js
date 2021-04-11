@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.8
+// @version      1.0.9
 // @description  2021年4月11日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
@@ -10,7 +10,7 @@
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.8/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.9/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -81,7 +81,7 @@
 // @include      /^https?:\/\/s\.taobao\.com\/search/
 // @include      /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
 // @include      /^https?:\/\/list\.tmall\.com\/search_product\.htm/
-// @include      /^https?:\/\/search\.jd\.com\/Search/
+// @include      /^https?:\/\/search\.jd\.com\/search/
 // @include      /^https?:\/\/search\.suning\.com/
 // @include      /^https?:\/\/search\.yhd\.com\/c0-0\/k/
 // @include      /^https?:\/\/search\.smzdm\.com\/\?/
@@ -111,7 +111,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.8";
+    var t = "1.0.9";
     e.reactive({
         tmVersion: ""
     });
@@ -381,7 +381,7 @@
     }, {
         url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/
     }, {
-        url: /^https?:\/\/search\.jd\.com\/Search/
+        url: /^https?:\/\/search\.jd\.com\/search/
     }, {
         url: /^https?:\/\/search\.suning\.com/
     }, {
@@ -435,7 +435,7 @@
         url: /^http:\/\/localhost:8080\/all-search\//,
         invisible: !0
     } ], m = function() {
-        const e = u.find(e => e.url.test(window.location.href));
+        const e = u.find(e => e.url.test(window.location.href.toLowerCase()));
         return e ? {
             url: e.url,
             invisible: e.invisible,
@@ -580,7 +580,7 @@
             url: "http://s.taobao.com/search?q=%s"
         }, {
             nameZh: "京东",
-            url: "http://search.jd.com/Search?keyword=%s&enc=utf-8"
+            url: "http://search.jd.com/search?keyword=%s&enc=utf-8"
         }, {
             nameZh: "苏宁",
             url: "http://search.suning.com/%s/"
@@ -1021,7 +1021,8 @@
     console.log("all-search running 全搜运行中(production)");
     const M = r("mode") || "horizontal";
     function T() {
-        if (z = m(), z.disabled) return;
+        if (z = m(), !z) return;
+        if (z.disabled) return;
         z.invisible || (i("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
         i("as-style", `https://cdn.jsdelivr.net/npm/all-search@${s}/build/as-style.css`));
         const e = document.getElementById("all-search");
