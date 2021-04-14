@@ -5,10 +5,7 @@
     <logo :mode="mode"/>
     <as-menu
       :mode="mode"/>
-    <div class="as-setting"
-         @click="openSet">
-      设置
-    </div>
+    <side-bar/>
   </div>
 </template>
 
@@ -19,12 +16,14 @@ import { debounce } from '../util/debounce'
 import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
+import sideBar from './components/side-bar'
 
 export default {
   name: 'all-search',
   components: {
     logo,
-    asMenu
+    asMenu,
+    sideBar
   },
   setup () {
     const currentSite = siteInfo()
@@ -95,7 +94,6 @@ export default {
     height: $height;
     width: 100%;
     top: 0;
-    z-index: 999999;
     border-bottom: 1px #e8e8e8 solid;
     flex-direction: row;
   }
@@ -109,7 +107,6 @@ export default {
     width: $verticalWidth;
     top: 0;
     left: 0;
-    z-index: 999999;
     border-right: 1px #e8e8e8 solid;
     flex-direction: column;
   }
@@ -118,6 +115,7 @@ export default {
     position: fixed;
     display: flex !important;
     background-color: #fff;
+    z-index: $mainZIndex;
   }
 
   .as-setting {
