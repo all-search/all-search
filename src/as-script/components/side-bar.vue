@@ -4,8 +4,8 @@
     @click="open">
     设置
   </div>
-  <teleport to="html">
-    <transition name="overlay-fade" appear>
+  <teleport to="#all-search">
+    <transition name="overlay" appear>
       <overlay
         v-show="visible"
         @click="onMaskClick">
@@ -15,10 +15,11 @@
             aria-modal="true"
             role="dialog"
             class="as-side-bar"
-            :class="{open: visible}"
             @click.stop>
             <header></header>
-            <section></section>
+            <section>
+              <radio label="测试"/>
+            </section>
           </div>
         </transition>
       </overlay>
@@ -29,11 +30,13 @@
 <script>
 import { ref } from 'vue'
 import overlay from '../components/overlay'
+import radio from '../components/radio'
 
 export default {
   name: 'side-bar',
   components: {
-    overlay
+    overlay,
+    radio
   },
   setup () {
     const visible = ref(false)
@@ -57,7 +60,7 @@ export default {
   @import "../../assets/common.scss";
 
   .as-side-bar {
-    width: 30%;
+    width: 20vw;
     right: 0;
     height: 100%;
     top: 0;
@@ -71,26 +74,30 @@ export default {
     overflow: hidden;
   }
 
-  .as-side-bar.open {
-    /*animation: rtl-drawer-in .9s;*/
+  .overlay-enter-active, .overlay-leave-active {
+    transition: opacity .3s;
   }
 
-  .overlay-fade-enter-active, .overlay-fade-leave-active {
-    transition: opacity .5s;
-    > .as-side-bar {
-      opacity: 1;
-    }
-  }
-
-  .overlay-fade-enter-from, .overlay-fade-leave-to {
+  .overlay-enter-from, .overlay-leave-to {
     opacity: 0;
   }
 
-  .drawer-enter-active, .drawer-leave-active {
-    transition: transform .5s;
+  .overlay-enter-active .as-side-bar {
+    animation: rtl-drawer-animation .3s linear reverse
   }
 
-  .drawer-enter-from, .drawer-leave-to {
-    transform: translate(100%);
+  .overlay-leave-active .as-side-bar {
+    animation: rtl-drawer-animation .3s linear
   }
+
+  @keyframes rtl-drawer-animation {
+    0% {
+      transform: translate(0)
+    }
+
+    to {
+      transform: translate(100%)
+    }
+  }
+
 </style>

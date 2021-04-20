@@ -15,7 +15,6 @@ import { siteInfo } from '../config/loadList.js'
 
 let currentSite = siteInfo()
 
-const isDev = process.env.NODE_ENV === 'development'
 const isPro = process.env.NODE_ENV === 'production'
 
 const app = createApp(index)
@@ -43,12 +42,10 @@ if (currentSite && currentSite.style) {
 
 function init () {
   currentSite = siteInfo()
-  if (!currentSite) {
-    return
-  }
-  if (isDev) {
-    initStyle()
-  } else {
+  if (isPro) {
+    if (!currentSite) {
+      return
+    }
     if (currentSite.disabled) {
       return
     }
