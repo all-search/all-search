@@ -47,6 +47,7 @@ export default {
       ])
       const newValue = `body-${mode.value}`
       const oldValue = map.get(newValue)
+      console.log(newValue, oldValue)
       body.classList.toggle(oldValue, false)
       body.classList.toggle(newValue, true)
     }

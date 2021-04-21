@@ -18,7 +18,20 @@
             @click.stop>
             <header></header>
             <section>
-              <radio label="测试"/>
+              <form-item label="方向">
+                <as-radio
+                  label="horizontal"
+                  v-model="mode"
+                  @change="changeMode">
+                  横向
+                </as-radio>
+                <as-radio
+                  label="vertical"
+                  v-model="mode"
+                  @change="changeMode">
+                  竖向
+                </as-radio>
+              </form-item>
             </section>
           </div>
         </transition>
@@ -29,14 +42,17 @@
 
 <script>
 import { ref } from 'vue'
+import { getSession, setSession } from '../../util'
 import overlay from '../components/overlay'
 import radio from '../components/radio'
+import formItem from '../components/form-item'
 
 export default {
   name: 'side-bar',
   components: {
     overlay,
-    radio
+    asRadio: radio,
+    formItem
   },
   setup () {
     const visible = ref(false)
@@ -46,10 +62,18 @@ export default {
     const onMaskClick = () => {
       visible.value = false
     }
+    const mode = ref(getSession('mode') || 'horizontal')
+
+    const changeMode = (value) => {
+      console.log(1 + value)
+      // setSession('mode', value)
+    }
     return {
+      mode,
       visible,
       open,
-      onMaskClick
+      onMaskClick,
+      changeMode
     }
   }
 }
@@ -72,6 +96,9 @@ export default {
     flex-direction: column;
     box-shadow: 0 8px 10px -5px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12);
     overflow: hidden;
+    > section {
+      padding: 10px 20px;
+    }
   }
 
   .overlay-enter-active, .overlay-leave-active {

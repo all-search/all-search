@@ -335,9 +335,8 @@ export const list = [
 ]
 
 export const siteInfo = function () {
-  const target = list.find(item => {
-    return item.url.test(window.location.href.toLowerCase())
-  })
+  const target = list
+    .find(item => item.url.test(window.location.href.toLowerCase()))
   if (target) {
     return {
       url: target.url,

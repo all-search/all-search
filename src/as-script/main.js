@@ -23,10 +23,13 @@ console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 
 // 添加样式
 const initStyle = function () {
-  addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css`)
   if (isPro) {
     addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search@${version}/build/as-style.css`)
   }
+}
+
+const initIconFont = function () {
+  addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css`)
 }
 
 const mode = getSession('mode') || 'horizontal'
@@ -53,6 +56,7 @@ function init () {
       initStyle()
     }
   }
+  initIconFont()
   const el = getAsRoot()
   if (el) {
     el.style.display = currentSite.invisible ? 'none' : 'unset'

@@ -67,6 +67,7 @@ export default {
   setup (props) {
     const sites = reactive(initSites('tm'))
     const currentSite = siteInfo()
+
     const data = reactive({
       showTimeout: 50,
       hideTimeout: 200
@@ -74,7 +75,12 @@ export default {
     const transition = computed(() =>
       props.mode === 'horizontal' ? 'drop' : 'fade'
     )
-    const defaultKeyword = () => currentSite.keyword ? currentSite.keyword() : getKeyword()
+    const defaultKeyword = () => {
+      if (currentSite && currentSite.keyword) {
+        return currentSite.keyword()
+      }
+      return getKeyword()
+    }
     const handleClick = (item, isOpen) => {
       const keyword = defaultKeyword()
       if (isOpen) {
