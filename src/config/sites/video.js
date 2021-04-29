@@ -17,7 +17,7 @@ export default [
   },
   {
     nameZh: 'AcFun',
-    url: 'http://www.acfun.cn/search/?#query=%s'
+    url: 'https://www.acfun.cn/search?keyword=%s'
   },
   {
     nameZh: '乐视',

@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.9
-// @description  2021年4月11日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.10
+// @description  2021年4月29日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/4/11
+// @update       2021/4/29
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.9/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.10/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -111,7 +111,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.9";
+    var t = "1.0.10";
     e.reactive({
         tmVersion: ""
     });
@@ -143,7 +143,7 @@
     };
     function i(e, t) {
         let s;
-        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? c(s, e) : function(e, t) {
+        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? l(s, e) : function(e, t) {
             if (!e) return;
             if (t) {
                 const e = document.styleSheets;
@@ -154,7 +154,7 @@
             document.getElementsByTagName("head")[0].appendChild(s);
         }(t, e);
     }
-    function c(e, t, s, o) {
+    function l(e, t, s, o) {
         !function(e, t, s) {
             const o = t / 1e3 * 60;
             let a = 0;
@@ -194,7 +194,7 @@
             }
         }), 20, !0);
     }
-    const l = a("script-loaded"), h = a("page-loaded");
+    const c = a("script-loaded"), h = a("page-loaded");
     const u = [ {
         url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
         style: {
@@ -297,7 +297,11 @@
             1: "body { margin-top: 30px!important; } .fixed-top {top: 30px;}"
         }
     }, {
-        url: /^https?:\/\/www\.acfun\.cn\/search/
+        url: /^https?:\/\/www\.acfun\.cn\/search/,
+        keyword: () => document.getElementById("search-text--standalone").value,
+        style: {
+            1: "#header {top: 30px;}"
+        }
     }, {
         url: /^https?:\/\/www\.youtube\.com\/results/,
         style: {
@@ -558,7 +562,7 @@
             url: "https://v.qq.com/x/search/?q=%s"
         }, {
             nameZh: "AcFun",
-            url: "http://www.acfun.cn/search/?#query=%s"
+            url: "https://www.acfun.cn/search?keyword=%s"
         }, {
             nameZh: "乐视",
             url: "http://so.letv.com/s?wd=%s"
@@ -920,9 +924,9 @@
         class: "as-url-icon"
     };
     k.render = function(t, s, o, a, r, n) {
-        const i = e.resolveComponent("icon"), c = e.resolveComponent("menu-item");
+        const i = e.resolveComponent("icon"), l = e.resolveComponent("menu-item");
         return e.openBlock(), e.createBlock("ul", Z, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
-        e.createBlock(c, {
+        e.createBlock(l, {
             class: "as-menu-item",
             key: t.index,
             showTimeout: a.data.showTimeout,
@@ -1001,7 +1005,7 @@
         };
     }
     N.render = function(t, s, o, a, r, n) {
-        const i = e.resolveComponent("logo"), c = e.resolveComponent("as-menu");
+        const i = e.resolveComponent("logo"), l = e.resolveComponent("as-menu");
         return e.openBlock(), e.createBlock("div", {
             class: [ "as-container", a.classList ],
             style: {
@@ -1009,7 +1013,7 @@
             }
         }, [ e.createVNode(i, {
             mode: a.mode
-        }, null, 8, [ "mode" ]), e.createVNode(c, {
+        }, null, 8, [ "mode" ]), e.createVNode(l, {
             mode: a.mode
         }, null, 8, [ "mode" ]), e.createVNode("div", {
             class: "as-setting",
@@ -1033,7 +1037,7 @@
             }(), t = document.body.parentElement.insertBefore(e, document.body);
             B.mount(t), function() {
                 const e = function() {
-                    document.dispatchEvent(new CustomEvent(l, {
+                    document.dispatchEvent(new CustomEvent(c, {
                         detail: {
                             version: s,
                             getSession: r,
@@ -1046,8 +1050,8 @@
         }
     }
     var E, V;
-    z && z.style && (z.style[1] && "horizontal" === M && c(z.style[1], "as-special"), 
-    z.style[2] && "vertical" === M && c(z.style[2], "as-special")), history.pushState = C(history.pushState, T), 
+    z && z.style && (z.style[1] && "horizontal" === M && l(z.style[1], "as-special"), 
+    z.style[2] && "vertical" === M && l(z.style[2], "as-special")), history.pushState = C(history.pushState, T), 
     history.replaceState = C(history.replaceState, T), Node.prototype.removeChild = (E = Node.prototype.removeChild, 
     V = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
     function() {
