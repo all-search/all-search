@@ -138,7 +138,13 @@ export const list = [
     }
   },
   {
-    url: /^https?:\/\/www\.acfun\.cn\/search/
+    url: /^https?:\/\/www\.acfun\.cn\/search/,
+    keyword () {
+      return document.getElementById('search-text--standalone').value
+    },
+    style: {
+      1: `#header {top: ${height}px;}`
+    }
   },
   {
     url: /^https?:\/\/www\.youtube\.com\/results/,
