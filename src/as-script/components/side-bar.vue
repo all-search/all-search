@@ -64,9 +64,8 @@ export default {
     }
     const mode = ref(getSession('mode') || 'horizontal')
 
-    const changeMode = (value) => {
-      console.log(1 + value)
-      // setSession('mode', value)
+    const changeMode = (e) => {
+      setSession('mode', e.target.value)
     }
     return {
       mode,
@@ -85,6 +84,7 @@ export default {
 
   .as-side-bar {
     width: 20vw;
+    min-width: 300px;
     right: 0;
     height: 100%;
     top: 0;
@@ -98,6 +98,7 @@ export default {
     overflow: hidden;
     > section {
       padding: 10px 20px;
+      height: 100%;
     }
   }
 

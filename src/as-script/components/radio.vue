@@ -1,11 +1,10 @@
 <template>
   <label
-    class="as-radio as-radio-anim">
+    class="as-radio as-radio-animate">
     <input
       type="radio"
-      name="sex"
-      :value="modelValue"
-      @input="handleInput"/>
+      :value="label"
+      v-model="model"/>
     <i
       class="as-radio-icon">
     </i>
@@ -17,7 +16,7 @@
 </template>
 
 <script>
-import { getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance } from 'vue'
 
 function useComponentId () {
   return getCurrentInstance().uid
@@ -37,13 +36,24 @@ export default {
   },
   setup (props, ctx) {
     const id = `radio_${useComponentId()}`
-    const handleInput = () => {
-      ctx.emit('update:modelValue', props.label)
-      ctx.emit('change', props.label)
+    const model = computed({
+      get () {
+        return props.modelValue
+      },
+      set (value) {
+        ctx.emit('update:modelValue', value)
+      }
+    })
+    const handleChange = (e) => {
+      console.log(e)
+    }
+    const handleInput = (e) => {
+      // ctx.emit('update:modelValue', props.label)
+      console.log(e)
     }
     return {
       id,
-      handleInput
+      model
     }
   }
 }
@@ -62,7 +72,9 @@ export default {
     outline: none;
     font-size: 14px;
     user-select: none;
-
+    & + & {
+      margin-left: 14px;
+    }
     input {
       position: absolute;
       opacity: 0;
@@ -100,7 +112,7 @@ export default {
     input:disabled:checked + .as-radio-icon:after {
       background-color: #c1c1c1;
     }
-    &.as-radio-anim .as-radio-icon {
+    &.as-radio-animate .as-radio-icon {
       transition: background-color ease-out .3s;
     }
 

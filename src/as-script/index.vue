@@ -5,10 +5,7 @@
     <logo :mode="mode"/>
     <as-menu
       :mode="mode"/>
-    <div class="as-setting"
-         @click="openSet">
-      设置
-    </div>
+    <side-bar/>
   </div>
 </template>
 
@@ -19,12 +16,14 @@ import { debounce } from '../util/debounce'
 import { siteInfo } from '../config/loadList'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
+import sideBar from './components/side-bar'
 
 export default {
   name: 'all-search',
   components: {
     logo,
-    asMenu
+    asMenu,
+    sideBar
   },
   setup () {
     const currentSite = siteInfo()

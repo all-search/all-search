@@ -18,7 +18,7 @@ export default {
   name: 'form-item',
   props: {
     labelWidth: {
-      type: String,
+      type: [String, Number],
       default: 60
     },
     label: {
