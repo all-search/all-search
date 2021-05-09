@@ -96,7 +96,7 @@ export function addStyle (styleContent) {
   head.appendChild(style)
 }
 
-export function addLink (url, name) {
+function addLink (url, name) {
   if (!url) {
     return
   }
@@ -123,7 +123,7 @@ export function addStyleResource (name, link) {
     styleContent = window.GM_getResourceText(name)
   }
   if (styleContent) {
-    ACAddStyle(styleContent, name)
+    addStyleContent(styleContent, name)
   } else {
     addLink(link, name)
   }
@@ -160,7 +160,7 @@ export function RAFInterval (callback, period, runNow) {
   requestAnimationFrame(step)
 }
 
-function safeRemove (cssSelectorOrFunction) {
+function removeNode (cssSelectorOrFunction) {
   try {
     if (typeof (cssSelectorOrFunction) === 'string') {
       let removeNodes = document.querySelectorAll(cssSelectorOrFunction)
@@ -173,11 +173,12 @@ function safeRemove (cssSelectorOrFunction) {
       console.log('未知命令：' + cssSelectorOrFunction)
     }
   } catch (e) {
-
+    console.log(e)
   }
 }
 
-export function ACAddStyle (css, className, addToTarget, isReload) { // 添加CSS代码，不考虑文本载入时间，只执行一次-无论成功与否，带有className
+export function addStyleContent (css, className, addToTarget, isReload = false) {
+  // 添加CSS代码，不考虑文本载入时间，只执行一次-无论成功与否，带有className
   RAFInterval(function () {
     /**
      * addToTarget这里不要使用head标签,head标签的css会在html载入时加载，
@@ -187,22 +188,23 @@ export function ACAddStyle (css, className, addToTarget, isReload) { // 添加CS
     if (typeof (addToTarget) === 'undefined') {
       addTo = (document.body || document.head || document.documentElement || document)
     }
-    isReload = isReload || false // 默认是非加载型
     // 如果没有目标节点(则直接加) || 有目标节点且找到了节点(进行新增)
     if (typeof (addToTarget) === 'undefined' ||
-      (typeof (addToTarget) !== 'undefined' && document.querySelector(addToTarget) !== null)
+      (typeof (addToTarget) !== 'undefined' &&
+        document.querySelector(addToTarget) !== null)
     ) {
-      // clearInterval(tout);
       // 如果true 强行覆盖，不管有没有--先删除
       // 如果false，不覆盖，但是如果有的话，要退出，不存在则新增--无需删除
-      if (isReload === true) {
-        safeRemove('.' + className)
-      } else if (isReload === false && document.querySelector('.' + className) != null) {
+      if (isReload) {
+        removeNode('.' + className)
+      } else if (!isReload && document.querySelector('.' + className) !== null) {
         // 节点存在 && 不准备覆盖
         return true
       } else {
         let cssNode = document.createElement('style')
-        if (className != null) cssNode.className = className
+        if (className) {
+          cssNode.className = className
+        }
         cssNode.setAttribute('type', 'text/css')
         cssNode.innerHTML = css
         try {

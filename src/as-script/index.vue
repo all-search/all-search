@@ -11,9 +11,10 @@
 
 <script>
 import { computed, onMounted, ref } from 'vue'
-import { getSession } from '../util'
+import { addStyleContent } from '../util'
 import { debounce } from '../util/debounce'
 import { siteInfo } from '../config/loadList'
+import mode from '../components/mode.js'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'
 import sideBar from './components/side-bar'
@@ -27,19 +28,15 @@ export default {
   },
   setup () {
     const currentSite = siteInfo()
-    const mode = ref(getSession('mode') || 'horizontal')
     const visible = ref(false)
     const classList = computed(() => [
-      `as-${mode.value}`,
-      {
-        [`as-${mode.value}-hidden`]: !visible.value
-      }
+      `as-${mode.value}`
     ])
     const openSet = () => {
       window.open('https://endday.gitee.io/all-search/')
     }
 
-    function initBody () {
+    function addBodyClass () {
       const body = document.body
       const map = new Map([
         ['body-horizontal', 'body-vertical'],
@@ -47,9 +44,21 @@ export default {
       ])
       const newValue = `body-${mode.value}`
       const oldValue = map.get(newValue)
-      console.log(newValue, oldValue)
       body.classList.toggle(oldValue, false)
       body.classList.toggle(newValue, true)
+    }
+
+    function addCustomStyle () {
+      const currentSite = siteInfo()
+      if (currentSite && currentSite.style) {
+        let styleContent = ''
+        if (currentSite.style[1] && mode.value === 'horizontal') {
+          styleContent = currentSite.style[1]
+        } else if (currentSite.style[2] && mode.value === 'vertical') {
+          styleContent = currentSite.style[2]
+        }
+        addStyleContent(styleContent, 'as-custom-style', undefined, true)
+      }
     }
 
     function showBar () {
@@ -57,11 +66,12 @@ export default {
     }
 
     onMounted(() => {
-      initBody()
+      addBodyClass()
+      addCustomStyle()
     })
 
     window.addEventListener('resize', debounce(() => {
-      initBody()
+      addBodyClass()
     }), false)
 
     return {

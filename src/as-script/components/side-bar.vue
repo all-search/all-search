@@ -16,7 +16,9 @@
             role="dialog"
             class="as-side-bar"
             @click.stop>
-            <header></header>
+            <header class="header">
+              设置
+            </header>
             <section>
               <form-item label="方向">
                 <as-radio
@@ -33,6 +35,9 @@
                 </as-radio>
               </form-item>
             </section>
+            <footer>
+
+            </footer>
           </div>
         </transition>
       </overlay>
@@ -42,7 +47,8 @@
 
 <script>
 import { ref } from 'vue'
-import { getSession, setSession } from '../../util'
+import { setSession } from '../../util'
+import mode from '../../components/mode.js'
 import overlay from '../components/overlay'
 import radio from '../components/radio'
 import formItem from '../components/form-item'
@@ -62,9 +68,9 @@ export default {
     const onMaskClick = () => {
       visible.value = false
     }
-    const mode = ref(getSession('mode') || 'horizontal')
 
     const changeMode = (e) => {
+      mode.value = e.target.value
       setSession('mode', e.target.value)
     }
     return {
@@ -96,6 +102,13 @@ export default {
     flex-direction: column;
     box-shadow: 0 8px 10px -5px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12);
     overflow: hidden;
+    > header {
+      align-items: center;
+      color: $color;
+      display: flex;
+      margin-bottom: 32px;
+      padding: 20px 20px 0;
+    }
     > section {
       padding: 10px 20px;
       height: 100%;

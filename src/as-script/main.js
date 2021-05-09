@@ -1,15 +1,6 @@
 import { createApp } from 'vue'
 import index from './index.vue'
-import {
-  ACAddStyle,
-  addStyleResource,
-  checkBody,
-  createAsRoot,
-  getAsRoot,
-  getSession,
-  passTmMethods,
-  version
-} from '../util/index.js'
+import { addStyleResource, checkBody, createAsRoot, getAsRoot, passTmMethods, version } from '../util/index.js'
 import { withHookAfter, withHookBefore } from '../util/hook'
 import { siteInfo } from '../config/loadList.js'
 
@@ -30,17 +21,6 @@ const initStyle = function () {
 
 const initIconFont = function () {
   addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css`)
-}
-
-const mode = getSession('mode') || 'horizontal'
-
-if (currentSite && currentSite.style) {
-  if (currentSite.style[1] && mode === 'horizontal') {
-    ACAddStyle(currentSite.style[1], 'as-special')
-  }
-  if (currentSite.style[2] && mode === 'vertical') {
-    ACAddStyle(currentSite.style[2], 'as-special')
-  }
 }
 
 function init () {
