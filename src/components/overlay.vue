@@ -36,7 +36,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../../assets/common.scss";
+  @import "../assets/common.scss";
 
   .as-overlay {
     position: fixed;

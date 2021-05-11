@@ -44,10 +44,10 @@
 
 <script>
 import { computed, reactive } from 'vue'
-import { getKeyword } from '../../util'
-import { initSites } from '../../util/sites'
-import parseUrl from '../../util/parseUrl'
-import { siteInfo } from '../../config/loadList'
+import { getKeyword } from '../util'
+import { initSites } from '../util/sites'
+import parseUrl from '../util/parseUrl'
+import { siteInfo } from '../config/loadList'
 import menuItem from './menuItem.vue'
 import icon from '../components/icon.vue'
 
@@ -119,11 +119,10 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../../assets/common";
+  @import "../assets/common";
 
   .as-menu {
     flex: 1;
-    width: 100%;
     padding: 0;
     margin: 0;
     white-space: nowrap;

@@ -11,13 +11,11 @@
 
 <script>
 import { computed, onMounted, ref } from 'vue'
-import { addStyleContent } from '../util'
-import { debounce } from '../util/debounce'
 import { siteInfo } from '../config/loadList'
-import mode from '../components/mode.js'
-import logo from './components/logo.vue'
-import asMenu from './components/menu.vue'
-import sideBar from './components/side-bar'
+import { initStyle, mode } from '../components/mode.js'
+import logo from '../components/logo.vue'
+import asMenu from '../components/menu.vue'
+import sideBar from '../components/side-bar'
 
 export default {
   name: 'all-search',
@@ -36,43 +34,13 @@ export default {
       window.open('https://endday.gitee.io/all-search/')
     }
 
-    function addBodyClass () {
-      const body = document.body
-      const map = new Map([
-        ['body-horizontal', 'body-vertical'],
-        ['body-vertical', 'body-horizontal']
-      ])
-      const newValue = `body-${mode.value}`
-      const oldValue = map.get(newValue)
-      body.classList.toggle(oldValue, false)
-      body.classList.toggle(newValue, true)
-    }
-
-    function addCustomStyle () {
-      const currentSite = siteInfo()
-      if (currentSite && currentSite.style) {
-        let styleContent = ''
-        if (currentSite.style[1] && mode.value === 'horizontal') {
-          styleContent = currentSite.style[1]
-        } else if (currentSite.style[2] && mode.value === 'vertical') {
-          styleContent = currentSite.style[2]
-        }
-        addStyleContent(styleContent, 'as-custom-style', undefined, true)
-      }
-    }
-
     function showBar () {
       visible.value = true
     }
 
     onMounted(() => {
-      addBodyClass()
-      addCustomStyle()
+      initStyle()
     })
-
-    window.addEventListener('resize', debounce(() => {
-      addBodyClass()
-    }), false)
 
     return {
       currentSite,
@@ -107,6 +75,11 @@ export default {
     top: 0;
     border-bottom: 1px #e8e8e8 solid;
     flex-direction: row;
+    // overflow-x: scroll;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .as-horizontal-hidden {

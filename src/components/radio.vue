@@ -26,8 +26,7 @@ export default {
   name: 'as-radio',
   props: {
     modelValue: {
-      type: [String, Number],
-      default: false
+      type: [String, Number]
     },
     label: {
       type: [String, Number],

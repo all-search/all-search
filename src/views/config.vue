@@ -15,7 +15,7 @@
     </el-header>
     <el-scrollbar class="page-container">
       <el-container>
-        <side-bar/>
+        <aside/>
         <el-main class="page-mainer">
           <version-alert/>
           <router-view/>
@@ -28,13 +28,13 @@
 
 <script>
 import versionAlert from '../components/version-alert'
-import sideBar from '../components/side-bar'
+import aside from '../components/aside'
 
 export default {
   name: 'config',
   components: {
     versionAlert,
-    sideBar
+    aside
   }
 }
 </script>
