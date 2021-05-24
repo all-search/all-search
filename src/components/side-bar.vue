@@ -45,7 +45,18 @@
               </form-item>
             </section>
             <footer>
-
+              <a class="link"
+                 title="all-search"
+                 href="https://endday.github.io/all-search/"
+                 target="_blank">
+                设置页
+              </a>
+              <a class="link"
+                 title="github"
+                 href="https://github.com/endday/all-search"
+                 target="_blank">
+                GitHub地址
+              </a>
             </footer>
           </div>
         </transition>
@@ -127,11 +138,25 @@ export default {
       color: $color;
       display: flex;
       margin-bottom: 32px;
-      padding: 20px 20px 0;
+      padding: 20px 24px 0;
     }
     > section {
-      padding: 10px 20px;
+      padding: 10px 24px;
       height: 100%;
+      flex: 1;
+    }
+    > footer {
+      padding: 10px 24px 30px;
+      .link {
+        font-size: 14px;
+        text-decoration: none;
+        &:visited {
+          color: $color;
+        }
+      }
+      .link + .link {
+        margin-left: 20px;
+      }
     }
   }
 
