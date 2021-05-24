@@ -15,7 +15,7 @@ import { siteInfo } from '../config/loadList'
 import { initStyle, mode } from '../components/mode.js'
 import logo from '../components/logo.vue'
 import asMenu from '../components/menu.vue'
-import sideBar from '../components/side-bar'
+import sideBar from '../components/side-bar.vue'
 
 export default {
   name: 'all-search',

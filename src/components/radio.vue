@@ -43,13 +43,6 @@ export default {
         ctx.emit('update:modelValue', value)
       }
     })
-    const handleChange = (e) => {
-      console.log(e)
-    }
-    const handleInput = (e) => {
-      // ctx.emit('update:modelValue', props.label)
-      console.log(e)
-    }
     return {
       id,
       model

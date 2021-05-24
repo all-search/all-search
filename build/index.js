@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.10
-// @description  2021年4月29日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.11
+// @description  2021年5月24日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/4/29
+// @update       2021/5/24
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.10/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.11/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -104,84 +104,83 @@
 // @include      /^https?:\/\/www\.startpage\.com\/do\/search/
 // @include      /^https?:\/\/endday\.github\.io/
 // @include      /^https?:\/\/endday\.gitee\.io/
-// @include      /^http:\/\/localhost:8080\/all-search\//
 
 // ==/UserScript==
 /* eslint-disable */
 
 !function(e) {
     "use strict";
-    var t = "1.0.10";
+    var t = "1.0.11";
     e.reactive({
         tmVersion: ""
     });
-    const s = t;
-    function o(e, t) {
+    const o = t;
+    function s(e, t) {
         t = t || window.location.href;
-        const s = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), o = t.match(s);
-        return decodeURIComponent(o ? o[2] : "");
+        const o = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), s = t.match(o);
+        return decodeURIComponent(s ? s[2] : "");
     }
     function a(e) {
         return e ? "__allSearch__" + e : null;
     }
     let r = function(e) {
         const t = a(e);
-        let s;
-        if (s = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
-        s) try {
-            return JSON.parse(s);
+        let o;
+        if (o = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
+        o) try {
+            return JSON.parse(o);
         } catch (e) {
-            return s;
+            return o;
         }
         return null;
     }, n = function(e, t) {
-        const s = a(e);
-        if (window.GM_setValue) window.GM_setValue(s, t); else {
+        const o = a(e);
+        if (window.GM_setValue) window.GM_setValue(o, t); else {
             const e = JSON.stringify(t);
-            e && window.localStorage.setItem(s, e);
+            e && window.localStorage.setItem(o, e);
         }
     };
-    function i(e, t) {
-        let s;
-        window.GM_getResourceText && (s = window.GM_getResourceText(e)), s ? l(s, e) : function(e, t) {
+    function l(e, t) {
+        let o;
+        window.GM_getResourceText && (o = window.GM_getResourceText(e)), o ? i(o, e) : function(e, t) {
             if (!e) return;
             if (t) {
                 const e = document.styleSheets;
-                for (let s = 0; s < e.length; s++) if (e[s].ownerNode.className === t) return;
+                for (let o = 0; o < e.length; o++) if (e[o].ownerNode.className === t) return;
             }
-            const s = document.createElement("link");
-            s.href = e, s.rel = "stylesheet", s.type = "text/css", s.crossorigin = "anonymous", 
-            document.getElementsByTagName("head")[0].appendChild(s);
+            const o = document.createElement("link");
+            o.href = e, o.rel = "stylesheet", o.type = "text/css", o.crossorigin = "anonymous", 
+            document.getElementsByTagName("head")[0].appendChild(o);
         }(t, e);
     }
-    function l(e, t, s, o) {
-        !function(e, t, s) {
-            const o = t / 1e3 * 60;
+    function i(e, t, o, s = !1) {
+        !function(e, t, o) {
+            const s = t / 1e3 * 60;
             let a = 0;
-            if (!0 === s) {
+            if (!0 === o) {
                 if (e()) return;
             }
             requestAnimationFrame((function t() {
-                if (a < o) a++, requestAnimationFrame(t); else {
+                if (a < s) a++, requestAnimationFrame(t); else {
                     e() || !1 || (a = 0, requestAnimationFrame(t));
                 }
             }));
         }((function() {
-            let a = document.querySelector(s);
-            if (void 0 === s && (a = document.body || document.head || document.documentElement || document), 
-            o = o || !1, void 0 === s || void 0 !== s && null !== document.querySelector(s)) {
-                if (!0 !== o) {
-                    if (!1 === o && null != document.querySelector("." + t)) return !0;
-                    {
-                        let s = document.createElement("style");
-                        null != t && (s.className = t), s.setAttribute("type", "text/css"), s.innerHTML = e;
+            let a = document.querySelector(o);
+            if (void 0 === o && (a = document.body || document.head || document.documentElement || document), 
+            void 0 === o || void 0 !== o && null !== document.querySelector(o)) {
+                if (!s) {
+                    if (s || null === document.querySelector("." + t)) {
+                        let o = document.createElement("style");
+                        t && (o.className = t), o.setAttribute("type", "text/css"), o.innerHTML = e;
                         try {
-                            a.appendChild(s);
+                            a.appendChild(o);
                         } catch (e) {
                             console.log(e.message);
                         }
                         return !0;
                     }
+                    return !0;
                 }
                 !function(e) {
                     try {
@@ -189,13 +188,15 @@
                             let t = document.querySelectorAll(e);
                             for (let e = 0; e < t.length; e++) t[e].remove();
                         } else "function" == typeof e ? e() : console.log("未知命令：" + e);
-                    } catch (e) {}
+                    } catch (e) {
+                        console.log(e);
+                    }
                 }("." + t);
             }
         }), 20, !0);
     }
-    const c = a("script-loaded"), h = a("page-loaded");
-    const u = [ {
+    const c = a("script-loaded"), u = a("page-loaded");
+    const h = [ {
         url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
@@ -363,7 +364,7 @@
         url: /^https?:\/\/subhd\.com\/search/
     }, {
         url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/,
-        keyword: () => o("text") || o("q")
+        keyword: () => s("text") || s("q")
     }, {
         url: /^https?:\/\/fanyi\.baidu\.com/,
         keyword: () => document.getElementById("baidu_translate_input").value
@@ -435,11 +436,8 @@
     }, {
         url: /^https?:\/\/endday\.gitee\.io/,
         invisible: !0
-    }, {
-        url: /^http:\/\/localhost:8080\/all-search\//,
-        invisible: !0
     } ], m = function() {
-        const e = u.find(e => e.url.test(window.location.href.toLowerCase()));
+        const e = h.find(e => e.url.test(window.location.href.toLowerCase()));
         return e ? {
             url: e.url,
             invisible: e.invisible,
@@ -450,7 +448,33 @@
             mounted: e.mounted
         } : null;
     };
-    var p = {
+    const p = r("mode"), d = e => -1 === [ "vertical", "horizontal" ].indexOf(p) ? "horizontal" : e, w = e.ref(d(p)), y = new Map([ [ "body-horizontal", "body-vertical" ], [ "body-vertical", "body-horizontal" ] ]), f = (e = "horizontal") => {
+        (e => {
+            const t = document.body, o = "body-" + e, s = y.get(o);
+            t.classList.toggle(s, !1), t.classList.toggle(o, !0);
+        })(e), (e => {
+            const t = m();
+            if (t && t.style) {
+                let o = "";
+                t.style[1] && "horizontal" === e ? o = t.style[1] : t.style[2] && "vertical" === e && (o = t.style[2]), 
+                i(o, "as-custom-style", void 0, !0);
+            }
+        })(e);
+    };
+    window.addEventListener("resize", function(e, t = 500) {
+        let o = null;
+        return function() {
+            clearTimeout(o), o = setTimeout(() => {
+                e.apply(this, arguments);
+            }, t);
+        };
+    }(() => {
+        f(w.value);
+    }), !1), e.watch(w, e => {
+        const t = d(e);
+        f(t), n("mode", t);
+    });
+    var g = {
         name: "logo",
         props: {
             mode: {
@@ -460,39 +484,39 @@
             }
         }
     };
-    const d = e.createVNode("p", {
+    const b = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    p.render = function(t, s, o, a, r, n) {
+    g.render = function(t, o, s, a, r, n) {
         return e.openBlock(), e.createBlock("a", {
-            class: [ "as-title", "as-title-" + o.mode ],
+            class: [ "as-title", "as-title-" + s.mode ],
             href: "https://endday.github.io/all-search/",
             target: "_blank"
-        }, [ d ], 2);
-    }, p.__file = "src/as-script/components/logo.vue";
-    let w = document.createElement("a");
-    function y(e) {
+        }, [ b ], 2);
+    }, g.__file = "src/components/logo.vue";
+    let v = document.createElement("a");
+    function k(e) {
         let t = e;
         if (t.indexOf("//") < 0) t = "//" + t; else {
-            if (!(t.indexOf("//") > -1)) return w;
+            if (!(t.indexOf("//") > -1)) return v;
             {
                 const e = t.toLowerCase();
                 e.startsWith("http://") || e.startsWith("https://") || e.startsWith("ftp://") || e.startsWith("files://") || (t = t.replace(/.*\/\//, "//"));
             }
         }
-        return w.href = t, {
-            href: w.href,
-            origin: w.origin,
-            protocol: w.protocol,
-            host: w.host,
-            hostname: w.hostname,
-            port: w.port,
-            pathname: w.pathname,
-            search: w.search,
-            hash: w.hash
+        return v.href = t, {
+            href: v.href,
+            origin: v.origin,
+            protocol: v.protocol,
+            host: v.host,
+            hostname: v.hostname,
+            port: v.port,
+            pathname: v.pathname,
+            search: v.search,
+            hash: v.hash
         };
     }
-    const f = [ {
+    const x = [ {
         nameZh: "搜索",
         name: "search",
         list: [ {
@@ -782,10 +806,10 @@
     } ].map(e => ({
         ...e,
         list: e.list.map(t => {
-            const {hostname: s} = y(t.url);
+            const {hostname: o} = k(t.url);
             return {
                 ...t,
-                id: `${e.name}-${s}`,
+                id: `${e.name}-${o}`,
                 data: {
                     visible: !0
                 }
@@ -795,28 +819,28 @@
             visible: !0
         }
     }));
-    function g(e) {
-        let t = f;
-        const o = r("sites"), a = r("sites-version");
-        return o && (t = o, o && a && (a !== s || "tm" !== e) && (t = function(e, t) {
-            const s = JSON.parse(JSON.stringify(e));
-            let o = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
-            return o.forEach(e => {
-                const t = s.find(t => t.name === e.name);
+    function Z(e) {
+        let t = x;
+        const s = r("sites"), a = r("sites-version");
+        return s && (t = s, s && a && (a !== o || "tm" !== e) && (t = function(e, t) {
+            const o = JSON.parse(JSON.stringify(e));
+            let s = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
+            return s.forEach(e => {
+                const t = o.find(t => t.name === e.name);
                 t && (e.list.forEach(e => {
-                    const s = t.list.findIndex(t => t.id === e.id);
-                    s > -1 && (Object.keys(e).forEach(o => {
-                        "data" !== o && (t.list[s][o] = e[o]);
+                    const o = t.list.findIndex(t => t.id === e.id);
+                    o > -1 && (Object.keys(e).forEach(s => {
+                        "data" !== s && (t.list[o][s] = e[s]);
                     }), e.isAdd = !0);
                 }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
                 e.isAdd = !0);
-            }), o = o.filter(e => !e.isAdd), o.length && s.push(...o), s;
-        }(o, f), n("sites", t), n("sites-version", s))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
+            }), s = s.filter(e => !e.isAdd), s.length && o.push(...s), o;
+        }(s, x), n("sites", t), n("sites-version", o))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
             ...e,
             show: !1
         }))), t;
     }
-    var b = {
+    var q = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -833,31 +857,31 @@
             }
         },
         setup(e, t) {
-            let s = null;
-            const o = () => {
-                s && clearTimeout(s);
+            let o = null;
+            const s = () => {
+                o && clearTimeout(o);
             };
             return {
                 handleMouseEnter: () => {
-                    e.disabled || (o(), s = setTimeout(() => {
+                    e.disabled || (s(), o = setTimeout(() => {
                         t.emit("show", !0);
                     }, e.showTimeout));
                 },
                 handleMouseLeave: () => {
-                    e.disabled || (o(), s = setTimeout(() => {
+                    e.disabled || (s(), o = setTimeout(() => {
                         t.emit("show", !1);
                     }, e.hideTimeout));
                 }
             };
         }
     };
-    b.render = function(t, s, o, a, r, n) {
+    q.render = function(t, o, s, a, r, n) {
         return e.openBlock(), e.createBlock("li", {
-            onMouseenter: s[1] || (s[1] = e => a.handleMouseEnter(e)),
-            onMouseleave: s[2] || (s[2] = e => a.handleMouseLeave(e))
+            onMouseenter: o[1] || (o[1] = e => a.handleMouseEnter(e)),
+            onMouseleave: o[2] || (o[2] = e => a.handleMouseLeave(e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, b.__file = "src/as-script/components/menuItem.vue";
-    var v = {
+    }, q.__file = "src/components/menuItem.vue";
+    var C = {
         name: "icon",
         props: {
             name: {
@@ -866,16 +890,16 @@
             }
         }
     };
-    v.render = function(t, s, o, a, r, n) {
+    C.render = function(t, o, s, a, r, n) {
         return e.openBlock(), e.createBlock("i", {
-            class: [ "as-menu-item-icon", "icon-" + o.name ]
+            class: [ "as-menu-item-icon", "icon-" + s.name ]
         }, null, 2);
-    }, v.__file = "src/as-script/components/icon.vue";
-    var k = {
+    }, C.__file = "src/components/icon.vue";
+    var _ = {
         name: "as-menu",
         components: {
-            menuItem: b,
-            icon: v
+            menuItem: q,
+            icon: C
         },
         props: {
             mode: {
@@ -885,55 +909,55 @@
             }
         },
         setup(t) {
-            const s = e.reactive(g("tm")), o = m(), a = e.reactive({
+            const o = e.reactive(Z("tm")), s = m(), a = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
-            }), r = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), n = () => o.keyword ? o.keyword() : function() {
+            }), r = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), n = () => s && s.keyword ? s.keyword() : function() {
                 const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
                 return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
             }();
             return {
-                sites: s,
+                sites: o,
                 data: a,
                 transition: r,
                 handleClick: (e, t) => {
-                    const s = n();
-                    t ? window.open(e.url.replace("%s", s)) : window.location.href = e.url.replace("%s", s);
+                    const o = n();
+                    t ? window.open(e.url.replace("%s", o)) : window.location.href = e.url.replace("%s", o);
                 },
                 handleMenuShow: (e, t) => {
                     t.show = e;
                 },
                 getFavicon: function(e) {
-                    const t = y(e), s = t.host.split(".");
-                    let o = t.host;
-                    return s.length > 2 && (o = s.slice(1).join(".")), `https://ico.ihuan.me/${o}/cdn.ico`;
+                    const t = k(e), o = t.host.split(".");
+                    let s = t.host;
+                    return o.length > 2 && (s = o.slice(1).join(".")), `https://ico.ihuan.me/${s}/cdn.ico`;
                 }
             };
         }
     };
-    const Z = {
+    const N = {
         class: "as-menu"
-    }, x = {
+    }, S = {
         class: "as-menu-item-title"
-    }, q = {
+    }, V = {
         key: 0,
         class: "as-subMenu-container"
-    }, _ = {
+    }, M = {
         class: "as-subMenu"
-    }, S = {
+    }, B = {
         class: "as-url-icon"
     };
-    k.render = function(t, s, o, a, r, n) {
-        const i = e.resolveComponent("icon"), l = e.resolveComponent("menu-item");
-        return e.openBlock(), e.createBlock("ul", Z, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
-        e.createBlock(l, {
+    _.render = function(t, o, s, a, r, n) {
+        const l = e.resolveComponent("icon"), i = e.resolveComponent("menu-item");
+        return e.openBlock(), e.createBlock("ul", N, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
+        e.createBlock(i, {
             class: "as-menu-item",
             key: t.index,
             showTimeout: a.data.showTimeout,
             hideTimeout: a.data.hideTimeout,
             onShow: e => a.handleMenuShow(e, t)
         }, {
-            default: e.withCtx(() => [ e.createVNode("div", x, [ e.createVNode(i, {
+            default: e.withCtx(() => [ e.createVNode("div", S, [ e.createVNode(l, {
                 name: t.name
             }, null, 8, [ "name" ]), e.createVNode("span", {
                 textContent: e.toDisplayString(t.nameZh),
@@ -943,12 +967,12 @@
                 name: a.transition
             }, {
                 default: e.withCtx(() => [ t.list && t.list.length ? e.withDirectives((e.openBlock(), 
-                e.createBlock("div", q, [ e.createVNode("ul", _, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, s) => e.withDirectives((e.openBlock(), 
+                e.createBlock("div", V, [ e.createVNode("ul", M, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
                 e.createBlock("li", {
-                    key: s,
+                    key: o,
                     onClick: e => a.handleClick(t),
                     onMouseup: e.withModifiers(e => a.handleClick(t, !0), [ "middle" ])
-                }, [ e.createVNode("div", S, [ e.createVNode("img", {
+                }, [ e.createVNode("div", B, [ e.createVNode("img", {
                     src: a.getFavicon(t.url),
                     onerror: "this.classList.add('error')"
                 }, null, 8, [ "src" ]) ]), e.createVNode("p", {
@@ -959,36 +983,192 @@
             }, 1032, [ "name" ]) ]),
             _: 2
         }, 1032, [ "showTimeout", "hideTimeout", "onShow" ]))), 128)) ]);
-    }, k.__file = "src/as-script/components/menu.vue";
-    var N = {
-        name: "all-search",
+    }, _.__file = "src/components/menu.vue";
+    var z = {
+        name: "overlay",
+        setup(e, {emit: t}) {
+            let o = !1, s = !1;
+            return {
+                onMouseDown: e => {
+                    o = e.target === e.currentTarget;
+                },
+                onMouseUp: e => {
+                    s = e.target === e.currentTarget;
+                },
+                onMaskClick: e => {
+                    o && s && t("click", e), o = s = !1;
+                }
+            };
+        }
+    };
+    z.render = function(t, o, s, a, r, n) {
+        return e.openBlock(), e.createBlock("div", {
+            class: "as-overlay",
+            onMousedown: o[1] || (o[1] = (...e) => a.onMouseDown && a.onMouseDown(...e)),
+            onMouseup: o[2] || (o[2] = (...e) => a.onMouseUp && a.onMouseUp(...e)),
+            onClick: o[3] || (o[3] = (...e) => a.onMaskClick && a.onMaskClick(...e))
+        }, [ e.renderSlot(t.$slots, "default") ], 32);
+    }, z.__file = "src/components/overlay.vue";
+    var T = {
+        name: "as-radio",
+        props: {
+            modelValue: {
+                type: [ String, Number ]
+            },
+            label: {
+                type: [ String, Number ],
+                default: ""
+            }
+        },
+        setup: (t, o) => ({
+            id: "radio_" + e.getCurrentInstance().uid,
+            model: e.computed({
+                get: () => t.modelValue,
+                set(e) {
+                    o.emit("update:modelValue", e);
+                }
+            })
+        })
+    };
+    const E = {
+        class: "as-radio as-radio-animate"
+    }, D = e.createVNode("i", {
+        class: "as-radio-icon"
+    }, null, -1), L = {
+        class: "as-radio-label"
+    };
+    T.render = function(t, o, s, a, r, n) {
+        return e.openBlock(), e.createBlock("label", E, [ e.withDirectives(e.createVNode("input", {
+            type: "radio",
+            value: s.label,
+            "onUpdate:modelValue": o[1] || (o[1] = e => a.model = e)
+        }, null, 8, [ "value" ]), [ [ e.vModelRadio, a.model ] ]), D, e.createVNode("span", L, [ e.renderSlot(t.$slots, "default") ]) ]);
+    }, T.__file = "src/components/radio.vue";
+    var I = {
+        name: "form-item",
+        props: {
+            labelWidth: {
+                type: [ String, Number ],
+                default: 60
+            },
+            label: {
+                type: [ String, Number ],
+                default: ""
+            }
+        },
+        setup: t => ({
+            labelStyle: e.computed(() => ({
+                width: t.labelWidth + "px"
+            })),
+            contentStyle: e.computed(() => ({
+                marginLeft: t.labelWidth + "px"
+            }))
+        })
+    };
+    I.render = function(t, o, s, a, r, n) {
+        return e.openBlock(), e.createBlock("div", null, [ e.createVNode("label", {
+            class: "as-label",
+            style: a.labelStyle,
+            textContent: e.toDisplayString(s.label)
+        }, null, 12, [ "textContent" ]), e.createVNode("div", {
+            class: "as-content",
+            style: a.contentStyle
+        }, [ e.renderSlot(t.$slots, "default") ], 4) ]);
+    }, I.__file = "src/components/form-item.vue";
+    var A = {
+        name: "side-bar",
         components: {
-            logo: p,
-            asMenu: k
+            overlay: z,
+            asRadio: T,
+            formItem: I
         },
         setup() {
-            const t = m(), s = e.ref(r("mode") || "horizontal"), o = e.ref(!1), a = e.computed(() => [ "as-" + s.value, {
-                [`as-${s.value}-hidden`]: !o.value
-            } ]);
-            function n() {
-                const e = document.body, t = new Map([ [ "body-horizontal", "body-vertical" ], [ "body-vertical", "body-horizontal" ] ]), o = "body-" + s.value, a = t.get(o);
-                e.classList.toggle(a, !1), e.classList.toggle(o, !0);
-            }
+            const t = e.ref(!1);
+            return {
+                mode: w,
+                visible: t,
+                open: () => {
+                    t.value = !0;
+                },
+                onMaskClick: () => {
+                    t.value = !1;
+                },
+                changeMode: e => {
+                    w.value = e.target.value;
+                }
+            };
+        }
+    };
+    const j = e.createVNode("header", {
+        class: "header"
+    }, " 设置 ", -1), O = e.createTextVNode(" 横向 "), F = e.createTextVNode(" 竖向 "), $ = e.createVNode("footer", null, null, -1);
+    A.render = function(t, o, s, a, r, n) {
+        const l = e.resolveComponent("as-radio"), i = e.resolveComponent("form-item"), c = e.resolveComponent("overlay");
+        return e.openBlock(), e.createBlock(e.Fragment, null, [ e.createVNode("div", {
+            class: "as-setting",
+            onClick: o[1] || (o[1] = (...e) => a.open && a.open(...e))
+        }, " 设置 "), (e.openBlock(), e.createBlock(e.Teleport, {
+            to: "#all-search"
+        }, [ e.createVNode(e.Transition, {
+            name: "overlay",
+            appear: ""
+        }, {
+            default: e.withCtx(() => [ e.withDirectives(e.createVNode(c, {
+                onClick: a.onMaskClick
+            }, {
+                default: e.withCtx(() => [ e.createVNode(e.Transition, {
+                    name: "drawer",
+                    appear: ""
+                }, {
+                    default: e.withCtx(() => [ e.withDirectives(e.createVNode("div", {
+                        "aria-modal": "true",
+                        role: "dialog",
+                        class: "as-side-bar",
+                        onClick: o[4] || (o[4] = e.withModifiers(() => {}, [ "stop" ]))
+                    }, [ j, e.createVNode("section", null, [ e.createVNode(i, {
+                        label: "方向"
+                    }, {
+                        default: e.withCtx(() => [ e.createVNode(l, {
+                            label: "horizontal",
+                            modelValue: a.mode,
+                            "onUpdate:modelValue": o[2] || (o[2] = e => a.mode = e),
+                            onChange: a.changeMode
+                        }, {
+                            default: e.withCtx(() => [ O ]),
+                            _: 1
+                        }, 8, [ "modelValue", "onChange" ]), e.createVNode(l, {
+                            label: "vertical",
+                            modelValue: a.mode,
+                            "onUpdate:modelValue": o[3] || (o[3] = e => a.mode = e),
+                            onChange: a.changeMode
+                        }, {
+                            default: e.withCtx(() => [ F ]),
+                            _: 1
+                        }, 8, [ "modelValue", "onChange" ]) ]),
+                        _: 1
+                    }) ]), $ ], 512), [ [ e.vShow, a.visible ] ]) ]),
+                    _: 1
+                }) ]),
+                _: 1
+            }, 8, [ "onClick" ]), [ [ e.vShow, a.visible ] ]) ]),
+            _: 1
+        }) ])) ], 64);
+    }, A.__file = "src/components/side-bar.vue";
+    var G = {
+        name: "all-search",
+        components: {
+            logo: g,
+            asMenu: _,
+            sideBar: A
+        },
+        setup() {
+            const t = m(), o = e.ref(!1), s = e.computed(() => [ "as-" + w.value ]);
             return e.onMounted(() => {
-                n();
-            }), window.addEventListener("resize", function(e, t = 500) {
-                let s = null;
-                return function() {
-                    clearTimeout(s), s = setTimeout(() => {
-                        e.apply(this, arguments);
-                    }, t);
-                };
-            }(() => {
-                n();
-            }), !1), {
+                f();
+            }), {
                 currentSite: t,
-                mode: s,
-                classList: a,
+                mode: w,
+                classList: s,
                 openSet: () => {
                     window.open("https://endday.gitee.io/all-search/");
                 },
@@ -998,76 +1178,70 @@
             };
         }
     };
-    function C(e, t) {
+    function U(e, t) {
         return function() {
-            const s = e.apply(this, arguments);
-            return t.apply(this, arguments), s;
+            const o = e.apply(this, arguments);
+            return t.apply(this, arguments), o;
         };
     }
-    N.render = function(t, s, o, a, r, n) {
-        const i = e.resolveComponent("logo"), l = e.resolveComponent("as-menu");
+    G.render = function(t, o, s, a, r, n) {
+        const l = e.resolveComponent("logo"), i = e.resolveComponent("as-menu"), c = e.resolveComponent("side-bar");
         return e.openBlock(), e.createBlock("div", {
             class: [ "as-container", a.classList ],
             style: {
                 display: "none"
             }
-        }, [ e.createVNode(i, {
+        }, [ e.createVNode(l, {
             mode: a.mode
-        }, null, 8, [ "mode" ]), e.createVNode(l, {
+        }, null, 8, [ "mode" ]), e.createVNode(i, {
             mode: a.mode
-        }, null, 8, [ "mode" ]), e.createVNode("div", {
-            class: "as-setting",
-            onClick: s[1] || (s[1] = (...e) => a.openSet && a.openSet(...e))
-        }, " 设置 ") ], 2);
-    }, N.__file = "src/as-script/index.vue";
-    let z = m();
-    const B = e.createApp(N);
+        }, null, 8, [ "mode" ]), e.createVNode(c) ], 2);
+    }, G.__file = "src/as-script/index.vue";
+    let W = m();
+    const J = e.createApp(G);
     console.log("all-search running 全搜运行中(production)");
-    const M = r("mode") || "horizontal";
-    function T() {
-        if (z = m(), !z) return;
-        if (z.disabled) return;
-        z.invisible || (i("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-        i("as-style", `https://cdn.jsdelivr.net/npm/all-search@${s}/build/as-style.css`));
+    function R() {
+        if (W = m(), !W) return;
+        if (W.disabled) return;
+        W.invisible || l("as-style", `https://cdn.jsdelivr.net/npm/all-search@${o}/build/as-style.css`), 
+        l("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css");
         const e = document.getElementById("all-search");
-        if (e) e.style.display = z.invisible ? "none" : "unset"; else {
+        if (e) e.style.display = W.invisible ? "none" : "unset"; else {
             const e = function() {
                 let e = document.createElement("div");
                 return e.id = "all-search", e;
             }(), t = document.body.parentElement.insertBefore(e, document.body);
-            B.mount(t), function() {
+            J.mount(t), function() {
                 const e = function() {
                     document.dispatchEvent(new CustomEvent(c, {
                         detail: {
-                            version: s,
+                            version: o,
                             getSession: r,
                             setSession: n
                         }
                     }));
                 };
-                document.addEventListener(h, e), e();
+                document.addEventListener(u, e), e();
             }();
         }
     }
-    var E, V;
-    z && z.style && (z.style[1] && "horizontal" === M && l(z.style[1], "as-special"), 
-    z.style[2] && "vertical" === M && l(z.style[2], "as-special")), history.pushState = C(history.pushState, T), 
-    history.replaceState = C(history.replaceState, T), Node.prototype.removeChild = (E = Node.prototype.removeChild, 
-    V = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
+    var H, P;
+    history.pushState = U(history.pushState, R), history.replaceState = U(history.replaceState, R), 
+    Node.prototype.removeChild = (H = Node.prototype.removeChild, P = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
     function() {
-        if (!1 !== V.apply(this, arguments)) return E.apply(this, arguments);
+        if (!1 !== P.apply(this, arguments)) return H.apply(this, arguments);
     }), function() {
         let e = 0;
-        return new Promise((t, s) => {
+        return new Promise((t, o) => {
             if (document && document.body) t(); else {
-                const o = setInterval((function() {
-                    e += 1, document && document.body && (clearInterval(o), t()), 50 === e && (clearInterval(o), 
-                    s(new Error("timeOut")));
+                const s = setInterval((function() {
+                    e += 1, document && document.body && (clearInterval(s), t()), 50 === e && (clearInterval(s), 
+                    o(new Error("timeOut")));
                 }), 200);
             }
         });
     }().then(() => {
-        T();
+        R();
     }).catch(e => {
         console.error(e);
     });

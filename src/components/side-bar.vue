@@ -48,9 +48,9 @@
 <script>
 import { ref } from 'vue'
 import { mode } from '../components/mode.js'
-import overlay from '../components/overlay'
-import radio from '../components/radio'
-import formItem from '../components/form-item'
+import overlay from '../components/overlay.vue'
+import radio from '../components/radio.vue'
+import formItem from '../components/form-item.vue'
 
 export default {
   name: 'side-bar',

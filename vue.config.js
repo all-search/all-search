@@ -28,6 +28,11 @@ module.exports = {
         })
       config.entry('app').clear().add('./src/main.js')
     }
+    config
+      .plugin('userscript-metadata')
+      .use(new UserScriptMetaDataPlugin({
+        metaData
+      }))
     config.externals = {
       vue: 'Vue'
     }

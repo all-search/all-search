@@ -1,4 +1,4 @@
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { getSession, setSession, addStyleContent } from '../util'
 import { debounce } from '../util/debounce'
 import { siteInfo } from '../config/loadList'
