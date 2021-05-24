@@ -34,6 +34,15 @@
                   竖向
                 </as-radio>
               </form-item>
+              <form-item label="对齐">
+                <as-radio
+                  v-for="[key, value] in alignList"
+                  :label="key"
+                  v-model="align"
+                  @change="changeAlign">
+                  {{ value }}
+                </as-radio>
+              </form-item>
             </section>
             <footer>
 
@@ -47,7 +56,8 @@
 
 <script>
 import { ref } from 'vue'
-import { mode } from '../components/mode.js'
+import useMode from '../components/mode.js'
+import useAlign from '../components/align.js'
 import overlay from '../components/overlay.vue'
 import radio from '../components/radio.vue'
 import formItem from '../components/form-item.vue'
@@ -68,15 +78,26 @@ export default {
       visible.value = false
     }
 
+    const { mode } = useMode()
+    const { alignList, align } = useAlign()
+
     const changeMode = (e) => {
       mode.value = e.target.value
     }
+
+    const changeAlign = e => {
+      align.value = e.target.value
+    }
+
     return {
       mode,
       visible,
       open,
       onMaskClick,
-      changeMode
+      changeMode,
+      alignList,
+      align,
+      changeAlign
     }
   }
 }
@@ -101,6 +122,7 @@ export default {
     box-shadow: 0 8px 10px -5px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12);
     overflow: hidden;
     > header {
+      font-size: 16px;
       align-items: center;
       color: $color;
       display: flex;

@@ -1,18 +1,18 @@
-import { ref, watch } from 'vue'
-import { getSession, setSession, addStyleContent } from '../util'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { addStyleContent, getSession, setSession } from '../util'
 import { debounce } from '../util/debounce'
 import { siteInfo } from '../config/loadList'
 
 const session = getSession('mode')
 
 const getMode = val => {
-  if (['vertical', 'horizontal'].indexOf(session) === -1) {
+  if(val !== 'vertical' && val !== 'horizontal') {
     return 'horizontal'
   }
   return val
 }
 
-export const mode = ref(getMode(session))
+const mode = ref(getMode(session))
 
 const map = new Map([
   ['body-horizontal', 'body-vertical'],
@@ -40,19 +40,33 @@ const addCustomStyle = (value) => {
   }
 }
 
-export const initStyle = (value = 'horizontal') => {
+const initStyle = (value = 'horizontal') => {
   addBodyClass(value)
   addCustomStyle(value)
 }
-
-window.addEventListener('resize', debounce(() => {
-  initStyle(mode.value)
-}), false)
 
 watch(mode, (value) => {
   const formatVal = getMode(value)
   initStyle(formatVal)
   setSession('mode', formatVal)
 })
+
+const resizeHandle = debounce(() => initStyle(mode.value))
+
+export default function useMode () {
+
+  onMounted(() => {
+    initStyle(mode.value)
+    window.addEventListener('resize', resizeHandle, false)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', resizeHandle, false)
+  })
+
+  return {
+    mode
+  }
+}
 
 

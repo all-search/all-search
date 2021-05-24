@@ -1,6 +1,7 @@
 <template>
   <ul
-    class="as-menu">
+    class="as-menu"
+    :style="{justifyContent: align}">
     <menu-item
       class="as-menu-item"
       v-for="item in sites"
@@ -50,6 +51,7 @@ import parseUrl from '../util/parseUrl'
 import { siteInfo } from '../config/loadList'
 import menuItem from './menuItem.vue'
 import icon from '../components/icon.vue'
+import useAlign from '../components/align.js'
 
 export default {
   name: 'as-menu',
@@ -106,9 +108,12 @@ export default {
       // return `https://api.jxcxin.cn/api/Favicon/api.php?url=${mainDomain}`
     }
 
+    const { align } = useAlign()
+
     return {
       sites,
       data,
+      align,
       transition,
       handleClick,
       handleMenuShow,
