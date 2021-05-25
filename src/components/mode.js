@@ -54,7 +54,6 @@ watch(mode, (value) => {
 const resizeHandle = debounce(() => initStyle(mode.value))
 
 export default function useMode () {
-
   onMounted(() => {
     initStyle(mode.value)
     window.addEventListener('resize', resizeHandle, false)

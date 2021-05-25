@@ -20,14 +20,6 @@ export default createRouter({
       component: () => import('../views/config.vue'),
       children: [
         {
-          path: 'setting',
-          name: 'setting',
-          component: () => import('../views/setting.vue'),
-          meta: {
-            nameZh: '基础配置'
-          }
-        },
-        {
           path: 'sites',
           name: 'sites',
           component: () => import('../views/sites.vue'),

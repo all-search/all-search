@@ -7,18 +7,6 @@
       <el-menu
         router>
         <router-link
-          to="setting"
-          custom
-          v-slot="{ navigate, route, isActive }">
-          <el-menu-item
-            :index="route.path"
-            :class="[isActive && 'is-active']"
-            @click="navigate">
-            <i class="el-icon-menu"></i>
-            <template #title>基础设置</template>
-          </el-menu-item>
-        </router-link>
-        <router-link
           to="sites"
           custom
           active-class="is-active"
@@ -38,7 +26,7 @@
 
 <script>
 export default {
-  name: 'side-bar'
+  name: 'asAside'
 }
 </script>
 
