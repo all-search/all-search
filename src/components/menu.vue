@@ -133,7 +133,7 @@ export default {
     white-space: nowrap;
     border: 0;
     box-shadow: none;
-    background-color: #fff;
+    background-color: var(--as-bg-color);
     display: flex;
   }
 
@@ -244,7 +244,7 @@ export default {
     min-width: 90px;
     border: 1px solid #e4e7ed;
     border-radius: 2px;
-    background-color: #fff;
+    background-color: var(--as-bg-color);
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12),
     0 6px 16px 0 rgba(0, 0, 0, .08),
     0 9px 28px 8px rgba(0, 0, 0, .05);

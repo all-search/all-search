@@ -64,6 +64,7 @@ export default {
 
   #all-search {
     --as-primary-color: #1890ff;
+    --as-bg-color: #fff;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   }
 
@@ -73,7 +74,6 @@ export default {
     top: 0;
     border-bottom: 1px #e8e8e8 solid;
     flex-direction: row;
-    // overflow-x: scroll;
     scrollbar-width: none;
     &::-webkit-scrollbar {
       display: none;
@@ -96,7 +96,7 @@ export default {
   .as-container {
     position: fixed;
     display: flex !important;
-    background-color: #fff;
+    background-color: var(--as-bg-color);
     z-index: $mainZIndex;
   }
 

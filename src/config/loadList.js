@@ -7,7 +7,7 @@ export const list = [
   {
     url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
     style: {
-      1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;} .srp .minidiv{top: ${height}px !important;}`
+      1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;}#searchform.minidiv{top: ${height}px !important;}`
     }
   },
   {

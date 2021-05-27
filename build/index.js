@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.12
-// @description  2021年5月25日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.13
+// @description  2021年5月27日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/5/25
+// @update       2021/5/27
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.12/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.13/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -110,7 +110,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.12";
+    var t = "1.0.13";
     e.reactive({
         tmVersion: ""
     });
@@ -169,20 +169,7 @@
             let a = document.querySelector(o);
             if (void 0 === o && (a = document.body || document.head || document.documentElement || document), 
             void 0 === o || void 0 !== o && null !== document.querySelector(o)) {
-                if (!s) {
-                    if (s || null === document.querySelector("." + t)) {
-                        let o = document.createElement("style");
-                        t && (o.className = t), o.setAttribute("type", "text/css"), o.innerHTML = e;
-                        try {
-                            a.appendChild(o);
-                        } catch (e) {
-                            console.log(e.message);
-                        }
-                        return !0;
-                    }
-                    return !0;
-                }
-                !function(e) {
+                if (s) !function(e) {
                     try {
                         if ("string" == typeof e) {
                             let t = document.querySelectorAll(e);
@@ -191,7 +178,15 @@
                     } catch (e) {
                         console.log(e);
                     }
-                }("." + t);
+                }("." + t); else if (!s && null !== document.querySelector("." + t)) return !0;
+                let o = document.createElement("style");
+                t && (o.className = t), o.setAttribute("type", "text/css"), o.innerHTML = e;
+                try {
+                    a.appendChild(o);
+                } catch (e) {
+                    console.log(e.message);
+                }
+                return !0;
             }
         }), 20, !0);
     }
@@ -199,7 +194,7 @@
     const h = [ {
         url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
         style: {
-            1: ".srp #searchform:not(.minidiv){top: 50px !important;} .srp .minidiv{top: 30px !important;}"
+            1: ".srp #searchform:not(.minidiv){top: 50px !important;}#searchform.minidiv{top: 30px !important;}"
         }
     }, {
         url: /^https?:\/\/www\.baidu\.com\/$/,

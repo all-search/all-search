@@ -200,20 +200,19 @@ export function addStyleContent (css, className, addToTarget, isReload = false) 
       } else if (!isReload && document.querySelector('.' + className) !== null) {
         // 节点存在 && 不准备覆盖
         return true
-      } else {
-        let cssNode = document.createElement('style')
-        if (className) {
-          cssNode.className = className
-        }
-        cssNode.setAttribute('type', 'text/css')
-        cssNode.innerHTML = css
-        try {
-          addTo.appendChild(cssNode)
-        } catch (e) {
-          console.log(e.message)
-        }
-        return true
       }
+      let cssNode = document.createElement('style')
+      if (className) {
+        cssNode.className = className
+      }
+      cssNode.setAttribute('type', 'text/css')
+      cssNode.innerHTML = css
+      try {
+        addTo.appendChild(cssNode)
+      } catch (e) {
+        console.log(e.message)
+      }
+      return true
     }
   }, 20, true)
 }
