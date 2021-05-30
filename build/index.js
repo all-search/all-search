@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.13
-// @description  2021年5月27日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.14
+// @description  2021年5月30日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/5/27
+// @update       2021/5/30
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.13/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.14/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -18,113 +18,114 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 
-// @include      /^https?:\/\/www\.google\.com(.hk)?\/search/
-// @include      /^https?:\/\/www\.baidu\.com\/$/
-// @include      /^https?:\/\/www\.baidu\.com\/s/
-// @include      /^https?:\/\/www\.baidu\.com\/baidu\?wd/
-// @include      /^https?:\/\/[^.]*\.bing\.com\/search/
-// @include      /^https?:\/\/duckduckgo\.com\/*/
-// @include      /^https?:\/\/search\.yahoo\.com\/search/
-// @include      /^https?:\/\/tw\.search\.yahoo\.com\/search/
-// @include      /^https?:\/\/searx\.me\/\?q/
-// @include      /^https?:\/\/www\.sogou\.com\/(?:web|s)/
-// @include      /^https?:\/\/yandex\.com\/search/
-// @include      /^https?:\/\/www\.startpage\.com\/do\/asearch/
-// @include      /^https?:\/\/mijisou.com\/\?q/
-// @include      /^https?:\/\/google\.infinitynewtab\.com\/\?q/
-// @include      /^https?:\/\/www\.dogedoge\.com\/results\?q/
-// @include      /^https?:\/\/baike\.baidu\.com\/item/
-// @include      /^https?:\/\/baike\.baidu\.com\/search/
-// @include      /^https?:\/\/wenku\.baidu\.com\/search/
-// @include      /^https?:\/\/zhidao\.baidu\.com\/search/
-// @include      /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/
-// @include      /^https?:\/\/www\.zhihu\.com\/search\?/
-// @include      /^https?:\/\/www\.so\.com\/s/
-// @include      /^https?:\/\/so\.baike\.com\/doc/
-// @include      /^https?:\/\/www\.baike\.com\/wiki/
-// @include      /^https?:\/\/www\.docin\.com\/search\.do/
-// @include      /^https?:\/\/zhihu\.sogou\.com\/zhihu/
-// @include      /^https?:\/\/weixin\.sogou\.com\/weixin\?/
-// @include      /^https?:\/\/www\.quora\.com\/search\?/
-// @include      /^https?:\/\/stackoverflow\.com\/search\?/
-// @include      /^https?:\/\/search\.bilibili\.com\/all/
-// @include      /^https?:\/\/www\.acfun\.cn\/search/
-// @include      /^https?:\/\/www\.youtube\.com\/results/
-// @include      /^https?:\/\/www\.nicovideo\.jp\/search\//
-// @include      /^https?:\/\/so\.iqiyi\.com\/so\/q/
-// @include      /^https?:\/\/v\.qq\.com\/x\/search/
-// @include      /^https?:\/\/music\.baidu\.com\/search/
-// @include      /^https?:\/\/so\.1ting\.com\/all\.do/
-// @include      /^https?:\/\/www\.xiami\.com\/search/
-// @include      /^https?:\/\/s\.music\.qq\.com/
-// @include      /^https?:\/\/music\.163\.com\/.*?#\/search/
-// @include      /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
-// @include      /^https?:\/\/image\.baidu\.com\/search/
-// @include      /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
-// @include      /^https?:\/\/.*\.bing\.com\/images\/search/
-// @include      /^https?:\/\/www\.flickr\.com\/search\//
+// @include      /\/\/www\.google\.com(.hk)?\/search/
+// @include      /\/\/www\.baidu\.com\/$/
+// @include      /\/\/www\.baidu\.com\/s/
+// @include      /\/\/www\.baidu\.com\/baidu\?wd/
+// @include      /\/\/[^.]*\.bing\.com\/search/
+// @include      /\/\/duckduckgo\.com\/*/
+// @include      /\/\/search\.yahoo\.com\/search/
+// @include      /\/\/tw\.search\.yahoo\.com\/search/
+// @include      /\/\/searx\.me\/\?q/
+// @include      /\/\/www\.sogou\.com\/(?:web|s)/
+// @include      /\/\/yandex\.com\/search/
+// @include      /\/\/www\.startpage\.com\/do\/asearch/
+// @include      /\/\/mijisou.com\/\?q/
+// @include      /\/\/google\.infinitynewtab\.com\/\?q/
+// @include      /\/\/www\.dogedoge\.com\/results\?q/
+// @include      /\/\/baike\.baidu\.com\/item/
+// @include      /\/\/baike\.baidu\.com\/search/
+// @include      /\/\/wenku\.baidu\.com\/search/
+// @include      /\/\/zhidao\.baidu\.com\/search/
+// @include      /\/\/\D{2,5}\.wikipedia\.org\/wiki/
+// @include      /\/\/www\.zhihu\.com\/search\?/
+// @include      /\/\/www\.so\.com\/s/
+// @include      /\/\/so\.baike\.com\/doc/
+// @include      /\/\/www\.baike\.com\/wiki/
+// @include      /\/\/www\.docin\.com\/search\.do/
+// @include      /\/\/zhihu\.sogou\.com\/zhihu/
+// @include      /\/\/weixin\.sogou\.com\/weixin\?/
+// @include      /\/\/www\.quora\.com\/search\?/
+// @include      /\/\/stackoverflow\.com\/search\?/
+// @include      /\/\/search\.bilibili\.com\/all/
+// @include      /\/\/www\.acfun\.cn\/search/
+// @include      /\/\/www\.youtube\.com\/results/
+// @include      /\/\/www\.youtube\.com\/watch/
+// @include      /\/\/www\.nicovideo\.jp\/search\//
+// @include      /\/\/so\.iqiyi\.com\/so\/q/
+// @include      /\/\/v\.qq\.com\/x\/search/
+// @include      /\/\/music\.baidu\.com\/search/
+// @include      /\/\/so\.1ting\.com\/all\.do/
+// @include      /\/\/www\.xiami\.com\/search/
+// @include      /\/\/s\.music\.qq\.com/
+// @include      /\/\/music\.163\.com\/.*?#\/search/
+// @include      /\/\/so\.yinyuetai\.com\/\?keyword/
+// @include      /\/\/image\.baidu\.com\/search/
+// @include      /\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
+// @include      /\/\/.*\.bing\.com\/images\/search/
+// @include      /\/\/www\.flickr\.com\/search\//
 // @include      /^http:\/\/www\.pixiv\.net\/search\.php/
-// @include      /^https?:\/\/huaban\.com\/search\/\?/
-// @include      /^https?:\/\/www\.pinterest\.com\/search\//
-// @include      /^https?:\/\/thepiratebay\.org\/search/
-// @include      /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/
-// @include      /^https?:\/\/www\.ed2000\.com\/filelist\.asp/
-// @include      /^https?:\/\/www\.zimuzu\.tv\/search\//
-// @include      /^https?:\/\/so\.cqp\.cc\/search/
-// @include      /^https?:\/\/subhd\.com\/search/
-// @include      /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/
-// @include      /^https?:\/\/fanyi\.baidu\.com/
-// @include      /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/
-// @include      /^https?:\/\/dict\.youdao\.com\/search/
-// @include      /^https?:\/\/dict\.youdao\.com\/w/
-// @include      /^https?:\/\/dict\.cn\/./
-// @include      /^https?:\/\/s\.taobao\.com\/search/
-// @include      /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
-// @include      /^https?:\/\/list\.tmall\.com\/search_product\.htm/
-// @include      /^https?:\/\/search\.jd\.com\/search/
-// @include      /^https?:\/\/search\.suning\.com/
-// @include      /^https?:\/\/search\.yhd\.com\/c0-0\/k/
-// @include      /^https?:\/\/search\.smzdm\.com\/\?/
-// @include      /^https?:\/\/s\.weibo\.com\/weibo\?q=/
-// @include      /^https?:\/\/tieba\.baidu\.com\/f\/search/
-// @include      /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/
-// @include      /^https?:\/\/www\.douban\.com\/search/
-// @include      /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/
-// @include      /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
+// @include      /\/\/huaban\.com\/search\/\?/
+// @include      /\/\/www\.pinterest\.com\/search\//
+// @include      /\/\/thepiratebay\.org\/search/
+// @include      /\/\/share\.dmhy\.org\/topics\/list\?keyword=/
+// @include      /\/\/www\.ed2000\.com\/filelist\.asp/
+// @include      /\/\/www\.zimuzu\.tv\/search\//
+// @include      /\/\/so\.cqp\.cc\/search/
+// @include      /\/\/subhd\.com\/search/
+// @include      /\/\/translate\.google(?:\.\D{1,4}){1,2}/
+// @include      /\/\/fanyi\.baidu\.com/
+// @include      /\/\/.*\.bing\.com\/dict\/search\?q=/
+// @include      /\/\/dict\.youdao\.com\/search/
+// @include      /\/\/dict\.youdao\.com\/w/
+// @include      /\/\/dict\.cn\/./
+// @include      /\/\/s\.taobao\.com\/search/
+// @include      /\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
+// @include      /\/\/list\.tmall\.com\/search_product\.htm/
+// @include      /\/\/search\.jd\.com\/search/
+// @include      /\/\/search\.suning\.com/
+// @include      /\/\/search\.yhd\.com\/c0-0\/k/
+// @include      /\/\/search\.smzdm\.com\/\?/
+// @include      /\/\/s\.weibo\.com\/weibo\?q=/
+// @include      /\/\/tieba\.baidu\.com\/f\/search/
+// @include      /\/\/(movie|music|book)\.douban\.com\/subject_search?/
+// @include      /\/\/www\.douban\.com\/search/
+// @include      /\/\/xueshu\.baidu\.com\/(?:s|baidu)/
+// @include      /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
 // @include      /^http:\/\/search\.cnki\.net\/search\.aspx/
 // @include      /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/
-// @include      /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/
+// @include      /\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/
 // @include      /^http:\/\/.*?ebscohost\.com\/.*?results/
 // @include      /^http:\/\/link\.springer\.com\/search\?query=/
-// @include      /^https?:.*?jstor.org\/action\/doAdvancedSearch/
-// @include      /^https?:.*?runoob\.com\//
-// @include      /^https?:\/\/github\.com\/search/
-// @include      /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/
-// @include      /^https?:\/\/google\.infinitynewtab\.com\/\?q/
-// @include      /^https?:\/\/www\.startpage\.com\/do\/search/
-// @include      /^https?:\/\/endday\.github\.io/
-// @include      /^https?:\/\/endday\.gitee\.io/
+// @include      /.*?jstor.org\/action\/doAdvancedSearch/
+// @include      /.*?runoob\.com\//
+// @include      /\/\/github\.com\/search/
+// @include      /\/\/developer\.mozilla\.org\/.{2,5}\/search/
+// @include      /\/\/google\.infinitynewtab\.com\/\?q/
+// @include      /\/\/www\.startpage\.com\/do\/search/
+// @include      /\/\/endday\.github\.io/
+// @include      /\/\/endday\.gitee\.io/
 
 // ==/UserScript==
 /* eslint-disable */
 
 !function(e) {
     "use strict";
-    var t = "1.0.13";
+    var t = "1.0.14";
     e.reactive({
         tmVersion: ""
     });
     const o = t;
-    function s(e, t) {
+    function a(e, t) {
         t = t || window.location.href;
-        const o = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), s = t.match(o);
-        return decodeURIComponent(s ? s[2] : "");
+        const o = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), a = t.match(o);
+        return decodeURIComponent(a ? a[2] : "");
     }
-    function a(e) {
+    function n(e) {
         return e ? "__allSearch__" + e : null;
     }
-    let n = function(e) {
-        const t = a(e);
+    let r = function(e) {
+        const t = n(e);
         let o;
         if (o = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
         o) try {
@@ -133,8 +134,8 @@
             return o;
         }
         return null;
-    }, r = function(e, t) {
-        const o = a(e);
+    }, s = function(e, t) {
+        const o = n(e);
         if (window.GM_setValue) window.GM_setValue(o, t); else {
             const e = JSON.stringify(t);
             e && window.localStorage.setItem(o, e);
@@ -142,7 +143,7 @@
     };
     function l(e, t) {
         let o;
-        window.GM_getResourceText && (o = window.GM_getResourceText(e)), o ? i(o, e) : function(e, t) {
+        window.GM_getResourceText && (o = window.GM_getResourceText(e)), o ? c(o, e) : function(e, t) {
             if (!e) return;
             if (t) {
                 const e = document.styleSheets;
@@ -153,36 +154,37 @@
             document.getElementsByTagName("head")[0].appendChild(o);
         }(t, e);
     }
-    function i(e, t, o, s = !1) {
+    function i(e) {
+        try {
+            if ("string" == typeof e) {
+                let t = document.querySelectorAll(e);
+                for (let e = 0; e < t.length; e++) t[e].remove();
+            } else "function" == typeof e ? e() : console.log("未知命令：" + e);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    function c(e, t, o, a = !1) {
         !function(e, t, o) {
-            const s = t / 1e3 * 60;
-            let a = 0;
+            const a = t / 1e3 * 60;
+            let n = 0;
             if (!0 === o) {
                 if (e()) return;
             }
             requestAnimationFrame((function t() {
-                if (a < s) a++, requestAnimationFrame(t); else {
-                    e() || !1 || (a = 0, requestAnimationFrame(t));
+                if (n < a) n++, requestAnimationFrame(t); else {
+                    e() || !1 || (n = 0, requestAnimationFrame(t));
                 }
             }));
         }((function() {
-            let a = document.querySelector(o);
-            if (void 0 === o && (a = document.body || document.head || document.documentElement || document), 
+            let n = document.querySelector(o);
+            if (void 0 === o && (n = document.body || document.head || document.documentElement || document), 
             void 0 === o || void 0 !== o && null !== document.querySelector(o)) {
-                if (s) !function(e) {
-                    try {
-                        if ("string" == typeof e) {
-                            let t = document.querySelectorAll(e);
-                            for (let e = 0; e < t.length; e++) t[e].remove();
-                        } else "function" == typeof e ? e() : console.log("未知命令：" + e);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                }("." + t); else if (!s && null !== document.querySelector("." + t)) return !0;
+                if (a) i("." + t); else if (!a && null !== document.querySelector("." + t)) return !0;
                 let o = document.createElement("style");
                 t && (o.className = t), o.setAttribute("type", "text/css"), o.innerHTML = e;
                 try {
-                    a.appendChild(o);
+                    n.appendChild(o);
                 } catch (e) {
                     console.log(e.message);
                 }
@@ -190,248 +192,251 @@
             }
         }), 20, !0);
     }
-    const c = a("script-loaded"), u = a("page-loaded");
+    const u = n("script-loaded"), m = n("page-loaded");
     const h = [ {
-        url: /^https?:\/\/www\.google\.com(.hk)?\/search/,
+        url: /\/\/www\.google\.com(.hk)?\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;}#searchform.minidiv{top: 30px !important;}"
         }
     }, {
-        url: /^https?:\/\/www\.baidu\.com\/$/,
+        url: /\/\/www\.baidu\.com\/$/,
         invisible: !0
     }, {
-        url: /^https?:\/\/www\.baidu\.com\/s/,
+        url: /\/\/www\.baidu\.com\/s/,
         style: {
             1: ".fix-head { top: 30px !important; }",
             2: ".fix-head #u { right: 100px; }"
         }
     }, {
-        url: /^https?:\/\/www\.baidu\.com\/baidu\?wd/,
+        url: /\/\/www\.baidu\.com\/baidu\?wd/,
         style: {
             1: ".fix-head { top: 30px !important; }",
             2: ".fix-head #u { right: 100px; }"
         }
     }, {
-        url: /^https?:\/\/[^.]*\.bing\.com\/search/
+        url: /\/\/[^.]*\.bing\.com\/search/
     }, {
-        url: /^https?:\/\/duckduckgo\.com\/*/
+        url: /\/\/duckduckgo\.com\/*/
     }, {
-        url: /^https?:\/\/search\.yahoo\.com\/search/
+        url: /\/\/search\.yahoo\.com\/search/
     }, {
-        url: /^https?:\/\/tw\.search\.yahoo\.com\/search/
+        url: /\/\/tw\.search\.yahoo\.com\/search/
     }, {
-        url: /^https?:\/\/searx\.me\/\?q/
+        url: /\/\/searx\.me\/\?q/
     }, {
-        url: /^https?:\/\/www\.sogou\.com\/(?:web|s)/,
+        url: /\/\/www\.sogou\.com\/(?:web|s)/,
         style: {
             1: ".header { top: 30px }",
             2: ".header { right: 100px }"
         }
     }, {
-        url: /^https?:\/\/yandex\.com\/search/,
+        url: /\/\/yandex\.com\/search/,
         style: {
             1: "body { margin: 30px!important; }"
         }
     }, {
-        url: /^https?:\/\/www\.startpage\.com\/do\/asearch/
+        url: /\/\/www\.startpage\.com\/do\/asearch/
     }, {
-        url: /^https?:\/\/mijisou.com\/\?q/,
+        url: /\/\/mijisou.com\/\?q/,
         style: {
             1: ".search-page{top: 30px;} .searx-navbar{top: 42px!important;}",
             2: ".search-page{right: 100px!important;}"
         }
     }, {
-        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
+        url: /\/\/google\.infinitynewtab\.com\/\?q/
     }, {
-        url: /^https?:\/\/www\.dogedoge\.com\/results\?q/,
+        url: /\/\/www\.dogedoge\.com\/results\?q/,
         style: {
             1: "#header_wrapper{top: 30px!important;}",
             2: "#header_wrapper{right: 100px!important;}"
         }
     }, {
-        url: /^https?:\/\/baike\.baidu\.com\/item/
+        url: /\/\/baike\.baidu\.com\/item/
     }, {
-        url: /^https?:\/\/baike\.baidu\.com\/search/
+        url: /\/\/baike\.baidu\.com\/search/
     }, {
-        url: /^https?:\/\/wenku\.baidu\.com\/search/
+        url: /\/\/wenku\.baidu\.com\/search/
     }, {
-        url: /^https?:\/\/zhidao\.baidu\.com\/search/
+        url: /\/\/zhidao\.baidu\.com\/search/
     }, {
-        url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/
+        url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
     }, {
-        url: /^https?:\/\/www\.zhihu\.com\/search\?/,
+        url: /\/\/www\.zhihu\.com\/search\?/,
         style: {
             1: ".AppHeader.is-fixed {top: 30px!important;}"
         }
     }, {
-        url: /^https?:\/\/www\.so\.com\/s/
+        url: /\/\/www\.so\.com\/s/
     }, {
-        url: /^https?:\/\/so\.baike\.com\/doc/
+        url: /\/\/so\.baike\.com\/doc/
     }, {
-        url: /^https?:\/\/www\.baike\.com\/wiki/
+        url: /\/\/www\.baike\.com\/wiki/
     }, {
-        url: /^https?:\/\/www\.docin\.com\/search\.do/
+        url: /\/\/www\.docin\.com\/search\.do/
     }, {
-        url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
+        url: /\/\/zhihu\.sogou\.com\/zhihu/,
         style: {
             1: ".header { top:30px }"
         }
     }, {
-        url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/
+        url: /\/\/weixin\.sogou\.com\/weixin\?/
     }, {
-        url: /^https?:\/\/www\.quora\.com\/search\?/
+        url: /\/\/www\.quora\.com\/search\?/
     }, {
-        url: /^https?:\/\/stackoverflow\.com\/search\?/,
+        url: /\/\/stackoverflow\.com\/search\?/,
         style: {
             1: ".top-bar._fixed { top: 30px }",
             2: ".top-bar._fixed { right: 100px }"
         }
     }, {
-        url: /^https?:\/\/search\.bilibili\.com\/all/,
+        url: /\/\/search\.bilibili\.com\/all/,
         keyword: () => document.getElementById("search-keyword").value,
         style: {
             1: "body { margin-top: 30px!important; } .fixed-top {top: 30px;}"
         }
     }, {
-        url: /^https?:\/\/www\.acfun\.cn\/search/,
+        url: /\/\/www\.acfun\.cn\/search/,
         keyword: () => document.getElementById("search-text--standalone").value,
         style: {
             1: "#header {top: 30px;}"
         }
     }, {
-        url: /^https?:\/\/www\.youtube\.com\/results/,
+        url: /\/\/www\.youtube\.com\/results/,
         style: {
-            1: "#masthead-container.ytd-app {top:30px !important;} html:not(.style-scope) {--ytd-toolbar-height:86px !important;}",
+            1: "#masthead-container.ytd-app {top:30px !important;} \n          html:not(.style-scope) {--ytd-toolbar-height:86px !important;}\n          ytd-mini-guide-renderer.ytd-app {padding-top: 30px;}",
             2: "ytd-app {margin-left:100px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:100px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}"
         }
     }, {
-        url: /^https?:\/\/www\.nicovideo\.jp\/search\//
+        url: /\/\/www\.youtube\.com\/watch/,
+        invisible: !0
     }, {
-        url: /^https?:\/\/so\.iqiyi\.com\/so\/q/
+        url: /\/\/www\.nicovideo\.jp\/search\//
     }, {
-        url: /^https?:\/\/v\.qq\.com\/x\/search/,
+        url: /\/\/so\.iqiyi\.com\/so\/q/
+    }, {
+        url: /\/\/v\.qq\.com\/x\/search/,
         style: {
             1: ".site_head {top: 30px;}"
         }
     }, {
-        url: /^https?:\/\/music\.baidu\.com\/search/
+        url: /\/\/music\.baidu\.com\/search/
     }, {
-        url: /^https?:\/\/so\.1ting\.com\/all\.do/
+        url: /\/\/so\.1ting\.com\/all\.do/
     }, {
-        url: /^https?:\/\/www\.xiami\.com\/search/
+        url: /\/\/www\.xiami\.com\/search/
     }, {
-        url: /^https?:\/\/s\.music\.qq\.com/
+        url: /\/\/s\.music\.qq\.com/
     }, {
-        url: /^https?:\/\/music\.163\.com\/.*?#\/search/
+        url: /\/\/music\.163\.com\/.*?#\/search/
     }, {
-        url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/
+        url: /\/\/so\.yinyuetai\.com\/\?keyword/
     }, {
-        url: /^https?:\/\/image\.baidu\.com\/search/,
+        url: /\/\/image\.baidu\.com\/search/,
         style: {
             1: "#search .s_search { top: 30px; }"
         }
     }, {
-        url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
+        url: /\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
     }, {
-        url: /^https?:\/\/.*\.bing\.com\/images\/search/,
+        url: /\/\/.*\.bing\.com\/images\/search/,
         style: {
             1: "#miniheader {padding-top: 30px;}"
         }
     }, {
-        url: /^https?:\/\/www\.flickr\.com\/search\//
+        url: /\/\/www\.flickr\.com\/search\//
     }, {
         url: /^http:\/\/www\.pixiv\.net\/search\.php/
     }, {
-        url: /^https?:\/\/huaban\.com\/search\/\?/
+        url: /\/\/huaban\.com\/search\/\?/
     }, {
-        url: /^https?:\/\/www\.pinterest\.com\/search\//
+        url: /\/\/www\.pinterest\.com\/search\//
     }, {
-        url: /^https?:\/\/thepiratebay\.org\/search/
+        url: /\/\/thepiratebay\.org\/search/
     }, {
-        url: /^https?:\/\/share\.dmhy\.org\/topics\/list\?keyword=/
+        url: /\/\/share\.dmhy\.org\/topics\/list\?keyword=/
     }, {
-        url: /^https?:\/\/www\.ed2000\.com\/filelist\.asp/
+        url: /\/\/www\.ed2000\.com\/filelist\.asp/
     }, {
-        url: /^https?:\/\/www\.zimuzu\.tv\/search\//
+        url: /\/\/www\.zimuzu\.tv\/search\//
     }, {
-        url: /^https?:\/\/so\.cqp\.cc\/search/
+        url: /\/\/so\.cqp\.cc\/search/
     }, {
-        url: /^https?:\/\/subhd\.com\/search/
+        url: /\/\/subhd\.com\/search/
     }, {
-        url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/,
-        keyword: () => s("text") || s("q")
+        url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/,
+        keyword: () => a("text") || a("q")
     }, {
-        url: /^https?:\/\/fanyi\.baidu\.com/,
+        url: /\/\/fanyi\.baidu\.com/,
         keyword: () => document.getElementById("baidu_translate_input").value
     }, {
-        url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q=/
+        url: /\/\/.*\.bing\.com\/dict\/search\?q=/
     }, {
-        url: /^https?:\/\/dict\.youdao\.com\/search/
+        url: /\/\/dict\.youdao\.com\/search/
     }, {
-        url: /^https?:\/\/dict\.youdao\.com\/w/
+        url: /\/\/dict\.youdao\.com\/w/
     }, {
-        url: /^https?:\/\/dict\.cn\/./
+        url: /\/\/dict\.cn\/./
     }, {
-        url: /^https?:\/\/s\.taobao\.com\/search/,
+        url: /\/\/s\.taobao\.com\/search/,
         style: {
             1: ".m-header-fixed .header-inner { top: 30px !important;}"
         }
     }, {
-        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
+        url: /\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
     }, {
-        url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/
+        url: /\/\/list\.tmall\.com\/search_product\.htm/
     }, {
-        url: /^https?:\/\/search\.jd\.com\/search/
+        url: /\/\/search\.jd\.com\/search/
     }, {
-        url: /^https?:\/\/search\.suning\.com/
+        url: /\/\/search\.suning\.com/
     }, {
-        url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/
+        url: /\/\/search\.yhd\.com\/c0-0\/k/
     }, {
-        url: /^https?:\/\/search\.smzdm\.com\/\?/
+        url: /\/\/search\.smzdm\.com\/\?/
     }, {
-        url: /^https?:\/\/s\.weibo\.com\/weibo\?q=/,
+        url: /\/\/s\.weibo\.com\/weibo\?q=/,
         style: {
             1: ".WB_global_nav { top: 30px !important;}"
         }
     }, {
-        url: /^https?:\/\/tieba\.baidu\.com\/f\/search/
+        url: /\/\/tieba\.baidu\.com\/f\/search/
     }, {
-        url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/
+        url: /\/\/(movie|music|book)\.douban\.com\/subject_search?/
     }, {
-        url: /^https?:\/\/www\.douban\.com\/search/
+        url: /\/\/www\.douban\.com\/search/
     }, {
-        url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/
+        url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/
     }, {
-        url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
+        url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
     }, {
         url: /^http:\/\/search\.cnki\.net\/search\.aspx/
     }, {
         url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/
     }, {
-        url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/
+        url: /\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/
     }, {
         url: /^http:\/\/.*?ebscohost\.com\/.*?results/
     }, {
         url: /^http:\/\/link\.springer\.com\/search\?query=/
     }, {
-        url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/
+        url: /.*?jstor.org\/action\/doAdvancedSearch/
     }, {
-        url: /^https?:.*?runoob\.com\//
+        url: /.*?runoob\.com\//
     }, {
-        url: /^https?:\/\/github\.com\/search/
+        url: /\/\/github\.com\/search/
     }, {
-        url: /^https?:\/\/developer\.mozilla\.org\/.{2,5}\/search/
+        url: /\/\/developer\.mozilla\.org\/.{2,5}\/search/
     }, {
-        url: /^https?:\/\/google\.infinitynewtab\.com\/\?q/
+        url: /\/\/google\.infinitynewtab\.com\/\?q/
     }, {
-        url: /^https?:\/\/www\.startpage\.com\/do\/search/
+        url: /\/\/www\.startpage\.com\/do\/search/
     }, {
-        url: /^https?:\/\/endday\.github\.io/,
+        url: /\/\/endday\.github\.io/,
         invisible: !0
     }, {
-        url: /^https?:\/\/endday\.gitee\.io/,
+        url: /\/\/endday\.gitee\.io/,
         invisible: !0
-    } ], m = function() {
+    } ], d = function() {
         const e = h.find(e => e.url.test(window.location.href.toLowerCase()));
         return e ? {
             url: e.url,
@@ -441,85 +446,126 @@
             keyword: e.keyword,
             create: e.create,
             mounted: e.mounted
-        } : null;
+        } : {
+            url: "",
+            invisible: !0,
+            disabled: !0,
+            style: {},
+            keyword: null,
+            create: null,
+            mounted: null
+        };
     };
-    const d = n("mode"), p = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, w = e.ref(p(d)), g = new Map([ [ "body-horizontal", "body-vertical" ], [ "body-vertical", "body-horizontal" ] ]), f = (e = "horizontal") => {
-        (e => {
-            const t = document.body, o = "body-" + e, s = g.get(o);
-            t.classList.toggle(s, !1), t.classList.toggle(o, !0);
-        })(e), (e => {
-            const t = m();
-            if (t && t.style) {
-                let o = "";
-                t.style[1] && "horizontal" === e ? o = t.style[1] : t.style[2] && "vertical" === e && (o = t.style[2]), 
-                i(o, "as-custom-style", void 0, !0);
-            }
-        })(e);
+    function p(e, t) {
+        return function() {
+            const o = e.apply(this, arguments);
+            return t.apply(this, arguments), o;
+        };
+    }
+    let w = d();
+    const g = r("mode"), f = "vertical" !== (y = g) && "horizontal" !== y ? "horizontal" : y;
+    var y;
+    const b = new Map([ [ "body-horizontal", "body-vertical" ], [ "body-vertical", "body-horizontal" ] ]), v = (e = f) => {
+        const t = d(), o = document.body;
+        if (t.invisible || t.disabled) o.classList.remove("body-vertical", "body-horizontal"); else if (e) {
+            const t = "body-" + e, a = b.get(t);
+            o.classList.toggle(a, !1), o.classList.toggle(t, !0);
+        }
+    }, k = (e = f) => {
+        const t = d();
+        if (t.invisible || t.disabled) i(".as-custom-style"); else if (t.style) {
+            let o = "";
+            t.style[1] && "horizontal" === e ? o = t.style[1] : t.style[2] && "vertical" === e && (o = t.style[2]), 
+            o && c(o, "as-custom-style", void 0, !0);
+        }
+    }, x = function() {
+        w = d(), w.invisible || w.disabled ? i(".as-style") : l("as-style", `https://cdn.jsdelivr.net/npm/all-search@${o}/build/as-style.css`);
+    }, Z = function() {
+        var e, t, o;
+        Node.prototype.removeChild = (e = Node.prototype.removeChild, t = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
+        function() {
+            if (!1 !== t.apply(this, arguments)) return e.apply(this, arguments);
+        }), k(), v(), l("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+        x(), o = () => {
+            w = d(), k(), v(), x();
+        }, history.pushState = p(history.pushState, o), history.replaceState = p(history.replaceState, o), 
+        window.addEventListener("yt-navigate-finish", o);
+    }, q = r("mode"), C = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, N = e.ref(C(q)), _ = (e = "horizontal") => {
+        v(e), k(e);
     };
-    e.watch(w, e => {
-        const t = p(e);
-        f(t), r("mode", t);
+    !function(e) {
+        const t = function() {
+            document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || e();
+        };
+        document.addEventListener("fullscreenchange", e), document.addEventListener("webkitfullscreenchange", e), 
+        document.addEventListener("mozfullscreenchange", e), document.addEventListener("MSFullscreenChange", e), 
+        document.addEventListener("resize", t);
+    }(() => {
+        _(N.value);
+    }), e.watch(N, e => {
+        const t = C(e);
+        _(t), s("mode", t);
     });
-    const y = function(e, t = 500) {
+    const S = function(e, t = 500) {
         let o = null;
         return function() {
             clearTimeout(o), o = setTimeout(() => {
                 e.apply(this, arguments);
             }, t);
         };
-    }(() => f(w.value));
-    function b() {
+    }(() => _(N.value));
+    function V() {
         return e.onMounted(() => {
-            f(w.value), window.addEventListener("resize", y, !1);
+            _(N.value), window.addEventListener("resize", S, !1);
         }), e.onUnmounted(() => {
-            window.removeEventListener("resize", y, !1);
+            window.removeEventListener("resize", S, !1);
         }), {
-            mode: w
+            mode: N
         };
     }
-    var v = {
+    var M = {
         name: "logo",
         props: {
             mode: {
                 type: String,
                 default: "horizontal",
-                validator: e => [ "horizontal", "vertical" ].includes(e)
+                validator: e => [ "horizontal", "vertical" ].indexOf(e) > -1
             }
         }
     };
-    const k = e.createVNode("p", {
+    const B = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    v.render = function(t, o, s, a, n, r) {
+    M.render = function(t, o, a, n, r, s) {
         return e.openBlock(), e.createBlock("a", {
-            class: [ "as-title", "as-title-" + s.mode ],
+            class: [ "as-title", "as-title-" + a.mode ],
             href: "https://github.com/endday/all-search",
             target: "_blank"
-        }, [ k ], 2);
-    }, v.__file = "src/components/logo.vue";
-    let x = document.createElement("a");
-    function Z(e) {
+        }, [ B ], 2);
+    }, M.__file = "src/components/logo.vue";
+    let z = document.createElement("a");
+    function T(e) {
         let t = e;
         if (t.indexOf("//") < 0) t = "//" + t; else {
-            if (!(t.indexOf("//") > -1)) return x;
+            if (!(t.indexOf("//") > -1)) return z;
             {
                 const e = t.toLowerCase();
                 e.startsWith("http://") || e.startsWith("https://") || e.startsWith("ftp://") || e.startsWith("files://") || (t = t.replace(/.*\/\//, "//"));
             }
         }
-        return x.href = t, {
-            href: x.href,
-            origin: x.origin,
-            protocol: x.protocol,
-            host: x.host,
-            hostname: x.hostname,
-            port: x.port,
-            pathname: x.pathname,
-            search: x.search,
-            hash: x.hash
+        return z.href = t, {
+            href: z.href,
+            origin: z.origin,
+            protocol: z.protocol,
+            host: z.host,
+            hostname: z.hostname,
+            port: z.port,
+            pathname: z.pathname,
+            search: z.search,
+            hash: z.hash
         };
     }
-    const q = [ {
+    const L = [ {
         nameZh: "搜索",
         name: "search",
         list: [ {
@@ -809,7 +855,7 @@
     } ].map(e => ({
         ...e,
         list: e.list.map(t => {
-            const {hostname: o} = Z(t.url);
+            const {hostname: o} = T(t.url);
             return {
                 ...t,
                 id: `${e.name}-${o}`,
@@ -822,28 +868,28 @@
             visible: !0
         }
     }));
-    function C(e) {
-        let t = q;
-        const s = n("sites"), a = n("sites-version");
-        return s && (t = s, s && a && (a !== o || "tm" !== e) && (t = function(e, t) {
+    function E(e) {
+        let t = L;
+        const a = r("sites"), n = r("sites-version");
+        return a && (t = a, a && n && (n !== o || "tm" !== e) && (t = function(e, t) {
             const o = JSON.parse(JSON.stringify(e));
-            let s = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
-            return s.forEach(e => {
+            let a = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
+            return a.forEach(e => {
                 const t = o.find(t => t.name === e.name);
                 t && (e.list.forEach(e => {
                     const o = t.list.findIndex(t => t.id === e.id);
-                    o > -1 && (Object.keys(e).forEach(s => {
-                        "data" !== s && (t.list[o][s] = e[s]);
+                    o > -1 && (Object.keys(e).forEach(a => {
+                        "data" !== a && (t.list[o][a] = e[a]);
                     }), e.isAdd = !0);
                 }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
                 e.isAdd = !0);
-            }), s = s.filter(e => !e.isAdd), s.length && o.push(...s), o;
-        }(s, q), r("sites", t), r("sites-version", o))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
+            }), a = a.filter(e => !e.isAdd), a.length && o.push(...a), o;
+        }(a, L), s("sites", t), s("sites-version", o))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
             ...e,
             show: !1
         }))), t;
     }
-    var _ = {
+    var D = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -861,30 +907,30 @@
         },
         setup(e, t) {
             let o = null;
-            const s = () => {
+            const a = () => {
                 o && clearTimeout(o);
             };
             return {
                 handleMouseEnter: () => {
-                    e.disabled || (s(), o = setTimeout(() => {
+                    e.disabled || (a(), o = setTimeout(() => {
                         t.emit("show", !0);
                     }, e.showTimeout));
                 },
                 handleMouseLeave: () => {
-                    e.disabled || (s(), o = setTimeout(() => {
+                    e.disabled || (a(), o = setTimeout(() => {
                         t.emit("show", !1);
                     }, e.hideTimeout));
                 }
             };
         }
     };
-    _.render = function(t, o, s, a, n, r) {
+    D.render = function(t, o, a, n, r, s) {
         return e.openBlock(), e.createBlock("li", {
-            onMouseenter: o[1] || (o[1] = e => a.handleMouseEnter(e)),
-            onMouseleave: o[2] || (o[2] = e => a.handleMouseLeave(e))
+            onMouseenter: o[1] || (o[1] = e => n.handleMouseEnter(e)),
+            onMouseleave: o[2] || (o[2] = e => n.handleMouseLeave(e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, _.__file = "src/components/menuItem.vue";
-    var N = {
+    }, D.__file = "src/components/menuItem.vue";
+    var I = {
         name: "icon",
         props: {
             name: {
@@ -893,105 +939,105 @@
             }
         }
     };
-    N.render = function(t, o, s, a, n, r) {
+    I.render = function(t, o, a, n, r, s) {
         return e.openBlock(), e.createBlock("i", {
-            class: [ "as-menu-item-icon", "icon-" + s.name ]
+            class: [ "as-menu-item-icon", "icon-" + a.name ]
         }, null, 2);
-    }, N.__file = "src/components/icon.vue";
-    const S = n("align"), V = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), M = e => V.has(e) ? e : "flex-start", B = e.ref(M(S)), z = e.reactive(V);
-    function T() {
+    }, I.__file = "src/components/icon.vue";
+    const A = r("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), F = e => j.has(e) ? e : "flex-start", O = e.ref(F(A)), U = e.reactive(j);
+    function G() {
         return {
-            alignList: z,
-            align: B
+            alignList: U,
+            align: O
         };
     }
-    e.watch(B, e => {
-        r("align", M(e));
+    e.watch(O, e => {
+        s("align", F(e));
     });
-    var L = {
+    var $ = {
         name: "as-menu",
         components: {
-            menuItem: _,
-            icon: N
+            menuItem: D,
+            icon: I
         },
         props: {
             mode: {
                 type: String,
                 default: "horizontal",
-                validator: e => [ "horizontal", "vertical" ].includes(e)
+                validator: e => [ "horizontal", "vertical" ].indexOf(e) > -1
             }
         },
         setup(t) {
-            const o = e.reactive(C("tm")), s = m(), a = e.reactive({
+            const o = e.reactive(E("tm")), a = d(), n = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
-            }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), r = () => s && s.keyword ? s.keyword() : function() {
+            }), r = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), s = () => a && a.keyword ? a.keyword() : function() {
                 const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
                 return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
             }();
-            const {align: l} = T();
+            const {align: l} = G();
             return {
                 sites: o,
-                data: a,
+                data: n,
                 align: l,
-                transition: n,
+                transition: r,
                 handleClick: (e, t) => {
-                    const o = r();
+                    const o = s();
                     t ? window.open(e.url.replace("%s", o)) : window.location.href = e.url.replace("%s", o);
                 },
                 handleMenuShow: (e, t) => {
                     t.show = e;
                 },
                 getFavicon: function(e) {
-                    const t = Z(e), o = t.host.split(".");
-                    let s = t.host;
-                    return o.length > 2 && (s = o.slice(1).join(".")), `https://ico.ihuan.me/${s}/cdn.ico`;
+                    const t = T(e), o = t.host.split(".");
+                    let a = t.host;
+                    return o.length > 2 && (a = o.slice(1).join(".")), `https://ico.ihuan.me/${a}/cdn.ico`;
                 }
             };
         }
     };
-    const E = {
+    const W = {
         class: "as-menu-item-title"
-    }, D = {
+    }, J = {
         key: 0,
         class: "as-subMenu-container"
-    }, I = {
+    }, R = {
         class: "as-subMenu"
-    }, A = {
+    }, H = {
         class: "as-url-icon"
     };
-    L.render = function(t, o, s, a, n, r) {
+    $.render = function(t, o, a, n, r, s) {
         const l = e.resolveComponent("icon"), i = e.resolveComponent("menu-item");
         return e.openBlock(), e.createBlock("ul", {
             class: "as-menu",
             style: {
-                justifyContent: a.align
+                justifyContent: n.align
             }
-        }, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.sites, t => (e.openBlock(), 
+        }, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(n.sites, t => (e.openBlock(), 
         e.createBlock(i, {
             class: "as-menu-item",
             key: t.index,
-            showTimeout: a.data.showTimeout,
-            hideTimeout: a.data.hideTimeout,
-            onShow: e => a.handleMenuShow(e, t)
+            showTimeout: n.data.showTimeout,
+            hideTimeout: n.data.hideTimeout,
+            onShow: e => n.handleMenuShow(e, t)
         }, {
-            default: e.withCtx(() => [ e.createVNode("div", E, [ e.createVNode(l, {
+            default: e.withCtx(() => [ e.createVNode("div", W, [ e.createVNode(l, {
                 name: t.name
             }, null, 8, [ "name" ]), e.createVNode("span", {
                 textContent: e.toDisplayString(t.nameZh),
-                onClick: e => a.handleClick(t.list[0]),
-                onMouseup: e.withModifiers(e => a.handleClick(t.list[0], !0), [ "middle" ])
+                onClick: e => n.handleClick(t.list[0]),
+                onMouseup: e.withModifiers(e => n.handleClick(t.list[0], !0), [ "middle" ])
             }, null, 40, [ "textContent", "onClick", "onMouseup" ]) ]), e.createVNode(e.Transition, {
-                name: a.transition
+                name: n.transition
             }, {
                 default: e.withCtx(() => [ t.list && t.list.length ? e.withDirectives((e.openBlock(), 
-                e.createBlock("div", D, [ e.createVNode("ul", I, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
+                e.createBlock("div", J, [ e.createVNode("ul", R, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
                 e.createBlock("li", {
                     key: o,
-                    onClick: e => a.handleClick(t),
-                    onMouseup: e.withModifiers(e => a.handleClick(t, !0), [ "middle" ])
-                }, [ e.createVNode("div", A, [ e.createVNode("img", {
-                    src: a.getFavicon(t.url),
+                    onClick: e => n.handleClick(t),
+                    onMouseup: e.withModifiers(e => n.handleClick(t, !0), [ "middle" ])
+                }, [ e.createVNode("div", H, [ e.createVNode("img", {
+                    src: n.getFavicon(t.url),
                     onerror: "this.classList.add('error')"
                 }, null, 8, [ "src" ]) ]), e.createVNode("p", {
                     class: "as-subMenu-text",
@@ -1001,33 +1047,33 @@
             }, 1032, [ "name" ]) ]),
             _: 2
         }, 1032, [ "showTimeout", "hideTimeout", "onShow" ]))), 128)) ], 4);
-    }, L.__file = "src/components/menu.vue";
-    var j = {
+    }, $.__file = "src/components/menu.vue";
+    var P = {
         name: "overlay",
         setup(e, {emit: t}) {
-            let o = !1, s = !1;
+            let o = !1, a = !1;
             return {
                 onMouseDown: e => {
                     o = e.target === e.currentTarget;
                 },
                 onMouseUp: e => {
-                    s = e.target === e.currentTarget;
+                    a = e.target === e.currentTarget;
                 },
                 onMaskClick: e => {
-                    o && s && t("click", e), o = s = !1;
+                    o && a && t("click", e), o = a = !1;
                 }
             };
         }
     };
-    j.render = function(t, o, s, a, n, r) {
+    P.render = function(t, o, a, n, r, s) {
         return e.openBlock(), e.createBlock("div", {
             class: "as-overlay",
-            onMousedown: o[1] || (o[1] = (...e) => a.onMouseDown && a.onMouseDown(...e)),
-            onMouseup: o[2] || (o[2] = (...e) => a.onMouseUp && a.onMouseUp(...e)),
-            onClick: o[3] || (o[3] = (...e) => a.onMaskClick && a.onMaskClick(...e))
+            onMousedown: o[1] || (o[1] = (...e) => n.onMouseDown && n.onMouseDown(...e)),
+            onMouseup: o[2] || (o[2] = (...e) => n.onMouseUp && n.onMouseUp(...e)),
+            onClick: o[3] || (o[3] = (...e) => n.onMaskClick && n.onMaskClick(...e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, j.__file = "src/components/overlay.vue";
-    var F = {
+    }, P.__file = "src/components/overlay.vue";
+    var Q = {
         name: "as-radio",
         props: {
             modelValue: {
@@ -1039,7 +1085,6 @@
             }
         },
         setup: (t, o) => ({
-            id: "radio_" + e.getCurrentInstance().uid,
             model: e.computed({
                 get: () => t.modelValue,
                 set(e) {
@@ -1048,21 +1093,21 @@
             })
         })
     };
-    const U = {
+    const Y = {
         class: "as-radio as-radio-animate"
-    }, G = e.createVNode("i", {
+    }, K = e.createVNode("i", {
         class: "as-radio-icon"
-    }, null, -1), O = {
+    }, null, -1), X = {
         class: "as-radio-label"
     };
-    F.render = function(t, o, s, a, n, r) {
-        return e.openBlock(), e.createBlock("label", U, [ e.withDirectives(e.createVNode("input", {
+    Q.render = function(t, o, a, n, r, s) {
+        return e.openBlock(), e.createBlock("label", Y, [ e.withDirectives(e.createVNode("input", {
             type: "radio",
-            value: s.label,
-            "onUpdate:modelValue": o[1] || (o[1] = e => a.model = e)
-        }, null, 8, [ "value" ]), [ [ e.vModelRadio, a.model ] ]), G, e.createVNode("span", O, [ e.renderSlot(t.$slots, "default") ]) ]);
-    }, F.__file = "src/components/radio.vue";
-    var $ = {
+            value: a.label,
+            "onUpdate:modelValue": o[1] || (o[1] = e => n.model = e)
+        }, null, 8, [ "value" ]), [ [ e.vModelRadio, n.model ] ]), K, e.createVNode("span", X, [ e.renderSlot(t.$slots, "default") ]) ]);
+    }, Q.__file = "src/components/radio.vue";
+    var ee = {
         name: "form-item",
         props: {
             labelWidth: {
@@ -1083,25 +1128,25 @@
             }))
         })
     };
-    $.render = function(t, o, s, a, n, r) {
+    ee.render = function(t, o, a, n, r, s) {
         return e.openBlock(), e.createBlock("div", null, [ e.createVNode("label", {
             class: "as-label",
-            style: a.labelStyle,
-            textContent: e.toDisplayString(s.label)
+            style: n.labelStyle,
+            textContent: e.toDisplayString(a.label)
         }, null, 12, [ "textContent" ]), e.createVNode("div", {
             class: "as-content",
-            style: a.contentStyle
+            style: n.contentStyle
         }, [ e.renderSlot(t.$slots, "default") ], 4) ]);
-    }, $.__file = "src/components/form-item.vue";
-    var W = {
+    }, ee.__file = "src/components/form-item.vue";
+    var te = {
         name: "side-bar",
         components: {
-            overlay: j,
-            asRadio: F,
-            formItem: $
+            overlay: P,
+            asRadio: Q,
+            formItem: ee
         },
         setup() {
-            const t = e.ref(!1), {mode: o} = b(), {alignList: s, align: a} = T();
+            const t = e.ref(!1), {mode: o} = V(), {alignList: a, align: n} = G();
             return {
                 mode: o,
                 visible: t,
@@ -1114,17 +1159,17 @@
                 changeMode: e => {
                     o.value = e.target.value;
                 },
-                alignList: s,
-                align: a,
+                alignList: a,
+                align: n,
                 changeAlign: e => {
-                    a.value = e.target.value;
+                    n.value = e.target.value;
                 }
             };
         }
     };
-    const J = e.createVNode("header", {
+    const oe = e.createVNode("header", {
         class: "header"
-    }, " 设置 ", -1), R = e.createTextVNode(" 横向 "), H = e.createTextVNode(" 竖向 "), P = e.createVNode("footer", null, [ e.createVNode("a", {
+    }, " 设置 ", -1), ae = e.createTextVNode("横向 "), ne = e.createTextVNode("竖向 "), re = e.createVNode("footer", null, [ e.createVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -1135,11 +1180,11 @@
         href: "https://github.com/endday/all-search",
         target: "_blank"
     }, " GitHub地址 ") ], -1);
-    W.render = function(t, o, s, a, n, r) {
+    te.render = function(t, o, a, n, r, s) {
         const l = e.resolveComponent("as-radio"), i = e.resolveComponent("form-item"), c = e.resolveComponent("overlay");
         return e.openBlock(), e.createBlock(e.Fragment, null, [ e.createVNode("div", {
             class: "as-setting",
-            onClick: o[1] || (o[1] = (...e) => a.open && a.open(...e))
+            onClick: o[1] || (o[1] = (...e) => n.open && n.open(...e))
         }, " 设置 "), (e.openBlock(), e.createBlock(e.Teleport, {
             to: "#all-search"
         }, [ e.createVNode(e.Transition, {
@@ -1147,7 +1192,7 @@
             appear: ""
         }, {
             default: e.withCtx(() => [ e.withDirectives(e.createVNode(c, {
-                onClick: a.onMaskClick
+                onClick: n.onMaskClick
             }, {
                 default: e.withCtx(() => [ e.createVNode(e.Transition, {
                     name: "drawer",
@@ -1158,136 +1203,114 @@
                         role: "dialog",
                         class: "as-side-bar",
                         onClick: o[5] || (o[5] = e.withModifiers(() => {}, [ "stop" ]))
-                    }, [ J, e.createVNode("section", null, [ e.createVNode(i, {
+                    }, [ oe, e.createVNode("section", null, [ e.createVNode(i, {
                         label: "方向"
                     }, {
                         default: e.withCtx(() => [ e.createVNode(l, {
                             label: "horizontal",
-                            modelValue: a.mode,
-                            "onUpdate:modelValue": o[2] || (o[2] = e => a.mode = e),
-                            onChange: a.changeMode
+                            modelValue: n.mode,
+                            "onUpdate:modelValue": o[2] || (o[2] = e => n.mode = e),
+                            onChange: n.changeMode
                         }, {
-                            default: e.withCtx(() => [ R ]),
+                            default: e.withCtx(() => [ ae ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]), e.createVNode(l, {
                             label: "vertical",
-                            modelValue: a.mode,
-                            "onUpdate:modelValue": o[3] || (o[3] = e => a.mode = e),
-                            onChange: a.changeMode
+                            modelValue: n.mode,
+                            "onUpdate:modelValue": o[3] || (o[3] = e => n.mode = e),
+                            onChange: n.changeMode
                         }, {
-                            default: e.withCtx(() => [ H ]),
+                            default: e.withCtx(() => [ ne ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]) ]),
                         _: 1
                     }), e.createVNode(i, {
                         label: "对齐"
                     }, {
-                        default: e.withCtx(() => [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(a.alignList, ([t, s]) => (e.openBlock(), 
+                        default: e.withCtx(() => [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(n.alignList, ([t, a]) => (e.openBlock(), 
                         e.createBlock(l, {
                             label: t,
-                            modelValue: a.align,
-                            "onUpdate:modelValue": o[4] || (o[4] = e => a.align = e),
-                            onChange: a.changeAlign
+                            modelValue: n.align,
+                            "onUpdate:modelValue": o[4] || (o[4] = e => n.align = e),
+                            onChange: n.changeAlign
                         }, {
-                            default: e.withCtx(() => [ e.createTextVNode(e.toDisplayString(s), 1) ]),
+                            default: e.withCtx(() => [ e.createTextVNode(e.toDisplayString(a), 1) ]),
                             _: 2
                         }, 1032, [ "label", "modelValue", "onChange" ]))), 256)) ]),
                         _: 1
-                    }) ]), P ], 512), [ [ e.vShow, a.visible ] ]) ]),
+                    }), e.createCommentVNode('<form-item label="主题色">\r\n                <color/>\r\n              </form-item>\r\n              <form-item label="背景色">\r\n                <color/>\r\n              </form-item>') ]), re ], 512), [ [ e.vShow, n.visible ] ]) ]),
                     _: 1
                 }) ]),
                 _: 1
-            }, 8, [ "onClick" ]), [ [ e.vShow, a.visible ] ]) ]),
+            }, 8, [ "onClick" ]), [ [ e.vShow, n.visible ] ]) ]),
             _: 1
         }) ])) ], 64);
-    }, W.__file = "src/components/side-bar.vue";
-    var Q = {
+    }, te.__file = "src/components/side-bar.vue";
+    var se = {
         name: "all-search",
         components: {
-            logo: v,
-            asMenu: L,
-            sideBar: W
+            logo: M,
+            asMenu: $,
+            sideBar: te
         },
         setup() {
-            const t = m(), o = e.ref(!1), s = e.computed(() => [ "as-" + a.value ]);
-            const {mode: a} = b();
-            return {
+            const t = d(), o = e.computed(() => "as-" + a.value), {mode: a} = V();
+            return Z(), {
                 currentSite: t,
                 mode: a,
-                classList: s,
-                openSet: () => {
-                    window.open("https://endday.gitee.io/all-search/");
-                },
-                showBar: function() {
-                    o.value = !0;
-                }
+                classList: o
             };
         }
     };
-    function Y(e, t) {
-        return function() {
-            const o = e.apply(this, arguments);
-            return t.apply(this, arguments), o;
-        };
-    }
-    Q.render = function(t, o, s, a, n, r) {
+    se.render = function(t, o, a, n, r, s) {
         const l = e.resolveComponent("logo"), i = e.resolveComponent("as-menu"), c = e.resolveComponent("side-bar");
         return e.openBlock(), e.createBlock("div", {
-            class: [ "as-container", a.classList ],
+            class: [ "as-container", n.classList ],
             style: {
                 display: "none"
             }
         }, [ e.createVNode(l, {
-            mode: a.mode
+            mode: n.mode
         }, null, 8, [ "mode" ]), e.createVNode(i, {
-            mode: a.mode
+            mode: n.mode
         }, null, 8, [ "mode" ]), e.createVNode(c) ], 2);
-    }, Q.__file = "src/as-script/index.vue";
-    let K = m();
-    const X = e.createApp(Q);
-    console.log("all-search running 全搜运行中(production)");
-    function ee() {
-        if (K = m(), !K) return;
-        if (K.disabled) return;
-        K.invisible || l("as-style", `https://cdn.jsdelivr.net/npm/all-search@${o}/build/as-style.css`), 
-        l("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css");
+    }, se.__file = "src/as-script/index.vue";
+    let le = d();
+    const ie = e.createApp(se);
+    function ce() {
+        le = d();
         const e = document.getElementById("all-search");
-        if (e) e.style.display = K.invisible ? "none" : "unset"; else {
+        if (e) e.style.display = le.invisible ? "none" : "unset"; else {
             const e = function() {
                 let e = document.createElement("div");
                 return e.id = "all-search", e;
             }(), t = document.body.parentElement.insertBefore(e, document.body);
-            X.mount(t), function() {
+            ie.mount(t), function() {
                 const e = function() {
-                    document.dispatchEvent(new CustomEvent(c, {
+                    document.dispatchEvent(new CustomEvent(u, {
                         detail: {
                             version: o,
-                            getSession: n,
-                            setSession: r
+                            getSession: r,
+                            setSession: s
                         }
                     }));
                 };
-                document.addEventListener(u, e), e();
+                document.addEventListener(m, e), e();
             }();
         }
     }
-    var te, oe;
-    history.pushState = Y(history.pushState, ee), history.replaceState = Y(history.replaceState, ee), 
-    Node.prototype.removeChild = (te = Node.prototype.removeChild, oe = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
-    function() {
-        if (!1 !== oe.apply(this, arguments)) return te.apply(this, arguments);
-    }), function() {
+    console.log("all-search running 全搜运行中(production)"), function() {
         let e = 0;
         return new Promise((t, o) => {
             if (document && document.body) t(); else {
-                const s = setInterval((function() {
-                    e += 1, document && document.body && (clearInterval(s), t()), 50 === e && (clearInterval(s), 
+                const a = setInterval((function() {
+                    e += 1, document && document.body && (clearInterval(a), t()), 50 === e && (clearInterval(a), 
                     o(new Error("timeOut")));
                 }), 200);
             }
         });
     }().then(() => {
-        ee();
+        ce();
     }).catch(e => {
         console.error(e);
     });

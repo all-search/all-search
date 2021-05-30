@@ -19,7 +19,7 @@ export default {
     mode: {
       type: String,
       default: 'horizontal',
-      validator: val => ['horizontal', 'vertical'].includes(val)
+      validator: val => ['horizontal', 'vertical'].indexOf(val) > -1
     }
   }
 }

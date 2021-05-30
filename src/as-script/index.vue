@@ -10,12 +10,13 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { siteInfo } from '../config/loadList'
 import useMode from '../components/mode.js'
 import logo from '../components/logo.vue'
 import asMenu from '../components/menu.vue'
 import sideBar from '../components/side-bar.vue'
+import { initStyle } from '../util/initStyle.js'
 
 export default {
   name: 'all-search',
@@ -26,26 +27,13 @@ export default {
   },
   setup () {
     const currentSite = siteInfo()
-    const visible = ref(false)
-    const classList = computed(() => [
-      `as-${mode.value}`
-    ])
-    const openSet = () => {
-      window.open('https://endday.gitee.io/all-search/')
-    }
-
-    function showBar () {
-      visible.value = true
-    }
-
+    const classList = computed(() => `as-${mode.value}`)
     const { mode } = useMode()
-
+    initStyle()
     return {
       currentSite,
       mode,
-      classList,
-      openSet,
-      showBar
+      classList
     }
   }
 }

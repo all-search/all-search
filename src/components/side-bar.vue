@@ -24,14 +24,12 @@
                 <as-radio
                   label="horizontal"
                   v-model="mode"
-                  @change="changeMode">
-                  横向
+                  @change="changeMode">横向
                 </as-radio>
                 <as-radio
                   label="vertical"
                   v-model="mode"
-                  @change="changeMode">
-                  竖向
+                  @change="changeMode">竖向
                 </as-radio>
               </form-item>
               <form-item label="对齐">
@@ -43,6 +41,12 @@
                   {{ value }}
                 </as-radio>
               </form-item>
+              <!--<form-item label="主题色">
+                <color/>
+              </form-item>
+              <form-item label="背景色">
+                <color/>
+              </form-item>-->
             </section>
             <footer>
               <a class="link"
@@ -72,6 +76,7 @@ import useAlign from '../components/align.js'
 import overlay from '../components/overlay.vue'
 import radio from '../components/radio.vue'
 import formItem from '../components/form-item.vue'
+// import color from '../components/color.vue'
 
 export default {
   name: 'side-bar',

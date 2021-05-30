@@ -160,7 +160,7 @@ export function RAFInterval (callback, period, runNow) {
   requestAnimationFrame(step)
 }
 
-function removeNode (cssSelectorOrFunction) {
+export function removeNode (cssSelectorOrFunction) {
   try {
     if (typeof (cssSelectorOrFunction) === 'string') {
       let removeNodes = document.querySelectorAll(cssSelectorOrFunction)

@@ -16,11 +16,7 @@
 </template>
 
 <script>
-import { computed, getCurrentInstance } from 'vue'
-
-function useComponentId () {
-  return getCurrentInstance().uid
-}
+import { computed } from 'vue'
 
 export default {
   name: 'as-radio',
@@ -34,7 +30,6 @@ export default {
     }
   },
   setup (props, ctx) {
-    const id = `radio_${useComponentId()}`
     const model = computed({
       get () {
         return props.modelValue
@@ -44,7 +39,6 @@ export default {
       }
     })
     return {
-      id,
       model
     }
   }
