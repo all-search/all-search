@@ -3,6 +3,7 @@
     <input
       class="input—color"
       type="color"
+      :default-value="model"
       v-model="model"
     />
   </label>
@@ -25,7 +26,6 @@ export default {
       },
       set (value) {
         ctx.emit('update:modelValue', value)
-        console.log(value)
       }
     })
     return {
@@ -45,13 +45,16 @@ export default {
     outline: none;
     vertical-align: middle;
   }
+
   .input—color {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     padding: 4px;
     border: 1px solid #e6e6e6;
     border-radius: 4px;
+    background-color: var(--as-secondary-background-color);
   }
+
   .input—color::-webkit-color-swatch {
     border: 0;
   }

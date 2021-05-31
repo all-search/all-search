@@ -48,7 +48,7 @@ export default {
 <style lang="scss">
   /* radio */
   label.as-radio {
-    color: #606266;
+    color: var(--as-primary-text-color);
     font-weight: 500;
     line-height: 1;
     position: relative;
@@ -71,7 +71,7 @@ export default {
       position: relative;
       width: 12px;
       height: 12px;
-      background: #FFFFFF;
+      background: var(--as-bg-color);
       border: 1px solid #979797;
       border-radius: 50%;
       vertical-align: -2px;
@@ -81,7 +81,7 @@ export default {
       content: "";
       width: 6px;
       height: 6px;
-      background-color: #fff;
+      background-color: var(--as-bg-color);
       border-radius: 50%;
       top: 3px;
       left: 3px;

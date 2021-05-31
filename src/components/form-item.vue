@@ -47,7 +47,7 @@ export default {
     vertical-align: middle;
     float: left;
     font-size: 14px;
-    color: #606266;
+    color: var(--as-primary-text-color);
     line-height: 40px;
     padding: 0 12px 0 0;
     box-sizing: border-box;

@@ -47,7 +47,7 @@ export default {
     text-decoration: none !important;
     padding: 0;
     margin: 0;
-    color: $primary;
+    color: var(--as-primary-color);
 
     .as-title-inner {
       padding: 0;
@@ -61,4 +61,6 @@ export default {
       cursor: pointer;
     }
   }
+
+
 </style>

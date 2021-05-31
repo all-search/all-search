@@ -23,20 +23,20 @@ const map = new Map([
 ])
 
 export const initBodyClass = (value = mode) => {
-  const currentSite = siteInfo()
+  currentSite = siteInfo()
   const body = document.body
   if (currentSite.invisible || currentSite.disabled) {
     body.classList.remove('body-vertical', 'body-horizontal')
   } else if (value) {
     const newValue = `body-${value}`
     const oldValue = map.get(newValue)
-    body.classList.toggle(oldValue, false)
-    body.classList.toggle(newValue, true)
+    body.classList.remove(oldValue)
+    body.classList.add(newValue)
   }
 }
 
 export const addCustomStyle = (value = mode) => {
-  const currentSite = siteInfo()
+  currentSite = siteInfo()
   if (currentSite.invisible || currentSite.disabled) {
     removeNode('.as-custom-style')
   } else if (currentSite.style) {

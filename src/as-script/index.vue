@@ -12,7 +12,7 @@
 <script>
 import { computed } from 'vue'
 import { siteInfo } from '../config/loadList'
-import useMode from '../components/mode.js'
+import useMode from '../components/useMode.js'
 import logo from '../components/logo.vue'
 import asMenu from '../components/menu.vue'
 import sideBar from '../components/side-bar.vue'
@@ -52,15 +52,28 @@ export default {
 
   #all-search {
     --as-primary-color: #1890ff;
-    --as-bg-color: #fff;
+    --as-bg-color: #ffffff;
+    --as-primary-text-color: #606266;
+    --as-secondary-background-color: #f5f7fa;
+    --as-border-color: #e8e8e8;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  }
+
+  @media (prefers-color-scheme: dark) {
+    #all-search {
+      --as-primary-color: #3d9be9;
+      --as-bg-color: #212121;
+      --as-primary-text-color: #e0e0e0;
+      --as-secondary-background-color: #444;
+      --as-border-color: #212121;
+    }
   }
 
   .as-horizontal {
     height: $height;
     width: 100%;
     top: 0;
-    border-bottom: 1px #e8e8e8 solid;
+    border-bottom: 1px var(--as-border-color) solid;
     flex-direction: row;
     scrollbar-width: none;
     &::-webkit-scrollbar {
@@ -77,7 +90,7 @@ export default {
     width: $verticalWidth;
     top: 0;
     left: 0;
-    border-right: 1px #e8e8e8 solid;
+    border-right: 1px var(--as-border-color) solid;
     flex-direction: column;
   }
 
@@ -96,7 +109,7 @@ export default {
     white-space: nowrap;
     cursor: pointer;
     font-size: 14px;
-    color: $color;
+    color: var(--as-primary-text-color);
 
     &:hover {
       color: var(--as-primary-color);

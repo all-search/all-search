@@ -202,6 +202,7 @@ export default {
     line-height: $height;
     list-style: none;
     position: relative;
+    color: var(--as-primary-text-color);
     transition: color .3s cubic-bezier(.645, .045, .355, 1), border-color .3s cubic-bezier(.645, .045, .355, 1), background .3s cubic-bezier(.645, .045, .355, 1);
     box-sizing: border-box;
     &:hover {
@@ -213,7 +214,7 @@ export default {
   }
 
   .as-menu-item-icon {
-    color: $color;
+    color: var(--as-primary-text-color);
     margin: 1.25px 10px 0 0;
     line-height: $height - 1.25px;
   }
@@ -228,7 +229,7 @@ export default {
     font-size: 14px;
     display: flex;
     align-items: center;
-    color: $color;
+    color: var(--as-primary-text-color);
   }
 
   .as-subMenu-container {
@@ -261,7 +262,7 @@ export default {
       box-sizing: border-box;
       cursor: pointer;
       &:hover {
-        background-color: #f5f7fa;
+        background-color: var(--as-secondary-background-color);
         color: var(--as-primary-color);
       }
     }
@@ -270,7 +271,7 @@ export default {
       flex: 1;
       font-size: 14px;
       text-overflow: ellipsis;
-      color: $color;
+      color: var(--as-primary-text-color);
       white-space: nowrap;
       margin: 0;
       line-height: 34px;

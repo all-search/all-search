@@ -26,7 +26,7 @@ export default {
     cursor: pointer;
     background: #fff;
     border: 1px solid #dcdfe6;
-    color: $color;
+    color: var(--as-primary-text-color);
     text-align: center;
     box-sizing: border-box;
     outline: none;
