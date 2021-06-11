@@ -34,7 +34,6 @@ export default function useColor () {
     bgColor.value = session2
     setCssValue('--as-primary-color', session1)
     setCssValue('--as-bg-color', session2)
-    console.log(session2)
   })
   return {
     changePrimaryColor,

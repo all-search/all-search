@@ -94,6 +94,21 @@
                 @click="changeVisible(item.data)">
                 {{item.data.visible ? '隐藏': '展示'}}
               </el-button>
+              <el-popconfirm
+                v-if="isPersonal(cate)"
+                title="确定删除吗？"
+                confirmButtonText="确认"
+                cancelButtonText="取消"
+                @confirm="deleteUrl(j)">
+                <template #reference>
+                  <el-button
+                    icon="el-icon-remove"
+                    :plain="true"
+                    type="danger">
+                    删除
+                  </el-button>
+                </template>
+              </el-popconfirm>
             </div>
           </div>
         </draggable>
@@ -192,7 +207,7 @@ export default {
       cate.list.push(item)
       this.$message('添加成功')
     },
-    del (j) {
+    deleteUrl (j) {
       const i = this.localSites.findIndex(item => item.name === 'personal')
       this.localSites[i].list.splice(j, 1)
     },

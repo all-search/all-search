@@ -1,12 +1,15 @@
 <template>
-  <label>
-    <input
-      class="input—color"
-      type="color"
-      :default-value="model"
-      v-model="model"
-    />
-  </label>
+  <div class="color-set">
+    <label class="label">
+      <input
+        class="input—color"
+        type="color"
+        :default-value="model"
+        v-model="model"
+      />
+    </label>
+    <p class="reset-btn">重置</p>
+  </div>
 </template>
 
 <script>
@@ -16,6 +19,9 @@ export default {
   name: 'color',
   props: {
     modelValue: {
+      type: [String, Number]
+    },
+    default: {
       type: [String, Number]
     }
   },
@@ -61,5 +67,16 @@ export default {
 
   .input—color::-webkit-color-swatch-wrapper {
     padding: 0;
+  }
+
+  .color-set {
+    display: flex;
+    align-items: center;
+  }
+
+  .reset-btn {
+    margin: 0;
+    padding: 0 20px;
+    color: var(--as-primary-text-color);
   }
 </style>
