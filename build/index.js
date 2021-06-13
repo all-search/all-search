@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.14
-// @description  2021年5月30日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.15
+// @description  2021年6月13日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/5/30
+// @update       2021/6/13
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.14/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.15/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -111,7 +111,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.14";
+    var t = "1.0.15";
     e.reactive({
         tmVersion: ""
     });
@@ -121,11 +121,11 @@
         const o = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), a = t.match(o);
         return decodeURIComponent(a ? a[2] : "");
     }
-    function n(e) {
+    function r(e) {
         return e ? "__allSearch__" + e : null;
     }
-    let r = function(e) {
-        const t = n(e);
+    let n = function(e) {
+        const t = r(e);
         let o;
         if (o = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
         o) try {
@@ -134,16 +134,16 @@
             return o;
         }
         return null;
-    }, s = function(e, t) {
-        const o = n(e);
+    }, l = function(e, t) {
+        const o = r(e);
         if (window.GM_setValue) window.GM_setValue(o, t); else {
             const e = JSON.stringify(t);
             e && window.localStorage.setItem(o, e);
         }
     };
-    function l(e, t) {
+    function s(e, t) {
         let o;
-        window.GM_getResourceText && (o = window.GM_getResourceText(e)), o ? c(o, e) : function(e, t) {
+        window.GM_getResourceText && (o = window.GM_getResourceText(e)), o ? i(o, e) : function(e, t) {
             if (!e) return;
             if (t) {
                 const e = document.styleSheets;
@@ -154,7 +154,7 @@
             document.getElementsByTagName("head")[0].appendChild(o);
         }(t, e);
     }
-    function i(e) {
+    function c(e) {
         try {
             if ("string" == typeof e) {
                 let t = document.querySelectorAll(e);
@@ -164,27 +164,27 @@
             console.log(e);
         }
     }
-    function c(e, t, o, a = !1) {
+    function i(e, t, o, a = !1) {
         !function(e, t, o) {
             const a = t / 1e3 * 60;
-            let n = 0;
+            let r = 0;
             if (!0 === o) {
                 if (e()) return;
             }
             requestAnimationFrame((function t() {
-                if (n < a) n++, requestAnimationFrame(t); else {
-                    e() || !1 || (n = 0, requestAnimationFrame(t));
+                if (r < a) r++, requestAnimationFrame(t); else {
+                    e() || !1 || (r = 0, requestAnimationFrame(t));
                 }
             }));
         }((function() {
-            let n = document.querySelector(o);
-            if (void 0 === o && (n = document.body || document.head || document.documentElement || document), 
+            let r = document.querySelector(o);
+            if (void 0 === o && (r = document.body || document.head || document.documentElement || document), 
             void 0 === o || void 0 !== o && null !== document.querySelector(o)) {
-                if (a) i("." + t); else if (!a && null !== document.querySelector("." + t)) return !0;
+                if (a) c("." + t); else if (!a && null !== document.querySelector("." + t)) return !0;
                 let o = document.createElement("style");
                 t && (o.className = t), o.setAttribute("type", "text/css"), o.innerHTML = e;
                 try {
-                    n.appendChild(o);
+                    r.appendChild(o);
                 } catch (e) {
                     console.log(e.message);
                 }
@@ -192,8 +192,8 @@
             }
         }), 20, !0);
     }
-    const u = n("script-loaded"), m = n("page-loaded");
-    const h = [ {
+    const u = r("script-loaded"), m = r("page-loaded");
+    const d = [ {
         url: /\/\/www\.google\.com(.hk)?\/search/,
         style: {
             1: ".srp #searchform:not(.minidiv){top: 50px !important;}#searchform.minidiv{top: 30px !important;}"
@@ -436,8 +436,8 @@
     }, {
         url: /\/\/endday\.gitee\.io/,
         invisible: !0
-    } ], d = function() {
-        const e = h.find(e => e.url.test(window.location.href.toLowerCase()));
+    } ], h = function() {
+        const e = d.find(e => e.url.test(window.location.href.toLowerCase()));
         return e ? {
             url: e.url,
             invisible: e.invisible,
@@ -462,35 +462,35 @@
             return t.apply(this, arguments), o;
         };
     }
-    let w = d();
-    const g = r("mode"), f = "vertical" !== (y = g) && "horizontal" !== y ? "horizontal" : y;
-    var y;
-    const b = new Map([ [ "body-horizontal", "body-vertical" ], [ "body-vertical", "body-horizontal" ] ]), v = (e = f) => {
-        const t = d(), o = document.body;
-        if (t.invisible || t.disabled) o.classList.remove("body-vertical", "body-horizontal"); else if (e) {
-            const t = "body-" + e, a = b.get(t);
-            o.classList.toggle(a, !1), o.classList.toggle(t, !0);
+    let w = h();
+    const f = n("mode"), y = "vertical" !== (g = f) && "horizontal" !== g ? "horizontal" : g;
+    var g;
+    const b = new Map([ [ "body-horizontal", "body-vertical" ], [ "body-vertical", "body-horizontal" ] ]), v = (e = y) => {
+        w = h();
+        const t = document.body;
+        if (w.invisible || w.disabled) t.classList.remove("body-vertical", "body-horizontal"); else if (e) {
+            const o = "body-" + e, a = b.get(o);
+            t.classList.remove(a), t.classList.add(o);
         }
-    }, k = (e = f) => {
-        const t = d();
-        if (t.invisible || t.disabled) i(".as-custom-style"); else if (t.style) {
-            let o = "";
-            t.style[1] && "horizontal" === e ? o = t.style[1] : t.style[2] && "vertical" === e && (o = t.style[2]), 
-            o && c(o, "as-custom-style", void 0, !0);
+    }, k = (e = y) => {
+        if (w = h(), w.invisible || w.disabled) c(".as-custom-style"); else if (w.style) {
+            let t = "";
+            w.style[1] && "horizontal" === e ? t = w.style[1] : w.style[2] && "vertical" === e && (t = w.style[2]), 
+            t && i(t, "as-custom-style", void 0, !0);
         }
     }, x = function() {
-        w = d(), w.invisible || w.disabled ? i(".as-style") : l("as-style", `https://cdn.jsdelivr.net/npm/all-search@${o}/build/as-style.css`);
+        w = h(), w.invisible || w.disabled ? c(".as-style") : s("as-style", `https://cdn.jsdelivr.net/npm/all-search@${o}/build/as-style.css`);
     }, Z = function() {
         var e, t, o;
         Node.prototype.removeChild = (e = Node.prototype.removeChild, t = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
         function() {
             if (!1 !== t.apply(this, arguments)) return e.apply(this, arguments);
-        }), k(), v(), l("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+        }), k(), v(), s("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
         x(), o = () => {
-            w = d(), k(), v(), x();
+            w = h(), k(), v(), x();
         }, history.pushState = p(history.pushState, o), history.replaceState = p(history.replaceState, o), 
         window.addEventListener("yt-navigate-finish", o);
-    }, q = r("mode"), C = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, N = e.ref(C(q)), _ = (e = "horizontal") => {
+    }, C = n("mode"), V = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, N = e.ref(V(C)), _ = (e = "horizontal") => {
         v(e), k(e);
     };
     !function(e) {
@@ -503,10 +503,10 @@
     }(() => {
         _(N.value);
     }), e.watch(N, e => {
-        const t = C(e);
-        _(t), s("mode", t);
+        const t = V(e);
+        _(t), l("mode", t);
     });
-    const S = function(e, t = 500) {
+    const q = function(e, t = 500) {
         let o = null;
         return function() {
             clearTimeout(o), o = setTimeout(() => {
@@ -514,16 +514,16 @@
             }, t);
         };
     }(() => _(N.value));
-    function V() {
+    function S() {
         return e.onMounted(() => {
-            _(N.value), window.addEventListener("resize", S, !1);
+            _(S.value), window.addEventListener("resize", q, !1);
         }), e.onUnmounted(() => {
-            window.removeEventListener("resize", S, !1);
+            window.removeEventListener("resize", q, !1);
         }), {
             mode: N
         };
     }
-    var M = {
+    var B = {
         name: "logo",
         props: {
             mode: {
@@ -533,25 +533,26 @@
             }
         }
     };
-    const B = e.createVNode("p", {
+    const M = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    M.render = function(t, o, a, n, r, s) {
+    B.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("a", {
             class: [ "as-title", "as-title-" + a.mode ],
             href: "https://github.com/endday/all-search",
             target: "_blank"
-        }, [ B ], 2);
-    }, M.__file = "src/components/logo.vue";
+        }, [ M ], 2);
+    }, B.__file = "src/components/logo.vue";
     let z = document.createElement("a");
     function T(e) {
         let t = e;
         if (t.indexOf("//") < 0) t = "//" + t; else {
             if (!(t.indexOf("//") > -1)) return z;
-            {
-                const e = t.toLowerCase();
-                e.startsWith("http://") || e.startsWith("https://") || e.startsWith("ftp://") || e.startsWith("files://") || (t = t.replace(/.*\/\//, "//"));
-            }
+            t = function(e) {
+                const t = e.toLowerCase(), o = [ "http://", "https://", "ftp://", "files://" ];
+                for (let a = 0; a < o.length; a++) if (0 === t.indexOf(o[a])) return e.replace(/.*\/\//, "//");
+                return e;
+            }(t);
         }
         return z.href = t, {
             href: z.href,
@@ -565,7 +566,7 @@
             hash: z.hash
         };
     }
-    const L = [ {
+    const E = [ {
         nameZh: "搜索",
         name: "search",
         list: [ {
@@ -868,10 +869,10 @@
             visible: !0
         }
     }));
-    function E(e) {
-        let t = L;
-        const a = r("sites"), n = r("sites-version");
-        return a && (t = a, a && n && (n !== o || "tm" !== e) && (t = function(e, t) {
+    function L(e) {
+        let t = E;
+        const a = n("sites"), r = n("sites-version");
+        return a && (t = a, a && r && (r !== o || "tm" !== e) && (t = function(e, t) {
             const o = JSON.parse(JSON.stringify(e));
             let a = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
             return a.forEach(e => {
@@ -884,12 +885,12 @@
                 }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
                 e.isAdd = !0);
             }), a = a.filter(e => !e.isAdd), a.length && o.push(...a), o;
-        }(a, L), s("sites", t), s("sites-version", o))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
+        }(a, E), l("sites", t), l("sites-version", o))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
             ...e,
             show: !1
         }))), t;
     }
-    var D = {
+    var I = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -924,13 +925,13 @@
             };
         }
     };
-    D.render = function(t, o, a, n, r, s) {
+    I.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("li", {
-            onMouseenter: o[1] || (o[1] = e => n.handleMouseEnter(e)),
-            onMouseleave: o[2] || (o[2] = e => n.handleMouseLeave(e))
+            onMouseenter: o[1] || (o[1] = e => r.handleMouseEnter(e)),
+            onMouseleave: o[2] || (o[2] = e => r.handleMouseLeave(e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, D.__file = "src/components/menuItem.vue";
-    var I = {
+    }, I.__file = "src/components/menuItem.vue";
+    var D = {
         name: "icon",
         props: {
             name: {
@@ -939,26 +940,26 @@
             }
         }
     };
-    I.render = function(t, o, a, n, r, s) {
+    D.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("i", {
             class: [ "as-menu-item-icon", "icon-" + a.name ]
         }, null, 2);
-    }, I.__file = "src/components/icon.vue";
-    const A = r("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), F = e => j.has(e) ? e : "flex-start", O = e.ref(F(A)), U = e.reactive(j);
-    function G() {
+    }, D.__file = "src/components/icon.vue";
+    const A = n("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), F = e => j.has(e) ? e : "flex-start", U = e.ref(F(A)), O = e.reactive(j);
+    function $() {
         return {
-            alignList: U,
-            align: O
+            alignList: O,
+            align: U
         };
     }
-    e.watch(O, e => {
-        s("align", F(e));
+    e.watch(U, e => {
+        l("align", F(e));
     });
-    var $ = {
+    var G = {
         name: "as-menu",
         components: {
-            menuItem: D,
-            icon: I
+            menuItem: I,
+            icon: D
         },
         props: {
             mode: {
@@ -968,21 +969,21 @@
             }
         },
         setup(t) {
-            const o = e.reactive(E("tm")), a = d(), n = e.reactive({
+            const o = e.reactive(L("tm")), a = h(), r = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
-            }), r = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), s = () => a && a.keyword ? a.keyword() : function() {
+            }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), l = () => a && a.keyword ? a.keyword() : function() {
                 const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
                 return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
             }();
-            const {align: l} = G();
+            const {align: s} = $();
             return {
                 sites: o,
-                data: n,
-                align: l,
-                transition: r,
+                data: r,
+                align: s,
+                transition: n,
                 handleClick: (e, t) => {
-                    const o = s();
+                    const o = l();
                     t ? window.open(e.url.replace("%s", o)) : window.location.href = e.url.replace("%s", o);
                 },
                 handleMenuShow: (e, t) => {
@@ -996,9 +997,9 @@
             };
         }
     };
-    const W = {
+    const J = {
         class: "as-menu-item-title"
-    }, J = {
+    }, P = {
         key: 0,
         class: "as-subMenu-container"
     }, R = {
@@ -1006,38 +1007,38 @@
     }, H = {
         class: "as-url-icon"
     };
-    $.render = function(t, o, a, n, r, s) {
-        const l = e.resolveComponent("icon"), i = e.resolveComponent("menu-item");
+    G.render = function(t, o, a, r, n, l) {
+        const s = e.resolveComponent("icon"), c = e.resolveComponent("menu-item");
         return e.openBlock(), e.createBlock("ul", {
             class: "as-menu",
             style: {
-                justifyContent: n.align
+                justifyContent: r.align
             }
-        }, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(n.sites, t => (e.openBlock(), 
-        e.createBlock(i, {
+        }, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(r.sites, t => (e.openBlock(), 
+        e.createBlock(c, {
             class: "as-menu-item",
             key: t.index,
-            showTimeout: n.data.showTimeout,
-            hideTimeout: n.data.hideTimeout,
-            onShow: e => n.handleMenuShow(e, t)
+            showTimeout: r.data.showTimeout,
+            hideTimeout: r.data.hideTimeout,
+            onShow: e => r.handleMenuShow(e, t)
         }, {
-            default: e.withCtx(() => [ e.createVNode("div", W, [ e.createVNode(l, {
+            default: e.withCtx(() => [ e.createVNode("div", J, [ e.createVNode(s, {
                 name: t.name
             }, null, 8, [ "name" ]), e.createVNode("span", {
                 textContent: e.toDisplayString(t.nameZh),
-                onClick: e => n.handleClick(t.list[0]),
-                onMouseup: e.withModifiers(e => n.handleClick(t.list[0], !0), [ "middle" ])
+                onClick: e => r.handleClick(t.list[0]),
+                onMouseup: e.withModifiers(e => r.handleClick(t.list[0], !0), [ "middle" ])
             }, null, 40, [ "textContent", "onClick", "onMouseup" ]) ]), e.createVNode(e.Transition, {
-                name: n.transition
+                name: r.transition
             }, {
                 default: e.withCtx(() => [ t.list && t.list.length ? e.withDirectives((e.openBlock(), 
-                e.createBlock("div", J, [ e.createVNode("ul", R, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
+                e.createBlock("div", P, [ e.createVNode("ul", R, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
                 e.createBlock("li", {
                     key: o,
-                    onClick: e => n.handleClick(t),
-                    onMouseup: e.withModifiers(e => n.handleClick(t, !0), [ "middle" ])
+                    onClick: e => r.handleClick(t),
+                    onMouseup: e.withModifiers(e => r.handleClick(t, !0), [ "middle" ])
                 }, [ e.createVNode("div", H, [ e.createVNode("img", {
-                    src: n.getFavicon(t.url),
+                    src: r.getFavicon(t.url),
                     onerror: "this.classList.add('error')"
                 }, null, 8, [ "src" ]) ]), e.createVNode("p", {
                     class: "as-subMenu-text",
@@ -1047,8 +1048,38 @@
             }, 1032, [ "name" ]) ]),
             _: 2
         }, 1032, [ "showTimeout", "hideTimeout", "onShow" ]))), 128)) ], 4);
-    }, $.__file = "src/components/menu.vue";
-    var P = {
+    }, G.__file = "src/components/menu.vue";
+    const W = e.ref(""), Q = e.ref(""), Y = e.ref("");
+    e.watch(W, e => {
+        K("primary-color", e), l("primary-color", e);
+    }), e.watch(Q, e => {
+        K("bg-color", e), l("bg-color", e);
+    }), e.watch(Y, e => {
+        K("primary-text-color", e), l("primary-text-color", e);
+    });
+    const K = (e, t) => {
+        document.getElementById("all-search").style.setProperty("--as-" + e, t);
+    }, X = {
+        "primary-color": W,
+        "bg-color": Q,
+        "primary-text-color": Y
+    }, ee = e => {
+        const t = (e => {
+            const t = document.getElementById("all-search");
+            return getComputedStyle(t).getPropertyValue("--as-" + e).trim();
+        })(e), o = n(e) || t;
+        X[e].value = o;
+    };
+    function te() {
+        return e.onMounted(() => {
+            ee("primary-color"), ee("bg-color"), ee("primary-text-color");
+        }), {
+            primaryColor: W,
+            bgColor: Q,
+            primaryTextColor: Y
+        };
+    }
+    var oe = {
         name: "overlay",
         setup(e, {emit: t}) {
             let o = !1, a = !1;
@@ -1065,15 +1096,15 @@
             };
         }
     };
-    P.render = function(t, o, a, n, r, s) {
+    oe.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("div", {
             class: "as-overlay",
-            onMousedown: o[1] || (o[1] = (...e) => n.onMouseDown && n.onMouseDown(...e)),
-            onMouseup: o[2] || (o[2] = (...e) => n.onMouseUp && n.onMouseUp(...e)),
-            onClick: o[3] || (o[3] = (...e) => n.onMaskClick && n.onMaskClick(...e))
+            onMousedown: o[1] || (o[1] = (...e) => r.onMouseDown && r.onMouseDown(...e)),
+            onMouseup: o[2] || (o[2] = (...e) => r.onMouseUp && r.onMouseUp(...e)),
+            onClick: o[3] || (o[3] = (...e) => r.onMaskClick && r.onMaskClick(...e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, P.__file = "src/components/overlay.vue";
-    var Q = {
+    }, oe.__file = "src/components/overlay.vue";
+    var ae = {
         name: "as-radio",
         props: {
             modelValue: {
@@ -1093,21 +1124,21 @@
             })
         })
     };
-    const Y = {
+    const re = {
         class: "as-radio as-radio-animate"
-    }, K = e.createVNode("i", {
+    }, ne = e.createVNode("i", {
         class: "as-radio-icon"
-    }, null, -1), X = {
+    }, null, -1), le = {
         class: "as-radio-label"
     };
-    Q.render = function(t, o, a, n, r, s) {
-        return e.openBlock(), e.createBlock("label", Y, [ e.withDirectives(e.createVNode("input", {
+    ae.render = function(t, o, a, r, n, l) {
+        return e.openBlock(), e.createBlock("label", re, [ e.withDirectives(e.createVNode("input", {
             type: "radio",
             value: a.label,
-            "onUpdate:modelValue": o[1] || (o[1] = e => n.model = e)
-        }, null, 8, [ "value" ]), [ [ e.vModelRadio, n.model ] ]), K, e.createVNode("span", X, [ e.renderSlot(t.$slots, "default") ]) ]);
-    }, Q.__file = "src/components/radio.vue";
-    var ee = {
+            "onUpdate:modelValue": o[1] || (o[1] = e => r.model = e)
+        }, null, 8, [ "value" ]), [ [ e.vModelRadio, r.model ] ]), ne, e.createVNode("span", le, [ e.renderSlot(t.$slots, "default") ]) ]);
+    }, ae.__file = "src/components/radio.vue";
+    var se = {
         name: "form-item",
         props: {
             labelWidth: {
@@ -1128,25 +1159,92 @@
             }))
         })
     };
-    ee.render = function(t, o, a, n, r, s) {
+    se.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("div", null, [ e.createVNode("label", {
             class: "as-label",
-            style: n.labelStyle,
+            style: r.labelStyle,
             textContent: e.toDisplayString(a.label)
         }, null, 12, [ "textContent" ]), e.createVNode("div", {
             class: "as-content",
-            style: n.contentStyle
+            style: r.contentStyle
         }, [ e.renderSlot(t.$slots, "default") ], 4) ]);
-    }, ee.__file = "src/components/form-item.vue";
-    var te = {
+    }, se.__file = "src/components/form-item.vue";
+    var ce = {
+        name: "xButton",
+        props: {
+            type: {
+                type: String,
+                default: "primary"
+            }
+        }
+    };
+    ce.render = function(t, o, a, r, n, l) {
+        return e.openBlock(), e.createBlock("button", {
+            class: [ "as-button", "as-button__" + a.type ]
+        }, [ e.renderSlot(t.$slots, "default") ], 2);
+    }, ce.__file = "src/components/button.vue";
+    var ie = {
+        name: "color",
+        components: {
+            asButton: ce
+        },
+        props: {
+            modelValue: {
+                type: [ String, Number ]
+            },
+            defaultValue: {
+                type: [ String, Number ]
+            }
+        },
+        setup(t, o) {
+            const a = e.computed({
+                get: () => t.modelValue,
+                set(e) {
+                    o.emit("update:modelValue", e);
+                }
+            });
+            return {
+                model: a,
+                reset: () => {
+                    a.value = t.defaultValue;
+                }
+            };
+        }
+    };
+    const ue = e.withScopeId("data-v-2532dbfa");
+    e.pushScopeId("data-v-2532dbfa");
+    const me = {
+        class: "color-set"
+    }, de = {
+        class: "label"
+    }, he = e.createTextVNode(" 重置 ");
+    e.popScopeId();
+    const pe = ue((t, o, a, r, n, l) => {
+        const s = e.resolveComponent("asButton");
+        return e.openBlock(), e.createBlock("div", me, [ e.createVNode("label", de, [ e.withDirectives(e.createVNode("input", {
+            class: "input—color",
+            type: "color",
+            "onUpdate:modelValue": o[1] || (o[1] = e => r.model = e)
+        }, null, 512), [ [ e.vModelText, r.model ] ]) ]), e.createVNode(s, {
+            class: "reset-btn",
+            type: "text",
+            onClick: r.reset
+        }, {
+            default: ue(() => [ he ]),
+            _: 1
+        }, 8, [ "onClick" ]) ]);
+    });
+    ie.render = pe, ie.__scopeId = "data-v-2532dbfa", ie.__file = "src/components/color.vue";
+    var we = {
         name: "side-bar",
         components: {
-            overlay: P,
-            asRadio: Q,
-            formItem: ee
+            overlay: oe,
+            asRadio: ae,
+            formItem: se,
+            color: ie
         },
         setup() {
-            const t = e.ref(!1), {mode: o} = V(), {alignList: a, align: n} = G();
+            const t = e.ref(!1), {mode: o} = S(), {alignList: a, align: r} = $(), {primaryColor: n, bgColor: l, primaryTextColor: s} = te();
             return {
                 mode: o,
                 visible: t,
@@ -1160,16 +1258,19 @@
                     o.value = e.target.value;
                 },
                 alignList: a,
-                align: n,
+                align: r,
                 changeAlign: e => {
-                    n.value = e.target.value;
-                }
+                    r.value = e.target.value;
+                },
+                primaryColor: n,
+                bgColor: l,
+                primaryTextColor: s
             };
         }
     };
-    const oe = e.createVNode("header", {
+    const fe = e.createVNode("header", {
         class: "header"
-    }, " 设置 ", -1), ae = e.createTextVNode("横向 "), ne = e.createTextVNode("竖向 "), re = e.createVNode("footer", null, [ e.createVNode("a", {
+    }, " 设置 ", -1), ye = e.createTextVNode("横向 "), ge = e.createTextVNode("竖向 "), be = e.createVNode("footer", null, [ e.createVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -1180,19 +1281,19 @@
         href: "https://github.com/endday/all-search",
         target: "_blank"
     }, " GitHub地址 ") ], -1);
-    te.render = function(t, o, a, n, r, s) {
-        const l = e.resolveComponent("as-radio"), i = e.resolveComponent("form-item"), c = e.resolveComponent("overlay");
+    we.render = function(t, o, a, r, n, l) {
+        const s = e.resolveComponent("as-radio"), c = e.resolveComponent("form-item"), i = e.resolveComponent("color"), u = e.resolveComponent("overlay");
         return e.openBlock(), e.createBlock(e.Fragment, null, [ e.createVNode("div", {
             class: "as-setting",
-            onClick: o[1] || (o[1] = (...e) => n.open && n.open(...e))
+            onClick: o[1] || (o[1] = (...e) => r.open && r.open(...e))
         }, " 设置 "), (e.openBlock(), e.createBlock(e.Teleport, {
             to: "#all-search"
         }, [ e.createVNode(e.Transition, {
             name: "overlay",
             appear: ""
         }, {
-            default: e.withCtx(() => [ e.withDirectives(e.createVNode(c, {
-                onClick: n.onMaskClick
+            default: e.withCtx(() => [ e.withDirectives(e.createVNode(u, {
+                onClick: r.onMaskClick
             }, {
                 default: e.withCtx(() => [ e.createVNode(e.Transition, {
                     name: "drawer",
@@ -1202,59 +1303,87 @@
                         "aria-modal": "true",
                         role: "dialog",
                         class: "as-side-bar",
-                        onClick: o[5] || (o[5] = e.withModifiers(() => {}, [ "stop" ]))
-                    }, [ oe, e.createVNode("section", null, [ e.createVNode(i, {
+                        onClick: o[8] || (o[8] = e.withModifiers(() => {}, [ "stop" ]))
+                    }, [ fe, e.createVNode("section", null, [ e.createVNode(c, {
                         label: "方向"
                     }, {
-                        default: e.withCtx(() => [ e.createVNode(l, {
+                        default: e.withCtx(() => [ e.createVNode(s, {
                             label: "horizontal",
-                            modelValue: n.mode,
-                            "onUpdate:modelValue": o[2] || (o[2] = e => n.mode = e),
-                            onChange: n.changeMode
+                            modelValue: r.mode,
+                            "onUpdate:modelValue": o[2] || (o[2] = e => r.mode = e),
+                            onChange: r.changeMode
                         }, {
-                            default: e.withCtx(() => [ ae ]),
+                            default: e.withCtx(() => [ ye ]),
                             _: 1
-                        }, 8, [ "modelValue", "onChange" ]), e.createVNode(l, {
+                        }, 8, [ "modelValue", "onChange" ]), e.createVNode(s, {
                             label: "vertical",
-                            modelValue: n.mode,
-                            "onUpdate:modelValue": o[3] || (o[3] = e => n.mode = e),
-                            onChange: n.changeMode
+                            modelValue: r.mode,
+                            "onUpdate:modelValue": o[3] || (o[3] = e => r.mode = e),
+                            onChange: r.changeMode
                         }, {
-                            default: e.withCtx(() => [ ne ]),
+                            default: e.withCtx(() => [ ge ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]) ]),
                         _: 1
-                    }), e.createVNode(i, {
+                    }), e.createVNode(c, {
                         label: "对齐"
                     }, {
-                        default: e.withCtx(() => [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(n.alignList, ([t, a]) => (e.openBlock(), 
-                        e.createBlock(l, {
+                        default: e.withCtx(() => [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(r.alignList, ([t, a]) => (e.openBlock(), 
+                        e.createBlock(s, {
+                            key: t,
                             label: t,
-                            modelValue: n.align,
-                            "onUpdate:modelValue": o[4] || (o[4] = e => n.align = e),
-                            onChange: n.changeAlign
+                            modelValue: r.align,
+                            "onUpdate:modelValue": o[4] || (o[4] = e => r.align = e),
+                            onChange: r.changeAlign
                         }, {
                             default: e.withCtx(() => [ e.createTextVNode(e.toDisplayString(a), 1) ]),
                             _: 2
-                        }, 1032, [ "label", "modelValue", "onChange" ]))), 256)) ]),
+                        }, 1032, [ "label", "modelValue", "onChange" ]))), 128)) ]),
                         _: 1
-                    }), e.createCommentVNode('<form-item label="主题色">\r\n                <color/>\r\n              </form-item>\r\n              <form-item label="背景色">\r\n                <color/>\r\n              </form-item>') ]), re ], 512), [ [ e.vShow, n.visible ] ]) ]),
+                    }), e.createVNode(c, {
+                        label: "主题色"
+                    }, {
+                        default: e.withCtx(() => [ e.createVNode(i, {
+                            "default-value": "#1890ff",
+                            modelValue: r.primaryColor,
+                            "onUpdate:modelValue": o[5] || (o[5] = e => r.primaryColor = e)
+                        }, null, 8, [ "modelValue" ]) ]),
+                        _: 1
+                    }), e.createVNode(c, {
+                        label: "背景色"
+                    }, {
+                        default: e.withCtx(() => [ e.createVNode(i, {
+                            "default-value": "#ffffff",
+                            modelValue: r.bgColor,
+                            "onUpdate:modelValue": o[6] || (o[6] = e => r.bgColor = e)
+                        }, null, 8, [ "modelValue" ]) ]),
+                        _: 1
+                    }), e.createVNode(c, {
+                        label: "文字色"
+                    }, {
+                        default: e.withCtx(() => [ e.createVNode(i, {
+                            "default-value": "#606266",
+                            modelValue: r.primaryTextColor,
+                            "onUpdate:modelValue": o[7] || (o[7] = e => r.primaryTextColor = e)
+                        }, null, 8, [ "modelValue" ]) ]),
+                        _: 1
+                    }) ]), be ], 512), [ [ e.vShow, r.visible ] ]) ]),
                     _: 1
                 }) ]),
                 _: 1
-            }, 8, [ "onClick" ]), [ [ e.vShow, n.visible ] ]) ]),
+            }, 8, [ "onClick" ]), [ [ e.vShow, r.visible ] ]) ]),
             _: 1
         }) ])) ], 64);
-    }, te.__file = "src/components/side-bar.vue";
-    var se = {
+    }, we.__file = "src/components/side-bar.vue";
+    var ve = {
         name: "all-search",
         components: {
-            logo: M,
-            asMenu: $,
-            sideBar: te
+            logo: B,
+            asMenu: G,
+            sideBar: we
         },
         setup() {
-            const t = d(), o = e.computed(() => "as-" + a.value), {mode: a} = V();
+            const t = h(), o = e.computed(() => "as-" + a.value), {mode: a} = S();
             return Z(), {
                 currentSite: t,
                 mode: a,
@@ -1262,36 +1391,36 @@
             };
         }
     };
-    se.render = function(t, o, a, n, r, s) {
-        const l = e.resolveComponent("logo"), i = e.resolveComponent("as-menu"), c = e.resolveComponent("side-bar");
+    ve.render = function(t, o, a, r, n, l) {
+        const s = e.resolveComponent("logo"), c = e.resolveComponent("as-menu"), i = e.resolveComponent("side-bar");
         return e.openBlock(), e.createBlock("div", {
-            class: [ "as-container", n.classList ],
+            class: [ "as-container", r.classList ],
             style: {
                 display: "none"
             }
-        }, [ e.createVNode(l, {
-            mode: n.mode
-        }, null, 8, [ "mode" ]), e.createVNode(i, {
-            mode: n.mode
-        }, null, 8, [ "mode" ]), e.createVNode(c) ], 2);
-    }, se.__file = "src/as-script/index.vue";
-    let le = d();
-    const ie = e.createApp(se);
-    function ce() {
-        le = d();
+        }, [ e.createVNode(s, {
+            mode: r.mode
+        }, null, 8, [ "mode" ]), e.createVNode(c, {
+            mode: r.mode
+        }, null, 8, [ "mode" ]), e.createVNode(i) ], 2);
+    }, ve.__file = "src/as-script/index.vue";
+    let ke = h();
+    const xe = e.createApp(ve);
+    function Ze() {
+        ke = h();
         const e = document.getElementById("all-search");
-        if (e) e.style.display = le.invisible ? "none" : "unset"; else {
+        if (e) e.style.display = ke.invisible ? "none" : "unset"; else {
             const e = function() {
                 let e = document.createElement("div");
                 return e.id = "all-search", e;
             }(), t = document.body.parentElement.insertBefore(e, document.body);
-            ie.mount(t), function() {
+            xe.mount(t), function() {
                 const e = function() {
                     document.dispatchEvent(new CustomEvent(u, {
                         detail: {
                             version: o,
-                            getSession: r,
-                            setSession: s
+                            getSession: n,
+                            setSession: l
                         }
                     }));
                 };
@@ -1310,7 +1439,7 @@
             }
         });
     }().then(() => {
-        ce();
+        Ze();
     }).catch(e => {
         console.error(e);
     });

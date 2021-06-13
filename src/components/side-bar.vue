@@ -44,13 +44,18 @@
               </form-item>
               <form-item label="主题色">
                 <color
-                  v-model="primaryColor"
-                  @change="changePrimaryColor"/>
+                  default-value="#1890ff"
+                  v-model="primaryColor"/>
               </form-item>
               <form-item label="背景色">
                 <color
-                  v-model="bgColor"
-                  @change="changeBgColor"/>
+                  default-value="#ffffff"
+                  v-model="bgColor"/>
+              </form-item>
+              <form-item label="文字色">
+                <color
+                  default-value="#606266"
+                  v-model="primaryTextColor"/>
               </form-item>
             </section>
             <footer>
@@ -103,11 +108,11 @@ export default {
 
     const { mode } = useMode()
     const { alignList, align } = useAlign()
+
     const {
       primaryColor,
       bgColor,
-      changeBgColor,
-      changePrimaryColor
+      primaryTextColor
     } = useColor()
 
     const changeMode = (e) => {
@@ -129,8 +134,7 @@ export default {
       changeAlign,
       primaryColor,
       bgColor,
-      changePrimaryColor,
-      changeBgColor,
+      primaryTextColor
     }
   }
 }

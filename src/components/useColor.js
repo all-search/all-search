@@ -1,44 +1,61 @@
-import { onMounted, ref } from 'vue'
-import { getSession } from '../util'
+import { onMounted, ref, watch } from 'vue'
+import { getSession, setSession } from '../util'
 
 const primaryColor = ref('')
 const bgColor = ref('')
+const primaryTextColor = ref('')
 
-const changePrimaryColor = e => {
-  setCssValue('--as-primary-color', e.target.value)
-  primaryColor.value = e.target.value
-}
+watch(primaryColor, value => {
+  setCssValue('primary-color', value)
+  setSession('primary-color', value)
+})
 
-const changeBgColor = e => {
-  setCssValue('--as-bg-color', e.target.value)
-  bgColor.value = e.target.value
-}
+watch(bgColor, value => {
+  setCssValue('bg-color', value)
+  setSession('bg-color', value)
+})
+
+watch(primaryTextColor, value => {
+  setCssValue('primary-text-color', value)
+  setSession('primary-text-color', value)
+})
 
 const getCssValue = name => {
   const el = document.getElementById('all-search')
-  return getComputedStyle(el).getPropertyValue(name).trim()
+  return getComputedStyle(el).getPropertyValue(`--as-${name}`).trim()
 }
 
 const setCssValue = (name, value) => {
   const el = document.getElementById('all-search')
-  el.style.setProperty(name, value)
+  el.style.setProperty(`--as-${name}`, value)
+}
+
+const map = {
+  'primary-color': primaryColor,
+  'bg-color': bgColor,
+  'primary-text-color': primaryTextColor
+}
+
+const initColor = (name) => {
+  const colorDefault = getCssValue(name)
+  const session = getSession(name) || colorDefault
+  const colorVal = map[name]
+  colorVal.value = session
+}
+
+const resetColor = (name) => {
+
 }
 
 export default function useColor () {
   onMounted(() => {
-    const primaryColorDefault = getCssValue('--as-primary-color')
-    const bgColorDefault = getCssValue('--as-bg-color')
-    const session1 = getSession('primary-color') || primaryColorDefault
-    const session2 = getSession('bg-color') || bgColorDefault
-    primaryColor.value = session1
-    bgColor.value = session2
-    setCssValue('--as-primary-color', session1)
-    setCssValue('--as-bg-color', session2)
+    initColor('primary-color')
+    initColor('bg-color')
+    initColor('primary-text-color')
   })
   return {
-    changePrimaryColor,
-    changeBgColor,
     primaryColor,
-    bgColor
+    bgColor,
+    primaryTextColor
   }
 }

@@ -54,6 +54,7 @@ export default {
   }
 
   .as-content {
+    height: 40px;
     line-height: 40px;
     position: relative;
     font-size: 14px;

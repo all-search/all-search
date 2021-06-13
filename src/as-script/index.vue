@@ -59,7 +59,7 @@ export default {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   }
 
-  @media (prefers-color-scheme: dark) {
+  /*@media (prefers-color-scheme: dark) {
     #all-search {
       --as-primary-color: #3d9be9;
       --as-bg-color: #212121;
@@ -67,7 +67,7 @@ export default {
       --as-secondary-background-color: #444;
       --as-border-color: #212121;
     }
-  }
+  }*/
 
   .as-horizontal {
     height: $height;

@@ -4,24 +4,32 @@
       <input
         class="input—color"
         type="color"
-        :default-value="model"
         v-model="model"
       />
     </label>
-    <p class="reset-btn">重置</p>
+    <asButton
+      class="reset-btn"
+      type="text"
+      @click="reset">
+      重置
+    </asButton>
   </div>
 </template>
 
 <script>
 import { computed } from 'vue'
+import asButton from './button.vue'
 
 export default {
   name: 'color',
+  components: {
+    asButton
+  },
   props: {
     modelValue: {
       type: [String, Number]
     },
-    default: {
+    defaultValue: {
       type: [String, Number]
     }
   },
@@ -34,8 +42,12 @@ export default {
         ctx.emit('update:modelValue', value)
       }
     })
+    const reset = () => {
+      model.value = props.defaultValue
+    }
     return {
-      model
+      model,
+      reset
     }
   }
 }
@@ -70,13 +82,10 @@ export default {
   }
 
   .color-set {
-    display: flex;
-    align-items: center;
+
   }
 
   .reset-btn {
-    margin: 0;
-    padding: 0 20px;
-    color: var(--as-primary-text-color);
+    margin-left: 20px;
   }
 </style>
