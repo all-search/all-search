@@ -33,7 +33,7 @@ const resizeHandle = debounce(() => initStyle(mode.value))
 
 export default function useMode () {
   onMounted(() => {
-    initStyle(useMode.value)
+    initStyle(mode.value)
     window.addEventListener('resize', resizeHandle, false)
   })
 

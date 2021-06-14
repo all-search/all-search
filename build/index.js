@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.15
-// @description  2021年6月13日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.16
+// @description  2021年6月14日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/6/13
+// @update       2021/6/14
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.15/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.16/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -111,7 +111,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.15";
+    var t = "1.0.16";
     e.reactive({
         tmVersion: ""
     });
@@ -405,7 +405,11 @@
     }, {
         url: /\/\/www\.douban\.com\/search/
     }, {
-        url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/
+        url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
+        style: {
+            1: "#head_wr.gj #head.gj, #left_menu_content { top: 30px !important;}",
+            2: "#left_menu_content { left: 100px !important;}"
+        }
     }, {
         url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
     }, {
@@ -465,33 +469,33 @@
     let w = h();
     const f = n("mode"), y = "vertical" !== (g = f) && "horizontal" !== g ? "horizontal" : g;
     var g;
-    const b = new Map([ [ "body-horizontal", "body-vertical" ], [ "body-vertical", "body-horizontal" ] ]), v = (e = y) => {
+    const b = (e = y) => {
         w = h();
         const t = document.body;
-        if (w.invisible || w.disabled) t.classList.remove("body-vertical", "body-horizontal"); else if (e) {
-            const o = "body-" + e, a = b.get(o);
-            t.classList.remove(a), t.classList.add(o);
+        if (t.classList.remove("body-vertical", "body-horizontal"), e) {
+            const o = "body-" + e;
+            t.classList.add(o);
         }
-    }, k = (e = y) => {
-        if (w = h(), w.invisible || w.disabled) c(".as-custom-style"); else if (w.style) {
+    }, v = (e = y) => {
+        if (w = h(), c(".as-custom-style"), w.style) {
             let t = "";
             w.style[1] && "horizontal" === e ? t = w.style[1] : w.style[2] && "vertical" === e && (t = w.style[2]), 
-            t && i(t, "as-custom-style", void 0, !0);
+            t && i(t, "as-custom-style");
         }
-    }, x = function() {
+    }, k = function() {
         w = h(), w.invisible || w.disabled ? c(".as-style") : s("as-style", `https://cdn.jsdelivr.net/npm/all-search@${o}/build/as-style.css`);
-    }, Z = function() {
+    }, x = function() {
         var e, t, o;
         Node.prototype.removeChild = (e = Node.prototype.removeChild, t = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
         function() {
             if (!1 !== t.apply(this, arguments)) return e.apply(this, arguments);
-        }), k(), v(), s("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-        x(), o = () => {
-            w = h(), k(), v(), x();
+        }), v(), b(), s("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
+        k(), o = () => {
+            w = h(), v(), b(), k();
         }, history.pushState = p(history.pushState, o), history.replaceState = p(history.replaceState, o), 
         window.addEventListener("yt-navigate-finish", o);
-    }, C = n("mode"), V = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, N = e.ref(V(C)), _ = (e = "horizontal") => {
-        v(e), k(e);
+    }, Z = n("mode"), C = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, _ = e.ref(C(Z)), V = (e = "horizontal") => {
+        b(e), v(e);
     };
     !function(e) {
         const t = function() {
@@ -501,29 +505,29 @@
         document.addEventListener("mozfullscreenchange", e), document.addEventListener("MSFullscreenChange", e), 
         document.addEventListener("resize", t);
     }(() => {
-        _(N.value);
-    }), e.watch(N, e => {
-        const t = V(e);
-        _(t), l("mode", t);
+        V(_.value);
+    }), e.watch(_, e => {
+        const t = C(e);
+        V(t), l("mode", t);
     });
-    const q = function(e, t = 500) {
+    const N = function(e, t = 500) {
         let o = null;
         return function() {
             clearTimeout(o), o = setTimeout(() => {
                 e.apply(this, arguments);
             }, t);
         };
-    }(() => _(N.value));
-    function S() {
+    }(() => V(_.value));
+    function q() {
         return e.onMounted(() => {
-            _(S.value), window.addEventListener("resize", q, !1);
+            V(_.value), window.addEventListener("resize", N, !1);
         }), e.onUnmounted(() => {
-            window.removeEventListener("resize", q, !1);
+            window.removeEventListener("resize", N, !1);
         }), {
-            mode: N
+            mode: _
         };
     }
-    var B = {
+    var S = {
         name: "logo",
         props: {
             mode: {
@@ -533,40 +537,40 @@
             }
         }
     };
-    const M = e.createVNode("p", {
+    const B = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    B.render = function(t, o, a, r, n, l) {
+    S.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("a", {
             class: [ "as-title", "as-title-" + a.mode ],
             href: "https://github.com/endday/all-search",
             target: "_blank"
-        }, [ M ], 2);
-    }, B.__file = "src/components/logo.vue";
-    let z = document.createElement("a");
+        }, [ B ], 2);
+    }, S.__file = "src/components/logo.vue";
+    let M = document.createElement("a");
     function T(e) {
         let t = e;
         if (t.indexOf("//") < 0) t = "//" + t; else {
-            if (!(t.indexOf("//") > -1)) return z;
+            if (!(t.indexOf("//") > -1)) return M;
             t = function(e) {
                 const t = e.toLowerCase(), o = [ "http://", "https://", "ftp://", "files://" ];
                 for (let a = 0; a < o.length; a++) if (0 === t.indexOf(o[a])) return e.replace(/.*\/\//, "//");
                 return e;
             }(t);
         }
-        return z.href = t, {
-            href: z.href,
-            origin: z.origin,
-            protocol: z.protocol,
-            host: z.host,
-            hostname: z.hostname,
-            port: z.port,
-            pathname: z.pathname,
-            search: z.search,
-            hash: z.hash
+        return M.href = t, {
+            href: M.href,
+            origin: M.origin,
+            protocol: M.protocol,
+            host: M.host,
+            hostname: M.hostname,
+            port: M.port,
+            pathname: M.pathname,
+            search: M.search,
+            hash: M.hash
         };
     }
-    const E = [ {
+    const z = [ {
         nameZh: "搜索",
         name: "search",
         list: [ {
@@ -869,8 +873,8 @@
             visible: !0
         }
     }));
-    function L(e) {
-        let t = E;
+    function E(e) {
+        let t = z;
         const a = n("sites"), r = n("sites-version");
         return a && (t = a, a && r && (r !== o || "tm" !== e) && (t = function(e, t) {
             const o = JSON.parse(JSON.stringify(e));
@@ -885,12 +889,12 @@
                 }), e.list = e.list.filter(e => !e.isAdd), e.list.length && (t.list = t.list.concat(e.list)), 
                 e.isAdd = !0);
             }), a = a.filter(e => !e.isAdd), a.length && o.push(...a), o;
-        }(a, E), l("sites", t), l("sites-version", o))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
+        }(a, z), l("sites", t), l("sites-version", o))), "tm" === e && (t = t.filter(e => e.list && e.list.length > 0 && e.data && e.data.visible).map(e => ({
             ...e,
             show: !1
         }))), t;
     }
-    var I = {
+    var L = {
         name: "menuItem",
         props: {
             showTimeout: {
@@ -925,13 +929,13 @@
             };
         }
     };
-    I.render = function(t, o, a, r, n, l) {
+    L.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("li", {
             onMouseenter: o[1] || (o[1] = e => r.handleMouseEnter(e)),
             onMouseleave: o[2] || (o[2] = e => r.handleMouseLeave(e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, I.__file = "src/components/menuItem.vue";
-    var D = {
+    }, L.__file = "src/components/menuItem.vue";
+    var I = {
         name: "icon",
         props: {
             name: {
@@ -940,26 +944,26 @@
             }
         }
     };
-    D.render = function(t, o, a, r, n, l) {
+    I.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("i", {
             class: [ "as-menu-item-icon", "icon-" + a.name ]
         }, null, 2);
-    }, D.__file = "src/components/icon.vue";
-    const A = n("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), F = e => j.has(e) ? e : "flex-start", U = e.ref(F(A)), O = e.reactive(j);
-    function $() {
+    }, I.__file = "src/components/icon.vue";
+    const D = n("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), A = e => j.has(e) ? e : "flex-start", F = e.ref(A(D)), U = e.reactive(j);
+    function O() {
         return {
-            alignList: O,
-            align: U
+            alignList: U,
+            align: F
         };
     }
-    e.watch(U, e => {
-        l("align", F(e));
+    e.watch(F, e => {
+        l("align", A(e));
     });
-    var G = {
+    var $ = {
         name: "as-menu",
         components: {
-            menuItem: I,
-            icon: D
+            menuItem: L,
+            icon: I
         },
         props: {
             mode: {
@@ -969,14 +973,14 @@
             }
         },
         setup(t) {
-            const o = e.reactive(L("tm")), a = h(), r = e.reactive({
+            const o = e.reactive(E("tm")), a = h(), r = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
             }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), l = () => a && a.keyword ? a.keyword() : function() {
                 const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
                 return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
             }();
-            const {align: s} = $();
+            const {align: s} = O();
             return {
                 sites: o,
                 data: r,
@@ -997,17 +1001,17 @@
             };
         }
     };
-    const J = {
+    const G = {
         class: "as-menu-item-title"
-    }, P = {
+    }, J = {
         key: 0,
         class: "as-subMenu-container"
-    }, R = {
+    }, P = {
         class: "as-subMenu"
-    }, H = {
+    }, R = {
         class: "as-url-icon"
     };
-    G.render = function(t, o, a, r, n, l) {
+    $.render = function(t, o, a, r, n, l) {
         const s = e.resolveComponent("icon"), c = e.resolveComponent("menu-item");
         return e.openBlock(), e.createBlock("ul", {
             class: "as-menu",
@@ -1022,7 +1026,7 @@
             hideTimeout: r.data.hideTimeout,
             onShow: e => r.handleMenuShow(e, t)
         }, {
-            default: e.withCtx(() => [ e.createVNode("div", J, [ e.createVNode(s, {
+            default: e.withCtx(() => [ e.createVNode("div", G, [ e.createVNode(s, {
                 name: t.name
             }, null, 8, [ "name" ]), e.createVNode("span", {
                 textContent: e.toDisplayString(t.nameZh),
@@ -1032,12 +1036,12 @@
                 name: r.transition
             }, {
                 default: e.withCtx(() => [ t.list && t.list.length ? e.withDirectives((e.openBlock(), 
-                e.createBlock("div", P, [ e.createVNode("ul", R, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
+                e.createBlock("div", J, [ e.createVNode("ul", P, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
                 e.createBlock("li", {
                     key: o,
                     onClick: e => r.handleClick(t),
                     onMouseup: e.withModifiers(e => r.handleClick(t, !0), [ "middle" ])
-                }, [ e.createVNode("div", H, [ e.createVNode("img", {
+                }, [ e.createVNode("div", R, [ e.createVNode("img", {
                     src: r.getFavicon(t.url),
                     onerror: "this.classList.add('error')"
                 }, null, 8, [ "src" ]) ]), e.createVNode("p", {
@@ -1048,38 +1052,38 @@
             }, 1032, [ "name" ]) ]),
             _: 2
         }, 1032, [ "showTimeout", "hideTimeout", "onShow" ]))), 128)) ], 4);
-    }, G.__file = "src/components/menu.vue";
-    const W = e.ref(""), Q = e.ref(""), Y = e.ref("");
-    e.watch(W, e => {
-        K("primary-color", e), l("primary-color", e);
+    }, $.__file = "src/components/menu.vue";
+    const H = e.ref(""), W = e.ref(""), Q = e.ref("");
+    e.watch(H, e => {
+        Y("primary-color", e), l("primary-color", e);
+    }), e.watch(W, e => {
+        Y("bg-color", e), l("bg-color", e);
     }), e.watch(Q, e => {
-        K("bg-color", e), l("bg-color", e);
-    }), e.watch(Y, e => {
-        K("primary-text-color", e), l("primary-text-color", e);
+        Y("primary-text-color", e), l("primary-text-color", e);
     });
-    const K = (e, t) => {
+    const Y = (e, t) => {
         document.getElementById("all-search").style.setProperty("--as-" + e, t);
-    }, X = {
-        "primary-color": W,
-        "bg-color": Q,
-        "primary-text-color": Y
-    }, ee = e => {
+    }, K = {
+        "primary-color": H,
+        "bg-color": W,
+        "primary-text-color": Q
+    }, X = e => {
         const t = (e => {
             const t = document.getElementById("all-search");
             return getComputedStyle(t).getPropertyValue("--as-" + e).trim();
         })(e), o = n(e) || t;
-        X[e].value = o;
+        K[e].value = o;
     };
-    function te() {
+    function ee() {
         return e.onMounted(() => {
-            ee("primary-color"), ee("bg-color"), ee("primary-text-color");
+            X("primary-color"), X("bg-color"), X("primary-text-color");
         }), {
-            primaryColor: W,
-            bgColor: Q,
-            primaryTextColor: Y
+            primaryColor: H,
+            bgColor: W,
+            primaryTextColor: Q
         };
     }
-    var oe = {
+    var te = {
         name: "overlay",
         setup(e, {emit: t}) {
             let o = !1, a = !1;
@@ -1096,15 +1100,15 @@
             };
         }
     };
-    oe.render = function(t, o, a, r, n, l) {
+    te.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("div", {
             class: "as-overlay",
             onMousedown: o[1] || (o[1] = (...e) => r.onMouseDown && r.onMouseDown(...e)),
             onMouseup: o[2] || (o[2] = (...e) => r.onMouseUp && r.onMouseUp(...e)),
             onClick: o[3] || (o[3] = (...e) => r.onMaskClick && r.onMaskClick(...e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
-    }, oe.__file = "src/components/overlay.vue";
-    var ae = {
+    }, te.__file = "src/components/overlay.vue";
+    var oe = {
         name: "as-radio",
         props: {
             modelValue: {
@@ -1124,21 +1128,21 @@
             })
         })
     };
-    const re = {
+    const ae = {
         class: "as-radio as-radio-animate"
-    }, ne = e.createVNode("i", {
+    }, re = e.createVNode("i", {
         class: "as-radio-icon"
-    }, null, -1), le = {
+    }, null, -1), ne = {
         class: "as-radio-label"
     };
-    ae.render = function(t, o, a, r, n, l) {
-        return e.openBlock(), e.createBlock("label", re, [ e.withDirectives(e.createVNode("input", {
+    oe.render = function(t, o, a, r, n, l) {
+        return e.openBlock(), e.createBlock("label", ae, [ e.withDirectives(e.createVNode("input", {
             type: "radio",
             value: a.label,
             "onUpdate:modelValue": o[1] || (o[1] = e => r.model = e)
-        }, null, 8, [ "value" ]), [ [ e.vModelRadio, r.model ] ]), ne, e.createVNode("span", le, [ e.renderSlot(t.$slots, "default") ]) ]);
-    }, ae.__file = "src/components/radio.vue";
-    var se = {
+        }, null, 8, [ "value" ]), [ [ e.vModelRadio, r.model ] ]), re, e.createVNode("span", ne, [ e.renderSlot(t.$slots, "default") ]) ]);
+    }, oe.__file = "src/components/radio.vue";
+    var le = {
         name: "form-item",
         props: {
             labelWidth: {
@@ -1159,7 +1163,7 @@
             }))
         })
     };
-    se.render = function(t, o, a, r, n, l) {
+    le.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("div", null, [ e.createVNode("label", {
             class: "as-label",
             style: r.labelStyle,
@@ -1168,8 +1172,8 @@
             class: "as-content",
             style: r.contentStyle
         }, [ e.renderSlot(t.$slots, "default") ], 4) ]);
-    }, se.__file = "src/components/form-item.vue";
-    var ce = {
+    }, le.__file = "src/components/form-item.vue";
+    var se = {
         name: "xButton",
         props: {
             type: {
@@ -1178,15 +1182,15 @@
             }
         }
     };
-    ce.render = function(t, o, a, r, n, l) {
+    se.render = function(t, o, a, r, n, l) {
         return e.openBlock(), e.createBlock("button", {
             class: [ "as-button", "as-button__" + a.type ]
         }, [ e.renderSlot(t.$slots, "default") ], 2);
-    }, ce.__file = "src/components/button.vue";
-    var ie = {
+    }, se.__file = "src/components/button.vue";
+    var ce = {
         name: "color",
         components: {
-            asButton: ce
+            asButton: se
         },
         props: {
             modelValue: {
@@ -1211,17 +1215,17 @@
             };
         }
     };
-    const ue = e.withScopeId("data-v-2532dbfa");
+    const ie = e.withScopeId("data-v-2532dbfa");
     e.pushScopeId("data-v-2532dbfa");
-    const me = {
+    const ue = {
         class: "color-set"
-    }, de = {
+    }, me = {
         class: "label"
-    }, he = e.createTextVNode(" 重置 ");
+    }, de = e.createTextVNode(" 重置 ");
     e.popScopeId();
-    const pe = ue((t, o, a, r, n, l) => {
+    const he = ie((t, o, a, r, n, l) => {
         const s = e.resolveComponent("asButton");
-        return e.openBlock(), e.createBlock("div", me, [ e.createVNode("label", de, [ e.withDirectives(e.createVNode("input", {
+        return e.openBlock(), e.createBlock("div", ue, [ e.createVNode("label", me, [ e.withDirectives(e.createVNode("input", {
             class: "input—color",
             type: "color",
             "onUpdate:modelValue": o[1] || (o[1] = e => r.model = e)
@@ -1230,21 +1234,21 @@
             type: "text",
             onClick: r.reset
         }, {
-            default: ue(() => [ he ]),
+            default: ie(() => [ de ]),
             _: 1
         }, 8, [ "onClick" ]) ]);
     });
-    ie.render = pe, ie.__scopeId = "data-v-2532dbfa", ie.__file = "src/components/color.vue";
-    var we = {
+    ce.render = he, ce.__scopeId = "data-v-2532dbfa", ce.__file = "src/components/color.vue";
+    var pe = {
         name: "side-bar",
         components: {
-            overlay: oe,
-            asRadio: ae,
-            formItem: se,
-            color: ie
+            overlay: te,
+            asRadio: oe,
+            formItem: le,
+            color: ce
         },
         setup() {
-            const t = e.ref(!1), {mode: o} = S(), {alignList: a, align: r} = $(), {primaryColor: n, bgColor: l, primaryTextColor: s} = te();
+            const t = e.ref(!1), {mode: o} = q(), {alignList: a, align: r} = O(), {primaryColor: n, bgColor: l, primaryTextColor: s} = ee();
             return {
                 mode: o,
                 visible: t,
@@ -1268,9 +1272,9 @@
             };
         }
     };
-    const fe = e.createVNode("header", {
+    const we = e.createVNode("header", {
         class: "header"
-    }, " 设置 ", -1), ye = e.createTextVNode("横向 "), ge = e.createTextVNode("竖向 "), be = e.createVNode("footer", null, [ e.createVNode("a", {
+    }, " 设置 ", -1), fe = e.createTextVNode("横向 "), ye = e.createTextVNode("竖向 "), ge = e.createVNode("footer", null, [ e.createVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -1281,7 +1285,7 @@
         href: "https://github.com/endday/all-search",
         target: "_blank"
     }, " GitHub地址 ") ], -1);
-    we.render = function(t, o, a, r, n, l) {
+    pe.render = function(t, o, a, r, n, l) {
         const s = e.resolveComponent("as-radio"), c = e.resolveComponent("form-item"), i = e.resolveComponent("color"), u = e.resolveComponent("overlay");
         return e.openBlock(), e.createBlock(e.Fragment, null, [ e.createVNode("div", {
             class: "as-setting",
@@ -1304,7 +1308,7 @@
                         role: "dialog",
                         class: "as-side-bar",
                         onClick: o[8] || (o[8] = e.withModifiers(() => {}, [ "stop" ]))
-                    }, [ fe, e.createVNode("section", null, [ e.createVNode(c, {
+                    }, [ we, e.createVNode("section", null, [ e.createVNode(c, {
                         label: "方向"
                     }, {
                         default: e.withCtx(() => [ e.createVNode(s, {
@@ -1313,7 +1317,7 @@
                             "onUpdate:modelValue": o[2] || (o[2] = e => r.mode = e),
                             onChange: r.changeMode
                         }, {
-                            default: e.withCtx(() => [ ye ]),
+                            default: e.withCtx(() => [ fe ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]), e.createVNode(s, {
                             label: "vertical",
@@ -1321,7 +1325,7 @@
                             "onUpdate:modelValue": o[3] || (o[3] = e => r.mode = e),
                             onChange: r.changeMode
                         }, {
-                            default: e.withCtx(() => [ ge ]),
+                            default: e.withCtx(() => [ ye ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]) ]),
                         _: 1
@@ -1367,31 +1371,31 @@
                             "onUpdate:modelValue": o[7] || (o[7] = e => r.primaryTextColor = e)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
-                    }) ]), be ], 512), [ [ e.vShow, r.visible ] ]) ]),
+                    }) ]), ge ], 512), [ [ e.vShow, r.visible ] ]) ]),
                     _: 1
                 }) ]),
                 _: 1
             }, 8, [ "onClick" ]), [ [ e.vShow, r.visible ] ]) ]),
             _: 1
         }) ])) ], 64);
-    }, we.__file = "src/components/side-bar.vue";
-    var ve = {
+    }, pe.__file = "src/components/side-bar.vue";
+    var be = {
         name: "all-search",
         components: {
-            logo: B,
-            asMenu: G,
-            sideBar: we
+            logo: S,
+            asMenu: $,
+            sideBar: pe
         },
         setup() {
-            const t = h(), o = e.computed(() => "as-" + a.value), {mode: a} = S();
-            return Z(), {
+            const t = h(), o = e.computed(() => "as-" + a.value), {mode: a} = q();
+            return x(), {
                 currentSite: t,
                 mode: a,
                 classList: o
             };
         }
     };
-    ve.render = function(t, o, a, r, n, l) {
+    be.render = function(t, o, a, r, n, l) {
         const s = e.resolveComponent("logo"), c = e.resolveComponent("as-menu"), i = e.resolveComponent("side-bar");
         return e.openBlock(), e.createBlock("div", {
             class: [ "as-container", r.classList ],
@@ -1403,18 +1407,18 @@
         }, null, 8, [ "mode" ]), e.createVNode(c, {
             mode: r.mode
         }, null, 8, [ "mode" ]), e.createVNode(i) ], 2);
-    }, ve.__file = "src/as-script/index.vue";
-    let ke = h();
-    const xe = e.createApp(ve);
-    function Ze() {
-        ke = h();
+    }, be.__file = "src/as-script/index.vue";
+    let ve = h();
+    const ke = e.createApp(be);
+    function xe() {
+        ve = h();
         const e = document.getElementById("all-search");
-        if (e) e.style.display = ke.invisible ? "none" : "unset"; else {
+        if (e) e.style.display = ve.invisible ? "none" : "unset"; else {
             const e = function() {
                 let e = document.createElement("div");
                 return e.id = "all-search", e;
             }(), t = document.body.parentElement.insertBefore(e, document.body);
-            xe.mount(t), function() {
+            ke.mount(t), function() {
                 const e = function() {
                     document.dispatchEvent(new CustomEvent(u, {
                         detail: {
@@ -1439,7 +1443,7 @@
             }
         });
     }().then(() => {
-        Ze();
+        xe();
     }).catch(e => {
         console.error(e);
     });

@@ -298,7 +298,11 @@ export const list = [
     url: /\/\/www\.douban\.com\/search/
   },
   {
-    url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/
+    url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
+    style: {
+      1: `#head_wr.gj #head.gj, #left_menu_content { top: ${height}px !important;}`,
+      2: `#left_menu_content { left: ${width}px !important;}`
+    }
   },
   {
     url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/

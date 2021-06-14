@@ -1,6 +1,6 @@
 import { siteInfo } from '../config/loadList'
 import { addStyleContent, addStyleResource, getSession, removeNode, version } from './index'
-import { withHookBefore, withHookAfter } from './hook'
+import { withHookAfter, withHookBefore } from './hook'
 
 const isPro = process.env.NODE_ENV === 'production'
 
@@ -25,21 +25,17 @@ const map = new Map([
 export const initBodyClass = (value = mode) => {
   currentSite = siteInfo()
   const body = document.body
-  if (currentSite.invisible || currentSite.disabled) {
-    body.classList.remove('body-vertical', 'body-horizontal')
-  } else if (value) {
+  body.classList.remove('body-vertical', 'body-horizontal')
+  if (value) {
     const newValue = `body-${value}`
-    const oldValue = map.get(newValue)
-    body.classList.remove(oldValue)
     body.classList.add(newValue)
   }
 }
 
 export const addCustomStyle = (value = mode) => {
   currentSite = siteInfo()
-  if (currentSite.invisible || currentSite.disabled) {
-    removeNode('.as-custom-style')
-  } else if (currentSite.style) {
+  removeNode('.as-custom-style')
+  if (currentSite.style) {
     let styleContent = ''
     if (currentSite.style[1] && value === 'horizontal') {
       styleContent = currentSite.style[1]
@@ -47,7 +43,7 @@ export const addCustomStyle = (value = mode) => {
       styleContent = currentSite.style[2]
     }
     if (styleContent) {
-      addStyleContent(styleContent, 'as-custom-style', undefined, true)
+      addStyleContent(styleContent, 'as-custom-style')
     }
   }
 }
@@ -71,7 +67,6 @@ const protectStyle = function () {
     return true
   })
 }
-
 
 
 const routerChange = cb => {
