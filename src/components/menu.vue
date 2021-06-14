@@ -78,10 +78,11 @@ export default {
       props.mode === 'horizontal' ? 'drop' : 'fade'
     )
     const defaultKeyword = () => {
+      let keyword = getKeyword()
       if (currentSite && currentSite.keyword) {
-        return currentSite.keyword()
+        keyword = currentSite.keyword()
       }
-      return getKeyword()
+      return encodeURIComponent(keyword)
     }
     const handleClick = (item, isOpen) => {
       const keyword = defaultKeyword()

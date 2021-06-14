@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.16
+// @version      1.0.17
 // @description  2021年6月14日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
@@ -10,7 +10,7 @@
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.16/build/as-style.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.17/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -111,7 +111,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.16";
+    var t = "1.0.17";
     e.reactive({
         tmVersion: ""
     });
@@ -494,7 +494,7 @@
             w = h(), v(), b(), k();
         }, history.pushState = p(history.pushState, o), history.replaceState = p(history.replaceState, o), 
         window.addEventListener("yt-navigate-finish", o);
-    }, Z = n("mode"), C = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, _ = e.ref(C(Z)), V = (e = "horizontal") => {
+    }, C = n("mode"), Z = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, _ = e.ref(Z(C)), V = (e = "horizontal") => {
         b(e), v(e);
     };
     !function(e) {
@@ -507,7 +507,7 @@
     }(() => {
         V(_.value);
     }), e.watch(_, e => {
-        const t = C(e);
+        const t = Z(e);
         V(t), l("mode", t);
     });
     const N = function(e, t = 500) {
@@ -949,14 +949,14 @@
             class: [ "as-menu-item-icon", "icon-" + a.name ]
         }, null, 2);
     }, I.__file = "src/components/icon.vue";
-    const D = n("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), A = e => j.has(e) ? e : "flex-start", F = e.ref(A(D)), U = e.reactive(j);
+    const D = n("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), A = e => j.has(e) ? e : "flex-start", U = e.ref(A(D)), F = e.reactive(j);
     function O() {
         return {
-            alignList: U,
-            align: F
+            alignList: F,
+            align: U
         };
     }
-    e.watch(F, e => {
+    e.watch(U, e => {
         l("align", A(e));
     });
     var $ = {
@@ -976,10 +976,13 @@
             const o = e.reactive(E("tm")), a = h(), r = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
-            }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), l = () => a && a.keyword ? a.keyword() : function() {
-                const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
-                return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
-            }();
+            }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), l = () => {
+                let e = function() {
+                    const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
+                    return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
+                }();
+                return a && a.keyword && (e = a.keyword()), encodeURIComponent(e);
+            };
             const {align: s} = O();
             return {
                 sites: o,
@@ -1003,12 +1006,12 @@
     };
     const G = {
         class: "as-menu-item-title"
-    }, J = {
+    }, R = {
         key: 0,
         class: "as-subMenu-container"
-    }, P = {
+    }, J = {
         class: "as-subMenu"
-    }, R = {
+    }, P = {
         class: "as-url-icon"
     };
     $.render = function(t, o, a, r, n, l) {
@@ -1036,12 +1039,12 @@
                 name: r.transition
             }, {
                 default: e.withCtx(() => [ t.list && t.list.length ? e.withDirectives((e.openBlock(), 
-                e.createBlock("div", J, [ e.createVNode("ul", P, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
+                e.createBlock("div", R, [ e.createVNode("ul", J, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
                 e.createBlock("li", {
                     key: o,
                     onClick: e => r.handleClick(t),
                     onMouseup: e.withModifiers(e => r.handleClick(t, !0), [ "middle" ])
-                }, [ e.createVNode("div", R, [ e.createVNode("img", {
+                }, [ e.createVNode("div", P, [ e.createVNode("img", {
                     src: r.getFavicon(t.url),
                     onerror: "this.classList.add('error')"
                 }, null, 8, [ "src" ]) ]), e.createVNode("p", {
