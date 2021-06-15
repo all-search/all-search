@@ -65,12 +65,13 @@ export default {
   }
 
   .input—color {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     padding: 4px;
     border: 1px solid #e6e6e6;
     border-radius: 4px;
     background-color: var(--as-secondary-background-color);
+    box-sizing: border-box;
   }
 
   .input—color::-webkit-color-swatch {
@@ -79,10 +80,6 @@ export default {
 
   .input—color::-webkit-color-swatch-wrapper {
     padding: 0;
-  }
-
-  .color-set {
-
   }
 
   .reset-btn {
