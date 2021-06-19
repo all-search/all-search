@@ -19,7 +19,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.9.1",
-    "element-plus": "^1.0.1-beta.27",
+    "element-plus": "^1.0.2-beta.48",
     "vue": "^3.0.7",
     "vue-draggable-next": "^2.0.1",
     "vue-router": "^4.0.5"

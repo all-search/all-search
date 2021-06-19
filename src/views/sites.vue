@@ -94,21 +94,14 @@
                 @click="changeVisible(item.data)">
                 {{item.data.visible ? '隐藏': '展示'}}
               </el-button>
-              <el-popconfirm
+              <el-button
                 v-if="isPersonal(cate)"
-                title="确定删除吗？"
-                confirmButtonText="确认"
-                cancelButtonText="取消"
-                @confirm="deleteUrl(j)">
-                <template #reference>
-                  <el-button
-                    icon="el-icon-remove"
-                    :plain="true"
-                    type="danger">
-                    删除
-                  </el-button>
-                </template>
-              </el-popconfirm>
+                icon="el-icon-remove"
+                :plain="true"
+                type="danger"
+                @click="deleteUrl(j)">
+                删除
+              </el-button>
             </div>
           </div>
         </draggable>
