@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.17
-// @description  2021年6月14日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.18
+// @description  2021年6月21日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/6/14
+// @update       2021/6/21
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
-// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.17/build/as-style.css
+// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.0.18/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.18/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -111,7 +111,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.17";
+    var t = "1.0.18";
     e.reactive({
         tmVersion: ""
     });
@@ -121,11 +121,11 @@
         const o = new RegExp("(\\?|#|&)" + e + "=([^&#]*)(&|#|$)"), a = t.match(o);
         return decodeURIComponent(a ? a[2] : "");
     }
-    function r(e) {
+    function n(e) {
         return e ? "__allSearch__" + e : null;
     }
-    let n = function(e) {
-        const t = r(e);
+    let r = function(e) {
+        const t = n(e);
         let o;
         if (o = window.GM_getValue ? window.GM_getValue(t) : window.localStorage.getItem(t), 
         o) try {
@@ -135,7 +135,7 @@
         }
         return null;
     }, l = function(e, t) {
-        const o = r(e);
+        const o = n(e);
         if (window.GM_setValue) window.GM_setValue(o, t); else {
             const e = JSON.stringify(t);
             e && window.localStorage.setItem(o, e);
@@ -167,24 +167,24 @@
     function i(e, t, o, a = !1) {
         !function(e, t, o) {
             const a = t / 1e3 * 60;
-            let r = 0;
+            let n = 0;
             if (!0 === o) {
                 if (e()) return;
             }
             requestAnimationFrame((function t() {
-                if (r < a) r++, requestAnimationFrame(t); else {
-                    e() || !1 || (r = 0, requestAnimationFrame(t));
+                if (n < a) n++, requestAnimationFrame(t); else {
+                    e() || !1 || (n = 0, requestAnimationFrame(t));
                 }
             }));
         }((function() {
-            let r = document.querySelector(o);
-            if (void 0 === o && (r = document.body || document.head || document.documentElement || document), 
+            let n = document.querySelector(o);
+            if (void 0 === o && (n = document.body || document.head || document.documentElement || document), 
             void 0 === o || void 0 !== o && null !== document.querySelector(o)) {
                 if (a) c("." + t); else if (!a && null !== document.querySelector("." + t)) return !0;
                 let o = document.createElement("style");
                 t && (o.className = t), o.setAttribute("type", "text/css"), o.innerHTML = e;
                 try {
-                    r.appendChild(o);
+                    n.appendChild(o);
                 } catch (e) {
                     console.log(e.message);
                 }
@@ -192,7 +192,7 @@
             }
         }), 20, !0);
     }
-    const u = r("script-loaded"), m = r("page-loaded");
+    const u = n("script-loaded"), m = n("page-loaded");
     const d = [ {
         url: /\/\/www\.google\.com(.hk)?\/search/,
         style: {
@@ -467,16 +467,16 @@
         };
     }
     let w = h();
-    const f = n("mode"), y = "vertical" !== (g = f) && "horizontal" !== g ? "horizontal" : g;
-    var g;
-    const b = (e = y) => {
+    const f = r("mode"), g = "vertical" !== (y = f) && "horizontal" !== y ? "horizontal" : y;
+    var y;
+    const b = (e = g) => {
         w = h();
         const t = document.body;
         if (t.classList.remove("body-vertical", "body-horizontal"), e) {
             const o = "body-" + e;
             t.classList.add(o);
         }
-    }, v = (e = y) => {
+    }, v = (e = g) => {
         if (w = h(), c(".as-custom-style"), w.style) {
             let t = "";
             w.style[1] && "horizontal" === e ? t = w.style[1] : w.style[2] && "vertical" === e && (t = w.style[2]), 
@@ -485,16 +485,16 @@
     }, k = function() {
         w = h(), w.invisible || w.disabled ? c(".as-style") : s("as-style", `https://cdn.jsdelivr.net/npm/all-search@${o}/build/as-style.css`);
     }, x = function() {
-        var e, t, o;
+        var e, t, a;
         Node.prototype.removeChild = (e = Node.prototype.removeChild, t = e => !e || "STYLE" !== e.tagName || !(e.classList.contains("as-icon") || e.classList.contains("as-style")), 
         function() {
             if (!1 !== t.apply(this, arguments)) return e.apply(this, arguments);
-        }), v(), b(), s("as-icon", "https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css"), 
-        k(), o = () => {
+        }), v(), b(), s("as-icon", `https://cdn.jsdelivr.net/npm/all-search@${o}/src/assets/iconfont.css`), 
+        k(), a = () => {
             w = h(), v(), b(), k();
-        }, history.pushState = p(history.pushState, o), history.replaceState = p(history.replaceState, o), 
-        window.addEventListener("yt-navigate-finish", o);
-    }, C = n("mode"), Z = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, _ = e.ref(Z(C)), V = (e = "horizontal") => {
+        }, history.pushState = p(history.pushState, a), history.replaceState = p(history.replaceState, a), 
+        window.addEventListener("yt-navigate-finish", a);
+    }, Z = r("mode"), C = e => "vertical" !== e && "horizontal" !== e ? "horizontal" : e, _ = e.ref(C(Z)), V = (e = "horizontal") => {
         b(e), v(e);
     };
     !function(e) {
@@ -507,7 +507,7 @@
     }(() => {
         V(_.value);
     }), e.watch(_, e => {
-        const t = Z(e);
+        const t = C(e);
         V(t), l("mode", t);
     });
     const N = function(e, t = 500) {
@@ -540,7 +540,7 @@
     const B = e.createVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    S.render = function(t, o, a, r, n, l) {
+    S.render = function(t, o, a, n, r, l) {
         return e.openBlock(), e.createBlock("a", {
             class: [ "as-title", "as-title-" + a.mode ],
             href: "https://github.com/endday/all-search",
@@ -612,13 +612,15 @@
             url: "http://fanyi.baidu.com/#auto/zh/%s"
         }, {
             nameZh: "DeepL",
-            url: "https://www.deepl.com/translator#zh/en/%s"
+            url: "https://www.deepl.com/translator#zh/en/%s",
+            icon: "https://www.deepl.com/img/favicon/favicon_96.png"
         }, {
             nameZh: "谷歌翻译",
             url: "https://translate.google.com/?q=%s"
         }, {
             nameZh: "有道词典",
-            url: "http://dict.youdao.com/search?q=%s"
+            url: "http://dict.youdao.com/search?q=%s",
+            icon: "https://shared.ydstatic.com/images/favicon.ico"
         }, {
             nameZh: "必应翻译",
             url: "http://cn.bing.com/dict/search?q=%s"
@@ -634,7 +636,8 @@
             url: "http://search.bilibili.com/all?keyword=%s"
         }, {
             nameZh: "优酷",
-            url: "http://www.soku.com/search_video/q_%s"
+            url: "http://www.soku.com/search_video/q_%s",
+            icon: "https://img.alicdn.com/tfs/TB1WeJ9Xrj1gK0jSZFuXXcrHpXa-195-195.png"
         }, {
             nameZh: "腾讯视频",
             url: "https://v.qq.com/x/search/?q=%s"
@@ -662,13 +665,16 @@
             url: "http://s.taobao.com/search?q=%s"
         }, {
             nameZh: "京东",
-            url: "http://search.jd.com/search?keyword=%s&enc=utf-8"
+            url: "http://search.jd.com/search?keyword=%s&enc=utf-8",
+            icon: "https://www.jd.com/favicon.ico"
         }, {
             nameZh: "苏宁",
-            url: "http://search.suning.com/%s/"
+            url: "http://search.suning.com/%s/",
+            icon: "http://www.suning.com/favicon.ico"
         }, {
             nameZh: "亚马逊",
-            url: "http://www.amazon.cn/s/ref=nb_sb_noss?field-keywords=%s"
+            url: "http://www.amazon.cn/s/ref=nb_sb_noss?field-keywords=%s",
+            icon: "https://www.amazon.cn/favicon.ico"
         }, {
             nameZh: "天猫",
             url: "http://list.tmall.com/search_product.htm?q=%s"
@@ -687,7 +693,8 @@
         name: "music",
         list: [ {
             nameZh: "网易音乐",
-            url: "http://music.163.com/#/search/m/?s=%s"
+            url: "http://music.163.com/#/search/m/?s=%s",
+            icon: "https://s1.music.126.net/style/favicon.ico"
         }, {
             nameZh: "一听",
             url: "http://so.1ting.com/all.do?q=%s"
@@ -721,7 +728,8 @@
             url: "https://juejin.im/search?query=%s&type=all"
         }, {
             nameZh: "Can I Use",
-            url: "http://caniuse.com/#search=%s"
+            url: "http://caniuse.com/#search=%s",
+            icon: "https://caniuse.com/img/favicon-128.png"
         }, {
             nameZh: "GitHub",
             url: "https://github.com/search?utf8=✓&q=%s"
@@ -730,7 +738,8 @@
             url: "http://www.runoob.com/?s=%s"
         }, {
             nameZh: "GreasyFork",
-            url: "https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓"
+            url: "https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓",
+            icon: "https://greasyfork.org/packs/media/images/blacklogo96-b2384000fca45aa17e45eb417cbcbb59.png"
         } ]
     }, {
         nameZh: "新闻",
@@ -805,7 +814,8 @@
             url: "http://iask.sina.com.cn/search?searchWord=%s"
         }, {
             nameZh: "萌娘百科",
-            url: "https://zh.moegirl.org/%s"
+            url: "https://zh.moegirl.org/%s",
+            icon: "https://zh.moegirl.org.cn/favicon.ico"
         }, {
             nameZh: "果壳",
             url: "http://www.guokr.com/search/all/?wd=%s"
@@ -838,9 +848,6 @@
             nameZh: "花瓣",
             url: "http://huaban.com/search/?q=%s"
         }, {
-            nameZh: "easyicon",
-            url: "http://www.easyicon.net/iconsearch/%s/"
-        }, {
             nameZh: "Pinterest",
             url: "https://www.pinterest.com/search/pins/?q=%s&rs=typed&term_meta"
         }, {
@@ -848,10 +855,33 @@
             url: "https://yandex.com/images/search?text=%s"
         }, {
             nameZh: "pixabay",
-            url: "https://pixabay.com/images/search/%s/"
+            url: "https://pixabay.com/images/search/%s/",
+            icon: "https://pixabay.com/favicon-32x32.png"
         }, {
             nameZh: "unsplash",
             url: "https://unsplash.com/s/photos/%s"
+        } ]
+    }, {
+        nameZh: "网盘",
+        name: "disk",
+        list: [ {
+            nameZh: "百度网盘",
+            url: "https://pan.baidu.com/disk/home?#/search?key=%s"
+        }, {
+            nameZh: "大力盘",
+            url: "https://www.dalipan.com/search?keyword=%s"
+        }, {
+            nameZh: "大圣盘",
+            url: "https://www.dashengpan.com/search?keyword=%s"
+        }, {
+            nameZh: "罗马盘",
+            url: "https://www.luomapan.com/search?keyword=%s"
+        }, {
+            nameZh: "小白盘",
+            url: "https://www.xiaobaipan.com/list-%s.html?from=1"
+        }, {
+            nameZh: "56网盘",
+            url: "https://www.56wangpan.com/search/kw%s"
         } ]
     }, {
         nameZh: "常用",
@@ -875,8 +905,8 @@
     }));
     function E(e) {
         let t = z;
-        const a = n("sites"), r = n("sites-version");
-        return a && (t = a, a && r && (r !== o || "tm" !== e) && (t = function(e, t) {
+        const a = r("sites"), n = r("sites-version");
+        return a && (t = a, a && n && (n !== o || "tm" !== e) && (t = function(e, t) {
             const o = JSON.parse(JSON.stringify(e));
             let a = JSON.parse(JSON.stringify(t.filter(e => "personal" !== e.name)));
             return a.forEach(e => {
@@ -929,10 +959,10 @@
             };
         }
     };
-    L.render = function(t, o, a, r, n, l) {
+    L.render = function(t, o, a, n, r, l) {
         return e.openBlock(), e.createBlock("li", {
-            onMouseenter: o[1] || (o[1] = e => r.handleMouseEnter(e)),
-            onMouseleave: o[2] || (o[2] = e => r.handleMouseLeave(e))
+            onMouseenter: o[1] || (o[1] = e => n.handleMouseEnter(e)),
+            onMouseleave: o[2] || (o[2] = e => n.handleMouseLeave(e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
     }, L.__file = "src/components/menuItem.vue";
     var I = {
@@ -944,19 +974,19 @@
             }
         }
     };
-    I.render = function(t, o, a, r, n, l) {
+    I.render = function(t, o, a, n, r, l) {
         return e.openBlock(), e.createBlock("i", {
             class: [ "as-menu-item-icon", "icon-" + a.name ]
         }, null, 2);
     }, I.__file = "src/components/icon.vue";
-    const D = n("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), A = e => j.has(e) ? e : "flex-start", U = e.ref(A(D)), F = e.reactive(j);
+    const D = r("align"), j = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]), A = e => j.has(e) ? e : "flex-start", F = e.ref(A(D)), U = e.reactive(j);
     function O() {
         return {
-            alignList: F,
-            align: U
+            alignList: U,
+            align: F
         };
     }
-    e.watch(U, e => {
+    e.watch(F, e => {
         l("align", A(e));
     });
     var $ = {
@@ -973,10 +1003,10 @@
             }
         },
         setup(t) {
-            const o = e.reactive(E("tm")), a = h(), r = e.reactive({
+            const o = e.reactive(E("tm")), a = h(), n = e.reactive({
                 showTimeout: 50,
                 hideTimeout: 200
-            }), n = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), l = () => {
+            }), r = e.computed(() => "horizontal" === t.mode ? "drop" : "fade"), l = () => {
                 let e = function() {
                     const e = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
                     return e ? "INPUT" === e.nodeName || "textarea" === e.localName ? e.value : e.textContent : "";
@@ -986,9 +1016,9 @@
             const {align: s} = O();
             return {
                 sites: o,
-                data: r,
+                data: n,
                 align: s,
-                transition: n,
+                transition: r,
                 handleClick: (e, t) => {
                     const o = l();
                     t ? window.open(e.url.replace("%s", o)) : window.location.href = e.url.replace("%s", o);
@@ -997,7 +1027,8 @@
                     t.show = e;
                 },
                 getFavicon: function(e) {
-                    const t = T(e), o = t.host.split(".");
+                    if (e.icon) return e.icon;
+                    const t = T(e.url), o = t.host.split(".");
                     let a = t.host;
                     return o.length > 2 && (a = o.slice(1).join(".")), `https://ico.ihuan.me/${a}/cdn.ico`;
                 }
@@ -1006,46 +1037,46 @@
     };
     const G = {
         class: "as-menu-item-title"
-    }, R = {
+    }, J = {
         key: 0,
         class: "as-subMenu-container"
-    }, J = {
+    }, R = {
         class: "as-subMenu"
-    }, P = {
+    }, H = {
         class: "as-url-icon"
     };
-    $.render = function(t, o, a, r, n, l) {
+    $.render = function(t, o, a, n, r, l) {
         const s = e.resolveComponent("icon"), c = e.resolveComponent("menu-item");
         return e.openBlock(), e.createBlock("ul", {
             class: "as-menu",
             style: {
-                justifyContent: r.align
+                justifyContent: n.align
             }
-        }, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(r.sites, t => (e.openBlock(), 
+        }, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(n.sites, t => (e.openBlock(), 
         e.createBlock(c, {
             class: "as-menu-item",
             key: t.index,
-            showTimeout: r.data.showTimeout,
-            hideTimeout: r.data.hideTimeout,
-            onShow: e => r.handleMenuShow(e, t)
+            showTimeout: n.data.showTimeout,
+            hideTimeout: n.data.hideTimeout,
+            onShow: e => n.handleMenuShow(e, t)
         }, {
             default: e.withCtx(() => [ e.createVNode("div", G, [ e.createVNode(s, {
                 name: t.name
             }, null, 8, [ "name" ]), e.createVNode("span", {
                 textContent: e.toDisplayString(t.nameZh),
-                onClick: e => r.handleClick(t.list[0]),
-                onMouseup: e.withModifiers(e => r.handleClick(t.list[0], !0), [ "middle" ])
+                onClick: e => n.handleClick(t.list[0]),
+                onMouseup: e.withModifiers(e => n.handleClick(t.list[0], !0), [ "middle" ])
             }, null, 40, [ "textContent", "onClick", "onMouseup" ]) ]), e.createVNode(e.Transition, {
-                name: r.transition
+                name: n.transition
             }, {
                 default: e.withCtx(() => [ t.list && t.list.length ? e.withDirectives((e.openBlock(), 
-                e.createBlock("div", R, [ e.createVNode("ul", J, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
+                e.createBlock("div", J, [ e.createVNode("ul", R, [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(t.list, (t, o) => e.withDirectives((e.openBlock(), 
                 e.createBlock("li", {
                     key: o,
-                    onClick: e => r.handleClick(t),
-                    onMouseup: e.withModifiers(e => r.handleClick(t, !0), [ "middle" ])
-                }, [ e.createVNode("div", P, [ e.createVNode("img", {
-                    src: r.getFavicon(t.url),
+                    onClick: e => n.handleClick(t),
+                    onMouseup: e.withModifiers(e => n.handleClick(t, !0), [ "middle" ])
+                }, [ e.createVNode("div", H, [ e.createVNode("img", {
+                    src: n.getFavicon(t),
                     onerror: "this.classList.add('error')"
                 }, null, 8, [ "src" ]) ]), e.createVNode("p", {
                     class: "as-subMenu-text",
@@ -1056,34 +1087,34 @@
             _: 2
         }, 1032, [ "showTimeout", "hideTimeout", "onShow" ]))), 128)) ], 4);
     }, $.__file = "src/components/menu.vue";
-    const H = e.ref(""), W = e.ref(""), Q = e.ref("");
-    e.watch(H, e => {
-        Y("primary-color", e), l("primary-color", e);
+    const P = e.ref(""), W = e.ref(""), X = e.ref("");
+    e.watch(P, e => {
+        Q("primary-color", e), l("primary-color", e);
     }), e.watch(W, e => {
-        Y("bg-color", e), l("bg-color", e);
-    }), e.watch(Q, e => {
-        Y("primary-text-color", e), l("primary-text-color", e);
+        Q("bg-color", e), l("bg-color", e);
+    }), e.watch(X, e => {
+        Q("primary-text-color", e), l("primary-text-color", e);
     });
-    const Y = (e, t) => {
+    const Q = (e, t) => {
         document.getElementById("all-search").style.setProperty("--as-" + e, t);
-    }, K = {
-        "primary-color": H,
+    }, Y = {
+        "primary-color": P,
         "bg-color": W,
-        "primary-text-color": Q
-    }, X = e => {
+        "primary-text-color": X
+    }, K = e => {
         const t = (e => {
             const t = document.getElementById("all-search");
             return getComputedStyle(t).getPropertyValue("--as-" + e).trim();
-        })(e), o = n(e) || t;
-        K[e].value = o;
+        })(e), o = r(e) || t;
+        Y[e].value = o;
     };
     function ee() {
         return e.onMounted(() => {
-            X("primary-color"), X("bg-color"), X("primary-text-color");
+            K("primary-color"), K("bg-color"), K("primary-text-color");
         }), {
-            primaryColor: H,
+            primaryColor: P,
             bgColor: W,
-            primaryTextColor: Q
+            primaryTextColor: X
         };
     }
     var te = {
@@ -1103,12 +1134,12 @@
             };
         }
     };
-    te.render = function(t, o, a, r, n, l) {
+    te.render = function(t, o, a, n, r, l) {
         return e.openBlock(), e.createBlock("div", {
             class: "as-overlay",
-            onMousedown: o[1] || (o[1] = (...e) => r.onMouseDown && r.onMouseDown(...e)),
-            onMouseup: o[2] || (o[2] = (...e) => r.onMouseUp && r.onMouseUp(...e)),
-            onClick: o[3] || (o[3] = (...e) => r.onMaskClick && r.onMaskClick(...e))
+            onMousedown: o[1] || (o[1] = (...e) => n.onMouseDown && n.onMouseDown(...e)),
+            onMouseup: o[2] || (o[2] = (...e) => n.onMouseUp && n.onMouseUp(...e)),
+            onClick: o[3] || (o[3] = (...e) => n.onMaskClick && n.onMaskClick(...e))
         }, [ e.renderSlot(t.$slots, "default") ], 32);
     }, te.__file = "src/components/overlay.vue";
     var oe = {
@@ -1133,17 +1164,17 @@
     };
     const ae = {
         class: "as-radio as-radio-animate"
-    }, re = e.createVNode("i", {
+    }, ne = e.createVNode("i", {
         class: "as-radio-icon"
-    }, null, -1), ne = {
+    }, null, -1), re = {
         class: "as-radio-label"
     };
-    oe.render = function(t, o, a, r, n, l) {
+    oe.render = function(t, o, a, n, r, l) {
         return e.openBlock(), e.createBlock("label", ae, [ e.withDirectives(e.createVNode("input", {
             type: "radio",
             value: a.label,
-            "onUpdate:modelValue": o[1] || (o[1] = e => r.model = e)
-        }, null, 8, [ "value" ]), [ [ e.vModelRadio, r.model ] ]), re, e.createVNode("span", ne, [ e.renderSlot(t.$slots, "default") ]) ]);
+            "onUpdate:modelValue": o[1] || (o[1] = e => n.model = e)
+        }, null, 8, [ "value" ]), [ [ e.vModelRadio, n.model ] ]), ne, e.createVNode("span", re, [ e.renderSlot(t.$slots, "default") ]) ]);
     }, oe.__file = "src/components/radio.vue";
     var le = {
         name: "form-item",
@@ -1166,14 +1197,14 @@
             }))
         })
     };
-    le.render = function(t, o, a, r, n, l) {
+    le.render = function(t, o, a, n, r, l) {
         return e.openBlock(), e.createBlock("div", null, [ e.createVNode("label", {
             class: "as-label",
-            style: r.labelStyle,
+            style: n.labelStyle,
             textContent: e.toDisplayString(a.label)
         }, null, 12, [ "textContent" ]), e.createVNode("div", {
             class: "as-content",
-            style: r.contentStyle
+            style: n.contentStyle
         }, [ e.renderSlot(t.$slots, "default") ], 4) ]);
     }, le.__file = "src/components/form-item.vue";
     var se = {
@@ -1185,7 +1216,7 @@
             }
         }
     };
-    se.render = function(t, o, a, r, n, l) {
+    se.render = function(t, o, a, n, r, l) {
         return e.openBlock(), e.createBlock("button", {
             class: [ "as-button", "as-button__" + a.type ]
         }, [ e.renderSlot(t.$slots, "default") ], 2);
@@ -1226,16 +1257,16 @@
         class: "label"
     }, de = e.createTextVNode(" 重置 ");
     e.popScopeId();
-    const he = ie((t, o, a, r, n, l) => {
+    const he = ie((t, o, a, n, r, l) => {
         const s = e.resolveComponent("asButton");
         return e.openBlock(), e.createBlock("div", ue, [ e.createVNode("label", me, [ e.withDirectives(e.createVNode("input", {
             class: "input—color",
             type: "color",
-            "onUpdate:modelValue": o[1] || (o[1] = e => r.model = e)
-        }, null, 512), [ [ e.vModelText, r.model ] ]) ]), e.createVNode(s, {
+            "onUpdate:modelValue": o[1] || (o[1] = e => n.model = e)
+        }, null, 512), [ [ e.vModelText, n.model ] ]) ]), e.createVNode(s, {
             class: "reset-btn",
             type: "text",
-            onClick: r.reset
+            onClick: n.reset
         }, {
             default: ie(() => [ de ]),
             _: 1
@@ -1251,7 +1282,7 @@
             color: ce
         },
         setup() {
-            const t = e.ref(!1), {mode: o} = q(), {alignList: a, align: r} = O(), {primaryColor: n, bgColor: l, primaryTextColor: s} = ee();
+            const t = e.ref(!1), {mode: o} = q(), {alignList: a, align: n} = O(), {primaryColor: r, bgColor: l, primaryTextColor: s} = ee();
             return {
                 mode: o,
                 visible: t,
@@ -1265,11 +1296,11 @@
                     o.value = e.target.value;
                 },
                 alignList: a,
-                align: r,
+                align: n,
                 changeAlign: e => {
-                    r.value = e.target.value;
+                    n.value = e.target.value;
                 },
-                primaryColor: n,
+                primaryColor: r,
                 bgColor: l,
                 primaryTextColor: s
             };
@@ -1277,7 +1308,7 @@
     };
     const we = e.createVNode("header", {
         class: "header"
-    }, " 设置 ", -1), fe = e.createTextVNode("横向 "), ye = e.createTextVNode("竖向 "), ge = e.createVNode("footer", null, [ e.createVNode("a", {
+    }, " 设置 ", -1), fe = e.createTextVNode("横向 "), ge = e.createTextVNode("竖向 "), ye = e.createVNode("footer", null, [ e.createVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -1288,11 +1319,11 @@
         href: "https://github.com/endday/all-search",
         target: "_blank"
     }, " GitHub地址 ") ], -1);
-    pe.render = function(t, o, a, r, n, l) {
+    pe.render = function(t, o, a, n, r, l) {
         const s = e.resolveComponent("as-radio"), c = e.resolveComponent("form-item"), i = e.resolveComponent("color"), u = e.resolveComponent("overlay");
         return e.openBlock(), e.createBlock(e.Fragment, null, [ e.createVNode("div", {
             class: "as-setting",
-            onClick: o[1] || (o[1] = (...e) => r.open && r.open(...e))
+            onClick: o[1] || (o[1] = (...e) => n.open && n.open(...e))
         }, " 设置 "), (e.openBlock(), e.createBlock(e.Teleport, {
             to: "#all-search"
         }, [ e.createVNode(e.Transition, {
@@ -1300,7 +1331,7 @@
             appear: ""
         }, {
             default: e.withCtx(() => [ e.withDirectives(e.createVNode(u, {
-                onClick: r.onMaskClick
+                onClick: n.onMaskClick
             }, {
                 default: e.withCtx(() => [ e.createVNode(e.Transition, {
                     name: "drawer",
@@ -1316,32 +1347,32 @@
                     }, {
                         default: e.withCtx(() => [ e.createVNode(s, {
                             label: "horizontal",
-                            modelValue: r.mode,
-                            "onUpdate:modelValue": o[2] || (o[2] = e => r.mode = e),
-                            onChange: r.changeMode
+                            modelValue: n.mode,
+                            "onUpdate:modelValue": o[2] || (o[2] = e => n.mode = e),
+                            onChange: n.changeMode
                         }, {
                             default: e.withCtx(() => [ fe ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]), e.createVNode(s, {
                             label: "vertical",
-                            modelValue: r.mode,
-                            "onUpdate:modelValue": o[3] || (o[3] = e => r.mode = e),
-                            onChange: r.changeMode
+                            modelValue: n.mode,
+                            "onUpdate:modelValue": o[3] || (o[3] = e => n.mode = e),
+                            onChange: n.changeMode
                         }, {
-                            default: e.withCtx(() => [ ye ]),
+                            default: e.withCtx(() => [ ge ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]) ]),
                         _: 1
                     }), e.createVNode(c, {
                         label: "对齐"
                     }, {
-                        default: e.withCtx(() => [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(r.alignList, ([t, a]) => (e.openBlock(), 
+                        default: e.withCtx(() => [ (e.openBlock(!0), e.createBlock(e.Fragment, null, e.renderList(n.alignList, ([t, a]) => (e.openBlock(), 
                         e.createBlock(s, {
                             key: t,
                             label: t,
-                            modelValue: r.align,
-                            "onUpdate:modelValue": o[4] || (o[4] = e => r.align = e),
-                            onChange: r.changeAlign
+                            modelValue: n.align,
+                            "onUpdate:modelValue": o[4] || (o[4] = e => n.align = e),
+                            onChange: n.changeAlign
                         }, {
                             default: e.withCtx(() => [ e.createTextVNode(e.toDisplayString(a), 1) ]),
                             _: 2
@@ -1352,8 +1383,8 @@
                     }, {
                         default: e.withCtx(() => [ e.createVNode(i, {
                             "default-value": "#1890ff",
-                            modelValue: r.primaryColor,
-                            "onUpdate:modelValue": o[5] || (o[5] = e => r.primaryColor = e)
+                            modelValue: n.primaryColor,
+                            "onUpdate:modelValue": o[5] || (o[5] = e => n.primaryColor = e)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
                     }), e.createVNode(c, {
@@ -1361,8 +1392,8 @@
                     }, {
                         default: e.withCtx(() => [ e.createVNode(i, {
                             "default-value": "#ffffff",
-                            modelValue: r.bgColor,
-                            "onUpdate:modelValue": o[6] || (o[6] = e => r.bgColor = e)
+                            modelValue: n.bgColor,
+                            "onUpdate:modelValue": o[6] || (o[6] = e => n.bgColor = e)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
                     }), e.createVNode(c, {
@@ -1370,15 +1401,15 @@
                     }, {
                         default: e.withCtx(() => [ e.createVNode(i, {
                             "default-value": "#606266",
-                            modelValue: r.primaryTextColor,
-                            "onUpdate:modelValue": o[7] || (o[7] = e => r.primaryTextColor = e)
+                            modelValue: n.primaryTextColor,
+                            "onUpdate:modelValue": o[7] || (o[7] = e => n.primaryTextColor = e)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
-                    }) ]), ge ], 512), [ [ e.vShow, r.visible ] ]) ]),
+                    }) ]), ye ], 512), [ [ e.vShow, n.visible ] ]) ]),
                     _: 1
                 }) ]),
                 _: 1
-            }, 8, [ "onClick" ]), [ [ e.vShow, r.visible ] ]) ]),
+            }, 8, [ "onClick" ]), [ [ e.vShow, n.visible ] ]) ]),
             _: 1
         }) ])) ], 64);
     }, pe.__file = "src/components/side-bar.vue";
@@ -1398,17 +1429,17 @@
             };
         }
     };
-    be.render = function(t, o, a, r, n, l) {
+    be.render = function(t, o, a, n, r, l) {
         const s = e.resolveComponent("logo"), c = e.resolveComponent("as-menu"), i = e.resolveComponent("side-bar");
         return e.openBlock(), e.createBlock("div", {
-            class: [ "as-container", r.classList ],
+            class: [ "as-container", n.classList ],
             style: {
                 display: "none"
             }
         }, [ e.createVNode(s, {
-            mode: r.mode
+            mode: n.mode
         }, null, 8, [ "mode" ]), e.createVNode(c, {
-            mode: r.mode
+            mode: n.mode
         }, null, 8, [ "mode" ]), e.createVNode(i) ], 2);
     }, be.__file = "src/as-script/index.vue";
     let ve = h();
@@ -1426,7 +1457,7 @@
                     document.dispatchEvent(new CustomEvent(u, {
                         detail: {
                             version: o,
-                            getSession: n,
+                            getSession: r,
                             setSession: l
                         }
                     }));

@@ -9,6 +9,7 @@ import social from './social'
 import knowledge from './knowledge'
 import image from './image'
 import shopping from './shopping'
+import disk from './disk'
 
 const list = [
   {
@@ -60,6 +61,11 @@ const list = [
     nameZh: '图片',
     name: 'image',
     list: image
+  },
+  {
+    nameZh: '网盘',
+    name: 'disk',
+    list: disk
   },
   {
     nameZh: '常用',

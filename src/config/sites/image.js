@@ -28,10 +28,6 @@ export default [
     url: 'http://huaban.com/search/?q=%s'
   },
   {
-    nameZh: 'easyicon',
-    url: 'http://www.easyicon.net/iconsearch/%s/'
-  },
-  {
     nameZh: 'Pinterest',
     url: 'https://www.pinterest.com/search/pins/?q=%s&rs=typed&term_meta'
   },
@@ -41,7 +37,8 @@ export default [
   },
   {
     nameZh: 'pixabay',
-    url: 'https://pixabay.com/images/search/%s/'
+    url: 'https://pixabay.com/images/search/%s/',
+    icon: 'https://pixabay.com/favicon-32x32.png'
   },
   {
     nameZh: 'unsplash',

@@ -5,15 +5,18 @@ export default [
   },
   {
     nameZh: '京东',
-    url: 'http://search.jd.com/search?keyword=%s&enc=utf-8'
+    url: 'http://search.jd.com/search?keyword=%s&enc=utf-8',
+    icon: 'https://www.jd.com/favicon.ico'
   },
   {
     nameZh: '苏宁',
-    url: 'http://search.suning.com/%s/'
+    url: 'http://search.suning.com/%s/',
+    icon: 'http://www.suning.com/favicon.ico'
   },
   {
     nameZh: '亚马逊',
-    url: 'http://www.amazon.cn/s/ref=nb_sb_noss?field-keywords=%s'
+    url: 'http://www.amazon.cn/s/ref=nb_sb_noss?field-keywords=%s',
+    icon: 'https://www.amazon.cn/favicon.ico'
   },
   {
     nameZh: '天猫',

@@ -21,7 +21,8 @@ export default [
   },
   {
     nameZh: '萌娘百科',
-    url: 'https://zh.moegirl.org/%s'
+    url: 'https://zh.moegirl.org/%s',
+    icon: 'https://zh.moegirl.org.cn/favicon.ico'
   },
   {
     nameZh: '果壳',

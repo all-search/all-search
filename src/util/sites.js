@@ -43,6 +43,7 @@ export function initSites (type) {
     if (
       localSites &&
       sitesVersion &&
+      // 当版本有更新，或者是在设置页面调用，才会进行合并数组
       (sitesVersion !== version || type !== 'tm')
     ) {
       sitesData = mergeSites(localSites, sites)

@@ -13,7 +13,8 @@ export default [
   },
   {
     nameZh: 'Can I Use',
-    url: 'http://caniuse.com/#search=%s'
+    url: 'http://caniuse.com/#search=%s',
+    icon: 'https://caniuse.com/img/favicon-128.png'
   },
   {
     nameZh: 'GitHub',
@@ -25,6 +26,7 @@ export default [
   },
   {
     nameZh: 'GreasyFork',
-    url: 'https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓'
+    url: 'https://greasyfork.org/zh-CN/scripts?q=%s&utf8=✓',
+    icon: 'https://greasyfork.org/packs/media/images/blacklogo96-b2384000fca45aa17e45eb417cbcbb59.png'
   }
 ]

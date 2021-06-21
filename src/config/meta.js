@@ -20,7 +20,7 @@ const meta = `// ==UserScript==
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
-// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css
+// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@${pkg.version}/src/assets/iconfont.css
 // @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@${pkg.version}/build/as-style.css
 // @run-at       document-start
 

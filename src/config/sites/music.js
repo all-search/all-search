@@ -1,7 +1,8 @@
 export default [
   {
     nameZh: '网易音乐',
-    url: 'http://music.163.com/#/search/m/?s=%s'
+    url: 'http://music.163.com/#/search/m/?s=%s',
+    icon: 'https://s1.music.126.net/style/favicon.ico'
   },
   {
     nameZh: '一听',

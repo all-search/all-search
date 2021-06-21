@@ -29,7 +29,7 @@
               @click.middle="handleClick(child, true)">
               <div class="as-url-icon">
                 <img
-                  :src="getFavicon(child.url)"
+                  :src="getFavicon(child)"
                   onerror="this.classList.add('error')">
               </div>
               <p class="as-subMenu-text"
@@ -96,8 +96,11 @@ export default {
       item.show = value
     }
 
-    function getFavicon (url) {
-      const obj = parseUrl(url)
+    function getFavicon (item) {
+      if(item.icon) {
+        return item.icon
+      }
+      const obj = parseUrl(item.url)
       const arr = obj.host.split('.')
       let mainDomain = obj.host
       if (arr.length > 2) {

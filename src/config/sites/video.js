@@ -9,7 +9,8 @@ export default [
   },
   {
     nameZh: '优酷',
-    url: 'http://www.soku.com/search_video/q_%s'
+    url: 'http://www.soku.com/search_video/q_%s',
+    icon: 'https://img.alicdn.com/tfs/TB1WeJ9Xrj1gK0jSZFuXXcrHpXa-195-195.png'
   },
   {
     nameZh: '腾讯视频',

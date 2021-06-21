@@ -80,7 +80,7 @@ export const initStyle = function () {
   protectStyle()
   addCustomStyle()
   initBodyClass()
-  addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search/src/assets/iconfont.css`)
+  addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search@${version}/src/assets/iconfont.css`)
   addAsStyle()
   routerChange(() => {
     currentSite = siteInfo()
