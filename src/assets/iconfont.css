@@ -1,62 +1,61 @@
 @font-face {
-    font-family: "iconfont"; /* Project id 1817653 */
-    src: url('//at.alicdn.com/t/font_1817653_7bw0xc36d7s.woff2?t=1624290194843') format('woff2'),
-    url('//at.alicdn.com/t/font_1817653_7bw0xc36d7s.woff?t=1624290194843') format('woff'),
-    url('//at.alicdn.com/t/font_1817653_7bw0xc36d7s.ttf?t=1624290194843') format('truetype');
+  font-family: "iconfont"; /* Project id 1817653 */
+  src: url('iconfont.ttf?t=1624290223505') format('truetype');
 }
 
 .iconfont {
-    font-family: "iconfont" !important;
-    font-size: 16px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .icon-disk:before {
-    content: "\e752";
+  content: "\e752";
 }
 
 .icon-personal:before {
-    content: "\e79d";
+  content: "\e79d";
 }
 
 .icon-shopping:before {
-    content: "\e7b2";
+  content: "\e7b2";
 }
 
 .icon-developer:before {
-    content: "\e6f2";
+  content: "\e6f2";
 }
 
 .icon-image:before {
-    content: "\e6ff";
+  content: "\e6ff";
 }
 
 .icon-social:before {
-    content: "\e74b";
+  content: "\e74b";
 }
 
 .icon-news:before {
-    content: "\e751";
+  content: "\e751";
 }
 
 .icon-knowledge:before {
-    content: "\e754";
+  content: "\e754";
 }
 
 .icon-music:before {
-    content: "\e756";
+  content: "\e756";
 }
 
 .icon-translate:before {
-    content: "\e76a";
+  content: "\e76a";
 }
 
 .icon-video:before {
-    content: "\e76d";
+  content: "\e76d";
 }
 
 .icon-search:before {
-    content: "\e7b3";
+  content: "\e7b3";
 }
+

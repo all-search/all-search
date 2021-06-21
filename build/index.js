@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.0.18
-// @description  2021年6月21日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @version      1.0.19
+// @description  2021年6月22日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2021/6/21
+// @update       2021/6/22
 // @homepageURL  https://github.com/endday/all-search
 
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.prod.js
-// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.0.18/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.18/build/as-style.css
+// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.0.19/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.0.19/build/as-style.css
 // @run-at       document-start
 
 // @grant        GM_getValue
@@ -111,7 +111,7 @@
 
 !function(e) {
     "use strict";
-    var t = "1.0.18";
+    var t = "1.0.19";
     e.reactive({
         tmVersion: ""
     });
