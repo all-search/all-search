@@ -50,12 +50,15 @@ export default {
     margin-left: $verticalWidth;
   }
 
-  #all-search {
+  body {
     --as-primary-color: #1890ff;
     --as-bg-color: #ffffff;
     --as-primary-text-color: #606266;
     --as-secondary-background-color: #f5f7fa;
     --as-border-color: #e8e8e8;
+  }
+
+  #all-search {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   }
 

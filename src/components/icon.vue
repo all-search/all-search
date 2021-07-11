@@ -18,6 +18,8 @@ export default {
 
 <style lang="scss">
   .as-menu-item-icon {
+    width: 20px;
+    height: 28px;
     font-family: "iconfont" !important;
     font-size: 20px;
     font-style: normal;

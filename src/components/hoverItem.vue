@@ -9,7 +9,7 @@
 <script>
 
 export default {
-  name: 'menuItem',
+  name: 'hover-item',
   props: {
     showTimeout: {
       type: Number,
