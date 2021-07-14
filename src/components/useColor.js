@@ -28,6 +28,7 @@ const getCssValue = name => {
 const setCssValue = (name, value) => {
   const el = document.getElementById('all-search')
   el.style.setProperty(`--as-${name}`, value)
+  document.body.style.setProperty(`--as-${name}`, value)
 }
 
 const map = {

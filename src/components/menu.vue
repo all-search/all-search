@@ -1,26 +1,33 @@
 <template>
-  <ul
-    class="as-menu"
-    :class="menuClass"
-    :style="{justifyContent: align}">
-    <menu-item
-      v-for="item in sites"
-      :key="item.name"
-      :item="item">
-    </menu-item>
-  </ul>
+  <scrollbar
+    class="as-menu-container">
+    <ul
+      class="as-menu"
+      :class="menuClass"
+      :style="{justifyContent: align}">
+      <menu-item
+        v-for="item in sites"
+        :key="item.name"
+        :item="item"
+        :mode="mode">
+      </menu-item>
+    </ul>
+  </scrollbar>
 </template>
 
 <script>
 import { computed, reactive } from 'vue'
+import scrollbar from 'element-plus/lib/el-scrollbar'
+import 'element-plus/lib/theme-chalk/el-scrollbar.css'
 import { initSites } from '../util/sites'
-import menuItem from './menuItem2.vue'
+import menuItem from './menuItem.vue'
 import icon from '../components/icon.vue'
 import useAlign from '../components/align.js'
 
 export default {
   name: 'as-menu',
   components: {
+    scrollbar,
     menuItem,
     icon
   },
@@ -60,8 +67,11 @@ export default {
 <style lang="scss">
   @import "../assets/common";
 
-  .as-menu {
+  .as-menu-container {
     flex: 1;
+  }
+
+  .as-menu {
     padding: 0;
     margin: 0;
     white-space: nowrap;

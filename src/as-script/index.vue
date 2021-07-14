@@ -50,7 +50,7 @@ export default {
     margin-left: $verticalWidth;
   }
 
-  body {
+  body, #all-search {
     --as-primary-color: #1890ff;
     --as-bg-color: #ffffff;
     --as-primary-text-color: #606266;
@@ -102,20 +102,5 @@ export default {
     display: flex !important;
     background-color: var(--as-bg-color);
     z-index: $mainZIndex;
-  }
-
-  .as-setting {
-    line-height: $height;
-    padding: 0 16px;
-    position: relative;
-    margin: 0;
-    white-space: nowrap;
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--as-primary-text-color);
-
-    &:hover {
-      color: var(--as-primary-color);
-    }
   }
 </style>

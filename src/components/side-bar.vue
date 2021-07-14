@@ -144,6 +144,22 @@ export default {
 <style lang="scss">
   @import "../assets/common.scss";
 
+  .as-setting {
+    line-height: $height;
+    padding: 0 16px;
+    position: relative;
+    margin: 0;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--as-primary-text-color);
+
+    &:hover {
+      color: var(--as-primary-color);
+      background-color: rgba(0, 0, 0, .025);
+    }
+  }
+
   .as-side-bar {
     width: 20vw;
     min-width: 300px;
