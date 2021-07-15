@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import scrollbar from 'element-plus/lib/el-scrollbar'
 import 'element-plus/lib/theme-chalk/el-scrollbar.css'
 import { initSites } from '../util/sites'
@@ -104,5 +104,9 @@ export default {
 
   .fade-enter, .fade-leave-to {
     opacity: 0;
+  }
+
+  .el-scrollbar__bar {
+    display: none;
   }
 </style>

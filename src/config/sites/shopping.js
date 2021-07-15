@@ -1,7 +1,8 @@
 export default [
   {
     nameZh: '淘宝',
-    url: 'http://s.taobao.com/search?q=%s'
+    url: 'http://s.taobao.com/search?q=%s',
+    icon: 'https://www.taobao.com/favicon.ico'
   },
   {
     nameZh: '京东',
@@ -10,8 +11,7 @@ export default [
   },
   {
     nameZh: '苏宁',
-    url: 'http://search.suning.com/%s/',
-    icon: 'http://www.suning.com/favicon.ico'
+    url: 'https://search.suning.com/%s/'
   },
   {
     nameZh: '亚马逊',

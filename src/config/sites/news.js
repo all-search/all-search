@@ -1,11 +1,13 @@
 export default [
   {
     nameZh: '谷歌中文',
-    url: 'https://news.google.com/search?q=%s&hl=zh-CN&gl=CN&ceid=CN:zh-Hans'
+    url: 'https://news.google.com/search?q=%s&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',
+    icon: 'https://www.google.com/favicon.ico'
   },
   {
     nameZh: '百度新闻',
-    url: 'http://news.baidu.com/ns?word=%s&tn=news&from=news&cl=2&rn=20&ct=1'
+    url: 'http://news.baidu.com/ns?word=%s&tn=news&from=news&cl=2&rn=20&ct=1',
+    icon: 'https://www.baidu.com/favicon.ico'
   },
   {
     nameZh: '网易-百度',

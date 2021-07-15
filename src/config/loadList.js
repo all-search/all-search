@@ -187,9 +187,6 @@ export const list = [
     url: /\/\/music\.163\.com\/.*?#\/search/
   },
   {
-    url: /\/\/so\.yinyuetai\.com\/\?keyword/
-  },
-  {
     url: /\/\/image\.baidu\.com\/search/,
     style: {
       1: `#search .s_search { top: ${height}px; }`

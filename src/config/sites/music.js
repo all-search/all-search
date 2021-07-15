@@ -9,10 +9,6 @@ export default [
     url: 'http://so.1ting.com/all.do?q=%s'
   },
   {
-    nameZh: '音悦Tai',
-    url: 'http://so.yinyuetai.com/?keyword=%s'
-  },
-  {
     nameZh: 'QQ音乐',
     url: 'https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%s'
   },

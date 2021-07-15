@@ -12,10 +12,6 @@ export default [
     url: 'https://cn.bing.com/search?q=%s'
   },
   {
-    nameZh: '多吉',
-    url: 'https://www.dogedoge.com/results?q=%s'
-  },
-  {
     nameZh: 'DDG',
     url: 'https://duckduckgo.com/?q=%s'
   },
@@ -30,10 +26,6 @@ export default [
   {
     nameZh: '搜狗',
     url: 'https://www.sogou.com/web?query=%s'
-  },
-  {
-    nameZh: '秘迹搜索',
-    url: 'https://mijisou.com/?q=%s&category_general=on&time_range=&language=zh-CN'
   },
   {
     nameZh: 'Yandex',

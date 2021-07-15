@@ -60,7 +60,7 @@ export default {
     }
   },
   setup (props) {
-    const isMobileRef = ref(isMobile)
+    const isMobileRef = ref(isMobile())
     const currentSite = siteInfo()
     const classList = computed(() =>
       props.mode === 'horizontal' ? 'horizontal' : 'vertical'
@@ -75,14 +75,8 @@ export default {
       }
       const obj = parseUrl(item.url)
       const arr = obj.host.split('.')
-      let mainDomain = obj.host
-      if (arr.length > 2) {
-        mainDomain = arr.slice(1).join('.')
-      }
-      return `https://ico.ihuan.me/${mainDomain}/cdn.ico`
-      // return `https://api.iowen.cn/favicon/${mainDomain}.png`
-      // return `http://statics.dnspod.cn/proxy_favicon/_/favicon?domain=${mainDomain}`
-      // return `https://api.jxcxin.cn/api/Favicon/api.php?url=${mainDomain}`
+      let mainDomain = obj.origin
+      return `${mainDomain}/favicon.ico`
     }
 
     const handleMenuShow = (value, item) => {
