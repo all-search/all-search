@@ -46,7 +46,6 @@ export const list = [
   {
     url: /\/\/www\.sogou\.com\/(?:web|s)/,
     style: {
-      1: `.header { top: ${height}px }`,
       2: `.header { right: ${width}px }`
     }
   },

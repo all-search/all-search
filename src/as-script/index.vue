@@ -7,6 +7,9 @@
       :mode="mode"/>
     <side-bar/>
   </div>
+  <hoverButton
+    :show="!show"
+    @show="showMenu"/>
 </template>
 
 <script>
@@ -16,24 +19,38 @@ import useMode from '../components/useMode.js'
 import logo from '../components/logo.vue'
 import asMenu from '../components/menu.vue'
 import sideBar from '../components/side-bar.vue'
+import hoverButton from '../components/hover-button'
 import { initStyle } from '../util/initStyle.js'
+import useScroll from '../util/useScroll'
 
 export default {
   name: 'all-search',
   components: {
     logo,
     asMenu,
-    sideBar
+    sideBar,
+    hoverButton
   },
   setup () {
     const currentSite = siteInfo()
-    const classList = computed(() => `as-${mode.value}`)
+    const { x, direction } = useScroll()
+    const show = computed(() => direction.value === -1 && x.value > 50)
+    const classList = computed(() => [
+      `as-${mode.value}`,
+      { show: direction.value === -1 && x.value > 50 }
+    ])
     const { mode } = useMode()
+    const showMenu = () => {
+      direction.value = -1
+      x.value = 51
+    }
     initStyle()
     return {
       currentSite,
       mode,
-      classList
+      classList,
+      showMenu,
+      show
     }
   }
 }
@@ -78,14 +95,12 @@ export default {
     top: 0;
     border-bottom: 1px var(--as-border-color) solid;
     flex-direction: row;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    transition: transform 0.38s;
+    transform: translateY(-100%);
   }
 
-  .as-horizontal-hidden {
-    // transform: translateY(-30px);
+  .as-horizontal.show {
+    transform: translateY(0);
   }
 
   .as-vertical {
