@@ -59,13 +59,6 @@ export const list = [
     url: /\/\/www\.startpage\.com\/do\/asearch/
   },
   {
-    url: /\/\/mijisou.com\/\?q/,
-    style: {
-      // 1: `.search-page{top: ${height}px;} .searx-navbar{top: ${height + 12}px!important;}`,
-      2: `.search-page{right: ${width}px!important;}`
-    }
-  },
-  {
     url: /\/\/google\.infinitynewtab\.com\/\?q/
   },
   {
