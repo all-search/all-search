@@ -19,7 +19,7 @@ import useMode from '../components/useMode.js'
 import logo from '../components/logo.vue'
 import asMenu from '../components/menu.vue'
 import sideBar from '../components/side-bar.vue'
-import hoverButton from '../components/hover-button'
+import hoverButton from '../components/hover-button.vue'
 import { initStyle } from '../util/initStyle.js'
 import useScroll from '../util/useScroll'
 
@@ -34,15 +34,14 @@ export default {
   setup () {
     const currentSite = siteInfo()
     const { x, direction } = useScroll()
-    const show = computed(() => direction.value === -1 && x.value > 50)
+    const show = computed(() => direction.value === -1 || x.value < 30)
     const classList = computed(() => [
       `as-${mode.value}`,
-      { show: direction.value === -1 && x.value > 50 }
+      { show: direction.value === -1 || x.value < 30 }
     ])
     const { mode } = useMode()
     const showMenu = () => {
       direction.value = -1
-      x.value = 51
     }
     initStyle()
     return {
@@ -60,7 +59,8 @@ export default {
   @import "../assets/common.scss";
 
   .body-horizontal {
-    margin-top: $height;
+    transform: translateY($height);
+    height: calc(100% - 30px);
   }
 
   .body-vertical {
