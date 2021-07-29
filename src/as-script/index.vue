@@ -45,9 +45,7 @@ export default {
   @import "../assets/common.scss";
 
   .body-horizontal {
-    position: absolute;
-    top: $height;
-    height: calc(100% - 30px);
+    margin-top: $height;
   }
 
   .body-vertical {
