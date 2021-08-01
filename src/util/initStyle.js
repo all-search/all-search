@@ -1,7 +1,6 @@
 import { siteInfo } from '../config/loadList'
 import { addStyleContent, addStyleResource, getSession, removeNode, version } from './index'
 import { withHookAfter, withHookBefore } from './hook'
-import {fixTop} from './fixTop'
 
 const isPro = process.env.NODE_ENV === 'production'
 
@@ -67,12 +66,6 @@ const protectStyle = function () {
     }
     return true
   })
-  Node.prototype.appendChild = withHookBefore(Node.prototype.appendChild, (e) => {
-    if(e && (e.tagName === 'STYLE' || e.tagName === 'LINK')) {
-      console.log(Object.getOwnPropertyNames(e))
-    }
-    return true
-  })
 }
 
 
@@ -85,15 +78,13 @@ const routerChange = cb => {
 
 export const initStyle = function () {
   protectStyle()
-  // addCustomStyle()
-  fixTop()
+  addCustomStyle()
   initBodyClass()
   addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search@${version}/src/assets/iconfont.css`)
   addAsStyle()
   routerChange(() => {
     currentSite = siteInfo()
-    // addCustomStyle()
-    fixTop()
+    addCustomStyle()
     initBodyClass()
     addAsStyle()
   })

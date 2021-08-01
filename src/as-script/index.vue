@@ -53,6 +53,7 @@ export default {
   }
 
   body, #all-search {
+    --as-horizontal-height: $height;
     --as-primary-color: #1890ff;
     --as-bg-color: #ffffff;
     --as-primary-text-color: #606266;

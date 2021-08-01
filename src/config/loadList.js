@@ -7,7 +7,7 @@ export const list = [
   {
     url: /\/\/www\.google\.com(.hk)?\/search/,
     style: {
-      // 1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;}#searchform.minidiv{top: ${height}px !important;}`
+      1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;}#searchform.minidiv{top: ${height}px !important;}`
     }
   },
   {
@@ -24,7 +24,7 @@ export const list = [
   {
     url: /\/\/www\.baidu\.com\/baidu\?wd/,
     style: {
-      // 1: `.fix-head { top: ${height}px !important; }`,
+      1: `.fix-head { top: ${height}px !important; }`,
       2: `.fix-head #u { right: ${width}px; }`
     }
   },
@@ -52,7 +52,7 @@ export const list = [
   {
     url: /\/\/yandex\.com\/search/,
     style: {
-      // 1: `body { margin: ${height}px!important; }`
+      1: `body { margin: ${height}px!important; }`
     }
   },
   {
@@ -64,7 +64,7 @@ export const list = [
   {
     url: /\/\/www\.dogedoge\.com\/results\?q/,
     style: {
-      // 1: `#header_wrapper{top: ${height}px!important;}`,
+      1: `#header_wrapper{top: ${height}px!important;}`,
       2: `#header_wrapper{right: ${width}px!important;}`
     }
   },
@@ -86,7 +86,7 @@ export const list = [
   {
     url: /\/\/www\.zhihu\.com\/search\?/,
     style: {
-      // 1: `.AppHeader.is-fixed {top: ${height}px!important;}`
+      1: `.AppHeader.is-fixed {top: ${height}px!important;}`
     }
   },
   {
@@ -104,7 +104,7 @@ export const list = [
   {
     url: /\/\/zhihu\.sogou\.com\/zhihu/,
     style: {
-      // 1: `.header { top:${height}px }`
+      1: `.header { top:${height}px }`
     }
   },
   {
@@ -116,7 +116,7 @@ export const list = [
   {
     url: /\/\/stackoverflow\.com\/search\?/,
     style: {
-      // 1: `.top-bar._fixed { top: ${height}px }`,
+      1: `.top-bar._fixed { top: ${height}px }`,
       2: `.top-bar._fixed { right: ${width}px }`
     }
   },
@@ -126,7 +126,7 @@ export const list = [
       return document.getElementById('search-keyword').value
     },
     style: {
-      // 1: `body { margin-top: ${height}px!important; } .fixed-top {top: ${height}px;}`
+      1: `body { margin-top: ${height}px!important; } .fixed-top {top: ${height}px;}`
     }
   },
   {
@@ -141,9 +141,9 @@ export const list = [
   {
     url: /\/\/www\.youtube\.com\/results/,
     style: {
-      // 1: `#masthead-container.ytd-app {top:${height}px !important;}
-      //     html:not(.style-scope) {--ytd-toolbar-height:${height + 56}px !important;}
-      //     ytd-mini-guide-renderer.ytd-app {padding-top: ${height}px;}`,
+      1: `#masthead-container.ytd-app {top:${height}px !important;} 
+          html:not(.style-scope) {--ytd-toolbar-height:${height + 56}px !important;}
+          ytd-mini-guide-renderer.ytd-app {padding-top: ${height}px;}`,
       2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
     }
   },
@@ -160,7 +160,7 @@ export const list = [
   {
     url: /\/\/v\.qq\.com\/x\/search/,
     style: {
-      // 1: `.site_head {top: ${height}px;}`
+      1: `.site_head {top: ${height}px;}`
     }
   },
   {
@@ -181,7 +181,7 @@ export const list = [
   {
     url: /\/\/image\.baidu\.com\/search/,
     style: {
-      // 1: `#search .s_search { top: ${height}px; }`
+      1: `#search .s_search { top: ${height}px; }`
     }
   },
   {
@@ -190,7 +190,7 @@ export const list = [
   {
     url: /\/\/.*\.bing\.com\/images\/search/,
     style: {
-      // 1: `#miniheader {padding-top: ${height}px;}`
+      1: `#miniheader {padding-top: ${height}px;}`
     }
   },
   {
@@ -200,7 +200,10 @@ export const list = [
     url: /^http:\/\/www\.pixiv\.net\/search\.php/
   },
   {
-    url: /\/\/huaban\.com\/search\/\?/
+    url: /\/\/huaban\.com\/search\/\?/,
+    style: {
+      1: `#header  { top: ${height}px; }`
+    }
   },
   {
     url: /\/\/www\.pinterest\.com\/search\//
@@ -250,7 +253,7 @@ export const list = [
   {
     url: /\/\/s\.taobao\.com\/search/,
     style: {
-      // 1: `.m-header-fixed .header-inner { top: ${height}px !important;}`
+      1: `.m-header-fixed .header-inner { top: ${height}px !important;}`
     }
   },
   {
@@ -274,7 +277,7 @@ export const list = [
   {
     url: /\/\/s\.weibo\.com\/weibo\?q=/,
     style: {
-      // 1: `.WB_global_nav { top: ${height}px !important;}`
+      1: `.WB_global_nav { top: ${height}px !important;}`
     }
   },
   {
@@ -289,7 +292,7 @@ export const list = [
   {
     url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
     style: {
-      // 1: `#head_wr.gj #head.gj, #left_menu_content { top: ${height}px !important;}`,
+      1: `#head_wr.gj #head.gj, #left_menu_content { top: ${height}px !important;}`,
       2: `#left_menu_content { left: ${width}px !important;}`
     }
   },
