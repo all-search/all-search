@@ -2,6 +2,7 @@
 
 ## all-search 全搜，一个搜索引擎快捷跳转菜单
 
+
 一个让你可以方便的在各个搜索引擎之间跳转的顶部固定菜单，基于vue，使用rollup构建。
 
 A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.
@@ -11,7 +12,15 @@ A top fixed menu that allows you to jump between various search engines, build b
 [github](https://endday.github.io/all-search/)
 
 ## 脚本地址
-[greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)
+~~greasyfork地址(地址已被封)~~
+
+![npm](https://img.shields.io/npm/v/all-search) （以npm徽章的版本号为准）
+
+[jsdelivr的cdn地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.js)
+
+https://cdn.jsdelivr.net/npm/all-search@latest/build/index.js
+
+jsdelivr的cdn的更新有延迟的问题，如果发现上述的cdn地址中的版本号和npm徽章的对不上，请自行修改版本号，就是上述链接@符号后面的数字
 
 ## 特色功能
 * [图形界面添加网址](https://endday.gitee.io/all-search/)

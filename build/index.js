@@ -1,16 +1,17 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.1.4
+// @version      1.1.5
 // @description  2021年8月15日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
 // @update       2021/8/15
 // @homepageURL  https://github.com/endday/all-search
 // @updateURL    https://cdn.jsdelivr.net/npm/all-search@latest/build/index.js
+// @downloadURL  https://cdn.jsdelivr.net/npm/all-search@latest/build/index.js
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.1.2/vue.global.prod.min.js
-// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.1.4/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.1.4/build/as-style.css
+// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.1.5/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.1.5/build/as-style.css
 // @run-at       document-start
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -108,7 +109,7 @@
 
 !function(e) {
     "use strict";
-    var t = "default" in e ? e.default : e, n = "1.1.4";
+    var t = "default" in e ? e.default : e, n = "1.1.5";
     e.reactive({
         tmVersion: ""
     });
