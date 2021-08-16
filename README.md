@@ -2,13 +2,11 @@
 
 ## all-search 全搜，一个搜索引擎快捷跳转菜单
 
-
 一个让你可以方便的在各个搜索引擎之间跳转的顶部固定菜单，基于vue，使用rollup构建。
 
 A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.
 
 ## 设置地址
-[码云](https://endday.gitee.io/all-search/)
 [github](https://endday.github.io/all-search/)
 
 ## 脚本地址
@@ -16,14 +14,16 @@ A top fixed menu that allows you to jump between various search engines, build b
 
 ![npm](https://img.shields.io/npm/v/all-search) （以npm徽章的版本号为准）
 
-[jsdelivr的cdn地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.js)
+[点击安装](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
 
-https://cdn.jsdelivr.net/npm/all-search@latest/build/index.js
+最新的版本的链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
 
-jsdelivr的cdn的更新有延迟的问题，如果发现上述的cdn地址中的版本号和npm徽章的对不上，请自行修改版本号，就是上述链接@符号后面的数字
+jsdelivr的cdn的更新有延迟的问题，如果发现上述的cdn地址中的版本号和npm徽章的对不上，请自行修改版本号，就是上述链接@符号后面的latest，改为版本号，下面是个例子
+
+指定版本链接：https://cdn.jsdelivr.net/npm/all-search@1.1.6/build/index.user.js
 
 ## 特色功能
-* [图形界面添加网址](https://endday.gitee.io/all-search/)
+* [图形界面添加网址](https://endday.github.io/all-search/)
 * 拖动改变分类排序
 * 支持垂直和横向布局
 * 点击分类使用分类第一个地址打开

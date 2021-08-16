@@ -12,15 +12,24 @@ import meta from './src/config/meta'
 
 export default {
   input: 'src/as-script/main.js',
-  output: {
-    name: 'allSearch',
-    file: 'build/index.js',
-    format: 'iife',
-    // sourceMap: true,
-    globals: {
-      vue: 'Vue'
+  output: [
+    {
+      name: 'allSearch',
+      file: 'build/index.user.js',
+      format: 'iife',
+      globals: {
+        vue: 'Vue'
+      }
+    },
+    {
+      name: 'allSearch',
+      file: 'build/index.js',
+      format: 'iife',
+      globals: {
+        vue: 'Vue'
+      }
     }
-  },
+  ],
   external: ['vue'],
   plugins: [
     del({ targets: 'build/*' }),
