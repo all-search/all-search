@@ -25,16 +25,21 @@
           <div class="ft">
             <el-button-group>
               <el-button
+                size="medium"
                 icon="el-icon-arrow-left"
                 @click="moveLeft(index)"
               />
               <el-button
+                size="medium"
                 icon="el-icon-arrow-right"
                 @click="moveRight(index)"
               />
             </el-button-group>
             <el-button
+              size="medium"
               icon="el-icon-view"
+              :type="cate.data.visible ? 'primary': 'info'"
+              plain
               @click="changeVisible(cate.data)">
               {{cate.data.visible ? '隐藏': '展示'}}
             </el-button>
@@ -46,7 +51,8 @@
           <div
             v-for="(item, j) in cate.list"
             :key="j"
-            class="url-item">
+            class="url-item"
+            :class="{invisible: !item.data.visible}">
             <el-button
               class="move-icon"
               type="text"
@@ -75,6 +81,7 @@
                 trigger="click"
                 @command="addToPersonal($event, item)">
                 <el-button
+                  size="medium"
                   icon="el-icon-plus">
                   添加
                 </el-button>
@@ -91,6 +98,9 @@
               </el-dropdown>
               <el-button
                 icon="el-icon-view"
+                size="medium"
+                :type="item.data.visible ? 'primary': 'info'"
+                plain
                 @click="changeVisible(item.data)">
                 {{item.data.visible ? '隐藏': '展示'}}
               </el-button>
@@ -99,6 +109,7 @@
                 icon="el-icon-remove"
                 :plain="true"
                 type="danger"
+                size="medium"
                 @click="deleteUrl(j)">
                 删除
               </el-button>
@@ -322,11 +333,14 @@ export default {
     display: flex;
     background-color: #fff;
     font-size: 14px;
-    color: #606266;
+    color: #303133;
     align-items: center;
     padding: 12px 20px 12px 10px;
     transition: background-color .25s ease;
 
+    &.invisible {
+      color: #C0C4CC;
+    }
     &:hover {
       background-color: #f5f7fa;
     }
@@ -340,6 +354,9 @@ export default {
       font-size: 18px;
       color: #999;
       cursor: move;
+      &:hover {
+        color: #409EFF;
+      }
     }
 
     .name {

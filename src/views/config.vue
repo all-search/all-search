@@ -3,10 +3,13 @@
     class="container">
     <el-header
       class="header">
-      <a id="logo"
-         href="/all-search">
+      <el-link
+        id="logo"
+        :underline="false"
+        type="primary"
+        href="/all-search">
         全搜 All-Search
-      </a>
+      </el-link>
       <div class="header-bd"></div>
       <a class="gh-btn"
          href="https://github.com/endday/all-search">
@@ -41,6 +44,7 @@ export default {
 
 <style lang="scss" scoped>
   @import "../assets/common";
+
   #logo {
     height: 64px;
     line-height: 64px;
