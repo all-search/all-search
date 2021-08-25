@@ -44,10 +44,7 @@ export const list = [
     url: /\/\/searx\.me\/\?q/
   },
   {
-    url: /\/\/www\.sogou\.com\/(?:web|s)/,
-    style: {
-      2: `.header { right: ${width}px }`
-    }
+    url: /\/\/www\.sogou\.com\/(?:web|s)/
   },
   {
     url: /\/\/yandex\.com\/search/,
@@ -90,8 +87,11 @@ export const list = [
     }
   },
   {
-    url: /\/\/www\.so\.com\/s/
-  },
+    url: /\/\/www\.so\.com\/s/,
+    style: {
+      2: `.body-vertical #header { z-index: 2000!important; }`
+    }
+},
   {
     url: /\/\/so\.baike\.com\/doc/
   },

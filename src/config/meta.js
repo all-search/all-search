@@ -17,8 +17,8 @@ const meta = `// ==UserScript==
 // @license      ${pkg.license}
 // @update       ${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}
 // @homepageURL  ${pkg.homepage}
-// @updateURL    https://cdn.jsdelivr.net/npm/all-search@latest/build/index.js
-// @downloadURL  https://cdn.jsdelivr.net/npm/all-search@latest/build/index.js
+// @updateURL    https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
+// @downloadURL  https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.1.2/vue.global.prod.min.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@${pkg.version}/src/assets/iconfont.css

@@ -29,7 +29,7 @@ export default {
   @import "../assets/common";
 
   @media screen and (max-width: 768px) {
-    .as-title {
+    .as-title-vertical {
       display: none;
     }
   }
