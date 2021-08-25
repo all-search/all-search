@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.1.7
+// @version      1.1.8
 // @description  2021年8月25日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
@@ -10,8 +10,8 @@
 // @downloadURL  https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.1.2/vue.global.prod.min.js
-// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.1.7/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.1.7/build/as-style.css
+// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.1.8/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.1.8/build/as-style.css
 // @run-at       document-start
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -109,7 +109,7 @@
 
 !function(e) {
     "use strict";
-    var t = "default" in e ? e.default : e, n = "1.1.7";
+    var t = "default" in e ? e.default : e, n = "1.1.8";
     e.reactive({
         tmVersion: ""
     });
@@ -222,7 +222,8 @@
     }, {
         url: /\/\/searx\.me\/\?q/
     }, {
-        url: /\/\/www\.sogou\.com\/(?:web|s)/
+        url: /\/\/www\.sogou\.com\/(?:web|s)/,
+        keyword: () => document.getElementById("upquery").value
     }, {
         url: /\/\/yandex\.com\/search/,
         style: {
@@ -266,11 +267,15 @@
         url: /\/\/www\.docin\.com\/search\.do/
     }, {
         url: /\/\/zhihu\.sogou\.com\/zhihu/,
+        keyword: () => document.getElementById("upquery").value,
         style: {
             1: ".header { top:30px }"
         }
     }, {
-        url: /\/\/weixin\.sogou\.com\/weixin\?/
+        url: /\/\/weixin\.sogou\.com\/weixin\?/,
+        style: {
+            2: ".headsearch#scroll-header { left:unset; }"
+        }
     }, {
         url: /\/\/www\.quora\.com\/search\?/
     }, {

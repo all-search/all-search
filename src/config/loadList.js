@@ -44,7 +44,10 @@ export const list = [
     url: /\/\/searx\.me\/\?q/
   },
   {
-    url: /\/\/www\.sogou\.com\/(?:web|s)/
+    url: /\/\/www\.sogou\.com\/(?:web|s)/,
+    keyword() {
+      return document.getElementById('upquery').value
+    }
   },
   {
     url: /\/\/yandex\.com\/search/,
@@ -91,7 +94,7 @@ export const list = [
     style: {
       2: `.body-vertical #header { z-index: 2000!important; }`
     }
-},
+  },
   {
     url: /\/\/so\.baike\.com\/doc/
   },
@@ -103,12 +106,18 @@ export const list = [
   },
   {
     url: /\/\/zhihu\.sogou\.com\/zhihu/,
+    keyword() {
+      return document.getElementById('upquery').value
+    },
     style: {
       1: `.header { top:${height}px }`
     }
   },
   {
-    url: /\/\/weixin\.sogou\.com\/weixin\?/
+    url: /\/\/weixin\.sogou\.com\/weixin\?/,
+    style: {
+      2: `.headsearch#scroll-header { left:unset; }`
+    }
   },
   {
     url: /\/\/www\.quora\.com\/search\?/
