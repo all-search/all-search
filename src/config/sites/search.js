@@ -30,5 +30,10 @@ export default [
   {
     nameZh: 'Yandex',
     url: 'https://yandex.com/search/?text=%s'
+  },
+  {
+    nameZh: 'startpage',
+    url: 'https://www.startpage.com/sp/search?query=%s',
+    icon: 'https://www.startpage.com/sp/cdn/favicons/favicon-16x16--default.png'
   }
 ]

@@ -1,5 +1,5 @@
 <template>
-  <scrollbar
+  <div
     class="as-menu-container">
     <ul
       class="as-menu"
@@ -12,24 +12,22 @@
         :mode="mode">
       </menu-item>
     </ul>
-  </scrollbar>
+  </div>
 </template>
 
 <script>
-import { computed, reactive, ref } from 'vue'
-import scrollbar from 'element-plus/lib/el-scrollbar'
-import 'element-plus/lib/theme-chalk/el-scrollbar.css'
+import { computed, reactive } from 'vue'
+// import scrollbar from 'element-plus/lib/el-scrollbar'
+// import 'element-plus/lib/theme-chalk/el-scrollbar.css'
 import { initSites } from '../util/sites'
 import menuItem from './menuItem.vue'
-import icon from '../components/icon.vue'
 import useAlign from '../components/align.js'
 
 export default {
   name: 'as-menu',
   components: {
-    scrollbar,
-    menuItem,
-    icon
+    // scrollbar,
+    menuItem
   },
   props: {
     mode: {
@@ -109,4 +107,5 @@ export default {
   .el-scrollbar__bar {
     display: none;
   }
+
 </style>

@@ -1,5 +1,6 @@
 <template>
   <popover
+    :append-to-body="false"
     :placement="placement"
     :trigger="isMobileRef ? 'click' : 'hover'"
     popper-class="as-subMenu-container">

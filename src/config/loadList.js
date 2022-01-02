@@ -56,9 +56,6 @@ export const list = [
     }
   },
   {
-    url: /\/\/www\.startpage\.com\/do\/asearch/
-  },
-  {
     url: /\/\/google\.infinitynewtab\.com\/\?q/
   },
   {
@@ -150,7 +147,7 @@ export const list = [
   {
     url: /\/\/www\.youtube\.com\/results/,
     style: {
-      1: `#masthead-container.ytd-app {top:${height}px !important;} 
+      1: `#masthead-container.ytd-app {top:${height}px !important;}
           html:not(.style-scope) {--ytd-toolbar-height:${height + 56}px !important;}
           ytd-mini-guide-renderer.ytd-app {padding-top: ${height}px;}`,
       2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
@@ -339,7 +336,10 @@ export const list = [
     url: /\/\/google\.infinitynewtab\.com\/\?q/
   },
   {
-    url: /\/\/www\.startpage\.com\/do\/search/
+    url: /\/\/www\.startpage\.com\/sp\/search/,
+    style: {
+      1: `.layout-web__header {top: ${height}px !important;}`
+    }
   },
   {
     url: /\/\/endday\.github\.io/,
