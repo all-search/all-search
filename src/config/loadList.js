@@ -15,14 +15,14 @@ export const list = [
     invisible: true
   },
   {
-    url: /\/\/www\.baidu\.com\/s/,
+    url: /\/\/www\.baidu\.com\/s\?/,
     style: {
       1: `.fix-head { top: ${height}px !important; }`,
       2: `.fix-head #u { right: ${width}px; }`
     }
   },
   {
-    url: /\/\/www\.baidu\.com\/baidu\?wd/,
+    url: /\/\/www\.baidu\.com\/baidu\?/,
     style: {
       1: `.fix-head { top: ${height}px !important; }`,
       2: `.fix-head #u { right: ${width}px; }`

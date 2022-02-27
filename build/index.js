@@ -1,17 +1,17 @@
 // ==UserScript==
-// @name         all-search 全搜v1.1.9，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.1.9
-// @description  2022年1月2日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @name         all-search 全搜v1.1.10，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.1.10
+// @description  2022年2月27日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
-// @update       2022/1/2
+// @update       2022/2/27
 // @homepageURL  https://github.com/endday/all-search
 // @updateURL    https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
 // @downloadURL  https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
 // @noframes
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/3.1.2/vue.global.prod.min.js
-// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.1.9/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.1.9/build/as-style.css
+// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@1.1.10/src/assets/iconfont.css
+// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@1.1.10/build/as-style.css
 // @run-at       document-start
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -20,8 +20,8 @@
 
 // @include      /\/\/www\.google\.com(.hk)?\/search/
 // @include      /\/\/www\.baidu\.com\/$/
-// @include      /\/\/www\.baidu\.com\/s/
-// @include      /\/\/www\.baidu\.com\/baidu\?wd/
+// @include      /\/\/www\.baidu\.com\/s\?/
+// @include      /\/\/www\.baidu\.com\/baidu\?/
 // @include      /\/\/[^.]*\.bing\.com\/search/
 // @include      /\/\/duckduckgo\.com\/*/
 // @include      /\/\/search\.yahoo\.com\/search/
@@ -108,7 +108,7 @@
 
 !function(e) {
     "use strict";
-    var t = "default" in e ? e.default : e, n = "1.1.9";
+    var t = "default" in e ? e.default : e, n = "1.1.10";
     e.reactive({
         tmVersion: ""
     });
@@ -199,13 +199,13 @@
         url: /\/\/www\.baidu\.com\/$/,
         invisible: !0
     }, {
-        url: /\/\/www\.baidu\.com\/s/,
+        url: /\/\/www\.baidu\.com\/s\?/,
         style: {
             1: ".fix-head { top: 30px !important; }",
             2: ".fix-head #u { right: 100px; }"
         }
     }, {
-        url: /\/\/www\.baidu\.com\/baidu\?wd/,
+        url: /\/\/www\.baidu\.com\/baidu\?/,
         style: {
             1: ".fix-head { top: 30px !important; }",
             2: ".fix-head #u { right: 100px; }"
@@ -3211,9 +3211,7 @@
                 placement: a,
                 classList: r,
                 getFavicon: function(e) {
-                    if (e.icon) return e.icon;
-                    const t = j(e.url);
-                    return t.host.split("."), t.origin + "/favicon.ico";
+                    return e.icon ? e.icon : j(e.url).origin + "/favicon.ico";
                 },
                 handleMenuShow: (e, t) => {
                     t.show = e;

@@ -17,8 +17,6 @@
 
 <script>
 import { computed, reactive } from 'vue'
-// import scrollbar from 'element-plus/lib/el-scrollbar'
-// import 'element-plus/lib/theme-chalk/el-scrollbar.css'
 import { initSites } from '../util/sites'
 import menuItem from './menuItem.vue'
 import useAlign from '../components/align.js'

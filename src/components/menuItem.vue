@@ -75,9 +75,7 @@ export default {
         return item.icon
       }
       const obj = parseUrl(item.url)
-      const arr = obj.host.split('.')
-      let mainDomain = obj.origin
-      return `${mainDomain}/favicon.ico`
+      return `${obj.origin}/favicon.ico`
     }
 
     const handleMenuShow = (value, item) => {
