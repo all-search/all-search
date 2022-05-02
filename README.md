@@ -16,7 +16,8 @@ A top fixed menu that allows you to jump between various search engines, build b
 
 [点击安装](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
 
-最新的版本的链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
+最新的版本链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
+最新的版本链接2：https://cdn.jsdelivr.net/gh/endday/all-search@master/build/index.user.js
 
 jsdelivr的cdn的更新有延迟的问题，如果发现上述的cdn地址中的版本号和npm徽章的对不上，请自行修改版本号，就是上述链接@符号后面的latest，改为版本号，下面是个例子
 
