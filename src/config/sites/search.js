@@ -16,6 +16,10 @@ export default [
     url: 'https://duckduckgo.com/?q=%s'
   },
   {
+    nameZh: '头条搜索',
+    url: 'https://so.toutiao.com/search?dvpf=pc&keyword=%s'
+  },
+  {
     nameZh: '360',
     url: 'https://www.so.com/s?ie=utf-8&q=%s'
   },

@@ -1,10 +1,10 @@
 <template>
   <a
+    v-if="!isMobile"
     class="as-title"
     href="https://github.com/endday/all-search"
     target="_blank"
-    :class="`as-title-${mode}`"
-  >
+    :class="`as-title-${mode}`">
     <p class="as-title-inner">
       All Search
     </p>
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import useUa from '../components/useUa'
 
 export default {
   name: 'logo',
@@ -20,6 +21,12 @@ export default {
       type: String,
       default: 'horizontal',
       validator: val => ['horizontal', 'vertical'].indexOf(val) > -1
+    }
+  },
+  setup () {
+    const { isMobile } = useUa()
+    return {
+      isMobile
     }
   }
 }

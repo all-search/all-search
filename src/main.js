@@ -14,3 +14,7 @@ app.use(router)
 app.use(ElementPlus)
 app.mount('#app')
 getTmMethods()
+
+window.addEventListener('scroll', ev => {
+  console.log(ev)
+})

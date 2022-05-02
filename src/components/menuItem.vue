@@ -1,9 +1,8 @@
 <template>
   <popover
-    :append-to-body="false"
     :placement="placement"
-    :trigger="isMobileRef ? 'click' : 'hover'"
-    popper-class="as-subMenu-container">
+    :trigger="isMobile ? 'click' : 'hover'"
+    :popper-class="'as-subMenu-container'">
     <template #reference>
       <div class="as-menu-item"
            :class="classList">
@@ -11,7 +10,7 @@
         <span
           class="as-menu-item-title"
           v-text="item.nameZh"
-          @click="handleClick(item.list[0], false, isMobileRef)"
+          @click="handleClick(item.list[0], false, isMobile)"
           @click.middle="handleClick(item.list[0], true)">
         </span>
       </div>
@@ -42,8 +41,9 @@ import popover from 'element-plus/lib/el-popover'
 import 'element-plus/lib/theme-chalk/el-popover.css'
 import { siteInfo } from '../config/loadList'
 import parseUrl from '../util/parseUrl'
-import { getKeyword, isMobile } from '../util'
+import { getKeyword } from '../util'
 import icon from '../components/icon.vue'
+import useUa from '../components/useUa'
 
 export default {
   name: 'menuItem',
@@ -61,7 +61,7 @@ export default {
     }
   },
   setup (props) {
-    const isMobileRef = ref(isMobile())
+    const { isMobile } = useUa()
     const currentSite = siteInfo()
     const classList = computed(() =>
       props.mode === 'horizontal' ? 'horizontal' : 'vertical'
@@ -107,7 +107,7 @@ export default {
       getFavicon,
       handleMenuShow,
       handleClick,
-      isMobileRef
+      isMobile
     }
   }
 }

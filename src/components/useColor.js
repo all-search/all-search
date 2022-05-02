@@ -44,10 +44,6 @@ const initColor = (name) => {
   colorVal.value = session
 }
 
-const resetColor = (name) => {
-
-}
-
 export default function useColor () {
   onMounted(() => {
     initColor('primary-color')

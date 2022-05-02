@@ -342,6 +342,12 @@ export const list = [
     }
   },
   {
+    url: /\/\/so\.toutiao\.com\/search/,
+    style: {
+
+    }
+  },
+  {
     url: /\/\/endday\.github\.io/,
     invisible: true
   },
