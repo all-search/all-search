@@ -20,7 +20,7 @@ A top fixed menu that allows you to jump between various search engines, build b
 
 jsdelivr的cdn的更新有延迟的问题，如果发现上述的cdn地址中的版本号和npm徽章的对不上，请自行修改版本号，就是上述链接@符号后面的latest，改为版本号，下面是个例子
 
-指定版本链接：https://cdn.jsdelivr.net/npm/all-search@1.1.6/build/index.user.js
+指定版本链接：https://cdn.jsdelivr.net/npm/all-search@1.1.12/build/index.user.js
 
 ## 特色功能
 * [图形界面添加网址](https://endday.github.io/all-search/)
