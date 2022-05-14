@@ -2,7 +2,7 @@ import { siteInfo } from '../config/loadList'
 import { addStyleContent, addStyleResource, getSession, removeNode, version } from './index'
 import { withHookAfter, withHookBefore } from './hook'
 
-const isPro = process.env.NODE_ENV === 'production'
+// const isPro = process.env.NODE_ENV === 'production'
 
 let currentSite = siteInfo()
 
@@ -16,11 +16,6 @@ const getMode = val => {
 }
 
 const mode = getMode(session)
-
-const map = new Map([
-  ['body-horizontal', 'body-vertical'],
-  ['body-vertical', 'body-horizontal']
-])
 
 export const initBodyClass = (value = mode) => {
   currentSite = siteInfo()
@@ -48,17 +43,6 @@ export const addCustomStyle = (value = mode) => {
   }
 }
 
-const addAsStyle = function () {
-  if (isPro) {
-    currentSite = siteInfo()
-    if (currentSite.invisible || currentSite.disabled) {
-      removeNode('.as-style')
-    } else {
-      addStyleResource('as-style', `https://cdn.jsdelivr.net/npm/all-search@${version}/build/as-style.css`)
-    }
-  }
-}
-
 const protectStyle = function () {
   Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, (e) => {
     if (e && e.tagName === 'STYLE') {
@@ -81,11 +65,9 @@ export const initStyle = function () {
   addCustomStyle()
   initBodyClass()
   addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search@${version}/src/assets/iconfont.css`)
-  addAsStyle()
   routerChange(() => {
     currentSite = siteInfo()
     addCustomStyle()
     initBodyClass()
-    addAsStyle()
   })
 }

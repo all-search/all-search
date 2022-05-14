@@ -4,9 +4,8 @@ import {
   checkBody,
   createAsRoot,
   getAsRoot,
-  passTmMethods,
-  version
-} from '../util/index.js'
+  passTmMethods
+} from '../util'
 import { siteInfo } from '../config/loadList.js'
 
 let currentSite = siteInfo()

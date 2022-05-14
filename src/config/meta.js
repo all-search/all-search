@@ -20,9 +20,8 @@ const meta = `// ==UserScript==
 // @updateURL    https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
 // @downloadURL  https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
 // @noframes
-// @require      https://cdn.bootcdn.net/ajax/libs/vue/3.1.2/vue.global.prod.min.js
+// @require      https://unpkg.com/vue@3.2.33/dist/vue.global.js
 // @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@${pkg.version}/src/assets/iconfont.css
-// @resource     as-style  https://cdn.jsdelivr.net/npm/all-search@${pkg.version}/build/as-style.css
 // @run-at       document-start
 // @grant        GM_getValue
 // @grant        GM_setValue

@@ -156,7 +156,6 @@ export function RAFInterval (callback, period, runNow) {
       }
     }
   }
-
   requestAnimationFrame(step)
 }
 

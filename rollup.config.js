@@ -1,14 +1,16 @@
-import commonjs from 'rollup-plugin-commonjs'
-import resolve from 'rollup-plugin-node-resolve'
-import vue from 'rollup-plugin-vue'
-import replace from 'rollup-plugin-replace'
-import { terser } from 'rollup-plugin-terser'
+import commonjs from '@rollup/plugin-commonjs'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
 import json from '@rollup/plugin-json'
-import CleanCSS from 'clean-css' // 压缩css
-import { writeFileSync } from 'fs' // 写文件
+import vue from 'rollup-plugin-vue'
+import { terser } from 'rollup-plugin-terser'
 import del from 'rollup-plugin-delete'
-import scss from 'rollup-plugin-scss'
 import meta from './src/config/meta'
+import styles from 'rollup-plugin-styles'
+
+const styleInjectPath = require
+  .resolve('./src/util/injectStyle.js')
+  .replace(/[\\/]+/g, '/')
 
 export default {
   input: 'src/as-script/main.js',
@@ -33,20 +35,28 @@ export default {
   external: ['vue'],
   plugins: [
     del({ targets: 'build/*' }),
-    scss({
-      output (style) {
-        writeFileSync('build/as-style.css', new CleanCSS().minify(style).styles)
-      }
-    }),
-    vue({
-      css: false
-    }),
-    resolve(),
-    commonjs(),
+    vue(),
     json(),
+    styles({
+      mode: [
+        'inject',
+        cssContent => {
+          return `\n
+          import { injectStyle } from '${styleInjectPath}';\n
+          injectStyle(${cssContent});`
+        }
+      ]
+    }),
+    nodeResolve({
+      extensions: ['.vue', '.js']
+    }),
+    commonjs(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-      'process.env.VUE_ENV': JSON.stringify('browser')
+      preventAssignment: false,
+      values: {
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        'process.env.VUE_ENV': JSON.stringify('browser')
+      }
     }),
     terser({
       output: {

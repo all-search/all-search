@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
-import 'element-plus/lib/theme-chalk/index.css'
+import 'element-plus/dist/index.css'
 import './assets/iconfont.css'
 import './assets/normalize.css'
 import './assets/common.scss'
@@ -15,6 +15,3 @@ app.use(ElementPlus)
 app.mount('#app')
 getTmMethods()
 
-window.addEventListener('scroll', ev => {
-  console.log(ev)
-})
