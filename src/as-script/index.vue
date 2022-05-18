@@ -7,19 +7,21 @@
       :mode="mode"/>
     <side-bar/>
   </div>
-  <hoverButton :show="!show"/>
+  <!--  <hoverButton :show="!show"/>-->
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed, watch, ref } from 'vue'
 import { siteInfo } from '../config/loadList'
 import { initStyle } from '../util/initStyle.js'
 import useMode from '../components/useMode.js'
 import logo from '../components/logo.vue'
 import asMenu from '../components/menu.vue'
 import sideBar from '../components/side-bar.vue'
-import hoverButton from '../components/hover-button.vue'
-import useScroll from '../util/useScroll'
+// import hoverButton from '../components/hover-button.vue'
+// import useScroll from '../util/useScroll'
+// import { setSession } from '../util'
+// import { toggleCustomStyle } from '../util/initStyle'
 
 export default {
   name: 'all-search',
@@ -27,19 +29,22 @@ export default {
     logo,
     asMenu,
     sideBar,
-    hoverButton
+    // hoverButton
   },
   setup () {
     const show = ref(false)
     const currentSite = siteInfo()
     const { mode } = useMode()
-    const { direction } = useScroll()
+    // const { direction } = useScroll()
     const classList = computed(() => {
       return {
-        [`as-${mode.value}`]: true,
-        show: direction.value > 0
+        [`as-${mode.value}`]: true
+        // show: direction.value > 0
       }
     })
+/*    watch(direction, (item) => {
+      toggleCustomStyle(item.value > 0)
+    })*/
     initStyle()
     return {
       currentSite,
@@ -55,11 +60,11 @@ export default {
 @import "../assets/common.scss";
 
 .body-horizontal {
-  margin-top: $height;
+  margin-top: $height !important;
 }
 
 .body-vertical {
-  margin-left: $verticalWidth;
+  margin-left: $verticalWidth !important;
 }
 
 body, #all-search {
@@ -91,7 +96,7 @@ body, #all-search {
   top: 0;
   border-bottom: 1px var(--as-border-color) solid;
   flex-direction: row;
-  transform: translateY(-100%);
+  //transform: translateY(-100%);
 }
 
 .as-horizontal.show {

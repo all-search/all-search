@@ -43,6 +43,14 @@ export const addCustomStyle = (value = mode) => {
   }
 }
 
+export const toggleCustomStyle = (open = true) => {
+  if (open) {
+    addCustomStyle()
+  } else {
+    removeNode('.as-custom-style')
+  }
+}
+
 const protectStyle = function () {
   Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, (e) => {
     if (e && e.tagName === 'STYLE') {

@@ -12,7 +12,7 @@ export default function (element = window) {
     const scrollTop = eventTarget.scrollTop
     direction.value = y.value - scrollTop
     y.value = scrollTop
-  })
+  }, 50)
   if (element) {
     element.addEventListener('scroll', scrollHandler)
   }

@@ -176,6 +176,7 @@ export default {
     opacity: 1;
   }
 }
+
 .as-menu-item.no-underline {
   text-decoration: none;
 }
@@ -216,91 +217,93 @@ export default {
 }
 
 .as-subMenu-container {
-  .as-subMenu {
-    list-style: none;
-    padding: 0;
-    min-width: 90px;
+
+}
+
+.as-subMenu {
+  list-style: none;
+  padding: 0;
+  min-width: 90px;
+  box-sizing: border-box;
+  margin: 4px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  li {
+    overflow: hidden;
     box-sizing: border-box;
-    margin: 4px 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    li {
-      overflow: hidden;
-      box-sizing: border-box;
-
-      a {
-        display: flex;
-        align-items: center;
-        height: 34px;
-        padding: 0 16px;
-        text-decoration: none;
-      }
-
-      &:hover {
-        background-color: var(--as-secondary-background-color);
-        color: var(--as-primary-color);
-      }
+    a {
+      display: flex;
+      align-items: center;
+      height: 34px;
+      padding: 0 16px;
+      text-decoration: none;
     }
 
-    .as-subMenu-text {
-      flex: 1;
-      font-size: 14px;
-      text-overflow: ellipsis;
-      color: var(--as-primary-text-color);
-      white-space: nowrap;
-      margin: 0;
-      line-height: 34px;
-      font-weight: normal;
+    &:hover {
+      background-color: var(--as-secondary-background-color);
+      color: var(--as-primary-color);
     }
+  }
 
-    .as-url-icon {
-      width: 16px;
-      height: 16px;
-      margin-right: 10px;
+  .as-subMenu-text {
+    flex: 1;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    color: var(--as-primary-text-color);
+    white-space: nowrap;
+    margin: 0;
+    line-height: 34px;
+    font-weight: normal;
+  }
+
+  .as-url-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    border: none;
+    position: relative;
+    font-size: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
       border: none;
-      position: relative;
-      font-size: 0;
+      vertical-align: top;
+    }
 
-      img {
+    img.error {
+      display: inline-block;
+      transform: scale(1);
+      content: '';
+      color: transparent;
+    }
+
+    img.error {
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 100%;
         height: 100%;
-        border: none;
-        vertical-align: top;
+        background: #f5f5f5 no-repeat center / 50% 50%;
       }
 
-      img.error {
-        display: inline-block;
-        transform: scale(1);
-        content: '';
-        color: transparent;
-      }
-
-      img.error {
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          background: #f5f5f5 no-repeat center / 50% 50%;
-        }
-
-        &::after {
-          content: attr(alt);
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          width: 100%;
-          line-height: 2;
-          background-color: rgba(0, 0, 0, .5);
-          color: white;
-          font-size: 12px;
-          text-align: center;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+      &::after {
+        content: attr(alt);
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        line-height: 2;
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+        font-size: 12px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

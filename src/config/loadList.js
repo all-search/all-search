@@ -50,10 +50,7 @@ export const list = [
     }
   },
   {
-    url: /\/\/yandex\.com\/search/,
-    style: {
-      1: `body { margin: ${height}px!important; }`
-    }
+    url: /\/\/yandex\.com\/search/
   },
   {
     url: /\/\/google\.infinitynewtab\.com\/\?q/
@@ -132,7 +129,7 @@ export const list = [
       return document.getElementById('search-keyword').value
     },
     style: {
-      1: `body { margin-top: ${height}px!important; } .fixed-top {top: ${height}px;}`
+      1: `.fixed-top {top: ${height}px;}`
     }
   },
   {
