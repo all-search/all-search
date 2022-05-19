@@ -208,8 +208,6 @@ export default {
 
 .as-menu-item-icon {
   color: var(--as-primary-text-color);
-  margin: 1.25px 10px 0 0;
-  line-height: $height - 1.25px;
 }
 
 .el-popover.el-popper.as-subMenu-container {

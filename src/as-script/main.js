@@ -6,6 +6,7 @@ import {
   getAsRoot,
   passTmMethods
 } from '../util'
+import '../assets/iconfont'
 import { siteInfo } from '../config/loadList.js'
 
 let currentSite = siteInfo()

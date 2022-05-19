@@ -1,7 +1,7 @@
 <template>
-  <i class="as-menu-item-icon"
-     :class="`icon-${name}`">
-  </i>
+  <svg class="as-icon as-menu-item-icon" aria-hidden="true">
+    <use :xlink:href="`#icon-${name}`"></use>
+  </svg>
 </template>
 
 <script>
@@ -17,13 +17,13 @@ export default {
 </script>
 
 <style lang="scss">
-  .as-menu-item-icon {
-    width: 20px;
-    height: 28px;
-    font-family: "iconfont" !important;
-    font-size: 20px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+.as-icon {
+  font-size: 20px;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+  margin: 1.25px 8px 0 0;
+}
 </style>
