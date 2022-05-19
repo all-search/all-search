@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 12.x # 配置Node环境
+      - name: Use Node.js 14.x # 配置Node环境
         uses: actions/setup-node@v3 # 配置脚本来自 https://github.com/actions/setup-node
         with:
-          node-version: 12
+          node-version: 14
 
       - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
