@@ -2,27 +2,25 @@ name: Deploy Github Pages
 on:
   push:
     branches:
-    - master
+      - master
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
+      - uses: actions/checkout@v3
+      - name: Use Node.js 12.x # 配置Node环境
+        uses: actions/setup-node@v3 # 配置脚本来自 https://github.com/actions/setup-node
+        with:
+          node-version: 12
 
-    - name: Use Node.js 10.x # 配置Node环境
-      uses: actions/setup-node@v1 # 配置脚本来自 https://github.com/actions/setup-node
-      with:
-        node-version: "10.x"
+      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+        run: |
+          npm install
+          npm run build
+          cp dist/index.html dist/404.html
 
-    - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
-      run: |
-        npm install
-        npm run build
-        cp dist/index.html dist/404.html
-        
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@4.1.0
-      with:
-        branch: gh-pages # The branch the action should deploy to.
-        folder: dist # The folder the action should deploy.
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: dist # The folder the action should deploy.
