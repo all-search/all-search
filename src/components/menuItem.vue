@@ -181,6 +181,10 @@ export default {
   text-decoration: none;
 }
 
+.as-menu-item:visited {
+  color: var(--as-primary-text-color);
+}
+
 .as-menu-item {
   height: $height;
   line-height: $height;
