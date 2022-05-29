@@ -1,4 +1,4 @@
-import { getQueryString } from '../util/index.js'
+import { getQueryString } from '../util/index'
 
 const height = 30
 const width = 100
@@ -360,12 +360,10 @@ export const siteInfo = function () {
   if (target) {
     return {
       url: target.url,
-      invisible: target.invisible,
-      disabled: target.disabled,
+      invisible: !!target.invisible,
+      disabled: !!target.disabled,
       style: target.style,
-      keyword: target.keyword,
-      create: target.create,
-      mounted: target.mounted
+      keyword: target.keyword
     }
   }
   return {
@@ -373,8 +371,6 @@ export const siteInfo = function () {
     invisible: true,
     disabled: true,
     style: {},
-    keyword: null,
-    create: null,
-    mounted: null
+    keyword: null
   }
 }

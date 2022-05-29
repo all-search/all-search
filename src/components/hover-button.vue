@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { isMobile } from '../util'
+import { isMobile } from '../util/index'
 
 export default {
   name: 'hover-button',

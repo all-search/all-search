@@ -1,5 +1,5 @@
 import { onMounted, ref, watch } from 'vue'
-import { getSession, setSession } from '../util'
+import { getSession, setSession } from '../util/index'
 
 const primaryColor = ref('')
 const bgColor = ref('')

@@ -1,7 +1,7 @@
 <template>
-  <div class="as-container"
-       :class="classList"
-       style="display: none">
+  <div v-show="!site.invisible"
+       class="as-container"
+       :class="classList">
     <logo :mode="mode"/>
     <as-menu
       :mode="mode"/>
@@ -11,16 +11,17 @@
 </template>
 
 <script>
-import { computed, watch, ref } from 'vue'
+import { computed, watch, ref, reactive } from 'vue'
+import { initStyle, addStyleForCurrentSite } from '../util/initStyle'
 import { siteInfo } from '../config/loadList'
-import { initStyle } from '../util/initStyle.js'
-import useMode from '../components/useMode.js'
-import logo from '../components/logo.vue'
-import asMenu from '../components/menu.vue'
-import sideBar from '../components/side-bar.vue'
-// import hoverButton from '../components/hover-button.vue'
+import { routerChange } from '../util/routerChange'
+import useMode from '../components/useMode'
+import logo from '../components/logo'
+import asMenu from '../components/menu'
+import sideBar from '../components/side-bar'
+// import hoverButton from '../components/hover-button'
 // import useScroll from '../util/useScroll'
-// import { setSession } from '../util'
+// import { setSession } from '../util/index'
 // import { toggleCustomStyle } from '../util/initStyle'
 
 export default {
@@ -28,26 +29,42 @@ export default {
   components: {
     logo,
     asMenu,
-    sideBar,
-    // hoverButton
+    sideBar
   },
   setup () {
     const show = ref(false)
-    const currentSite = siteInfo()
     const { mode } = useMode()
-    // const { direction } = useScroll()
-    const classList = computed(() => {
-      return {
-        [`as-${mode.value}`]: true
-        // show: direction.value > 0
-      }
+    let site = reactive({
+      url: '',
+      invisible: false,
+      disabled: false,
+      style: {},
+      keyword: null
     })
-/*    watch(direction, (item) => {
-      toggleCustomStyle(item.value > 0)
-    })*/
+    const classList = computed(() => ({
+      [`as-${mode.value}`]: true
+    }))
     initStyle()
+    updateSite()
+    watch(mode, newMode => {
+      addStyleForCurrentSite(newMode, site)
+    }, {
+      immediate: true
+    })
+    function updateSite () {
+      const curSite = siteInfo()
+      site.url = curSite.url
+      site.invisible = curSite.invisible
+      site.disabled = curSite.disabled
+      site.style = curSite.style
+      site.keyword = curSite.keyword
+    }
+    routerChange(() => {
+      updateSite()
+      addStyleForCurrentSite(mode, site)
+    })
     return {
-      currentSite,
+      site,
       mode,
       classList,
       show
@@ -114,7 +131,7 @@ body, #all-search {
 
 .as-container {
   position: fixed;
-  display: flex !important;
+  display: flex;
   background-color: var(--as-bg-color);
   z-index: $mainZIndex;
 }

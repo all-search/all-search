@@ -1,5 +1,5 @@
 import { reactive, ref, watch } from 'vue'
-import { getSession, setSession } from '../util'
+import { getSession, setSession } from '../util/index'
 
 const session = getSession('align')
 const list = new Map([

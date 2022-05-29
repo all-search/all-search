@@ -1,40 +1,35 @@
-import { siteInfo } from '../config/loadList'
-import { addStyleContent, addStyleResource, getSession, removeNode, version } from './index'
-import { withHookAfter, withHookBefore } from './hook'
+import { unref } from 'vue'
+import {
+  addStyleContent,
+  addStyleResource,
+  removeNode,
+  version
+} from './index'
+import {
+  withHookBefore
+} from './hook'
 
-// const isPro = process.env.NODE_ENV === 'production'
-
-let currentSite = siteInfo()
-
-const session = getSession('mode')
-
-const getMode = val => {
-  if (val !== 'vertical' && val !== 'horizontal') {
-    return 'horizontal'
-  }
-  return val
-}
-
-const mode = getMode(session)
-
-export const initBodyClass = (value = mode) => {
-  currentSite = siteInfo()
+export const initBodyClass = (mode, currentSite) => {
   const body = document.body
   body.classList.remove('body-vertical', 'body-horizontal')
-  if (value) {
-    const newValue = `body-${value}`
-    body.classList.add(newValue)
+  if (!currentSite.invisible) {
+    if (mode) {
+      const newValue = `body-${mode}`
+      body.classList.add(newValue)
+    }
   }
 }
 
-export const addCustomStyle = (value = mode) => {
-  currentSite = siteInfo()
+export const addCustomStyle = (mode, currentSite) => {
   removeNode('.as-custom-style')
+  if (currentSite.invisible) {
+    return
+  }
   if (currentSite.style) {
     let styleContent = ''
-    if (currentSite.style[1] && value === 'horizontal') {
+    if (currentSite.style[1] && mode === 'horizontal') {
       styleContent = currentSite.style[1]
-    } else if (currentSite.style[2] && value === 'vertical') {
+    } else if (currentSite.style[2] && mode === 'vertical') {
       styleContent = currentSite.style[2]
     }
     if (styleContent) {
@@ -43,39 +38,25 @@ export const addCustomStyle = (value = mode) => {
   }
 }
 
-export const toggleCustomStyle = (open = true) => {
-  if (open) {
-    addCustomStyle()
-  } else {
-    removeNode('.as-custom-style')
+export const protectStyle = function () {
+  if (Node.prototype.__as_hooks__) {
+    return
   }
-}
-
-const protectStyle = function () {
   Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, (e) => {
     if (e && e.tagName === 'STYLE') {
       return !(e.classList.contains('as-icon') || e.classList.contains('as-style'))
     }
     return true
   })
-}
-
-
-const routerChange = cb => {
-  history.pushState = withHookAfter(history.pushState, cb)
-  history.replaceState = withHookAfter(history.replaceState, cb)
-// youtube 无法触发history事件，特殊逻辑
-  window.addEventListener('yt-navigate-finish', cb)
+  Node.prototype.__as_hooks__ = true
 }
 
 export const initStyle = function () {
-  protectStyle()
-  addCustomStyle()
-  initBodyClass()
   addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search@${version}/src/assets/iconfont.css`)
-  routerChange(() => {
-    currentSite = siteInfo()
-    addCustomStyle()
-    initBodyClass()
-  })
+}
+
+export const addStyleForCurrentSite = function (mode, site) {
+  const modeVal = unref(mode)
+  addCustomStyle(modeVal, site)
+  initBodyClass(modeVal, site)
 }

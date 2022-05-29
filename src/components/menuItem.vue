@@ -49,8 +49,8 @@ import popover from 'element-plus/lib/components/popover/index'
 import 'element-plus/lib/components/popover/style/css'
 import { siteInfo } from '../config/loadList'
 import parseUrl from '../util/parseUrl'
-import { getKeyword } from '../util'
-import icon from '../components/icon.vue'
+import { getKeyword } from '../util/index'
+import icon from '../components/icon'
 import useUa from '../components/useUa'
 
 export default {

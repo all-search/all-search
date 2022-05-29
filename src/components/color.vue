@@ -18,7 +18,7 @@
 
 <script>
 import { computed } from 'vue'
-import asButton from './button.vue'
+import asButton from './button'
 
 export default {
   name: 'color',

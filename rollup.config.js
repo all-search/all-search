@@ -2,7 +2,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import json from '@rollup/plugin-json'
-import vue from 'rollup-plugin-vue'
+import vue from '@vitejs/plugin-vue'
 import { terser } from 'rollup-plugin-terser'
 import del from 'rollup-plugin-delete'
 import meta from './src/config/meta'
@@ -48,7 +48,7 @@ export default {
       ]
     }),
     nodeResolve({
-      extensions: ['.vue', '.js']
+      extensions: ['.js', '.json', '.vue']
     }),
     commonjs(),
     replace({

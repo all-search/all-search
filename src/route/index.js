@@ -17,12 +17,12 @@ export default createRouter({
     },
     {
       path: '/config/',
-      component: () => import('../views/config.vue'),
+      component: () => import('../views/config'),
       children: [
         {
           path: 'sites',
           name: 'sites',
-          component: () => import('../views/sites.vue'),
+          component: () => import('../views/sites'),
           meta: {
             nameZh: '网址配置'
           }

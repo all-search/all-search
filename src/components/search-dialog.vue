@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { onKeyDown } from './onkeydown.js'
-import asDialog from './dialog.vue'
+import { onKeyDown } from './onkeydown'
+import asDialog from './dialog'
 
 export default {
   name: 'search-dialog',

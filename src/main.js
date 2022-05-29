@@ -7,7 +7,7 @@ import './assets/common.scss'
 import { getTmMethods } from './util'
 
 import router from './route'
-import App from './App.vue'
+import App from './App'
 
 const app = createApp(App)
 app.use(router)

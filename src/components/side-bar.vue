@@ -81,13 +81,13 @@
 
 <script>
 import { ref } from 'vue'
-import useMode from '../components/useMode.js'
-import useAlign from '../components/align.js'
-import useColor from '../components/useColor.js'
-import overlay from '../components/overlay.vue'
-import radio from '../components/radio.vue'
-import formItem from '../components/form-item.vue'
-import color from '../components/color.vue'
+import useMode from '../components/useMode'
+import useAlign from '../components/align'
+import useColor from '../components/useColor'
+import overlay from '../components/overlay'
+import radio from '../components/radio'
+import formItem from '../components/form-item'
+import color from '../components/color'
 
 export default {
   name: 'side-bar',

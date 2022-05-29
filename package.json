@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "1.1.12",
+  "version": "1.2.0",
   "description": "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。",
   "author": "endday",
   "homepage": "https://github.com/endday/all-search",
@@ -21,12 +21,13 @@
     "axios": "^0.21.1",
     "core-js": "^3.9.1",
     "element-plus": "^2.2.0",
-    "vue": "^3.2.33",
+    "vue": "^3.2.36",
     "vue-draggable-next": "^2.0.1",
     "vue-router": "^4.0.5",
     "vue3-popper": "^0.2.2"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.3",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-json": "^4.0.3",
@@ -46,7 +47,6 @@
     "rollup-plugin-delete": "^1.2.0",
     "rollup-plugin-styles": "^4.0.0",
     "rollup-plugin-terser": "^5.2.0",
-    "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1"
   }

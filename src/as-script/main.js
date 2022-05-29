@@ -1,32 +1,29 @@
 import { createApp } from 'vue'
-import index from './index.vue'
+import index from './index'
 import {
   checkBody,
   createAsRoot,
   getAsRoot,
   passTmMethods
-} from '../util'
+} from '../util/index'
+import { protectStyle } from '../util/initStyle.js'
 import '../assets/iconfont'
-import { siteInfo } from '../config/loadList.js'
-
-let currentSite = siteInfo()
 
 const app = createApp(index)
 
 console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 
 function init () {
-  currentSite = siteInfo()
   const el = getAsRoot()
-  if (el) {
-    el.style.display = currentSite.invisible ? 'none' : 'unset'
-  } else {
+  if (!el) {
     const el = createAsRoot()
     const mountEL = document.body.parentElement.insertBefore(el, document.body)
     app.mount(mountEL)
     passTmMethods()
   }
 }
+
+protectStyle()
 
 checkBody().then(() => {
   init()
