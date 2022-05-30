@@ -1,6 +1,6 @@
 <template>
-  <div class="color-set">
-    <label class="label">
+  <div class="as-color-set">
+    <label class="as-color-label">
       <input
         class="input—color"
         type="color"
@@ -53,8 +53,9 @@ export default {
 }
 </script>
 
-<style scoped>
-  label {
+<style lang="scss">
+.as-color-set {
+  .as-color-label {
     line-height: 1;
     position: relative;
     cursor: pointer;
@@ -85,4 +86,5 @@ export default {
   .reset-btn {
     margin-left: 20px;
   }
+}
 </style>

@@ -17,11 +17,10 @@ const meta = `// ==UserScript==
 // @license      ${pkg.license}
 // @update       ${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}
 // @homepageURL  ${pkg.homepage}
-// @updateURL    https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
-// @downloadURL  https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
+// @updateURL    https://unpkg.com/all-search@latest/build/index.user.js
+// @downloadURL  https://unpkg.com/all-search@latest/build/index.user.js
 // @noframes
-// @require      https://unpkg.com/vue@3.2.33/dist/vue.global.js
-// @resource     as-icon  https://cdn.jsdelivr.net/npm/all-search@${pkg.version}/src/assets/iconfont.css
+// @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
 // @run-at       document-start
 // @grant        GM_getValue
 // @grant        GM_setValue

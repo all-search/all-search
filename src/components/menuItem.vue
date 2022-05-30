@@ -1,13 +1,14 @@
 <template>
-  <popover
+  <popper
     :placement="placement"
-    :trigger="isMobile ? 'click' : 'hover'"
-    :popper-class="'as-subMenu-container'">
-    <template #reference>
+    popper-class="as-subMenu-container">
+    <template #trigger="{ show, hide }">
       <a v-if="!isMobile"
          class="as-menu-item no-underline"
          :class="classList"
-         :href="formatItem.list[0].url">
+         :href="formatItem.list[0].url"
+         @mouseenter="show($event.target)"
+         @mouseleave="hide">
         <icon :name="item.name"/>
         <span
           class="as-menu-item-title"
@@ -40,13 +41,14 @@
         </a>
       </li>
     </ul>
-  </popover>
+  </popper>
 </template>
 
 <script>
 import { computed, unref } from 'vue'
-import popover from 'element-plus/lib/components/popover/index'
-import 'element-plus/lib/components/popover/style/css'
+// import { popover } from 'element-plus'
+import popper from '../components/popper'
+// import 'element-plus/lib/components/popover/style/css'
 import { siteInfo } from '../config/loadList'
 import parseUrl from '../util/parseUrl'
 import { getKeyword } from '../util/index'
@@ -56,7 +58,7 @@ import useUa from '../components/useUa'
 export default {
   name: 'menuItem',
   components: {
-    popover,
+    popper,
     icon
   },
   props: {
@@ -214,12 +216,10 @@ export default {
   color: var(--as-primary-text-color);
 }
 
-.el-popover.el-popper.as-subMenu-container {
-  padding: 0;
-}
-
 .as-subMenu-container {
-
+  background: #fff;
+  border: 1px solid #e4e7ed;
+  box-shadow: 0 0 12px rgba(0, 0, 0, .12);
 }
 
 .as-subMenu {

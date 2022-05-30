@@ -351,6 +351,9 @@ export const list = [
   {
     url: /\/\/endday\.gitee\.io/,
     invisible: true
+  },
+  {
+    url: /\/\/localhost/
   }
 ]
 

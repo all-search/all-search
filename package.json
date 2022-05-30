@@ -14,25 +14,28 @@
     "tmServe": "vue-cli-service serve --fix --tm",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "tmBuild": "rollup -c"
+    "tmBuild": "rollup -c",
+    "viteDev": "vite build --mode dev",
+    "viteBuild": "vite build --mode prod"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
     "axios": "^0.21.1",
     "core-js": "^3.9.1",
     "element-plus": "^2.2.0",
+    "resize-observer-polyfill": "^1.5.1",
     "vue": "^3.2.36",
     "vue-draggable-next": "^2.0.1",
     "vue-router": "^4.0.5",
-    "vue3-popper": "^0.2.2"
+    "vue3-popper": "^0.2.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^2.3.3",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-json": "^4.0.3",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-replace": "^4.0.0",
+    "@vitejs/plugin-vue": "^2.3.3",
     "@vue/cli-plugin-babel": "^5.0.0",
     "@vue/cli-plugin-eslint": "^5.0.0",
     "@vue/cli-service": "^5.0.0",
@@ -48,6 +51,8 @@
     "rollup-plugin-styles": "^4.0.0",
     "rollup-plugin-terser": "^5.2.0",
     "sass": "^1.32.8",
-    "sass-loader": "^10.1.1"
+    "sass-loader": "^10.1.1",
+    "vite": "^2.6.7",
+    "rollup-plugin-external-globals": "^0.6.1"
   }
 }

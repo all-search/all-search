@@ -2,8 +2,7 @@ import { unref } from 'vue'
 import {
   addStyleContent,
   addStyleResource,
-  removeNode,
-  version
+  removeNode
 } from './index'
 import {
   withHookBefore
@@ -44,7 +43,12 @@ export const protectStyle = function () {
   }
   Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, (e) => {
     if (e && e.tagName === 'STYLE') {
-      return !(e.classList.contains('as-icon') || e.classList.contains('as-style'))
+      return !(
+        e.classList.contains('as-icon') ||
+        e.classList.contains('as-style') ||
+        e.classList.contains('elPopover') ||
+        e.classList.contains('elScrollbar')
+      )
     }
     return true
   })
@@ -52,7 +56,8 @@ export const protectStyle = function () {
 }
 
 export const initStyle = function () {
-  addStyleResource('as-icon', `https://cdn.jsdelivr.net/npm/all-search@${version}/src/assets/iconfont.css`)
+  addStyleResource('elPopover', 'https://unpkg.com/element-plus@2.2.2/theme-chalk/el-popover.css')
+  addStyleResource('elScrollbar', `https://unpkg.com/element-plus@2.2.2/theme-chalk/el-scrollbar.css`)
 }
 
 export const addStyleForCurrentSite = function (mode, site) {

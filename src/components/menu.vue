@@ -1,6 +1,7 @@
 <template>
   <scrollbar
-    class="as-menu-container">
+    class="as-menu-container"
+    noresize>
     <ul
       class="as-menu"
       :class="menuClass"
@@ -17,8 +18,8 @@
 
 <script>
 import { computed, reactive } from 'vue'
-import scrollbar from 'element-plus/lib/components/scrollbar/index'
-import 'element-plus/lib/components/scrollbar/style/css'
+import scrollbar from './scrollbar/src/scrollbar'
+import './scrollbar/css/scrollbar.css'
 import { initSites } from '../util/sites'
 import menuItem from './menuItem'
 import useAlign from '../components/align'
@@ -63,49 +64,49 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../assets/common";
+@import "../assets/common";
 
-  .as-menu-container {
-    flex: 1;
-  }
+.as-menu-container {
+  flex: 1;
+}
 
-  .as-menu {
-    padding: 0;
-    margin: 0;
-    white-space: nowrap;
-    border: 0;
-    box-shadow: none;
-    background-color: var(--as-bg-color);
-    display: flex;
-  }
+.as-menu {
+  padding: 0;
+  margin: 0;
+  white-space: nowrap;
+  border: 0;
+  box-shadow: none;
+  background-color: var(--as-bg-color);
+  display: flex;
+}
 
-  .as-horizontal-menu {
-    flex-direction: row;
-  }
+.as-horizontal-menu {
+  flex-direction: row;
+}
 
-  .as-vertical-menu {
-    flex-direction: column;
-  }
+.as-vertical-menu {
+  flex-direction: column;
+}
 
-  .drop-enter-active, .drop-leave-active {
-    transition: all 0.2s cubic-bezier(.645, .045, .355, 1);
-  }
+.drop-enter-active, .drop-leave-active {
+  transition: all 0.2s cubic-bezier(.645, .045, .355, 1);
+}
 
-  .drop-enter, .drop-leave-to {
-    opacity: 0;
-    transform: scaleY(0.0001);
-  }
+.drop-enter, .drop-leave-to {
+  opacity: 0;
+  transform: scaleY(0.0001);
+}
 
-  .fade-enter-active, .fade-leave-active {
-    transition: all 0.2s cubic-bezier(.645, .045, .355, 1);
-  }
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.2s cubic-bezier(.645, .045, .355, 1);
+}
 
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 
-  .el-scrollbar__bar {
-    display: none;
-  }
+.el-scrollbar__bar {
+  display: none;
+}
 
 </style>

@@ -4,7 +4,7 @@ import {
   checkBody,
   createAsRoot,
   getAsRoot,
-  passTmMethods
+  passTmMethods,
 } from '../util/index'
 import { protectStyle } from '../util/initStyle.js'
 import '../assets/iconfont'

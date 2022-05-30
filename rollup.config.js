@@ -5,8 +5,9 @@ import json from '@rollup/plugin-json'
 import vue from '@vitejs/plugin-vue'
 import { terser } from 'rollup-plugin-terser'
 import del from 'rollup-plugin-delete'
-import meta from './src/config/meta'
 import styles from 'rollup-plugin-styles'
+import externalGlobals from 'rollup-plugin-external-globals'
+import meta from './src/config/meta'
 
 const styleInjectPath = require
   .resolve('./src/util/injectStyle.js')
@@ -18,21 +19,9 @@ export default {
     {
       name: 'allSearch',
       file: 'build/index.user.js',
-      format: 'iife',
-      globals: {
-        vue: 'Vue'
-      }
-    },
-    {
-      name: 'allSearch',
-      file: 'build/index.js',
-      format: 'iife',
-      globals: {
-        vue: 'Vue'
-      }
+      format: 'iife'
     }
   ],
-  external: ['vue'],
   plugins: [
     del({ targets: 'build/*' }),
     vue(),
@@ -51,6 +40,9 @@ export default {
       extensions: ['.js', '.json', '.vue']
     }),
     commonjs(),
+    externalGlobals({
+      vue: 'Vue'
+    }),
     replace({
       preventAssignment: false,
       values: {
@@ -59,6 +51,8 @@ export default {
       }
     }),
     terser({
+      compress: false,
+      mangle: false,
       output: {
         beautify: true,
         preamble: meta
