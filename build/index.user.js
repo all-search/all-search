@@ -702,7 +702,14 @@
     }, {
         url: /\/\/localhost/
     } ];
-    const siteInfo = function() {
+    let currentSite = null;
+    const siteInfo = function(refresh) {
+        if (refresh) {
+            currentSite = getSite();
+        }
+        return currentSite;
+    };
+    const getSite = function() {
         const target = list$2.find(item => item.url.test(window.location.href.toLowerCase()));
         if (target) {
             return {
@@ -2947,7 +2954,7 @@
                 immediate: true
             });
             function updateSite() {
-                const curSite = siteInfo();
+                const curSite = siteInfo(true);
                 site.url = curSite.url;
                 site.invisible = curSite.invisible;
                 site.disabled = curSite.disabled;

@@ -46,9 +46,7 @@
 
 <script>
 import { computed, unref } from 'vue'
-// import { popover } from 'element-plus'
 import popper from '../components/popper'
-// import 'element-plus/lib/components/popover/style/css'
 import { siteInfo } from '../config/loadList'
 import parseUrl from '../util/parseUrl'
 import { getKeyword } from '../util/index'

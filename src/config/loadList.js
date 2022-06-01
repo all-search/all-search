@@ -45,7 +45,7 @@ export const list = [
   },
   {
     url: /\/\/www\.sogou\.com\/(?:web|s)/,
-    keyword() {
+    keyword () {
       return document.getElementById('upquery').value
     }
   },
@@ -100,7 +100,7 @@ export const list = [
   },
   {
     url: /\/\/zhihu\.sogou\.com\/zhihu/,
-    keyword() {
+    keyword () {
       return document.getElementById('upquery').value
     },
     style: {
@@ -340,9 +340,7 @@ export const list = [
   },
   {
     url: /\/\/so\.toutiao\.com\/search/,
-    style: {
-
-    }
+    style: {}
   },
   {
     url: /\/\/endday\.github\.io/,
@@ -357,7 +355,16 @@ export const list = [
   }
 ]
 
-export const siteInfo = function () {
+let currentSite = null
+
+export const siteInfo = function (refresh) {
+  if (refresh) {
+    currentSite = getSite()
+  }
+  return currentSite
+}
+
+const getSite = function () {
   const target = list
     .find(item => item.url.test(window.location.href.toLowerCase()))
   if (target) {

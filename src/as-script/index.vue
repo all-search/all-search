@@ -52,7 +52,7 @@ export default {
       immediate: true
     })
     function updateSite () {
-      const curSite = siteInfo()
+      const curSite = siteInfo(true)
       site.url = curSite.url
       site.invisible = curSite.invisible
       site.disabled = curSite.disabled
