@@ -41,7 +41,8 @@ export default {
     }),
     commonjs(),
     externalGlobals({
-      vue: 'Vue'
+      vue: 'Vue',
+      '@popperjs/core': 'Popper'
     }),
     replace({
       preventAssignment: false,

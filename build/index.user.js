@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.0，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.0
+// @name         all-search 全搜v1.2.1，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.1
 // @description  2022年6月1日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
@@ -10,8 +10,8 @@
 // @downloadURL  https://unpkg.com/all-search@latest/build/index.user.js
 // @noframes
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
+// @require      https://unpkg.com/@popperjs/core@2.11.5/dist/umd/popper-lite.min.js
 // @run-at       document-start
-// @grant        unsafeWindow
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
@@ -110,7 +110,7 @@
 (function() {
     "use strict";
     var name = "all-search";
-    var version$1 = "1.2.0";
+    var version$1 = "1.2.1";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -748,7 +748,7 @@
             document.removeEventListener("resize", handleResize);
         };
     }
-    function debounce$1(fn, delay = 500) {
+    function debounce(fn, delay = 500) {
         let timeout = null;
         return function() {
             clearTimeout(timeout);
@@ -773,7 +773,7 @@
         const formatVal = getMode(value);
         setSession("mode", formatVal);
     });
-    const resizeHandle = debounce$1(() => initStyle(mode.value));
+    const resizeHandle = debounce(() => initStyle(mode.value));
     function useMode() {
         Vue.onMounted(() => {
             window.addEventListener("resize", resizeHandle, false);
@@ -896,7 +896,7 @@
             target: "_blank"
         }, _hoisted_2$6, 2)) : Vue.createCommentVNode("v-if", true);
     }
-    var logo = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ], [ "__file", "E:\\myProject\\all-search\\src\\components\\logo.vue" ] ]);
+    var logo = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ], [ "__file", "E:\\project\\all-search\\src\\components\\logo.vue" ] ]);
     var MapShim = function() {
         if (typeof Map !== "undefined") {
             return Map;
@@ -1585,7 +1585,7 @@
             _: 1
         });
     }
-    var Bar = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ], [ "__file", "E:\\myProject\\all-search\\src\\components\\scrollbar\\src\\bar.vue" ] ]);
+    var Bar = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ], [ "__file", "E:\\project\\all-search\\src\\components\\scrollbar\\src\\bar.vue" ] ]);
     const _sfc_main$b = Vue.defineComponent({
         components: {
             Bar: Bar
@@ -1765,7 +1765,7 @@
             always: _ctx.always
         }, null, 8, [ "move", "ratio", "size", "always" ]) ], 64)) : Vue.createCommentVNode("v-if", true) ], 512);
     }
-    var scrollbar = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ], [ "__file", "E:\\myProject\\all-search\\src\\components\\scrollbar\\src\\scrollbar.vue" ] ]);
+    var scrollbar = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ], [ "__file", "E:\\project\\all-search\\src\\components\\scrollbar\\src\\scrollbar.vue" ] ]);
     var css$b = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\r\n";
     injectStyle(css$b);
     let el = document.createElement("a");
@@ -2193,1317 +2193,19 @@
         }
         return sitesData;
     }
-    var top = "top";
-    var bottom = "bottom";
-    var right = "right";
-    var left = "left";
-    var auto = "auto";
-    var basePlacements = [ top, bottom, right, left ];
-    var start = "start";
-    var end = "end";
-    var clippingParents = "clippingParents";
-    var viewport = "viewport";
-    var popper$1 = "popper";
-    var reference = "reference";
-    var variationPlacements = basePlacements.reduce((function(acc, placement) {
-        return acc.concat([ placement + "-" + start, placement + "-" + end ]);
-    }), []);
-    var placements = [].concat(basePlacements, [ auto ]).reduce((function(acc, placement) {
-        return acc.concat([ placement, placement + "-" + start, placement + "-" + end ]);
-    }), []);
-    var beforeRead = "beforeRead";
-    var read = "read";
-    var afterRead = "afterRead";
-    var beforeMain = "beforeMain";
-    var main = "main";
-    var afterMain = "afterMain";
-    var beforeWrite = "beforeWrite";
-    var write = "write";
-    var afterWrite = "afterWrite";
-    var modifierPhases = [ beforeRead, read, afterRead, beforeMain, main, afterMain, beforeWrite, write, afterWrite ];
-    function getNodeName(element) {
-        return element ? (element.nodeName || "").toLowerCase() : null;
-    }
-    function getWindow(node) {
-        if (node == null) {
-            return window;
-        }
-        if (node.toString() !== "[object Window]") {
-            var ownerDocument = node.ownerDocument;
-            return ownerDocument ? ownerDocument.defaultView || window : window;
-        }
-        return node;
-    }
-    function isElement(node) {
-        var OwnElement = getWindow(node).Element;
-        return node instanceof OwnElement || node instanceof Element;
-    }
-    function isHTMLElement(node) {
-        var OwnElement = getWindow(node).HTMLElement;
-        return node instanceof OwnElement || node instanceof HTMLElement;
-    }
-    function isShadowRoot(node) {
-        if (typeof ShadowRoot === "undefined") {
-            return false;
-        }
-        var OwnElement = getWindow(node).ShadowRoot;
-        return node instanceof OwnElement || node instanceof ShadowRoot;
-    }
-    function applyStyles(_ref) {
-        var state = _ref.state;
-        Object.keys(state.elements).forEach((function(name) {
-            var style = state.styles[name] || {};
-            var attributes = state.attributes[name] || {};
-            var element = state.elements[name];
-            if (!isHTMLElement(element) || !getNodeName(element)) {
-                return;
-            }
-            Object.assign(element.style, style);
-            Object.keys(attributes).forEach((function(name) {
-                var value = attributes[name];
-                if (value === false) {
-                    element.removeAttribute(name);
-                } else {
-                    element.setAttribute(name, value === true ? "" : value);
-                }
-            }));
-        }));
-    }
-    function effect$2(_ref2) {
-        var state = _ref2.state;
-        var initialStyles = {
-            popper: {
-                position: state.options.strategy,
-                left: "0",
-                top: "0",
-                margin: "0"
-            },
-            arrow: {
-                position: "absolute"
-            },
-            reference: {}
+    function useTimeout() {
+        let timeoutHandle;
+        const registerTimeout = (fn, delay) => {
+            cancelTimeout();
+            timeoutHandle = window.setTimeout(fn, delay);
         };
-        Object.assign(state.elements.popper.style, initialStyles.popper);
-        state.styles = initialStyles;
-        if (state.elements.arrow) {
-            Object.assign(state.elements.arrow.style, initialStyles.arrow);
-        }
-        return function() {
-            Object.keys(state.elements).forEach((function(name) {
-                var element = state.elements[name];
-                var attributes = state.attributes[name] || {};
-                var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]);
-                var style = styleProperties.reduce((function(style, property) {
-                    style[property] = "";
-                    return style;
-                }), {});
-                if (!isHTMLElement(element) || !getNodeName(element)) {
-                    return;
-                }
-                Object.assign(element.style, style);
-                Object.keys(attributes).forEach((function(attribute) {
-                    element.removeAttribute(attribute);
-                }));
-            }));
-        };
-    }
-    var applyStyles$1 = {
-        name: "applyStyles",
-        enabled: true,
-        phase: "write",
-        fn: applyStyles,
-        effect: effect$2,
-        requires: [ "computeStyles" ]
-    };
-    function getBasePlacement(placement) {
-        return placement.split("-")[0];
-    }
-    var max = Math.max;
-    var min = Math.min;
-    var round = Math.round;
-    function getBoundingClientRect(element, includeScale) {
-        if (includeScale === void 0) {
-            includeScale = false;
-        }
-        var rect = element.getBoundingClientRect();
-        var scaleX = 1;
-        var scaleY = 1;
-        if (isHTMLElement(element) && includeScale) {
-            var offsetHeight = element.offsetHeight;
-            var offsetWidth = element.offsetWidth;
-            if (offsetWidth > 0) {
-                scaleX = round(rect.width) / offsetWidth || 1;
-            }
-            if (offsetHeight > 0) {
-                scaleY = round(rect.height) / offsetHeight || 1;
-            }
-        }
+        const cancelTimeout = () => window.clearTimeout(timeoutHandle);
         return {
-            width: rect.width / scaleX,
-            height: rect.height / scaleY,
-            top: rect.top / scaleY,
-            right: rect.right / scaleX,
-            bottom: rect.bottom / scaleY,
-            left: rect.left / scaleX,
-            x: rect.left / scaleX,
-            y: rect.top / scaleY
+            registerTimeout: registerTimeout,
+            cancelTimeout: cancelTimeout
         };
     }
-    function getLayoutRect(element) {
-        var clientRect = getBoundingClientRect(element);
-        var width = element.offsetWidth;
-        var height = element.offsetHeight;
-        if (Math.abs(clientRect.width - width) <= 1) {
-            width = clientRect.width;
-        }
-        if (Math.abs(clientRect.height - height) <= 1) {
-            height = clientRect.height;
-        }
-        return {
-            x: element.offsetLeft,
-            y: element.offsetTop,
-            width: width,
-            height: height
-        };
-    }
-    function contains(parent, child) {
-        var rootNode = child.getRootNode && child.getRootNode();
-        if (parent.contains(child)) {
-            return true;
-        } else if (rootNode && isShadowRoot(rootNode)) {
-            var next = child;
-            do {
-                if (next && parent.isSameNode(next)) {
-                    return true;
-                }
-                next = next.parentNode || next.host;
-            } while (next);
-        }
-        return false;
-    }
-    function getComputedStyle$1(element) {
-        return getWindow(element).getComputedStyle(element);
-    }
-    function isTableElement(element) {
-        return [ "table", "td", "th" ].indexOf(getNodeName(element)) >= 0;
-    }
-    function getDocumentElement(element) {
-        return ((isElement(element) ? element.ownerDocument : element.document) || window.document).documentElement;
-    }
-    function getParentNode(element) {
-        if (getNodeName(element) === "html") {
-            return element;
-        }
-        return element.assignedSlot || element.parentNode || (isShadowRoot(element) ? element.host : null) || getDocumentElement(element);
-    }
-    function getTrueOffsetParent(element) {
-        if (!isHTMLElement(element) || getComputedStyle$1(element).position === "fixed") {
-            return null;
-        }
-        return element.offsetParent;
-    }
-    function getContainingBlock(element) {
-        var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") !== -1;
-        var isIE = navigator.userAgent.indexOf("Trident") !== -1;
-        if (isIE && isHTMLElement(element)) {
-            var elementCss = getComputedStyle$1(element);
-            if (elementCss.position === "fixed") {
-                return null;
-            }
-        }
-        var currentNode = getParentNode(element);
-        if (isShadowRoot(currentNode)) {
-            currentNode = currentNode.host;
-        }
-        while (isHTMLElement(currentNode) && [ "html", "body" ].indexOf(getNodeName(currentNode)) < 0) {
-            var css = getComputedStyle$1(currentNode);
-            if (css.transform !== "none" || css.perspective !== "none" || css.contain === "paint" || [ "transform", "perspective" ].indexOf(css.willChange) !== -1 || isFirefox && css.willChange === "filter" || isFirefox && css.filter && css.filter !== "none") {
-                return currentNode;
-            } else {
-                currentNode = currentNode.parentNode;
-            }
-        }
-        return null;
-    }
-    function getOffsetParent(element) {
-        var window = getWindow(element);
-        var offsetParent = getTrueOffsetParent(element);
-        while (offsetParent && isTableElement(offsetParent) && getComputedStyle$1(offsetParent).position === "static") {
-            offsetParent = getTrueOffsetParent(offsetParent);
-        }
-        if (offsetParent && (getNodeName(offsetParent) === "html" || getNodeName(offsetParent) === "body" && getComputedStyle$1(offsetParent).position === "static")) {
-            return window;
-        }
-        return offsetParent || getContainingBlock(element) || window;
-    }
-    function getMainAxisFromPlacement(placement) {
-        return [ "top", "bottom" ].indexOf(placement) >= 0 ? "x" : "y";
-    }
-    function within(min$1, value, max$1) {
-        return max(min$1, min(value, max$1));
-    }
-    function withinMaxClamp(min, value, max) {
-        var v = within(min, value, max);
-        return v > max ? max : v;
-    }
-    function getFreshSideObject() {
-        return {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        };
-    }
-    function mergePaddingObject(paddingObject) {
-        return Object.assign({}, getFreshSideObject(), paddingObject);
-    }
-    function expandToHashMap(value, keys) {
-        return keys.reduce((function(hashMap, key) {
-            hashMap[key] = value;
-            return hashMap;
-        }), {});
-    }
-    var toPaddingObject = function toPaddingObject(padding, state) {
-        padding = typeof padding === "function" ? padding(Object.assign({}, state.rects, {
-            placement: state.placement
-        })) : padding;
-        return mergePaddingObject(typeof padding !== "number" ? padding : expandToHashMap(padding, basePlacements));
-    };
-    function arrow(_ref) {
-        var _state$modifiersData$;
-        var state = _ref.state, name = _ref.name, options = _ref.options;
-        var arrowElement = state.elements.arrow;
-        var popperOffsets = state.modifiersData.popperOffsets;
-        var basePlacement = getBasePlacement(state.placement);
-        var axis = getMainAxisFromPlacement(basePlacement);
-        var isVertical = [ left, right ].indexOf(basePlacement) >= 0;
-        var len = isVertical ? "height" : "width";
-        if (!arrowElement || !popperOffsets) {
-            return;
-        }
-        var paddingObject = toPaddingObject(options.padding, state);
-        var arrowRect = getLayoutRect(arrowElement);
-        var minProp = axis === "y" ? top : left;
-        var maxProp = axis === "y" ? bottom : right;
-        var endDiff = state.rects.reference[len] + state.rects.reference[axis] - popperOffsets[axis] - state.rects.popper[len];
-        var startDiff = popperOffsets[axis] - state.rects.reference[axis];
-        var arrowOffsetParent = getOffsetParent(arrowElement);
-        var clientSize = arrowOffsetParent ? axis === "y" ? arrowOffsetParent.clientHeight || 0 : arrowOffsetParent.clientWidth || 0 : 0;
-        var centerToReference = endDiff / 2 - startDiff / 2;
-        var min = paddingObject[minProp];
-        var max = clientSize - arrowRect[len] - paddingObject[maxProp];
-        var center = clientSize / 2 - arrowRect[len] / 2 + centerToReference;
-        var offset = within(min, center, max);
-        var axisProp = axis;
-        state.modifiersData[name] = (_state$modifiersData$ = {}, _state$modifiersData$[axisProp] = offset, 
-        _state$modifiersData$.centerOffset = offset - center, _state$modifiersData$);
-    }
-    function effect$1(_ref2) {
-        var state = _ref2.state, options = _ref2.options;
-        var _options$element = options.element, arrowElement = _options$element === void 0 ? "[data-popper-arrow]" : _options$element;
-        if (arrowElement == null) {
-            return;
-        }
-        if (typeof arrowElement === "string") {
-            arrowElement = state.elements.popper.querySelector(arrowElement);
-            if (!arrowElement) {
-                return;
-            }
-        }
-        if (!contains(state.elements.popper, arrowElement)) {
-            return;
-        }
-        state.elements.arrow = arrowElement;
-    }
-    var arrow$1 = {
-        name: "arrow",
-        enabled: true,
-        phase: "main",
-        fn: arrow,
-        effect: effect$1,
-        requires: [ "popperOffsets" ],
-        requiresIfExists: [ "preventOverflow" ]
-    };
-    function getVariation(placement) {
-        return placement.split("-")[1];
-    }
-    var unsetSides = {
-        top: "auto",
-        right: "auto",
-        bottom: "auto",
-        left: "auto"
-    };
-    function roundOffsetsByDPR(_ref) {
-        var x = _ref.x, y = _ref.y;
-        var win = window;
-        var dpr = win.devicePixelRatio || 1;
-        return {
-            x: round(x * dpr) / dpr || 0,
-            y: round(y * dpr) / dpr || 0
-        };
-    }
-    function mapToStyles(_ref2) {
-        var _Object$assign2;
-        var popper = _ref2.popper, popperRect = _ref2.popperRect, placement = _ref2.placement, variation = _ref2.variation, offsets = _ref2.offsets, position = _ref2.position, gpuAcceleration = _ref2.gpuAcceleration, adaptive = _ref2.adaptive, roundOffsets = _ref2.roundOffsets, isFixed = _ref2.isFixed;
-        var _offsets$x = offsets.x, x = _offsets$x === void 0 ? 0 : _offsets$x, _offsets$y = offsets.y, y = _offsets$y === void 0 ? 0 : _offsets$y;
-        var _ref3 = typeof roundOffsets === "function" ? roundOffsets({
-            x: x,
-            y: y
-        }) : {
-            x: x,
-            y: y
-        };
-        x = _ref3.x;
-        y = _ref3.y;
-        var hasX = offsets.hasOwnProperty("x");
-        var hasY = offsets.hasOwnProperty("y");
-        var sideX = left;
-        var sideY = top;
-        var win = window;
-        if (adaptive) {
-            var offsetParent = getOffsetParent(popper);
-            var heightProp = "clientHeight";
-            var widthProp = "clientWidth";
-            if (offsetParent === getWindow(popper)) {
-                offsetParent = getDocumentElement(popper);
-                if (getComputedStyle$1(offsetParent).position !== "static" && position === "absolute") {
-                    heightProp = "scrollHeight";
-                    widthProp = "scrollWidth";
-                }
-            }
-            offsetParent = offsetParent;
-            if (placement === top || (placement === left || placement === right) && variation === end) {
-                sideY = bottom;
-                var offsetY = isFixed && offsetParent === win && win.visualViewport ? win.visualViewport.height : offsetParent[heightProp];
-                y -= offsetY - popperRect.height;
-                y *= gpuAcceleration ? 1 : -1;
-            }
-            if (placement === left || (placement === top || placement === bottom) && variation === end) {
-                sideX = right;
-                var offsetX = isFixed && offsetParent === win && win.visualViewport ? win.visualViewport.width : offsetParent[widthProp];
-                x -= offsetX - popperRect.width;
-                x *= gpuAcceleration ? 1 : -1;
-            }
-        }
-        var commonStyles = Object.assign({
-            position: position
-        }, adaptive && unsetSides);
-        var _ref4 = roundOffsets === true ? roundOffsetsByDPR({
-            x: x,
-            y: y
-        }) : {
-            x: x,
-            y: y
-        };
-        x = _ref4.x;
-        y = _ref4.y;
-        if (gpuAcceleration) {
-            var _Object$assign;
-            return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? "0" : "", 
-            _Object$assign[sideX] = hasX ? "0" : "", _Object$assign.transform = (win.devicePixelRatio || 1) <= 1 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", 
-            _Object$assign));
-        }
-        return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : "", 
-        _Object$assign2[sideX] = hasX ? x + "px" : "", _Object$assign2.transform = "", _Object$assign2));
-    }
-    function computeStyles(_ref5) {
-        var state = _ref5.state, options = _ref5.options;
-        var _options$gpuAccelerat = options.gpuAcceleration, gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat, _options$adaptive = options.adaptive, adaptive = _options$adaptive === void 0 ? true : _options$adaptive, _options$roundOffsets = options.roundOffsets, roundOffsets = _options$roundOffsets === void 0 ? true : _options$roundOffsets;
-        var commonStyles = {
-            placement: getBasePlacement(state.placement),
-            variation: getVariation(state.placement),
-            popper: state.elements.popper,
-            popperRect: state.rects.popper,
-            gpuAcceleration: gpuAcceleration,
-            isFixed: state.options.strategy === "fixed"
-        };
-        if (state.modifiersData.popperOffsets != null) {
-            state.styles.popper = Object.assign({}, state.styles.popper, mapToStyles(Object.assign({}, commonStyles, {
-                offsets: state.modifiersData.popperOffsets,
-                position: state.options.strategy,
-                adaptive: adaptive,
-                roundOffsets: roundOffsets
-            })));
-        }
-        if (state.modifiersData.arrow != null) {
-            state.styles.arrow = Object.assign({}, state.styles.arrow, mapToStyles(Object.assign({}, commonStyles, {
-                offsets: state.modifiersData.arrow,
-                position: "absolute",
-                adaptive: false,
-                roundOffsets: roundOffsets
-            })));
-        }
-        state.attributes.popper = Object.assign({}, state.attributes.popper, {
-            "data-popper-placement": state.placement
-        });
-    }
-    var computeStyles$1 = {
-        name: "computeStyles",
-        enabled: true,
-        phase: "beforeWrite",
-        fn: computeStyles,
-        data: {}
-    };
-    var passive = {
-        passive: true
-    };
-    function effect(_ref) {
-        var state = _ref.state, instance = _ref.instance, options = _ref.options;
-        var _options$scroll = options.scroll, scroll = _options$scroll === void 0 ? true : _options$scroll, _options$resize = options.resize, resize = _options$resize === void 0 ? true : _options$resize;
-        var window = getWindow(state.elements.popper);
-        var scrollParents = [].concat(state.scrollParents.reference, state.scrollParents.popper);
-        if (scroll) {
-            scrollParents.forEach((function(scrollParent) {
-                scrollParent.addEventListener("scroll", instance.update, passive);
-            }));
-        }
-        if (resize) {
-            window.addEventListener("resize", instance.update, passive);
-        }
-        return function() {
-            if (scroll) {
-                scrollParents.forEach((function(scrollParent) {
-                    scrollParent.removeEventListener("scroll", instance.update, passive);
-                }));
-            }
-            if (resize) {
-                window.removeEventListener("resize", instance.update, passive);
-            }
-        };
-    }
-    var eventListeners = {
-        name: "eventListeners",
-        enabled: true,
-        phase: "write",
-        fn: function fn() {},
-        effect: effect,
-        data: {}
-    };
-    var hash$1 = {
-        left: "right",
-        right: "left",
-        bottom: "top",
-        top: "bottom"
-    };
-    function getOppositePlacement(placement) {
-        return placement.replace(/left|right|bottom|top/g, (function(matched) {
-            return hash$1[matched];
-        }));
-    }
-    var hash = {
-        start: "end",
-        end: "start"
-    };
-    function getOppositeVariationPlacement(placement) {
-        return placement.replace(/start|end/g, (function(matched) {
-            return hash[matched];
-        }));
-    }
-    function getWindowScroll(node) {
-        var win = getWindow(node);
-        var scrollLeft = win.pageXOffset;
-        var scrollTop = win.pageYOffset;
-        return {
-            scrollLeft: scrollLeft,
-            scrollTop: scrollTop
-        };
-    }
-    function getWindowScrollBarX(element) {
-        return getBoundingClientRect(getDocumentElement(element)).left + getWindowScroll(element).scrollLeft;
-    }
-    function getViewportRect(element) {
-        var win = getWindow(element);
-        var html = getDocumentElement(element);
-        var visualViewport = win.visualViewport;
-        var width = html.clientWidth;
-        var height = html.clientHeight;
-        var x = 0;
-        var y = 0;
-        if (visualViewport) {
-            width = visualViewport.width;
-            height = visualViewport.height;
-            if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-                x = visualViewport.offsetLeft;
-                y = visualViewport.offsetTop;
-            }
-        }
-        return {
-            width: width,
-            height: height,
-            x: x + getWindowScrollBarX(element),
-            y: y
-        };
-    }
-    function getDocumentRect(element) {
-        var _element$ownerDocumen;
-        var html = getDocumentElement(element);
-        var winScroll = getWindowScroll(element);
-        var body = (_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body;
-        var width = max(html.scrollWidth, html.clientWidth, body ? body.scrollWidth : 0, body ? body.clientWidth : 0);
-        var height = max(html.scrollHeight, html.clientHeight, body ? body.scrollHeight : 0, body ? body.clientHeight : 0);
-        var x = -winScroll.scrollLeft + getWindowScrollBarX(element);
-        var y = -winScroll.scrollTop;
-        if (getComputedStyle$1(body || html).direction === "rtl") {
-            x += max(html.clientWidth, body ? body.clientWidth : 0) - width;
-        }
-        return {
-            width: width,
-            height: height,
-            x: x,
-            y: y
-        };
-    }
-    function isScrollParent(element) {
-        var _getComputedStyle = getComputedStyle$1(element), overflow = _getComputedStyle.overflow, overflowX = _getComputedStyle.overflowX, overflowY = _getComputedStyle.overflowY;
-        return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
-    }
-    function getScrollParent(node) {
-        if ([ "html", "body", "#document" ].indexOf(getNodeName(node)) >= 0) {
-            return node.ownerDocument.body;
-        }
-        if (isHTMLElement(node) && isScrollParent(node)) {
-            return node;
-        }
-        return getScrollParent(getParentNode(node));
-    }
-    function listScrollParents(element, list) {
-        var _element$ownerDocumen;
-        if (list === void 0) {
-            list = [];
-        }
-        var scrollParent = getScrollParent(element);
-        var isBody = scrollParent === ((_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body);
-        var win = getWindow(scrollParent);
-        var target = isBody ? [ win ].concat(win.visualViewport || [], isScrollParent(scrollParent) ? scrollParent : []) : scrollParent;
-        var updatedList = list.concat(target);
-        return isBody ? updatedList : updatedList.concat(listScrollParents(getParentNode(target)));
-    }
-    function rectToClientRect(rect) {
-        return Object.assign({}, rect, {
-            left: rect.x,
-            top: rect.y,
-            right: rect.x + rect.width,
-            bottom: rect.y + rect.height
-        });
-    }
-    function getInnerBoundingClientRect(element) {
-        var rect = getBoundingClientRect(element);
-        rect.top = rect.top + element.clientTop;
-        rect.left = rect.left + element.clientLeft;
-        rect.bottom = rect.top + element.clientHeight;
-        rect.right = rect.left + element.clientWidth;
-        rect.width = element.clientWidth;
-        rect.height = element.clientHeight;
-        rect.x = rect.left;
-        rect.y = rect.top;
-        return rect;
-    }
-    function getClientRectFromMixedType(element, clippingParent) {
-        return clippingParent === viewport ? rectToClientRect(getViewportRect(element)) : isElement(clippingParent) ? getInnerBoundingClientRect(clippingParent) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
-    }
-    function getClippingParents(element) {
-        var clippingParents = listScrollParents(getParentNode(element));
-        var canEscapeClipping = [ "absolute", "fixed" ].indexOf(getComputedStyle$1(element).position) >= 0;
-        var clipperElement = canEscapeClipping && isHTMLElement(element) ? getOffsetParent(element) : element;
-        if (!isElement(clipperElement)) {
-            return [];
-        }
-        return clippingParents.filter((function(clippingParent) {
-            return isElement(clippingParent) && contains(clippingParent, clipperElement) && getNodeName(clippingParent) !== "body";
-        }));
-    }
-    function getClippingRect(element, boundary, rootBoundary) {
-        var mainClippingParents = boundary === "clippingParents" ? getClippingParents(element) : [].concat(boundary);
-        var clippingParents = [].concat(mainClippingParents, [ rootBoundary ]);
-        var firstClippingParent = clippingParents[0];
-        var clippingRect = clippingParents.reduce((function(accRect, clippingParent) {
-            var rect = getClientRectFromMixedType(element, clippingParent);
-            accRect.top = max(rect.top, accRect.top);
-            accRect.right = min(rect.right, accRect.right);
-            accRect.bottom = min(rect.bottom, accRect.bottom);
-            accRect.left = max(rect.left, accRect.left);
-            return accRect;
-        }), getClientRectFromMixedType(element, firstClippingParent));
-        clippingRect.width = clippingRect.right - clippingRect.left;
-        clippingRect.height = clippingRect.bottom - clippingRect.top;
-        clippingRect.x = clippingRect.left;
-        clippingRect.y = clippingRect.top;
-        return clippingRect;
-    }
-    function computeOffsets(_ref) {
-        var reference = _ref.reference, element = _ref.element, placement = _ref.placement;
-        var basePlacement = placement ? getBasePlacement(placement) : null;
-        var variation = placement ? getVariation(placement) : null;
-        var commonX = reference.x + reference.width / 2 - element.width / 2;
-        var commonY = reference.y + reference.height / 2 - element.height / 2;
-        var offsets;
-        switch (basePlacement) {
-          case top:
-            offsets = {
-                x: commonX,
-                y: reference.y - element.height
-            };
-            break;
-
-          case bottom:
-            offsets = {
-                x: commonX,
-                y: reference.y + reference.height
-            };
-            break;
-
-          case right:
-            offsets = {
-                x: reference.x + reference.width,
-                y: commonY
-            };
-            break;
-
-          case left:
-            offsets = {
-                x: reference.x - element.width,
-                y: commonY
-            };
-            break;
-
-          default:
-            offsets = {
-                x: reference.x,
-                y: reference.y
-            };
-        }
-        var mainAxis = basePlacement ? getMainAxisFromPlacement(basePlacement) : null;
-        if (mainAxis != null) {
-            var len = mainAxis === "y" ? "height" : "width";
-            switch (variation) {
-              case start:
-                offsets[mainAxis] = offsets[mainAxis] - (reference[len] / 2 - element[len] / 2);
-                break;
-
-              case end:
-                offsets[mainAxis] = offsets[mainAxis] + (reference[len] / 2 - element[len] / 2);
-                break;
-            }
-        }
-        return offsets;
-    }
-    function detectOverflow(state, options) {
-        if (options === void 0) {
-            options = {};
-        }
-        var _options = options, _options$placement = _options.placement, placement = _options$placement === void 0 ? state.placement : _options$placement, _options$boundary = _options.boundary, boundary = _options$boundary === void 0 ? clippingParents : _options$boundary, _options$rootBoundary = _options.rootBoundary, rootBoundary = _options$rootBoundary === void 0 ? viewport : _options$rootBoundary, _options$elementConte = _options.elementContext, elementContext = _options$elementConte === void 0 ? popper$1 : _options$elementConte, _options$altBoundary = _options.altBoundary, altBoundary = _options$altBoundary === void 0 ? false : _options$altBoundary, _options$padding = _options.padding, padding = _options$padding === void 0 ? 0 : _options$padding;
-        var paddingObject = mergePaddingObject(typeof padding !== "number" ? padding : expandToHashMap(padding, basePlacements));
-        var altContext = elementContext === popper$1 ? reference : popper$1;
-        var popperRect = state.rects.popper;
-        var element = state.elements[altBoundary ? altContext : elementContext];
-        var clippingClientRect = getClippingRect(isElement(element) ? element : element.contextElement || getDocumentElement(state.elements.popper), boundary, rootBoundary);
-        var referenceClientRect = getBoundingClientRect(state.elements.reference);
-        var popperOffsets = computeOffsets({
-            reference: referenceClientRect,
-            element: popperRect,
-            strategy: "absolute",
-            placement: placement
-        });
-        var popperClientRect = rectToClientRect(Object.assign({}, popperRect, popperOffsets));
-        var elementClientRect = elementContext === popper$1 ? popperClientRect : referenceClientRect;
-        var overflowOffsets = {
-            top: clippingClientRect.top - elementClientRect.top + paddingObject.top,
-            bottom: elementClientRect.bottom - clippingClientRect.bottom + paddingObject.bottom,
-            left: clippingClientRect.left - elementClientRect.left + paddingObject.left,
-            right: elementClientRect.right - clippingClientRect.right + paddingObject.right
-        };
-        var offsetData = state.modifiersData.offset;
-        if (elementContext === popper$1 && offsetData) {
-            var offset = offsetData[placement];
-            Object.keys(overflowOffsets).forEach((function(key) {
-                var multiply = [ right, bottom ].indexOf(key) >= 0 ? 1 : -1;
-                var axis = [ top, bottom ].indexOf(key) >= 0 ? "y" : "x";
-                overflowOffsets[key] += offset[axis] * multiply;
-            }));
-        }
-        return overflowOffsets;
-    }
-    function computeAutoPlacement(state, options) {
-        if (options === void 0) {
-            options = {};
-        }
-        var _options = options, placement = _options.placement, boundary = _options.boundary, rootBoundary = _options.rootBoundary, padding = _options.padding, flipVariations = _options.flipVariations, _options$allowedAutoP = _options.allowedAutoPlacements, allowedAutoPlacements = _options$allowedAutoP === void 0 ? placements : _options$allowedAutoP;
-        var variation = getVariation(placement);
-        var placements$1 = variation ? flipVariations ? variationPlacements : variationPlacements.filter((function(placement) {
-            return getVariation(placement) === variation;
-        })) : basePlacements;
-        var allowedPlacements = placements$1.filter((function(placement) {
-            return allowedAutoPlacements.indexOf(placement) >= 0;
-        }));
-        if (allowedPlacements.length === 0) {
-            allowedPlacements = placements$1;
-        }
-        var overflows = allowedPlacements.reduce((function(acc, placement) {
-            acc[placement] = detectOverflow(state, {
-                placement: placement,
-                boundary: boundary,
-                rootBoundary: rootBoundary,
-                padding: padding
-            })[getBasePlacement(placement)];
-            return acc;
-        }), {});
-        return Object.keys(overflows).sort((function(a, b) {
-            return overflows[a] - overflows[b];
-        }));
-    }
-    function getExpandedFallbackPlacements(placement) {
-        if (getBasePlacement(placement) === auto) {
-            return [];
-        }
-        var oppositePlacement = getOppositePlacement(placement);
-        return [ getOppositeVariationPlacement(placement), oppositePlacement, getOppositeVariationPlacement(oppositePlacement) ];
-    }
-    function flip(_ref) {
-        var state = _ref.state, options = _ref.options, name = _ref.name;
-        if (state.modifiersData[name]._skip) {
-            return;
-        }
-        var _options$mainAxis = options.mainAxis, checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis, _options$altAxis = options.altAxis, checkAltAxis = _options$altAxis === void 0 ? true : _options$altAxis, specifiedFallbackPlacements = options.fallbackPlacements, padding = options.padding, boundary = options.boundary, rootBoundary = options.rootBoundary, altBoundary = options.altBoundary, _options$flipVariatio = options.flipVariations, flipVariations = _options$flipVariatio === void 0 ? true : _options$flipVariatio, allowedAutoPlacements = options.allowedAutoPlacements;
-        var preferredPlacement = state.options.placement;
-        var basePlacement = getBasePlacement(preferredPlacement);
-        var isBasePlacement = basePlacement === preferredPlacement;
-        var fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipVariations ? [ getOppositePlacement(preferredPlacement) ] : getExpandedFallbackPlacements(preferredPlacement));
-        var placements = [ preferredPlacement ].concat(fallbackPlacements).reduce((function(acc, placement) {
-            return acc.concat(getBasePlacement(placement) === auto ? computeAutoPlacement(state, {
-                placement: placement,
-                boundary: boundary,
-                rootBoundary: rootBoundary,
-                padding: padding,
-                flipVariations: flipVariations,
-                allowedAutoPlacements: allowedAutoPlacements
-            }) : placement);
-        }), []);
-        var referenceRect = state.rects.reference;
-        var popperRect = state.rects.popper;
-        var checksMap = new Map;
-        var makeFallbackChecks = true;
-        var firstFittingPlacement = placements[0];
-        for (var i = 0; i < placements.length; i++) {
-            var placement = placements[i];
-            var _basePlacement = getBasePlacement(placement);
-            var isStartVariation = getVariation(placement) === start;
-            var isVertical = [ top, bottom ].indexOf(_basePlacement) >= 0;
-            var len = isVertical ? "width" : "height";
-            var overflow = detectOverflow(state, {
-                placement: placement,
-                boundary: boundary,
-                rootBoundary: rootBoundary,
-                altBoundary: altBoundary,
-                padding: padding
-            });
-            var mainVariationSide = isVertical ? isStartVariation ? right : left : isStartVariation ? bottom : top;
-            if (referenceRect[len] > popperRect[len]) {
-                mainVariationSide = getOppositePlacement(mainVariationSide);
-            }
-            var altVariationSide = getOppositePlacement(mainVariationSide);
-            var checks = [];
-            if (checkMainAxis) {
-                checks.push(overflow[_basePlacement] <= 0);
-            }
-            if (checkAltAxis) {
-                checks.push(overflow[mainVariationSide] <= 0, overflow[altVariationSide] <= 0);
-            }
-            if (checks.every((function(check) {
-                return check;
-            }))) {
-                firstFittingPlacement = placement;
-                makeFallbackChecks = false;
-                break;
-            }
-            checksMap.set(placement, checks);
-        }
-        if (makeFallbackChecks) {
-            var numberOfChecks = flipVariations ? 3 : 1;
-            var _loop = function _loop(_i) {
-                var fittingPlacement = placements.find((function(placement) {
-                    var checks = checksMap.get(placement);
-                    if (checks) {
-                        return checks.slice(0, _i).every((function(check) {
-                            return check;
-                        }));
-                    }
-                }));
-                if (fittingPlacement) {
-                    firstFittingPlacement = fittingPlacement;
-                    return "break";
-                }
-            };
-            for (var _i = numberOfChecks; _i > 0; _i--) {
-                var _ret = _loop(_i);
-                if (_ret === "break") break;
-            }
-        }
-        if (state.placement !== firstFittingPlacement) {
-            state.modifiersData[name]._skip = true;
-            state.placement = firstFittingPlacement;
-            state.reset = true;
-        }
-    }
-    var flip$1 = {
-        name: "flip",
-        enabled: true,
-        phase: "main",
-        fn: flip,
-        requiresIfExists: [ "offset" ],
-        data: {
-            _skip: false
-        }
-    };
-    function getSideOffsets(overflow, rect, preventedOffsets) {
-        if (preventedOffsets === void 0) {
-            preventedOffsets = {
-                x: 0,
-                y: 0
-            };
-        }
-        return {
-            top: overflow.top - rect.height - preventedOffsets.y,
-            right: overflow.right - rect.width + preventedOffsets.x,
-            bottom: overflow.bottom - rect.height + preventedOffsets.y,
-            left: overflow.left - rect.width - preventedOffsets.x
-        };
-    }
-    function isAnySideFullyClipped(overflow) {
-        return [ top, right, bottom, left ].some((function(side) {
-            return overflow[side] >= 0;
-        }));
-    }
-    function hide(_ref) {
-        var state = _ref.state, name = _ref.name;
-        var referenceRect = state.rects.reference;
-        var popperRect = state.rects.popper;
-        var preventedOffsets = state.modifiersData.preventOverflow;
-        var referenceOverflow = detectOverflow(state, {
-            elementContext: "reference"
-        });
-        var popperAltOverflow = detectOverflow(state, {
-            altBoundary: true
-        });
-        var referenceClippingOffsets = getSideOffsets(referenceOverflow, referenceRect);
-        var popperEscapeOffsets = getSideOffsets(popperAltOverflow, popperRect, preventedOffsets);
-        var isReferenceHidden = isAnySideFullyClipped(referenceClippingOffsets);
-        var hasPopperEscaped = isAnySideFullyClipped(popperEscapeOffsets);
-        state.modifiersData[name] = {
-            referenceClippingOffsets: referenceClippingOffsets,
-            popperEscapeOffsets: popperEscapeOffsets,
-            isReferenceHidden: isReferenceHidden,
-            hasPopperEscaped: hasPopperEscaped
-        };
-        state.attributes.popper = Object.assign({}, state.attributes.popper, {
-            "data-popper-reference-hidden": isReferenceHidden,
-            "data-popper-escaped": hasPopperEscaped
-        });
-    }
-    var hide$1 = {
-        name: "hide",
-        enabled: true,
-        phase: "main",
-        requiresIfExists: [ "preventOverflow" ],
-        fn: hide
-    };
-    function distanceAndSkiddingToXY(placement, rects, offset) {
-        var basePlacement = getBasePlacement(placement);
-        var invertDistance = [ left, top ].indexOf(basePlacement) >= 0 ? -1 : 1;
-        var _ref = typeof offset === "function" ? offset(Object.assign({}, rects, {
-            placement: placement
-        })) : offset, skidding = _ref[0], distance = _ref[1];
-        skidding = skidding || 0;
-        distance = (distance || 0) * invertDistance;
-        return [ left, right ].indexOf(basePlacement) >= 0 ? {
-            x: distance,
-            y: skidding
-        } : {
-            x: skidding,
-            y: distance
-        };
-    }
-    function offset(_ref2) {
-        var state = _ref2.state, options = _ref2.options, name = _ref2.name;
-        var _options$offset = options.offset, offset = _options$offset === void 0 ? [ 0, 0 ] : _options$offset;
-        var data = placements.reduce((function(acc, placement) {
-            acc[placement] = distanceAndSkiddingToXY(placement, state.rects, offset);
-            return acc;
-        }), {});
-        var _data$state$placement = data[state.placement], x = _data$state$placement.x, y = _data$state$placement.y;
-        if (state.modifiersData.popperOffsets != null) {
-            state.modifiersData.popperOffsets.x += x;
-            state.modifiersData.popperOffsets.y += y;
-        }
-        state.modifiersData[name] = data;
-    }
-    var offset$1 = {
-        name: "offset",
-        enabled: true,
-        phase: "main",
-        requires: [ "popperOffsets" ],
-        fn: offset
-    };
-    function popperOffsets(_ref) {
-        var state = _ref.state, name = _ref.name;
-        state.modifiersData[name] = computeOffsets({
-            reference: state.rects.reference,
-            element: state.rects.popper,
-            strategy: "absolute",
-            placement: state.placement
-        });
-    }
-    var popperOffsets$1 = {
-        name: "popperOffsets",
-        enabled: true,
-        phase: "read",
-        fn: popperOffsets,
-        data: {}
-    };
-    function getAltAxis(axis) {
-        return axis === "x" ? "y" : "x";
-    }
-    function preventOverflow(_ref) {
-        var state = _ref.state, options = _ref.options, name = _ref.name;
-        var _options$mainAxis = options.mainAxis, checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis, _options$altAxis = options.altAxis, checkAltAxis = _options$altAxis === void 0 ? false : _options$altAxis, boundary = options.boundary, rootBoundary = options.rootBoundary, altBoundary = options.altBoundary, padding = options.padding, _options$tether = options.tether, tether = _options$tether === void 0 ? true : _options$tether, _options$tetherOffset = options.tetherOffset, tetherOffset = _options$tetherOffset === void 0 ? 0 : _options$tetherOffset;
-        var overflow = detectOverflow(state, {
-            boundary: boundary,
-            rootBoundary: rootBoundary,
-            padding: padding,
-            altBoundary: altBoundary
-        });
-        var basePlacement = getBasePlacement(state.placement);
-        var variation = getVariation(state.placement);
-        var isBasePlacement = !variation;
-        var mainAxis = getMainAxisFromPlacement(basePlacement);
-        var altAxis = getAltAxis(mainAxis);
-        var popperOffsets = state.modifiersData.popperOffsets;
-        var referenceRect = state.rects.reference;
-        var popperRect = state.rects.popper;
-        var tetherOffsetValue = typeof tetherOffset === "function" ? tetherOffset(Object.assign({}, state.rects, {
-            placement: state.placement
-        })) : tetherOffset;
-        var normalizedTetherOffsetValue = typeof tetherOffsetValue === "number" ? {
-            mainAxis: tetherOffsetValue,
-            altAxis: tetherOffsetValue
-        } : Object.assign({
-            mainAxis: 0,
-            altAxis: 0
-        }, tetherOffsetValue);
-        var offsetModifierState = state.modifiersData.offset ? state.modifiersData.offset[state.placement] : null;
-        var data = {
-            x: 0,
-            y: 0
-        };
-        if (!popperOffsets) {
-            return;
-        }
-        if (checkMainAxis) {
-            var _offsetModifierState$;
-            var mainSide = mainAxis === "y" ? top : left;
-            var altSide = mainAxis === "y" ? bottom : right;
-            var len = mainAxis === "y" ? "height" : "width";
-            var offset = popperOffsets[mainAxis];
-            var min$1 = offset + overflow[mainSide];
-            var max$1 = offset - overflow[altSide];
-            var additive = tether ? -popperRect[len] / 2 : 0;
-            var minLen = variation === start ? referenceRect[len] : popperRect[len];
-            var maxLen = variation === start ? -popperRect[len] : -referenceRect[len];
-            var arrowElement = state.elements.arrow;
-            var arrowRect = tether && arrowElement ? getLayoutRect(arrowElement) : {
-                width: 0,
-                height: 0
-            };
-            var arrowPaddingObject = state.modifiersData["arrow#persistent"] ? state.modifiersData["arrow#persistent"].padding : getFreshSideObject();
-            var arrowPaddingMin = arrowPaddingObject[mainSide];
-            var arrowPaddingMax = arrowPaddingObject[altSide];
-            var arrowLen = within(0, referenceRect[len], arrowRect[len]);
-            var minOffset = isBasePlacement ? referenceRect[len] / 2 - additive - arrowLen - arrowPaddingMin - normalizedTetherOffsetValue.mainAxis : minLen - arrowLen - arrowPaddingMin - normalizedTetherOffsetValue.mainAxis;
-            var maxOffset = isBasePlacement ? -referenceRect[len] / 2 + additive + arrowLen + arrowPaddingMax + normalizedTetherOffsetValue.mainAxis : maxLen + arrowLen + arrowPaddingMax + normalizedTetherOffsetValue.mainAxis;
-            var arrowOffsetParent = state.elements.arrow && getOffsetParent(state.elements.arrow);
-            var clientOffset = arrowOffsetParent ? mainAxis === "y" ? arrowOffsetParent.clientTop || 0 : arrowOffsetParent.clientLeft || 0 : 0;
-            var offsetModifierValue = (_offsetModifierState$ = offsetModifierState == null ? void 0 : offsetModifierState[mainAxis]) != null ? _offsetModifierState$ : 0;
-            var tetherMin = offset + minOffset - offsetModifierValue - clientOffset;
-            var tetherMax = offset + maxOffset - offsetModifierValue;
-            var preventedOffset = within(tether ? min(min$1, tetherMin) : min$1, offset, tether ? max(max$1, tetherMax) : max$1);
-            popperOffsets[mainAxis] = preventedOffset;
-            data[mainAxis] = preventedOffset - offset;
-        }
-        if (checkAltAxis) {
-            var _offsetModifierState$2;
-            var _mainSide = mainAxis === "x" ? top : left;
-            var _altSide = mainAxis === "x" ? bottom : right;
-            var _offset = popperOffsets[altAxis];
-            var _len = altAxis === "y" ? "height" : "width";
-            var _min = _offset + overflow[_mainSide];
-            var _max = _offset - overflow[_altSide];
-            var isOriginSide = [ top, left ].indexOf(basePlacement) !== -1;
-            var _offsetModifierValue = (_offsetModifierState$2 = offsetModifierState == null ? void 0 : offsetModifierState[altAxis]) != null ? _offsetModifierState$2 : 0;
-            var _tetherMin = isOriginSide ? _min : _offset - referenceRect[_len] - popperRect[_len] - _offsetModifierValue + normalizedTetherOffsetValue.altAxis;
-            var _tetherMax = isOriginSide ? _offset + referenceRect[_len] + popperRect[_len] - _offsetModifierValue - normalizedTetherOffsetValue.altAxis : _max;
-            var _preventedOffset = tether && isOriginSide ? withinMaxClamp(_tetherMin, _offset, _tetherMax) : within(tether ? _tetherMin : _min, _offset, tether ? _tetherMax : _max);
-            popperOffsets[altAxis] = _preventedOffset;
-            data[altAxis] = _preventedOffset - _offset;
-        }
-        state.modifiersData[name] = data;
-    }
-    var preventOverflow$1 = {
-        name: "preventOverflow",
-        enabled: true,
-        phase: "main",
-        fn: preventOverflow,
-        requiresIfExists: [ "offset" ]
-    };
-    function getHTMLElementScroll(element) {
-        return {
-            scrollLeft: element.scrollLeft,
-            scrollTop: element.scrollTop
-        };
-    }
-    function getNodeScroll(node) {
-        if (node === getWindow(node) || !isHTMLElement(node)) {
-            return getWindowScroll(node);
-        } else {
-            return getHTMLElementScroll(node);
-        }
-    }
-    function isElementScaled(element) {
-        var rect = element.getBoundingClientRect();
-        var scaleX = round(rect.width) / element.offsetWidth || 1;
-        var scaleY = round(rect.height) / element.offsetHeight || 1;
-        return scaleX !== 1 || scaleY !== 1;
-    }
-    function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
-        if (isFixed === void 0) {
-            isFixed = false;
-        }
-        var isOffsetParentAnElement = isHTMLElement(offsetParent);
-        var offsetParentIsScaled = isHTMLElement(offsetParent) && isElementScaled(offsetParent);
-        var documentElement = getDocumentElement(offsetParent);
-        var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled);
-        var scroll = {
-            scrollLeft: 0,
-            scrollTop: 0
-        };
-        var offsets = {
-            x: 0,
-            y: 0
-        };
-        if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
-            if (getNodeName(offsetParent) !== "body" || isScrollParent(documentElement)) {
-                scroll = getNodeScroll(offsetParent);
-            }
-            if (isHTMLElement(offsetParent)) {
-                offsets = getBoundingClientRect(offsetParent, true);
-                offsets.x += offsetParent.clientLeft;
-                offsets.y += offsetParent.clientTop;
-            } else if (documentElement) {
-                offsets.x = getWindowScrollBarX(documentElement);
-            }
-        }
-        return {
-            x: rect.left + scroll.scrollLeft - offsets.x,
-            y: rect.top + scroll.scrollTop - offsets.y,
-            width: rect.width,
-            height: rect.height
-        };
-    }
-    function order(modifiers) {
-        var map = new Map;
-        var visited = new Set;
-        var result = [];
-        modifiers.forEach((function(modifier) {
-            map.set(modifier.name, modifier);
-        }));
-        function sort(modifier) {
-            visited.add(modifier.name);
-            var requires = [].concat(modifier.requires || [], modifier.requiresIfExists || []);
-            requires.forEach((function(dep) {
-                if (!visited.has(dep)) {
-                    var depModifier = map.get(dep);
-                    if (depModifier) {
-                        sort(depModifier);
-                    }
-                }
-            }));
-            result.push(modifier);
-        }
-        modifiers.forEach((function(modifier) {
-            if (!visited.has(modifier.name)) {
-                sort(modifier);
-            }
-        }));
-        return result;
-    }
-    function orderModifiers(modifiers) {
-        var orderedModifiers = order(modifiers);
-        return modifierPhases.reduce((function(acc, phase) {
-            return acc.concat(orderedModifiers.filter((function(modifier) {
-                return modifier.phase === phase;
-            })));
-        }), []);
-    }
-    function debounce(fn) {
-        var pending;
-        return function() {
-            if (!pending) {
-                pending = new Promise((function(resolve) {
-                    Promise.resolve().then((function() {
-                        pending = undefined;
-                        resolve(fn());
-                    }));
-                }));
-            }
-            return pending;
-        };
-    }
-    function mergeByName(modifiers) {
-        var merged = modifiers.reduce((function(merged, current) {
-            var existing = merged[current.name];
-            merged[current.name] = existing ? Object.assign({}, existing, current, {
-                options: Object.assign({}, existing.options, current.options),
-                data: Object.assign({}, existing.data, current.data)
-            }) : current;
-            return merged;
-        }), {});
-        return Object.keys(merged).map((function(key) {
-            return merged[key];
-        }));
-    }
-    var DEFAULT_OPTIONS = {
-        placement: "bottom",
-        modifiers: [],
-        strategy: "absolute"
-    };
-    function areValidElements() {
-        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-        return !args.some((function(element) {
-            return !(element && typeof element.getBoundingClientRect === "function");
-        }));
-    }
-    function popperGenerator(generatorOptions) {
-        if (generatorOptions === void 0) {
-            generatorOptions = {};
-        }
-        var _generatorOptions = generatorOptions, _generatorOptions$def = _generatorOptions.defaultModifiers, defaultModifiers = _generatorOptions$def === void 0 ? [] : _generatorOptions$def, _generatorOptions$def2 = _generatorOptions.defaultOptions, defaultOptions = _generatorOptions$def2 === void 0 ? DEFAULT_OPTIONS : _generatorOptions$def2;
-        return function createPopper(reference, popper, options) {
-            if (options === void 0) {
-                options = defaultOptions;
-            }
-            var state = {
-                placement: "bottom",
-                orderedModifiers: [],
-                options: Object.assign({}, DEFAULT_OPTIONS, defaultOptions),
-                modifiersData: {},
-                elements: {
-                    reference: reference,
-                    popper: popper
-                },
-                attributes: {},
-                styles: {}
-            };
-            var effectCleanupFns = [];
-            var isDestroyed = false;
-            var instance = {
-                state: state,
-                setOptions: function setOptions(setOptionsAction) {
-                    var options = typeof setOptionsAction === "function" ? setOptionsAction(state.options) : setOptionsAction;
-                    cleanupModifierEffects();
-                    state.options = Object.assign({}, defaultOptions, state.options, options);
-                    state.scrollParents = {
-                        reference: isElement(reference) ? listScrollParents(reference) : reference.contextElement ? listScrollParents(reference.contextElement) : [],
-                        popper: listScrollParents(popper)
-                    };
-                    var orderedModifiers = orderModifiers(mergeByName([].concat(defaultModifiers, state.options.modifiers)));
-                    state.orderedModifiers = orderedModifiers.filter((function(m) {
-                        return m.enabled;
-                    }));
-                    runModifierEffects();
-                    return instance.update();
-                },
-                forceUpdate: function forceUpdate() {
-                    if (isDestroyed) {
-                        return;
-                    }
-                    var _state$elements = state.elements, reference = _state$elements.reference, popper = _state$elements.popper;
-                    if (!areValidElements(reference, popper)) {
-                        return;
-                    }
-                    state.rects = {
-                        reference: getCompositeRect(reference, getOffsetParent(popper), state.options.strategy === "fixed"),
-                        popper: getLayoutRect(popper)
-                    };
-                    state.reset = false;
-                    state.placement = state.options.placement;
-                    state.orderedModifiers.forEach((function(modifier) {
-                        return state.modifiersData[modifier.name] = Object.assign({}, modifier.data);
-                    }));
-                    for (var index = 0; index < state.orderedModifiers.length; index++) {
-                        if (state.reset === true) {
-                            state.reset = false;
-                            index = -1;
-                            continue;
-                        }
-                        var _state$orderedModifie = state.orderedModifiers[index], fn = _state$orderedModifie.fn, _state$orderedModifie2 = _state$orderedModifie.options, _options = _state$orderedModifie2 === void 0 ? {} : _state$orderedModifie2, name = _state$orderedModifie.name;
-                        if (typeof fn === "function") {
-                            state = fn({
-                                state: state,
-                                options: _options,
-                                name: name,
-                                instance: instance
-                            }) || state;
-                        }
-                    }
-                },
-                update: debounce((function() {
-                    return new Promise((function(resolve) {
-                        instance.forceUpdate();
-                        resolve(state);
-                    }));
-                })),
-                destroy: function destroy() {
-                    cleanupModifierEffects();
-                    isDestroyed = true;
-                }
-            };
-            if (!areValidElements(reference, popper)) {
-                return instance;
-            }
-            instance.setOptions(options).then((function(state) {
-                if (!isDestroyed && options.onFirstUpdate) {
-                    options.onFirstUpdate(state);
-                }
-            }));
-            function runModifierEffects() {
-                state.orderedModifiers.forEach((function(_ref3) {
-                    var name = _ref3.name, _ref3$options = _ref3.options, options = _ref3$options === void 0 ? {} : _ref3$options, effect = _ref3.effect;
-                    if (typeof effect === "function") {
-                        var cleanupFn = effect({
-                            state: state,
-                            name: name,
-                            instance: instance,
-                            options: options
-                        });
-                        var noopFn = function noopFn() {};
-                        effectCleanupFns.push(cleanupFn || noopFn);
-                    }
-                }));
-            }
-            function cleanupModifierEffects() {
-                effectCleanupFns.forEach((function(fn) {
-                    return fn();
-                }));
-                effectCleanupFns = [];
-            }
-            return instance;
-        };
-    }
-    var defaultModifiers = [ eventListeners, popperOffsets$1, computeStyles$1, applyStyles$1, offset$1, flip$1, preventOverflow$1, arrow$1, hide$1 ];
-    var createPopper = popperGenerator({
-        defaultModifiers: defaultModifiers
-    });
-    var css$a = '.root {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  background-color: var(--background-color);\n  border: 1px solid var(--border-color);\n  border-radius: 10px;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 999;\n}\n\n.arrow,\n.arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n\n.arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.root:global([data-show="true"]) {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.root:global([data-initialized]) {\n  display: block;\n}\n\n.root:global([data-popper-placement^="bottom"]) .arrow {\n  top: -10px;\n  border-width: 0 8px 10px 8px;\n  border-color: transparent transparent var(--border-color) transparent;\n  margin-left: -8px;\n}\n.root:global([data-popper-placement^="bottom"]) .arrow::before {\n  top: 1px;\n  left: -7px;\n  border-width: 0 7px 9px 7px;\n  border-color: transparent transparent var(--background-color) transparent;\n}\n\n.root:global([data-popper-placement^="top"]) .arrow {\n  bottom: -10px;\n  border-width: 10px 8px 0 8px;\n  border-color: var(--border-color) transparent transparent transparent;\n  margin-left: -8px;\n}\n.root:global([data-popper-placement^="top"]) .arrow::before {\n  bottom: 1px;\n  left: -7px;\n  border-width: 9px 7px 0 7px;\n  border-color: var(--background-color) transparent transparent transparent;\n}\n\n.root:global([data-popper-placement^="left"]) .arrow {\n  right: -10px;\n  margin-top: -8px;\n  border-width: 8px 0 8px 10px;\n  border-color: transparent transparent transparent var(--border-color);\n}\n.root:global([data-popper-placement^="left"]) .arrow::before {\n  right: 1px;\n  top: -7px;\n  border-width: 7px 0 7px 9px;\n  border-color: transparent transparent transparent var(--background-color);\n}\n\n.root:global([data-popper-placement^="right"]) .arrow {\n  left: -10px;\n  margin-top: -8px;\n  border-width: 8px 10px 8px 0;\n  border-color: transparent var(--border-color) transparent transparent;\n}\n.root:global([data-popper-placement^="right"]) .arrow::before {\n  left: 1px;\n  top: -7px;\n  border-width: 7px 9px 7px 0;\n  border-color: transparent var(--background-color) transparent transparent;\n}\n\n.content {\n  padding: 16px;\n}';
+    var css$a = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 999;\n}\n\n.arrow,\n.arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n\n.arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n.popover-content[data-popper-placement^=bottom] .arrow {\n  top: -10px;\n  border-width: 0 8px 10px 8px;\n  border-color: transparent transparent var(--border-color) transparent;\n  margin-left: -8px;\n}\n.popover-content[data-popper-placement^=bottom] .arrow::before {\n  top: 1px;\n  left: -7px;\n  border-width: 0 7px 9px 7px;\n  border-color: transparent transparent var(--background-color) transparent;\n}\n\n.popover-content[data-popper-placement^=top] .arrow {\n  bottom: -10px;\n  border-width: 10px 8px 0 8px;\n  border-color: var(--border-color) transparent transparent transparent;\n  margin-left: -8px;\n}\n.popover-content[data-popper-placement^=top] .arrow::before {\n  bottom: 1px;\n  left: -7px;\n  border-width: 9px 7px 0 7px;\n  border-color: var(--background-color) transparent transparent transparent;\n}\n\n.popover-content[data-popper-placement^=left] .arrow {\n  right: -10px;\n  margin-top: -8px;\n  border-width: 8px 0 8px 10px;\n  border-color: transparent transparent transparent var(--border-color);\n}\n.popover-content[data-popper-placement^=left] .arrow::before {\n  right: 1px;\n  top: -7px;\n  border-width: 7px 0 7px 9px;\n  border-color: transparent transparent transparent var(--background-color);\n}\n\n.popover-content[data-popper-placement^=right] .arrow {\n  left: -10px;\n  margin-top: -8px;\n  border-width: 8px 10px 8px 0;\n  border-color: transparent var(--border-color) transparent transparent;\n}\n.popover-content[data-popper-placement^=right] .arrow::before {\n  left: 1px;\n  top: -7px;\n  border-width: 7px 9px 7px 0;\n  border-color: transparent var(--background-color) transparent transparent;\n}\n\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
     injectStyle(css$a);
     const _sfc_main$a = Vue.defineComponent({
         props: {
@@ -3514,14 +2216,22 @@
             strategy: {
                 type: String,
                 default: "absolute"
+            },
+            popperClass: {
+                type: String,
+                default: ""
             }
         },
         setup(props) {
             const isVisible = Vue.ref(false);
             const popover = Vue.ref(null);
             const popperInstance = Vue.ref(null);
+            const {registerTimeout: registerTimeout, cancelTimeout: cancelTimeout} = useTimeout();
             function createPopover(target) {
-                popperInstance.value = createPopper(target, popover, {
+                if (popperInstance.value) {
+                    return;
+                }
+                popperInstance.value = Popper.createPopper(target, popover.value, {
                     strategy: props.strategy,
                     placement: props.placement,
                     modifiers: [ {
@@ -3532,7 +2242,7 @@
                     }, {
                         name: "offset",
                         options: {
-                            offset: [ 0, 18 ]
+                            offset: [ 0, 10 ]
                         }
                     } ]
                 });
@@ -3546,10 +2256,13 @@
             function show(target) {
                 isVisible.value = true;
                 createPopover(target);
+                cancelTimeout();
             }
             function hide() {
-                isVisible.value = false;
-                destroyPopover();
+                registerTimeout(() => {
+                    isVisible.value = false;
+                    destroyPopover();
+                }, 200);
             }
             return {
                 isVisible: isVisible,
@@ -3565,23 +2278,27 @@
         class: "arrow",
         "data-popper-arrow": ""
     }, null, -1);
-    const _hoisted_3$4 = {
-        class: "content"
-    };
     function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.renderSlot(_ctx.$slots, "trigger", Vue.normalizeProps(Vue.guardReactiveProps({
             show: _ctx.show,
             hide: _ctx.hide
-        }))), (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
-            to: "body"
-        }, [ Vue.createElementVNode("div", {
-            ref: "popover",
-            "data-show": _ctx.isVisible,
-            "data-initialized": _ctx.popperInstance !== null,
-            class: "root"
-        }, [ _hoisted_2$5, Vue.createElementVNode("div", _hoisted_3$4, [ Vue.renderSlot(_ctx.$slots, "default") ]) ], 8, _hoisted_1$6) ])) ], 64);
+        }))), Vue.createVNode(Vue.Transition, {
+            name: "slide-fade"
+        }, {
+            default: Vue.withCtx(() => [ (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
+                to: "body"
+            }, [ Vue.createElementVNode("div", {
+                class: Vue.normalizeClass([ _ctx.popperClass, "popover-content" ]),
+                ref: "popover",
+                "data-show": _ctx.isVisible,
+                "data-initialized": _ctx.popperInstance !== null,
+                onMouseenter: _cache[0] || (_cache[0] = (...args) => _ctx.show && _ctx.show(...args)),
+                onMouseleave: _cache[1] || (_cache[1] = (...args) => _ctx.hide && _ctx.hide(...args))
+            }, [ _hoisted_2$5, Vue.renderSlot(_ctx.$slots, "default") ], 42, _hoisted_1$6) ])) ]),
+            _: 3
+        }) ], 64);
     }
-    var popper = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ], [ "__file", "E:\\myProject\\all-search\\src\\components\\popper.vue" ] ]);
+    var popper = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ], [ "__file", "E:\\project\\all-search\\src\\components\\popper.vue" ] ]);
     var css$9 = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 1.25px 8px 0 0;\n}";
     injectStyle(css$9);
     const _sfc_main$9 = {
@@ -3603,8 +2320,8 @@
             "xlink:href": `#icon-${$props.name}`
         }, null, 8, _hoisted_2$4) ]);
     }
-    var icon = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\icon.vue" ] ]);
-    var css$8 = '.as-menu-item.horizontal {\n  position: relative;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  padding: 0 16px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.el-popover.el-popper.as-subMenu-container {\n  padding: 0;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n}\n.as-subMenu .as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-subMenu .as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-subMenu .as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-subMenu .as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-subMenu .as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
+    var icon = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ], [ "__file", "E:\\project\\all-search\\src\\components\\icon.vue" ] ]);
+    var css$8 = '.as-menu-item.horizontal {\n  position: relative;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  padding: 0 16px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n}\n.as-subMenu .as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-subMenu .as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-subMenu .as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-subMenu .as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-subMenu .as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
     injectStyle(css$8);
     const _sfc_main$8 = {
         name: "menuItem",
@@ -3697,7 +2414,6 @@
         const _component_popper = Vue.resolveComponent("popper");
         return Vue.openBlock(), Vue.createBlock(_component_popper, {
             placement: $setup.placement,
-            trigger: $setup.isMobile ? "click" : "hover",
             "popper-class": "as-subMenu-container"
         }, {
             trigger: Vue.withCtx(({show: show, hide: hide}) => [ !$setup.isMobile ? (Vue.openBlock(), 
@@ -3732,9 +2448,9 @@
                 textContent: Vue.toDisplayString(child.nameZh)
             }, null, 8, _hoisted_9) ], 8, _hoisted_6) ])), [ [ Vue.vShow, child.data.visible ] ])), 128)) ]) ]),
             _: 1
-        }, 8, [ "placement", "trigger" ]);
+        }, 8, [ "placement" ]);
     }
-    var menuItem = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\menuItem.vue" ] ]);
+    var menuItem = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ], [ "__file", "E:\\project\\all-search\\src\\components\\menuItem.vue" ] ]);
     const session = getSession("align");
     const list = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]);
     const formatVal = val => {
@@ -3812,7 +2528,7 @@
             _: 1
         });
     }
-    var asMenu = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\menu.vue" ] ]);
+    var asMenu = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ], [ "__file", "E:\\project\\all-search\\src\\components\\menu.vue" ] ]);
     const primaryColor = Vue.ref("");
     const bgColor = Vue.ref("");
     const primaryTextColor = Vue.ref("");
@@ -3894,7 +2610,7 @@
             onClick: _cache[2] || (_cache[2] = (...args) => $setup.onMaskClick && $setup.onMaskClick(...args))
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 32);
     }
-    var overlay = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\overlay.vue" ] ]);
+    var overlay = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ], [ "__file", "E:\\project\\all-search\\src\\components\\overlay.vue" ] ]);
     var css$5 = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
     injectStyle(css$5);
     const _sfc_main$5 = {
@@ -3939,7 +2655,7 @@
             "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.model = $event)
         }, null, 8, _hoisted_2$2), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3$2, Vue.createElementVNode("span", _hoisted_4$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
     }
-    var radio = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\radio.vue" ] ]);
+    var radio = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ], [ "__file", "E:\\project\\all-search\\src\\components\\radio.vue" ] ]);
     var css$4 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  height: 40px;\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
     injectStyle(css$4);
     const _sfc_main$4 = {
@@ -3978,7 +2694,7 @@
             style: Vue.normalizeStyle($setup.contentStyle)
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 4) ]);
     }
-    var formItem = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\form-item.vue" ] ]);
+    var formItem = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ], [ "__file", "E:\\project\\all-search\\src\\components\\form-item.vue" ] ]);
     var css$3 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
     injectStyle(css$3);
     const _sfc_main$3 = {
@@ -3995,7 +2711,7 @@
             class: Vue.normalizeClass([ "as-button", `as-button__${$props.type}` ])
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 2);
     }
-    var asButton = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\button.vue" ] ]);
+    var asButton = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ], [ "__file", "E:\\project\\all-search\\src\\components\\button.vue" ] ]);
     var css$2 = '@charset "UTF-8";\n.as-color-set .as-color-label {\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  vertical-align: middle;\n}\n.as-color-set .input—color {\n  width: 30px;\n  height: 30px;\n  padding: 4px;\n  border: 1px solid #e6e6e6;\n  border-radius: 4px;\n  background-color: var(--as-secondary-background-color);\n  box-sizing: border-box;\n}\n.as-color-set .input—color::-webkit-color-swatch {\n  border: 0;\n}\n.as-color-set .input—color::-webkit-color-swatch-wrapper {\n  padding: 0;\n}\n.as-color-set .reset-btn {\n  margin-left: 20px;\n}';
     injectStyle(css$2);
     const _sfc_main$2 = {
@@ -4051,7 +2767,7 @@
             _: 1
         }, 8, [ "onClick" ]) ]);
     }
-    var color = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\color.vue" ] ]);
+    var color = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ], [ "__file", "E:\\project\\all-search\\src\\components\\color.vue" ] ]);
     var css$1 = ".as-setting {\n  line-height: 30px;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n}\n.as-setting:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.025);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
     injectStyle(css$1);
     const _sfc_main$1 = {
@@ -4209,7 +2925,7 @@
             _: 1
         }) ])) ], 64);
     }
-    var sideBar = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\side-bar.vue" ] ]);
+    var sideBar = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__file", "E:\\project\\all-search\\src\\components\\side-bar.vue" ] ]);
     var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\n.body-vertical {\n  margin-left: 100px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n}\n\n.as-horizontal.show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n}\n\n.as-container {\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
@@ -4271,7 +2987,7 @@
             mode: $setup.mode
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, !$setup.site.invisible ] ]), Vue.createCommentVNode('  <hoverButton :show="!show"/>') ], 2112);
     }
-    var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ], [ "__file", "E:\\myProject\\all-search\\src\\as-script\\index.vue" ] ]);
+    var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ], [ "__file", "E:\\project\\all-search\\src\\as-script\\index.vue" ] ]);
     !function(e) {
         var t, a, l, o, h, i, n = '<svg><symbol id="icon-disk" viewBox="0 0 1024 1024"><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z"  ></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024"><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z"  ></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024"><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z"  ></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024"><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z"  ></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024"><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z"  ></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024"><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z"  ></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024"><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z"  ></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024"><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z"  ></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024"><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z"  ></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024"><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z"  ></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024"><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z"  ></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024"><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z"  ></path></symbol></svg>', v = (v = document.getElementsByTagName("script"))[v.length - 1].getAttribute("data-injectcss");
         if (v && !e.__iconfont__svg__cssinject__) {
