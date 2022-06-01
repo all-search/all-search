@@ -220,6 +220,7 @@ export default {
   background: #fff;
   border: 1px solid #e4e7ed;
   box-shadow: 0 0 12px rgba(0, 0, 0, .12);
+  border-radius: 4px;
 }
 
 .as-subMenu {

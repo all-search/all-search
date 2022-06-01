@@ -887,14 +887,14 @@
     const _hoisted_1$8 = Vue.createElementVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    const _hoisted_2$6 = [ _hoisted_1$8 ];
+    const _hoisted_2$5 = [ _hoisted_1$8 ];
     function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
         return !$setup.isMobile ? (Vue.openBlock(), Vue.createElementBlock("a", {
             key: 0,
             class: Vue.normalizeClass([ "as-title", `as-title-${$props.mode}` ]),
             href: "https://github.com/endday/all-search",
             target: "_blank"
-        }, _hoisted_2$6, 2)) : Vue.createCommentVNode("v-if", true);
+        }, _hoisted_2$5, 2)) : Vue.createCommentVNode("v-if", true);
     }
     var logo = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ], [ "__file", "E:\\project\\all-search\\src\\components\\logo.vue" ] ]);
     var MapShim = function() {
@@ -2235,11 +2235,6 @@
                     strategy: props.strategy,
                     placement: props.placement,
                     modifiers: [ {
-                        name: "arrow",
-                        options: {
-                            padding: 24
-                        }
-                    }, {
                         name: "offset",
                         options: {
                             offset: [ 0, 10 ]
@@ -2274,10 +2269,6 @@
         }
     });
     const _hoisted_1$6 = [ "data-show", "data-initialized" ];
-    const _hoisted_2$5 = Vue.createElementVNode("div", {
-        class: "arrow",
-        "data-popper-arrow": ""
-    }, null, -1);
     function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.renderSlot(_ctx.$slots, "trigger", Vue.normalizeProps(Vue.guardReactiveProps({
             show: _ctx.show,
@@ -2294,7 +2285,7 @@
                 "data-initialized": _ctx.popperInstance !== null,
                 onMouseenter: _cache[0] || (_cache[0] = (...args) => _ctx.show && _ctx.show(...args)),
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => _ctx.hide && _ctx.hide(...args))
-            }, [ _hoisted_2$5, Vue.renderSlot(_ctx.$slots, "default") ], 42, _hoisted_1$6) ])) ]),
+            }, [ Vue.createCommentVNode('        <div class="arrow" data-popper-arrow />'), Vue.renderSlot(_ctx.$slots, "default") ], 42, _hoisted_1$6) ])) ]),
             _: 3
         }) ], 64);
     }
@@ -2321,7 +2312,7 @@
         }, null, 8, _hoisted_2$4) ]);
     }
     var icon = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ], [ "__file", "E:\\project\\all-search\\src\\components\\icon.vue" ] ]);
-    var css$8 = '.as-menu-item.horizontal {\n  position: relative;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  padding: 0 16px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n}\n.as-subMenu .as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-subMenu .as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-subMenu .as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-subMenu .as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-subMenu .as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
+    var css$8 = '.as-menu-item.horizontal {\n  position: relative;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  padding: 0 16px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n}\n.as-subMenu .as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-subMenu .as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-subMenu .as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-subMenu .as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-subMenu .as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
     injectStyle(css$8);
     const _sfc_main$8 = {
         name: "menuItem",

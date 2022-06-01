@@ -11,7 +11,7 @@
         class="popover-content"
         @mouseenter="show"
         @mouseleave="hide">
-        <div class="arrow" data-popper-arrow />
+<!--        <div class="arrow" data-popper-arrow />-->
         <slot />
       </div>
     </Teleport>
@@ -58,12 +58,12 @@ export default defineComponent({
           strategy: props.strategy,
           placement: props.placement,
           modifiers: [
-            {
+            /*{
               name: 'arrow',
               options: {
                 padding: 24
               }
-            },
+            },*/
             {
               name: 'offset',
               options: {
