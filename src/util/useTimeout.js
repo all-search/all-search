@@ -1,4 +1,4 @@
-export function useTimeout () {
+export default function useTimeout () {
   let timeoutHandle
   const registerTimeout = (fn, delay) => {
     cancelTimeout()

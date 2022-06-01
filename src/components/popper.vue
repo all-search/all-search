@@ -20,7 +20,7 @@
 
 <script>
 import { createPopper } from '@popperjs/core'
-import { useTimeout } from '@/util/useTimeout'
+import useTimeout from '../util/useTimeout.js'
 import {
   defineComponent,
   ref
