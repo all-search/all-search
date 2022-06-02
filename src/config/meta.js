@@ -15,14 +15,14 @@ const meta = `// ==UserScript==
 // @description  ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日更新 ${pkg.description}
 // @author       ${pkg.author}
 // @license      ${pkg.license}
-// @update       ${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}
 // @homepageURL  ${pkg.homepage}
 // @updateURL    https://unpkg.com/all-search@latest/build/index.user.js
 // @downloadURL  https://unpkg.com/all-search@latest/build/index.user.js
+// @supportURL
 // @noframes
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
 // @require      https://unpkg.com/@popperjs/core@2.11.5/dist/umd/popper-lite.min.js
-// @run-at       document-start
+// @run-at       document-body
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle

@@ -56,8 +56,7 @@ export const protectStyle = function () {
 }
 
 export const initStyle = function () {
-  addStyleResource('elPopover', 'https://unpkg.com/element-plus@2.2.2/theme-chalk/el-popover.css')
-  addStyleResource('elScrollbar', `https://unpkg.com/element-plus@2.2.2/theme-chalk/el-scrollbar.css`)
+
 }
 
 export const addStyleForCurrentSite = function (mode, site) {

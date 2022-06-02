@@ -1,5 +1,5 @@
 <template>
-  <div v-show="!site.invisible"
+  <div v-show="visible"
        class="as-container"
        :class="classList">
     <logo :mode="mode"/>
@@ -11,18 +11,15 @@
 </template>
 
 <script>
-import { computed, watch, ref, reactive } from 'vue'
+import { computed, watch, ref, reactive, unref } from 'vue'
 import { initStyle, addStyleForCurrentSite } from '../util/initStyle'
 import { siteInfo } from '../config/loadList'
 import { routerChange } from '../util/routerChange'
+import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
 import useMode from '../components/useMode'
 import logo from '../components/logo'
 import asMenu from '../components/menu'
 import sideBar from '../components/side-bar'
-// import hoverButton from '../components/hover-button'
-// import useScroll from '../util/useScroll'
-// import { setSession } from '../util/index'
-// import { toggleCustomStyle } from '../util/initStyle'
 
 export default {
   name: 'all-search',
@@ -32,7 +29,8 @@ export default {
     sideBar
   },
   setup () {
-    const show = ref(false)
+    // const show = ref(false)
+    const fullScreen = ref(false)
     const { mode } = useMode()
     let site = reactive({
       url: '',
@@ -44,6 +42,9 @@ export default {
     const classList = computed(() => ({
       [`as-${mode.value}`]: true
     }))
+    const visible = computed(() => {
+      return !site.invisible && !unref(fullScreen)
+    })
     initStyle()
     updateSite()
     watch(mode, newMode => {
@@ -59,15 +60,17 @@ export default {
       site.style = curSite.style
       site.keyword = curSite.keyword
     }
+    onFullScreenChange(() => {
+      fullScreen.value = isFullScreen()
+    })
     routerChange(() => {
       updateSite()
       addStyleForCurrentSite(mode, site)
     })
     return {
-      site,
       mode,
       classList,
-      show
+      visible
     }
   }
 }

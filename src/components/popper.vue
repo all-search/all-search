@@ -19,14 +19,11 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import { createPopper } from '@popperjs/core'
 import useTimeout from '../util/useTimeout.js'
-import {
-  defineComponent,
-  ref
-} from 'vue'
 
-export default defineComponent({
+export default {
   props: {
     placement: {
       type: String,
@@ -103,7 +100,7 @@ export default defineComponent({
       hide
     }
   }
-})
+}
 </script>
 
 <style lang="scss">
@@ -113,7 +110,7 @@ export default defineComponent({
   display: none;
   pointer-events: none;
   opacity: 0;
-  z-index: 999;
+  z-index: 9999;
 }
 
 .arrow,
