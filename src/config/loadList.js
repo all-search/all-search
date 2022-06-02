@@ -126,7 +126,8 @@ export const list = [
   {
     url: /\/\/search\.bilibili\.com\/all/,
     keyword () {
-      return document.getElementById('search-keyword').value
+      const el = document.querySelector('.search-input-el')
+      return el ? el.value : ''
     },
     style: {
       1: `.fixed-top {top: ${height}px;}`
@@ -223,7 +224,8 @@ export const list = [
   {
     url: /\/\/fanyi\.baidu\.com/,
     keyword () {
-      return document.getElementById('baidu_translate_input').value
+      const el = document.getElementById('baidu_translate_input')
+      return el ? el.value : ''
     }
   },
   {
@@ -262,7 +264,7 @@ export const list = [
   {
     url: /\/\/s\.weibo\.com\/weibo\?q=/,
     style: {
-      1: `.WB_global_nav { top: ${height}px !important;}`
+      1: `div[role="navigation"] { top: ${height}px !important;}`
     }
   },
   {
