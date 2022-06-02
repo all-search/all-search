@@ -173,9 +173,6 @@ export const list = [
     url: /\/\/so\.1ting\.com\/all\.do/
   },
   {
-    url: /\/\/www\.xiami\.com\/search/
-  },
-  {
     url: /\/\/s\.music\.qq\.com/
   },
   {
@@ -215,19 +212,7 @@ export const list = [
     url: /\/\/thepiratebay\.org\/search/
   },
   {
-    url: /\/\/share\.dmhy\.org\/topics\/list\?keyword=/
-  },
-  {
-    url: /\/\/www\.ed2000\.com\/filelist\.asp/
-  },
-  {
-    url: /\/\/www\.zimuzu\.tv\/search\//
-  },
-  {
-    url: /\/\/so\.cqp\.cc\/search/
-  },
-  {
-    url: /\/\/subhd\.com\/search/
+    url: /\/\/subhd\.tv\/search/
   },
   {
     url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/,
@@ -272,9 +257,6 @@ export const list = [
     url: /\/\/search\.suning\.com/
   },
   {
-    url: /\/\/search\.yhd\.com\/c0-0\/k/
-  },
-  {
     url: /\/\/search\.smzdm\.com\/\?/
   },
   {
@@ -306,31 +288,10 @@ export const list = [
     url: /^http:\/\/search\.cnki\.net\/search\.aspx/
   },
   {
-    url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/
-  },
-  {
-    url: /\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/
-  },
-  {
-    url: /^http:\/\/.*?ebscohost\.com\/.*?results/
-  },
-  {
     url: /^http:\/\/link\.springer\.com\/search\?query=/
   },
   {
-    url: /.*?jstor.org\/action\/doAdvancedSearch/
-  },
-  {
-    url: /.*?runoob\.com\//
-  },
-  {
     url: /\/\/github\.com\/search/
-  },
-  {
-    url: /\/\/developer\.mozilla\.org\/.{2,5}\/search/
-  },
-  {
-    url: /\/\/google\.infinitynewtab\.com\/\?q/
   },
   {
     url: /\/\/www\.startpage\.com\/sp\/search/,
