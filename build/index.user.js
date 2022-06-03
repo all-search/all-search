@@ -2227,7 +2227,7 @@
                 registerTimeout(() => {
                     visible.value = false;
                     destroyPopover();
-                }, 200);
+                }, 100);
             }
             return {
                 visible: visible,
