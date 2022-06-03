@@ -4,14 +4,15 @@ import {
   checkBody,
   createAsRoot,
   getAsRoot,
-  passTmMethods,
+  passTmMethods
 } from '../util/index'
 import { protectStyle } from '../util/initStyle.js'
 import '../assets/iconfont'
+import { siteInfo } from '../config/loadList.js'
+
+const site = siteInfo()
 
 const app = createApp(index)
-
-console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 
 function init () {
   const el = getAsRoot()
@@ -21,12 +22,15 @@ function init () {
     app.mount(mountEL)
     passTmMethods()
   }
+  console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 }
 
-protectStyle()
+if (!site.disabled) {
+  protectStyle()
 
-checkBody().then(() => {
-  init()
-}).catch(err => {
-  console.error(err)
-})
+  checkBody().then(() => {
+    init()
+  }).catch(err => {
+    console.error(err)
+  })
+}

@@ -321,7 +321,7 @@ export const list = [
 let currentSite = null
 
 export const siteInfo = function (refresh) {
-  if (refresh) {
+  if (refresh || !currentSite) {
     currentSite = getSite()
   }
   return currentSite

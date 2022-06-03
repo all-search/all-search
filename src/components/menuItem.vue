@@ -3,33 +3,28 @@
     :placement="placement"
     popper-class="as-subMenu-container">
     <template #trigger="{ show, hide }">
-      <a v-if="!isMobile"
-         class="as-menu-item no-underline"
+      <a class="as-menu-item no-underline"
          :class="classList"
-         :href="formatItem.list[0].url"
          @mouseenter="show($event.target)"
-         @mouseleave="hide">
+         @mouseleave="hide"
+         href="javascript:void 0"
+         @click="handleClick(item.list[0], false, isMobile)"
+         @click.middle="handleClick(item.list[0], true)">
         <icon :name="item.name"/>
         <span
           class="as-menu-item-title"
           v-text="item.nameZh">
         </span>
       </a>
-      <div class="as-menu-item"
-           v-else>
-        <icon :name="item.name"/>
-        <span
-          class="as-menu-item-title"
-          v-text="item.nameZh">
-        </span>
-      </div>
     </template>
     <ul class="as-subMenu">
       <li
-        v-for="(child, i) in formatItem.list"
+        v-for="(child, i) in item.list"
         :key="`${item.name}_${i}`"
         v-show="child.data.visible">
-        <a :href="child.url">
+        <a href="javascript:void 0"
+           @click="handleClick(child)"
+           @click.middle="handleClick(child, true)">
           <div class="as-url-icon">
             <img
               :src="getFavicon(child)"
@@ -77,16 +72,6 @@ export default {
     const placement = computed(() =>
       props.mode === 'horizontal' ? 'bottom-start' : 'right-start'
     )
-    const formatItem = computed(() => {
-      const keyword = defaultKeyword()
-      return {
-        ...props.item,
-        list: props.item.list.map(item => ({
-          ...item,
-          url: item.url.replace('%s', keyword)
-        }))
-      }
-    })
 
     function getFavicon (item) {
       if (item.icon) {
@@ -125,8 +110,7 @@ export default {
       getFavicon,
       handleMenuShow,
       handleClick,
-      isMobile,
-      formatItem
+      isMobile
     }
   }
 }

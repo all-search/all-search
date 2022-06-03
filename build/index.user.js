@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.4，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.4
-// @description  2022年6月2日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @name         all-search 全搜v1.2.5，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.5
+// @description  2022年6月3日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
 // @homepageURL  https://github.com/endday/all-search
@@ -16,7 +16,6 @@
 // @grant        GM_setValue
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
-
 // @include      /\/\/www\.google\.com(.hk)?\/search/
 // @include      /\/\/www\.baidu\.com\/$/
 // @include      /\/\/www\.baidu\.com\/s\?/
@@ -97,7 +96,7 @@
 (function() {
     "use strict";
     var name = "all-search";
-    var version$1 = "1.2.4";
+    var version$1 = "1.2.5";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -629,7 +628,7 @@
     } ];
     let currentSite = null;
     const siteInfo = function(refresh) {
-        if (refresh) {
+        if (refresh || !currentSite) {
             currentSite = getSite();
         }
         return currentSite;
@@ -2117,6 +2116,52 @@
             cancelTimeout: cancelTimeout
         };
     }
+    function onClickOutside(target, handler, options) {
+        const {ignore: ignore, capture: capture = true} = options;
+        if (!window) return;
+        const shouldListen = Vue.ref(true);
+        let fallback;
+        const listener = event => {
+            window.clearTimeout(fallback);
+            const el = target;
+            const composedPath = event.composedPath();
+            if (!el || el === event.target || composedPath.includes(el) || !shouldListen.value) return;
+            if (ignore && ignore.length > 0) {
+                if (ignore.some(target => {
+                    const el = target;
+                    return el && (event.target === el || composedPath.includes(el));
+                })) return;
+            }
+            handler(event);
+        };
+        window.addEventListener("click", listener, {
+            passive: true,
+            capture: capture
+        });
+        window.addEventListener("pointermove", listener, {
+            passive: true,
+            capture: capture
+        });
+        const pointerdownFn = e => {
+            const el = target;
+            shouldListen.value = !!el && !e.composedPath().includes(el);
+        };
+        window.addEventListener("pointerdown", pointerdownFn, {
+            passive: true
+        });
+        const pointerupFn = e => {
+            fallback = window.setTimeout(() => listener(e), 50);
+        };
+        window.addEventListener("pointerup", pointerupFn, {
+            passive: true
+        });
+        return () => {
+            window.removeEventListener("click", listener);
+            window.removeEventListener("pointermove", listener);
+            window.removeEventListener("pointerdown", pointerdownFn);
+            window.removeEventListener("pointerup", pointerupFn);
+        };
+    }
     var css$a = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 9999;\n}\n\n.arrow,\n.arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n\n.arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n.popover-content[data-popper-placement^=bottom] .arrow {\n  top: -10px;\n  border-width: 0 8px 10px 8px;\n  border-color: transparent transparent var(--border-color) transparent;\n  margin-left: -8px;\n}\n.popover-content[data-popper-placement^=bottom] .arrow::before {\n  top: 1px;\n  left: -7px;\n  border-width: 0 7px 9px 7px;\n  border-color: transparent transparent var(--background-color) transparent;\n}\n\n.popover-content[data-popper-placement^=top] .arrow {\n  bottom: -10px;\n  border-width: 10px 8px 0 8px;\n  border-color: var(--border-color) transparent transparent transparent;\n  margin-left: -8px;\n}\n.popover-content[data-popper-placement^=top] .arrow::before {\n  bottom: 1px;\n  left: -7px;\n  border-width: 9px 7px 0 7px;\n  border-color: var(--background-color) transparent transparent transparent;\n}\n\n.popover-content[data-popper-placement^=left] .arrow {\n  right: -10px;\n  margin-top: -8px;\n  border-width: 8px 0 8px 10px;\n  border-color: transparent transparent transparent var(--border-color);\n}\n.popover-content[data-popper-placement^=left] .arrow::before {\n  right: 1px;\n  top: -7px;\n  border-width: 7px 0 7px 9px;\n  border-color: transparent transparent transparent var(--background-color);\n}\n\n.popover-content[data-popper-placement^=right] .arrow {\n  left: -10px;\n  margin-top: -8px;\n  border-width: 8px 10px 8px 0;\n  border-color: transparent var(--border-color) transparent transparent;\n}\n.popover-content[data-popper-placement^=right] .arrow::before {\n  left: 1px;\n  top: -7px;\n  border-width: 7px 9px 7px 0;\n  border-color: transparent var(--background-color) transparent transparent;\n}\n\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
     injectStyle(css$a);
     const _sfc_main$a = {
@@ -2135,7 +2180,8 @@
             }
         },
         setup(props) {
-            const isVisible = Vue.ref(false);
+            const visible = Vue.ref(false);
+            const trigger = Vue.ref(null);
             const popover = Vue.ref(null);
             const popperInstance = Vue.ref(null);
             const {registerTimeout: registerTimeout, cancelTimeout: cancelTimeout} = useTimeout();
@@ -2160,19 +2206,32 @@
                     popperInstance.value = null;
                 }
             }
+            let stopFn;
+            function handleClickOutside(target) {
+                if (!stopFn) {
+                    stopFn = onClickOutside(target, hide, {
+                        ignore: [ popover.value ]
+                    });
+                }
+            }
+            Vue.onUnmounted(() => {
+                stopFn();
+            });
             function show(target) {
-                isVisible.value = true;
+                visible.value = true;
                 createPopover(target);
                 cancelTimeout();
+                handleClickOutside(target);
             }
             function hide() {
                 registerTimeout(() => {
-                    isVisible.value = false;
+                    visible.value = false;
                     destroyPopover();
                 }, 200);
             }
             return {
-                isVisible: isVisible,
+                visible: visible,
+                trigger: trigger,
                 popover: popover,
                 popperInstance: popperInstance,
                 show: show,
@@ -2182,10 +2241,12 @@
     };
     const _hoisted_1$6 = [ "data-show", "data-initialized" ];
     function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
-        return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.renderSlot(_ctx.$slots, "trigger", Vue.normalizeProps(Vue.guardReactiveProps({
+        return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.renderSlot(_ctx.$slots, "trigger", Vue.mergeProps({
+            ref: "trigger"
+        }, {
             show: $setup.show,
             hide: $setup.hide
-        }))), Vue.createVNode(Vue.Transition, {
+        })), Vue.createVNode(Vue.Transition, {
             name: "slide-fade"
         }, {
             default: Vue.withCtx(() => [ (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
@@ -2193,7 +2254,7 @@
             }, [ Vue.createElementVNode("div", {
                 class: Vue.normalizeClass([ $props.popperClass, "popover-content" ]),
                 ref: "popover",
-                "data-show": $setup.isVisible,
+                "data-show": $setup.visible,
                 "data-initialized": $setup.popperInstance !== null,
                 onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.show && $setup.show(...args)),
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
@@ -2246,16 +2307,6 @@
             const currentSite = siteInfo();
             const classList = Vue.computed(() => props.mode === "horizontal" ? "horizontal" : "vertical");
             const placement = Vue.computed(() => props.mode === "horizontal" ? "bottom-start" : "right-start");
-            const formatItem = Vue.computed(() => {
-                const keyword = defaultKeyword();
-                return {
-                    ...props.item,
-                    list: props.item.list.map(item => ({
-                        ...item,
-                        url: item.url.replace("%s", keyword)
-                    }))
-                };
-            });
             function getFavicon(item) {
                 if (item.icon) {
                     return item.icon;
@@ -2291,27 +2342,21 @@
                 getFavicon: getFavicon,
                 handleMenuShow: handleMenuShow,
                 handleClick: handleClick,
-                isMobile: isMobile,
-                formatItem: formatItem
+                isMobile: isMobile
             };
         }
     };
-    const _hoisted_1$4 = [ "href", "onMouseenter", "onMouseleave" ];
+    const _hoisted_1$4 = [ "onMouseenter", "onMouseleave" ];
     const _hoisted_2$3 = [ "textContent" ];
     const _hoisted_3$3 = {
-        key: 1,
-        class: "as-menu-item"
-    };
-    const _hoisted_4$2 = [ "textContent" ];
-    const _hoisted_5 = {
         class: "as-subMenu"
     };
-    const _hoisted_6 = [ "href" ];
-    const _hoisted_7 = {
+    const _hoisted_4$2 = [ "onClick", "onMouseup" ];
+    const _hoisted_5 = {
         class: "as-url-icon"
     };
-    const _hoisted_8 = [ "src" ];
-    const _hoisted_9 = [ "textContent" ];
+    const _hoisted_6 = [ "src" ];
+    const _hoisted_7 = [ "textContent" ];
     function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_icon = Vue.resolveComponent("icon");
         const _component_popper = Vue.resolveComponent("popper");
@@ -2319,37 +2364,34 @@
             placement: $setup.placement,
             "popper-class": "as-subMenu-container"
         }, {
-            trigger: Vue.withCtx(({show: show, hide: hide}) => [ !$setup.isMobile ? (Vue.openBlock(), 
-            Vue.createElementBlock("a", {
-                key: 0,
+            trigger: Vue.withCtx(({show: show, hide: hide}) => [ Vue.createElementVNode("a", {
                 class: Vue.normalizeClass([ "as-menu-item no-underline", $setup.classList ]),
-                href: $setup.formatItem.list[0].url,
                 onMouseenter: $event => show($event.target),
-                onMouseleave: hide
+                onMouseleave: hide,
+                href: "javascript:void 0",
+                onClick: _cache[0] || (_cache[0] = $event => $setup.handleClick($props.item.list[0], false, $setup.isMobile)),
+                onMouseup: _cache[1] || (_cache[1] = Vue.withModifiers($event => $setup.handleClick($props.item.list[0], true), [ "middle" ]))
             }, [ Vue.createVNode(_component_icon, {
                 name: $props.item.name
             }, null, 8, [ "name" ]), Vue.createElementVNode("span", {
                 class: "as-menu-item-title",
                 textContent: Vue.toDisplayString($props.item.nameZh)
-            }, null, 8, _hoisted_2$3) ], 42, _hoisted_1$4)) : (Vue.openBlock(), Vue.createElementBlock("div", _hoisted_3$3, [ Vue.createVNode(_component_icon, {
-                name: $props.item.name
-            }, null, 8, [ "name" ]), Vue.createElementVNode("span", {
-                class: "as-menu-item-title",
-                textContent: Vue.toDisplayString($props.item.nameZh)
-            }, null, 8, _hoisted_4$2) ])) ]),
-            default: Vue.withCtx(() => [ Vue.createElementVNode("ul", _hoisted_5, [ (Vue.openBlock(true), 
-            Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.formatItem.list, (child, i) => Vue.withDirectives((Vue.openBlock(), 
+            }, null, 8, _hoisted_2$3) ], 42, _hoisted_1$4) ]),
+            default: Vue.withCtx(() => [ Vue.createElementVNode("ul", _hoisted_3$3, [ (Vue.openBlock(true), 
+            Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($props.item.list, (child, i) => Vue.withDirectives((Vue.openBlock(), 
             Vue.createElementBlock("li", {
                 key: `${$props.item.name}_${i}`
             }, [ Vue.createElementVNode("a", {
-                href: child.url
-            }, [ Vue.createElementVNode("div", _hoisted_7, [ Vue.createElementVNode("img", {
+                href: "javascript:void 0",
+                onClick: $event => $setup.handleClick(child),
+                onMouseup: Vue.withModifiers($event => $setup.handleClick(child, true), [ "middle" ])
+            }, [ Vue.createElementVNode("div", _hoisted_5, [ Vue.createElementVNode("img", {
                 src: $setup.getFavicon(child),
                 onerror: "this.classList.add('error')"
-            }, null, 8, _hoisted_8) ]), Vue.createElementVNode("p", {
+            }, null, 8, _hoisted_6) ]), Vue.createElementVNode("p", {
                 class: "as-subMenu-text",
                 textContent: Vue.toDisplayString(child.nameZh)
-            }, null, 8, _hoisted_9) ], 8, _hoisted_6) ])), [ [ Vue.vShow, child.data.visible ] ])), 128)) ]) ]),
+            }, null, 8, _hoisted_7) ], 40, _hoisted_4$2) ])), [ [ Vue.vShow, child.data.visible ] ])), 128)) ]) ]),
             _: 1
         }, 8, [ "placement" ]);
     }
@@ -2925,8 +2967,8 @@
             "complete" == o.readyState && (o.onreadystatechange = null, m());
         });
     }(window);
+    const site = siteInfo();
     const app = Vue.createApp(index);
-    console.log(`all-search running 全搜运行中(${"production"})`);
     function init() {
         const el = getAsRoot();
         if (!el) {
@@ -2935,11 +2977,14 @@
             app.mount(mountEL);
             passTmMethods();
         }
+        console.log(`all-search running 全搜运行中(${"production"})`);
     }
-    protectStyle();
-    checkBody().then(() => {
-        init();
-    }).catch(err => {
-        console.error(err);
-    });
+    if (!site.disabled) {
+        protectStyle();
+        checkBody().then(() => {
+            init();
+        }).catch(err => {
+            console.error(err);
+        });
+    }
 })();

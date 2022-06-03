@@ -27,7 +27,6 @@ const meta = `// ==UserScript==
 // @grant        GM_setValue
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
-
 ${includeList}
 
 // ==/UserScript==

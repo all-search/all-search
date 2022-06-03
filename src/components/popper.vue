@@ -1,27 +1,30 @@
 <template>
-  <slot name="trigger" v-bind="{ show, hide }" />
+  <slot ref="trigger"
+        name="trigger"
+        v-bind="{ show, hide }"/>
   <transition name="slide-fade">
     <Teleport
       to="body">
       <div
         :class="popperClass"
         ref="popover"
-        :data-show="isVisible"
+        :data-show="visible"
         :data-initialized="popperInstance !== null"
         class="popover-content"
         @mouseenter="show"
         @mouseleave="hide">
-<!--        <div class="arrow" data-popper-arrow />-->
-        <slot />
+        <!--        <div class="arrow" data-popper-arrow />-->
+        <slot/>
       </div>
     </Teleport>
   </transition>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { createPopper } from '@popperjs/core'
 import useTimeout from '../util/useTimeout.js'
+import { onClickOutside } from '../util/onClickOutside'
 
 export default {
   props: {
@@ -39,7 +42,8 @@ export default {
     }
   },
   setup (props) {
-    const isVisible = ref(false)
+    const visible = ref(false)
+    const trigger = ref(null)
     const popover = ref(null)
     const popperInstance = ref(null)
     const { registerTimeout, cancelTimeout } = useTimeout()
@@ -79,21 +83,39 @@ export default {
       }
     }
 
+    let stopFn
+
+    function handleClickOutside (target) {
+      if (!stopFn) {
+        stopFn = onClickOutside(target, hide, {
+          ignore: [
+            popover.value
+          ]
+        })
+      }
+    }
+
+    onUnmounted(()=> {
+      stopFn()
+    })
+
     function show (target) {
-      isVisible.value = true
+      visible.value = true
       createPopover(target)
       cancelTimeout()
+      handleClickOutside(target)
     }
 
     function hide () {
       registerTimeout(() => {
-        isVisible.value = false
+        visible.value = false
         destroyPopover()
       }, 200)
     }
 
     return {
-      isVisible,
+      visible,
+      trigger,
       popover,
       popperInstance,
       show,
