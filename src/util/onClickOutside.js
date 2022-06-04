@@ -36,22 +36,9 @@ export function onClickOutside (
   window.addEventListener('click', listener, {
     passive: true, capture
   })
-  window.addEventListener('pointermove', listener, {
-    passive: true, capture
-  })
-  const pointerdownFn = (e) => {
-    const el = target
-    shouldListen.value = !!el && !e.composedPath().includes(el)
-  }
-  window.addEventListener('pointerdown', pointerdownFn, { passive: true })
-  const pointerupFn = (e) => {
-    fallback = window.setTimeout(() => listener(e), 50)
-  }
-  window.addEventListener('pointerup', pointerupFn, { passive: true })
+  window.addEventListener('pointerdown', listener, { passive: true })
   return () => {
     window.removeEventListener('click', listener)
-    window.removeEventListener('pointermove', listener)
-    window.removeEventListener('pointerdown', pointerdownFn)
-    window.removeEventListener('pointerup', pointerupFn)
+    window.removeEventListener('pointerdown', listener)
   }
 }

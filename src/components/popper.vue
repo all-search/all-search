@@ -50,6 +50,7 @@ export default {
 
     function createPopover (target) {
       if (popperInstance.value) {
+        visible.value = true
         return
       }
       popperInstance.value = createPopper(
@@ -76,12 +77,12 @@ export default {
       )
     }
 
-    function destroyPopover () {
+/*    function destroyPopover () {
       if (popperInstance.value) {
         popperInstance.value.destroy()
         popperInstance.value = null
       }
-    }
+    }*/
 
     let stopFn
 
@@ -109,7 +110,6 @@ export default {
     function hide () {
       registerTimeout(() => {
         visible.value = false
-        destroyPopover()
       }, 100)
     }
 
