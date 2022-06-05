@@ -13,13 +13,38 @@ const styleInjectPath = require
   .resolve('./src/util/injectStyle.js')
   .replace(/[\\/]+/g, '/')
 
-export default {
+const config =  {
   input: 'src/as-script/main.js',
   output: [
     {
       name: 'allSearch',
       file: 'build/index.user.js',
-      format: 'iife'
+      format: 'iife',
+      plugins: [
+        terser({
+          compress: false,
+          mangle: false,
+          output: {
+            beautify: true,
+            preamble: meta('tm')
+          }
+        })
+      ]
+    },
+    {
+      name: 'allSearch',
+      file: 'build/index.sc.user.js',
+      format: 'iife',
+      plugins: [
+        terser({
+          compress: false,
+          mangle: false,
+          output: {
+            beautify: true,
+            preamble: meta('sc')
+          }
+        })
+      ]
     }
   ],
   plugins: [
@@ -50,14 +75,8 @@ export default {
         'process.env.NODE_ENV': JSON.stringify('production'),
         'process.env.VUE_ENV': JSON.stringify('browser')
       }
-    }),
-    terser({
-      compress: false,
-      mangle: false,
-      output: {
-        beautify: true,
-        preamble: meta
-      }
     })
   ]
 }
+
+export default config

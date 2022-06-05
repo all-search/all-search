@@ -5,19 +5,29 @@ const endOfLine = require('os').EOL
 
 const now = new Date()
 
-const includeList = list
-  .map(item => `// @include      ${item.url}`)
-  .join(endOfLine)
+const includeList = type => {
+  if (type === 'tm') {
+    return list
+      .map(item => `// @include      ${item.url}`)
+      .join(endOfLine)
+  } else {
+    return '// @include      *'
+  }
+}
 
-const meta = `// ==UserScript==
+const scriptUrl = type => {
+  return `https://unpkg.com/all-search@latest/build/${type === 'tm' ? 'index.user.js': 'index.sc.user.js'}`
+}
+
+const meta = type => `// ==UserScript==
 // @name         ${pkg.name} 全搜v${pkg.version}，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      ${pkg.version}
 // @description  ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日更新 ${pkg.description}
 // @author       ${pkg.author}
 // @license      ${pkg.license}
 // @homepageURL  ${pkg.homepage}
-// @updateURL    https://unpkg.com/all-search@latest/build/index.user.js
-// @downloadURL  https://unpkg.com/all-search@latest/build/index.user.js
+// @updateURL    ${scriptUrl(type)}
+// @downloadURL  ${scriptUrl(type)}
 // @supportURL
 // @noframes
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
@@ -27,7 +37,7 @@ const meta = `// ==UserScript==
 // @grant        GM_setValue
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
-${includeList}
+${includeList(type)}
 
 // ==/UserScript==
 /* eslint-disable */
