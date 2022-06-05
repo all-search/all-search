@@ -7,14 +7,14 @@
 A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.
 
 ## 设置地址
+[码云](https://endday.gitee.io/all-search/)
 [github](https://endday.github.io/all-search/)
 
 ## 脚本地址
-~~greasyfork地址(地址已被封)~~
+[greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)
 
-![npm](https://img.shields.io/npm/v/all-search) （以npm徽章的版本号为准）
-
-[点击安装](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
+[jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
+[unpkg地址](https://unpkg.com/all-search@latest/build/index.user.js)
 
 最新的版本链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
 最新的版本链接2：https://cdn.jsdelivr.net/gh/endday/all-search@master/build/index.user.js
