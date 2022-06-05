@@ -6,26 +6,30 @@
 
 A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.
 
-## 设置地址
-[码云](https://endday.gitee.io/all-search/)
-[github](https://endday.github.io/all-search/)
+#### 有什么需求、建议、问题直接提 Issues
+#### 做这个脚本纯粹是个人兴趣，用爱发电。
+#### 开源不易，多多鼓励，如果觉得还不错，就去 Github 点个⭐ Star 鼓励一下, 或者把脚本分享给身边的人。
 
 ## 脚本地址
 脚本猫的版本有兼容性差异，脚本猫用户请使用脚本猫专属安装地址
 
 ### greasyFork
-[greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)
-[jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
-[unpkg地址](https://unpkg.com/all-search@latest/build/index.user.js)
-最新的版本链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
-最新的版本链接2：https://cdn.jsdelivr.net/gh/endday/all-search@master/build/index.user.js
+* [greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)
+* [jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
+* [unpkg地址](https://unpkg.com/all-search@latest/build/index.user.js)
+* 最新的版本链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
+* 最新的版本链接2：https://cdn.jsdelivr.net/gh/endday/all-search@master/build/index.user.js
 
 ### 脚本猫
-[脚本猫ScriptCat地址](https://scriptcat.org/script-show-page/477)
-[jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.sc.user.js)
-[unpkg地址](https://unpkg.com/all-search@latest/build/index.sc.user.js)
-最新的版本链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.sc.user.js
-最新的版本链接2：https://cdn.jsdelivr.net/gh/endday/all-search@master/build/index.sc.user.js
+* [脚本猫ScriptCat地址](https://scriptcat.org/script-show-page/477)
+* [jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.sc.user.js)
+* [unpkg地址](https://unpkg.com/all-search@latest/build/index.sc.user.js)
+* 最新的版本链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.sc.user.js
+* 最新的版本链接2：https://cdn.jsdelivr.net/gh/endday/all-search@master/build/index.sc.user.js
+
+## 设置地址
+* [码云](https://endday.gitee.io/all-search/)
+* [github](https://endday.github.io/all-search/)
 
 ## 特色功能
 * [图形界面添加网址](https://endday.github.io/all-search/)
@@ -38,7 +42,6 @@ A top fixed menu that allows you to jump between various search engines, build b
     * 移动端为点击触发菜单
 
 ## 待完成
-
 * 文字选中工具栏
 * 快捷键唤起全局搜索栏（待定）
 * 常态隐藏，通过指定区域或按钮触发展示（后续不维护固定模式的css兼容）（待定）
@@ -63,5 +66,5 @@ npm run serve
 #### 构建油猴脚本
 记得改package.json中的版本号
 ```
-npm run buildScript
+npm run tmBuild
 ```
