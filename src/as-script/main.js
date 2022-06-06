@@ -27,7 +27,6 @@ function init () {
 
 if (!site.disabled) {
   protectStyle()
-
   checkBody().then(() => {
     init()
   }).catch(err => {

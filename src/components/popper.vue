@@ -8,6 +8,7 @@
       <div
         :class="popperClass"
         ref="popover"
+        v-show="visible"
         :data-show="visible"
         :data-initialized="popperInstance !== null"
         class="popover-content"

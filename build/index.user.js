@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜v1.2.7，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.2.7
-// @description  2022年6月5日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @description  2022年6月6日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
 // @homepageURL  https://github.com/endday/all-search
@@ -2229,14 +2229,14 @@
         }, {
             default: Vue.withCtx(() => [ (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
                 to: "body"
-            }, [ Vue.createElementVNode("div", {
+            }, [ Vue.withDirectives(Vue.createElementVNode("div", {
                 class: Vue.normalizeClass([ $props.popperClass, "popover-content" ]),
                 ref: "popover",
                 "data-show": $setup.visible,
                 "data-initialized": $setup.popperInstance !== null,
                 onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.show && $setup.show(...args)),
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
-            }, [ Vue.createCommentVNode('        <div class="arrow" data-popper-arrow />'), Vue.renderSlot(_ctx.$slots, "default") ], 42, _hoisted_1$6) ])) ]),
+            }, [ Vue.createCommentVNode('        <div class="arrow" data-popper-arrow />'), Vue.renderSlot(_ctx.$slots, "default") ], 42, _hoisted_1$6), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
             _: 3
         }) ], 64);
     }
@@ -2849,7 +2849,7 @@
         }) ])) ], 64);
     }
     var sideBar = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__file", "E:\\project\\all-search\\src\\components\\side-bar.vue" ] ]);
-    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\n.body-vertical {\n  margin-left: 100px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n}\n\n.as-horizontal.show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n}\n\n.as-container {\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\n.body-vertical {\n  margin-left: 100px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n}\n\n.as-horizontal.show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",
@@ -2905,6 +2905,9 @@
         const _component_as_menu = Vue.resolveComponent("as-menu");
         const _component_side_bar = Vue.resolveComponent("side-bar");
         return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.withDirectives(Vue.createElementVNode("div", {
+            style: {
+                opacity: "0"
+            },
             class: Vue.normalizeClass([ "as-container", $setup.classList ])
         }, [ Vue.createVNode(_component_logo, {
             mode: $setup.mode

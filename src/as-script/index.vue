@@ -1,5 +1,6 @@
 <template>
   <div v-show="visible"
+       style="opacity: 0"
        class="as-container"
        :class="classList">
     <logo :mode="mode"/>
@@ -52,6 +53,7 @@ export default {
     }, {
       immediate: true
     })
+
     function updateSite () {
       const curSite = siteInfo(true)
       site.url = curSite.url
@@ -60,6 +62,7 @@ export default {
       site.style = curSite.style
       site.keyword = curSite.keyword
     }
+
     onFullScreenChange(() => {
       fullScreen.value = isFullScreen()
     })
@@ -133,6 +136,7 @@ body, #all-search {
 }
 
 .as-container {
+  opacity: 1 !important;
   position: fixed;
   display: flex;
   background-color: var(--as-bg-color);
