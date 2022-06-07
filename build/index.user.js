@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         all-search 全搜v1.2.7，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.2.7
-// @description  2022年6月6日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @description  2022年6月7日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
 // @homepageURL  https://github.com/endday/all-search
-// @updateURL    https://unpkg.com/all-search@latest/build/index.user.js
-// @downloadURL  https://unpkg.com/all-search@latest/build/index.user.js
+// @updateURL    https://unpkg.com/all-search@latest/build/index.user.js'}
+// @downloadURL  https://unpkg.com/all-search@latest/build/index.user.js'}
 // @supportURL
 // @noframes
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
@@ -16,6 +16,7 @@
 // @grant        GM_setValue
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
+
 // @include      /\/\/www\.google\.com(.hk)?\/search/
 // @include      /\/\/www\.baidu\.com\/$/
 // @include      /\/\/www\.baidu\.com\/s\?/
@@ -89,9 +90,7 @@
 // @include      /\/\/endday\.github\.io/
 // @include      /\/\/endday\.gitee\.io/
 // @include      /\/\/localhost/
-
 // ==/UserScript==
-/* eslint-disable */
 
 (function() {
     "use strict";
@@ -110,7 +109,8 @@
         tmServe: "vue-cli-service serve --fix --tm",
         build: "vue-cli-service build",
         lint: "vue-cli-service lint",
-        tmBuild: "rollup -c"
+        tmDev: "cross-env NODE_ENV=development rollup -c",
+        tmBuild: "cross-env NODE_ENV=production rollup -c"
     };
     var dependencies = {
         "@popperjs/core": "^2.9.2",
@@ -136,17 +136,18 @@
         autoprefixer: "^10.4.7",
         "babel-eslint": "^10.1.0",
         "babel-plugin-import": "^1.13.3",
+        "cross-env": "^7.0.3",
         eslint: "^7.32.0",
         "eslint-plugin-vue": "^7.7.0",
         postcss: "^8.4.13",
         rollup: "^2.72.1",
         "rollup-plugin-delete": "^1.2.0",
+        "rollup-plugin-external-globals": "^0.6.1",
         "rollup-plugin-styles": "^4.0.0",
         "rollup-plugin-terser": "^5.2.0",
         sass: "^1.32.8",
         "sass-loader": "^10.1.1",
-        vite: "^2.6.7",
-        "rollup-plugin-external-globals": "^0.6.1"
+        vite: "^2.6.7"
     };
     var pkg = {
         name: name,

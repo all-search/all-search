@@ -1,3 +1,4 @@
+import path from 'path'
 import pkg from '../../package.json'
 import { list } from './loadList'
 
@@ -15,12 +16,12 @@ const includeList = type => {
   }
 }
 
+const fileName = type => type === 'tm' ? 'index.user.js': 'index.sc.user.js'
 const scriptUrl = type => {
-  return `https://unpkg.com/all-search@latest/build/${type === 'tm' ? 'index.user.js': 'index.sc.user.js'}`
+  return `https://unpkg.com/all-search@latest/build/${fileName(type)}'}`
 }
 
-const meta = type => `// ==UserScript==
-// @name         ${pkg.name} 全搜v${pkg.version}，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+const meta = type => `// @name         ${pkg.name} 全搜v${pkg.version}，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      ${pkg.version}
 // @description  ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日更新 ${pkg.description}
 // @author       ${pkg.author}
@@ -37,10 +38,17 @@ const meta = type => `// ==UserScript==
 // @grant        GM_setValue
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
-${includeList(type)}
-
-// ==/UserScript==
-/* eslint-disable */
 `
 
-export default meta
+export const proMeta = type => `// ==UserScript==
+${meta(type)}
+${includeList(type)}
+// ==/UserScript==
+`
+
+export const devMeta = type => `// ==UserScript==
+${meta(type)}
+${includeList(type)}
+// @require      file:///${path.join(__dirname, `/build/${fileName(type)}`)}
+// ==/UserScript==
+`

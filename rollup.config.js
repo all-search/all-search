@@ -1,17 +1,21 @@
+import fs from 'fs'
+import path from 'path'
 import commonjs from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import json from '@rollup/plugin-json'
 import vue from '@vitejs/plugin-vue'
 import { terser } from 'rollup-plugin-terser'
-import del from 'rollup-plugin-delete'
+// import del from 'rollup-plugin-delete'
 import styles from 'rollup-plugin-styles'
 import externalGlobals from 'rollup-plugin-external-globals'
-import meta from './src/config/meta'
+import { proMeta, devMeta } from './src/config/meta'
 
 const styleInjectPath = require
   .resolve('./src/util/injectStyle.js')
   .replace(/[\\/]+/g, '/')
+
+const isDev = process.env.NODE_ENV === 'development'
 
 const config =  {
   input: 'src/as-script/main.js',
@@ -26,9 +30,10 @@ const config =  {
           mangle: false,
           output: {
             beautify: true,
-            preamble: meta('tm')
+            preamble: proMeta('tm')
           }
-        })
+        }),
+        buildDev(devMeta('tm'), 'tm')
       ]
     },
     {
@@ -41,14 +46,15 @@ const config =  {
           mangle: false,
           output: {
             beautify: true,
-            preamble: meta('sc')
+            preamble: proMeta('sc')
           }
-        })
+        }),
+        buildDev(devMeta('sc'), 'sc')
       ]
     }
   ],
   plugins: [
-    del({ targets: 'build/*' }),
+    // del({ targets: 'build/*' }),
     vue(),
     json(),
     styles({
@@ -77,6 +83,18 @@ const config =  {
       }
     })
   ]
+}
+
+function buildDev(text, type) {
+  return {
+    name: "rollup-plugin-buildDev",
+    generateBundle() {
+      if (isDev) {
+        const fileName = type === 'tm' ? 'index.dev.js': 'index.sc.dev.js'
+        fs.writeFileSync(path.join(__dirname, `/build/${fileName}`), text)
+      }
+    }
+  }
 }
 
 export default config
