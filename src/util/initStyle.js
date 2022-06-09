@@ -1,27 +1,26 @@
 import { unref } from 'vue'
 import {
   addStyleContent,
-  addStyleResource,
   removeNode
 } from './index'
 import {
   withHookBefore
 } from './hook'
 
-export const initBodyClass = (mode, currentSite) => {
+export const initBodyClass = (mode, currentSite, remove = false) => {
   const body = document.body
   body.classList.remove('body-vertical', 'body-horizontal')
-  if (!currentSite.invisible) {
-    if (mode) {
-      const newValue = `body-${mode}`
-      body.classList.add(newValue)
-    }
+  if (remove) {
+    return
+  }
+  if (!currentSite.invisible && mode) {
+    body.classList.add(`body-${mode}`)
   }
 }
 
-export const addCustomStyle = (mode, currentSite) => {
+export const addCustomStyle = (mode, currentSite, remove) => {
   removeNode('.as-custom-style')
-  if (currentSite.invisible) {
+  if (currentSite.invisible || remove) {
     return
   }
   if (currentSite.style) {
@@ -59,8 +58,8 @@ export const initStyle = function () {
 
 }
 
-export const addStyleForCurrentSite = function (mode, site) {
+export const addStyleForCurrentSite = function (mode, site, remove = false) {
   const modeVal = unref(mode)
-  addCustomStyle(modeVal, site)
-  initBodyClass(modeVal, site)
+  addCustomStyle(modeVal, site, remove)
+  initBodyClass(modeVal, site, remove)
 }

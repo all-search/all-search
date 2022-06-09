@@ -14,8 +14,8 @@
     "tmServe": "vue-cli-service serve --fix --tm",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "tmDev": "cross-env NODE_ENV=development rollup -c",
-    "tmBuild": "cross-env NODE_ENV=production rollup -c -w"
+    "tmDev": "cross-env NODE_ENV=development rollup -c -w",
+    "tmBuild": "cross-env NODE_ENV=production rollup -c"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",

@@ -8,7 +8,10 @@
       :mode="mode"/>
     <side-bar/>
   </div>
-  <!--  <hoverButton :show="!show"/>-->
+  <hoverButton
+    :show="!show"
+    @show="showVal = true"
+  />
 </template>
 
 <script>
@@ -17,20 +20,22 @@ import { initStyle, addStyleForCurrentSite } from '../util/initStyle'
 import { siteInfo } from '../config/loadList'
 import { routerChange } from '../util/routerChange'
 import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
+import useScroll from '../util/useScroll'
 import useMode from '../components/useMode'
 import logo from '../components/logo'
 import asMenu from '../components/menu'
 import sideBar from '../components/side-bar'
+import hoverButton from '../components/hover-button'
 
 export default {
   name: 'all-search',
   components: {
     logo,
     asMenu,
-    sideBar
+    sideBar,
+    hoverButton
   },
   setup () {
-    // const show = ref(false)
     const fullScreen = ref(false)
     const { mode } = useMode()
     let site = reactive({
@@ -40,16 +45,27 @@ export default {
       style: {},
       keyword: null
     })
-    const classList = computed(() => ({
-      [`as-${mode.value}`]: true
-    }))
+    const { direction } = useScroll()
+
+    const showVal = ref(false)
+    const show = computed(() => showVal.value || direction.value > 0)
+    watch(direction, value => {
+      if (showVal.value && value < 0) {
+        showVal.value = false
+      }
+    })
+    const classList = computed(() => ([
+      `as-${mode.value}`,
+      show.value ? 'show' : 'hide'
+    ]))
+
     const visible = computed(() => {
       return !site.invisible && !unref(fullScreen)
     })
     initStyle()
     updateSite()
-    watch(mode, newMode => {
-      addStyleForCurrentSite(newMode, site)
+    watch([mode, show], ([newMode, newShow]) => {
+      addStyleForCurrentSite(newMode, site, !newShow)
     }, {
       immediate: true
     })
@@ -70,10 +86,13 @@ export default {
       updateSite()
       addStyleForCurrentSite(mode, site)
     })
+
     return {
       mode,
       classList,
-      visible
+      visible,
+      show,
+      showVal
     }
   }
 }
@@ -119,10 +138,15 @@ body, #all-search {
   top: 0;
   border-bottom: 1px var(--as-border-color) solid;
   flex-direction: row;
-  //transform: translateY(-100%);
+}
+
+.as-horizontal.hide {
+  transition: transform 0.38s;
+  transform: translateY(-100%);
 }
 
 .as-horizontal.show {
+  transition: transform 0.38s;
   transform: translateY(0);
 }
 
