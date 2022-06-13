@@ -9,8 +9,8 @@
     <side-bar/>
   </div>
   <hoverButton
-    :show="!show"
-    @show="showVal = true"
+    :show="show"
+    @change="changeShow"
   />
 </template>
 
@@ -20,7 +20,6 @@ import { initStyle, addStyleForCurrentSite } from '../util/initStyle'
 import { siteInfo } from '../config/loadList'
 import { routerChange } from '../util/routerChange'
 import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
-import useScroll from '../util/useScroll'
 import useMode from '../components/useMode'
 import logo from '../components/logo'
 import asMenu from '../components/menu'
@@ -45,20 +44,15 @@ export default {
       style: {},
       keyword: null
     })
-    const { direction } = useScroll()
 
-    const showVal = ref(false)
-    const show = computed(() => showVal.value || direction.value > 0)
-    watch(direction, value => {
-      if (showVal.value && value < 0) {
-        showVal.value = false
-      }
-    })
+    const show = ref(false)
+    function changeShow (value) {
+      show.value = value
+    }
     const classList = computed(() => ([
       `as-${mode.value}`,
       show.value ? 'show' : 'hide'
     ]))
-
     const visible = computed(() => {
       return !site.invisible && !unref(fullScreen)
     })
@@ -69,7 +63,6 @@ export default {
     }, {
       immediate: true
     })
-
     function updateSite () {
       const curSite = siteInfo(true)
       site.url = curSite.url
@@ -78,7 +71,6 @@ export default {
       site.style = curSite.style
       site.keyword = curSite.keyword
     }
-
     onFullScreenChange(() => {
       fullScreen.value = isFullScreen()
     })
@@ -86,13 +78,12 @@ export default {
       updateSite()
       addStyleForCurrentSite(mode, site)
     })
-
     return {
       mode,
       classList,
       visible,
       show,
-      showVal
+      changeShow
     }
   }
 }
@@ -141,12 +132,12 @@ body, #all-search {
 }
 
 .as-horizontal.hide {
-  transition: transform 0.38s;
+  transition: transform 0.1s;
   transform: translateY(-100%);
 }
 
 .as-horizontal.show {
-  transition: transform 0.38s;
+  transition: transform 0.1s;
   transform: translateY(0);
 }
 

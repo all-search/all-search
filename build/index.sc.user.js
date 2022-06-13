@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜v1.2.7，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.2.7
-// @description  2022年6月9日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
+// @description  2022年6月13日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
 // @homepageURL  https://github.com/endday/all-search
@@ -608,34 +608,6 @@
             document.removeEventListener("resize", handleResize);
         };
     }
-    function throttle$1(fn, delay) {
-        let canRun = true;
-        return function() {
-            if (!canRun) return;
-            canRun = false;
-            setTimeout(() => {
-                fn.apply(this, arguments);
-                canRun = true;
-            }, delay);
-        };
-    }
-    const y = Vue.ref(0);
-    const direction = Vue.ref(0);
-    function useScroll() {
-        const scrollHandler = throttle$1((function(e) {
-            const eventTarget = e.target === document ? e.target.documentElement : e.target;
-            const scrollTop = eventTarget.scrollTop;
-            direction.value = y.value - scrollTop;
-            y.value = scrollTop;
-        }), 50);
-        if (window) {
-            window.addEventListener("scroll", scrollHandler);
-        }
-        return {
-            y: y,
-            direction: direction
-        };
-    }
     const session$1 = getSession("mode");
     const getMode = val => {
         if (val !== "vertical" && val !== "horizontal") {
@@ -853,7 +825,7 @@
         };
     }();
     var trailingTimeout = 2;
-    function throttle(callback, delay) {
+    function throttle$1(callback, delay) {
         var leadingCall = false, trailingCall = false, lastCallTime = 0;
         function resolvePending() {
             if (leadingCall) {
@@ -893,7 +865,7 @@
             this.mutationsObserver_ = null;
             this.observers_ = [];
             this.onTransitionEnd_ = this.onTransitionEnd_.bind(this);
-            this.refresh = throttle(this.refresh.bind(this), REFRESH_DELAY);
+            this.refresh = throttle$1(this.refresh.bind(this), REFRESH_DELAY);
         }
         ResizeObserverController.prototype.addObserver = function(observer) {
             if (!~this.observers_.indexOf(observer)) {
@@ -2813,7 +2785,41 @@
         }) ])) ], 64);
     }
     var sideBar = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ], [ "__file", "E:\\project\\all-search\\src\\components\\side-bar.vue" ] ]);
-    var css$1 = "\n.hover-button[data-v-07eb5373] {\r\n    position: fixed;\r\n    z-index: 99999;\r\n    top: 0;\r\n    padding: 0px 16px;\r\n    height: 28px;\r\n    line-height: 28px;\r\n    font-weight: 600;\r\n    font-size: 17px;\r\n    color: var(--as-primary-color);\r\n    background: #fff;\r\n    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\r\n    border: 1px var(--as-border-color) solid;\r\n    left: 50%;\r\n    transition: transform 0.38s;\r\n    transform: translateY(0) translateX(-50%);\n}\n.hover-button.hide[data-v-07eb5373] {\r\n    transform: translateY(-100%) translateX(-50%);\n}\r\n";
+    function throttle(fn, delay) {
+        let canRun = true;
+        return function() {
+            if (!canRun) return;
+            canRun = false;
+            setTimeout(() => {
+                fn.apply(this, arguments);
+                canRun = true;
+            }, delay);
+        };
+    }
+    const y = Vue.ref(0);
+    const direction = Vue.ref(0);
+    function useScroll() {
+        const scrollHandler = throttle((function(e) {
+            const eventTarget = e.target === document ? e.target.documentElement : e.target;
+            const scrollTop = eventTarget.scrollTop;
+            if (scrollTop < y.value) {
+                direction.value = "top";
+            } else if (scrollTop > y.value) {
+                direction.value = "bottom";
+            } else {
+                direction.value = "mid";
+            }
+            y.value = scrollTop;
+        }), 50);
+        if (window) {
+            window.addEventListener("scroll", scrollHandler);
+        }
+        return {
+            y: y,
+            direction: direction
+        };
+    }
+    var css$1 = "\n.hover-button[data-v-07eb5373] {\r\n  position: fixed;\r\n  z-index: 99999;\r\n  top: 0;\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\r\n  font-weight: 600;\r\n  font-size: 17px;\r\n  color: var(--as-primary-color);\r\n  background: #fff;\r\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\r\n  border: 1px var(--as-border-color) solid;\r\n  left: 50%;\r\n  transition: transform 0.2s;\r\n  transform: translateY(0) translateX(-50%);\r\n  opacity: 0.6;\n}\n.hover-button.hide[data-v-07eb5373] {\r\n  transition: transform 0.2s;\r\n  transform: translateY(-100%) translateX(-50%);\n}\r\n";
     injectStyle(css$1);
     const _sfc_main$1 = {
         name: "hover-button",
@@ -2823,18 +2829,24 @@
                 default: true
             }
         },
-        setup(props, context) {
+        setup(props, ctx) {
             const useClick = isMobile();
             const handleMouseEnter = () => {
                 if (!useClick) {
-                    context.emit("show", true);
+                    ctx.emit("change", true);
                 }
             };
             const handleClick = () => {
                 if (useClick) {
-                    context.emit("show", true);
+                    ctx.emit("change", true);
                 }
             };
+            const {direction: direction} = useScroll();
+            Vue.watch(direction, value => {
+                if (props.show && value === "top") {
+                    ctx.emit("change", false);
+                }
+            });
             return {
                 handleMouseEnter: handleMouseEnter,
                 handleClick: handleClick
@@ -2844,14 +2856,14 @@
     function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("div", {
             class: Vue.normalizeClass([ "hover-button", {
-                hide: !$props.show
+                hide: $props.show
             } ]),
             onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.handleMouseEnter && $setup.handleMouseEnter(...args)),
             onClick: _cache[1] || (_cache[1] = (...args) => $setup.handleClick && $setup.handleClick(...args))
         }, " All Search ", 34);
     }
     var hoverButton = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-07eb5373" ], [ "__file", "E:\\project\\all-search\\src\\components\\hover-button.vue" ] ]);
-    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\n.body-vertical {\n  margin-left: 100px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n}\n\n.as-horizontal.hide {\n  transition: transform 0.38s;\n  transform: translateY(-100%);\n}\n\n.as-horizontal.show {\n  transition: transform 0.38s;\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\n.body-vertical {\n  margin-left: 100px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n}\n\n.as-horizontal.hide {\n  transition: transform 0.1s;\n  transform: translateY(-100%);\n}\n\n.as-horizontal.show {\n  transition: transform 0.1s;\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",
@@ -2871,14 +2883,10 @@
                 style: {},
                 keyword: null
             });
-            const {direction: direction} = useScroll();
-            const showVal = Vue.ref(false);
-            const show = Vue.computed(() => showVal.value || direction.value > 0);
-            Vue.watch(direction, value => {
-                if (showVal.value && value < 0) {
-                    showVal.value = false;
-                }
-            });
+            const show = Vue.ref(false);
+            function changeShow(value) {
+                show.value = value;
+            }
             const classList = Vue.computed(() => [ `as-${mode.value}`, show.value ? "show" : "hide" ]);
             const visible = Vue.computed(() => !site.invisible && !Vue.unref(fullScreen));
             updateSite();
@@ -2907,7 +2915,7 @@
                 classList: classList,
                 visible: visible,
                 show: show,
-                showVal: showVal
+                changeShow: changeShow
             };
         }
     };
@@ -2926,9 +2934,9 @@
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_as_menu, {
             mode: $setup.mode
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.createVNode(_component_hoverButton, {
-            show: !$setup.show,
-            onShow: _cache[0] || (_cache[0] = $event => $setup.showVal = true)
-        }, null, 8, [ "show" ]) ], 64);
+            show: $setup.show,
+            onChange: $setup.changeShow
+        }, null, 8, [ "show", "onChange" ]) ], 64);
     }
     var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ], [ "__file", "E:\\project\\all-search\\src\\as-script\\index.vue" ] ]);
     !function(e) {

@@ -10,7 +10,13 @@ export default function () {
   const scrollHandler = throttle(function (e) {
     const eventTarget = (e.target === document ? e.target.documentElement : e.target)
     const scrollTop = eventTarget.scrollTop
-    direction.value = y.value - scrollTop
+    if(scrollTop < y.value) {
+      direction.value = 'top'
+    } else if(scrollTop > y.value) {
+      direction.value = 'bottom'
+    } else {
+      direction.value = 'mid'
+    }
     y.value = scrollTop
   }, 50)
   if (window) {
