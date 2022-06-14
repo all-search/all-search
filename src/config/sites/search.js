@@ -24,20 +24,11 @@ export default [
     url: 'https://www.so.com/s?ie=utf-8&q=%s'
   },
   {
-    nameZh: '雅虎',
-    url: 'https://search.yahoo.com/search;?p=%s'
-  },
-  {
     nameZh: '搜狗',
     url: 'https://www.sogou.com/web?query=%s'
   },
   {
     nameZh: 'Yandex',
     url: 'https://yandex.com/search/?text=%s'
-  },
-  {
-    nameZh: 'startpage',
-    url: 'https://www.startpage.com/sp/search?query=%s',
-    icon: 'https://www.startpage.com/sp/cdn/favicons/favicon-16x16--default.png'
   }
 ]

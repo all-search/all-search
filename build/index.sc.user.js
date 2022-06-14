@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.9，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.9
+// @name         all-search 全搜v1.2.10，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.10
 // @description  2022年6月14日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name = "all-search";
-    var version$1 = "1.2.9";
+    var version$1 = "1.2.10";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -1659,18 +1659,11 @@
         nameZh: "360",
         url: "https://www.so.com/s?ie=utf-8&q=%s"
     }, {
-        nameZh: "雅虎",
-        url: "https://search.yahoo.com/search;?p=%s"
-    }, {
         nameZh: "搜狗",
         url: "https://www.sogou.com/web?query=%s"
     }, {
         nameZh: "Yandex",
         url: "https://yandex.com/search/?text=%s"
-    }, {
-        nameZh: "startpage",
-        url: "https://www.startpage.com/sp/search?query=%s",
-        icon: "https://www.startpage.com/sp/cdn/favicons/favicon-16x16--default.png"
     } ];
     var translate = [ {
         nameZh: "百度翻译",
@@ -2105,13 +2098,19 @@
                 popperInstance.value = Popper.createPopper(target, popover.value, {
                     strategy: props.strategy,
                     placement: props.placement,
-                    modifiers: [ {
+                    modifiers: [ "keepTogether", {
                         name: "offset",
                         options: {
-                            offset: [ 0, 10 ]
+                            offset: [ 0, 0 ]
                         }
                     } ]
                 });
+            }
+            function destroyPopover() {
+                if (popperInstance.value) {
+                    popperInstance.value.destroy();
+                    popperInstance.value = null;
+                }
             }
             let stopFn;
             function handleClickOutside(target) {
@@ -2133,6 +2132,7 @@
             function hide() {
                 registerTimeout(() => {
                     visible.value = false;
+                    destroyPopover();
                 }, 100);
             }
             return {
