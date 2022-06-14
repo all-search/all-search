@@ -78,12 +78,12 @@ export default {
       )
     }
 
-/*    function destroyPopover () {
+    function destroyPopover () {
       if (popperInstance.value) {
         popperInstance.value.destroy()
         popperInstance.value = null
       }
-    }*/
+    }
 
     let stopFn
 

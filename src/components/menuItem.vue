@@ -8,8 +8,9 @@
          @mouseenter="show($event.target)"
          @mouseleave="hide"
          href="javascript:void 0"
-         @click="handleClick(item.list[0], false, isMobile)"
-         @click.middle="handleClick(item.list[0], true)">
+         @click.exact="handleClick(item.list[0], false, isMobile)"
+         @click.ctrl.exact="handleClick(item.list[0], true)"
+         @click.middle.exact="handleClick(item.list[0], true)">
         <icon :name="item.name"/>
         <span
           class="as-menu-item-title"
@@ -23,8 +24,9 @@
         :key="`${item.name}_${i}`"
         v-show="child.data.visible">
         <a href="javascript:void 0"
-           @click="handleClick(child)"
-           @click.middle="handleClick(child, true)">
+           @click.exact="handleClick(child)"
+           @click.ctrl.exact="handleClick(child, true)"
+           @click.middle.exact="handleClick(child, true)">
           <div class="as-url-icon">
             <img
               :src="getFavicon(child)"
@@ -46,7 +48,7 @@ import { siteInfo } from '../config/loadList'
 import parseUrl from '../util/parseUrl'
 import { getKeyword } from '../util/index'
 import icon from '../components/icon'
-import useUa from '../components/useUa'
+import useUa from '../util/useUa'
 
 export default {
   name: 'menuItem',
