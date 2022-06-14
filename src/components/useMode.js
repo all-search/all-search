@@ -1,19 +1,23 @@
-import { ref, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { getSession, setSession } from '../util/index'
+
 const session = getSession('mode')
 
 const getMode = val => {
-  if (val !== 'vertical' && val !== 'horizontal') {
+  if (!['vertical', 'horizontal'].includes(val)) {
     return 'horizontal'
   }
   return val
 }
 
-const mode = ref(getMode(session))
+const modeRef = ref(getMode(session))
 
-watch(mode, (value) => {
-  const formatVal = getMode(value)
-  setSession('mode', formatVal)
+const mode = computed({
+  get: () => modeRef.value,
+  set: val => {
+    modeRef.value = val
+    setSession('mode', getMode(val))
+  }
 })
 
 export default function useMode () {

@@ -2,7 +2,7 @@
 
 ## all-search 全搜，一个搜索引擎快捷跳转菜单
 
-一个让你可以方便的在各个搜索引擎之间跳转的顶部固定菜单，基于vue，使用rollup构建。
+一个让你可以方便的在各个搜索引擎之间跳转的顶部固定菜单，基于vue3，使用rollup构建。
 
 A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.
 
@@ -36,15 +36,16 @@ A top fixed menu that allows you to jump between various search engines, build b
 * 拖动改变分类排序
 * 支持垂直和横向布局
 * 点击分类使用分类第一个地址打开
-* 鼠标中键点击地址可以打开新窗口
+* 鼠标中键点击地址可以打开新窗口（也可以使用ctrl+右键单击）
 * 提供移动端支持
     * 若页面宽度不足，可以进行滚动，
     * 移动端为点击触发菜单
+* 隐藏功能，通过按钮触发展示和隐藏
 
 ## 待完成
+* 英语支持
 * 文字选中工具栏
 * 快捷键唤起全局搜索栏（待定）
-* 常态隐藏，通过指定区域或按钮触发展示（后续不维护固定模式的css兼容）（待定）
 * 谷歌插件化（待定）
 
 ## 兼容和性能
@@ -59,12 +60,22 @@ A top fixed menu that allows you to jump between various search engines, build b
 QQ群号 148498263
 
 #### 本地开发
+设置页
 ```
 npm run serve
 ```
 
+脚本
+```
+npm run tmDev
+```
+运行后，将build目录下的index.dev.js复制到油猴或其他脚本管理器中。
+
+tmDev使用了watch，每次修改都会自动重新构建，index.dev.js文件内并没有代码，而是require引用了本地文件index.user.js，所以记得开启油猴的文件访问权限
+
 #### 构建油猴脚本
-记得改package.json中的版本号
+脚本的版本号引用package.json中的版本号，记得修改
 ```
 npm run tmBuild
 ```
+会打包出油猴使用的index.user.js和脚本猫专属的index.sc.user.js

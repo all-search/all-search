@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import useUa from '../util/useUa'
+import { isMobile } from '../util/index'
 
 export default {
   name: 'logo',
@@ -24,9 +24,8 @@ export default {
     }
   },
   setup () {
-    const { isMobile } = useUa()
     return {
-      isMobile
+      isMobile: isMobile()
     }
   }
 }

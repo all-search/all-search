@@ -1,6 +1,6 @@
 <template>
-  <div class="hover-button"
-       :class="{hide: show}"
+  <div class="as-hover-btn"
+       :class="className"
        @mouseenter="handleMouseEnter"
        @click="handleClick">
     All Search
@@ -8,12 +8,13 @@
 </template>
 
 <script>
-import { watch } from 'vue'
+import { watch, computed } from 'vue'
 import { isMobile } from '../util/index'
 import useScroll from '../util/useScroll'
+import useMode from '../components/useMode'
 
 export default {
-  name: 'hover-button',
+  name: 'hover-btn',
   props: {
     show: {
       type: Boolean,
@@ -21,52 +22,75 @@ export default {
     }
   },
   setup (props, ctx) {
-    const useClick = isMobile()
+    const { isMobileVal } = isMobile()
     const handleMouseEnter = () => {
-      if (!useClick) {
+      if (!isMobileVal) {
         ctx.emit('change', true)
       }
     }
     const handleClick = () => {
-      if (useClick) {
+      if (isMobileVal) {
         ctx.emit('change', true)
       }
     }
     const { direction } = useScroll()
     watch(direction, value => {
       if (props.show && value === 'top') {
-        ctx.emit('change', false)
+        // ctx.emit('change', false)
       }
     })
+
+    const { mode } = useMode()
+    const className = computed(() => {
+      return {
+        'as-hide': props.show,
+        [`as-hover-btn-${mode.value}`]: true
+      }
+    })
+
     return {
       handleMouseEnter,
-      handleClick
+      handleClick,
+      className
     }
   }
 }
 </script>
 
 <style scoped>
-.hover-button {
+.as-hover-btn {
   position: fixed;
   z-index: 99999;
-  top: 0;
-  padding: 0 16px;
-  height: 28px;
-  line-height: 28px;
   font-weight: 600;
   font-size: 17px;
   color: var(--as-primary-color);
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   border: 1px var(--as-border-color) solid;
-  left: 50%;
-  transition: transform 0.2s;
-  transform: translateY(0) translateX(-50%);
   opacity: 0.6;
+  cursor: pointer;
 }
 
-.hover-button.hide {
+.as-hover-btn-horizontal {
+  top: 0;
+  left: 50%;
+  transform: translateY(0) translateX(-50%);
+  padding: 0 16px;
+  height: 28px;
+  line-height: 28px;
+}
+
+.as-hover-btn-vertical {
+  left: 0;
+  top: 50%;
+  transform: translateY(-200%) translateX(0) rotate(90deg);
+  transform-origin: 0 100%;
+  padding: 0 16px;
+  height: 28px;
+  line-height: 28px;
+}
+
+.hover-btn.as-hide {
   transition: transform 0.2s;
   transform: translateY(-100%) translateX(-50%);
 }

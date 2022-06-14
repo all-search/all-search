@@ -11,7 +11,7 @@
          @click.exact="handleClick(item.list[0], false, isMobile)"
          @click.ctrl.exact="handleClick(item.list[0], true)"
          @click.middle.exact="handleClick(item.list[0], true)">
-        <icon :name="item.name"/>
+        <icon :name="item.name" />
         <span
           class="as-menu-item-title"
           v-text="item.nameZh">
@@ -42,13 +42,12 @@
 </template>
 
 <script>
-import { computed, unref } from 'vue'
+import { computed, unref, ref } from 'vue'
 import popper from '../components/popper'
 import { siteInfo } from '../config/loadList'
 import parseUrl from '../util/parseUrl'
-import { getKeyword } from '../util/index'
+import { getKeyword, isMobile } from '../util/index'
 import icon from '../components/icon'
-import useUa from '../util/useUa'
 
 export default {
   name: 'menuItem',
@@ -66,7 +65,7 @@ export default {
     }
   },
   setup (props) {
-    const { isMobile } = useUa()
+    const isMobileRef = ref(isMobile())
     const currentSite = siteInfo()
     const classList = computed(() =>
       props.mode === 'horizontal' ? 'horizontal' : 'vertical'
@@ -112,7 +111,7 @@ export default {
       getFavicon,
       handleMenuShow,
       handleClick,
-      isMobile
+      isMobile: isMobileRef
     }
   }
 }

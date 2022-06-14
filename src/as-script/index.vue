@@ -8,7 +8,7 @@
       :mode="mode"/>
     <side-bar/>
   </div>
-  <hoverButton
+  <hoverBtn
     :show="show"
     @change="changeShow"
   />
@@ -21,10 +21,11 @@ import { siteInfo } from '../config/loadList'
 import { routerChange } from '../util/routerChange'
 import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
 import useMode from '../components/useMode'
+import useSwitchShow from '../components/useSwitchShow'
 import logo from '../components/logo'
 import asMenu from '../components/menu'
 import sideBar from '../components/side-bar'
-import hoverButton from '../components/hover-button'
+import hoverBtn from '../components/hover-btn'
 
 export default {
   name: 'all-search',
@@ -32,7 +33,7 @@ export default {
     logo,
     asMenu,
     sideBar,
-    hoverButton
+    hoverBtn
   },
   setup () {
     const fullScreen = ref(false)
@@ -45,13 +46,13 @@ export default {
       keyword: null
     })
 
-    const show = ref(false)
+    const { show } = useSwitchShow()
     function changeShow (value) {
       show.value = value
     }
     const classList = computed(() => ([
       `as-${mode.value}`,
-      show.value ? 'show' : 'hide'
+      show.value ? 'as-show' : 'as-hide'
     ]))
     const visible = computed(() => {
       return !site.invisible && !unref(fullScreen)
@@ -76,7 +77,7 @@ export default {
     })
     routerChange(() => {
       updateSite()
-      addStyleForCurrentSite(mode, site)
+      addStyleForCurrentSite(mode, site, !show.value)
     })
     return {
       mode,
@@ -129,16 +130,13 @@ body, #all-search {
   top: 0;
   border-bottom: 1px var(--as-border-color) solid;
   flex-direction: row;
-}
-
-.as-horizontal.hide {
   transition: transform 0.1s;
-  transform: translateY(-100%);
-}
-
-.as-horizontal.show {
-  transition: transform 0.1s;
-  transform: translateY(0);
+  &.as-hide {
+    transform: translateY(-100%);
+  }
+  &.as-show {
+    transform: translateY(0);
+  }
 }
 
 .as-vertical {
@@ -148,6 +146,13 @@ body, #all-search {
   left: 0;
   border-right: 1px var(--as-border-color) solid;
   flex-direction: column;
+  transition: transform 0.1s;
+  &.as-hide {
+    transform: translateX(-100%);
+  }
+  &.as-show {
+    transform: translateX(0);
+  }
 }
 
 .as-container {

@@ -10,10 +10,7 @@ import {
 export const initBodyClass = (mode, currentSite, remove = false) => {
   const body = document.body
   body.classList.remove('body-vertical', 'body-horizontal')
-  if (remove) {
-    return
-  }
-  if (!currentSite.invisible && mode) {
+  if (!remove && !currentSite.invisible && mode) {
     body.classList.add(`body-${mode}`)
   }
 }
