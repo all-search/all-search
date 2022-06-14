@@ -61,6 +61,7 @@ export default {
           strategy: props.strategy,
           placement: props.placement,
           modifiers: [
+            'keepTogether', // 内置modifier
             /*{
               name: 'arrow',
               options: {
@@ -70,7 +71,7 @@ export default {
             {
               name: 'offset',
               options: {
-                offset: [0, 10]
+                offset: [0, 0]
               }
             }
           ]
