@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.7，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.7
+// @name         all-search 全搜v1.2.9，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.9
 // @description  2022年6月14日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。
 // @author       endday
 // @license      GPL-2.0
@@ -95,7 +95,7 @@
 (function() {
     "use strict";
     var name = "all-search";
-    var version$1 = "1.2.7";
+    var version$1 = "1.2.9";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，个人配置自动保存到谷歌插件。";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
