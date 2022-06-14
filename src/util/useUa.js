@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { isMobile } from '../util/index'
+import { isMobile } from './index'
 
 export default function () {
   return {

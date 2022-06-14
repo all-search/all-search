@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import useUa from '../components/useUa'
+import useUa from '../util/useUa'
 
 export default {
   name: 'logo',

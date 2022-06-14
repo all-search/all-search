@@ -46,7 +46,7 @@ import { siteInfo } from '../config/loadList'
 import parseUrl from '../util/parseUrl'
 import { getKeyword } from '../util/index'
 import icon from '../components/icon'
-import useUa from '../components/useUa'
+import useUa from '../util/useUa'
 
 export default {
   name: 'menuItem',
@@ -240,6 +240,7 @@ export default {
     margin: 0;
     line-height: 34px;
     font-weight: normal;
+    text-align: left;
   }
 
   .as-url-icon {
