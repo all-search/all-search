@@ -2344,7 +2344,7 @@
         class: "as-subMenu"
     };
     const _hoisted_4$2 = [ "onClick", "onMouseup" ];
-    const _hoisted_5$1 = {
+    const _hoisted_5 = {
         class: "as-url-icon"
     };
     const _hoisted_6 = [ "src" ];
@@ -2377,7 +2377,7 @@
                 href: "javascript:void 0",
                 onClick: [ Vue.withModifiers($event => $setup.handleClick(child), [ "exact" ]), Vue.withModifiers($event => $setup.handleClick(child, true), [ "ctrl", "exact" ]) ],
                 onMouseup: Vue.withModifiers($event => $setup.handleClick(child, true), [ "middle", "exact" ])
-            }, [ Vue.createElementVNode("div", _hoisted_5$1, [ Vue.createElementVNode("img", {
+            }, [ Vue.createElementVNode("div", _hoisted_5, [ Vue.createElementVNode("img", {
                 src: $setup.getFavicon(child),
                 onerror: "this.classList.add('error')"
             }, null, 8, _hoisted_6) ]), Vue.createElementVNode("p", {
@@ -2705,7 +2705,7 @@
         }, 8, [ "onClick" ]) ]);
     }
     var color = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ] ]);
-    var css$2 = ".as-setting {\n  display: flex;\n  position: relative;\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
+    var css$2 = ".as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
     injectStyle(css$2);
     const _sfc_main$2 = {
         name: "side-bar",
@@ -2752,15 +2752,12 @@
             };
         }
     };
-    const _hoisted_1 = {
-        class: "as-setting"
-    };
-    const _hoisted_2 = Vue.createElementVNode("header", {
+    const _hoisted_1 = Vue.createElementVNode("header", {
         class: "header"
     }, " 设置 ", -1);
-    const _hoisted_3 = Vue.createTextVNode("横向 ");
-    const _hoisted_4 = Vue.createTextVNode("竖向 ");
-    const _hoisted_5 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
+    const _hoisted_2 = Vue.createTextVNode("横向 ");
+    const _hoisted_3 = Vue.createTextVNode("竖向 ");
+    const _hoisted_4 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -2776,13 +2773,15 @@
         const _component_form_item = Vue.resolveComponent("form-item");
         const _component_color = Vue.resolveComponent("color");
         const _component_overlay = Vue.resolveComponent("overlay");
-        return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.createElementVNode("div", _hoisted_1, [ Vue.createElementVNode("div", {
+        return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.createElementVNode("div", {
+            class: Vue.normalizeClass([ "as-setting", $setup.mode ])
+        }, [ Vue.createElementVNode("div", {
             class: "as-setting-btn",
             onClick: _cache[0] || (_cache[0] = (...args) => $setup.hide && $setup.hide(...args))
         }, " 收起 "), Vue.createElementVNode("div", {
             class: "as-setting-btn",
             onClick: _cache[1] || (_cache[1] = (...args) => $setup.open && $setup.open(...args))
-        }, " 设置 ") ]), (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
+        }, " 设置 ") ], 2), (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
             to: "#all-search"
         }, [ Vue.createVNode(Vue.Transition, {
             name: "overlay",
@@ -2800,7 +2799,7 @@
                         role: "dialog",
                         class: "as-side-bar",
                         onClick: _cache[8] || (_cache[8] = Vue.withModifiers(() => {}, [ "stop" ]))
-                    }, [ _hoisted_2, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
+                    }, [ _hoisted_1, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
                         label: "方向"
                     }, {
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_as_radio, {
@@ -2809,7 +2808,7 @@
                             "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.mode = $event),
                             onChange: $setup.changeMode
                         }, {
-                            default: Vue.withCtx(() => [ _hoisted_3 ]),
+                            default: Vue.withCtx(() => [ _hoisted_2 ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]), Vue.createVNode(_component_as_radio, {
                             label: "vertical",
@@ -2817,7 +2816,7 @@
                             "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.mode = $event),
                             onChange: $setup.changeMode
                         }, {
-                            default: Vue.withCtx(() => [ _hoisted_4 ]),
+                            default: Vue.withCtx(() => [ _hoisted_3 ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]) ]),
                         _: 1
@@ -2863,7 +2862,7 @@
                             "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.primaryTextColor = $event)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
-                    }) ]), _hoisted_5 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ]),
+                    }) ]), _hoisted_4 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ]),
                     _: 1
                 }) ]),
                 _: 1

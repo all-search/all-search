@@ -1,5 +1,5 @@
 <template>
-  <div class="as-setting">
+  <div class="as-setting" :class="mode">
     <div
       class="as-setting-btn"
       @click="hide">
@@ -160,10 +160,14 @@ export default {
 @import "../assets/common.scss";
 
 .as-setting {
-  display: flex;
   position: relative;
-  box-shadow: -4px 0 10px 0 rgb(0 0 0 / 12%);
+
+  &.horizontal {
+    box-shadow: -4px 0 10px 0 rgb(0 0 0 / 12%);
+    display: flex;
+  }
 }
+
 
 .as-setting-btn {
   line-height: $height;
@@ -174,6 +178,7 @@ export default {
   cursor: pointer;
   font-size: 14px;
   color: var(--as-primary-text-color);
+  text-align: center;
 
   &:hover {
     color: var(--as-primary-color);
