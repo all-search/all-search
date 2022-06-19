@@ -1,10 +1,10 @@
 {
   "name": "all-search",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "description": "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开",
   "author": "endday",
   "homepage": "https://github.com/endday/all-search",
-  "license": "GPL-2.0",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
     "url": "git@github.com:endday/all-search.git"
@@ -18,6 +18,7 @@
     "tmBuild": "cross-env NODE_ENV=production rollup -c"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.4",
     "@popperjs/core": "^2.9.2",
     "axios": "^0.21.1",
     "core-js": "^3.9.1",

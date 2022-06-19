@@ -37,8 +37,8 @@ const map = {
   'primary-text-color': primaryTextColor
 }
 
-const initColor = (name) => {
-  const colorDefault = getCssValue(name)
+const initColor = (name, defaultValue) => {
+  const colorDefault = getCssValue(name) || defaultValue
   const session = getSession(name) || colorDefault
   const colorVal = map[name]
   colorVal.value = session
@@ -46,9 +46,9 @@ const initColor = (name) => {
 
 export default function useColor () {
   onMounted(() => {
-    initColor('primary-color')
-    initColor('bg-color')
-    initColor('primary-text-color')
+    initColor('primary-color', '#1890ff')
+    initColor('bg-color', '#ffffff')
+    initColor('primary-text-color', '#606266')
   })
   return {
     primaryColor,

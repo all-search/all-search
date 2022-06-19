@@ -1,136 +1,161 @@
 <template>
   <div class="sites">
-    <el-tabs
-      class="sites-tabs"
-      type="border-card"
+    <el-radio-group
+      class="tabs-container"
       v-model="tabName"
-      @tab-remove="removeTab">
-      <el-tab-pane
+      size="large">
+      <el-radio-button
         v-for="(cate, index) in localSites"
         :key="`${cate.name}-${index}`"
-        :label="cate.nameZhBackup"
-        :name="cate.name"
-        :closable="isPersonal(cate)">
-        <div class="url-item">
+        :label="cate.name">
+        {{ cate.nameZhBackup }}
+      </el-radio-button>
+    </el-radio-group>
+    <div
+      v-for="(cate, index) in localSites"
+      v-show="tabName === cate.name"
+      :key="`${cate.name}-${index}`">
+      <div class="url-item">
+        <div class="bd">
+          <el-input
+            v-if="isPersonal(cate)"
+            class="cate-input"
+            v-model="cate.nameZh">
+          </el-input>
+          <p v-else
+             class="cate-name"
+             v-text="cate.nameZh"/>
+        </div>
+        <div class="ft">
+          <el-button-group>
+            <el-button
+              @click="moveLeft(index)">
+              <el-icon>
+                <ArrowLeft/>
+              </el-icon>
+            </el-button>
+            <el-button
+              @click="moveRight(index)">
+              <el-icon>
+                <ArrowRight/>
+              </el-icon>
+            </el-button>
+          </el-button-group>
+          <el-button
+            :type="cate.data.visible ? 'primary': 'info'"
+            plain
+            @click="changeVisible(cate.data)">
+            <el-icon>
+              <View/>
+            </el-icon>
+            {{ cate.data.visible ? '隐藏' : '展示' }}
+          </el-button>
+          <el-button
+            v-if="isPersonal(cate)"
+            plain
+            type="danger"
+            @click="removeTab(cate.name)">
+            <el-icon>
+              <Remove/>
+            </el-icon>
+            删除
+          </el-button>
+        </div>
+      </div>
+      <draggable
+        handle=".move-icon"
+        v-model="cate.list">
+        <div
+          v-for="(item, j) in cate.list"
+          :key="j"
+          class="url-item"
+          :class="{invisible: !item.data.visible}">
+          <el-button
+            class="move-icon"
+            text>
+            <el-icon>
+              <DCaret/>
+            </el-icon>
+          </el-button>
+          <div class="hd">
+            <el-input
+              v-if="isPersonal(cate)"
+              class="input"
+              v-model="item.nameZh"/>
+            <p v-else
+               class="name"
+               v-text="item.nameZh"/>
+          </div>
           <div class="bd">
             <el-input
               v-if="isPersonal(cate)"
-              class="cate-input"
-              v-model="cate.nameZh">
-            </el-input>
+              class="input"
+              v-model="item.url"/>
             <p v-else
-               class="cate-name"
-               v-text="cate.nameZh"/>
+               class="input"
+               v-text="item.url"/>
           </div>
           <div class="ft">
-            <el-button-group>
-              <el-button
-                size="medium"
-                icon="el-icon-arrow-left"
-                @click="moveLeft(index)"
-              />
-              <el-button
-                size="medium"
-                icon="el-icon-arrow-right"
-                @click="moveRight(index)"
-              />
-            </el-button-group>
+            <el-dropdown
+              v-if="!isPersonal(cate) && personalCategory.length"
+              trigger="click"
+              @command="addToPersonal($event, item)">
+              <el-button>
+                <el-icon>
+                  <Plus/>
+                </el-icon>
+                添加
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    v-for="(pItem, i) in personalCategory"
+                    :key="i"
+                    :command="pItem">
+                    {{ pItem.nameZh }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
             <el-button
-              size="medium"
-              icon="el-icon-view"
-              :type="cate.data.visible ? 'primary': 'info'"
+              :type="item.data.visible ? 'primary': 'info'"
               plain
-              @click="changeVisible(cate.data)">
-              {{cate.data.visible ? '隐藏': '展示'}}
+              @click="changeVisible(item.data)">
+              <el-icon>
+                <View/>
+              </el-icon>
+              {{ item.data.visible ? '隐藏' : '展示' }}
+            </el-button>
+            <el-button
+              v-if="isPersonal(cate)"
+              :plain="true"
+              type="danger"
+              @click="deleteUrl(j)">
+              <el-icon>
+                <Remove/>
+              </el-icon>
+              删除
             </el-button>
           </div>
         </div>
-        <draggable
-          handle=".move-icon"
-          v-model="cate.list">
-          <div
-            v-for="(item, j) in cate.list"
-            :key="j"
-            class="url-item"
-            :class="{invisible: !item.data.visible}">
-            <el-button
-              class="move-icon"
-              type="text"
-              icon="el-icon-d-caret"/>
-            <div class="hd">
-              <el-input
-                v-if="isPersonal(cate)"
-                class="input"
-                v-model="item.nameZh"/>
-              <p v-else
-                 class="name"
-                 v-text="item.nameZh"/>
-            </div>
-            <div class="bd">
-              <el-input
-                v-if="isPersonal(cate)"
-                class="input"
-                v-model="item.url"/>
-              <p v-else
-                 class="input"
-                 v-text="item.url"/>
-            </div>
-            <div class="ft">
-              <el-dropdown
-                v-if="!isPersonal(cate) && personalCategory.length"
-                trigger="click"
-                @command="addToPersonal($event, item)">
-                <el-button
-                  size="medium"
-                  icon="el-icon-plus">
-                  添加
-                </el-button>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item
-                      v-for="(pItem, i) in personalCategory"
-                      :key="i"
-                      :command="pItem">
-                      {{pItem.nameZh}}
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-              <el-button
-                icon="el-icon-view"
-                size="medium"
-                :type="item.data.visible ? 'primary': 'info'"
-                plain
-                @click="changeVisible(item.data)">
-                {{item.data.visible ? '隐藏': '展示'}}
-              </el-button>
-              <el-button
-                v-if="isPersonal(cate)"
-                icon="el-icon-remove"
-                :plain="true"
-                type="danger"
-                size="medium"
-                @click="deleteUrl(j)">
-                删除
-              </el-button>
-            </div>
-          </div>
-        </draggable>
-        <div
-          v-if="isPersonal(cate)"
-          class="url-item">
-          <el-button
-            @click="addNewUrl(cate)">
-            添加网址
-          </el-button>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+      </draggable>
+      <div
+        v-if="isPersonal(cate)"
+        class="url-item">
+        <el-button
+          @click="addNewUrl(cate)">
+          添加网址
+        </el-button>
+      </div>
+    </div>
     <el-button
       class="add-cate-btn"
-      icon="el-icon-plus"
-      size="mini"
-      @click="addCategory"/>
+      size="small"
+      @click="addCategory">
+      <el-icon>
+        <Plus/>
+      </el-icon>
+    </el-button>
   </div>
   <div class="fixed-footer">
     <div class="btn-container">
@@ -255,15 +280,19 @@ export default {
     moveLeft (i) {
       const j = i - 1
       if (j >= 0) {
-        const list = this.localSites.splice(i, 1)
-        this.localSites.splice(j, 0, list[0])
+        const list = this.localSites;
+        [list[i], list[j]] = [list[j], list[i]]
+        console.log(j)
+        this.localSites = list
       }
     },
     moveRight (i) {
       const j = i + 1
       if (j < this.localSites.length) {
-        const list = this.localSites.splice(i, 1)
-        this.localSites.splice(j, 0, list[0])
+        const list = this.localSites;
+        [list[i], list[j]] = [list[j], list[i]]
+        console.log(j)
+        this.localSites = list
       }
     },
     reset () {
@@ -303,126 +332,132 @@ export default {
 </script>
 
 <style lang="scss">
-  .sites {
-    border-radius: 4px;
-    box-shadow: none;
-    position: relative;
-    margin-bottom: 20px;
+.sites {
+  border-radius: 4px;
+  box-shadow: none;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.tabs-container {
+  margin-bottom: 20px;
+}
+
+.sites-tabs {
+  border: 1px solid #eee;
+  box-shadow: none;
+}
+
+.border-bottom {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.el-button {
+  vertical-align: middle;
+}
+
+.add-cate-btn {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
+
+.url-item {
+  display: flex;
+  background-color: #fff;
+  font-size: 14px;
+  color: #303133;
+  align-items: center;
+  padding: 12px 20px 12px 10px;
+  transition: background-color .25s ease;
+
+  &.invisible {
+    color: #C0C4CC;
   }
 
-  .sites-tabs {
-    border: 1px solid #eee;
-    box-shadow: none;
+  &:hover {
+    background-color: #f5f7fa;
   }
 
-  .border-bottom {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  & + & {
+    border-top: 1px solid #ebeef5;
+  }
+
+  .move-icon {
+    padding: 6px 10px;
+    font-size: 18px;
+    color: #999;
+    cursor: move;
+
+    &:hover {
+      color: #409EFF;
+    }
+  }
+
+  .name {
+    width: 100px;
+    margin: 0;
+  }
+
+  .hd {
+    margin-right: 10px;
+  }
+
+  .bd {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  .input {
+    margin: 0 20px 0 0;
+  }
+
+  .cate-name {
+    flex: 1;
+    font-size: 16px;
+    margin: 0 0 0 15px;
+  }
+
+  .el-button-group {
+    margin-right: 10px;
+  }
+}
+
+.el-dropdown + .el-button {
+  margin-left: 10px;
+}
+
+.fixed-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: right;
+  width: 100%;
+
+  .btn-container {
+    box-shadow: 0 -2px 8px #f0f1f2;
+    margin-left: 220px;
+    margin-right: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 3px 3px 0 0;
   }
 
   .el-button {
-    vertical-align: middle;
+    /*border-radius: 0;*/
   }
+}
 
-  .add-cate-btn {
-    position: absolute;
-    right: 6px;
-    top: 6px;
+.category {
+  display: flex;
+  align-items: center;
+
+  .label {
+    margin: 0;
+    font-size: 16px;
   }
-
-  .url-item {
-    display: flex;
-    background-color: #fff;
-    font-size: 14px;
-    color: #303133;
-    align-items: center;
-    padding: 12px 20px 12px 10px;
-    transition: background-color .25s ease;
-
-    &.invisible {
-      color: #C0C4CC;
-    }
-    &:hover {
-      background-color: #f5f7fa;
-    }
-
-    & + & {
-      border-top: 1px solid #ebeef5;
-    }
-
-    .move-icon {
-      padding: 6px 10px;
-      font-size: 18px;
-      color: #999;
-      cursor: move;
-      &:hover {
-        color: #409EFF;
-      }
-    }
-
-    .name {
-      width: 100px;
-      margin: 0;
-    }
-
-    .hd {
-      margin-right: 10px;
-    }
-
-    .bd {
-      flex: 1;
-      margin-right: 10px;
-    }
-
-    .input {
-      margin: 0 20px 0 0;
-    }
-
-    .cate-name {
-      flex: 1;
-      font-size: 16px;
-      margin: 0 0 0 15px;
-    }
-
-    .el-button-group {
-      margin-right: 10px;
-    }
-  }
-
-  .el-dropdown + .el-button {
-    margin-left: 10px;
-  }
-
-  .fixed-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: right;
-    width: 100%;
-
-    .btn-container {
-      box-shadow: 0 -2px 8px #f0f1f2;
-      margin-left: 220px;
-      margin-right: 20px;
-      padding: 10px;
-      background-color: #fff;
-      border-radius: 3px 3px 0 0;
-    }
-
-    .el-button {
-      /*border-radius: 0;*/
-    }
-  }
-
-  .category {
-    display: flex;
-    align-items: center;
-
-    .label {
-      margin: 0;
-      font-size: 16px;
-    }
-  }
+}
 
 </style>
 

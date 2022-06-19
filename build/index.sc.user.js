@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.11，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.11
-// @description  2022年6月15日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @name         all-search 全搜v1.2.12，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.12
+// @description  2022年6月19日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
-// @license      GPL-2.0
+// @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
 // @updateURL    https://unpkg.com/all-search@latest/build/index.sc.user.js'}
 // @downloadURL  https://unpkg.com/all-search@latest/build/index.sc.user.js'}
@@ -23,11 +23,11 @@
 (function() {
     "use strict";
     var name = "all-search";
-    var version$1 = "1.2.11";
+    var version$1 = "1.2.12";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
-    var license = "GPL-2.0";
+    var license = "GPL-3.0";
     var repository = {
         type: "git",
         url: "git@github.com:endday/all-search.git"
@@ -41,6 +41,7 @@
         tmBuild: "cross-env NODE_ENV=production rollup -c"
     };
     var dependencies = {
+        "@element-plus/icons-vue": "^2.0.4",
         "@popperjs/core": "^2.9.2",
         axios: "^0.21.1",
         "core-js": "^3.9.1",
@@ -550,7 +551,8 @@
         url: /\/\/endday\.gitee\.io/,
         invisible: true
     }, {
-        url: /\/\/localhost/
+        url: /\/\/localhost/,
+        invisible: true
     } ];
     let currentSite = null;
     const siteInfo = function(refresh) {
@@ -2081,7 +2083,7 @@
             window.removeEventListener("pointerdown", listener);
         };
     }
-    var css$b = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 9999;\n}\n\n.arrow,\n.arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n\n.arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n.popover-content[data-popper-placement^=bottom] .arrow {\n  top: -10px;\n  border-width: 0 8px 10px 8px;\n  border-color: transparent transparent var(--border-color) transparent;\n  margin-left: -8px;\n}\n.popover-content[data-popper-placement^=bottom] .arrow::before {\n  top: 1px;\n  left: -7px;\n  border-width: 0 7px 9px 7px;\n  border-color: transparent transparent var(--background-color) transparent;\n}\n\n.popover-content[data-popper-placement^=top] .arrow {\n  bottom: -10px;\n  border-width: 10px 8px 0 8px;\n  border-color: var(--border-color) transparent transparent transparent;\n  margin-left: -8px;\n}\n.popover-content[data-popper-placement^=top] .arrow::before {\n  bottom: 1px;\n  left: -7px;\n  border-width: 9px 7px 0 7px;\n  border-color: var(--background-color) transparent transparent transparent;\n}\n\n.popover-content[data-popper-placement^=left] .arrow {\n  right: -10px;\n  margin-top: -8px;\n  border-width: 8px 0 8px 10px;\n  border-color: transparent transparent transparent var(--border-color);\n}\n.popover-content[data-popper-placement^=left] .arrow::before {\n  right: 1px;\n  top: -7px;\n  border-width: 7px 0 7px 9px;\n  border-color: transparent transparent transparent var(--background-color);\n}\n\n.popover-content[data-popper-placement^=right] .arrow {\n  left: -10px;\n  margin-top: -8px;\n  border-width: 8px 10px 8px 0;\n  border-color: transparent var(--border-color) transparent transparent;\n}\n.popover-content[data-popper-placement^=right] .arrow::before {\n  left: 1px;\n  top: -7px;\n  border-width: 7px 9px 7px 0;\n  border-color: transparent var(--background-color) transparent transparent;\n}\n\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
+    var css$b = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 9999;\n}\n\n.arrow,\n.arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n\n.arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/*.popover-content[data-popper-placement^="bottom"] {\n  .arrow {\n    top: -10px;\n    border-width: 0 8px 10px 8px;\n    border-color: transparent transparent var(--border-color) transparent;\n    margin-left: -8px;\n\n    &::before {\n      top: 1px;\n      left: -7px;\n      border-width: 0 7px 9px 7px;\n      border-color: transparent transparent var(--background-color) transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="top"] {\n  .arrow {\n    bottom: -10px;\n    border-width: 10px 8px 0 8px;\n    border-color: var(--border-color) transparent transparent transparent;\n    margin-left: -8px;\n\n    &::before {\n      bottom: 1px;\n      left: -7px;\n      border-width: 9px 7px 0 7px;\n      border-color: var(--background-color) transparent transparent transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="left"] {\n  .arrow {\n    right: -10px;\n    margin-top: -8px;\n    border-width: 8px 0 8px 10px;\n    border-color: transparent transparent transparent var(--border-color);\n\n    &::before {\n      right: 1px;\n      top: -7px;\n      border-width: 7px 0 7px 9px;\n      border-color: transparent transparent transparent var(--background-color);\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="right"] {\n  .arrow {\n    left: -10px;\n    margin-top: -8px;\n    border-width: 8px 10px 8px 0;\n    border-color: transparent var(--border-color) transparent transparent;\n\n    &::before {\n      left: 1px;\n      top: -7px;\n      border-width: 7px 9px 7px 0;\n      border-color: transparent var(--background-color) transparent transparent;\n    }\n  }\n}*/\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
     injectStyle(css$b);
     const _sfc_main$b = {
         props: {
@@ -2112,7 +2114,7 @@
                 popperInstance.value = Popper.createPopper(target, popover.value, {
                     strategy: props.strategy,
                     placement: props.placement,
-                    modifiers: [ "keepTogether", {
+                    modifiers: [ {
                         name: "offset",
                         options: {
                             offset: [ 0, 0 ]
@@ -2423,17 +2425,17 @@
         "bg-color": bgColor,
         "primary-text-color": primaryTextColor
     };
-    const initColor = name => {
-        const colorDefault = getCssValue(name);
+    const initColor = (name, defaultValue) => {
+        const colorDefault = getCssValue(name) || defaultValue;
         const session = getSession(name) || colorDefault;
         const colorVal = map[name];
         colorVal.value = session;
     };
     function useColor() {
         Vue.onMounted(() => {
-            initColor("primary-color");
-            initColor("bg-color");
-            initColor("primary-text-color");
+            initColor("primary-color", "#1890ff");
+            initColor("bg-color", "#ffffff");
+            initColor("primary-text-color", "#606266");
         });
         return {
             primaryColor: primaryColor,

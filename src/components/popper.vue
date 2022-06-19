@@ -61,7 +61,6 @@ export default {
           strategy: props.strategy,
           placement: props.placement,
           modifiers: [
-            'keepTogether', // 内置modifier
             /*{
               name: 'arrow',
               options: {
@@ -159,7 +158,7 @@ export default {
   display: block;
 }
 
-.popover-content[data-popper-placement^="bottom"] {
+/*.popover-content[data-popper-placement^="bottom"] {
   .arrow {
     top: -10px;
     border-width: 0 8px 10px 8px;
@@ -221,7 +220,7 @@ export default {
       border-color: transparent var(--background-color) transparent transparent;
     }
   }
-}
+}*/
 
 /* 可以为进入和离开动画设置不同的持续时间和动画函数 */
 .slide-fade-enter-active {

@@ -314,7 +314,8 @@ export const list = [
     invisible: true
   },
   {
-    url: /\/\/localhost/
+    url: /\/\/localhost/,
+    invisible: true
   }
 ]
 

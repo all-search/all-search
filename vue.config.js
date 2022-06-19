@@ -29,7 +29,9 @@ module.exports = {
       config.entry('app').clear().add('./src/main.js')
     }
     config.externals = {
-      vue: 'Vue'
+      vue: 'Vue',
+      'element-plus': 'ElementPlus',
+      '@element-plus/icons-vue': 'ElementPlusIconsVue'
     }
   },
   css: {
