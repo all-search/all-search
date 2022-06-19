@@ -282,7 +282,6 @@ export default {
       if (j >= 0) {
         const list = this.localSites;
         [list[i], list[j]] = [list[j], list[i]]
-        console.log(j)
         this.localSites = list
       }
     },
@@ -291,7 +290,6 @@ export default {
       if (j < this.localSites.length) {
         const list = this.localSites;
         [list[i], list[j]] = [list[j], list[i]]
-        console.log(j)
         this.localSites = list
       }
     },
