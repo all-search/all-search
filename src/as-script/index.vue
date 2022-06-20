@@ -8,10 +8,7 @@
       :mode="mode"/>
     <side-bar/>
   </div>
-  <hoverBtn
-    :show="show"
-    @change="changeShow"
-  />
+  <hoverBtn/>
 </template>
 
 <script>
@@ -47,9 +44,7 @@ export default {
     })
 
     const { show } = useSwitchShow()
-    function changeShow (value) {
-      show.value = value
-    }
+
     const classList = computed(() => ([
       `as-${mode.value}`,
       show.value ? 'as-show' : 'as-hide'
@@ -64,6 +59,7 @@ export default {
     }, {
       immediate: true
     })
+
     function updateSite () {
       const curSite = siteInfo(true)
       site.url = curSite.url
@@ -82,9 +78,7 @@ export default {
     return {
       mode,
       classList,
-      visible,
-      show,
-      changeShow
+      visible
     }
   }
 }

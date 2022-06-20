@@ -2,7 +2,7 @@
   <div class="as-setting" :class="mode">
     <div
       class="as-setting-btn"
-      @click="hide">
+      @click="show = false">
       收起
     </div>
     <div
@@ -30,13 +30,11 @@
               <form-item label="方向">
                 <as-radio
                   label="horizontal"
-                  v-model="mode"
-                  @change="changeMode">横向
+                  v-model="mode">横向
                 </as-radio>
                 <as-radio
                   label="vertical"
-                  v-model="mode"
-                  @change="changeMode">竖向
+                  v-model="mode">竖向
                 </as-radio>
               </form-item>
               <form-item label="对齐">
@@ -44,8 +42,16 @@
                   v-for="[key, value] in alignList"
                   :key="key"
                   :label="key"
-                  v-model="align"
-                  @change="changeAlign">
+                  v-model="align">
+                  {{ value }}
+                </as-radio>
+              </form-item>
+              <form-item label="滚动隐藏">
+                <as-radio
+                  v-for="[key, value] in options"
+                  :key="key"
+                  :label="key"
+                  v-model="scrollHide">
                   {{ value }}
                 </as-radio>
               </form-item>
@@ -89,7 +95,7 @@
 <script>
 import { ref } from 'vue'
 import useMode from '../components/useMode'
-import useAlign from '../components/align'
+import useAlign from './useAlign'
 import useSwitchShow from '../components/useSwitchShow'
 import useColor from '../components/useColor'
 import overlay from '../components/overlay'
@@ -123,33 +129,21 @@ export default {
       primaryTextColor
     } = useColor()
 
-    const changeMode = (e) => {
-      mode.value = e.target.value
-    }
-
-    const changeAlign = e => {
-      align.value = e.target.value
-    }
-
-    const { show } = useSwitchShow()
-
-    const hide = () => {
-      show.value = false
-    }
+    const { show, options, scrollHide } = useSwitchShow()
 
     return {
       mode,
       visible,
       open,
       onMaskClick,
-      changeMode,
       alignList,
       align,
-      changeAlign,
       primaryColor,
       bgColor,
       primaryTextColor,
-      hide
+      show,
+      options,
+      scrollHide
     }
   }
 }
@@ -171,7 +165,7 @@ export default {
 
 .as-setting-btn {
   line-height: $height;
-  padding: 0 16px;
+  padding: 0 14px;
   position: relative;
   margin: 0;
   white-space: nowrap;

@@ -22,7 +22,7 @@ import scrollbar from './scrollbar/src/scrollbar'
 import './scrollbar/css/scrollbar.css'
 import { initSites } from '../util/sites'
 import menuItem from './menuItem'
-import useAlign from '../components/align'
+import useAlign from './useAlign'
 
 export default {
   name: 'as-menu',

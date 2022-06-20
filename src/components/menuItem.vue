@@ -8,10 +8,10 @@
          @mouseenter="show($event.target)"
          @mouseleave="hide"
          href="javascript:void 0"
-         @click.exact="handleClick(item.list[0], false, isMobile)"
-         @click.ctrl.exact="handleClick(item.list[0], true)"
-         @click.middle.exact="handleClick(item.list[0], true)">
-        <icon :name="item.name" />
+         @click.exact="handleCateClick(item, false, isMobile)"
+         @click.ctrl.exact="handleCateClick(item, true)"
+         @click.middle.exact="handleCateClick(item, true)">
+        <icon :name="item.name"/>
         <span
           class="as-menu-item-title"
           v-text="item.nameZh">
@@ -92,6 +92,12 @@ export default {
       }
       return encodeURIComponent(keyword)
     }
+    const handleCateClick = (cate, isOpen, disabled) => {
+      const urlItem = cate.list
+        .filter(item => item.data.visible)
+        .find(item => item.url.indexOf(window.location.hostname) === -1)
+      handleClick(urlItem, isOpen, disabled)
+    }
     const handleClick = (item, isOpen, disabled) => {
       const disVal = unref(disabled)
       if (disVal) {
@@ -111,6 +117,7 @@ export default {
       getFavicon,
       handleMenuShow,
       handleClick,
+      handleCateClick,
       isMobile: isMobileRef
     }
   }
@@ -137,6 +144,12 @@ export default {
   &:hover::after {
     transform: scaleX(1);
     opacity: 1;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .as-menu-item.horizontal {
+    padding: 0 10px;
   }
 }
 

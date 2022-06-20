@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.13，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.13
-// @description  2022年6月21日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @name         all-search 全搜v1.2.14，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.14
+// @description  2022年6月22日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -95,7 +95,7 @@
 (function() {
     "use strict";
     var name = "all-search";
-    var version$1 = "1.2.13";
+    var version$1 = "1.2.14";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -702,12 +702,16 @@
             mode: mode
         };
     }
+    const options = new Map([ [ false, "关闭" ], [ "top", "向上" ], [ "bottom", "向下" ], [ "all", "滚动" ] ]);
     const defaultOpt = {
-        show: true
+        show: true,
+        scrollHide: false
     };
     const session$1 = getSession("switchShow") || defaultOpt;
+    const getOpts = val => options.has(val) ? val : false;
     const getOpt = val => Object.assign({}, defaultOpt, {
-        show: !!val.show
+        show: Boolean(val.show),
+        scrollHide: getOpts(val.scrollHide)
     });
     let data = Vue.reactive(getOpt(session$1));
     const show = Vue.computed({
@@ -717,9 +721,18 @@
             setSession("switchShow", data);
         }
     });
+    const scrollHide = Vue.computed({
+        get: () => data.scrollHide,
+        set: val => {
+            data.scrollHide = val;
+            setSession("switchShow", data);
+        }
+    });
     function useSwitchShow() {
         return {
-            show: show
+            show: show,
+            scrollHide: scrollHide,
+            options: options
         };
     }
     class Raf {
@@ -1313,7 +1326,7 @@
         return obj;
     };
     const SCOPE = "MElScrollbar";
-    const isNumber = val => typeof obj === "number" && !isNaN(val);
+    const isNumber = val => typeof val === "number" && !isNaN(val);
     const debugWarn = (...args) => {
         console.error(...args);
     };
@@ -1601,7 +1614,7 @@
                 sizeHeight.value = height + GAP < offsetHeight ? height + "px" : "";
                 sizeWidth.value = width + GAP < offsetWidth ? width + "px" : "";
             };
-            const handleScroll = () => {
+            const handleScroll = e => {
                 if (wrap.value) {
                     const offsetHeight = wrap.value.offsetHeight - GAP;
                     const offsetWidth = wrap.value.offsetWidth - GAP;
@@ -2282,7 +2295,7 @@
         }, null, 8, _hoisted_2$4) ]);
     }
     var icon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
-    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  padding: 0 16px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}\n.as-subMenu .as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-subMenu .as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-subMenu .as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-subMenu .as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-subMenu .as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
+    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  padding: 0 16px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}\n.as-subMenu .as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-subMenu .as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-subMenu .as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-subMenu .as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-subMenu .as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
     injectStyle(css$9);
     const _sfc_main$9 = {
         name: "menuItem",
@@ -2321,6 +2334,10 @@
                 }
                 return encodeURIComponent(keyword);
             };
+            const handleCateClick = (cate, isOpen, disabled) => {
+                const urlItem = cate.list.filter(item => item.data.visible).find(item => item.url.indexOf(window.location.hostname) === -1);
+                handleClick(urlItem, isOpen, disabled);
+            };
             const handleClick = (item, isOpen, disabled) => {
                 const disVal = Vue.unref(disabled);
                 if (disVal) {
@@ -2339,6 +2356,7 @@
                 getFavicon: getFavicon,
                 handleMenuShow: handleMenuShow,
                 handleClick: handleClick,
+                handleCateClick: handleCateClick,
                 isMobile: isMobileRef
             };
         }
@@ -2366,8 +2384,8 @@
                 onMouseenter: $event => show($event.target),
                 onMouseleave: hide,
                 href: "javascript:void 0",
-                onClick: [ _cache[0] || (_cache[0] = Vue.withModifiers($event => $setup.handleClick($props.item.list[0], false, $setup.isMobile), [ "exact" ])), _cache[1] || (_cache[1] = Vue.withModifiers($event => $setup.handleClick($props.item.list[0], true), [ "ctrl", "exact" ])) ],
-                onMouseup: _cache[2] || (_cache[2] = Vue.withModifiers($event => $setup.handleClick($props.item.list[0], true), [ "middle", "exact" ]))
+                onClick: [ _cache[0] || (_cache[0] = Vue.withModifiers($event => $setup.handleCateClick($props.item, false, $setup.isMobile), [ "exact" ])), _cache[1] || (_cache[1] = Vue.withModifiers($event => $setup.handleCateClick($props.item, true), [ "ctrl", "exact" ])) ],
+                onMouseup: _cache[2] || (_cache[2] = Vue.withModifiers($event => $setup.handleCateClick($props.item, true), [ "middle", "exact" ]))
             }, [ Vue.createVNode(_component_icon, {
                 name: $props.item.name
             }, null, 8, [ "name" ]), Vue.createElementVNode("span", {
@@ -2393,19 +2411,23 @@
         }, 8, [ "placement" ]);
     }
     var menuItem = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ] ]);
-    const session = getSession("align");
+    const NAME = "align";
+    const session = getSession(NAME);
     const list = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]);
-    const formatVal = val => {
-        const has = list.has(val);
-        if (has) {
+    const getVal = val => {
+        if (list.has(val)) {
             return val;
         }
         return "flex-start";
     };
-    const align = Vue.ref(formatVal(session));
+    const alignRef = Vue.ref(getVal(session));
     const alignList = Vue.reactive(list);
-    Vue.watch(align, value => {
-        setSession("align", formatVal(value));
+    const align = Vue.computed({
+        get: () => alignRef.value,
+        set: val => {
+            alignRef.value = val;
+            setSession(NAME, getVal(val));
+        }
     });
     function useAlign() {
         return {
@@ -2596,14 +2618,14 @@
         }, null, 8, _hoisted_2$2), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3$2, Vue.createElementVNode("span", _hoisted_4$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
     }
     var radio = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ] ]);
-    var css$5 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  height: 40px;\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
+    var css$5 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
     injectStyle(css$5);
     const _sfc_main$5 = {
         name: "form-item",
         props: {
             labelWidth: {
                 type: [ String, Number ],
-                default: 60
+                default: 80
             },
             label: {
                 type: [ String, Number ],
@@ -2708,7 +2730,7 @@
         }, 8, [ "onClick" ]) ]);
     }
     var color = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ] ]);
-    var css$2 = ".as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 16px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
+    var css$2 = ".as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
     injectStyle(css$2);
     const _sfc_main$2 = {
         name: "side-bar",
@@ -2729,29 +2751,20 @@
             const {mode: mode} = useMode();
             const {alignList: alignList, align: align} = useAlign();
             const {primaryColor: primaryColor, bgColor: bgColor, primaryTextColor: primaryTextColor} = useColor();
-            const changeMode = e => {
-                mode.value = e.target.value;
-            };
-            const changeAlign = e => {
-                align.value = e.target.value;
-            };
-            const {show: show} = useSwitchShow();
-            const hide = () => {
-                show.value = false;
-            };
+            const {show: show, options: options, scrollHide: scrollHide} = useSwitchShow();
             return {
                 mode: mode,
                 visible: visible,
                 open: open,
                 onMaskClick: onMaskClick,
-                changeMode: changeMode,
                 alignList: alignList,
                 align: align,
-                changeAlign: changeAlign,
                 primaryColor: primaryColor,
                 bgColor: bgColor,
                 primaryTextColor: primaryTextColor,
-                hide: hide
+                show: show,
+                options: options,
+                scrollHide: scrollHide
             };
         }
     };
@@ -2780,7 +2793,7 @@
             class: Vue.normalizeClass([ "as-setting", $setup.mode ])
         }, [ Vue.createElementVNode("div", {
             class: "as-setting-btn",
-            onClick: _cache[0] || (_cache[0] = (...args) => $setup.hide && $setup.hide(...args))
+            onClick: _cache[0] || (_cache[0] = $event => $setup.show = false)
         }, " 收起 "), Vue.createElementVNode("div", {
             class: "as-setting-btn",
             onClick: _cache[1] || (_cache[1] = (...args) => $setup.open && $setup.open(...args))
@@ -2801,7 +2814,7 @@
                         "aria-modal": "true",
                         role: "dialog",
                         class: "as-side-bar",
-                        onClick: _cache[8] || (_cache[8] = Vue.withModifiers(() => {}, [ "stop" ]))
+                        onClick: _cache[9] || (_cache[9] = Vue.withModifiers(() => {}, [ "stop" ]))
                     }, [ _hoisted_1, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
                         label: "方向"
                     }, {
@@ -2809,19 +2822,18 @@
                             label: "horizontal",
                             modelValue: $setup.mode,
                             "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.mode = $event),
-                            onChange: $setup.changeMode
+                            onChange: _ctx.changeMode
                         }, {
                             default: Vue.withCtx(() => [ _hoisted_2 ]),
                             _: 1
                         }, 8, [ "modelValue", "onChange" ]), Vue.createVNode(_component_as_radio, {
                             label: "vertical",
                             modelValue: $setup.mode,
-                            "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.mode = $event),
-                            onChange: $setup.changeMode
+                            "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.mode = $event)
                         }, {
                             default: Vue.withCtx(() => [ _hoisted_3 ]),
                             _: 1
-                        }, 8, [ "modelValue", "onChange" ]) ]),
+                        }, 8, [ "modelValue" ]) ]),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "对齐"
@@ -2831,12 +2843,25 @@
                             key: key,
                             label: key,
                             modelValue: $setup.align,
-                            "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.align = $event),
-                            onChange: $setup.changeAlign
+                            "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.align = $event)
                         }, {
                             default: Vue.withCtx(() => [ Vue.createTextVNode(Vue.toDisplayString(value), 1) ]),
                             _: 2
-                        }, 1032, [ "label", "modelValue", "onChange" ]))), 128)) ]),
+                        }, 1032, [ "label", "modelValue" ]))), 128)) ]),
+                        _: 1
+                    }), Vue.createVNode(_component_form_item, {
+                        label: "滚动隐藏"
+                    }, {
+                        default: Vue.withCtx(() => [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.options, ([key, value]) => (Vue.openBlock(), 
+                        Vue.createBlock(_component_as_radio, {
+                            key: key,
+                            label: key,
+                            modelValue: $setup.scrollHide,
+                            "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.scrollHide = $event)
+                        }, {
+                            default: Vue.withCtx(() => [ Vue.createTextVNode(Vue.toDisplayString(value), 1) ]),
+                            _: 2
+                        }, 1032, [ "label", "modelValue" ]))), 128)) ]),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "主题色"
@@ -2844,7 +2869,7 @@
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
                             "default-value": "#1890ff",
                             modelValue: $setup.primaryColor,
-                            "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.primaryColor = $event)
+                            "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.primaryColor = $event)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
@@ -2853,7 +2878,7 @@
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
                             "default-value": "#ffffff",
                             modelValue: $setup.bgColor,
-                            "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.bgColor = $event)
+                            "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.bgColor = $event)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
@@ -2862,7 +2887,7 @@
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
                             "default-value": "#606266",
                             modelValue: $setup.primaryTextColor,
-                            "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.primaryTextColor = $event)
+                            "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => $setup.primaryTextColor = $event)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
                     }) ]), _hoisted_4 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ]),
@@ -2908,35 +2933,32 @@
             direction: direction
         };
     }
-    var css$1 = "\n.as-hover-btn[data-v-72b56364] {\r\n  position: fixed;\r\n  z-index: 99999;\r\n  font-weight: 600;\r\n  font-size: 17px;\r\n  color: var(--as-primary-color);\r\n  background: #fff;\r\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\r\n  border: 1px var(--as-border-color) solid;\r\n  opacity: 0.6;\r\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-72b56364] {\r\n  top: 0;\r\n  left: 50%;\r\n  transform: translateY(0) translateX(-50%);\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-72b56364] {\r\n  left: 0;\r\n  top: 50%;\r\n  transform: translateY(-200%) translateX(0) rotate(90deg);\r\n  transform-origin: 0 100%;\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-72b56364] {\r\n  transition: transform 0.2s;\r\n  transform: translateY(-100%) translateX(-50%);\n}\r\n";
+    var css$1 = "\n.as-hover-btn[data-v-3952be4c] {\r\n  position: fixed;\r\n  z-index: 99999;\r\n  font-weight: 600;\r\n  font-size: 17px;\r\n  color: var(--as-primary-color);\r\n  background: #fff;\r\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\r\n  border: 1px var(--as-border-color) solid;\r\n  opacity: 0.6;\r\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-3952be4c] {\r\n  top: 0;\r\n  left: 50%;\r\n  transform: translateY(0) translateX(-50%);\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-3952be4c] {\r\n  left: 0;\r\n  top: 50%;\r\n  transform: translateY(-200%) translateX(0) rotate(90deg);\r\n  transform-origin: 0 100%;\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-3952be4c] {\r\n  transition: transform 0.2s;\r\n  transform: translateY(-100%) translateX(-50%);\n}\r\n";
     injectStyle(css$1);
     const _sfc_main$1 = {
         name: "hover-btn",
-        props: {
-            show: {
-                type: Boolean,
-                default: true
-            }
-        },
-        setup(props, ctx) {
-            const {isMobileVal: isMobileVal} = isMobile();
+        setup() {
+            let {show: show, scrollHide: scrollHide} = useSwitchShow();
+            const isMobileVal = isMobile();
             const handleMouseEnter = () => {
                 if (!isMobileVal) {
-                    ctx.emit("change", true);
+                    show.value = true;
                 }
             };
             const handleClick = () => {
                 if (isMobileVal) {
-                    ctx.emit("change", true);
+                    show.value = true;
                 }
             };
             const {direction: direction} = useScroll();
             Vue.watch(direction, value => {
-                if (props.show && value === "top") ;
+                if (show.value && scrollHide.value && (value === scrollHide.value || scrollHide.value === "all")) {
+                    show.value = false;
+                }
             });
             const {mode: mode} = useMode();
             const className = Vue.computed(() => ({
-                "as-hide": props.show,
+                "as-hide": !show.value,
                 [`as-hover-btn-${mode.value}`]: true
             }));
             return {
@@ -2953,7 +2975,7 @@
             onClick: _cache[1] || (_cache[1] = (...args) => $setup.handleClick && $setup.handleClick(...args))
         }, " All Search ", 34);
     }
-    var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-72b56364" ] ]);
+    var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-3952be4c" ] ]);
     var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\n.body-vertical {\n  margin-left: 100px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 100px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
@@ -2975,9 +2997,6 @@
                 keyword: null
             });
             const {show: show} = useSwitchShow();
-            function changeShow(value) {
-                show.value = value;
-            }
             const classList = Vue.computed(() => [ `as-${mode.value}`, show.value ? "as-show" : "as-hide" ]);
             const visible = Vue.computed(() => !site.invisible && !Vue.unref(fullScreen));
             updateSite();
@@ -3004,9 +3023,7 @@
             return {
                 mode: mode,
                 classList: classList,
-                visible: visible,
-                show: show,
-                changeShow: changeShow
+                visible: visible
             };
         }
     };
@@ -3024,10 +3041,7 @@
             mode: $setup.mode
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_as_menu, {
             mode: $setup.mode
-        }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.createVNode(_component_hoverBtn, {
-            show: $setup.show,
-            onChange: $setup.changeShow
-        }, null, 8, [ "show", "onChange" ]) ], 64);
+        }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.createVNode(_component_hoverBtn) ], 64);
     }
     var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ] ]);
     !function(e) {

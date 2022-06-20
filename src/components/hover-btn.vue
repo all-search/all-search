@@ -10,40 +10,40 @@
 <script>
 import { watch, computed } from 'vue'
 import { isMobile } from '../util/index'
+import useSwitchShow from './useSwitchShow'
 import useScroll from '../util/useScroll'
 import useMode from '../components/useMode'
 
 export default {
   name: 'hover-btn',
-  props: {
-    show: {
-      type: Boolean,
-      default: true
-    }
-  },
-  setup (props, ctx) {
-    const { isMobileVal } = isMobile()
+  setup () {
+    let { show, scrollHide } = useSwitchShow()
+    const isMobileVal = isMobile()
     const handleMouseEnter = () => {
       if (!isMobileVal) {
-        ctx.emit('change', true)
+        show.value = true
       }
     }
     const handleClick = () => {
       if (isMobileVal) {
-        ctx.emit('change', true)
+        show.value = true
       }
     }
+
     const { direction } = useScroll()
     watch(direction, value => {
-      if (props.show && value === 'top') {
-        // ctx.emit('change', false)
+      if (
+        (show.value && scrollHide.value) &&
+        (value === scrollHide.value || scrollHide.value === 'all')
+      ) {
+        show.value = false
       }
     })
 
     const { mode } = useMode()
     const className = computed(() => {
       return {
-        'as-hide': props.show,
+        'as-hide': !show.value,
         [`as-hover-btn-${mode.value}`]: true
       }
     })

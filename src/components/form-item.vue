@@ -19,7 +19,7 @@ export default {
   props: {
     labelWidth: {
       type: [String, Number],
-      default: 60
+      default: 80
     },
     label: {
       type: [String, Number],
@@ -54,7 +54,6 @@ export default {
   }
 
   .as-content {
-    height: 40px;
     line-height: 40px;
     position: relative;
     font-size: 14px;

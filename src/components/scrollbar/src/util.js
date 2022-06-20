@@ -1,8 +1,3 @@
-/*
- * @Description:
- * @User: lyy
- * @Date: 2022-05-06 12:18:31
- */
 import ResizeObserver from 'resize-observer-polyfill';
 export const isArray = Array.isArray;
 export const isString = val => typeof val === 'string';
@@ -16,7 +11,7 @@ export const toObject = arr => {
 export const SCOPE = 'MElScrollbar';
 export const GAP = 4; // top 2 + bottom 2 of bar instance
 export const isNumber = val => {
-    return typeof obj === 'number' && !isNaN(val);
+    return typeof val === 'number' && !isNaN(val);
 };
 export const debugWarn = (...args) => {
     console.error(...args);
