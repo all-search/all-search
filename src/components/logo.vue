@@ -32,41 +32,39 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../assets/common";
+@import "../assets/common";
 
-  @media screen and (max-width: 768px) {
-    .as-title-vertical {
-      display: none;
-    }
-  }
-
+@media screen and (max-width: 750px) {
   .as-title-horizontal {
-    min-width: 100px;
-    margin: 0 10px;
+    display: none;
   }
+}
 
-  .as-title-vertical {
-    width: 100%;
-  }
+.as-title-horizontal {
+  min-width: 100px;
+  margin: 0 10px;
+}
 
-  .as-title {
-    text-decoration: none !important;
-    padding: 0;
-    margin: 0;
-    color: var(--as-primary-color);
+.as-title-vertical {
+  width: 100%;
+}
 
-    .as-title-inner {
-      padding: 0;
-      font-size: 18px;
-      height: $height;
-      line-height: $height;
-      font-weight: 600;
-      color: var(--as-primary-color);
-      margin: 0 auto;
-      text-align: center;
-      cursor: pointer;
-    }
-  }
+.as-title {
+  text-decoration: none !important;
+  padding: 0;
+  margin: 0;
+  color: var(--as-primary-color);
+}
 
-
+.as-title-inner {
+  padding: 0;
+  font-size: 18px;
+  height: $height;
+  line-height: $height;
+  font-weight: 600;
+  color: var(--as-primary-color);
+  margin: 0 auto;
+  text-align: center;
+  cursor: pointer;
+}
 </style>

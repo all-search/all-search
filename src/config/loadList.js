@@ -75,7 +75,10 @@ export const list = [
     url: /\/\/zhidao\.baidu\.com\/search/
   },
   {
-    url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
+    url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/,
+    style: {
+      1: `#mw-head,#mw-panel{top: ${height}px!important;}#mw-panel`
+    }
   },
   {
     url: /\/\/www\.zhihu\.com\/search\?/,

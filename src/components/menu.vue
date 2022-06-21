@@ -46,7 +46,6 @@ export default {
       hideTimeout: 200
     })
 
-    const transition = computed(() => props.mode === 'horizontal' ? 'drop' : 'fade')
     const menuClass = computed(() => ({
       'as-horizontal-menu': props.mode === 'horizontal',
       'as-vertical-menu': props.mode === 'vertical'
@@ -56,7 +55,6 @@ export default {
       sites,
       data,
       align,
-      transition,
       menuClass
     }
   }
@@ -86,23 +84,6 @@ export default {
 
 .as-vertical-menu {
   flex-direction: column;
-}
-
-.drop-enter-active, .drop-leave-active {
-  transition: all 0.2s cubic-bezier(.645, .045, .355, 1);
-}
-
-.drop-enter, .drop-leave-to {
-  opacity: 0;
-  transform: scaleY(0.0001);
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: all 0.2s cubic-bezier(.645, .045, .355, 1);
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
 }
 
 .el-scrollbar__bar {

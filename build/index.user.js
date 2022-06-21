@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.12，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.12
-// @description  2022年6月19日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @name         all-search 全搜v1.2.13，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.13
+// @description  2022年6月21日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -95,7 +95,7 @@
 (function() {
     "use strict";
     var name = "all-search";
-    var version$1 = "1.2.12";
+    var version$1 = "1.2.13";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -441,7 +441,10 @@
     }, {
         url: /\/\/zhidao\.baidu\.com\/search/
     }, {
-        url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
+        url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/,
+        style: {
+            1: `#mw-head,#mw-panel{top: ${height}px!important;}#mw-panel`
+        }
     }, {
         url: /\/\/www\.zhihu\.com\/search\?/,
         style: {
@@ -788,7 +791,7 @@
             }, 0);
         }
     }
-    var css$d = "@media screen and (max-width: 768px) {\n  .as-title-vertical {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 100px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n.as-title .as-title-inner {\n  padding: 0;\n  font-size: 18px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
+    var css$d = "@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 100px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 18px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
     injectStyle(css$d);
     var _export_sfc = (sfc, props) => {
         const target = sfc.__vccOpts || sfc;
@@ -2410,7 +2413,7 @@
             align: align
         };
     }
-    var css$8 = ".as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}\n\n.drop-enter-active, .drop-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n\n.drop-enter, .drop-leave-to {\n  opacity: 0;\n  transform: scaleY(0.0001);\n}\n\n.fade-enter-active, .fade-leave-active {\n  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n\n.fade-enter, .fade-leave-to {\n  opacity: 0;\n}\n\n.el-scrollbar__bar {\n  display: none;\n}";
+    var css$8 = ".as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}\n\n.el-scrollbar__bar {\n  display: none;\n}";
     injectStyle(css$8);
     const _sfc_main$8 = {
         name: "as-menu",
@@ -2432,7 +2435,6 @@
                 showTimeout: 50,
                 hideTimeout: 200
             });
-            const transition = Vue.computed(() => props.mode === "horizontal" ? "drop" : "fade");
             const menuClass = Vue.computed(() => ({
                 "as-horizontal-menu": props.mode === "horizontal",
                 "as-vertical-menu": props.mode === "vertical"
@@ -2441,7 +2443,6 @@
                 sites: sites,
                 data: data,
                 align: align,
-                transition: transition,
                 menuClass: menuClass
             };
         }
