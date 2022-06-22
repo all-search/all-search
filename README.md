@@ -40,7 +40,7 @@ A top fixed menu that allows you to jump between various search engines, build b
 * 提供移动端支持
     * 若页面宽度不足，可以进行滚动，
     * 移动端为点击触发菜单
-* 自动隐藏功能，通过按钮触发，亦可更改为向上或向下滚动触发影城
+* 自动隐藏功能，通过按钮触发，亦可更改为向上或向下滚动触发隐藏
 
 ## 待完成
 * 英语支持
