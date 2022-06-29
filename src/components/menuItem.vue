@@ -27,11 +27,10 @@
            @click.exact="handleClick(child)"
            @click.ctrl.exact="handleClick(child, true)"
            @click.middle.exact="handleClick(child, true)">
-          <div class="as-url-icon">
-            <img
-              :src="getFavicon(child)"
-              onerror="this.classList.add('error')">
-          </div>
+          <favicon
+            :url="child.url"
+            :icon="child.icon"
+          />
           <p class="as-subMenu-text"
              v-text="child.nameZh">
           </p>
@@ -43,17 +42,18 @@
 
 <script>
 import { computed, unref, ref } from 'vue'
-import popper from '../components/popper'
+import popper from './popper'
 import { siteInfo } from '../config/loadList'
-import parseUrl from '../util/parseUrl'
 import { getKeyword, isMobile } from '../util/index'
-import icon from '../components/icon'
+import icon from './icon'
+import favicon from './favicon'
 
 export default {
   name: 'menuItem',
   components: {
     popper,
-    icon
+    icon,
+    favicon
   },
   props: {
     item: {
@@ -73,14 +73,6 @@ export default {
     const placement = computed(() =>
       props.mode === 'horizontal' ? 'bottom-start' : 'right-start'
     )
-
-    function getFavicon (item) {
-      if (item.icon) {
-        return item.icon
-      }
-      const obj = parseUrl(item.url)
-      return `${obj.origin}/favicon.ico`
-    }
 
     const handleMenuShow = (value, item) => {
       item.show = value
@@ -114,7 +106,6 @@ export default {
     return {
       placement,
       classList,
-      getFavicon,
       handleMenuShow,
       handleClick,
       handleCateClick,
@@ -255,57 +246,6 @@ export default {
     line-height: 34px;
     font-weight: normal;
     text-align: left;
-  }
-
-  .as-url-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 10px;
-    border: none;
-    position: relative;
-    font-size: 0;
-
-    img {
-      width: 100%;
-      height: 100%;
-      border: none;
-      vertical-align: top;
-    }
-
-    img.error {
-      display: inline-block;
-      transform: scale(1);
-      content: '';
-      color: transparent;
-    }
-
-    img.error {
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: #f5f5f5 no-repeat center / 50% 50%;
-      }
-
-      &::after {
-        content: attr(alt);
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        line-height: 2;
-        background-color: rgba(0, 0, 0, .5);
-        color: white;
-        font-size: 12px;
-        text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
   }
 }
 </style>

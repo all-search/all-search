@@ -6,16 +6,18 @@
     <Teleport
       to="body">
       <div
+        v-show="visible"
         :class="popperClass"
         ref="popover"
-        v-show="visible"
         :data-show="visible"
         :data-initialized="popperInstance !== null"
         class="popover-content"
         @mouseenter="show"
         @mouseleave="hide">
         <!--        <div class="arrow" data-popper-arrow />-->
-        <slot/>
+        <template v-if="loaded">
+          <slot/>
+        </template>
       </div>
     </Teleport>
   </transition>
@@ -44,6 +46,7 @@ export default {
   },
   setup (props) {
     const visible = ref(false)
+    const loaded = ref(false)
     const trigger = ref(null)
     const popover = ref(null)
     const popperInstance = ref(null)
@@ -102,6 +105,7 @@ export default {
     })
 
     function show (target) {
+      loaded.value = true
       visible.value = true
       createPopover(target)
       cancelTimeout()
@@ -117,6 +121,7 @@ export default {
 
     return {
       visible,
+      loaded,
       trigger,
       popover,
       popperInstance,

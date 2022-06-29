@@ -55,20 +55,30 @@
                   {{ value }}
                 </as-radio>
               </form-item>
+              <form-item label="图标">
+                <as-radio
+                  :label="1"
+                  v-model="favicon">显示
+                </as-radio>
+                <as-radio
+                  :label="2"
+                  v-model="favicon">隐藏
+                </as-radio>
+              </form-item>
               <form-item label="主题色">
                 <color
                   default-value="#1890ff"
-                  v-model="primaryColor" />
+                  v-model="primaryColor"/>
               </form-item>
               <form-item label="背景色">
                 <color
                   default-value="#ffffff"
-                  v-model="bgColor" />
+                  v-model="bgColor"/>
               </form-item>
               <form-item label="文字色">
                 <color
                   default-value="#606266"
-                  v-model="primaryTextColor" />
+                  v-model="primaryTextColor"/>
               </form-item>
             </section>
             <footer>
@@ -98,6 +108,7 @@ import useMode from '../components/useMode'
 import useAlign from './useAlign'
 import useSwitchShow from '../components/useSwitchShow'
 import useColor from '../components/useColor'
+import useFavicon from './useFavicon'
 import overlay from '../components/overlay'
 import radio from '../components/radio'
 import formItem from '../components/form-item'
@@ -122,14 +133,9 @@ export default {
 
     const { mode } = useMode()
     const { alignList, align } = useAlign()
-
-    const {
-      primaryColor,
-      bgColor,
-      primaryTextColor
-    } = useColor()
-
+    const { primaryColor, bgColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
+    const { favicon } = useFavicon()
 
     return {
       mode,
@@ -138,6 +144,7 @@ export default {
       onMaskClick,
       alignList,
       align,
+      favicon,
       primaryColor,
       bgColor,
       primaryTextColor,

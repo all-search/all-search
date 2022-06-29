@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.14，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.14
-// @description  2022年6月22日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @name         all-search 全搜v1.2.15，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.15
+// @description  2022年6月30日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -22,8 +22,8 @@
 
 (function() {
     "use strict";
-    var name = "all-search";
-    var version$1 = "1.2.14";
+    var name$1 = "all-search";
+    var version$1 = "1.2.15";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -79,7 +79,7 @@
         vite: "^2.6.7"
     };
     var pkg = {
-        name: name,
+        name: name$1,
         version: version$1,
         description: description,
         author: author,
@@ -610,14 +610,14 @@
             document.removeEventListener("resize", handleResize);
         };
     }
-    const session$2 = getSession("mode");
+    const session$3 = getSession("mode");
     const getMode = val => {
         if (![ "vertical", "horizontal" ].includes(val)) {
             return "horizontal";
         }
         return val;
     };
-    const modeRef = Vue.ref(getMode(session$2));
+    const modeRef = Vue.ref(getMode(session$3));
     const mode = Vue.computed({
         get: () => modeRef.value,
         set: val => {
@@ -635,13 +635,13 @@
         show: true,
         scrollHide: false
     };
-    const session$1 = getSession("switchShow") || defaultOpt;
+    const session$2 = getSession("switchShow") || defaultOpt;
     const getOpts = val => options.has(val) ? val : false;
     const getOpt = val => Object.assign({}, defaultOpt, {
         show: Boolean(val.show),
         scrollHide: getOpts(val.scrollHide)
     });
-    let data = Vue.reactive(getOpt(session$1));
+    let data = Vue.reactive(getOpt(session$2));
     const show = Vue.computed({
         get: () => data.show,
         set: val => {
@@ -732,8 +732,8 @@
             }, 0);
         }
     }
-    var css$d = "@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 100px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 18px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
-    injectStyle(css$d);
+    var css$e = "@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 100px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 18px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
+    injectStyle(css$e);
     var _export_sfc = (sfc, props) => {
         const target = sfc.__vccOpts || sfc;
         for (const [key, val] of props) {
@@ -741,7 +741,7 @@
         }
         return target;
     };
-    const _sfc_main$e = {
+    const _sfc_main$f = {
         name: "logo",
         props: {
             mode: {
@@ -756,19 +756,19 @@
             };
         }
     };
-    const _hoisted_1$8 = Vue.createElementVNode("p", {
+    const _hoisted_1$9 = Vue.createElementVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    const _hoisted_2$5 = [ _hoisted_1$8 ];
-    function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_2$6 = [ _hoisted_1$9 ];
+    function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
         return !$setup.isMobile ? (Vue.openBlock(), Vue.createElementBlock("a", {
             key: 0,
             class: Vue.normalizeClass([ "as-title", `as-title-${$props.mode}` ]),
             href: "https://github.com/endday/all-search",
             target: "_blank"
-        }, _hoisted_2$5, 2)) : Vue.createCommentVNode("", true);
+        }, _hoisted_2$6, 2)) : Vue.createCommentVNode("", true);
     }
-    var logo = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ] ]);
+    var logo = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ] ]);
     var MapShim = function() {
         if (typeof Map !== "undefined") {
             return Map;
@@ -1333,7 +1333,7 @@
         style.webkitTransform = translate;
         return style;
     };
-    const _sfc_main$d = Vue.defineComponent({
+    const _sfc_main$e = Vue.defineComponent({
         props: {
             vertical: Boolean,
             size: {
@@ -1439,7 +1439,7 @@
             };
         }
     });
-    function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createBlock(Vue.Transition, {
             name: "as-scrollbar-fade"
         }, {
@@ -1456,8 +1456,8 @@
             _: 1
         });
     }
-    var Bar = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
-    const _sfc_main$c = Vue.defineComponent({
+    var Bar = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ] ]);
+    const _sfc_main$d = Vue.defineComponent({
         components: {
             Bar: Bar
         },
@@ -1603,13 +1603,13 @@
             };
         }
     });
-    const _hoisted_1$7 = {
+    const _hoisted_1$8 = {
         ref: "scrollbar",
         class: "as-scrollbar"
     };
-    function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_bar = Vue.resolveComponent("bar");
-        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$7, [ Vue.createElementVNode("div", {
+        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$8, [ Vue.createElementVNode("div", {
             ref: "wrap",
             class: Vue.normalizeClass([ _ctx.wrapClass, "as-scrollbar__wrap", _ctx.native ? "" : "as-scrollbar__wrap--hidden-default" ]),
             style: Vue.normalizeStyle(_ctx.renderWrapStyle),
@@ -1636,9 +1636,9 @@
             always: _ctx.always
         }, null, 8, [ "move", "ratio", "size", "always" ]) ], 64)) : Vue.createCommentVNode("", true) ], 512);
     }
-    var scrollbar = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
-    var css$c = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\r\n";
-    injectStyle(css$c);
+    var scrollbar = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
+    var css$d = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\r\n";
+    injectStyle(css$d);
     let el = document.createElement("a");
     const replaceUrl = function(val) {
         const lowerCaseVal = val.toLowerCase();
@@ -2099,9 +2099,9 @@
             window.removeEventListener("pointerdown", listener);
         };
     }
-    var css$b = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 9999;\n}\n\n.arrow,\n.arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n\n.arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/*.popover-content[data-popper-placement^="bottom"] {\n  .arrow {\n    top: -10px;\n    border-width: 0 8px 10px 8px;\n    border-color: transparent transparent var(--border-color) transparent;\n    margin-left: -8px;\n\n    &::before {\n      top: 1px;\n      left: -7px;\n      border-width: 0 7px 9px 7px;\n      border-color: transparent transparent var(--background-color) transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="top"] {\n  .arrow {\n    bottom: -10px;\n    border-width: 10px 8px 0 8px;\n    border-color: var(--border-color) transparent transparent transparent;\n    margin-left: -8px;\n\n    &::before {\n      bottom: 1px;\n      left: -7px;\n      border-width: 9px 7px 0 7px;\n      border-color: var(--background-color) transparent transparent transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="left"] {\n  .arrow {\n    right: -10px;\n    margin-top: -8px;\n    border-width: 8px 0 8px 10px;\n    border-color: transparent transparent transparent var(--border-color);\n\n    &::before {\n      right: 1px;\n      top: -7px;\n      border-width: 7px 0 7px 9px;\n      border-color: transparent transparent transparent var(--background-color);\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="right"] {\n  .arrow {\n    left: -10px;\n    margin-top: -8px;\n    border-width: 8px 10px 8px 0;\n    border-color: transparent var(--border-color) transparent transparent;\n\n    &::before {\n      left: 1px;\n      top: -7px;\n      border-width: 7px 9px 7px 0;\n      border-color: transparent var(--background-color) transparent transparent;\n    }\n  }\n}*/\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
-    injectStyle(css$b);
-    const _sfc_main$b = {
+    var css$c = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 9999;\n}\n\n.arrow,\n.arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n\n.arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/*.popover-content[data-popper-placement^="bottom"] {\n  .arrow {\n    top: -10px;\n    border-width: 0 8px 10px 8px;\n    border-color: transparent transparent var(--border-color) transparent;\n    margin-left: -8px;\n\n    &::before {\n      top: 1px;\n      left: -7px;\n      border-width: 0 7px 9px 7px;\n      border-color: transparent transparent var(--background-color) transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="top"] {\n  .arrow {\n    bottom: -10px;\n    border-width: 10px 8px 0 8px;\n    border-color: var(--border-color) transparent transparent transparent;\n    margin-left: -8px;\n\n    &::before {\n      bottom: 1px;\n      left: -7px;\n      border-width: 9px 7px 0 7px;\n      border-color: var(--background-color) transparent transparent transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="left"] {\n  .arrow {\n    right: -10px;\n    margin-top: -8px;\n    border-width: 8px 0 8px 10px;\n    border-color: transparent transparent transparent var(--border-color);\n\n    &::before {\n      right: 1px;\n      top: -7px;\n      border-width: 7px 0 7px 9px;\n      border-color: transparent transparent transparent var(--background-color);\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="right"] {\n  .arrow {\n    left: -10px;\n    margin-top: -8px;\n    border-width: 8px 10px 8px 0;\n    border-color: transparent var(--border-color) transparent transparent;\n\n    &::before {\n      left: 1px;\n      top: -7px;\n      border-width: 7px 9px 7px 0;\n      border-color: transparent var(--background-color) transparent transparent;\n    }\n  }\n}*/\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
+    injectStyle(css$c);
+    const _sfc_main$c = {
         props: {
             placement: {
                 type: String,
@@ -2118,6 +2118,7 @@
         },
         setup(props) {
             const visible = Vue.ref(false);
+            const loaded = Vue.ref(false);
             const trigger = Vue.ref(null);
             const popover = Vue.ref(null);
             const popperInstance = Vue.ref(null);
@@ -2156,6 +2157,7 @@
                 stopFn();
             });
             function show(target) {
+                loaded.value = true;
                 visible.value = true;
                 createPopover(target);
                 cancelTimeout();
@@ -2169,6 +2171,7 @@
             }
             return {
                 visible: visible,
+                loaded: loaded,
                 trigger: trigger,
                 popover: popover,
                 popperInstance: popperInstance,
@@ -2177,8 +2180,8 @@
             };
         }
     };
-    const _hoisted_1$6 = [ "data-show", "data-initialized" ];
-    function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_1$7 = [ "data-show", "data-initialized" ];
+    function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.renderSlot(_ctx.$slots, "trigger", Vue.mergeProps({
             ref: "trigger"
         }, {
@@ -2196,14 +2199,16 @@
                 "data-initialized": $setup.popperInstance !== null,
                 onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.show && $setup.show(...args)),
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
-            }, [ Vue.renderSlot(_ctx.$slots, "default") ], 42, _hoisted_1$6), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
+            }, [ $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
+                key: 0
+            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$7), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
             _: 3
         }) ], 64);
     }
-    var popper = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
-    var css$a = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 1.25px 8px 0 0;\n}";
-    injectStyle(css$a);
-    const _sfc_main$a = {
+    var popper = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
+    var css$b = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 1.25px 8px 0 0;\n}";
+    injectStyle(css$b);
+    const _sfc_main$b = {
         name: "icon",
         props: {
             name: {
@@ -2212,24 +2217,82 @@
             }
         }
     };
-    const _hoisted_1$5 = {
+    const _hoisted_1$6 = {
         class: "as-icon as-menu-item-icon",
         "aria-hidden": "true"
     };
-    const _hoisted_2$4 = [ "xlink:href" ];
-    function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
-        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1$5, [ Vue.createElementVNode("use", {
+    const _hoisted_2$5 = [ "xlink:href" ];
+    function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1$6, [ Vue.createElementVNode("use", {
             "xlink:href": `#icon-${$props.name}`
-        }, null, 8, _hoisted_2$4) ]);
+        }, null, 8, _hoisted_2$5) ]);
     }
-    var icon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
-    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  padding: 0 16px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}\n.as-subMenu .as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-subMenu .as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-subMenu .as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-subMenu .as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-subMenu .as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
+    var icon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
+    const name = "favicon";
+    const session$1 = getSession(name);
+    const getValue = val => val || 1;
+    const valRef = Vue.ref(getValue(session$1));
+    const favicon$1 = Vue.computed({
+        get: () => valRef.value,
+        set: val => {
+            valRef.value = val;
+            setSession(name, getValue(val));
+        }
+    });
+    function useFavicon() {
+        return {
+            favicon: favicon$1
+        };
+    }
+    var css$a = '.as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
+    injectStyle(css$a);
+    const _sfc_main$a = {
+        name: "favicon",
+        props: {
+            url: {
+                type: String,
+                default: ""
+            },
+            icon: {
+                type: String,
+                default: ""
+            }
+        },
+        setup(props) {
+            const img = Vue.computed(() => {
+                if (props.icon) {
+                    return props.icon;
+                }
+                const obj = parseUrl(props.url);
+                return `https://ico.hnysnet.com/get.php?url=${obj.origin}`;
+            });
+            const {favicon: favicon} = useFavicon();
+            return {
+                img: img,
+                favicon: favicon
+            };
+        }
+    };
+    const _hoisted_1$5 = {
+        key: 0,
+        class: "as-url-icon"
+    };
+    const _hoisted_2$4 = [ "src" ];
+    function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+        return $setup.favicon === 1 ? (Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$5, [ Vue.createElementVNode("img", {
+            src: $setup.img,
+            onerror: "this.classList.add('error')"
+        }, null, 8, _hoisted_2$4) ])) : Vue.createCommentVNode("", true);
+    }
+    var favicon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
+    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  padding: 0 16px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
     injectStyle(css$9);
     const _sfc_main$9 = {
         name: "menuItem",
         components: {
             popper: popper,
-            icon: icon
+            icon: icon,
+            favicon: favicon
         },
         props: {
             item: {
@@ -2245,13 +2308,6 @@
             const currentSite = siteInfo();
             const classList = Vue.computed(() => props.mode === "horizontal" ? "horizontal" : "vertical");
             const placement = Vue.computed(() => props.mode === "horizontal" ? "bottom-start" : "right-start");
-            function getFavicon(item) {
-                if (item.icon) {
-                    return item.icon;
-                }
-                const obj = parseUrl(item.url);
-                return `${obj.origin}/favicon.ico`;
-            }
             const handleMenuShow = (value, item) => {
                 item.show = value;
             };
@@ -2281,7 +2337,6 @@
             return {
                 placement: placement,
                 classList: classList,
-                getFavicon: getFavicon,
                 handleMenuShow: handleMenuShow,
                 handleClick: handleClick,
                 handleCateClick: handleCateClick,
@@ -2295,13 +2350,10 @@
         class: "as-subMenu"
     };
     const _hoisted_4$2 = [ "onClick", "onMouseup" ];
-    const _hoisted_5 = {
-        class: "as-url-icon"
-    };
-    const _hoisted_6 = [ "src" ];
-    const _hoisted_7 = [ "textContent" ];
+    const _hoisted_5$1 = [ "textContent" ];
     function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_icon = Vue.resolveComponent("icon");
+        const _component_favicon = Vue.resolveComponent("favicon");
         const _component_popper = Vue.resolveComponent("popper");
         return Vue.openBlock(), Vue.createBlock(_component_popper, {
             placement: $setup.placement,
@@ -2328,13 +2380,13 @@
                 href: "javascript:void 0",
                 onClick: [ Vue.withModifiers($event => $setup.handleClick(child), [ "exact" ]), Vue.withModifiers($event => $setup.handleClick(child, true), [ "ctrl", "exact" ]) ],
                 onMouseup: Vue.withModifiers($event => $setup.handleClick(child, true), [ "middle", "exact" ])
-            }, [ Vue.createElementVNode("div", _hoisted_5, [ Vue.createElementVNode("img", {
-                src: $setup.getFavicon(child),
-                onerror: "this.classList.add('error')"
-            }, null, 8, _hoisted_6) ]), Vue.createElementVNode("p", {
+            }, [ Vue.createVNode(_component_favicon, {
+                url: child.url,
+                icon: child.icon
+            }, null, 8, [ "url", "icon" ]), Vue.createElementVNode("p", {
                 class: "as-subMenu-text",
                 textContent: Vue.toDisplayString(child.nameZh)
-            }, null, 8, _hoisted_7) ], 40, _hoisted_4$2) ])), [ [ Vue.vShow, child.data.visible ] ])), 128)) ]) ]),
+            }, null, 8, _hoisted_5$1) ], 40, _hoisted_4$2) ])), [ [ Vue.vShow, child.data.visible ] ])), 128)) ]) ]),
             _: 1
         }, 8, [ "placement" ]);
     }
@@ -2680,6 +2732,7 @@
             const {alignList: alignList, align: align} = useAlign();
             const {primaryColor: primaryColor, bgColor: bgColor, primaryTextColor: primaryTextColor} = useColor();
             const {show: show, options: options, scrollHide: scrollHide} = useSwitchShow();
+            const {favicon: favicon} = useFavicon();
             return {
                 mode: mode,
                 visible: visible,
@@ -2687,6 +2740,7 @@
                 onMaskClick: onMaskClick,
                 alignList: alignList,
                 align: align,
+                favicon: favicon,
                 primaryColor: primaryColor,
                 bgColor: bgColor,
                 primaryTextColor: primaryTextColor,
@@ -2701,7 +2755,9 @@
     }, " 设置 ", -1);
     const _hoisted_2 = Vue.createTextVNode("横向 ");
     const _hoisted_3 = Vue.createTextVNode("竖向 ");
-    const _hoisted_4 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
+    const _hoisted_4 = Vue.createTextVNode("显示 ");
+    const _hoisted_5 = Vue.createTextVNode("隐藏 ");
+    const _hoisted_6 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -2742,19 +2798,18 @@
                         "aria-modal": "true",
                         role: "dialog",
                         class: "as-side-bar",
-                        onClick: _cache[9] || (_cache[9] = Vue.withModifiers(() => {}, [ "stop" ]))
+                        onClick: _cache[11] || (_cache[11] = Vue.withModifiers(() => {}, [ "stop" ]))
                     }, [ _hoisted_1, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
                         label: "方向"
                     }, {
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_as_radio, {
                             label: "horizontal",
                             modelValue: $setup.mode,
-                            "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.mode = $event),
-                            onChange: _ctx.changeMode
+                            "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.mode = $event)
                         }, {
                             default: Vue.withCtx(() => [ _hoisted_2 ]),
                             _: 1
-                        }, 8, [ "modelValue", "onChange" ]), Vue.createVNode(_component_as_radio, {
+                        }, 8, [ "modelValue" ]), Vue.createVNode(_component_as_radio, {
                             label: "vertical",
                             modelValue: $setup.mode,
                             "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.mode = $event)
@@ -2792,12 +2847,31 @@
                         }, 1032, [ "label", "modelValue" ]))), 128)) ]),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
+                        label: "图标"
+                    }, {
+                        default: Vue.withCtx(() => [ Vue.createVNode(_component_as_radio, {
+                            label: 1,
+                            modelValue: $setup.favicon,
+                            "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.favicon = $event)
+                        }, {
+                            default: Vue.withCtx(() => [ _hoisted_4 ]),
+                            _: 1
+                        }, 8, [ "modelValue" ]), Vue.createVNode(_component_as_radio, {
+                            label: 2,
+                            modelValue: $setup.favicon,
+                            "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.favicon = $event)
+                        }, {
+                            default: Vue.withCtx(() => [ _hoisted_5 ]),
+                            _: 1
+                        }, 8, [ "modelValue" ]) ]),
+                        _: 1
+                    }), Vue.createVNode(_component_form_item, {
                         label: "主题色"
                     }, {
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
                             "default-value": "#1890ff",
                             modelValue: $setup.primaryColor,
-                            "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.primaryColor = $event)
+                            "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => $setup.primaryColor = $event)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
@@ -2806,7 +2880,7 @@
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
                             "default-value": "#ffffff",
                             modelValue: $setup.bgColor,
-                            "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.bgColor = $event)
+                            "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => $setup.bgColor = $event)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
@@ -2815,10 +2889,10 @@
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
                             "default-value": "#606266",
                             modelValue: $setup.primaryTextColor,
-                            "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => $setup.primaryTextColor = $event)
+                            "onUpdate:modelValue": _cache[10] || (_cache[10] = $event => $setup.primaryTextColor = $event)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
-                    }) ]), _hoisted_4 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ]),
+                    }) ]), _hoisted_6 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ]),
                     _: 1
                 }) ]),
                 _: 1
