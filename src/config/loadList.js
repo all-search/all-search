@@ -310,15 +310,15 @@ export const list = [
   },
   {
     url: /\/\/endday\.github\.io/,
-    invisible: true
+    disabled: true
   },
   {
     url: /\/\/endday\.gitee\.io/,
-    invisible: true
+    disabled: true
   },
   {
     url: /\/\/localhost/,
-    invisible: true
+    disabled: true
   }
 ]
 

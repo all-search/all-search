@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.15，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.15
-// @description  2022年6月30日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @name         all-search 全搜v1.2.16，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.16
+// @description  2022年7月17日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -95,7 +95,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.2.15";
+    var version$1 = "1.2.16";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -118,6 +118,7 @@
         axios: "^0.21.1",
         "core-js": "^3.9.1",
         "element-plus": "^2.2.0",
+        jsoneditor: "^9.9.0",
         "resize-observer-polyfill": "^1.5.1",
         vue: "^3.2.36",
         "vue-draggable-next": "^2.0.1",
@@ -621,13 +622,13 @@
         style: {}
     }, {
         url: /\/\/endday\.github\.io/,
-        invisible: true
+        disabled: true
     }, {
         url: /\/\/endday\.gitee\.io/,
-        invisible: true
+        disabled: true
     }, {
         url: /\/\/localhost/,
-        invisible: true
+        disabled: true
     } ];
     let currentSite = null;
     const siteInfo = function(refresh) {
@@ -2065,61 +2066,21 @@
         list: []
     } ].map(item => ({
         ...item,
-        list: item.list.map(child => {
-            const {hostname: hostname} = parseUrl(child.url);
-            return {
-                ...child,
-                id: `${item.name}-${hostname}`,
-                data: {
-                    visible: true
-                }
-            };
-        }),
         data: {
             visible: true
-        }
-    }));
-    function mergeSites(a, b) {
-        const oldSites = JSON.parse(JSON.stringify(a));
-        let newSites = JSON.parse(JSON.stringify(b.filter(item => item.name !== "personal")));
-        newSites.forEach(newCate => {
-            const oldCate = oldSites.find(oldCate => oldCate.name === newCate.name);
-            if (oldCate) {
-                newCate.list.forEach(newSite => {
-                    const i = oldCate.list.findIndex(oldSite => oldSite.id === newSite.id);
-                    if (i > -1) {
-                        Object.keys(newSite).forEach(key => {
-                            if (key !== "data") {
-                                oldCate.list[i][key] = newSite[key];
-                            }
-                        });
-                        newSite.isAdd = true;
-                    }
-                });
-                newCate.list = newCate.list.filter(item => !item.isAdd);
-                if (newCate.list.length) {
-                    oldCate.list = oldCate.list.concat(newCate.list);
-                }
-                newCate.isAdd = true;
+        },
+        list: item.list.map(child => ({
+            ...child,
+            data: {
+                visible: true
             }
-        });
-        newSites = newSites.filter(item => !item.isAdd);
-        if (newSites.length) {
-            oldSites.push(...newSites);
-        }
-        return oldSites;
-    }
+        }))
+    }));
     function initSites(type) {
         let sitesData = list$1;
         const localSites = getSession("sites");
-        const sitesVersion = getSession("sites-version");
         if (localSites) {
             sitesData = localSites;
-            if (localSites && sitesVersion && (sitesVersion !== version || type !== "tm")) {
-                sitesData = mergeSites(localSites, list$1);
-                setSession("sites", sitesData);
-                setSession("sites-version", version);
-            }
         }
         if (type === "tm") {
             sitesData = sitesData.filter(item => item.list && item.list.length > 0 && item.data && item.data.visible).map(item => ({
@@ -3158,10 +3119,10 @@
             const el = createAsRoot();
             const mountEL = document.body.parentElement.insertBefore(el, document.body);
             app.mount(mountEL);
-            passTmMethods();
         }
         console.log(`all-search running 全搜运行中(${"production"})`);
     }
+    passTmMethods();
     if (!site.disabled) {
         protectStyle();
         checkBody().then(() => {

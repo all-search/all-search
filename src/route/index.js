@@ -26,6 +26,14 @@ export default createRouter({
           meta: {
             nameZh: '网址配置'
           }
+        },
+        {
+          path: 'edit',
+          name: 'edit',
+          component: () => import('../views/edit'),
+          meta: {
+            nameZh: '网址配置'
+          }
         }
       ]
     },

@@ -19,6 +19,19 @@
             <template #title>网址配置</template>
           </el-menu-item>
         </router-link>
+        <router-link
+          to="edit"
+          custom
+          active-class="is-active"
+          v-slot="{ navigate, route, isActive }">
+          <el-menu-item
+            :index="route.path"
+            :class="[isActive && 'is-active']"
+            @click="navigate">
+            <i class="el-icon-menu"></i>
+            <template #title>网址编辑</template>
+          </el-menu-item>
+        </router-link>
       </el-menu>
     </el-aside>
   </el-scrollbar>

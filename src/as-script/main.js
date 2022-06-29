@@ -20,10 +20,11 @@ function init () {
     const el = createAsRoot()
     const mountEL = document.body.parentElement.insertBefore(el, document.body)
     app.mount(mountEL)
-    passTmMethods()
   }
   console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
 }
+
+passTmMethods()
 
 if (!site.disabled) {
   protectStyle()

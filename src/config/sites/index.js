@@ -74,19 +74,15 @@ const list = [
   }
 ].map(item => ({
   ...item,
-  list: item.list.map(child => {
-    const { hostname } = parseUrl(child.url)
-    return {
-      ...child,
-      id: `${item.name}-${hostname}`,
-      data: {
-        visible: true
-      }
-    }
-  }),
   data: {
     visible: true
-  }
+  },
+  list: item.list.map(child => ({
+    ...child,
+    data: {
+      visible: true
+    }
+  }))
 }))
 
 export default list
