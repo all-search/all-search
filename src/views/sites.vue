@@ -237,8 +237,10 @@ export default {
       this.$message('添加成功')
     },
     deleteUrl (j) {
-      const i = this.localSites.findIndex(item => item.name === 'personal')
-      this.localSites[i].list.splice(j, 1)
+      const currentTab = this.localSites.find(item => item.name === this.tabName)
+      if (currentTab) {
+        currentTab.list.splice(j, 1)
+      }
     },
     addNewUrl (cate) {
       cate.list.push({
