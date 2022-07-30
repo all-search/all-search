@@ -119,6 +119,7 @@ export default {
 
 .as-menu-item.horizontal {
   position: relative;
+  padding: 0 16px;
 
   &::after {
     content: "";
@@ -164,6 +165,10 @@ export default {
     transform: scaleY(1);
     opacity: 1;
   }
+
+  .as-menu-item-title {
+    margin-right: 6px;
+  }
 }
 
 .as-menu-item.no-underline {
@@ -182,13 +187,13 @@ export default {
   color: var(--as-primary-text-color);
   transition: color .3s cubic-bezier(.645, .045, .355, 1), border-color .3s cubic-bezier(.645, .045, .355, 1), background .3s cubic-bezier(.645, .045, .355, 1);
   box-sizing: border-box;
-  padding: 0 16px;
   margin: 0;
   white-space: nowrap;
   cursor: pointer;
   font-size: 14px;
   display: flex;
   align-items: center;
+  justify-content: center;
 
   &:hover {
     border-color: var(--as-primary-color);

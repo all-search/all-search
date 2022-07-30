@@ -139,7 +139,8 @@ export default {
   display: none;
   pointer-events: none;
   opacity: 0;
-  z-index: 9999;
+  z-index: 99999;
+  position: relative;
 }
 
 .arrow,

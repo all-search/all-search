@@ -41,7 +41,7 @@ export default {
 }
 
 .as-title-horizontal {
-  min-width: 100px;
+  min-width: 90px;
   margin: 0 10px;
 }
 
@@ -58,7 +58,7 @@ export default {
 
 .as-title-inner {
   padding: 0;
-  font-size: 18px;
+  font-size: 17px;
   height: $height;
   line-height: $height;
   font-weight: 600;

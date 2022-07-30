@@ -24,6 +24,6 @@ export default {
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
-  margin: 1.25px 8px 0 0;
+  margin: 1.25px 4px 0 0;
 }
 </style>
