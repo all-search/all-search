@@ -314,7 +314,6 @@ export default {
         nameZh: item.nameZh,
         name: item.name,
         list: item.list.map(child => ({
-          id: child.id,
           nameZh: child.nameZh,
           url: child.url,
           data: child.data

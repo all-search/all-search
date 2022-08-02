@@ -108,6 +108,22 @@ export default {
       ctx.emit('reset')
     }
 
+    function formatSites (data) {
+      if (!Array.isArray(data)) {
+        return []
+      }
+      return data.map(item => ({
+        nameZh: item.nameZh,
+        name: item.name,
+        list: item.list.map(child => ({
+          nameZh: child.nameZh,
+          url: child.url,
+          data: child.data
+        })),
+        data: item.data
+      }))
+    }
+
     function save () {
       instance.validate().then(res => {
         if (res.length !== 0) {
