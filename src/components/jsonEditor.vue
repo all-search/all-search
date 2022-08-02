@@ -115,12 +115,12 @@ export default {
       return data.map(item => ({
         nameZh: item.nameZh,
         name: item.name,
+        data: item.data,
         list: item.list.map(child => ({
           nameZh: child.nameZh,
           url: child.url,
           data: child.data
-        })),
-        data: item.data
+        }))
       }))
     }
 
