@@ -23,7 +23,6 @@ import { onMounted, ref, watch } from 'vue'
 import JSONEditor from 'jsoneditor'
 import 'jsoneditor/dist/jsoneditor.css'
 import { ElMessage } from 'element-plus'
-import { formatSites } from '../util/sites'
 
 export default {
   name: 'jsonEditor',

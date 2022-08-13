@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.17，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.17
-// @description  2022年8月2日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @name         all-search 全搜v1.2.18，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.18
+// @description  2022年8月13日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -95,7 +95,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.2.17";
+    var version$1 = "1.2.18";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -799,7 +799,8 @@
                 cssNode.id = "as-style-common";
                 cssNode.appendChild(document.createTextNode(styles));
                 styles = "";
-                const container = document.body || document.head || document.documentElement || document;
+                const asRoot = document.getElementById("all-search");
+                const container = asRoot || document.body || document.head || document.documentElement || document;
                 container.appendChild(cssNode);
                 id = null;
             }, 0);
@@ -2224,7 +2225,7 @@
             name: "slide-fade"
         }, {
             default: Vue.withCtx(() => [ (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
-                to: "body"
+                to: "#all-search"
             }, [ Vue.withDirectives(Vue.createElementVNode("div", {
                 class: Vue.normalizeClass([ $props.popperClass, "popover-content" ]),
                 ref: "popover",

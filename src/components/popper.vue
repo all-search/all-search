@@ -4,7 +4,7 @@
         v-bind="{ show, hide }"/>
   <transition name="slide-fade">
     <Teleport
-      to="body">
+      to="#all-search">
       <div
         v-show="visible"
         :class="popperClass"
