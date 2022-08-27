@@ -15,17 +15,9 @@ export const list = [
     invisible: true
   },
   {
-    url: /\/\/www\.baidu\.com\/s\?/,
+    url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
     style: {
-      1: `.fix-head { top: ${height}px !important; }`,
-      2: `.fix-head #u { right: ${width}px; }`
-    }
-  },
-  {
-    url: /\/\/www\.baidu\.com\/baidu\?/,
-    style: {
-      1: `.fix-head { top: ${height}px !important; }`,
-      2: `.fix-head #u { right: ${width}px; }`
+      1: `#head { top: ${height}px !important; }`
     }
   },
   {

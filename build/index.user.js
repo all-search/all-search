@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.18，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.18
-// @description  2022年8月13日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @name         all-search 全搜v1.2.19，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.19
+// @description  2022年8月27日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -19,8 +19,7 @@
 
 // @include      /\/\/www\.google\.com(.hk)?\/search/
 // @include      /\/\/www\.baidu\.com\/$/
-// @include      /\/\/www\.baidu\.com\/s\?/
-// @include      /\/\/www\.baidu\.com\/baidu\?/
+// @include      /\/\/www\.baidu\.com\/(s|baidu)\?/
 // @include      /\/\/[^.]*\.bing\.com\/search/
 // @include      /\/\/duckduckgo\.com\/*/
 // @include      /\/\/search\.yahoo\.com\/search/
@@ -95,7 +94,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.2.18";
+    var version$1 = "1.2.19";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -397,16 +396,9 @@
         url: /\/\/www\.baidu\.com\/$/,
         invisible: true
     }, {
-        url: /\/\/www\.baidu\.com\/s\?/,
+        url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
         style: {
-            1: `.fix-head { top: ${height}px !important; }`,
-            2: `.fix-head #u { right: ${width}px; }`
-        }
-    }, {
-        url: /\/\/www\.baidu\.com\/baidu\?/,
-        style: {
-            1: `.fix-head { top: ${height}px !important; }`,
-            2: `.fix-head #u { right: ${width}px; }`
+            1: `#head { top: ${height}px !important; }`
         }
     }, {
         url: /\/\/[^.]*\.bing\.com\/search/
