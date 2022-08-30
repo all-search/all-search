@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.2.19，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.2.19
-// @description  2022年8月27日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @name         all-search 全搜v1.2.20，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.2.20
+// @description  2022年8月30日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.2.19";
+    var version$1 = "1.2.20";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -256,7 +256,7 @@
         emit();
     }
     const isMobile = function() {
-        return /Android|webOS|iPhone|iPod|BlackBerry|iphone os|ipad/.test(navigator.userAgent.toLowerCase());
+        return /mobile|android|webos|iphone|ipod|blackberry|iphone os|ipad/i.test(navigator.userAgent);
     };
     function withHookBefore(originalFn, hookFn) {
         return function() {

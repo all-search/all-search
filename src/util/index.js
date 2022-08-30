@@ -253,5 +253,5 @@ export function getTmMethods () {
 }
 
 export const isMobile = function () {
-  return (/Android|webOS|iPhone|iPod|BlackBerry|iphone os|ipad/.test(navigator.userAgent.toLowerCase()))
+  return /mobile|android|webos|iphone|ipod|blackberry|iphone os|ipad/i.test(navigator.userAgent)
 }
