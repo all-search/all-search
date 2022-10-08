@@ -51,10 +51,6 @@ export const protectStyle = function () {
   Node.prototype.__as_hooks__ = true
 }
 
-export const initStyle = function () {
-
-}
-
 export const addStyleForCurrentSite = function (mode, site, remove = false) {
   const modeVal = unref(mode)
   // addCustomStyle(modeVal, site, remove)
@@ -70,7 +66,7 @@ function modifyPosition (item) {
   }
   const position = style.getPropertyValue('position')
   if (position === 'fixed') {
-    changeTop(item)
+    addDataset(item)
   } else if (position === 'absolute') {
     let parent = item.offsetParent
     let target = item
@@ -83,7 +79,7 @@ function modifyPosition (item) {
         parent = null
       }
     }
-    changeTop(target)
+    addDataset(target)
   }
 }
 
@@ -92,15 +88,25 @@ function getTop (el) {
   return style.getPropertyValue('top') || '0px'
 }
 
-function changeTop (item) {
+function addDataset (item) {
   const top = getTop(item)
   if (top.includes('px')) {
     const num = parseInt(top.replace('px', '')) || 0
-    item.style.top = `${num + 30}px`
+    // item.style.top = `${num + 30}px`
+    if (item.dataset.hasSet) {
+      item.dataset.hasSet = Number(item.dataset.hasSet) + 1
+    } else {
+      item.dataset.hasSet = 1
+    }
+    item.dataset.top = num
   }
 }
 
-const fixedNodeMap = new WeakMap()
+function changeTop (item) {
+  const num = parseInt(item.dataset.top) || 0
+  item.style.top = `${num + 30}px`
+  delete item.dataset.top
+}
 
 let isSelfChange = false
 
@@ -116,7 +122,6 @@ function addSpecialStyle () {
     attributes: true,
     childList: true,
     subtree: true,
-    attributeOldValue: true,
     attributeFilter: ['style', 'class']
   }
   // 当观察到变动时执行的回调函数
@@ -124,24 +129,26 @@ function addSpecialStyle () {
     if (isSelfChange) {
       isSelfChange = false
     } else {
-      isSelfChange = true
-      setTimeout(()=> {
-        for (let mutation of mutationsList) {
-          if (mutation.type === 'attributes') {
-            const item = mutation.target
-            if (!['BODY', 'STYLE'].includes(item.tagName)) {
-              modifyPosition(item)
-            }
+      mutationsList.forEach((mutation, i) => {
+        if (mutation.type === 'attributes') {
+          const item = mutation.target
+          if (!['BODY', 'STYLE'].includes(item.tagName)) {
+            modifyPosition(item)
           }
         }
       })
+      document.body.querySelectorAll('[data-top]').forEach(item => {
+        changeTop(item)
+      })
+      isSelfChange = true
     }
-    console.log(isSelfChange)
   }
   // 创建一个观察器实例并传入回调函数
   const observer = new MutationObserver(callback)
   // 以上述配置开始观察目标节点
-  observer.observe(targetNode, config)
+  setTimeout(() => {
+    observer.observe(targetNode, config)
+  })
   // 之后，可停止观察
   //   observer.disconnect();
 }
