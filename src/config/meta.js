@@ -1,36 +1,22 @@
 import path from 'path'
 import pkg from '../../package.json'
-import { list } from './loadList'
-
-const endOfLine = require('os').EOL
 
 const now = new Date()
 
-const includeList = type => {
-  if (type === 'tm') {
-    return list
-      .map(item => `// @include      ${item.url}`)
-      .join(endOfLine)
-  } else {
-    return '// @include      *'
-  }
-}
+const fileName = 'index.user.js'
+const scriptUrl = `https://unpkg.com/all-search@latest/build/${fileName}`
 
-const fileName = type => type === 'tm' ? 'index.user.js': 'index.sc.user.js'
-const scriptUrl = type => {
-  return `https://unpkg.com/all-search@latest/build/${fileName(type)}'}`
-}
-
-const meta = type => `// @name         ${pkg.name} 全搜v${pkg.version}，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+const meta = `// @name         ${pkg.name} 全搜v${pkg.version}，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      ${pkg.version}
 // @description  ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日更新 ${pkg.description}
 // @author       ${pkg.author}
 // @license      ${pkg.license}
 // @homepageURL  ${pkg.homepage}
-// @updateURL    ${scriptUrl(type)}
-// @downloadURL  ${scriptUrl(type)}
+// @updateURL    ${scriptUrl}
+// @downloadURL  ${scriptUrl}
 // @supportURL
 // @noframes
+// @include      *
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
 // @require      https://unpkg.com/@popperjs/core@2.11.5/dist/umd/popper-lite.min.js
 // @run-at       document-body
@@ -40,15 +26,13 @@ const meta = type => `// @name         ${pkg.name} 全搜v${pkg.version}，一�
 // @grant        GM_getResourceText
 `
 
-export const proMeta = type => `// ==UserScript==
-${meta(type)}
-${includeList(type)}
+export const proMeta = `// ==UserScript==
+${meta}
 // ==/UserScript==
 `
 
-export const devMeta = type => `// ==UserScript==
-${meta(type)}
-${includeList(type)}
-// @require      file:///${path.join(__dirname, `/build/${fileName(type)}`)}
+export const devMeta = `// ==UserScript==
+${meta}
+// @require      file:///${path.join(__dirname, `/build/${fileName}`)}
 // ==/UserScript==
 `

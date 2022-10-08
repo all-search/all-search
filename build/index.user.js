@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         all-search 全搜v1.2.19，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.2.19
-// @description  2022年8月27日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @description  2022年10月7日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
-// @updateURL    https://unpkg.com/all-search@latest/build/index.user.js'}
-// @downloadURL  https://unpkg.com/all-search@latest/build/index.user.js'}
+// @updateURL    https://unpkg.com/all-search@latest/build/index.user.js
+// @downloadURL  https://unpkg.com/all-search@latest/build/index.user.js
 // @supportURL
 // @noframes
+// @include      *
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
 // @require      https://unpkg.com/@popperjs/core@2.11.5/dist/umd/popper-lite.min.js
 // @run-at       document-body
@@ -17,78 +18,6 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 
-// @include      /\/\/www\.google\.com(.hk)?\/search/
-// @include      /\/\/www\.baidu\.com\/$/
-// @include      /\/\/www\.baidu\.com\/(s|baidu)\?/
-// @include      /\/\/[^.]*\.bing\.com\/search/
-// @include      /\/\/duckduckgo\.com\/*/
-// @include      /\/\/search\.yahoo\.com\/search/
-// @include      /\/\/tw\.search\.yahoo\.com\/search/
-// @include      /\/\/searx\.me\/\?q/
-// @include      /\/\/www\.sogou\.com\/(?:web|s)/
-// @include      /\/\/yandex\.com\/search/
-// @include      /\/\/google\.infinitynewtab\.com\/\?q/
-// @include      /\/\/www\.dogedoge\.com\/results\?q/
-// @include      /\/\/baike\.baidu\.com\/item/
-// @include      /\/\/baike\.baidu\.com\/search/
-// @include      /\/\/wenku\.baidu\.com\/search/
-// @include      /\/\/zhidao\.baidu\.com\/search/
-// @include      /\/\/\D{2,5}\.wikipedia\.org\/wiki/
-// @include      /\/\/www\.zhihu\.com\/search\?/
-// @include      /\/\/www\.so\.com\/s/
-// @include      /\/\/so\.baike\.com\/doc/
-// @include      /\/\/www\.baike\.com\/wiki/
-// @include      /\/\/www\.docin\.com\/search\.do/
-// @include      /\/\/zhihu\.sogou\.com\/zhihu/
-// @include      /\/\/weixin\.sogou\.com\/weixin\?/
-// @include      /\/\/www\.quora\.com\/search\?/
-// @include      /\/\/stackoverflow\.com\/search\?/
-// @include      /\/\/search\.bilibili\.com\/all/
-// @include      /\/\/www\.acfun\.cn\/search/
-// @include      /\/\/www\.youtube\.com\/results/
-// @include      /\/\/www\.youtube\.com\/watch/
-// @include      /\/\/www\.nicovideo\.jp\/search\//
-// @include      /\/\/so\.iqiyi\.com\/so\/q/
-// @include      /\/\/v\.qq\.com\/x\/search/
-// @include      /\/\/music\.baidu\.com\/search/
-// @include      /\/\/so\.1ting\.com\/all\.do/
-// @include      /\/\/s\.music\.qq\.com/
-// @include      /\/\/music\.163\.com\/.*?#\/search/
-// @include      /\/\/image\.baidu\.com\/search/
-// @include      /\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
-// @include      /\/\/.*\.bing\.com\/images\/search/
-// @include      /\/\/www\.flickr\.com\/search\//
-// @include      /^http:\/\/www\.pixiv\.net\/search\.php/
-// @include      /\/\/huaban\.com\/search\/\?/
-// @include      /\/\/www\.pinterest\.com\/search\//
-// @include      /\/\/thepiratebay\.org\/search/
-// @include      /\/\/subhd\.tv\/search/
-// @include      /\/\/translate\.google(?:\.\D{1,4}){1,2}/
-// @include      /\/\/fanyi\.baidu\.com/
-// @include      /\/\/.*\.bing\.com\/dict\/search\?q=/
-// @include      /\/\/dict\.youdao\.com\/search/
-// @include      /\/\/dict\.youdao\.com\/w/
-// @include      /\/\/dict\.cn\/./
-// @include      /\/\/s\.taobao\.com\/search/
-// @include      /\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
-// @include      /\/\/list\.tmall\.com\/search_product\.htm/
-// @include      /\/\/search\.jd\.com\/search/
-// @include      /\/\/search\.suning\.com/
-// @include      /\/\/search\.smzdm\.com\/\?/
-// @include      /\/\/s\.weibo\.com\/weibo\?q=/
-// @include      /\/\/tieba\.baidu\.com\/f\/search/
-// @include      /\/\/(movie|music|book)\.douban\.com\/subject_search?/
-// @include      /\/\/www\.douban\.com\/search/
-// @include      /\/\/xueshu\.baidu\.com\/(?:s|baidu)/
-// @include      /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
-// @include      /^http:\/\/search\.cnki\.net\/search\.aspx/
-// @include      /^http:\/\/link\.springer\.com\/search\?query=/
-// @include      /\/\/github\.com\/search/
-// @include      /\/\/www\.startpage\.com\/sp\/search/
-// @include      /\/\/so\.toutiao\.com\/search/
-// @include      /\/\/endday\.github\.io/
-// @include      /\/\/endday\.gitee\.io/
-// @include      /\/\/localhost/
 // ==/UserScript==
 
 (function() {
@@ -165,676 +94,6 @@
     Vue.reactive({
         tmVersion: ""
     });
-    const version = pkg.version;
-    function getQueryString(name, url) {
-        url = url || window.location.href;
-        const r = new RegExp("(\\?|#|&)" + name + "=([^&#]*)(&|#|$)");
-        const m = url.match(r);
-        return decodeURIComponent(!m ? "" : m[2]);
-    }
-    function getKeyword() {
-        const el = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
-        if (el) {
-            if (el.nodeName === "INPUT" || el.localName === "textarea") {
-                return el.value;
-            } else {
-                return el.textContent;
-            }
-        }
-        return "";
-    }
-    function checkBody() {
-        let time = 0;
-        return new Promise((resolve, reject) => {
-            if (document && document.body) {
-                resolve();
-            } else {
-                const id = setInterval((function() {
-                    time += 1;
-                    if (document && document.body) {
-                        clearInterval(id);
-                        resolve();
-                    }
-                    if (time === 50) {
-                        clearInterval(id);
-                        reject(new Error("timeOut"));
-                    }
-                }), 200);
-            }
-        });
-    }
-    function getName(name) {
-        if (name) {
-            return `__allSearch__${name}`;
-        }
-        return null;
-    }
-    let getSession = function(name) {
-        const formatName = getName(name);
-        let item;
-        if (window.GM_getValue) {
-            item = window.GM_getValue(formatName);
-        } else {
-            item = window.localStorage.getItem(formatName);
-        }
-        if (item) {
-            try {
-                return JSON.parse(item);
-            } catch (e) {
-                return item;
-            }
-        }
-        return null;
-    };
-    let setSession = function(name, value) {
-        const formatName = getName(name);
-        if (window.GM_setValue) {
-            window.GM_setValue(formatName, value);
-        } else {
-            const item = JSON.stringify(value);
-            if (item) {
-                window.localStorage.setItem(formatName, item);
-            }
-        }
-    };
-    function RAFInterval(callback, period, runNow) {
-        const needCount = period / 1e3 * 60;
-        let times = 0;
-        if (runNow === true) {
-            const shouldFinish = callback();
-            if (shouldFinish) {
-                return;
-            }
-        }
-        function step() {
-            if (times < needCount) {
-                times++;
-                requestAnimationFrame(step);
-            } else {
-                const shouldFinish = callback() || false;
-                if (!shouldFinish) {
-                    times = 0;
-                    requestAnimationFrame(step);
-                }
-            }
-        }
-        requestAnimationFrame(step);
-    }
-    function removeNode(cssSelectorOrFunction) {
-        try {
-            if (typeof cssSelectorOrFunction === "string") {
-                let removeNodes = document.querySelectorAll(cssSelectorOrFunction);
-                for (let i = 0; i < removeNodes.length; i++) {
-                    removeNodes[i].remove();
-                }
-            } else if (typeof cssSelectorOrFunction === "function") {
-                cssSelectorOrFunction();
-            } else {
-                console.log("未知命令：" + cssSelectorOrFunction);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-    function addStyleContent(css, className, addToTarget, isReload = false) {
-        RAFInterval((function() {
-            let addTo = document.querySelector(addToTarget);
-            if (typeof addToTarget === "undefined") {
-                addTo = document.body || document.head || document.documentElement || document;
-            }
-            if (typeof addToTarget === "undefined" || typeof addToTarget !== "undefined" && document.querySelector(addToTarget) !== null) {
-                if (isReload) {
-                    removeNode("." + className);
-                } else if (!isReload && document.querySelector("." + className) !== null) {
-                    return true;
-                }
-                let cssNode = document.createElement("style");
-                if (className) {
-                    cssNode.className = className;
-                }
-                cssNode.setAttribute("type", "text/css");
-                cssNode.innerHTML = css;
-                try {
-                    addTo.appendChild(cssNode);
-                } catch (e) {
-                    console.log(e.message);
-                }
-                return true;
-            }
-        }), 20, true);
-    }
-    function getAsRoot() {
-        return document.getElementById("all-search");
-    }
-    function createAsRoot() {
-        let el = document.createElement("div");
-        el.id = "all-search";
-        return el;
-    }
-    const scriptLoaded = getName("script-loaded");
-    const pageLoaded = getName("page-loaded");
-    function passTmMethods() {
-        const emit = function() {
-            document.dispatchEvent(new CustomEvent(scriptLoaded, {
-                detail: {
-                    version: version,
-                    getSession: getSession,
-                    setSession: setSession
-                }
-            }));
-        };
-        document.addEventListener(pageLoaded, emit);
-        emit();
-    }
-    const isMobile = function() {
-        return /Android|webOS|iPhone|iPod|BlackBerry|iphone os|ipad/.test(navigator.userAgent.toLowerCase());
-    };
-    function withHookBefore(originalFn, hookFn) {
-        return function() {
-            if (hookFn.apply(this, arguments) === false) {
-                return;
-            }
-            return originalFn.apply(this, arguments);
-        };
-    }
-    function withHookAfter(originalFn, hookFn) {
-        return function() {
-            const output = originalFn.apply(this, arguments);
-            hookFn.apply(this, arguments);
-            return output;
-        };
-    }
-    const initBodyClass = (mode, currentSite, remove = false) => {
-        const body = document.body;
-        body.classList.remove("body-vertical", "body-horizontal");
-        if (!remove && !currentSite.invisible && mode) {
-            body.classList.add(`body-${mode}`);
-        }
-    };
-    const addCustomStyle = (mode, currentSite, remove) => {
-        removeNode(".as-custom-style");
-        if (currentSite.invisible || remove) {
-            return;
-        }
-        if (currentSite.style) {
-            let styleContent = "";
-            if (currentSite.style[1] && mode === "horizontal") {
-                styleContent = currentSite.style[1];
-            } else if (currentSite.style[2] && mode === "vertical") {
-                styleContent = currentSite.style[2];
-            }
-            if (styleContent) {
-                addStyleContent(styleContent, "as-custom-style");
-            }
-        }
-    };
-    const protectStyle = function() {
-        if (Node.prototype.__as_hooks__) {
-            return;
-        }
-        Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, e => {
-            if (e && e.tagName === "STYLE") {
-                return !(e.classList.contains("as-icon") || e.classList.contains("as-style") || e.classList.contains("elPopover") || e.classList.contains("elScrollbar"));
-            }
-            return true;
-        });
-        Node.prototype.__as_hooks__ = true;
-    };
-    const addStyleForCurrentSite = function(mode, site, remove = false) {
-        const modeVal = Vue.unref(mode);
-        addCustomStyle(modeVal, site, remove);
-        initBodyClass(modeVal, site, remove);
-    };
-    const height = 30;
-    const width = 100;
-    const list$2 = [ {
-        url: /\/\/www\.google\.com(.hk)?\/search/,
-        style: {
-            1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;}#searchform.minidiv{top: ${height}px !important;}`
-        }
-    }, {
-        url: /\/\/www\.baidu\.com\/$/,
-        invisible: true
-    }, {
-        url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
-        style: {
-            1: `#head { top: ${height}px !important; }`
-        }
-    }, {
-        url: /\/\/[^.]*\.bing\.com\/search/
-    }, {
-        url: /\/\/duckduckgo\.com\/*/
-    }, {
-        url: /\/\/search\.yahoo\.com\/search/
-    }, {
-        url: /\/\/tw\.search\.yahoo\.com\/search/
-    }, {
-        url: /\/\/searx\.me\/\?q/
-    }, {
-        url: /\/\/www\.sogou\.com\/(?:web|s)/,
-        keyword() {
-            return document.getElementById("upquery").value;
-        }
-    }, {
-        url: /\/\/yandex\.com\/search/
-    }, {
-        url: /\/\/google\.infinitynewtab\.com\/\?q/
-    }, {
-        url: /\/\/www\.dogedoge\.com\/results\?q/,
-        style: {
-            1: `#header_wrapper{top: ${height}px!important;}`,
-            2: `#header_wrapper{right: ${width}px!important;}`
-        }
-    }, {
-        url: /\/\/baike\.baidu\.com\/item/
-    }, {
-        url: /\/\/baike\.baidu\.com\/search/
-    }, {
-        url: /\/\/wenku\.baidu\.com\/search/
-    }, {
-        url: /\/\/zhidao\.baidu\.com\/search/
-    }, {
-        url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/,
-        style: {
-            1: `#mw-head,#mw-panel{top: ${height}px!important;}#mw-panel`
-        }
-    }, {
-        url: /\/\/www\.zhihu\.com\/search\?/,
-        style: {
-            1: `.AppHeader.is-fixed {top: ${height}px!important;}`
-        }
-    }, {
-        url: /\/\/www\.so\.com\/s/,
-        style: {
-            2: `.body-vertical #header { z-index: 2000!important; }`
-        }
-    }, {
-        url: /\/\/so\.baike\.com\/doc/
-    }, {
-        url: /\/\/www\.baike\.com\/wiki/
-    }, {
-        url: /\/\/www\.docin\.com\/search\.do/
-    }, {
-        url: /\/\/zhihu\.sogou\.com\/zhihu/,
-        keyword() {
-            return document.getElementById("upquery").value;
-        },
-        style: {
-            1: `.header { top:${height}px }`
-        }
-    }, {
-        url: /\/\/weixin\.sogou\.com\/weixin\?/,
-        style: {
-            2: `.headsearch#scroll-header { left:unset; }`
-        }
-    }, {
-        url: /\/\/www\.quora\.com\/search\?/
-    }, {
-        url: /\/\/stackoverflow\.com\/search\?/,
-        style: {
-            1: `.top-bar._fixed { top: ${height}px }`,
-            2: `.top-bar._fixed { right: ${width}px }`
-        }
-    }, {
-        url: /\/\/search\.bilibili\.com\/all/,
-        keyword() {
-            const el = document.querySelector(".search-input-el");
-            return el ? el.value : "";
-        },
-        style: {
-            1: `.fixed-top {top: ${height}px;}`
-        }
-    }, {
-        url: /\/\/www\.acfun\.cn\/search/,
-        keyword() {
-            return document.getElementById("search-text--standalone").value;
-        },
-        style: {
-            1: `#header {top: ${height}px;}`
-        }
-    }, {
-        url: /\/\/www\.youtube\.com\/results/,
-        style: {
-            1: `#masthead-container.ytd-app {top:${height}px !important;}\n          html:not(.style-scope) {--ytd-toolbar-height:${height + 56}px !important;}\n          ytd-mini-guide-renderer.ytd-app {padding-top: ${height}px;}`,
-            2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
-        }
-    }, {
-        url: /\/\/www\.youtube\.com\/watch/,
-        invisible: true
-    }, {
-        url: /\/\/www\.nicovideo\.jp\/search\//
-    }, {
-        url: /\/\/so\.iqiyi\.com\/so\/q/
-    }, {
-        url: /\/\/v\.qq\.com\/x\/search/,
-        style: {
-            1: `.site_head {top: ${height}px;}`
-        }
-    }, {
-        url: /\/\/music\.baidu\.com\/search/
-    }, {
-        url: /\/\/so\.1ting\.com\/all\.do/
-    }, {
-        url: /\/\/s\.music\.qq\.com/
-    }, {
-        url: /\/\/music\.163\.com\/.*?#\/search/
-    }, {
-        url: /\/\/image\.baidu\.com\/search/,
-        style: {
-            1: `#search .s_search { top: ${height}px; }`
-        }
-    }, {
-        url: /\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
-    }, {
-        url: /\/\/.*\.bing\.com\/images\/search/,
-        style: {
-            1: `#miniheader {padding-top: ${height}px;}`
-        }
-    }, {
-        url: /\/\/www\.flickr\.com\/search\//
-    }, {
-        url: /^http:\/\/www\.pixiv\.net\/search\.php/
-    }, {
-        url: /\/\/huaban\.com\/search\/\?/,
-        style: {
-            1: `#header  { top: ${height}px; }`
-        }
-    }, {
-        url: /\/\/www\.pinterest\.com\/search\//
-    }, {
-        url: /\/\/thepiratebay\.org\/search/
-    }, {
-        url: /\/\/subhd\.tv\/search/
-    }, {
-        url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/,
-        keyword() {
-            return getQueryString("text") || getQueryString("q");
-        }
-    }, {
-        url: /\/\/fanyi\.baidu\.com/,
-        keyword() {
-            const el = document.getElementById("baidu_translate_input");
-            return el ? el.value : "";
-        }
-    }, {
-        url: /\/\/.*\.bing\.com\/dict\/search\?q=/
-    }, {
-        url: /\/\/dict\.youdao\.com\/search/
-    }, {
-        url: /\/\/dict\.youdao\.com\/w/
-    }, {
-        url: /\/\/dict\.cn\/./
-    }, {
-        url: /\/\/s\.taobao\.com\/search/,
-        style: {
-            1: `.m-header-fixed .header-inner { top: ${height}px !important;}`
-        }
-    }, {
-        url: /\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
-    }, {
-        url: /\/\/list\.tmall\.com\/search_product\.htm/
-    }, {
-        url: /\/\/search\.jd\.com\/search/
-    }, {
-        url: /\/\/search\.suning\.com/
-    }, {
-        url: /\/\/search\.smzdm\.com\/\?/
-    }, {
-        url: /\/\/s\.weibo\.com\/weibo\?q=/,
-        style: {
-            1: `div[role="navigation"] { top: ${height}px !important;}`
-        }
-    }, {
-        url: /\/\/tieba\.baidu\.com\/f\/search/
-    }, {
-        url: /\/\/(movie|music|book)\.douban\.com\/subject_search?/
-    }, {
-        url: /\/\/www\.douban\.com\/search/
-    }, {
-        url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
-        style: {
-            1: `#head_wr.gj #head.gj, #left_menu_content { top: ${height}px !important;}`,
-            2: `#left_menu_content { left: ${width}px !important;}`
-        }
-    }, {
-        url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
-    }, {
-        url: /^http:\/\/search\.cnki\.net\/search\.aspx/
-    }, {
-        url: /^http:\/\/link\.springer\.com\/search\?query=/
-    }, {
-        url: /\/\/github\.com\/search/
-    }, {
-        url: /\/\/www\.startpage\.com\/sp\/search/,
-        style: {
-            1: `.layout-web__header {top: ${height}px !important;}`
-        }
-    }, {
-        url: /\/\/so\.toutiao\.com\/search/,
-        style: {}
-    }, {
-        url: /\/\/endday\.github\.io/,
-        disabled: true
-    }, {
-        url: /\/\/endday\.gitee\.io/,
-        disabled: true
-    }, {
-        url: /\/\/localhost/,
-        disabled: true
-    } ];
-    let currentSite = null;
-    const siteInfo = function(refresh) {
-        if (refresh || !currentSite) {
-            currentSite = getSite();
-        }
-        return currentSite;
-    };
-    const getSite = function() {
-        const target = list$2.find(item => item.url.test(window.location.href.toLowerCase()));
-        if (target) {
-            return {
-                url: target.url,
-                invisible: !!target.invisible,
-                disabled: !!target.disabled,
-                style: target.style,
-                keyword: target.keyword
-            };
-        }
-        return {
-            url: "",
-            invisible: true,
-            disabled: true,
-            style: {},
-            keyword: null
-        };
-    };
-    const routerChange = cb => {
-        history.pushState = withHookAfter(history.pushState, cb);
-        history.replaceState = withHookAfter(history.replaceState, cb);
-        window.addEventListener("yt-navigate-finish", cb);
-    };
-    function isFullScreen() {
-        return document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
-    }
-    function onFullScreenChange(handler) {
-        const handleResize = function() {
-            if (!isFullScreen()) {
-                handler();
-            }
-        };
-        document.addEventListener("fullscreenchange", handler);
-        document.addEventListener("webkitfullscreenchange", handler);
-        document.addEventListener("mozfullscreenchange", handler);
-        document.addEventListener("MSFullscreenChange", handler);
-        document.addEventListener("resize", handleResize);
-        return () => {
-            document.removeEventListener("fullscreenchange", handler);
-            document.removeEventListener("webkitfullscreenchange", handler);
-            document.removeEventListener("mozfullscreenchange", handler);
-            document.removeEventListener("MSFullscreenChange", handler);
-            document.removeEventListener("resize", handleResize);
-        };
-    }
-    const session$3 = getSession("mode");
-    const getMode = val => {
-        if (![ "vertical", "horizontal" ].includes(val)) {
-            return "horizontal";
-        }
-        return val;
-    };
-    const modeRef = Vue.ref(getMode(session$3));
-    const mode = Vue.computed({
-        get: () => modeRef.value,
-        set: val => {
-            modeRef.value = val;
-            setSession("mode", getMode(val));
-        }
-    });
-    function useMode() {
-        return {
-            mode: mode
-        };
-    }
-    const options = new Map([ [ false, "关闭" ], [ "top", "向上" ], [ "bottom", "向下" ], [ "all", "滚动" ] ]);
-    const defaultOpt = {
-        show: true,
-        scrollHide: false
-    };
-    const session$2 = getSession("switchShow") || defaultOpt;
-    const getOpts = val => options.has(val) ? val : false;
-    const getOpt = val => Object.assign({}, defaultOpt, {
-        show: Boolean(val.show),
-        scrollHide: getOpts(val.scrollHide)
-    });
-    let data = Vue.reactive(getOpt(session$2));
-    const show = Vue.computed({
-        get: () => data.show,
-        set: val => {
-            data.show = val;
-            setSession("switchShow", data);
-        }
-    });
-    const scrollHide = Vue.computed({
-        get: () => data.scrollHide,
-        set: val => {
-            data.scrollHide = val;
-            setSession("switchShow", data);
-        }
-    });
-    function useSwitchShow() {
-        return {
-            show: show,
-            scrollHide: scrollHide,
-            options: options
-        };
-    }
-    class Raf {
-        constructor() {
-            this.init();
-        }
-        init() {
-            this._timerIdMap = {
-                timeout: {},
-                interval: {}
-            };
-        }
-        run(type = "interval", handler, interval = 16.7) {
-            const now = Date.now;
-            let stime = now();
-            let etime = stime;
-            const timerSymbol = Symbol("timerSymbol");
-            const loop = () => {
-                this.setIdMap(timerSymbol, type, loop);
-                etime = now();
-                if (etime - stime >= interval) {
-                    if (type === "interval") {
-                        stime = now();
-                        etime = stime;
-                    }
-                    handler();
-                    type === "timeout" && this.clearTimeout(timerSymbol);
-                }
-            };
-            this.setIdMap(timerSymbol, type, loop);
-            return timerSymbol;
-        }
-        setIdMap(timerSymbol, type, loop) {
-            this._timerIdMap[type][timerSymbol] = requestAnimationFrame(loop);
-        }
-        setTimeout(handler, timeout) {
-            return this.run("timeout", handler, timeout);
-        }
-        clearTimeout(timer) {
-            cancelAnimationFrame(this._timerIdMap.timeout[timer]);
-        }
-        setInterval(handler, timeout) {
-            return this.run("interval", handler, timeout);
-        }
-        clearInterval(timer) {
-            cancelAnimationFrame(this._timerIdMap.interval[timer]);
-        }
-    }
-    var raf = new Raf;
-    let id = null;
-    let styles = "";
-    function injectStyle(cssContent) {
-        styles += cssContent;
-        const styleNode = document.querySelector("#as-style-common");
-        if (styleNode) {
-            styleNode.styleSheet.cssText += styles;
-            styles = "";
-        } else if (!id) {
-            id = raf.setTimeout(() => {
-                const cssNode = document.createElement("style");
-                cssNode.setAttribute("type", "text/css");
-                cssNode.classList.add("as-style");
-                cssNode.id = "as-style-common";
-                cssNode.appendChild(document.createTextNode(styles));
-                styles = "";
-                const asRoot = document.getElementById("all-search");
-                const container = asRoot || document.body || document.head || document.documentElement || document;
-                container.appendChild(cssNode);
-                id = null;
-            }, 0);
-        }
-    }
-    var css$e = "@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
-    injectStyle(css$e);
-    var _export_sfc = (sfc, props) => {
-        const target = sfc.__vccOpts || sfc;
-        for (const [key, val] of props) {
-            target[key] = val;
-        }
-        return target;
-    };
-    const _sfc_main$f = {
-        name: "logo",
-        props: {
-            mode: {
-                type: String,
-                default: "horizontal",
-                validator: val => [ "horizontal", "vertical" ].indexOf(val) > -1
-            }
-        },
-        setup() {
-            return {
-                isMobile: isMobile()
-            };
-        }
-    };
-    const _hoisted_1$9 = Vue.createElementVNode("p", {
-        class: "as-title-inner"
-    }, " All Search ", -1);
-    const _hoisted_2$6 = [ _hoisted_1$9 ];
-    function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
-        return !$setup.isMobile ? (Vue.openBlock(), Vue.createElementBlock("a", {
-            key: 0,
-            class: Vue.normalizeClass([ "as-title", `as-title-${$props.mode}` ]),
-            href: "https://github.com/endday/all-search",
-            target: "_blank"
-        }, _hoisted_2$6, 2)) : Vue.createCommentVNode("", true);
-    }
-    var logo = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ] ]);
     var MapShim = function() {
         if (typeof Map !== "undefined") {
             return Map;
@@ -1399,345 +658,274 @@
         style.webkitTransform = translate;
         return style;
     };
-    const _sfc_main$e = Vue.defineComponent({
-        props: {
-            vertical: Boolean,
-            size: {
-                type: String,
-                default: ""
-            },
-            move: {
-                type: Number,
-                default: 0
-            },
-            ratio: {
-                type: Number,
-                default: 0
-            },
-            always: Boolean
-        },
-        setup(props) {
-            const visible = Vue.ref(false);
-            const barStore = Vue.reactive({});
-            let cursorDown = false;
-            let cursorLeave = false;
-            const thumb = Vue.ref(null);
-            const instance = Vue.ref(null);
-            let onselectstartStore = null;
-            const {proxy: proxy} = Vue.getCurrentInstance();
-            const scrollbar = proxy.$parent;
-            const bar = Vue.computed(() => BAR_MAP[props.vertical ? "vertical" : "horizontal"]);
-            const offsetRatio = Vue.computed(() => instance.value[bar.value.offset] ** 2 / scrollbar.wrap[bar.value.scrollSize] / props.ratio / thumb.value[bar.value.offset]);
-            const thumbStyle = Vue.computed(() => renderThumbStyle({
-                size: props.size,
-                move: props.move,
-                bar: bar.value
-            }));
-            const mouseMoveDocumentHandler = e => {
-                if (cursorDown === false) return;
-                const prevPage = barStore[bar.value.axis];
-                if (!prevPage) return;
-                const offset = (instance.value.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]) * -1;
-                const thumbClickPosition = thumb.value[bar.value.offset] - prevPage;
-                const thumbPositionPercentage = (offset - thumbClickPosition) * 100 * offsetRatio.value / instance.value[bar.value.offset];
-                scrollbar.wrap[bar.value.scroll] = thumbPositionPercentage * scrollbar.wrap[bar.value.scrollSize] / 100;
-            };
-            const mouseUpDocumentHandler = () => {
-                cursorDown = false;
-                barStore[bar.value.axis] = 0;
-                off(document, "mousemove", mouseMoveDocumentHandler);
-                off(document, "mouseup", mouseUpDocumentHandler);
-                document.onselectstart = onselectstartStore;
-                if (cursorLeave) {
-                    visible.value = false;
-                }
-            };
-            const startDrag = e => {
-                e.stopImmediatePropagation();
-                cursorDown = true;
-                on(document, "mousemove", mouseMoveDocumentHandler);
-                on(document, "mouseup", mouseUpDocumentHandler);
-                onselectstartStore = document.onselectstart;
-                document.onselectstart = () => false;
-            };
-            const clickThumbHandler = e => {
-                e.stopPropagation();
-                if (e.ctrlKey || [ 1, 2 ].includes(e.button)) {
-                    return;
-                }
-                window.getSelection().removeAllRanges();
-                startDrag(e);
-                barStore[bar.value.axis] = e.currentTarget[bar.value.offset] - (e[bar.value.client] - e.currentTarget.getBoundingClientRect()[bar.value.direction]);
-            };
-            const clickTrackHandler = e => {
-                const offset = Math.abs(e.target.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]);
-                const thumbHalf = thumb[bar.value.offset] / 2;
-                const thumbPositionPercentage = (offset - thumbHalf) * 100 * offsetRatio.value / instance[bar.value.offset];
-                scrollbar.wrap[bar.value.scroll] = thumbPositionPercentage * scrollbar.wrap[bar.value.scrollSize] / 100;
-            };
-            const mouseMoveScrollbarHandler = () => {
-                cursorLeave = false;
-                visible.value = !!props.size;
-            };
-            const mouseLeaveScrollbarHandler = () => {
-                cursorLeave = true;
-                visible.value = cursorDown;
-            };
-            Vue.onMounted(() => {
-                Vue.nextTick(() => {
-                    on(scrollbar.scrollbar, "mousemove", mouseMoveScrollbarHandler);
-                    on(scrollbar.scrollbar, "mouseleave", mouseLeaveScrollbarHandler);
-                });
-            });
-            Vue.onBeforeUnmount(() => {
-                off(document, "mouseup", this.mouseUpDocumentHandler);
-                off(scrollbar.scrollbar, "mousemove", this.mouseMoveScrollbarHandler);
-                off(scrollbar.scrollbar, "mouseleave", this.mouseLeaveScrollbarHandler);
-            });
-            return {
-                clickThumbHandler: clickThumbHandler,
-                clickTrackHandler: clickTrackHandler,
-                thumbStyle: thumbStyle,
-                bar: bar,
-                visible: visible,
-                instance: instance,
-                thumb: thumb
-            };
+    const version = pkg.version;
+    function getQueryString(name, url) {
+        url = url || window.location.href;
+        const r = new RegExp("(\\?|#|&)" + name + "=([^&#]*)(&|#|$)");
+        const m = url.match(r);
+        return decodeURIComponent(!m ? "" : m[2]);
+    }
+    function getKeyword() {
+        const el = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
+        if (el) {
+            if (el.nodeName === "INPUT" || el.localName === "textarea") {
+                return el.value;
+            } else {
+                return el.textContent;
+            }
         }
-    });
-    function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
-        return Vue.openBlock(), Vue.createBlock(Vue.Transition, {
-            name: "as-scrollbar-fade"
-        }, {
-            default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createElementVNode("div", {
-                ref: "instance",
-                class: Vue.normalizeClass([ "as-scrollbar__bar", "is-" + _ctx.bar.key ]),
-                onMousedown: _cache[1] || (_cache[1] = (...args) => _ctx.clickTrackHandler && _ctx.clickTrackHandler(...args))
-            }, [ Vue.createElementVNode("div", {
-                ref: "thumb",
-                class: "as-scrollbar__thumb",
-                style: Vue.normalizeStyle(_ctx.thumbStyle),
-                onMousedown: _cache[0] || (_cache[0] = (...args) => _ctx.clickThumbHandler && _ctx.clickThumbHandler(...args))
-            }, null, 36) ], 34), [ [ Vue.vShow, _ctx.always || _ctx.visible ] ]) ]),
-            _: 1
+        return "";
+    }
+    function checkBody() {
+        let time = 0;
+        return new Promise((resolve, reject) => {
+            if (document && document.body) {
+                resolve();
+            } else {
+                const id = setInterval((function() {
+                    time += 1;
+                    if (document && document.body) {
+                        clearInterval(id);
+                        resolve();
+                    }
+                    if (time === 50) {
+                        clearInterval(id);
+                        reject(new Error("timeOut"));
+                    }
+                }), 200);
+            }
         });
     }
-    var Bar = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ] ]);
-    const _sfc_main$d = Vue.defineComponent({
-        components: {
-            Bar: Bar
-        },
-        props: {
-            height: {
-                type: [ String, Number ],
-                default: ""
-            },
-            maxHeight: {
-                type: [ String, Number ],
-                default: ""
-            },
-            native: {
-                type: Boolean,
-                default: false
-            },
-            wrapStyle: {
-                type: [ String, Array ],
-                default: ""
-            },
-            wrapClass: {
-                type: [ String, Array ],
-                default: ""
-            },
-            viewClass: {
-                type: [ String, Array ],
-                default: ""
-            },
-            viewStyle: {
-                type: [ String, Array ],
-                default: ""
-            },
-            noresize: Boolean,
-            tag: {
-                type: String,
-                default: "div"
-            },
-            always: {
-                type: Boolean,
-                default: false
-            },
-            minSize: {
-                type: Number,
-                default: 20
-            }
-        },
-        emits: [ "scroll" ],
-        setup(props, {emit: emit}) {
-            const sizeWidth = Vue.ref("0");
-            const sizeHeight = Vue.ref("0");
-            const moveX = Vue.ref(0);
-            const moveY = Vue.ref(0);
-            const scrollbar = Vue.ref(null);
-            const wrap = Vue.ref(null);
-            const resize = Vue.ref(null);
-            const ratioY = Vue.ref(1);
-            const ratioX = Vue.ref(1);
-            const SCOPE = "AScrollbar";
-            const GAP = 4;
-            const renderWrapStyle = Vue.computed(() => {
-                let style = props.wrapStyle;
-                if (isArray(style)) {
-                    style = toObject(style);
-                    style.height = addUnit(props.height);
-                    style.maxHeight = addUnit(props.maxHeight);
-                } else if (isString(style)) {
-                    style += addUnit(props.height) ? `height: ${addUnit(props.height)};` : "";
-                    style += addUnit(props.maxHeight) ? `max-height: ${addUnit(props.maxHeight)};` : "";
-                }
-                return style;
-            });
-            const update = () => {
-                if (!wrap.value) return;
-                const offsetHeight = wrap.value.offsetHeight - GAP;
-                const offsetWidth = wrap.value.offsetWidth - GAP;
-                const originalHeight = offsetHeight ** 2 / wrap.value.scrollHeight;
-                const originalWidth = offsetWidth ** 2 / wrap.value.scrollWidth;
-                const height = Math.max(originalHeight, props.minSize);
-                const width = Math.max(originalWidth, props.minSize);
-                ratioY.value = originalHeight / (offsetHeight - originalHeight) / (height / (offsetHeight - height));
-                ratioX.value = originalWidth / (offsetWidth - originalWidth) / (width / (offsetWidth - width));
-                sizeHeight.value = height + GAP < offsetHeight ? height + "px" : "";
-                sizeWidth.value = width + GAP < offsetWidth ? width + "px" : "";
-            };
-            const handleScroll = e => {
-                if (wrap.value) {
-                    const offsetHeight = wrap.value.offsetHeight - GAP;
-                    const offsetWidth = wrap.value.offsetWidth - GAP;
-                    moveY.value = wrap.value.scrollTop * 100 / offsetHeight * ratioY.value;
-                    moveX.value = wrap.value.scrollLeft * 100 / offsetWidth * ratioX.value;
-                    emit("scroll", {
-                        scrollTop: wrap.value.scrollTop,
-                        scrollLeft: wrap.value.scrollLeft
-                    });
-                }
-            };
-            const setScrollTop = value => {
-                if (!isNumber(value)) {
-                    debugWarn(SCOPE, "value must be a number");
-                    return;
-                }
-                wrap.value.scrollTop = value;
-            };
-            const setScrollLeft = value => {
-                if (!isNumber(value)) {
-                    debugWarn(SCOPE, "value must be a number");
-                    return;
-                }
-                wrap.value.scrollLeft = value;
-            };
-            Vue.onMounted(() => {
-                if (!props.native) {
-                    Vue.nextTick(update);
-                }
-                if (!props.noresize) {
-                    addResizeListener(resize.value, update);
-                    addEventListener("resize", update);
-                }
-            });
-            Vue.onBeforeUnmount(() => {
-                if (!props.noresize) {
-                    removeResizeListener(resize.value, update);
-                    removeEventListener("resize", this.update);
-                }
-            });
-            Vue.onUpdated(() => update());
-            return {
-                scrollbar: scrollbar,
-                wrap: wrap,
-                resize: resize,
-                moveX: moveX,
-                moveY: moveY,
-                ratioX: ratioX,
-                ratioY: ratioY,
-                sizeWidth: sizeWidth,
-                sizeHeight: sizeHeight,
-                update: update,
-                handleScroll: handleScroll,
-                scrollTo: scrollTo,
-                setScrollTop: setScrollTop,
-                setScrollLeft: setScrollLeft,
-                renderWrapStyle: renderWrapStyle
-            };
+    function getName(name) {
+        if (name) {
+            return `__allSearch__${name}`;
         }
-    });
-    const _hoisted_1$8 = {
-        ref: "scrollbar",
-        class: "as-scrollbar"
-    };
-    function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
-        const _component_bar = Vue.resolveComponent("bar");
-        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$8, [ Vue.createElementVNode("div", {
-            ref: "wrap",
-            class: Vue.normalizeClass([ _ctx.wrapClass, "as-scrollbar__wrap", _ctx.native ? "" : "as-scrollbar__wrap--hidden-default" ]),
-            style: Vue.normalizeStyle(_ctx.renderWrapStyle),
-            onScroll: _cache[0] || (_cache[0] = (...args) => _ctx.handleScroll && _ctx.handleScroll(...args))
-        }, [ (Vue.openBlock(), Vue.createBlock(Vue.resolveDynamicComponent(_ctx.tag), {
-            ref: "resize",
-            class: Vue.normalizeClass([ "as-scrollbar__view", _ctx.viewClass ]),
-            style: Vue.normalizeStyle(_ctx.viewStyle)
-        }, {
-            default: Vue.withCtx(() => [ Vue.renderSlot(_ctx.$slots, "default") ]),
-            _: 3
-        }, 8, [ "class", "style" ])) ], 38), !_ctx.native ? (Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, {
-            key: 0
-        }, [ Vue.createVNode(_component_bar, {
-            move: _ctx.moveX,
-            ratio: _ctx.ratioX,
-            size: _ctx.sizeWidth,
-            always: _ctx.always
-        }, null, 8, [ "move", "ratio", "size", "always" ]), Vue.createVNode(_component_bar, {
-            move: _ctx.moveY,
-            ratio: _ctx.ratioY,
-            size: _ctx.sizeHeight,
-            vertical: "",
-            always: _ctx.always
-        }, null, 8, [ "move", "ratio", "size", "always" ]) ], 64)) : Vue.createCommentVNode("", true) ], 512);
+        return null;
     }
-    var scrollbar = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
-    var css$d = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\r\n";
-    injectStyle(css$d);
-    let el = document.createElement("a");
-    const replaceUrl = function(val) {
-        const lowerCaseVal = val.toLowerCase();
-        const list = [ "http://", "https://", "ftp://", "files://" ];
-        for (let i = 0; i < list.length; i++) {
-            if (lowerCaseVal.indexOf(list[i]) === 0) {
-                return val.replace(/.*\/\//, "//");
+    function isJson(str) {
+        if (typeof str !== "string") {
+            return false;
+        }
+        const char = str.charAt(0);
+        if (char !== "[" && char !== "{") {
+            return false;
+        }
+        try {
+            return typeof JSON.parse(str) === "object";
+        } catch (e) {
+            return false;
+        }
+    }
+    let getSession = function(name) {
+        const formatName = getName(name);
+        let item;
+        if (window.GM_getValue) {
+            item = window.GM_getValue(formatName);
+        } else {
+            item = window.localStorage.getItem(formatName);
+        }
+        if (item) {
+            if (isJson(item)) {
+                try {
+                    return JSON.parse(item);
+                } catch (e) {
+                    return item;
+                }
+            } else {
+                return item;
             }
         }
-        return val;
+        return null;
     };
-    function parseUrl(url) {
-        let val = url;
-        if (val.indexOf("//") < 0) {
-            val = `//${val}`;
-        } else if (val.indexOf("//") > -1) {
-            val = replaceUrl(val);
+    let setSession = function(name, value) {
+        const formatName = getName(name);
+        if (window.GM_setValue) {
+            window.GM_setValue(formatName, value);
         } else {
-            return el;
+            const item = JSON.stringify(value);
+            if (item) {
+                window.localStorage.setItem(formatName, item);
+            }
         }
-        el.href = val;
-        return {
-            href: el.href,
-            origin: el.origin,
-            protocol: el.protocol,
-            host: el.host,
-            hostname: el.hostname,
-            port: el.port,
-            pathname: el.pathname,
-            search: el.search,
-            hash: el.hash
+    };
+    function RAFInterval(callback, period, runNow) {
+        const needCount = period / 1e3 * 60;
+        let times = 0;
+        if (runNow === true) {
+            const shouldFinish = callback();
+            if (shouldFinish) {
+                return;
+            }
+        }
+        function step() {
+            if (times < needCount) {
+                times++;
+                requestAnimationFrame(step);
+            } else {
+                const shouldFinish = callback() || false;
+                if (!shouldFinish) {
+                    times = 0;
+                    requestAnimationFrame(step);
+                }
+            }
+        }
+        requestAnimationFrame(step);
+    }
+    function removeNode(cssSelectorOrFunction) {
+        try {
+            if (typeof cssSelectorOrFunction === "string") {
+                let removeNodes = document.querySelectorAll(cssSelectorOrFunction);
+                for (let i = 0; i < removeNodes.length; i++) {
+                    removeNodes[i].remove();
+                }
+            } else if (typeof cssSelectorOrFunction === "function") {
+                cssSelectorOrFunction();
+            } else {
+                console.log("未知命令：" + cssSelectorOrFunction);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    function addStyleContent(css, className, addToTarget, isReload = false) {
+        RAFInterval((function() {
+            let addTo = document.querySelector(addToTarget);
+            if (typeof addToTarget === "undefined") {
+                addTo = document.body || document.head || document.documentElement || document;
+            }
+            if (typeof addToTarget === "undefined" || typeof addToTarget !== "undefined" && document.querySelector(addToTarget) !== null) {
+                if (isReload) {
+                    removeNode("." + className);
+                } else if (!isReload && document.querySelector("." + className) !== null) {
+                    return true;
+                }
+                let cssNode = document.createElement("style");
+                if (className) {
+                    cssNode.className = className;
+                }
+                cssNode.setAttribute("type", "text/css");
+                cssNode.innerHTML = css;
+                try {
+                    addTo.appendChild(cssNode);
+                } catch (e) {
+                    console.log(e.message);
+                }
+                return true;
+            }
+        }), 20, true);
+    }
+    function getAsRoot() {
+        return document.getElementById("all-search");
+    }
+    function createAsRoot() {
+        let el = document.createElement("div");
+        el.id = "all-search";
+        return el;
+    }
+    const scriptLoaded = getName("script-loaded");
+    const pageLoaded = getName("page-loaded");
+    function passTmMethods() {
+        const emit = function() {
+            document.dispatchEvent(new CustomEvent(scriptLoaded, {
+                detail: {
+                    version: version,
+                    getSession: getSession,
+                    setSession: setSession
+                }
+            }));
+        };
+        document.addEventListener(pageLoaded, emit);
+        emit();
+    }
+    const isMobile = function() {
+        return /Android|webOS|iPhone|iPod|BlackBerry|iphone os|ipad/.test(navigator.userAgent.toLowerCase());
+    };
+    function withHookBefore(originalFn, hookFn) {
+        return function() {
+            if (hookFn.apply(this, arguments) === false) {
+                return;
+            }
+            return originalFn.apply(this, arguments);
         };
     }
+    function withHookAfter(originalFn, hookFn) {
+        return function() {
+            const output = originalFn.apply(this, arguments);
+            hookFn.apply(this, arguments);
+            return output;
+        };
+    }
+    const initBodyClass = (mode, currentSite, remove = false) => {
+        const body = document.body;
+        body.classList.remove("body-vertical", "body-horizontal");
+        if (!remove && !currentSite.invisible && mode) {
+            body.classList.add(`body-${mode}`);
+        }
+    };
+    const addCustomStyle = (mode, currentSite, remove) => {
+        removeNode(".as-custom-style");
+        if (currentSite.style) {
+            if (currentSite.invisible || remove) {
+                return;
+            }
+            let styleContent = "";
+            if (currentSite.style[1] && mode === "horizontal") {
+                styleContent = currentSite.style[1];
+            } else if (currentSite.style[2] && mode === "vertical") {
+                styleContent = currentSite.style[2];
+            }
+            if (styleContent) {
+                addStyleContent(styleContent, "as-custom-style");
+            }
+        } else {
+            addSpecialStyle(remove);
+        }
+    };
+    const protectStyle = function() {
+        if (Node.prototype.__as_hooks__) {
+            return;
+        }
+        Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, e => {
+            if (e && e.tagName === "STYLE") {
+                return !(e.classList.contains("as-icon") || e.classList.contains("as-style") || e.classList.contains("elPopover") || e.classList.contains("elScrollbar"));
+            }
+            return true;
+        });
+        Node.prototype.__as_hooks__ = true;
+    };
+    function addSpecialStyle(remove = false) {
+        document.addEventListener("DOMContentLoaded", (function() {
+            const el = document.elementFromPoint(document.body.offsetWidth / 2, 32);
+            if (el) {
+                let target = null;
+                let cur = el;
+                while (cur) {
+                    const style = window.getComputedStyle(cur);
+                    if ([ "fixed", "absolute" ].includes(style.getPropertyValue("position"))) {
+                        target = cur;
+                        cur = null;
+                    } else {
+                        cur = cur.offsetParent;
+                    }
+                }
+                if (target) {
+                    const style = window.getComputedStyle(target);
+                    if (!target.dataset.top) {
+                        target.dataset.top = style.top;
+                    }
+                    console.log(target.style.cssText);
+                    const top = target.dataset.top.replace("px", "");
+                    target.style.top = `${top + remove ? 30 : 0}px`;
+                    console.log(target);
+                }
+            }
+        }));
+    }
+    const addStyleForCurrentSite = function(mode, site, remove = false) {
+        const modeVal = Vue.unref(mode);
+        addCustomStyle(modeVal, site, remove);
+        initBodyClass(modeVal, site, remove);
+    };
     var search = [ {
         nameZh: "百度",
         url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
@@ -1782,6 +970,9 @@
         url: "http://cn.bing.com/dict/search?q=%s"
     } ];
     var developer = [ {
+        nameZh: "开发者搜索",
+        url: "https://kaifa.baidu.com/searchPage?wd=%s&module=SEARCH"
+    }, {
         nameZh: "MDN",
         url: "https://developer.mozilla.org/zh-CN/search?q=%s"
     }, {
@@ -2009,7 +1200,7 @@
         nameZh: "56网盘",
         url: "https://www.56wangpan.com/search/kw%s"
     } ];
-    const list$1 = [ {
+    const list$2 = [ {
         nameZh: "搜索",
         name: "search",
         list: search
@@ -2069,8 +1260,759 @@
             }
         }))
     }));
+    const height = 30;
+    const width = 100;
+    const list$1 = [ {
+        url: /\/\/www\.google\.com(.hk)?\/search/,
+        style: {
+            1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;}#searchform.minidiv{top: ${height}px !important;}`
+        }
+    }, {
+        url: /\/\/www\.baidu\.com\/(s|baidu)\?/
+    }, {
+        url: /\/\/[^.]*\.bing\.com\/search/
+    }, {
+        url: /\/\/duckduckgo\.com\/*/
+    }, {
+        url: /\/\/searx\.me\/\?q/
+    }, {
+        url: /\/\/www\.sogou\.com\/(?:web|s)/,
+        selectors: "#upquery"
+    }, {
+        url: /\/\/yandex\.com\/search/
+    }, {
+        url: /\/\/google\.infinitynewtab\.com\/\?q/
+    }, {
+        url: /\/\/baike\.baidu\.com\/item/
+    }, {
+        url: /\/\/baike\.baidu\.com\/search/
+    }, {
+        url: /\/\/wenku\.baidu\.com\/search/
+    }, {
+        url: /\/\/zhidao\.baidu\.com\/search/
+    }, {
+        url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/,
+        style: {
+            1: `#mw-head,#mw-panel{top: ${height}px!important;}`
+        }
+    }, {
+        url: /\/\/www\.zhihu\.com\/search\?/,
+        style: {
+            1: `.AppHeader.is-fixed {top: ${height}px!important;}`
+        }
+    }, {
+        url: /\/\/www\.so\.com\/s/,
+        style: {
+            2: `.body-vertical #header { z-index: 2000!important; }`
+        }
+    }, {
+        url: /\/\/so\.baike\.com\/doc/
+    }, {
+        url: /\/\/www\.baike\.com\/wiki/
+    }, {
+        url: /\/\/www\.docin\.com\/search\.do/
+    }, {
+        url: /\/\/zhihu\.sogou\.com\/zhihu/,
+        selectors: "#upquery",
+        style: {
+            1: `.header { top:${height}px }`
+        }
+    }, {
+        url: /\/\/weixin\.sogou\.com\/weixin\?/,
+        style: {
+            2: `.headsearch#scroll-header { left:unset; }`
+        }
+    }, {
+        url: /\/\/www\.quora\.com\/search\?/
+    }, {
+        url: /\/\/stackoverflow\.com\/search\?/,
+        style: {
+            1: `.top-bar._fixed { top: ${height}px }`,
+            2: `.top-bar._fixed { right: ${width}px }`
+        }
+    }, {
+        url: /\/\/search\.bilibili\.com\/all/,
+        selectors: ".search-input-el",
+        style: {
+            1: `.fixed-top {top: ${height}px;}`
+        }
+    }, {
+        url: /\/\/www\.acfun\.cn\/search/,
+        selectors: ".search-text--standalone",
+        style: {
+            1: `#header {top: ${height}px;}`
+        }
+    }, {
+        url: /\/\/www\.youtube\.com\/results/,
+        style: {
+            1: `#masthead-container.ytd-app {top:${height}px !important;}\n          html:not(.style-scope) {--ytd-toolbar-height:${height + 56}px !important;}\n          ytd-mini-guide-renderer.ytd-app {padding-top: ${height}px;}`,
+            2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
+        }
+    }, {
+        url: /\/\/www\.nicovideo\.jp\/search\//
+    }, {
+        url: /\/\/so\.iqiyi\.com\/so\/q/
+    }, {
+        url: /\/\/v\.qq\.com\/x\/search/,
+        style: {
+            1: `.site_head {top: ${height}px;}`
+        }
+    }, {
+        url: /\/\/music\.baidu\.com\/search/
+    }, {
+        url: /\/\/so\.1ting\.com\/all\.do/
+    }, {
+        url: /\/\/s\.music\.qq\.com/
+    }, {
+        url: /\/\/music\.163\.com\/.*?#\/search/
+    }, {
+        url: /\/\/image\.baidu\.com\/search/,
+        style: {
+            1: `#search .s_search { top: ${height}px; }`
+        }
+    }, {
+        url: /\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
+    }, {
+        url: /\/\/.*\.bing\.com\/images\/search/,
+        style: {
+            1: `#miniheader {padding-top: ${height}px;}`
+        }
+    }, {
+        url: /\/\/www\.flickr\.com\/search\//
+    }, {
+        url: /^http:\/\/www\.pixiv\.net\/search\.php/
+    }, {
+        url: /\/\/huaban\.com\/search\?/,
+        style: {
+            1: `#header  { top: ${height}px; }`
+        }
+    }, {
+        url: /\/\/www\.pinterest\.com\/search\//
+    }, {
+        url: /\/\/thepiratebay\.org\/search/
+    }, {
+        url: /\/\/subhd\.tv\/search/
+    }, {
+        url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/,
+        query: [ "text", "q" ]
+    }, {
+        url: /\/\/fanyi\.baidu\.com/,
+        selectors: ".baidu_translate_input"
+    }, {
+        url: /\/\/.*\.bing\.com\/dict\/search\?q=/
+    }, {
+        url: /\/\/dict\.youdao\.com\/search/
+    }, {
+        url: /\/\/dict\.youdao\.com\/w/
+    }, {
+        url: /\/\/dict\.cn\/./
+    }, {
+        url: /\/\/s\.taobao\.com\/search/,
+        style: {
+            1: `.m-header-fixed .header-inner { top: ${height}px !important;}`
+        }
+    }, {
+        url: /\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
+    }, {
+        url: /\/\/list\.tmall\.com\/search_product\.htm/
+    }, {
+        url: /\/\/search\.jd\.com\/search/
+    }, {
+        url: /\/\/search\.suning\.com/
+    }, {
+        url: /\/\/search\.smzdm\.com\/\?/
+    }, {
+        url: /\/\/s\.weibo\.com\/weibo\?q=/,
+        style: {
+            1: `div[role="navigation"] { top: ${height}px !important;}`
+        }
+    }, {
+        url: /\/\/tieba\.baidu\.com\/f\/search/
+    }, {
+        url: /\/\/(movie|music|book)\.douban\.com\/subject_search?/
+    }, {
+        url: /\/\/www\.douban\.com\/search/
+    }, {
+        url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
+        style: {
+            1: `#head_wr.gj #head.gj, #left_menu_content { top: ${height}px !important;}`,
+            2: `#left_menu_content { left: ${width}px !important;}`
+        }
+    }, {
+        url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
+    }, {
+        url: /\/\/github\.com\/search/
+    }, {
+        url: /\/\/www\.startpage\.com\/sp\/search/,
+        style: {
+            1: `.layout-web__header {top: ${height}px !important;}`
+        }
+    }, {
+        url: /\/\/endday\.github\.io/,
+        disabled: true
+    }, {
+        url: /\/\/endday\.gitee\.io/,
+        disabled: true
+    }, {
+        url: /\/\/localhost/,
+        disabled: true
+    } ];
+    let currentSite = null;
+    const siteInfo = function(refresh) {
+        if (refresh || !currentSite) {
+            currentSite = getSite();
+        }
+        return currentSite;
+    };
+    function getMenuItem() {
+        let targetItem = null;
+        let urlObj = null;
+        const curItem = new URL(window.location.href);
+        list$2.some(category => {
+            category.list.find(item => {
+                const menuItem = new URL(item.url);
+                if (menuItem.hostname === curItem.hostname && menuItem.pathname === curItem.pathname) {
+                    targetItem = item;
+                    urlObj = menuItem;
+                }
+            });
+        });
+        if (urlObj) {
+            for (const key of urlObj.searchParams.keys()) {
+                if (!curItem.searchParams.has(key)) {
+                    targetItem = null;
+                }
+            }
+        }
+        return targetItem;
+    }
+    const getSite = function() {
+        const target = list$1.find(item => item.url.test(window.location.href.toLowerCase()));
+        const menuItem = getMenuItem();
+        if (target) {
+            return {
+                url: target.url,
+                invisible: !!target.invisible,
+                disabled: !!target.disabled,
+                style: target.style,
+                selectors: target.selectors,
+                query: target.query
+            };
+        } else if (menuItem) {
+            return {
+                url: menuItem.url,
+                invisible: false,
+                disabled: false,
+                style: menuItem.style,
+                selectors: menuItem.selectors,
+                query: menuItem.query
+            };
+        }
+        return {
+            url: "",
+            invisible: true,
+            disabled: true,
+            style: {},
+            selectors: target.selectors,
+            query: target.query
+        };
+    };
+    const routerChange = cb => {
+        history.pushState = withHookAfter(history.pushState, cb);
+        history.replaceState = withHookAfter(history.replaceState, cb);
+        window.addEventListener("yt-navigate-finish", cb);
+    };
+    function isFullScreen() {
+        return document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
+    }
+    function onFullScreenChange(handler) {
+        const handleResize = function() {
+            if (!isFullScreen()) {
+                handler();
+            }
+        };
+        document.addEventListener("fullscreenchange", handler);
+        document.addEventListener("webkitfullscreenchange", handler);
+        document.addEventListener("mozfullscreenchange", handler);
+        document.addEventListener("MSFullscreenChange", handler);
+        document.addEventListener("resize", handleResize);
+        return () => {
+            document.removeEventListener("fullscreenchange", handler);
+            document.removeEventListener("webkitfullscreenchange", handler);
+            document.removeEventListener("mozfullscreenchange", handler);
+            document.removeEventListener("MSFullscreenChange", handler);
+            document.removeEventListener("resize", handleResize);
+        };
+    }
+    const session$3 = getSession("mode");
+    const getMode = val => {
+        if (![ "vertical", "horizontal" ].includes(val)) {
+            return "horizontal";
+        }
+        return val;
+    };
+    const modeRef = Vue.ref(getMode(session$3));
+    const mode = Vue.computed({
+        get: () => modeRef.value,
+        set: val => {
+            modeRef.value = val;
+            setSession("mode", getMode(val));
+        }
+    });
+    function useMode() {
+        return {
+            mode: mode
+        };
+    }
+    const options = new Map([ [ false, "关闭" ], [ "top", "向上" ], [ "bottom", "向下" ], [ "all", "滚动" ] ]);
+    const defaultOpt = {
+        show: true,
+        scrollHide: false
+    };
+    const session$2 = getSession("switchShow") || defaultOpt;
+    const getOpts = val => options.has(val) ? val : false;
+    const getOpt = val => Object.assign({}, defaultOpt, {
+        show: Boolean(val.show),
+        scrollHide: getOpts(val.scrollHide)
+    });
+    let data = Vue.reactive(getOpt(session$2));
+    const show = Vue.computed({
+        get: () => data.show,
+        set: val => {
+            data.show = val;
+            setSession("switchShow", data);
+        }
+    });
+    const scrollHide = Vue.computed({
+        get: () => data.scrollHide,
+        set: val => {
+            data.scrollHide = val;
+            setSession("switchShow", data);
+        }
+    });
+    function useSwitchShow() {
+        return {
+            show: show,
+            scrollHide: scrollHide,
+            options: options
+        };
+    }
+    class Raf {
+        constructor() {
+            this.init();
+        }
+        init() {
+            this._timerIdMap = {
+                timeout: {},
+                interval: {}
+            };
+        }
+        run(type = "interval", handler, interval = 16.7) {
+            const now = Date.now;
+            let stime = now();
+            let etime = stime;
+            const timerSymbol = Symbol("timerSymbol");
+            const loop = () => {
+                this.setIdMap(timerSymbol, type, loop);
+                etime = now();
+                if (etime - stime >= interval) {
+                    if (type === "interval") {
+                        stime = now();
+                        etime = stime;
+                    }
+                    handler();
+                    type === "timeout" && this.clearTimeout(timerSymbol);
+                }
+            };
+            this.setIdMap(timerSymbol, type, loop);
+            return timerSymbol;
+        }
+        setIdMap(timerSymbol, type, loop) {
+            this._timerIdMap[type][timerSymbol] = requestAnimationFrame(loop);
+        }
+        setTimeout(handler, timeout) {
+            return this.run("timeout", handler, timeout);
+        }
+        clearTimeout(timer) {
+            cancelAnimationFrame(this._timerIdMap.timeout[timer]);
+        }
+        setInterval(handler, timeout) {
+            return this.run("interval", handler, timeout);
+        }
+        clearInterval(timer) {
+            cancelAnimationFrame(this._timerIdMap.interval[timer]);
+        }
+    }
+    var raf = new Raf;
+    let id = null;
+    let styles = "";
+    function injectStyle(cssContent) {
+        styles += cssContent;
+        const styleNode = document.querySelector("#as-style-common");
+        if (styleNode) {
+            styleNode.styleSheet.cssText += styles;
+            styles = "";
+        } else if (!id) {
+            id = raf.setTimeout(() => {
+                const cssNode = document.createElement("style");
+                cssNode.setAttribute("type", "text/css");
+                cssNode.classList.add("as-style");
+                cssNode.id = "as-style-common";
+                cssNode.appendChild(document.createTextNode(styles));
+                styles = "";
+                const asRoot = document.getElementById("all-search");
+                const container = asRoot || document.body || document.head || document.documentElement || document;
+                container.appendChild(cssNode);
+                id = null;
+            }, 0);
+        }
+    }
+    var css$e = "@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
+    injectStyle(css$e);
+    var _export_sfc = (sfc, props) => {
+        const target = sfc.__vccOpts || sfc;
+        for (const [key, val] of props) {
+            target[key] = val;
+        }
+        return target;
+    };
+    const _sfc_main$f = {
+        name: "logo",
+        props: {
+            mode: {
+                type: String,
+                default: "horizontal",
+                validator: val => [ "horizontal", "vertical" ].indexOf(val) > -1
+            }
+        },
+        setup() {
+            return {
+                isMobile: isMobile()
+            };
+        }
+    };
+    const _hoisted_1$9 = Vue.createElementVNode("p", {
+        class: "as-title-inner"
+    }, " All Search ", -1);
+    const _hoisted_2$6 = [ _hoisted_1$9 ];
+    function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+        return !$setup.isMobile ? (Vue.openBlock(), Vue.createElementBlock("a", {
+            key: 0,
+            class: Vue.normalizeClass([ "as-title", `as-title-${$props.mode}` ]),
+            href: "https://github.com/endday/all-search",
+            target: "_blank"
+        }, _hoisted_2$6, 2)) : Vue.createCommentVNode("v-if", true);
+    }
+    var logo = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ], [ "__file", "E:\\project\\all-search\\src\\components\\logo.vue" ] ]);
+    const _sfc_main$e = Vue.defineComponent({
+        props: {
+            vertical: Boolean,
+            size: {
+                type: String,
+                default: ""
+            },
+            move: {
+                type: Number,
+                default: 0
+            },
+            ratio: {
+                type: Number,
+                default: 0
+            },
+            always: Boolean
+        },
+        setup(props) {
+            const visible = Vue.ref(false);
+            const barStore = Vue.reactive({});
+            let cursorDown = false;
+            let cursorLeave = false;
+            const thumb = Vue.ref(null);
+            const instance = Vue.ref(null);
+            let onselectstartStore = null;
+            const {proxy: proxy} = Vue.getCurrentInstance();
+            const scrollbar = proxy.$parent;
+            const bar = Vue.computed(() => BAR_MAP[props.vertical ? "vertical" : "horizontal"]);
+            const offsetRatio = Vue.computed(() => instance.value[bar.value.offset] ** 2 / scrollbar.wrap[bar.value.scrollSize] / props.ratio / thumb.value[bar.value.offset]);
+            const thumbStyle = Vue.computed(() => renderThumbStyle({
+                size: props.size,
+                move: props.move,
+                bar: bar.value
+            }));
+            const mouseMoveDocumentHandler = e => {
+                if (cursorDown === false) return;
+                const prevPage = barStore[bar.value.axis];
+                if (!prevPage) return;
+                const offset = (instance.value.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]) * -1;
+                const thumbClickPosition = thumb.value[bar.value.offset] - prevPage;
+                const thumbPositionPercentage = (offset - thumbClickPosition) * 100 * offsetRatio.value / instance.value[bar.value.offset];
+                scrollbar.wrap[bar.value.scroll] = thumbPositionPercentage * scrollbar.wrap[bar.value.scrollSize] / 100;
+            };
+            const mouseUpDocumentHandler = () => {
+                cursorDown = false;
+                barStore[bar.value.axis] = 0;
+                off(document, "mousemove", mouseMoveDocumentHandler);
+                off(document, "mouseup", mouseUpDocumentHandler);
+                document.onselectstart = onselectstartStore;
+                if (cursorLeave) {
+                    visible.value = false;
+                }
+            };
+            const startDrag = e => {
+                e.stopImmediatePropagation();
+                cursorDown = true;
+                on(document, "mousemove", mouseMoveDocumentHandler);
+                on(document, "mouseup", mouseUpDocumentHandler);
+                onselectstartStore = document.onselectstart;
+                document.onselectstart = () => false;
+            };
+            const clickThumbHandler = e => {
+                e.stopPropagation();
+                if (e.ctrlKey || [ 1, 2 ].includes(e.button)) {
+                    return;
+                }
+                window.getSelection().removeAllRanges();
+                startDrag(e);
+                barStore[bar.value.axis] = e.currentTarget[bar.value.offset] - (e[bar.value.client] - e.currentTarget.getBoundingClientRect()[bar.value.direction]);
+            };
+            const clickTrackHandler = e => {
+                const offset = Math.abs(e.target.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]);
+                const thumbHalf = thumb[bar.value.offset] / 2;
+                const thumbPositionPercentage = (offset - thumbHalf) * 100 * offsetRatio.value / instance[bar.value.offset];
+                scrollbar.wrap[bar.value.scroll] = thumbPositionPercentage * scrollbar.wrap[bar.value.scrollSize] / 100;
+            };
+            const mouseMoveScrollbarHandler = () => {
+                cursorLeave = false;
+                visible.value = !!props.size;
+            };
+            const mouseLeaveScrollbarHandler = () => {
+                cursorLeave = true;
+                visible.value = cursorDown;
+            };
+            Vue.onMounted(() => {
+                Vue.nextTick(() => {
+                    on(scrollbar.scrollbar, "mousemove", mouseMoveScrollbarHandler);
+                    on(scrollbar.scrollbar, "mouseleave", mouseLeaveScrollbarHandler);
+                });
+            });
+            Vue.onBeforeUnmount(() => {
+                off(document, "mouseup", this.mouseUpDocumentHandler);
+                off(scrollbar.scrollbar, "mousemove", this.mouseMoveScrollbarHandler);
+                off(scrollbar.scrollbar, "mouseleave", this.mouseLeaveScrollbarHandler);
+            });
+            return {
+                clickThumbHandler: clickThumbHandler,
+                clickTrackHandler: clickTrackHandler,
+                thumbStyle: thumbStyle,
+                bar: bar,
+                visible: visible,
+                instance: instance,
+                thumb: thumb
+            };
+        }
+    });
+    function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.openBlock(), Vue.createBlock(Vue.Transition, {
+            name: "as-scrollbar-fade",
+            persisted: ""
+        }, {
+            default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createElementVNode("div", {
+                ref: "instance",
+                class: Vue.normalizeClass([ "as-scrollbar__bar", "is-" + _ctx.bar.key ]),
+                onMousedown: _cache[1] || (_cache[1] = (...args) => _ctx.clickTrackHandler && _ctx.clickTrackHandler(...args))
+            }, [ Vue.createElementVNode("div", {
+                ref: "thumb",
+                class: "as-scrollbar__thumb",
+                style: Vue.normalizeStyle(_ctx.thumbStyle),
+                onMousedown: _cache[0] || (_cache[0] = (...args) => _ctx.clickThumbHandler && _ctx.clickThumbHandler(...args))
+            }, null, 36) ], 34), [ [ Vue.vShow, _ctx.always || _ctx.visible ] ]) ]),
+            _: 1
+        });
+    }
+    var Bar = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ], [ "__file", "E:\\project\\all-search\\src\\components\\scrollbar\\src\\bar.vue" ] ]);
+    const _sfc_main$d = Vue.defineComponent({
+        components: {
+            Bar: Bar
+        },
+        props: {
+            height: {
+                type: [ String, Number ],
+                default: ""
+            },
+            maxHeight: {
+                type: [ String, Number ],
+                default: ""
+            },
+            native: {
+                type: Boolean,
+                default: false
+            },
+            wrapStyle: {
+                type: [ String, Array ],
+                default: ""
+            },
+            wrapClass: {
+                type: [ String, Array ],
+                default: ""
+            },
+            viewClass: {
+                type: [ String, Array ],
+                default: ""
+            },
+            viewStyle: {
+                type: [ String, Array ],
+                default: ""
+            },
+            noresize: Boolean,
+            tag: {
+                type: String,
+                default: "div"
+            },
+            always: {
+                type: Boolean,
+                default: false
+            },
+            minSize: {
+                type: Number,
+                default: 20
+            }
+        },
+        emits: [ "scroll" ],
+        setup(props, {emit: emit}) {
+            const sizeWidth = Vue.ref("0");
+            const sizeHeight = Vue.ref("0");
+            const moveX = Vue.ref(0);
+            const moveY = Vue.ref(0);
+            const scrollbar = Vue.ref(null);
+            const wrap = Vue.ref(null);
+            const resize = Vue.ref(null);
+            const ratioY = Vue.ref(1);
+            const ratioX = Vue.ref(1);
+            const SCOPE = "AScrollbar";
+            const GAP = 4;
+            const renderWrapStyle = Vue.computed(() => {
+                let style = props.wrapStyle;
+                if (isArray(style)) {
+                    style = toObject(style);
+                    style.height = addUnit(props.height);
+                    style.maxHeight = addUnit(props.maxHeight);
+                } else if (isString(style)) {
+                    style += addUnit(props.height) ? `height: ${addUnit(props.height)};` : "";
+                    style += addUnit(props.maxHeight) ? `max-height: ${addUnit(props.maxHeight)};` : "";
+                }
+                return style;
+            });
+            const update = () => {
+                if (!wrap.value) return;
+                const offsetHeight = wrap.value.offsetHeight - GAP;
+                const offsetWidth = wrap.value.offsetWidth - GAP;
+                const originalHeight = offsetHeight ** 2 / wrap.value.scrollHeight;
+                const originalWidth = offsetWidth ** 2 / wrap.value.scrollWidth;
+                const height = Math.max(originalHeight, props.minSize);
+                const width = Math.max(originalWidth, props.minSize);
+                ratioY.value = originalHeight / (offsetHeight - originalHeight) / (height / (offsetHeight - height));
+                ratioX.value = originalWidth / (offsetWidth - originalWidth) / (width / (offsetWidth - width));
+                sizeHeight.value = height + GAP < offsetHeight ? height + "px" : "";
+                sizeWidth.value = width + GAP < offsetWidth ? width + "px" : "";
+            };
+            const handleScroll = e => {
+                if (wrap.value) {
+                    const offsetHeight = wrap.value.offsetHeight - GAP;
+                    const offsetWidth = wrap.value.offsetWidth - GAP;
+                    moveY.value = wrap.value.scrollTop * 100 / offsetHeight * ratioY.value;
+                    moveX.value = wrap.value.scrollLeft * 100 / offsetWidth * ratioX.value;
+                    emit("scroll", {
+                        scrollTop: wrap.value.scrollTop,
+                        scrollLeft: wrap.value.scrollLeft
+                    });
+                }
+            };
+            const setScrollTop = value => {
+                if (!isNumber(value)) {
+                    debugWarn(SCOPE, "value must be a number");
+                    return;
+                }
+                wrap.value.scrollTop = value;
+            };
+            const setScrollLeft = value => {
+                if (!isNumber(value)) {
+                    debugWarn(SCOPE, "value must be a number");
+                    return;
+                }
+                wrap.value.scrollLeft = value;
+            };
+            Vue.onMounted(() => {
+                if (!props.native) {
+                    Vue.nextTick(update);
+                }
+                if (!props.noresize) {
+                    addResizeListener(resize.value, update);
+                    addEventListener("resize", update);
+                }
+            });
+            Vue.onBeforeUnmount(() => {
+                if (!props.noresize) {
+                    removeResizeListener(resize.value, update);
+                    removeEventListener("resize", this.update);
+                }
+            });
+            Vue.onUpdated(() => update());
+            return {
+                scrollbar: scrollbar,
+                wrap: wrap,
+                resize: resize,
+                moveX: moveX,
+                moveY: moveY,
+                ratioX: ratioX,
+                ratioY: ratioY,
+                sizeWidth: sizeWidth,
+                sizeHeight: sizeHeight,
+                update: update,
+                handleScroll: handleScroll,
+                scrollTo: scrollTo,
+                setScrollTop: setScrollTop,
+                setScrollLeft: setScrollLeft,
+                renderWrapStyle: renderWrapStyle
+            };
+        }
+    });
+    const _hoisted_1$8 = {
+        ref: "scrollbar",
+        class: "as-scrollbar"
+    };
+    function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+        const _component_bar = Vue.resolveComponent("bar");
+        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$8, [ Vue.createElementVNode("div", {
+            ref: "wrap",
+            class: Vue.normalizeClass([ _ctx.wrapClass, "as-scrollbar__wrap", _ctx.native ? "" : "as-scrollbar__wrap--hidden-default" ]),
+            style: Vue.normalizeStyle(_ctx.renderWrapStyle),
+            onScroll: _cache[0] || (_cache[0] = (...args) => _ctx.handleScroll && _ctx.handleScroll(...args))
+        }, [ (Vue.openBlock(), Vue.createBlock(Vue.resolveDynamicComponent(_ctx.tag), {
+            ref: "resize",
+            class: Vue.normalizeClass([ "as-scrollbar__view", _ctx.viewClass ]),
+            style: Vue.normalizeStyle(_ctx.viewStyle)
+        }, {
+            default: Vue.withCtx(() => [ Vue.renderSlot(_ctx.$slots, "default") ]),
+            _: 3
+        }, 8, [ "class", "style" ])) ], 38), !_ctx.native ? (Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, {
+            key: 0
+        }, [ Vue.createVNode(_component_bar, {
+            move: _ctx.moveX,
+            ratio: _ctx.ratioX,
+            size: _ctx.sizeWidth,
+            always: _ctx.always
+        }, null, 8, [ "move", "ratio", "size", "always" ]), Vue.createVNode(_component_bar, {
+            move: _ctx.moveY,
+            ratio: _ctx.ratioY,
+            size: _ctx.sizeHeight,
+            vertical: "",
+            always: _ctx.always
+        }, null, 8, [ "move", "ratio", "size", "always" ]) ], 64)) : Vue.createCommentVNode("v-if", true) ], 512);
+    }
+    var scrollbar = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ], [ "__file", "E:\\project\\all-search\\src\\components\\scrollbar\\src\\scrollbar.vue" ] ]);
+    var css$d = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\r\n";
+    injectStyle(css$d);
     function initSites(type) {
-        let sitesData = list$1;
+        let sitesData = list$2;
         const localSites = getSession("sites");
         if (localSites) {
             sitesData = localSites;
@@ -2225,13 +2167,13 @@
                 "data-initialized": $setup.popperInstance !== null,
                 onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.show && $setup.show(...args)),
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
-            }, [ $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
+            }, [ Vue.createCommentVNode('        <div class="arrow" data-popper-arrow />'), $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
                 key: 0
-            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$7), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
+            }) : Vue.createCommentVNode("v-if", true) ], 42, _hoisted_1$7), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
             _: 3
         }) ], 64);
     }
-    var popper = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
+    var popper = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ], [ "__file", "E:\\project\\all-search\\src\\components\\popper.vue" ] ]);
     var css$b = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 1.25px 4px 0 0;\n}";
     injectStyle(css$b);
     const _sfc_main$b = {
@@ -2253,7 +2195,40 @@
             "xlink:href": `#icon-${$props.name}`
         }, null, 8, _hoisted_2$5) ]);
     }
-    var icon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
+    var icon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ], [ "__file", "E:\\project\\all-search\\src\\components\\icon.vue" ] ]);
+    let el = document.createElement("a");
+    const replaceUrl = function(val) {
+        const lowerCaseVal = val.toLowerCase();
+        const list = [ "http://", "https://", "ftp://", "files://" ];
+        for (let i = 0; i < list.length; i++) {
+            if (lowerCaseVal.indexOf(list[i]) === 0) {
+                return val.replace(/.*\/\//, "//");
+            }
+        }
+        return val;
+    };
+    function parseUrl(url) {
+        let val = url;
+        if (val.indexOf("//") < 0) {
+            val = `//${val}`;
+        } else if (val.indexOf("//") > -1) {
+            val = replaceUrl(val);
+        } else {
+            return el;
+        }
+        el.href = val;
+        return {
+            href: el.href,
+            origin: el.origin,
+            protocol: el.protocol,
+            host: el.host,
+            hostname: el.hostname,
+            port: el.port,
+            pathname: el.pathname,
+            search: el.search,
+            hash: el.hash
+        };
+    }
     const name = "favicon";
     const session$1 = getSession(name);
     const getValue = val => val || 1;
@@ -2308,9 +2283,9 @@
         return $setup.favicon === 1 ? (Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$5, [ Vue.createElementVNode("img", {
             src: $setup.img,
             onerror: "this.classList.add('error')"
-        }, null, 8, _hoisted_2$4) ])) : Vue.createCommentVNode("", true);
+        }, null, 8, _hoisted_2$4) ])) : Vue.createCommentVNode("v-if", true);
     }
-    var favicon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
+    var favicon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ], [ "__file", "E:\\project\\all-search\\src\\components\\favicon.vue" ] ]);
     var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
     injectStyle(css$9);
     const _sfc_main$9 = {
@@ -2339,10 +2314,19 @@
             };
             const defaultKeyword = () => {
                 let keyword = getKeyword();
-                if (currentSite && currentSite.keyword) {
-                    keyword = currentSite.keyword();
+                const selectors = currentSite.selectors;
+                const query = currentSite.query;
+                if (selectors) {
+                    const el = document.querySelector(selectors);
+                    keyword = el ? el.value : "";
+                } else if (query) {
+                    query.some(name => {
+                        const word = getQueryString(name);
+                        keyword = word;
+                        return !!word;
+                    });
                 }
-                return encodeURIComponent(keyword);
+                return keyword;
             };
             const handleCateClick = (cate, isOpen, disabled) => {
                 const urlItem = cate.list.filter(item => item.data.visible).find(item => item.url.indexOf(window.location.hostname) === -1);
@@ -2416,7 +2400,7 @@
             _: 1
         }, 8, [ "placement" ]);
     }
-    var menuItem = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ] ]);
+    var menuItem = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ], [ "__file", "E:\\project\\all-search\\src\\components\\menuItem.vue" ] ]);
     const NAME = "align";
     const session = getSession(NAME);
     const list = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]);
@@ -2496,7 +2480,7 @@
             _: 1
         });
     }
-    var asMenu = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ] ]);
+    var asMenu = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ], [ "__file", "E:\\project\\all-search\\src\\components\\menu.vue" ] ]);
     const primaryColor = Vue.ref("");
     const bgColor = Vue.ref("");
     const primaryTextColor = Vue.ref("");
@@ -2578,7 +2562,7 @@
             onClick: _cache[2] || (_cache[2] = (...args) => $setup.onMaskClick && $setup.onMaskClick(...args))
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 32);
     }
-    var overlay = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ] ]);
+    var overlay = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ], [ "__file", "E:\\project\\all-search\\src\\components\\overlay.vue" ] ]);
     var css$6 = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
     injectStyle(css$6);
     const _sfc_main$6 = {
@@ -2623,7 +2607,7 @@
             "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.model = $event)
         }, null, 8, _hoisted_2$2), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3$2, Vue.createElementVNode("span", _hoisted_4$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
     }
-    var radio = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ] ]);
+    var radio = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ], [ "__file", "E:\\project\\all-search\\src\\components\\radio.vue" ] ]);
     var css$5 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
     injectStyle(css$5);
     const _sfc_main$5 = {
@@ -2662,7 +2646,7 @@
             style: Vue.normalizeStyle($setup.contentStyle)
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 4) ]);
     }
-    var formItem = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ] ]);
+    var formItem = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ], [ "__file", "E:\\project\\all-search\\src\\components\\form-item.vue" ] ]);
     var css$4 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
     injectStyle(css$4);
     const _sfc_main$4 = {
@@ -2679,7 +2663,7 @@
             class: Vue.normalizeClass([ "as-button", `as-button__${$props.type}` ])
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 2);
     }
-    var asButton = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
+    var asButton = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ], [ "__file", "E:\\project\\all-search\\src\\components\\button.vue" ] ]);
     var css$3 = '@charset "UTF-8";\n.as-color-set .as-color-label {\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  vertical-align: middle;\n}\n.as-color-set .input—color {\n  width: 30px;\n  height: 30px;\n  padding: 4px;\n  border: 1px solid #e6e6e6;\n  border-radius: 4px;\n  background-color: var(--as-secondary-background-color);\n  box-sizing: border-box;\n}\n.as-color-set .input—color::-webkit-color-swatch {\n  border: 0;\n}\n.as-color-set .input—color::-webkit-color-swatch-wrapper {\n  padding: 0;\n}\n.as-color-set .reset-btn {\n  margin-left: 20px;\n}';
     injectStyle(css$3);
     const _sfc_main$3 = {
@@ -2735,7 +2719,7 @@
             _: 1
         }, 8, [ "onClick" ]) ]);
     }
-    var color = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ] ]);
+    var color = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ], [ "__file", "E:\\project\\all-search\\src\\components\\color.vue" ] ]);
     var css$2 = ".as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
     injectStyle(css$2);
     const _sfc_main$2 = {
@@ -2811,14 +2795,16 @@
             to: "#all-search"
         }, [ Vue.createVNode(Vue.Transition, {
             name: "overlay",
-            appear: ""
+            appear: "",
+            persisted: ""
         }, {
             default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createVNode(_component_overlay, {
                 onClick: $setup.onMaskClick
             }, {
                 default: Vue.withCtx(() => [ Vue.createVNode(Vue.Transition, {
                     name: "drawer",
-                    appear: ""
+                    appear: "",
+                    persisted: ""
                 }, {
                     default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createElementVNode("div", {
                         "aria-modal": "true",
@@ -2926,7 +2912,7 @@
             _: 1
         }) ])) ], 64);
     }
-    var sideBar = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ] ]);
+    var sideBar = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ], [ "__file", "E:\\project\\all-search\\src\\components\\side-bar.vue" ] ]);
     function throttle(fn, delay) {
         let canRun = true;
         return function() {
@@ -2961,7 +2947,7 @@
             direction: direction
         };
     }
-    var css$1 = "\n.as-hover-btn[data-v-3952be4c] {\r\n  position: fixed;\r\n  z-index: 99999;\r\n  font-weight: 600;\r\n  font-size: 17px;\r\n  color: var(--as-primary-color);\r\n  background: #fff;\r\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\r\n  border: 1px var(--as-border-color) solid;\r\n  opacity: 0.6;\r\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-3952be4c] {\r\n  top: 0;\r\n  left: 50%;\r\n  transform: translateY(0) translateX(-50%);\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-3952be4c] {\r\n  left: 0;\r\n  top: 50%;\r\n  transform: translateY(-200%) translateX(0) rotate(90deg);\r\n  transform-origin: 0 100%;\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-3952be4c] {\r\n  transition: transform 0.2s;\r\n  transform: translateY(-100%) translateX(-50%);\n}\r\n";
+    var css$1 = "\n.as-hover-btn[data-v-379a68eb] {\r\n  position: fixed;\r\n  z-index: 99999;\r\n  font-weight: 600;\r\n  font-size: 17px;\r\n  color: var(--as-primary-color);\r\n  background: #fff;\r\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\r\n  border: 1px var(--as-border-color) solid;\r\n  opacity: 0.6;\r\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-379a68eb] {\r\n  top: 0;\r\n  left: 50%;\r\n  transform: translateY(0) translateX(-50%);\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-379a68eb] {\r\n  left: 0;\r\n  top: 50%;\r\n  transform: translateY(-200%) translateX(0) rotate(90deg);\r\n  transform-origin: 0 100%;\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-379a68eb] {\r\n  transition: transform 0.2s;\r\n  transform: translateY(-100%) translateX(-50%);\n}\r\n";
     injectStyle(css$1);
     const _sfc_main$1 = {
         name: "hover-btn",
@@ -3003,7 +2989,7 @@
             onClick: _cache[1] || (_cache[1] = (...args) => $setup.handleClick && $setup.handleClick(...args))
         }, " All Search ", 34);
     }
-    var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-3952be4c" ] ]);
+    var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-379a68eb" ], [ "__file", "E:\\project\\all-search\\src\\components\\hover-btn.vue" ] ]);
     var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\n.body-vertical {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
@@ -3027,20 +3013,21 @@
             const {show: show} = useSwitchShow();
             const classList = Vue.computed(() => [ `as-${mode.value}`, show.value ? "as-show" : "as-hide" ]);
             const visible = Vue.computed(() => !site.invisible && !Vue.unref(fullScreen));
-            updateSite();
-            Vue.watch([ mode, show ], ([newMode, newShow]) => {
-                addStyleForCurrentSite(newMode, site, !newShow);
-            }, {
-                immediate: true
-            });
             function updateSite() {
                 const curSite = siteInfo(true);
                 site.url = curSite.url;
                 site.invisible = curSite.invisible;
                 site.disabled = curSite.disabled;
                 site.style = curSite.style;
-                site.keyword = curSite.keyword;
+                site.selectors = curSite.selectors;
+                site.query = curSite.query;
             }
+            updateSite();
+            Vue.watch([ mode, show ], ([newMode, newShow]) => {
+                addStyleForCurrentSite(newMode, site, !newShow);
+            }, {
+                immediate: true
+            });
             onFullScreenChange(() => {
                 fullScreen.value = isFullScreen();
             });
@@ -3049,6 +3036,7 @@
                 addStyleForCurrentSite(mode, site, !show.value);
             });
             return {
+                disabled: site.disabled,
                 mode: mode,
                 classList: classList,
                 visible: visible
@@ -3069,9 +3057,9 @@
             mode: $setup.mode
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_as_menu, {
             mode: $setup.mode
-        }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.createVNode(_component_hoverBtn) ], 64);
+        }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.withDirectives(Vue.createVNode(_component_hoverBtn, null, null, 512), [ [ Vue.vShow, $setup.visible ] ]) ], 64);
     }
-    var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ] ]);
+    var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ], [ "__file", "E:\\project\\all-search\\src\\as-script\\index.vue" ] ]);
     !function(e) {
         var t, a, l, o, h, i, n = '<svg><symbol id="icon-disk" viewBox="0 0 1024 1024"><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z"  ></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024"><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z"  ></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024"><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z"  ></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024"><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z"  ></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024"><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z"  ></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024"><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z"  ></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024"><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z"  ></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024"><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z"  ></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024"><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z"  ></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024"><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z"  ></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024"><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z"  ></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024"><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z"  ></path></symbol></svg>', v = (v = document.getElementsByTagName("script"))[v.length - 1].getAttribute("data-injectcss");
         if (v && !e.__iconfont__svg__cssinject__) {

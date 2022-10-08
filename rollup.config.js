@@ -6,7 +6,6 @@ import replace from '@rollup/plugin-replace'
 import json from '@rollup/plugin-json'
 import vue from '@vitejs/plugin-vue'
 import { terser } from 'rollup-plugin-terser'
-// import del from 'rollup-plugin-delete'
 import styles from 'rollup-plugin-styles'
 import externalGlobals from 'rollup-plugin-external-globals'
 import { proMeta, devMeta } from './src/config/meta'
@@ -30,26 +29,10 @@ const config =  {
           mangle: false,
           output: {
             beautify: true,
-            preamble: proMeta('tm')
+            preamble: proMeta
           }
         }),
-        buildDev(devMeta('tm'), 'tm')
-      ]
-    },
-    {
-      name: 'allSearch',
-      file: 'build/index.sc.user.js',
-      format: 'iife',
-      plugins: [
-        terser({
-          compress: false,
-          mangle: false,
-          output: {
-            beautify: true,
-            preamble: proMeta('sc')
-          }
-        }),
-        buildDev(devMeta('sc'), 'sc')
+        buildDev(devMeta)
       ]
     }
   ],
@@ -85,13 +68,12 @@ const config =  {
   ]
 }
 
-function buildDev(text, type) {
+function buildDev(text) {
   return {
     name: "rollup-plugin-buildDev",
     generateBundle() {
       if (isDev) {
-        const fileName = type === 'tm' ? 'index.dev.js': 'index.sc.dev.js'
-        fs.writeFileSync(path.join(__dirname, `/build/${fileName}`), text)
+        fs.writeFileSync(path.join(__dirname, '/build/index.dev.js'), text)
       }
     }
   }

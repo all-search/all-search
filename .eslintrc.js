@@ -1,3 +1,4 @@
+// https://eslint.org/docs/user-guide/configuring
 module.exports = {
   root: true,
   parserOptions: {
@@ -25,5 +26,3 @@ module.exports = {
     'spaced-comment': 'off'
   }
 }
-
-// https://eslint.org/docs/user-guide/configuring

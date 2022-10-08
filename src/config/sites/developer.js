@@ -1,5 +1,9 @@
 export default [
   {
+    nameZh: '开发者搜索',
+    url: 'https://kaifa.baidu.com/searchPage?wd=%s&module=SEARCH'
+  },
+  {
     nameZh: 'MDN',
     url: 'https://developer.mozilla.org/zh-CN/search?q=%s'
   },

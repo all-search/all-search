@@ -1,4 +1,4 @@
-import { getQueryString } from '../util/index'
+import sites from './sites/index'
 
 const height = 30
 const width = 100
@@ -9,10 +9,6 @@ export const list = [
     style: {
       1: `.srp #searchform:not(.minidiv){top: ${height + 20}px !important;}#searchform.minidiv{top: ${height}px !important;}`
     }
-  },
-  {
-    url: /\/\/www\.baidu\.com\/$/,
-    invisible: true
   },
   {
     url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
@@ -27,32 +23,17 @@ export const list = [
     url: /\/\/duckduckgo\.com\/*/
   },
   {
-    url: /\/\/search\.yahoo\.com\/search/
-  },
-  {
-    url: /\/\/tw\.search\.yahoo\.com\/search/
-  },
-  {
     url: /\/\/searx\.me\/\?q/
   },
   {
     url: /\/\/www\.sogou\.com\/(?:web|s)/,
-    keyword () {
-      return document.getElementById('upquery').value
-    }
+    selectors: '#upquery'
   },
   {
     url: /\/\/yandex\.com\/search/
   },
   {
     url: /\/\/google\.infinitynewtab\.com\/\?q/
-  },
-  {
-    url: /\/\/www\.dogedoge\.com\/results\?q/,
-    style: {
-      1: `#header_wrapper{top: ${height}px!important;}`,
-      2: `#header_wrapper{right: ${width}px!important;}`
-    }
   },
   {
     url: /\/\/baike\.baidu\.com\/item/
@@ -69,7 +50,7 @@ export const list = [
   {
     url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/,
     style: {
-      1: `#mw-head,#mw-panel{top: ${height}px!important;}#mw-panel`
+      1: `#mw-head,#mw-panel{top: ${height}px!important;}`
     }
   },
   {
@@ -95,9 +76,7 @@ export const list = [
   },
   {
     url: /\/\/zhihu\.sogou\.com\/zhihu/,
-    keyword () {
-      return document.getElementById('upquery').value
-    },
+    selectors: '#upquery',
     style: {
       1: `.header { top:${height}px }`
     }
@@ -120,19 +99,14 @@ export const list = [
   },
   {
     url: /\/\/search\.bilibili\.com\/all/,
-    keyword () {
-      const el = document.querySelector('.search-input-el')
-      return el ? el.value : ''
-    },
+    selectors: '.search-input-el',
     style: {
       1: `.fixed-top {top: ${height}px;}`
     }
   },
   {
     url: /\/\/www\.acfun\.cn\/search/,
-    keyword () {
-      return document.getElementById('search-text--standalone').value
-    },
+    selectors: '.search-text--standalone',
     style: {
       1: `#header {top: ${height}px;}`
     }
@@ -145,10 +119,6 @@ export const list = [
           ytd-mini-guide-renderer.ytd-app {padding-top: ${height}px;}`,
       2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
     }
-  },
-  {
-    url: /\/\/www\.youtube\.com\/watch/,
-    invisible: true
   },
   {
     url: /\/\/www\.nicovideo\.jp\/search\//
@@ -196,7 +166,7 @@ export const list = [
     url: /^http:\/\/www\.pixiv\.net\/search\.php/
   },
   {
-    url: /\/\/huaban\.com\/search\/\?/,
+    url: /\/\/huaban\.com\/search\?/,
     style: {
       1: `#header  { top: ${height}px; }`
     }
@@ -212,16 +182,11 @@ export const list = [
   },
   {
     url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/,
-    keyword () {
-      return getQueryString('text') || getQueryString('q')
-    }
+    query: ['text', 'q']
   },
   {
     url: /\/\/fanyi\.baidu\.com/,
-    keyword () {
-      const el = document.getElementById('baidu_translate_input')
-      return el ? el.value : ''
-    }
+    selectors: '.baidu_translate_input'
   },
   {
     url: /\/\/.*\.bing\.com\/dict\/search\?q=/
@@ -282,12 +247,6 @@ export const list = [
     url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
   },
   {
-    url: /^http:\/\/search\.cnki\.net\/search\.aspx/
-  },
-  {
-    url: /^http:\/\/link\.springer\.com\/search\?query=/
-  },
-  {
     url: /\/\/github\.com\/search/
   },
   {
@@ -295,10 +254,6 @@ export const list = [
     style: {
       1: `.layout-web__header {top: ${height}px !important;}`
     }
-  },
-  {
-    url: /\/\/so\.toutiao\.com\/search/,
-    style: {}
   },
   {
     url: /\/\/endday\.github\.io/,
@@ -323,16 +278,51 @@ export const siteInfo = function (refresh) {
   return currentSite
 }
 
+function getMenuItem () {
+  let targetItem = null
+  let urlObj = null
+  const curItem = new URL(window.location.href)
+  sites.some(category => {
+    category.list.find(item => {
+      const menuItem = new URL(item.url)
+      if (menuItem.hostname === curItem.hostname &&
+        menuItem.pathname === curItem.pathname) {
+        targetItem = item
+        urlObj = menuItem
+      }
+    })
+  })
+  if (urlObj) {
+    for (const key of urlObj.searchParams.keys()) {
+      if (!curItem.searchParams.has(key)) {
+        targetItem = null
+      }
+    }
+  }
+  return targetItem
+}
+
 const getSite = function () {
   const target = list
     .find(item => item.url.test(window.location.href.toLowerCase()))
+  const menuItem = getMenuItem()
   if (target) {
     return {
       url: target.url,
       invisible: !!target.invisible,
       disabled: !!target.disabled,
       style: target.style,
-      keyword: target.keyword
+      selectors: target.selectors,
+      query: target.query
+    }
+  } else if (menuItem) {
+    return {
+      url: menuItem.url,
+      invisible: false,
+      disabled: false,
+      style: menuItem.style,
+      selectors: menuItem.selectors,
+      query: menuItem.query
     }
   }
   return {
@@ -340,6 +330,7 @@ const getSite = function () {
     invisible: true,
     disabled: true,
     style: {},
-    keyword: null
+    selectors: target.selectors,
+    query: target.query
   }
 }

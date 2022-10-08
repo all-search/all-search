@@ -44,7 +44,7 @@
 import { computed, unref, ref } from 'vue'
 import popper from './popper'
 import { siteInfo } from '../config/loadList'
-import { getKeyword, isMobile } from '../util/index'
+import { getKeyword, getQueryString, isMobile } from '../util/index'
 import icon from './icon'
 import favicon from './favicon'
 
@@ -79,10 +79,19 @@ export default {
     }
     const defaultKeyword = () => {
       let keyword = getKeyword()
-      if (currentSite && currentSite.keyword) {
-        keyword = currentSite.keyword()
+      const selectors = currentSite.selectors
+      const query = currentSite.query
+      if (selectors) {
+        const el = document.querySelector(selectors)
+        keyword = el ? el.value : ''
+      } else if (query) {
+        query.some(name => {
+          const word = getQueryString(name)
+          keyword = word
+          return !!word
+        })
       }
-      return encodeURIComponent(keyword)
+      return keyword
     }
     const handleCateClick = (cate, isOpen, disabled) => {
       const urlItem = cate.list

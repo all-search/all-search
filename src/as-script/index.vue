@@ -8,12 +8,12 @@
       :mode="mode"/>
     <side-bar/>
   </div>
-  <hoverBtn/>
+  <hoverBtn v-show="visible" />
 </template>
 
 <script>
 import { computed, watch, ref, reactive, unref } from 'vue'
-import { initStyle, addStyleForCurrentSite } from '../util/initStyle'
+import { addStyleForCurrentSite } from '../util/initStyle'
 import { siteInfo } from '../config/loadList'
 import { routerChange } from '../util/routerChange'
 import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
@@ -52,22 +52,21 @@ export default {
     const visible = computed(() => {
       return !site.invisible && !unref(fullScreen)
     })
-    initStyle()
-    updateSite()
-    watch([mode, show], ([newMode, newShow]) => {
-      addStyleForCurrentSite(newMode, site, !newShow)
-    }, {
-      immediate: true
-    })
-
     function updateSite () {
       const curSite = siteInfo(true)
       site.url = curSite.url
       site.invisible = curSite.invisible
       site.disabled = curSite.disabled
       site.style = curSite.style
-      site.keyword = curSite.keyword
+      site.selectors = curSite.selectors
+      site.query = curSite.query
     }
+    updateSite()
+    watch([mode, show], ([newMode, newShow]) => {
+      addStyleForCurrentSite(newMode, site, !newShow)
+    }, {
+      immediate: true
+    })
     onFullScreenChange(() => {
       fullScreen.value = isFullScreen()
     })
@@ -76,6 +75,7 @@ export default {
       addStyleForCurrentSite(mode, site, !show.value)
     })
     return {
+      disabled: site.disabled,
       mode,
       classList,
       visible

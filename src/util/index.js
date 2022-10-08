@@ -1,5 +1,6 @@
 import pkg from '../../package.json'
 import store from './store'
+import { isString } from '../components/scrollbar/src/util'
 
 export const version = pkg.version
 
@@ -8,6 +9,20 @@ export function getQueryString (name, url) {
   const r = new RegExp('(\\?|#|&)' + name + '=([^&#]*)(&|#|$)')
   const m = url.match(r)
   return decodeURIComponent(!m ? '' : m[2])
+}
+
+export function getKeywordInput () {
+  const dom = document.getElementsByTagName('input')
+  for (let i = 0; i < dom.length; i++) {
+    if (
+      dom[i].clientWidth > 80 &&
+      dom[i].clientHeight > 0 &&
+      dom[i].value &&
+      decodeURI(document.location.href).includes(dom[i].value)
+    ) {
+      return dom[i].value
+    }
+  }
 }
 
 export function getKeyword () {
@@ -51,6 +66,21 @@ function getName (name) {
   return null
 }
 
+function isJson (str) {
+  if (typeof str !== 'string') {
+    return false
+  }
+  const char = str.charAt(0)
+  if (char !== '[' && char !== '{') {
+    return false
+  }
+  try {
+    return typeof JSON.parse(str) === 'object'
+  } catch (e) {
+    return false
+  }
+}
+
 export let getSession = function (name) {
   const formatName = getName(name)
   let item
@@ -62,9 +92,13 @@ export let getSession = function (name) {
     item = window.localStorage.getItem(formatName)
   }
   if (item) {
-    try {
-      return JSON.parse(item)
-    } catch (e) {
+    if (isJson(item)) {
+      try {
+        return JSON.parse(item)
+      } catch (e) {
+        return item
+      }
+    } else {
       return item
     }
   }
@@ -156,6 +190,7 @@ export function RAFInterval (callback, period, runNow) {
       }
     }
   }
+
   requestAnimationFrame(step)
 }
 
