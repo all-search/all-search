@@ -58,97 +58,99 @@ export const addStyleForCurrentSite = function (mode, site, remove = false) {
   initBodyClass(modeVal, site, remove)
 }
 
-function modifyPosition (item) {
+function getParent (el) {
+  let current = el
+  while (current.offsetParent) {
+    current = current.offsetParent
+  }
+  return current
+}
+
+function getRealFixedNode (item) {
   const style = window.getComputedStyle(item)
+  const position = style.getPropertyValue('position')
   const display = style.getPropertyValue('display')
   if (display === 'none') {
-    return
-  }
-  const position = style.getPropertyValue('position')
-  if (position === 'fixed') {
-    addDataset(item)
+    return null
+  } else if (position === 'fixed') {
+    return item
   } else if (position === 'absolute') {
-    let parent = item.offsetParent
-    let target = item
-    while (parent && parent.tagName !== 'BODY') {
-      target = parent
-      const offsetParent = parent.offsetParent
-      if (offsetParent && offsetParent.tagName !== 'BODY') {
-        parent = offsetParent
-      } else {
-        parent = null
-      }
-    }
-    addDataset(target)
-  }
-}
-
-function getTop (el) {
-  const style = window.getComputedStyle(el)
-  return style.getPropertyValue('top') || '0px'
-}
-
-function addDataset (item) {
-  const top = getTop(item)
-  if (top.includes('px')) {
-    const num = parseInt(top.replace('px', '')) || 0
-    // item.style.top = `${num + 30}px`
-    if (item.dataset.hasSet) {
-      item.dataset.hasSet = Number(item.dataset.hasSet) + 1
-    } else {
-      item.dataset.hasSet = 1
-    }
-    item.dataset.top = num
+    return getParent(item)
+  } else {
+    return null
   }
 }
 
 function changeTop (item) {
-  const num = parseInt(item.dataset.top) || 0
-  item.style.top = `${num + 30}px`
-  delete item.dataset.top
+  const style = window.getComputedStyle(item)
+  let top = style.getPropertyValue('top') || '0px'
+  if (!item.dataset.top) {
+    item.dataset.top = top
+  } else {
+    top = item.dataset.top
+  }
+  if (top.includes('px')) {
+    const num = parseInt(top.replace('px', '')) || 0
+    item.style.top = `${num + 30}px`
+  }
 }
 
 let isSelfChange = false
 
+function getFixedNodeList (list) {
+  const weakSet = new WeakSet()
+  const newList = []
+  const nodes = list
+    .filter(item => item)
+    .map(item => getRealFixedNode(item))
+    .filter(item => item)
+  nodes.forEach(item => {
+    if (!weakSet.has(item)) {
+      newList.push(item)
+      weakSet.add(item)
+    }
+  })
+  return newList
+}
+
 function addSpecialStyle () {
   console.log('addSpecialStyle')
-  document.body.querySelectorAll('*').forEach(item => {
-    modifyPosition(item)
+  const nodes = Array.from(document.body.querySelectorAll('*'))
+    .filter(item => item.tagName !== 'STYLE')
+  getFixedNodeList(nodes).forEach(item => {
+    changeTop(item)
   })
+}
+
+function mutationObserver () {
   // 选择需要观察变动的节点
-  const targetNode = document.body
+  const targetNode = document
   // 观察器的配置（需要观察什么变动）
   const config = {
     attributes: true,
     childList: true,
-    subtree: true,
-    attributeFilter: ['style', 'class']
+    subtree: true
+    // attributeFilter: ['style', 'class']
   }
   // 当观察到变动时执行的回调函数
   const callback = function (mutationsList) {
     if (isSelfChange) {
       isSelfChange = false
     } else {
-      mutationsList.forEach((mutation, i) => {
-        if (mutation.type === 'attributes') {
-          const item = mutation.target
-          if (!['BODY', 'STYLE'].includes(item.tagName)) {
-            modifyPosition(item)
-          }
-        }
-      })
-      document.body.querySelectorAll('[data-top]').forEach(item => {
+      isSelfChange = true
+      const filterNodes = mutationsList
+        .filter(mutation => ['attributes', 'class'].includes(mutation.type) && !['BODY', 'STYLE'].includes(mutation.target.tagName))
+        .map(mutation => getRealFixedNode(mutation.target))
+      console.log(filterNodes)
+      getFixedNodeList(filterNodes).forEach(item => {
         changeTop(item)
       })
-      isSelfChange = true
     }
   }
   // 创建一个观察器实例并传入回调函数
   const observer = new MutationObserver(callback)
   // 以上述配置开始观察目标节点
-  setTimeout(() => {
-    observer.observe(targetNode, config)
-  })
+  observer.observe(targetNode, config)
   // 之后，可停止观察
   //   observer.disconnect();
 }

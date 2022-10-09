@@ -89,6 +89,7 @@ export default {
 
 .body-horizontal {
   margin-top: $height !important;
+  position: relative;
 }
 
 .body-vertical {
