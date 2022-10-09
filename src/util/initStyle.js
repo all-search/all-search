@@ -61,7 +61,11 @@ export const addStyleForCurrentSite = function (mode, site, remove = false) {
 function getParent (el) {
   let current = el
   while (current.offsetParent) {
-    current = current.offsetParent
+    if (current.offsetParent.tagName === 'BODY') {
+      return current
+    } else {
+      current = current.offsetParent
+    }
   }
   return current
 }
@@ -81,17 +85,18 @@ function getRealFixedNode (item) {
   }
 }
 
-function changeTop (item) {
+function changeStyle (item) {
   const style = window.getComputedStyle(item)
-  let top = style.getPropertyValue('top') || '0px'
-  if (!item.dataset.top) {
-    item.dataset.top = top
+  const marginTop = style.getPropertyValue('margin-top')
+  if (item.dataset.hasSet) {
+    item.dataset.hasSet = Number(item.dataset.hasSet) + 1
   } else {
-    top = item.dataset.top
+    item.dataset.hasSet = 1
   }
-  if (top.includes('px')) {
-    const num = parseInt(top.replace('px', '')) || 0
-    item.style.top = `${num + 30}px`
+  if (marginTop === '0px') {
+    item.dataset.marginTop = '30px'
+  } else {
+    item.dataset.borderTop = '30px'
   }
 }
 
@@ -118,8 +123,9 @@ function addSpecialStyle () {
   const nodes = Array.from(document.body.querySelectorAll('*'))
     .filter(item => item.tagName !== 'STYLE')
   getFixedNodeList(nodes).forEach(item => {
-    changeTop(item)
+    changeStyle(item)
   })
+  mutationObserver()
 }
 
 function mutationObserver () {
@@ -141,9 +147,8 @@ function mutationObserver () {
       const filterNodes = mutationsList
         .filter(mutation => ['attributes', 'class'].includes(mutation.type) && !['BODY', 'STYLE'].includes(mutation.target.tagName))
         .map(mutation => getRealFixedNode(mutation.target))
-      console.log(filterNodes)
       getFixedNodeList(filterNodes).forEach(item => {
-        changeTop(item)
+        changeStyle(item)
       })
     }
   }

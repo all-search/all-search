@@ -8,7 +8,7 @@
       :mode="mode"/>
     <side-bar/>
   </div>
-  <hoverBtn v-show="visible" />
+  <hoverBtn v-show="visible"/>
 </template>
 
 <script>
@@ -52,6 +52,7 @@ export default {
     const visible = computed(() => {
       return !site.invisible && !unref(fullScreen)
     })
+
     function updateSite () {
       const curSite = siteInfo(true)
       site.url = curSite.url
@@ -61,6 +62,7 @@ export default {
       site.selectors = curSite.selectors
       site.query = curSite.query
     }
+
     updateSite()
     watch([mode, show], ([newMode, newShow]) => {
       addStyleForCurrentSite(newMode, site, !newShow)
@@ -89,7 +91,14 @@ export default {
 
 .body-horizontal {
   margin-top: $height !important;
-  position: relative;
+
+  [data-margin-top] {
+    margin-top: $height !important;
+  }
+
+  [data-border-top] {
+    border-top: $height solid rgba(255, 255, 255, 0) !important;
+  }
 }
 
 .body-vertical {
@@ -126,9 +135,11 @@ body, #all-search {
   border-bottom: 1px var(--as-border-color) solid;
   flex-direction: row;
   transition: transform 0.1s;
+
   &.as-hide {
     transform: translateY(-100%);
   }
+
   &.as-show {
     transform: translateY(0);
   }
@@ -142,9 +153,11 @@ body, #all-search {
   border-right: 1px var(--as-border-color) solid;
   flex-direction: column;
   transition: transform 0.1s;
+
   &.as-hide {
     transform: translateX(-100%);
   }
+
   &.as-show {
     transform: translateX(0);
   }
