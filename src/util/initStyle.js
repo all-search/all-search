@@ -91,12 +91,15 @@ function changeStyle (item) {
   const style = window.getComputedStyle(item)
   const styleMap = item.computedStyleMap()
   const marginTop = style.getPropertyValue('margin-top')
-  const top = style.getPropertyValue('top')
+  let top = style.getPropertyValue('top')
+  if (top.includes('px')) {
+    top = parseInt(top.replace('px', ''))
+  }
   const top2 = styleMap ? styleMap.get('top').value : null
   if (item.dataset.hasSet) {
     return
   }
-  if (top !== `${top2}px`) {
+  if (top !== top2) {
     return
   }
   if (marginTop === '0px') {
@@ -136,7 +139,7 @@ function addSpecialStyle () {
   getFixedNodeList(nodes).forEach(item => {
     changeStyle(item)
   })
-  // mutationObserver()
+  mutationObserver()
 }
 
 function mutationObserver () {
@@ -146,8 +149,8 @@ function mutationObserver () {
   const config = {
     attributes: true,
     childList: true,
-    subtree: true
-    // attributeFilter: ['style', 'class']
+    subtree: true,
+    attributeFilter: ['style', 'class']
   }
   // 当观察到变动时执行的回调函数
   const callback = function (mutationsList) {

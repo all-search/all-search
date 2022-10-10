@@ -844,12 +844,15 @@
         const style = window.getComputedStyle(item);
         const styleMap = item.computedStyleMap();
         const marginTop = style.getPropertyValue("margin-top");
-        const top = style.getPropertyValue("top");
+        let top = style.getPropertyValue("top");
+        if (top.includes("px")) {
+            top = parseInt(top.replace("px", ""));
+        }
         const top2 = styleMap ? styleMap.get("top").value : null;
         if (item.dataset.hasSet) {
             return;
         }
-        if (top !== `${top2}px`) {
+        if (top !== top2) {
             return;
         }
         if (marginTop === "0px") {
@@ -863,6 +866,7 @@
             item.dataset.hasSet = 1;
         }
     }
+    let isSelfChange = false;
     function getFixedNodeList(list) {
         const weakSet = new WeakSet;
         const newList = [];
@@ -881,6 +885,29 @@
         getFixedNodeList(nodes).forEach(item => {
             changeStyle(item);
         });
+        mutationObserver();
+    }
+    function mutationObserver() {
+        const targetNode = document;
+        const config = {
+            attributes: true,
+            childList: true,
+            subtree: true,
+            attributeFilter: [ "style", "class" ]
+        };
+        const callback = function(mutationsList) {
+            if (isSelfChange) {
+                isSelfChange = false;
+            } else {
+                isSelfChange = true;
+                const filterNodes = mutationsList.filter(mutation => [ "attributes", "class" ].includes(mutation.type) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => getRealFixedNode(mutation.target));
+                getFixedNodeList(filterNodes).forEach(item => {
+                    changeStyle(item);
+                });
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
     }
     var search = [ {
         nameZh: "百度",
