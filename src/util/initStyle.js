@@ -90,28 +90,29 @@ function getRealFixedNode (item) {
 function changeStyle (item) {
   const style = window.getComputedStyle(item)
   const styleMap = item.computedStyleMap()
-  const marginTop = style.getPropertyValue('margin-top')
-  let top = style.getPropertyValue('top')
+  const marginTop = style.marginTop
+  const marginTop2 = styleMap.get('margin-top').value
+  let top = style.top
   if (top.includes('px')) {
     top = parseInt(top.replace('px', ''))
   }
   const top2 = styleMap ? styleMap.get('top').value : null
-  if (item.dataset.hasSet) {
-    return
-  }
+  /*  if (item.dataset.hasSet) {
+      return
+    }*/
   if (top !== top2) {
     return
   }
-  if (marginTop === '0px') {
-    item.dataset.marginTop = '30px'
+  if (marginTop === '0px' && item.offsetTop === 0) {
+    item.dataset.asMarginTop = '30px'
   } else {
-    item.style.top = `${top + 30}px`
+    item.dataset.asTransform = '30px'
   }
-  if (item.dataset.hasSet) {
+  /*if (item.dataset.hasSet) {
     item.dataset.hasSet = Number(item.dataset.hasSet) + 1
   } else {
     item.dataset.hasSet = 1
-  }
+  }*/
 }
 
 let isSelfChange = false
@@ -157,14 +158,15 @@ function mutationObserver () {
     if (isSelfChange) {
       isSelfChange = false
     } else {
-      setTimeout(() => {
-        isSelfChange = true
-        const filterNodes = mutationsList
-          .filter(mutation => ['attributes', 'class'].includes(mutation.type) && !['BODY', 'STYLE'].includes(mutation.target.tagName))
-          .map(mutation => getRealFixedNode(mutation.target))
-        getFixedNodeList(filterNodes).forEach(item => {
-          changeStyle(item)
-        })
+      isSelfChange = true
+      const filterNodes = mutationsList
+        .filter(mutation =>
+          ['attributes', 'class'].includes(mutation.type)
+          && !['BODY', 'STYLE'].includes(mutation.target.tagName)
+        )
+        .map(mutation => getRealFixedNode(mutation.target))
+      getFixedNodeList(filterNodes).forEach(item => {
+        changeStyle(item)
       })
     }
   }

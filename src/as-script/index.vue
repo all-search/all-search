@@ -94,12 +94,12 @@ export default {
 }
 
 body {
-  [data-margin-top] {
+  [data-as-margin-top] {
     margin-top: $height !important;
   }
 
-  [data-border-top] {
-    background-color: red;
+  [data-as-transform] {
+    transform: translateY(30px);
   }
 
   [data-border-top]::before {
