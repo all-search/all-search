@@ -105,7 +105,7 @@ function changeStyle (item) {
   if (marginTop === '0px') {
     item.dataset.marginTop = '30px'
   } else {
-    item.dataset.borderTop = '30px'
+    item.style.top = `${top + 30}px`
   }
   if (item.dataset.hasSet) {
     item.dataset.hasSet = Number(item.dataset.hasSet) + 1
@@ -157,12 +157,14 @@ function mutationObserver () {
     if (isSelfChange) {
       isSelfChange = false
     } else {
-      isSelfChange = true
-      const filterNodes = mutationsList
-        .filter(mutation => ['attributes', 'class'].includes(mutation.type) && !['BODY', 'STYLE'].includes(mutation.target.tagName))
-        .map(mutation => getRealFixedNode(mutation.target))
-      getFixedNodeList(filterNodes).forEach(item => {
-        changeStyle(item)
+      setTimeout(() => {
+        isSelfChange = true
+        const filterNodes = mutationsList
+          .filter(mutation => ['attributes', 'class'].includes(mutation.type) && !['BODY', 'STYLE'].includes(mutation.target.tagName))
+          .map(mutation => getRealFixedNode(mutation.target))
+        getFixedNodeList(filterNodes).forEach(item => {
+          changeStyle(item)
+        })
       })
     }
   }

@@ -858,7 +858,7 @@
         if (marginTop === "0px") {
             item.dataset.marginTop = "30px";
         } else {
-            item.dataset.borderTop = "30px";
+            item.style.top = `${top + 30}px`;
         }
         if (item.dataset.hasSet) {
             item.dataset.hasSet = Number(item.dataset.hasSet) + 1;
@@ -899,10 +899,12 @@
             if (isSelfChange) {
                 isSelfChange = false;
             } else {
-                isSelfChange = true;
-                const filterNodes = mutationsList.filter(mutation => [ "attributes", "class" ].includes(mutation.type) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => getRealFixedNode(mutation.target));
-                getFixedNodeList(filterNodes).forEach(item => {
-                    changeStyle(item);
+                setTimeout(() => {
+                    isSelfChange = true;
+                    const filterNodes = mutationsList.filter(mutation => [ "attributes", "class" ].includes(mutation.type) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => getRealFixedNode(mutation.target));
+                    getFixedNodeList(filterNodes).forEach(item => {
+                        changeStyle(item);
+                    });
                 });
             }
         };
@@ -2976,7 +2978,7 @@
         }, " All Search ", 34);
     }
     var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-379a68eb" ], [ "__file", "E:\\myProject\\all-search\\src\\components\\hover-btn.vue" ] ]);
-    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\nbody [data-margin-top] {\n  margin-top: 30px !important;\n}\nbody [data-border-top] {\n  border-top: 30px solid rgba(255, 255, 255, 0) !important;\n}\n\n.body-vertical {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\nbody [data-margin-top] {\n  margin-top: 30px !important;\n}\nbody [data-border-top] {\n  background-color: red;\n}\nbody [data-border-top]::before {\n  content: "";\n  display: block;\n  height: 30px;\n}\n\n.body-vertical {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",

@@ -99,7 +99,13 @@ body {
   }
 
   [data-border-top] {
-    border-top: $height solid rgba(255, 255, 255, 0) !important;
+    background-color: red;
+  }
+
+  [data-border-top]::before {
+    content: "";
+    display: block;
+    height: 30px;
   }
 }
 
