@@ -54,8 +54,10 @@ export const protectStyle = function () {
 export const addStyleForCurrentSite = function (mode, site, remove = false) {
   const modeVal = unref(mode)
   // addCustomStyle(modeVal, site, remove)
-  addSpecialStyle()
   initBodyClass(modeVal, site, remove)
+  setTimeout(() => {
+    addSpecialStyle()
+  })
 }
 
 function getParent (el) {
@@ -87,16 +89,25 @@ function getRealFixedNode (item) {
 
 function changeStyle (item) {
   const style = window.getComputedStyle(item)
+  const styleMap = item.computedStyleMap()
   const marginTop = style.getPropertyValue('margin-top')
+  const top = style.getPropertyValue('top')
+  const top2 = styleMap ? styleMap.get('top').value : null
   if (item.dataset.hasSet) {
-    item.dataset.hasSet = Number(item.dataset.hasSet) + 1
-  } else {
-    item.dataset.hasSet = 1
+    return
+  }
+  if (top !== `${top2}px`) {
+    return
   }
   if (marginTop === '0px') {
     item.dataset.marginTop = '30px'
   } else {
     item.dataset.borderTop = '30px'
+  }
+  if (item.dataset.hasSet) {
+    item.dataset.hasSet = Number(item.dataset.hasSet) + 1
+  } else {
+    item.dataset.hasSet = 1
   }
 }
 
@@ -125,7 +136,7 @@ function addSpecialStyle () {
   getFixedNodeList(nodes).forEach(item => {
     changeStyle(item)
   })
-  mutationObserver()
+  // mutationObserver()
 }
 
 function mutationObserver () {
