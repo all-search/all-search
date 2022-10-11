@@ -90,8 +90,7 @@ function getRealFixedNode (item) {
 function changeStyle (item) {
   const style = window.getComputedStyle(item)
   const styleMap = item.computedStyleMap()
-  const marginTop = style.marginTop
-  const marginTop2 = styleMap.get('margin-top').value
+  const transitionDuration = style.transitionDuration
   let top = style.top
   if (top.includes('px')) {
     top = parseInt(top.replace('px', ''))
@@ -103,11 +102,25 @@ function changeStyle (item) {
   if (top !== top2) {
     return
   }
-  if (marginTop === '0px' && item.offsetTop === 0) {
-    item.dataset.asMarginTop = '30px'
+  if (transitionDuration !== '0s') {
+    item.addEventListener('transitionend', setTop)
   } else {
-    item.dataset.asTransform = '30px'
+    setTop()
   }
+
+  function setTop () {
+    const style = window.getComputedStyle(item)
+    const marginTop = style.marginTop
+    if (item.dataset.asMarginTop || item.dataset.asTransform) {
+      return
+    }
+    if (marginTop === '0px') {
+      item.dataset.asMarginTop = '30px'
+    } else {
+      item.dataset.asTransform = '30px'
+    }
+  }
+
   /*if (item.dataset.hasSet) {
     item.dataset.hasSet = Number(item.dataset.hasSet) + 1
   } else {
@@ -161,8 +174,11 @@ function mutationObserver () {
       isSelfChange = true
       const filterNodes = mutationsList
         .filter(mutation =>
-          ['attributes', 'class'].includes(mutation.type)
-          && !['BODY', 'STYLE'].includes(mutation.target.tagName)
+          {
+            return mutation.type === 'attributes'
+              && ['style', 'class'].includes(mutation.attributeName)
+              && !['BODY', 'STYLE'].includes(mutation.target.tagName)
+          }
         )
         .map(mutation => getRealFixedNode(mutation.target))
       getFixedNodeList(filterNodes).forEach(item => {

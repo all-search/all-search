@@ -330,7 +330,7 @@ const getSite = function () {
     invisible: true,
     disabled: true,
     style: {},
-    selectors: target.selectors,
-    query: target.query
+    selectors: null,
+    query: null
   }
 }

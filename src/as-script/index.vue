@@ -101,12 +101,6 @@ body {
   [data-as-transform] {
     transform: translateY(30px);
   }
-
-  [data-border-top]::before {
-    content: "";
-    display: block;
-    height: 30px;
-  }
 }
 
 .body-vertical {
