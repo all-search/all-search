@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜v1.2.20，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.2.20
-// @description  2022年10月10日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @description  2022年10月12日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -854,6 +854,7 @@
         }
         if (transitionDuration !== "0s") {
             item.addEventListener("transitionend", setTop);
+            console.log(transitionDuration);
         } else {
             setTop();
         }
@@ -923,6 +924,9 @@
     var search = [ {
         nameZh: "百度",
         url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
+    }, {
+        nameZh: "百度",
+        url: "https://m.baidu.com/s?wd=%s&ie=utf-8"
     }, {
         nameZh: "谷歌",
         url: "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8"
@@ -1257,15 +1261,9 @@
     const height = 30;
     const width = 100;
     const list$1 = [ {
-        url: /\/\/www\.google\.com(.hk)?\/search/,
-        style: {
-            1: `#searchform.minidiv{top: ${height}px !important;}`
-        }
+        url: /\/\/www\.google\.com(.hk)?\/search/
     }, {
-        url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
-        style: {
-            1: `#head { top: ${height}px !important; }`
-        }
+        url: /\/\/www\.baidu\.com\/(s|baidu)\?/
     }, {
         url: /\/\/[^.]*\.bing\.com\/search/
     }, {
@@ -1288,10 +1286,7 @@
     }, {
         url: /\/\/zhidao\.baidu\.com\/search/
     }, {
-        url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/,
-        style: {
-            1: `#mw-head,#mw-panel{top: ${height}px!important;}`
-        }
+        url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
     }, {
         url: /\/\/www\.zhihu\.com\/search\?/,
         style: {
@@ -2987,7 +2982,7 @@
         }, " All Search ", 34);
     }
     var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-379a68eb" ], [ "__file", "E:\\myProject\\all-search\\src\\components\\hover-btn.vue" ] ]);
-    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n\nbody [data-as-margin-top] {\n  margin-top: 30px !important;\n}\nbody [data-as-transform] {\n  transform: translateY(30px);\n}\n\n.body-vertical {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n.body-horizontal [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal [data-as-transform] {\n  transform: translateY(30px);\n}\n\n.body-vertical {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",

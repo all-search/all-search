@@ -91,9 +91,6 @@ export default {
 
 .body-horizontal {
   margin-top: $height !important;
-}
-
-body {
   [data-as-margin-top] {
     margin-top: $height !important;
   }

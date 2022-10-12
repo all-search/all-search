@@ -5,16 +5,10 @@ const width = 100
 
 export const list = [
   {
-    url: /\/\/www\.google\.com(.hk)?\/search/,
-    style: {
-      1: `#searchform.minidiv{top: ${height}px !important;}`
-    }
+    url: /\/\/www\.google\.com(.hk)?\/search/
   },
   {
-    url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
-    style: {
-      1: `#head { top: ${height}px !important; }`
-    }
+    url: /\/\/www\.baidu\.com\/(s|baidu)\?/
   },
   {
     url: /\/\/[^.]*\.bing\.com\/search/
@@ -48,10 +42,7 @@ export const list = [
     url: /\/\/zhidao\.baidu\.com\/search/
   },
   {
-    url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/,
-    style: {
-      1: `#mw-head,#mw-panel{top: ${height}px!important;}`
-    }
+    url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
   },
   {
     url: /\/\/www\.zhihu\.com\/search\?/,

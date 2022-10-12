@@ -96,14 +96,12 @@ function changeStyle (item) {
     top = parseInt(top.replace('px', ''))
   }
   const top2 = styleMap ? styleMap.get('top').value : null
-  /*  if (item.dataset.hasSet) {
-      return
-    }*/
   if (top !== top2) {
     return
   }
   if (transitionDuration !== '0s') {
     item.addEventListener('transitionend', setTop)
+    console.log(transitionDuration)
   } else {
     setTop()
   }
