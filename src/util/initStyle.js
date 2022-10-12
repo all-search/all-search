@@ -119,13 +119,8 @@ function changeStyle (item) {
     } else {
       item.dataset.asTransform = '30px'
     }
-  }
-
-  /*if (item.dataset.hasSet) {
-    item.dataset.hasSet = Number(item.dataset.hasSet) + 1
-  } else {
     item.dataset.hasSet = 1
-  }*/
+  }
 }
 
 let isSelfChange = false
@@ -145,6 +140,7 @@ function getFixedNodeList (list) {
   })
   return newList
 }
+
 
 function addSpecialStyle () {
   console.log('addSpecialStyle')
@@ -174,14 +170,17 @@ function mutationObserver () {
       isSelfChange = true
       const filterNodes = mutationsList
         .filter(mutation =>
-          {
-            return mutation.type === 'attributes'
-              && ['style', 'class'].includes(mutation.attributeName)
-              && !['BODY', 'STYLE'].includes(mutation.target.tagName)
-          }
+          mutation.type === 'attributes'
+          && ['style', 'class'].includes(mutation.attributeName)
+          && !['BODY', 'STYLE'].includes(mutation.target.tagName)
         )
-        .map(mutation => getRealFixedNode(mutation.target))
-      getFixedNodeList(filterNodes).forEach(item => {
+      const realFixedNode = filterNodes.map(mutation => getRealFixedNode(mutation.target))
+      const hasSetNodes = filterNodes.filter(item => item.target.dataset.hasSet)
+      hasSetNodes.forEach(item => {
+        delete item.target.dataset.asMarginTop
+        delete item.target.dataset.asTransform
+      })
+      getFixedNodeList(realFixedNode).forEach(item => {
         changeStyle(item)
       })
     }

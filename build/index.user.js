@@ -868,6 +868,7 @@
             } else {
                 item.dataset.asTransform = "30px";
             }
+            item.dataset.hasSet = 1;
         }
     }
     let isSelfChange = false;
@@ -904,8 +905,14 @@
                 isSelfChange = false;
             } else {
                 isSelfChange = true;
-                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class" ].includes(mutation.attributeName) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => getRealFixedNode(mutation.target));
-                getFixedNodeList(filterNodes).forEach(item => {
+                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class" ].includes(mutation.attributeName) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName));
+                const realFixedNode = filterNodes.map(mutation => getRealFixedNode(mutation.target));
+                const hasSetNodes = filterNodes.filter(item => item.target.dataset.hasSet);
+                hasSetNodes.forEach(item => {
+                    delete item.target.dataset.asMarginTop;
+                    delete item.target.dataset.asTransform;
+                });
+                getFixedNodeList(realFixedNode).forEach(item => {
                     changeStyle(item);
                 });
             }
