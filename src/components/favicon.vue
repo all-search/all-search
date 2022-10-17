@@ -31,8 +31,7 @@ export default {
         return props.icon
       }
       const obj = parseUrl(props.url)
-      // return `${obj.origin}/favicon.ico`
-      return `https://ico.hnysnet.com/get.php?url=${obj.origin}`
+      return `${obj.origin}/favicon.ico`
     })
 
     const { favicon } = useFavicon()

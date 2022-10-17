@@ -10,7 +10,7 @@ export function initSites (type) {
   if (type === 'tm') {
     sitesData = sitesData
       .filter(item =>
-        item.list &&
+        Array.isArray(item.list) &&
         item.list.length > 0 &&
         item.data &&
         item.data.visible)

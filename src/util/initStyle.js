@@ -109,7 +109,12 @@ function changeStyle (item) {
     const style = window.getComputedStyle(item)
     const marginTop = style.marginTop
     const transform = style.transform
-    if (item.dataset.asMarginTop || item.dataset.asTransform) {
+    if (
+      item.dataset.hasSet ||
+      item.dataset.asMarginTop ||
+      item.dataset.asTransform ||
+      item.dataset.asBorderTop
+    ) {
       return
     }
     if (marginTop === '0px') {
@@ -119,7 +124,7 @@ function changeStyle (item) {
     } else {
       item.dataset.asBorderTop = '1'
     }
-    item.dataset.hasSet = 1
+    item.dataset.hasSet = (item.dataset.hasSet || 0) + 1
   }
 }
 
@@ -143,7 +148,6 @@ function getFixedNodeList (list) {
 
 
 function addSpecialStyle () {
-  console.log('addSpecialStyle')
   const nodes = Array.from(document.body.querySelectorAll('*'))
     .filter(item => item.tagName !== 'STYLE')
   getFixedNodeList(nodes).forEach(item => {
@@ -179,6 +183,7 @@ function mutationObserver () {
       hasSetNodes.forEach(item => {
         delete item.target.dataset.asMarginTop
         delete item.target.dataset.asTransform
+        delete item.target.dataset.asBorderTop
       })
       getFixedNodeList(realFixedNode).forEach(item => {
         changeStyle(item)
