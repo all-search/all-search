@@ -91,12 +91,18 @@ export default {
 
 .body-horizontal {
   margin-top: $height !important;
+
   [data-as-margin-top] {
     margin-top: $height !important;
   }
 
   [data-as-transform] {
     transform: translateY(30px);
+  }
+
+  [data-as-border-top] {
+    border-top: rgba(0, 0, 0, 0) 30px solid;
+    box-sizing: content-box;
   }
 }
 

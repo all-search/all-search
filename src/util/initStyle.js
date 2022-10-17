@@ -101,7 +101,6 @@ function changeStyle (item) {
   }
   if (transitionDuration !== '0s') {
     item.addEventListener('transitionend', setTop)
-    console.log(transitionDuration)
   } else {
     setTop()
   }
@@ -109,13 +108,16 @@ function changeStyle (item) {
   function setTop () {
     const style = window.getComputedStyle(item)
     const marginTop = style.marginTop
+    const transform = style.transform
     if (item.dataset.asMarginTop || item.dataset.asTransform) {
       return
     }
     if (marginTop === '0px') {
-      item.dataset.asMarginTop = '30px'
+      item.dataset.asMarginTop = '1'
+    } else if (transform === 'none') {
+      item.dataset.asTransform = '1'
     } else {
-      item.dataset.asTransform = '30px'
+      item.dataset.asBorderTop = '1'
     }
     item.dataset.hasSet = 1
   }
