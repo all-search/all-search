@@ -87,6 +87,10 @@ function getRealFixedNode (item) {
   }
 }
 
+function isEqualTop (a, b) {
+  return String(a).replace('px', '') === String(b).replace('px', '')
+}
+
 function changeStyle (item) {
   const style = window.getComputedStyle(item)
   const styleMap = item.computedStyleMap()
@@ -96,27 +100,27 @@ function changeStyle (item) {
     top = parseInt(top.replace('px', ''))
   }
   const top2 = styleMap ? styleMap.get('top').value : null
-  if (top !== top2) {
+  if (!isEqualTop(top, top2)) {
     return
   }
-  if (transitionDuration !== '0s') {
+  if (transitionDuration.replace('s', '') > 0.49) {
     item.addEventListener('transitionend', setTop)
   } else {
     setTop()
   }
+  item.dataset.hasSet = (parseInt(item.dataset.hasSet) || 0) + 1
 
   function setTop () {
-    const style = window.getComputedStyle(item)
-    const marginTop = style.marginTop
-    const transform = style.transform
     if (
-      item.dataset.hasSet ||
       item.dataset.asMarginTop ||
       item.dataset.asTransform ||
       item.dataset.asBorderTop
     ) {
       return
     }
+    const style = window.getComputedStyle(item)
+    const marginTop = style.marginTop
+    const transform = style.transform
     if (marginTop === '0px') {
       item.dataset.asMarginTop = '1'
     } else if (transform === 'none') {
@@ -124,28 +128,29 @@ function changeStyle (item) {
     } else {
       item.dataset.asBorderTop = '1'
     }
-    item.dataset.hasSet = (item.dataset.hasSet || 0) + 1
   }
 }
 
 let isSelfChange = false
 
-function getFixedNodeList (list) {
+function getFixedNodeList (list, deep = false) {
   const weakSet = new WeakSet()
   const newList = []
   const nodes = list
     .filter(item => item)
     .map(item => {
-      const nodes = Array.from(item.querySelectorAll('*'))
-      nodes
-        .map(item => getRealFixedNode(item))
-        .filter(item => item)
-        .forEach(item => {
-          if (!weakSet.has(item)) {
-            newList.push(item)
-            weakSet.add(item)
-          }
-        })
+      if (deep) {
+        const nodes = Array.from(item.querySelectorAll('*'))
+        nodes
+          .map(item => getRealFixedNode(item))
+          .filter(item => item)
+          .forEach(item => {
+            if (!weakSet.has(item)) {
+              newList.push(item)
+              weakSet.add(item)
+            }
+          })
+      }
       return getRealFixedNode(item)
     })
     .filter(item => item)
@@ -158,8 +163,8 @@ function getFixedNodeList (list) {
   return newList
 }
 
-function fixedDomPosition (parent = document.body) {
-  const nodes = Array.from(parent.querySelectorAll('*'))
+function fixedDomPosition () {
+  const nodes = Array.from(document.body.querySelectorAll('*'))
     .filter(item => item.tagName !== 'STYLE')
   getFixedNodeList(nodes).forEach(item => {
     changeStyle(item)
@@ -190,18 +195,15 @@ function mutationObserver () {
       const filterNodes = mutationsList
         .filter(mutation =>
           mutation.type === 'attributes'
-          && ['style', 'class'].includes(mutation.attributeName)
+          && ['style', 'class', 'id'].includes(mutation.attributeName)
           && !['BODY', 'STYLE'].includes(mutation.target.tagName)
         )
         .map(mutation => mutation.target)
-      const hasSetNodes = filterNodes.filter(item => item.dataset.hasSet)
-      hasSetNodes.forEach(item => {
+      getFixedNodeList(filterNodes, true).forEach(item => {
         delete item.dataset.hasSet
         delete item.dataset.asMarginTop
         delete item.dataset.asTransform
         delete item.dataset.asBorderTop
-      })
-      getFixedNodeList(filterNodes).forEach(item => {
         changeStyle(item)
       })
     }
