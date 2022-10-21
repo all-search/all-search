@@ -88,7 +88,7 @@ function getRealFixedNode (item) {
 }
 
 function isEqualTop (a, b) {
-  return String(a).replace('px', '') === String(b).replace('px', '')
+  return String(a).replace(/px/i, '') === String(b).replace(/px/i, '')
 }
 
 function changeStyle (item) {
