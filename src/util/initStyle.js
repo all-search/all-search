@@ -135,7 +135,19 @@ function getFixedNodeList (list) {
   const newList = []
   const nodes = list
     .filter(item => item)
-    .map(item => getRealFixedNode(item))
+    .map(item => {
+      const nodes = Array.from(item.querySelectorAll('*'))
+      nodes
+        .map(item => getRealFixedNode(item))
+        .filter(item => item)
+        .forEach(item => {
+          if (!weakSet.has(item)) {
+            newList.push(item)
+            weakSet.add(item)
+          }
+        })
+      return getRealFixedNode(item)
+    })
     .filter(item => item)
   nodes.forEach(item => {
     if (!weakSet.has(item)) {
@@ -146,13 +158,16 @@ function getFixedNodeList (list) {
   return newList
 }
 
-
-function addSpecialStyle () {
-  const nodes = Array.from(document.body.querySelectorAll('*'))
+function fixedDomPosition (parent = document.body) {
+  const nodes = Array.from(parent.querySelectorAll('*'))
     .filter(item => item.tagName !== 'STYLE')
   getFixedNodeList(nodes).forEach(item => {
     changeStyle(item)
   })
+}
+
+function addSpecialStyle () {
+  fixedDomPosition()
   mutationObserver()
 }
 
@@ -178,14 +193,15 @@ function mutationObserver () {
           && ['style', 'class'].includes(mutation.attributeName)
           && !['BODY', 'STYLE'].includes(mutation.target.tagName)
         )
-      const realFixedNode = filterNodes.map(mutation => getRealFixedNode(mutation.target))
-      const hasSetNodes = filterNodes.filter(item => item.target.dataset.hasSet)
+        .map(mutation => mutation.target)
+      const hasSetNodes = filterNodes.filter(item => item.dataset.hasSet)
       hasSetNodes.forEach(item => {
-        delete item.target.dataset.asMarginTop
-        delete item.target.dataset.asTransform
-        delete item.target.dataset.asBorderTop
+        delete item.dataset.hasSet
+        delete item.dataset.asMarginTop
+        delete item.dataset.asTransform
+        delete item.dataset.asBorderTop
       })
-      getFixedNodeList(realFixedNode).forEach(item => {
+      getFixedNodeList(filterNodes).forEach(item => {
         changeStyle(item)
       })
     }

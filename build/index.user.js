@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜v1.2.20，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.2.20
-// @description  2022年10月17日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @description  2022年10月21日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -878,7 +878,16 @@
     function getFixedNodeList(list) {
         const weakSet = new WeakSet;
         const newList = [];
-        const nodes = list.filter(item => item).map(item => getRealFixedNode(item)).filter(item => item);
+        const nodes = list.filter(item => item).map(item => {
+            const nodes = Array.from(item.querySelectorAll("*"));
+            nodes.map(item => getRealFixedNode(item)).filter(item => item).forEach(item => {
+                if (!weakSet.has(item)) {
+                    newList.push(item);
+                    weakSet.add(item);
+                }
+            });
+            return getRealFixedNode(item);
+        }).filter(item => item);
         nodes.forEach(item => {
             if (!weakSet.has(item)) {
                 newList.push(item);
@@ -887,11 +896,14 @@
         });
         return newList;
     }
-    function addSpecialStyle() {
-        const nodes = Array.from(document.body.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
+    function fixedDomPosition(parent = document.body) {
+        const nodes = Array.from(parent.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
         getFixedNodeList(nodes).forEach(item => {
             changeStyle(item);
         });
+    }
+    function addSpecialStyle() {
+        fixedDomPosition();
         mutationObserver();
     }
     function mutationObserver() {
@@ -907,15 +919,15 @@
                 isSelfChange = false;
             } else {
                 isSelfChange = true;
-                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class" ].includes(mutation.attributeName) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName));
-                const realFixedNode = filterNodes.map(mutation => getRealFixedNode(mutation.target));
-                const hasSetNodes = filterNodes.filter(item => item.target.dataset.hasSet);
+                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class" ].includes(mutation.attributeName) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
+                const hasSetNodes = filterNodes.filter(item => item.dataset.hasSet);
                 hasSetNodes.forEach(item => {
-                    delete item.target.dataset.asMarginTop;
-                    delete item.target.dataset.asTransform;
-                    delete item.target.dataset.asBorderTop;
+                    delete item.dataset.hasSet;
+                    delete item.dataset.asMarginTop;
+                    delete item.dataset.asTransform;
+                    delete item.dataset.asBorderTop;
                 });
-                getFixedNodeList(realFixedNode).forEach(item => {
+                getFixedNodeList(filterNodes).forEach(item => {
                     changeStyle(item);
                 });
             }
