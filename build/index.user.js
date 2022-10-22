@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜v1.2.20，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.2.20
-// @description  2022年10月21日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @description  2022年10月22日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -815,6 +815,12 @@
             addSpecialStyle();
         });
     };
+    function delAsDataSet(item) {
+        delete item.dataset.hasSet;
+        delete item.dataset.asMarginTop;
+        delete item.dataset.asTransform;
+        delete item.dataset.asBorderTop;
+    }
     function getParent(el) {
         let current = el;
         while (current.offsetParent) {
@@ -823,6 +829,11 @@
             } else {
                 current = current.offsetParent;
             }
+        }
+        const style = window.getComputedStyle(current);
+        if (style.position !== "fixed") {
+            delAsDataSet(current);
+            return null;
         }
         return current;
     }
@@ -841,50 +852,46 @@
         }
     }
     function isEqualTop(a, b) {
-        return String(a).replace("px", "") === String(b).replace("px", "");
+        return String(a).replace(/px/i, "") === String(b).replace(/px/i, "");
     }
     function changeStyle(item) {
         const style = window.getComputedStyle(item);
         const styleMap = item.computedStyleMap();
-        const transitionDuration = style.transitionDuration;
+        const rect = item.getBoundingClientRect();
         let top = style.top;
         if (top.includes("px")) {
             top = parseInt(top.replace("px", ""));
         }
         const top2 = styleMap ? styleMap.get("top").value : null;
-        if (!isEqualTop(top, top2)) {
+        if (!isEqualTop(top, top2) && rect.bottom <= 0) {
             return;
         }
-        if (transitionDuration.replace("s", "") > .49) {
-            item.addEventListener("transitionend", setTop);
+        if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
+            return;
+        }
+        const marginTop = style.marginTop;
+        const transform = style.transform;
+        if (marginTop === "0px") {
+            item.dataset.asMarginTop = "1";
+        } else if (transform === "none") {
+            item.dataset.asTransform = "1";
         } else {
-            setTop();
+            item.dataset.asBorderTop = "1";
         }
         item.dataset.hasSet = (parseInt(item.dataset.hasSet) || 0) + 1;
-        function setTop() {
-            if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
-                return;
-            }
-            const style = window.getComputedStyle(item);
-            const marginTop = style.marginTop;
-            const transform = style.transform;
-            if (marginTop === "0px") {
-                item.dataset.asMarginTop = "1";
-            } else if (transform === "none") {
-                item.dataset.asTransform = "1";
-            } else {
-                item.dataset.asBorderTop = "1";
-            }
-        }
     }
     let isSelfChange = false;
     function getFixedNodeList(list, deep = false) {
         const weakSet = new WeakSet;
         const newList = [];
         const nodes = list.filter(item => item).map(item => {
+            delAsDataSet(item);
             if (deep) {
                 const nodes = Array.from(item.querySelectorAll("*"));
-                nodes.map(item => getRealFixedNode(item)).filter(item => item).forEach(item => {
+                nodes.map(item => {
+                    delAsDataSet(item);
+                    return getRealFixedNode(item);
+                }).filter(item => item).forEach(item => {
                     if (!weakSet.has(item)) {
                         newList.push(item);
                         weakSet.add(item);
@@ -926,10 +933,6 @@
                 isSelfChange = true;
                 const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
                 getFixedNodeList(filterNodes, true).forEach(item => {
-                    delete item.dataset.hasSet;
-                    delete item.dataset.asMarginTop;
-                    delete item.dataset.asTransform;
-                    delete item.dataset.asBorderTop;
                     changeStyle(item);
                 });
             }

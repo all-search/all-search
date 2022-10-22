@@ -60,6 +60,13 @@ export const addStyleForCurrentSite = function (mode, site, remove = false) {
   })
 }
 
+function delAsDataSet (item) {
+  delete item.dataset.hasSet
+  delete item.dataset.asMarginTop
+  delete item.dataset.asTransform
+  delete item.dataset.asBorderTop
+}
+
 function getParent (el) {
   let current = el
   while (current.offsetParent) {
@@ -68,6 +75,11 @@ function getParent (el) {
     } else {
       current = current.offsetParent
     }
+  }
+  const style = window.getComputedStyle(current)
+  if (style.position !== 'fixed') {
+    delAsDataSet(current)
+    return null
   }
   return current
 }
@@ -94,41 +106,32 @@ function isEqualTop (a, b) {
 function changeStyle (item) {
   const style = window.getComputedStyle(item)
   const styleMap = item.computedStyleMap()
-  const transitionDuration = style.transitionDuration
+  const rect = item.getBoundingClientRect()
   let top = style.top
   if (top.includes('px')) {
     top = parseInt(top.replace('px', ''))
   }
   const top2 = styleMap ? styleMap.get('top').value : null
-  if (!isEqualTop(top, top2)) {
+  if (!isEqualTop(top, top2) && rect.bottom <= 0) {
     return
   }
-  if (transitionDuration.replace('s', '') > 0.49) {
-    item.addEventListener('transitionend', setTop)
+  if (
+    item.dataset.asMarginTop ||
+    item.dataset.asTransform ||
+    item.dataset.asBorderTop
+  ) {
+    return
+  }
+  const marginTop = style.marginTop
+  const transform = style.transform
+  if (marginTop === '0px') {
+    item.dataset.asMarginTop = '1'
+  } else if (transform === 'none') {
+    item.dataset.asTransform = '1'
   } else {
-    setTop()
+    item.dataset.asBorderTop = '1'
   }
   item.dataset.hasSet = (parseInt(item.dataset.hasSet) || 0) + 1
-
-  function setTop () {
-    if (
-      item.dataset.asMarginTop ||
-      item.dataset.asTransform ||
-      item.dataset.asBorderTop
-    ) {
-      return
-    }
-    const style = window.getComputedStyle(item)
-    const marginTop = style.marginTop
-    const transform = style.transform
-    if (marginTop === '0px') {
-      item.dataset.asMarginTop = '1'
-    } else if (transform === 'none') {
-      item.dataset.asTransform = '1'
-    } else {
-      item.dataset.asBorderTop = '1'
-    }
-  }
 }
 
 let isSelfChange = false
@@ -139,10 +142,14 @@ function getFixedNodeList (list, deep = false) {
   const nodes = list
     .filter(item => item)
     .map(item => {
+      delAsDataSet(item)
       if (deep) {
         const nodes = Array.from(item.querySelectorAll('*'))
         nodes
-          .map(item => getRealFixedNode(item))
+          .map(item => {
+            delAsDataSet(item)
+            return getRealFixedNode(item)
+          })
           .filter(item => item)
           .forEach(item => {
             if (!weakSet.has(item)) {
@@ -200,10 +207,6 @@ function mutationObserver () {
         )
         .map(mutation => mutation.target)
       getFixedNodeList(filterNodes, true).forEach(item => {
-        delete item.dataset.hasSet
-        delete item.dataset.asMarginTop
-        delete item.dataset.asTransform
-        delete item.dataset.asBorderTop
         changeStyle(item)
       })
     }
