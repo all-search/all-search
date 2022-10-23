@@ -4,10 +4,6 @@ export default [
     url: 'https://www.baidu.com/s?wd=%s&ie=utf-8'
   },
   {
-    nameZh: '百度',
-    url: 'https://m.baidu.com/s?wd=%s&ie=utf-8'
-  },
-  {
     nameZh: '谷歌',
     url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8'
   },

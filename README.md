@@ -41,6 +41,8 @@ A top fixed menu that allows you to jump between various search engines, build b
     * 若页面宽度不足，可以进行滚动，
     * 移动端为点击触发菜单
 * 自动隐藏功能，通过按钮触发，亦可更改为向上或向下滚动触发隐藏
+* 新添加的网址支持自动加载（即用户自行添加的，都可以自动展示）
+* 自适应样式，无需要额外适配
 
 ## 待完成
 * 英语支持
