@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜v1.2.20，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
 // @version      1.2.20
-// @description  2022年10月22日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
+// @description  2022年10月23日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -811,12 +811,9 @@
     const addStyleForCurrentSite = function(mode, site, remove = false) {
         const modeVal = Vue.unref(mode);
         initBodyClass(modeVal, site, remove);
-        setTimeout(() => {
-            addSpecialStyle();
-        });
+        addSpecialStyle();
     };
     function delAsDataSet(item) {
-        delete item.dataset.hasSet;
         delete item.dataset.asMarginTop;
         delete item.dataset.asTransform;
         delete item.dataset.asBorderTop;
@@ -851,19 +848,11 @@
             return null;
         }
     }
-    function isEqualTop(a, b) {
-        return String(a).replace(/px/i, "") === String(b).replace(/px/i, "");
-    }
     function changeStyle(item) {
         const style = window.getComputedStyle(item);
         const styleMap = item.computedStyleMap();
-        const rect = item.getBoundingClientRect();
-        let top = style.top;
-        if (top.includes("px")) {
-            top = parseInt(top.replace("px", ""));
-        }
-        const top2 = styleMap ? styleMap.get("top").value : null;
-        if (!isEqualTop(top, top2) && rect.bottom <= 0) {
+        const top = styleMap ? styleMap.get("top").value : null;
+        if (top === "auto") {
             return;
         }
         if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
@@ -878,7 +867,7 @@
         } else {
             item.dataset.asBorderTop = "1";
         }
-        item.dataset.hasSet = (parseInt(item.dataset.hasSet) || 0) + 1;
+        item.dataset.asHasSet = (parseInt(item.dataset.asHasSet) || 0) + 1;
     }
     let isSelfChange = false;
     function getFixedNodeList(list, deep = false) {

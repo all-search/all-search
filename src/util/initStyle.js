@@ -55,13 +55,11 @@ export const addStyleForCurrentSite = function (mode, site, remove = false) {
   const modeVal = unref(mode)
   // addCustomStyle(modeVal, site, remove)
   initBodyClass(modeVal, site, remove)
-  setTimeout(() => {
-    addSpecialStyle()
-  })
+  addSpecialStyle()
 }
 
 function delAsDataSet (item) {
-  delete item.dataset.hasSet
+  // delete item.dataset.asHasSet
   delete item.dataset.asMarginTop
   delete item.dataset.asTransform
   delete item.dataset.asBorderTop
@@ -99,20 +97,11 @@ function getRealFixedNode (item) {
   }
 }
 
-function isEqualTop (a, b) {
-  return String(a).replace(/px/i, '') === String(b).replace(/px/i, '')
-}
-
 function changeStyle (item) {
   const style = window.getComputedStyle(item)
   const styleMap = item.computedStyleMap()
-  const rect = item.getBoundingClientRect()
-  let top = style.top
-  if (top.includes('px')) {
-    top = parseInt(top.replace('px', ''))
-  }
-  const top2 = styleMap ? styleMap.get('top').value : null
-  if (!isEqualTop(top, top2) && rect.bottom <= 0) {
+  const top = styleMap ? styleMap.get('top').value : null
+  if (top === 'auto') {
     return
   }
   if (
@@ -131,7 +120,7 @@ function changeStyle (item) {
   } else {
     item.dataset.asBorderTop = '1'
   }
-  item.dataset.hasSet = (parseInt(item.dataset.hasSet) || 0) + 1
+  item.dataset.asHasSet = (parseInt(item.dataset.asHasSet) || 0) + 1
 }
 
 let isSelfChange = false
