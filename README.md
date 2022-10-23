@@ -11,21 +11,15 @@ A top fixed menu that allows you to jump between various search engines, build b
 #### 开源不易，多多鼓励，如果觉得还不错，就去 Github 点个⭐ Star 鼓励一下, 或者把脚本分享给身边的人。
 
 ## 脚本地址
-脚本猫的版本有兼容性差异，脚本猫用户请使用脚本猫专属安装地址
+油猴和脚本猫的脚本差异已经抹平
+* [jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
+* [unpkg地址](https://unpkg.com/all-search@latest/build/index.user.js)
 
 ### greasyFork
 * [greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)
-* [jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
-* [unpkg地址](https://unpkg.com/all-search@latest/build/index.user.js)
-* 最新的版本链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js
-* 最新的版本链接2：https://cdn.jsdelivr.net/gh/endday/all-search@master/build/index.user.js
 
 ### 脚本猫
 * [脚本猫ScriptCat地址](https://scriptcat.org/script-show-page/477)
-* [jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.sc.user.js)
-* [unpkg地址](https://unpkg.com/all-search@latest/build/index.sc.user.js)
-* 最新的版本链接：https://cdn.jsdelivr.net/npm/all-search@latest/build/index.sc.user.js
-* 最新的版本链接2：https://cdn.jsdelivr.net/gh/endday/all-search@master/build/index.sc.user.js
 
 ## 设置地址
 * [码云](https://endday.gitee.io/all-search/)
