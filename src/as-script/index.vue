@@ -97,11 +97,11 @@ export default {
   }
 
   [data-as-transform] {
-    transform: translateY(30px);
+    transform: translateY($height);
   }
 
   [data-as-border-top] {
-    border-top: rgba(0, 0, 0, 0) 30px solid;
+    border-top: rgba(0, 0, 0, 0) $height solid;
     box-sizing: content-box;
   }
 }
