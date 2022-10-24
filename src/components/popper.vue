@@ -100,7 +100,7 @@ export default {
       }
     }
 
-    onUnmounted(()=> {
+    onUnmounted(() => {
       stopFn()
     })
 
@@ -141,18 +141,18 @@ export default {
   opacity: 0;
   z-index: 99999;
   position: relative;
-}
 
-.arrow,
-.arrow::before {
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
+  .arrow,
+  .arrow::before {
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
 
-.arrow::before {
-  content: '';
-  position: absolute;
+  .arrow::before {
+    content: '';
+    position: absolute;
+  }
 }
 
 .popover-content[data-show="true"] {
