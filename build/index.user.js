@@ -920,7 +920,7 @@
                 isSelfChange = false;
             } else {
                 isSelfChange = true;
-                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
+                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
                 getFixedNodeList(filterNodes, true).forEach(item => {
                     changeStyle(item);
                 });
@@ -1263,7 +1263,20 @@
             }
         }))
     }));
-    const height = 30;
+    function initSites(type) {
+        let sitesData = list$2;
+        const localSites = getSession("sites");
+        if (localSites) {
+            sitesData = localSites;
+        }
+        if (type === "tm") {
+            sitesData = sitesData.filter(item => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible).map(item => ({
+                ...item,
+                show: false
+            }));
+        }
+        return sitesData;
+    }
     const width = 100;
     const list$1 = [ {
         url: /\/\/www\.google\.com(.hk)?\/search/
@@ -1293,10 +1306,7 @@
     }, {
         url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
     }, {
-        url: /\/\/www\.zhihu\.com\/search\?/,
-        style: {
-            1: `.AppHeader.is-fixed {top: ${height}px!important;}`
-        }
+        url: /\/\/www\.zhihu\.com\/search\?/
     }, {
         url: /\/\/www\.so\.com\/s/,
         style: {
@@ -1310,10 +1320,7 @@
         url: /\/\/www\.docin\.com\/search\.do/
     }, {
         url: /\/\/zhihu\.sogou\.com\/zhihu/,
-        selectors: "#upquery",
-        style: {
-            1: `.header { top:${height}px }`
-        }
+        selectors: "#upquery"
     }, {
         url: /\/\/weixin\.sogou\.com\/weixin\?/,
         style: {
@@ -1324,25 +1331,17 @@
     }, {
         url: /\/\/stackoverflow\.com\/search\?/,
         style: {
-            1: `.top-bar._fixed { top: ${height}px }`,
             2: `.top-bar._fixed { right: ${width}px }`
         }
     }, {
         url: /\/\/search\.bilibili\.com\/all/,
-        selectors: ".search-input-el",
-        style: {
-            1: `.fixed-top {top: ${height}px;}`
-        }
+        selectors: ".search-input-el"
     }, {
         url: /\/\/www\.acfun\.cn\/search/,
-        selectors: ".search-text--standalone",
-        style: {
-            1: `#header {top: ${height}px;}`
-        }
+        selectors: ".search-text--standalone"
     }, {
         url: /\/\/www\.youtube\.com\/results/,
         style: {
-            1: `#masthead-container.ytd-app {top:${height}px !important;}\n          html:not(.style-scope) {--ytd-toolbar-height:${height + 56}px !important;}\n          ytd-mini-guide-renderer.ytd-app {padding-top: ${height}px;}`,
             2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
         }
     }, {
@@ -1350,10 +1349,7 @@
     }, {
         url: /\/\/so\.iqiyi\.com\/so\/q/
     }, {
-        url: /\/\/v\.qq\.com\/x\/search/,
-        style: {
-            1: `.site_head {top: ${height}px;}`
-        }
+        url: /\/\/v\.qq\.com\/x\/search/
     }, {
         url: /\/\/music\.baidu\.com\/search/
     }, {
@@ -1363,26 +1359,17 @@
     }, {
         url: /\/\/music\.163\.com\/.*?#\/search/
     }, {
-        url: /\/\/image\.baidu\.com\/search/,
-        style: {
-            1: `#search .s_search { top: ${height}px; }`
-        }
+        url: /\/\/image\.baidu\.com\/search/
     }, {
         url: /\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
     }, {
-        url: /\/\/.*\.bing\.com\/images\/search/,
-        style: {
-            1: `#miniheader {padding-top: ${height}px;}`
-        }
+        url: /\/\/.*\.bing\.com\/images\/search/
     }, {
         url: /\/\/www\.flickr\.com\/search\//
     }, {
         url: /^http:\/\/www\.pixiv\.net\/search\.php/
     }, {
-        url: /\/\/huaban\.com\/search\?/,
-        style: {
-            1: `#header  { top: ${height}px; }`
-        }
+        url: /\/\/huaban\.com\/search\?/
     }, {
         url: /\/\/www\.pinterest\.com\/search\//
     }, {
@@ -1404,10 +1391,7 @@
     }, {
         url: /\/\/dict\.cn\/./
     }, {
-        url: /\/\/s\.taobao\.com\/search/,
-        style: {
-            1: `.m-header-fixed .header-inner { top: ${height}px !important;}`
-        }
+        url: /\/\/s\.taobao\.com\/search/
     }, {
         url: /\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
     }, {
@@ -1419,10 +1403,7 @@
     }, {
         url: /\/\/search\.smzdm\.com\/\?/
     }, {
-        url: /\/\/s\.weibo\.com\/weibo\?q=/,
-        style: {
-            1: `div[role="navigation"] { top: ${height}px !important;}`
-        }
+        url: /\/\/s\.weibo\.com\/weibo\?q=/
     }, {
         url: /\/\/tieba\.baidu\.com\/f\/search/
     }, {
@@ -1432,7 +1413,6 @@
     }, {
         url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
         style: {
-            1: `#head_wr.gj #head.gj, #left_menu_content { top: ${height}px !important;}`,
             2: `#left_menu_content { left: ${width}px !important;}`
         }
     }, {
@@ -1440,10 +1420,7 @@
     }, {
         url: /\/\/github\.com\/search/
     }, {
-        url: /\/\/www\.startpage\.com\/sp\/search/,
-        style: {
-            1: `.layout-web__header {top: ${height}px !important;}`
-        }
+        url: /\/\/www\.startpage\.com\/sp\/search/
     }, {
         url: /\/\/endday\.github\.io/,
         disabled: true
@@ -1465,7 +1442,7 @@
         let targetItem = null;
         let urlObj = null;
         const curItem = new URL(window.location.href);
-        list$2.some(category => {
+        initSites("tm").some(category => {
             category.list.find(item => {
                 const menuItem = new URL(item.url);
                 if (menuItem.hostname === curItem.hostname && menuItem.pathname === curItem.pathname) {
@@ -2007,20 +1984,6 @@
     var scrollbar = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
     var css$d = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\r\n";
     injectStyle(css$d);
-    function initSites(type) {
-        let sitesData = list$2;
-        const localSites = getSession("sites");
-        if (localSites) {
-            sitesData = localSites;
-        }
-        if (type === "tm") {
-            sitesData = sitesData.filter(item => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible).map(item => ({
-                ...item,
-                show: false
-            }));
-        }
-        return sitesData;
-    }
     function useTimeout() {
         let timeoutHandle;
         const registerTimeout = (fn, delay) => {

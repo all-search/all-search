@@ -18,13 +18,9 @@
       <div class="url-item">
         <div class="bd">
           <el-input
-            v-if="isPersonal(cate)"
             class="cate-input"
             v-model="cate.nameZh">
           </el-input>
-          <p v-else
-             class="cate-name"
-             v-text="cate.nameZh"/>
         </div>
         <div class="ft">
           <el-button-group>
@@ -51,7 +47,6 @@
             {{ cate.data.visible ? '隐藏' : '展示' }}
           </el-button>
           <el-button
-            v-if="isPersonal(cate)"
             plain
             type="danger"
             @click="removeTab(cate.name)">
@@ -79,21 +74,13 @@
           </el-button>
           <div class="hd">
             <el-input
-              v-if="isPersonal(cate)"
               class="input"
               v-model="item.nameZh"/>
-            <p v-else
-               class="name"
-               v-text="item.nameZh"/>
           </div>
           <div class="bd">
             <el-input
-              v-if="isPersonal(cate)"
               class="input"
               v-model="item.url"/>
-            <p v-else
-               class="input"
-               v-text="item.url"/>
           </div>
           <div class="ft">
             <el-dropdown
@@ -127,7 +114,6 @@
               {{ item.data.visible ? '隐藏' : '展示' }}
             </el-button>
             <el-button
-              v-if="isPersonal(cate)"
               :plain="true"
               type="danger"
               @click="deleteUrl(j)">
@@ -140,7 +126,6 @@
         </div>
       </draggable>
       <div
-        v-if="isPersonal(cate)"
         class="url-item">
         <el-button
           @click="addNewUrl(cate)">

@@ -1,6 +1,6 @@
-import sites from './sites/index'
+import { initSites } from '../util/sites'
 
-const height = 30
+// const height = 30
 const width = 100
 
 export const list = [
@@ -45,10 +45,7 @@ export const list = [
     url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
   },
   {
-    url: /\/\/www\.zhihu\.com\/search\?/,
-    style: {
-      1: `.AppHeader.is-fixed {top: ${height}px!important;}`
-    }
+    url: /\/\/www\.zhihu\.com\/search\?/
   },
   {
     url: /\/\/www\.so\.com\/s/,
@@ -67,10 +64,7 @@ export const list = [
   },
   {
     url: /\/\/zhihu\.sogou\.com\/zhihu/,
-    selectors: '#upquery',
-    style: {
-      1: `.header { top:${height}px }`
-    }
+    selectors: '#upquery'
   },
   {
     url: /\/\/weixin\.sogou\.com\/weixin\?/,
@@ -84,30 +78,20 @@ export const list = [
   {
     url: /\/\/stackoverflow\.com\/search\?/,
     style: {
-      1: `.top-bar._fixed { top: ${height}px }`,
       2: `.top-bar._fixed { right: ${width}px }`
     }
   },
   {
     url: /\/\/search\.bilibili\.com\/all/,
-    selectors: '.search-input-el',
-    style: {
-      1: `.fixed-top {top: ${height}px;}`
-    }
+    selectors: '.search-input-el'
   },
   {
     url: /\/\/www\.acfun\.cn\/search/,
-    selectors: '.search-text--standalone',
-    style: {
-      1: `#header {top: ${height}px;}`
-    }
+    selectors: '.search-text--standalone'
   },
   {
     url: /\/\/www\.youtube\.com\/results/,
     style: {
-      1: `#masthead-container.ytd-app {top:${height}px !important;}
-          html:not(.style-scope) {--ytd-toolbar-height:${height + 56}px !important;}
-          ytd-mini-guide-renderer.ytd-app {padding-top: ${height}px;}`,
       2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
     }
   },
@@ -118,10 +102,7 @@ export const list = [
     url: /\/\/so\.iqiyi\.com\/so\/q/
   },
   {
-    url: /\/\/v\.qq\.com\/x\/search/,
-    style: {
-      1: `.site_head {top: ${height}px;}`
-    }
+    url: /\/\/v\.qq\.com\/x\/search/
   },
   {
     url: /\/\/music\.baidu\.com\/search/
@@ -136,19 +117,13 @@ export const list = [
     url: /\/\/music\.163\.com\/.*?#\/search/
   },
   {
-    url: /\/\/image\.baidu\.com\/search/,
-    style: {
-      1: `#search .s_search { top: ${height}px; }`
-    }
+    url: /\/\/image\.baidu\.com\/search/
   },
   {
     url: /\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/
   },
   {
-    url: /\/\/.*\.bing\.com\/images\/search/,
-    style: {
-      1: `#miniheader {padding-top: ${height}px;}`
-    }
+    url: /\/\/.*\.bing\.com\/images\/search/
   },
   {
     url: /\/\/www\.flickr\.com\/search\//
@@ -157,10 +132,7 @@ export const list = [
     url: /^http:\/\/www\.pixiv\.net\/search\.php/
   },
   {
-    url: /\/\/huaban\.com\/search\?/,
-    style: {
-      1: `#header  { top: ${height}px; }`
-    }
+    url: /\/\/huaban\.com\/search\?/
   },
   {
     url: /\/\/www\.pinterest\.com\/search\//
@@ -192,10 +164,7 @@ export const list = [
     url: /\/\/dict\.cn\/./
   },
   {
-    url: /\/\/s\.taobao\.com\/search/,
-    style: {
-      1: `.m-header-fixed .header-inner { top: ${height}px !important;}`
-    }
+    url: /\/\/s\.taobao\.com\/search/
   },
   {
     url: /\/\/list\.tmall\.com\/search_product\.htm.*from=chaoshi/
@@ -213,10 +182,7 @@ export const list = [
     url: /\/\/search\.smzdm\.com\/\?/
   },
   {
-    url: /\/\/s\.weibo\.com\/weibo\?q=/,
-    style: {
-      1: `div[role="navigation"] { top: ${height}px !important;}`
-    }
+    url: /\/\/s\.weibo\.com\/weibo\?q=/
   },
   {
     url: /\/\/tieba\.baidu\.com\/f\/search/
@@ -230,7 +196,6 @@ export const list = [
   {
     url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
     style: {
-      1: `#head_wr.gj #head.gj, #left_menu_content { top: ${height}px !important;}`,
       2: `#left_menu_content { left: ${width}px !important;}`
     }
   },
@@ -241,10 +206,7 @@ export const list = [
     url: /\/\/github\.com\/search/
   },
   {
-    url: /\/\/www\.startpage\.com\/sp\/search/,
-    style: {
-      1: `.layout-web__header {top: ${height}px !important;}`
-    }
+    url: /\/\/www\.startpage\.com\/sp\/search/
   },
   {
     url: /\/\/endday\.github\.io/,
@@ -273,7 +235,7 @@ function getMenuItem () {
   let targetItem = null
   let urlObj = null
   const curItem = new URL(window.location.href)
-  sites.some(category => {
+  initSites('tm').some(category => {
     category.list.find(item => {
       const menuItem = new URL(item.url)
       if (menuItem.hostname === curItem.hostname &&

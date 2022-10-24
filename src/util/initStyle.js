@@ -190,8 +190,8 @@ function mutationObserver () {
       isSelfChange = true
       const filterNodes = mutationsList
         .filter(mutation =>
-          mutation.type === 'attributes'
-          && ['style', 'class', 'id'].includes(mutation.attributeName)
+          (mutation.type === 'attributes' && ['style', 'class', 'id'].includes(mutation.attributeName))
+          || (mutation.type === 'childList' && mutation.addedNodes.length)
           && !['BODY', 'STYLE'].includes(mutation.target.tagName)
         )
         .map(mutation => mutation.target)
