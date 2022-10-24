@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import index from './index'
 import {
-  checkBody,
   createAsRoot,
   getAsRoot,
   passTmMethods
@@ -18,7 +17,7 @@ function init () {
   const el = getAsRoot()
   if (!el) {
     const el = createAsRoot()
-    const mountEL = document.body.parentElement.insertBefore(el, document.body)
+    const mountEL = document.documentElement.insertBefore(el, document.body)
     app.mount(mountEL)
   }
   console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
@@ -28,9 +27,5 @@ passTmMethods()
 
 if (!site.disabled) {
   protectStyle()
-  checkBody().then(() => {
-    init()
-  }).catch(err => {
-    console.error(err)
-  })
+  init()
 }

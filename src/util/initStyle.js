@@ -1,6 +1,7 @@
 import { unref } from 'vue'
 import {
   addStyleContent,
+  checkBody,
   removeNode
 } from './index'
 import {
@@ -54,12 +55,13 @@ export const protectStyle = function () {
 export const addStyleForCurrentSite = function (mode, site, remove = false) {
   const modeVal = unref(mode)
   // addCustomStyle(modeVal, site, remove)
-  initBodyClass(modeVal, site, remove)
+  checkBody().then(() => {
+    initBodyClass(modeVal, site, remove)
+  })
   addSpecialStyle()
 }
 
 function delAsDataSet (item) {
-  // delete item.dataset.asHasSet
   delete item.dataset.asMarginTop
   delete item.dataset.asTransform
   delete item.dataset.asBorderTop

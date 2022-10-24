@@ -188,7 +188,7 @@ export default {
   color: var(--as-primary-text-color);
 }
 
-.as-menu-item {
+a.as-menu-item {
   height: $height;
   line-height: $height;
   list-style: none;

@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         all-search 全搜v1.3.2，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
-// @version      1.3.2
+// @name         all-search 全搜v1.3.3，一个搜索引擎快捷跳转菜单, 支持图形界面自定义
+// @version      1.3.3
 // @description  2022年10月24日更新 竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开
 // @author       endday
 // @license      GPL-3.0
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.2";
+    var version$1 = "1.3.3";
     var description = "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开";
     var author = "endday";
     var homepage = "https://github.com/endday/all-search";
@@ -810,7 +810,9 @@
     };
     const addStyleForCurrentSite = function(mode, site, remove = false) {
         const modeVal = Vue.unref(mode);
-        initBodyClass(modeVal, site, remove);
+        checkBody().then(() => {
+            initBodyClass(modeVal, site, remove);
+        });
         addSpecialStyle();
     };
     function delAsDataSet(item) {
@@ -2133,7 +2135,7 @@
         }) ], 64);
     }
     var popper = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
-    var css$b = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 1.25px 4px 0 0;\n}";
+    var css$b = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 0.25px 4px 0 0;\n}";
     injectStyle(css$b);
     const _sfc_main$b = {
         name: "icon",
@@ -2245,7 +2247,7 @@
         }, null, 8, _hoisted_2$4) ])) : Vue.createCommentVNode("", true);
     }
     var favicon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
-    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\n.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\n.as-menu-item:hover .as-menu-item-icon, .as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
+    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
     injectStyle(css$9);
     const _sfc_main$9 = {
         name: "menuItem",
@@ -2462,7 +2464,6 @@
     const setCssValue = (name, value) => {
         const el = document.getElementById("all-search");
         el.style.setProperty(`--as-${name}`, value);
-        document.body.style.setProperty(`--as-${name}`, value);
     };
     const map = {
         "primary-color": primaryColor,
@@ -3055,7 +3056,7 @@
         const el = getAsRoot();
         if (!el) {
             const el = createAsRoot();
-            const mountEL = document.body.parentElement.insertBefore(el, document.body);
+            const mountEL = document.documentElement.insertBefore(el, document.body);
             app.mount(mountEL);
         }
         console.log(`all-search running 全搜运行中(${"production"})`);
@@ -3063,10 +3064,6 @@
     passTmMethods();
     if (!site.disabled) {
         protectStyle();
-        checkBody().then(() => {
-            init();
-        }).catch(err => {
-            console.error(err);
-        });
+        init();
     }
 })();
