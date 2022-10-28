@@ -6,6 +6,12 @@
 
 A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.
 
+感谢searchEngineJump提供的创意和网址来源。
+同类切换工具推荐：
+[搜索酱 功能最强，瑞士军刀](https://greasyfork.org/zh-CN/scripts/445274-searchjumper)
+[searchEngineJump 搜索引擎快捷跳转 用户最多](https://greasyfork.org/zh-CN/scripts/2739-search-enginejump)
+
+
 #### 有什么需求、建议、问题直接提 Issues
 #### 做这个脚本纯粹是个人兴趣，用爱发电。
 #### 开源不易，多多鼓励，如果觉得还不错，就去 Github 点个⭐ Star 鼓励一下, 或者把脚本分享给身边的人。
@@ -14,6 +20,8 @@ A top fixed menu that allows you to jump between various search engines, build b
 油猴和脚本猫的脚本差异已经抹平
 * [jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
 * [unpkg地址](https://unpkg.com/all-search@latest/build/index.user.js)
+* [iQDNS/iQZone地址](https://raw.iqiq.io/endday/all-search/master/build/index.user.js)
+* [KGitHub地址](https://raw.kgithub.com/endday/all-search/master/build/index.user.js)
 
 ### greasyFork
 * [greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)
@@ -74,4 +82,4 @@ tmDev使用了watch，每次修改都会自动重新构建，index.dev.js文件�
 ```
 npm run tmBuild
 ```
-会打包出油猴使用的index.user.js和脚本猫专属的index.sc.user.js
+会打包出油猴使用的index.user.js

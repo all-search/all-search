@@ -1,7 +1,15 @@
 {
   "name": "all-search",
   "version": "1.3.4",
-  "description": "竖向横向布局随意切换，支持图形界面自定义设置分类和添加链接，支持移动端，可收起展开",
+  "keywords": [
+    "searchEngineJump",
+    "tool",
+    "tamperMonkey",
+    "web",
+    "javascript",
+    "vue3"
+  ],
+  "description": "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.",
   "author": "endday",
   "homepage": "https://github.com/endday/all-search",
   "license": "GPL-3.0",
