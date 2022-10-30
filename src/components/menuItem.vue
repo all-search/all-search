@@ -230,7 +230,6 @@ a.as-menu-item {
   min-width: 90px;
   box-sizing: border-box;
   margin: 4px 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   li {
     overflow: hidden;

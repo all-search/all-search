@@ -80,6 +80,13 @@
                   default-value="#606266"
                   v-model="primaryTextColor"/>
               </form-item>
+              <form-item label="图标缓存">
+                <as-button
+                  type="text"
+                  @click="clearIconCache">
+                  清除
+                </as-button>
+              </form-item>
             </section>
             <footer>
               <a class="link"
@@ -90,9 +97,9 @@
               </a>
               <a class="link"
                  title="github"
-                 href="https://github.com/endday/all-search"
+                 href="https://github.com/endday/all-search/issues"
                  target="_blank">
-                GitHub地址
+                意见反馈
               </a>
             </footer>
           </div>
@@ -104,6 +111,7 @@
 
 <script>
 import { ref } from 'vue'
+import { setSession } from '../util'
 import useMode from '../components/useMode'
 import useAlign from './useAlign'
 import useSwitchShow from '../components/useSwitchShow'
@@ -113,6 +121,7 @@ import overlay from '../components/overlay'
 import radio from '../components/radio'
 import formItem from '../components/form-item'
 import color from '../components/color'
+import button from '../components/button'
 
 export default {
   name: 'side-bar',
@@ -120,7 +129,8 @@ export default {
     overlay,
     asRadio: radio,
     formItem,
-    color
+    color,
+    asButton: button
   },
   setup () {
     const visible = ref(false)
@@ -136,6 +146,11 @@ export default {
     const { primaryColor, bgColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
     const { favicon } = useFavicon()
+    const clearIconCache = function () {
+      if (window.confirm('确认要清除图标的缓存吗', )) {
+        setSession('iconCache', {})
+      }
+    }
 
     return {
       mode,
@@ -150,7 +165,8 @@ export default {
       primaryTextColor,
       show,
       options,
-      scrollHide
+      scrollHide,
+      clearIconCache
     }
   }
 }

@@ -6,6 +6,7 @@ import {
   passTmMethods
 } from '../util/index'
 import { protectStyle } from '../util/initStyle.js'
+import { initSpecialStyle } from '../util/addSpecialStyle'
 import iconfont from '../assets/iconfont'
 import { siteInfo } from '../config/loadList.js'
 
@@ -15,6 +16,7 @@ if (!site.disabled) {
   iconfont()
   passTmMethods()
   protectStyle()
+  initSpecialStyle()
   const el = getAsRoot()
   if (!el) {
     const app = createApp(index)

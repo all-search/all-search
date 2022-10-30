@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         all-search 全搜v1.3.5，搜索引擎快捷跳转, 支持任意网站展示
-// @version      1.3.5
-// @description  2022年10月28日更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @name         all-search 全搜v1.3.6，搜索引擎快捷跳转, 支持任意网站展示
+// @version      1.3.6
+// @description  2022年10月30日更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.5";
+    var version$1 = "1.3.6";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -815,124 +815,7 @@
         checkBody().then(() => {
             initBodyClass(modeVal, site, remove);
         });
-        addSpecialStyle();
     };
-    function delAsDataSet(item) {
-        delete item.dataset.asMarginTop;
-        delete item.dataset.asTransform;
-        delete item.dataset.asBorderTop;
-    }
-    function getParent(el) {
-        let current = el;
-        while (current.offsetParent) {
-            if (current.offsetParent.tagName === "BODY") {
-                return current;
-            } else {
-                current = current.offsetParent;
-            }
-        }
-        const style = window.getComputedStyle(current);
-        if (style.position !== "fixed") {
-            delAsDataSet(current);
-            return null;
-        }
-        return current;
-    }
-    function getRealFixedNode(item) {
-        const style = window.getComputedStyle(item);
-        const position = style.getPropertyValue("position");
-        const display = style.getPropertyValue("display");
-        if (display === "none") {
-            return null;
-        } else if (position === "fixed") {
-            return item;
-        } else if (position === "absolute") {
-            return getParent(item);
-        } else {
-            return null;
-        }
-    }
-    function changeStyle(item) {
-        const style = window.getComputedStyle(item);
-        const styleMap = item.computedStyleMap();
-        const top = styleMap ? styleMap.get("top").value : null;
-        if (top === "auto") {
-            return;
-        }
-        if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
-            return;
-        }
-        const marginTop = style.marginTop;
-        const transform = style.transform;
-        if (marginTop === "0px") {
-            item.dataset.asMarginTop = "1";
-        } else if (transform === "none") {
-            item.dataset.asTransform = "1";
-        } else {
-            item.dataset.asBorderTop = "1";
-        }
-        item.dataset.asHasSet = (parseInt(item.dataset.asHasSet) || 0) + 1;
-    }
-    let isSelfChange = false;
-    function getFixedNodeList(list, deep = false) {
-        const weakSet = new WeakSet;
-        const newList = [];
-        const nodes = list.filter(item => item).map(item => {
-            delAsDataSet(item);
-            if (deep) {
-                const nodes = Array.from(item.querySelectorAll("*"));
-                nodes.map(item => {
-                    delAsDataSet(item);
-                    return getRealFixedNode(item);
-                }).filter(item => item).forEach(item => {
-                    if (!weakSet.has(item)) {
-                        newList.push(item);
-                        weakSet.add(item);
-                    }
-                });
-            }
-            return getRealFixedNode(item);
-        }).filter(item => item);
-        nodes.forEach(item => {
-            if (!weakSet.has(item)) {
-                newList.push(item);
-                weakSet.add(item);
-            }
-        });
-        return newList;
-    }
-    function fixedDomPosition() {
-        const nodes = Array.from(document.body.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
-        getFixedNodeList(nodes).forEach(item => {
-            changeStyle(item);
-        });
-    }
-    function addSpecialStyle() {
-        fixedDomPosition();
-        mutationObserver();
-    }
-    function mutationObserver() {
-        const targetNode = document;
-        const config = {
-            attributes: true,
-            childList: true,
-            subtree: true,
-            attributeFilter: [ "style", "class" ]
-        };
-        const callback = function(mutationsList) {
-            if (isSelfChange) {
-                isSelfChange = false;
-            } else {
-                isSelfChange = true;
-                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
-                getFixedNodeList(filterNodes, true).forEach(item => {
-                    changeStyle(item);
-                });
-            }
-        };
-        const observer = new MutationObserver(callback);
-        observer.observe(targetNode, config);
-    }
     var search = [ {
         nameZh: "百度",
         url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
@@ -2128,6 +2011,9 @@
                 ref: "popover",
                 "data-show": $setup.visible,
                 "data-initialized": $setup.popperInstance !== null,
+                style: {
+                    display: "none"
+                },
                 onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.show && $setup.show(...args)),
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
             }, [ $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
@@ -2223,17 +2109,42 @@
             }
         },
         setup(props) {
+            const iconCache = Vue.reactive(getSession("iconCache") || {});
+            const isError = Vue.ref(false);
+            const {hostname: hostname, origin: origin} = parseUrl(props.url);
             const img = Vue.computed(() => {
-                if (props.icon) {
-                    return props.icon;
+                if (isError.value) {
+                    return `${origin}/favicon.ico`;
+                } else if (iconCache[hostname]) {
+                    return iconCache[hostname];
+                } else {
+                    return `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`;
                 }
-                const obj = parseUrl(props.url);
-                return `${obj.origin}/favicon.ico`;
             });
             const {favicon: favicon} = useFavicon();
+            function getBase64Image(image) {
+                let canvas = document.createElement("canvas");
+                canvas.width = image.width;
+                canvas.height = image.height;
+                let context = canvas.getContext("2d");
+                context.drawImage(image, 0, 0, image.width, image.height);
+                return canvas.toDataURL("image/png", 1);
+            }
+            function handleLoad(e) {
+                if (!isError.value && !img.value.startsWith("data:image")) {
+                    iconCache[hostname] = getBase64Image(e.target);
+                    setSession("iconCache", iconCache);
+                }
+            }
+            function handleError() {
+                isError.value = true;
+            }
             return {
                 img: img,
-                favicon: favicon
+                favicon: favicon,
+                handleLoad: handleLoad,
+                handleError: handleError,
+                isError: isError
             };
         }
     };
@@ -2244,12 +2155,17 @@
     const _hoisted_2$4 = [ "src" ];
     function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
         return $setup.favicon === 1 ? (Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$5, [ Vue.createElementVNode("img", {
+            class: Vue.normalizeClass({
+                error: $setup.isError
+            }),
             src: $setup.img,
-            onerror: "this.classList.add('error')"
-        }, null, 8, _hoisted_2$4) ])) : Vue.createCommentVNode("", true);
+            crossOrigin: "",
+            onError: _cache[0] || (_cache[0] = (...args) => $setup.handleError && $setup.handleError(...args)),
+            onLoad: _cache[1] || (_cache[1] = (...args) => $setup.handleLoad && $setup.handleLoad(...args))
+        }, null, 42, _hoisted_2$4) ])) : Vue.createCommentVNode("", true);
     }
     var favicon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
-    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
+    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
     injectStyle(css$9);
     const _sfc_main$9 = {
         name: "menuItem",
@@ -2625,13 +2541,13 @@
             class: Vue.normalizeClass([ "as-button", `as-button__${$props.type}` ])
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 2);
     }
-    var asButton = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
+    var button = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
     var css$3 = '@charset "UTF-8";\n.as-color-set .as-color-label {\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  vertical-align: middle;\n}\n.as-color-set .input—color {\n  width: 30px;\n  height: 30px;\n  padding: 4px;\n  border: 1px solid #e6e6e6;\n  border-radius: 4px;\n  background-color: var(--as-secondary-background-color);\n  box-sizing: border-box;\n}\n.as-color-set .input—color::-webkit-color-swatch {\n  border: 0;\n}\n.as-color-set .input—color::-webkit-color-swatch-wrapper {\n  padding: 0;\n}\n.as-color-set .reset-btn {\n  margin-left: 20px;\n}';
     injectStyle(css$3);
     const _sfc_main$3 = {
         name: "color",
         components: {
-            asButton: asButton
+            asButton: button
         },
         props: {
             modelValue: {
@@ -2690,7 +2606,8 @@
             overlay: overlay,
             asRadio: radio,
             formItem: formItem,
-            color: color
+            color: color,
+            asButton: button
         },
         setup() {
             const visible = Vue.ref(false);
@@ -2705,6 +2622,11 @@
             const {primaryColor: primaryColor, bgColor: bgColor, primaryTextColor: primaryTextColor} = useColor();
             const {show: show, options: options, scrollHide: scrollHide} = useSwitchShow();
             const {favicon: favicon} = useFavicon();
+            const clearIconCache = function() {
+                if (window.confirm("确认要清除图标的缓存吗")) {
+                    setSession("iconCache", {});
+                }
+            };
             return {
                 mode: mode,
                 visible: visible,
@@ -2718,7 +2640,8 @@
                 primaryTextColor: primaryTextColor,
                 show: show,
                 options: options,
-                scrollHide: scrollHide
+                scrollHide: scrollHide,
+                clearIconCache: clearIconCache
             };
         }
     };
@@ -2729,7 +2652,8 @@
     const _hoisted_3 = Vue.createTextVNode("竖向 ");
     const _hoisted_4 = Vue.createTextVNode("显示 ");
     const _hoisted_5 = Vue.createTextVNode("隐藏 ");
-    const _hoisted_6 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
+    const _hoisted_6 = Vue.createTextVNode(" 清除 ");
+    const _hoisted_7 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -2737,13 +2661,14 @@
     }, " 设置页 "), Vue.createElementVNode("a", {
         class: "link",
         title: "github",
-        href: "https://github.com/endday/all-search",
+        href: "https://github.com/endday/all-search/issues",
         target: "_blank"
-    }, " GitHub地址 ") ], -1);
+    }, " 意见反馈 ") ], -1);
     function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_as_radio = Vue.resolveComponent("as-radio");
         const _component_form_item = Vue.resolveComponent("form-item");
         const _component_color = Vue.resolveComponent("color");
+        const _component_as_button = Vue.resolveComponent("as-button");
         const _component_overlay = Vue.resolveComponent("overlay");
         return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.createElementVNode("div", {
             class: Vue.normalizeClass([ "as-setting", $setup.mode ])
@@ -2864,7 +2789,18 @@
                             "onUpdate:modelValue": _cache[10] || (_cache[10] = $event => $setup.primaryTextColor = $event)
                         }, null, 8, [ "modelValue" ]) ]),
                         _: 1
-                    }) ]), _hoisted_6 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ]),
+                    }), Vue.createVNode(_component_form_item, {
+                        label: "图标缓存"
+                    }, {
+                        default: Vue.withCtx(() => [ Vue.createVNode(_component_as_button, {
+                            type: "text",
+                            onClick: $setup.clearIconCache
+                        }, {
+                            default: Vue.withCtx(() => [ _hoisted_6 ]),
+                            _: 1
+                        }, 8, [ "onClick" ]) ]),
+                        _: 1
+                    }) ]), _hoisted_7 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ]),
                     _: 1
                 }) ]),
                 _: 1
@@ -3020,6 +2956,122 @@
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.withDirectives(Vue.createVNode(_component_hoverBtn, null, null, 512), [ [ Vue.vShow, $setup.visible ] ]) ], 64);
     }
     var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ] ]);
+    function delAsDataSet(item) {
+        delete item.dataset.asMarginTop;
+        delete item.dataset.asTransform;
+        delete item.dataset.asBorderTop;
+    }
+    function getParent(el) {
+        let current = el;
+        while (current.offsetParent) {
+            if (current.offsetParent.tagName === "BODY") {
+                return current;
+            } else {
+                current = current.offsetParent;
+            }
+        }
+        const style = window.getComputedStyle(current);
+        if (style.position !== "fixed") {
+            delAsDataSet(current);
+            return null;
+        }
+        return current;
+    }
+    function getRealFixedNode(item) {
+        const style = window.getComputedStyle(item);
+        const position = style.getPropertyValue("position");
+        const display = style.getPropertyValue("display");
+        if (display === "none") {
+            return null;
+        } else if (position === "fixed") {
+            return item;
+        } else if (position === "absolute") {
+            return getParent(item);
+        } else {
+            return null;
+        }
+    }
+    function changeStyle(item) {
+        const style = window.getComputedStyle(item);
+        const styleMap = item.computedStyleMap();
+        const top = styleMap ? styleMap.get("top").value : null;
+        if (top === "auto") {
+            return;
+        }
+        if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
+            return;
+        }
+        const marginTop = style.marginTop;
+        const transform = style.transform;
+        if (marginTop === "0px") {
+            item.dataset.asMarginTop = "1";
+        } else if (transform === "none") {
+            item.dataset.asTransform = "1";
+        } else {
+            item.dataset.asBorderTop = "1";
+        }
+        item.dataset.asHasSet = (parseInt(item.dataset.asHasSet) || 0) + 1;
+    }
+    let isSelfChange = false;
+    function getFixedNodeList(list, deep = false) {
+        const weakSet = new WeakSet;
+        const newList = [];
+        const nodes = list.filter(item => item).map(item => {
+            delAsDataSet(item);
+            if (deep) {
+                const nodes = Array.from(item.querySelectorAll("*"));
+                nodes.map(item => {
+                    delAsDataSet(item);
+                    return getRealFixedNode(item);
+                }).filter(item => item).forEach(item => {
+                    if (!weakSet.has(item)) {
+                        newList.push(item);
+                        weakSet.add(item);
+                    }
+                });
+            }
+            return getRealFixedNode(item);
+        }).filter(item => item);
+        nodes.forEach(item => {
+            if (!weakSet.has(item)) {
+                newList.push(item);
+                weakSet.add(item);
+            }
+        });
+        return newList;
+    }
+    function fixedDomPosition() {
+        const nodes = Array.from(document.body.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
+        getFixedNodeList(nodes).forEach(item => {
+            changeStyle(item);
+        });
+    }
+    function mutationObserver() {
+        const targetNode = document;
+        const config = {
+            attributes: true,
+            childList: true,
+            subtree: true,
+            attributeFilter: [ "style", "class" ]
+        };
+        const callback = function(mutationsList) {
+            if (isSelfChange) {
+                isSelfChange = false;
+            } else {
+                isSelfChange = true;
+                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
+                getFixedNodeList(filterNodes, true).forEach(item => {
+                    changeStyle(item);
+                });
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+    }
+    function initSpecialStyle() {
+        fixedDomPosition();
+        mutationObserver();
+    }
     function iconfont(e) {
         var t, a, l, o, h, i, n = '<svg><symbol id="icon-disk" viewBox="0 0 1024 1024"><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z"  ></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024"><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z"  ></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024"><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z"  ></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024"><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z"  ></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024"><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z"  ></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024"><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z"  ></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024"><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z"  ></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024"><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z"  ></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024"><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z"  ></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024"><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z"  ></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024"><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z"  ></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024"><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z"  ></path></symbol></svg>', v = (v = document.getElementsByTagName("script"))[v.length - 1].getAttribute("data-injectcss");
         if (v && !e.__iconfont__svg__cssinject__) {
@@ -3057,6 +3109,7 @@
         iconfont();
         passTmMethods();
         protectStyle();
+        initSpecialStyle();
         const el = getAsRoot();
         if (!el) {
             const app = Vue.createApp(index);

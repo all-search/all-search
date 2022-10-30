@@ -12,6 +12,7 @@
         :data-show="visible"
         :data-initialized="popperInstance !== null"
         class="popover-content"
+        style="display: none"
         @mouseenter="show"
         @mouseleave="hide">
         <!--        <div class="arrow" data-popper-arrow />-->

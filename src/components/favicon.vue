@@ -3,15 +3,19 @@
     v-if="favicon === 1"
     class="as-url-icon">
     <img
+      :class="{error: isError}"
       :src="img"
-      onerror="this.classList.add('error')">
+      crossOrigin=""
+      @error="handleError"
+      @load="handleLoad">
   </div>
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import parseUrl from '../util/parseUrl'
 import useFavicon from './useFavicon'
+import { getSession, setSession } from '../util/index'
 
 export default {
   name: 'favicon',
@@ -26,19 +30,49 @@ export default {
     }
   },
   setup (props) {
+    const iconCache = reactive(getSession('iconCache') || {})
+    const isError = ref(false)
+
+    const { hostname, origin } = parseUrl(props.url)
     const img = computed(() => {
-      if (props.icon) {
-        return props.icon
+      if (isError.value) {
+        return `${origin}/favicon.ico`
+      } else if (iconCache[hostname]) {
+        return iconCache[hostname]
+      } else {
+        return `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`
       }
-      const obj = parseUrl(props.url)
-      return `${obj.origin}/favicon.ico`
     })
 
     const { favicon } = useFavicon()
 
+    function getBase64Image (image) {
+      let canvas = document.createElement('canvas')
+      canvas.width = image.width
+      canvas.height = image.height
+      let context = canvas.getContext('2d')
+      context.drawImage(image, 0, 0, image.width, image.height)
+      // 得到图片的base64编码数据
+      return canvas.toDataURL('image/png', 1)
+    }
+
+    function handleLoad (e) {
+      if (!isError.value && !img.value.startsWith('data:image')) {
+        iconCache[hostname] = getBase64Image(e.target)
+        setSession('iconCache', iconCache)
+      }
+    }
+
+    function handleError () {
+      isError.value = true
+    }
+
     return {
       img,
-      favicon
+      favicon,
+      handleLoad,
+      handleError,
+      isError
     }
   }
 }
