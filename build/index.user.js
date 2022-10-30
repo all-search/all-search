@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         all-search 全搜v1.3.6，搜索引擎快捷跳转, 支持任意网站展示
-// @version      1.3.6
+// @name         all-search 全搜v1.3.7，搜索引擎快捷跳转, 支持任意网站展示
+// @version      1.3.7
 // @description  2022年10月30日更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.6";
+    var version$1 = "1.3.7";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -1310,13 +1310,10 @@
         url: /\/\/www\.startpage\.com\/sp\/search/
     }, {
         url: /\/\/endday\.github\.io/,
-        disabled: true
+        invisible: true
     }, {
         url: /\/\/endday\.gitee\.io/,
-        disabled: true
-    }, {
-        url: /\/\/localhost/,
-        disabled: true
+        invisible: true
     } ];
     let currentSite = null;
     const siteInfo = function(refresh) {
