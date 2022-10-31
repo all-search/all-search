@@ -78,7 +78,4 @@ will package out the index.user.js used by Tampermonkey
 
 #### Feedback and communication
 [QQ group](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
-QQ group number 148498263
-
-
-Translated with www.DeepL.com/Translator (free version)
+<br>QQ group number 148498263
