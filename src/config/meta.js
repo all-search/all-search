@@ -6,9 +6,9 @@ const now = new Date()
 const fileName = 'index.user.js'
 const scriptUrl = `https://unpkg.com/all-search@latest/build/${fileName}`
 
-const meta = `// @name         ${pkg.name} 全搜v${pkg.version}，搜索引擎快捷跳转, 支持任意网站展示
+const meta = `// @name         ${pkg.name} 全搜，搜索引擎快捷跳转, 支持任意网站展示
 // @version      ${pkg.version}
-// @description  ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  ${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       ${pkg.author}
 // @license      ${pkg.license}
 // @homepageURL  ${pkg.homepage}
