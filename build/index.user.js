@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         all-search 全搜v1.3.7，搜索引擎快捷跳转, 支持任意网站展示
-// @version      1.3.7
+// @name         all-search 全搜v1.3.8，搜索引擎快捷跳转, 支持任意网站展示
+// @version      1.3.8
 // @description  2022年10月31日更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.7";
+    var version$1 = "1.3.8";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -2093,6 +2093,7 @@
     }
     var css$a = '.as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
     injectStyle(css$a);
+    const iconCache = Vue.reactive(getSession("iconCache") || {});
     const _sfc_main$a = {
         name: "favicon",
         props: {
@@ -2106,7 +2107,6 @@
             }
         },
         setup(props) {
-            const iconCache = Vue.reactive(getSession("iconCache") || {});
             const isError = Vue.ref(false);
             const {hostname: hostname, origin: origin} = parseUrl(props.url);
             const img = Vue.computed(() => {
@@ -2129,8 +2129,11 @@
             }
             function handleLoad(e) {
                 if (!isError.value && !img.value.startsWith("data:image")) {
-                    iconCache[hostname] = getBase64Image(e.target);
-                    setSession("iconCache", iconCache);
+                    const base64 = getBase64Image(e.target);
+                    if (base64) {
+                        iconCache[hostname] = base64;
+                        setSession("iconCache", iconCache);
+                    }
                 }
             }
             function handleError() {

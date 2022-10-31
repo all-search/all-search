@@ -17,6 +17,8 @@ import parseUrl from '../util/parseUrl'
 import useFavicon from './useFavicon'
 import { getSession, setSession } from '../util/index'
 
+const iconCache = reactive(getSession('iconCache') || {})
+
 export default {
   name: 'favicon',
   props: {
@@ -30,7 +32,6 @@ export default {
     }
   },
   setup (props) {
-    const iconCache = reactive(getSession('iconCache') || {})
     const isError = ref(false)
 
     const { hostname, origin } = parseUrl(props.url)
@@ -58,8 +59,11 @@ export default {
 
     function handleLoad (e) {
       if (!isError.value && !img.value.startsWith('data:image')) {
-        iconCache[hostname] = getBase64Image(e.target)
-        setSession('iconCache', iconCache)
+        const base64 = getBase64Image(e.target)
+        if(base64) {
+          iconCache[hostname] = base64
+          setSession('iconCache', iconCache)
+        }
       }
     }
 
