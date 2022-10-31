@@ -1,4 +1,5 @@
-! [all-search](https://socialify.git.ci/endday/all-search/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern =Plus&stargazers=1&theme=Light)
+![all-search](https://socialify.git.ci/endday/all-search/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern=Plus&stargazers=1&theme=Light)
+
 [English](./README.md) | [简体中文](./README.zh-CN.md)
 ## all-search, a search engine jump menu
 
@@ -9,7 +10,7 @@ Similar tools recommended.
 [searchJumper Most powerful, Swiss army knife](https://greasyfork.org/zh-CN/scripts/445274-searchjumper)
 [searchEngineJump Search engine quick jump Most users](https://greasyfork.org/zh-CN/scripts/2739-search-enginejump)
 
-#### Any needs, suggestions, questions directly to Issues.<br>Doing this script is purely a personal interest, using love to generate electricity.<br>It's not easy to open source, so please encourage me, if you think it's good, go to GitHub and give it a ⭐ Star, or share it with people around you.
+#### Any needs, suggestions, question directly to Issues.<br>Doing this script is purely a personal interest, using love to generate electricity.<br>It's not easy to open source, so please encourage me, if you think it's good, go to GitHub and give it a ⭐ Star, or share it with people around you.
 
 ## Script URL
 The difference between Tampermonkey's and ScriptCat's scripts has been smoothed out
