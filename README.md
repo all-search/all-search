@@ -1,85 +1,83 @@
-![all-search](https://socialify.git.ci/endday/all-search/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern=Plus&stargazers=1&theme=Light)
+! [all-search](https://socialify.git.ci/endday/all-search/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern =Plus&stargazers=1&theme=Light)
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+## all-search, a search engine jump menu
 
-## all-search 全搜，一个搜索引擎快捷跳转菜单
+A top fixed menu that allows you to easily jump between search engines, based on vue3 and built using rollup.
 
-一个让你可以方便的在各个搜索引擎之间跳转的顶部固定菜单，基于vue3，使用rollup构建。
+Thanks to searchEngineJump for the idea and URL source.
+Similar tools recommended.
+[searchJumper Most powerful, Swiss army knife](https://greasyfork.org/zh-CN/scripts/445274-searchjumper)
+[searchEngineJump Search engine quick jump Most users](https://greasyfork.org/zh-CN/scripts/2739-search-enginejump)
 
-A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.
+#### Any needs, suggestions, questions directly to Issues.<br>Doing this script is purely a personal interest, using love to generate electricity.<br>It's not easy to open source, so please encourage me, if you think it's good, go to GitHub and give it a ⭐ Star, or share it with people around you.
 
-感谢searchEngineJump提供的创意和网址来源。
-同类切换工具推荐：
-[搜索酱 功能最强，瑞士军刀](https://greasyfork.org/zh-CN/scripts/445274-searchjumper)
-[searchEngineJump 搜索引擎快捷跳转 用户最多](https://greasyfork.org/zh-CN/scripts/2739-search-enginejump)
-
-
-#### 有什么需求、建议、问题直接提 Issues
-#### 做这个脚本纯粹是个人兴趣，用爱发电。
-#### 开源不易，多多鼓励，如果觉得还不错，就去 Github 点个⭐ Star 鼓励一下, 或者把脚本分享给身边的人。
-
-## 脚本地址
-油猴和脚本猫的脚本差异已经抹平
-* [jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
-* [unpkg地址](https://unpkg.com/all-search@latest/build/index.user.js)
-* [iQDNS/iQZone地址](https://raw.iqiq.io/endday/all-search/master/build/index.user.js)
-* [KGitHub地址](https://raw.kgithub.com/endday/all-search/master/build/index.user.js)
+## Script URL
+The difference between Tampermonkey's and ScriptCat's scripts has been smoothed out
+* [jsdelivr URL](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
+* [unpkg URL](https://unpkg.com/all-search@latest/build/index.user.js)
+* [iQDNS/iQZone URL](https://raw.iqiq.io/endday/all-search/master/build/index.user.js)
+* [KGitHub URL](https://raw.kgithub.com/endday/all-search/master/build/index.user.js)
 
 ### greasyFork
-* [greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)
+* [greasyfork URL](https://greasyfork.org/zh-CN/scripts/397993-all-search)
 
-### 脚本猫
-* [脚本猫ScriptCat地址](https://scriptcat.org/script-show-page/477)
+### ScriptCat
+* [ScriptCat ScriptCat URL](https://scriptcat.org/script-show-page/477)
 
-## 设置地址
-* [码云](https://endday.gitee.io/all-search/)
+## Set page
+* [code cloud](https://endday.gitee.io/all-search/)
 * [github](https://endday.github.io/all-search/)
 
-## 特色功能
-* [图形界面添加网址](https://endday.github.io/all-search/)
-* 拖动改变分类排序
-* 支持垂直和横向布局
-* 点击分类使用分类第一个地址打开
-* 鼠标中键点击地址可以打开新窗口（也可以使用ctrl+右键单击）
-* 提供移动端支持
-    * 若页面宽度不足，可以进行滚动，
-    * 移动端为点击触发菜单
-* 自动隐藏功能，通过按钮触发，亦可更改为向上或向下滚动触发隐藏
-* 新添加的网址支持自动加载（即用户自行添加的，都可以自动展示）
-* 自适应样式，无需要额外适配
+## Features
+* [GUI Add URL](https://endday.github.io/all-search/)
+* Drag to change category sorting
+* Support vertical and horizontal layout
+* Click on a category to use the first URL of the category to open it
+* Middle mouse button click on the URL to open a new window (you can also use ctrl+right click)
+* Provide mobile support
+  * Scrolling is possible if the page width is insufficient
+  * Mobile for click-triggered menu
+* Auto-hide function, triggered by button, can also be changed to scroll up or down to trigger hide
+* Auto-loading support for newly added URLs (i.e., those added by the user, can be displayed automatically)
+* Adaptive style, no additional adaptations required
 
-## 待完成
-* 英语支持
-* 文字选中工具栏
-* 快捷键唤起全局搜索栏（待定）
-* 谷歌插件化（待定）
+## Todo list
+* English support
+* Text selection toolbar
+* Shortcuts to evoke global search bar (TBD)
+* Google Pluginization (TBD)
 
-## 兼容和性能
-* 针对百度样式问题，没有使用损耗性能的定时器，采用劫持Node.prototype.removeChild来实现
-* 针对youtube的spf.js的路由切换进行监听
-* 与AC-baidu等主流油猴脚本无兼容问题
+## Compatibility and Performance
+* For Baidu style issues, instead of using performance-depleting timers, use hijacked Node.prototype.removeChild to achieve
+* Listening for route switching for youtube's spf.js
+* no compatibility issues with AC-baidu and other mainstream Tampermonkey scripts
 
-## 如何贡献
+## Contribute
 
-#### 反馈与交流
-[QQ群地址](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
-QQ群号 148498263
-
-#### 本地开发
-设置页
+#### Local development
+Setup page
 ```
 npm run serve
 ```
 
-脚本
+script
 ```
 npm run tmDev
 ```
-运行后，将build目录下的index.dev.js复制到油猴或其他脚本管理器中。
+After running, copy the index.dev.js from the build directory to Tampermonkey or another script manager.
 
-tmDev使用了watch，每次修改都会自动重新构建，index.dev.js文件内并没有代码，而是require引用了本地文件index.user.js，所以记得开启油猴的文件访问权限
+tmDev uses watch and will automatically rebuild every time it is modified. There is no code inside the index.dev.js file, but rather require references the local file index.user.js, so remember to enable Tampermonkey's file access rights
 
-#### 构建油猴脚本
-脚本的版本号引用package.json中的版本号，记得修改
+#### build scripts
+The version number of the script references the version number in package.json, remember to modify
 ```
 npm run tmBuild
 ```
-会打包出油猴使用的index.user.js
+will package out the index.user.js used by Tampermonkey
+
+#### Feedback and communication
+[QQ group](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
+QQ group number 148498263
+
+
+Translated with www.DeepL.com/Translator (free version)

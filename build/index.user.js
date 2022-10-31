@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜v1.3.7，搜索引擎快捷跳转, 支持任意网站展示
 // @version      1.3.7
-// @description  2022年10月30日更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2022年10月31日更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0
 // @homepageURL  https://github.com/endday/all-search
@@ -1559,9 +1559,9 @@
             class: Vue.normalizeClass([ "as-title", `as-title-${$props.mode}` ]),
             href: "https://github.com/endday/all-search",
             target: "_blank"
-        }, _hoisted_2$6, 2)) : Vue.createCommentVNode("", true);
+        }, _hoisted_2$6, 2)) : Vue.createCommentVNode("v-if", true);
     }
-    var logo = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ] ]);
+    var logo = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ], [ "__file", "E:\\myProject\\all-search\\src\\components\\logo.vue" ] ]);
     const _sfc_main$e = Vue.defineComponent({
         props: {
             vertical: Boolean,
@@ -1670,7 +1670,8 @@
     });
     function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createBlock(Vue.Transition, {
-            name: "as-scrollbar-fade"
+            name: "as-scrollbar-fade",
+            persisted: ""
         }, {
             default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createElementVNode("div", {
                 ref: "instance",
@@ -1685,7 +1686,7 @@
             _: 1
         });
     }
-    var Bar = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ] ]);
+    var Bar = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ], [ "__file", "E:\\myProject\\all-search\\src\\components\\scrollbar\\src\\bar.vue" ] ]);
     const _sfc_main$d = Vue.defineComponent({
         components: {
             Bar: Bar
@@ -1863,9 +1864,9 @@
             size: _ctx.sizeHeight,
             vertical: "",
             always: _ctx.always
-        }, null, 8, [ "move", "ratio", "size", "always" ]) ], 64)) : Vue.createCommentVNode("", true) ], 512);
+        }, null, 8, [ "move", "ratio", "size", "always" ]) ], 64)) : Vue.createCommentVNode("v-if", true) ], 512);
     }
-    var scrollbar = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
+    var scrollbar = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ], [ "__file", "E:\\myProject\\all-search\\src\\components\\scrollbar\\src\\scrollbar.vue" ] ]);
     var css$d = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\r\n";
     injectStyle(css$d);
     function useTimeout() {
@@ -2013,13 +2014,13 @@
                 },
                 onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.show && $setup.show(...args)),
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
-            }, [ $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
+            }, [ Vue.createCommentVNode('        <div class="arrow" data-popper-arrow />'), $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
                 key: 0
-            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$7), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
+            }) : Vue.createCommentVNode("v-if", true) ], 42, _hoisted_1$7), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
             _: 3
         }) ], 64);
     }
-    var popper = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
+    var popper = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ], [ "__file", "E:\\myProject\\all-search\\src\\components\\popper.vue" ] ]);
     var css$b = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 0.25px 4px 0 0;\n}";
     injectStyle(css$b);
     const _sfc_main$b = {
@@ -2041,7 +2042,7 @@
             "xlink:href": `#icon-${$props.name}`
         }, null, 8, _hoisted_2$5) ]);
     }
-    var icon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
+    var icon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ], [ "__file", "E:\\myProject\\all-search\\src\\components\\icon.vue" ] ]);
     let el = document.createElement("a");
     const replaceUrl = function(val) {
         const lowerCaseVal = val.toLowerCase();
@@ -2159,9 +2160,9 @@
             crossOrigin: "",
             onError: _cache[0] || (_cache[0] = (...args) => $setup.handleError && $setup.handleError(...args)),
             onLoad: _cache[1] || (_cache[1] = (...args) => $setup.handleLoad && $setup.handleLoad(...args))
-        }, null, 42, _hoisted_2$4) ])) : Vue.createCommentVNode("", true);
+        }, null, 42, _hoisted_2$4) ])) : Vue.createCommentVNode("v-if", true);
     }
-    var favicon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
+    var favicon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ], [ "__file", "E:\\myProject\\all-search\\src\\components\\favicon.vue" ] ]);
     var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
     injectStyle(css$9);
     const _sfc_main$9 = {
@@ -2276,7 +2277,7 @@
             _: 1
         }, 8, [ "placement" ]);
     }
-    var menuItem = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ] ]);
+    var menuItem = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\menuItem.vue" ] ]);
     const NAME = "align";
     const session = getSession(NAME);
     const list = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]);
@@ -2356,7 +2357,7 @@
             _: 1
         });
     }
-    var asMenu = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ] ]);
+    var asMenu = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\menu.vue" ] ]);
     const primaryColor = Vue.ref("");
     const bgColor = Vue.ref("");
     const primaryTextColor = Vue.ref("");
@@ -2437,7 +2438,7 @@
             onClick: _cache[2] || (_cache[2] = (...args) => $setup.onMaskClick && $setup.onMaskClick(...args))
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 32);
     }
-    var overlay = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ] ]);
+    var overlay = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\overlay.vue" ] ]);
     var css$6 = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
     injectStyle(css$6);
     const _sfc_main$6 = {
@@ -2482,7 +2483,7 @@
             "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.model = $event)
         }, null, 8, _hoisted_2$2), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3$2, Vue.createElementVNode("span", _hoisted_4$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
     }
-    var radio = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ] ]);
+    var radio = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\radio.vue" ] ]);
     var css$5 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
     injectStyle(css$5);
     const _sfc_main$5 = {
@@ -2521,7 +2522,7 @@
             style: Vue.normalizeStyle($setup.contentStyle)
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 4) ]);
     }
-    var formItem = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ] ]);
+    var formItem = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\form-item.vue" ] ]);
     var css$4 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
     injectStyle(css$4);
     const _sfc_main$4 = {
@@ -2538,7 +2539,7 @@
             class: Vue.normalizeClass([ "as-button", `as-button__${$props.type}` ])
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 2);
     }
-    var button = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
+    var button = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\button.vue" ] ]);
     var css$3 = '@charset "UTF-8";\n.as-color-set .as-color-label {\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  vertical-align: middle;\n}\n.as-color-set .input—color {\n  width: 30px;\n  height: 30px;\n  padding: 4px;\n  border: 1px solid #e6e6e6;\n  border-radius: 4px;\n  background-color: var(--as-secondary-background-color);\n  box-sizing: border-box;\n}\n.as-color-set .input—color::-webkit-color-swatch {\n  border: 0;\n}\n.as-color-set .input—color::-webkit-color-swatch-wrapper {\n  padding: 0;\n}\n.as-color-set .reset-btn {\n  margin-left: 20px;\n}';
     injectStyle(css$3);
     const _sfc_main$3 = {
@@ -2594,7 +2595,7 @@
             _: 1
         }, 8, [ "onClick" ]) ]);
     }
-    var color = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ] ]);
+    var color = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\color.vue" ] ]);
     var css$2 = ".as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
     injectStyle(css$2);
     const _sfc_main$2 = {
@@ -2679,14 +2680,16 @@
             to: "#all-search"
         }, [ Vue.createVNode(Vue.Transition, {
             name: "overlay",
-            appear: ""
+            appear: "",
+            persisted: ""
         }, {
             default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createVNode(_component_overlay, {
                 onClick: $setup.onMaskClick
             }, {
                 default: Vue.withCtx(() => [ Vue.createVNode(Vue.Transition, {
                     name: "drawer",
-                    appear: ""
+                    appear: "",
+                    persisted: ""
                 }, {
                     default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createElementVNode("div", {
                         "aria-modal": "true",
@@ -2805,7 +2808,7 @@
             _: 1
         }) ])) ], 64);
     }
-    var sideBar = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ] ]);
+    var sideBar = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ], [ "__file", "E:\\myProject\\all-search\\src\\components\\side-bar.vue" ] ]);
     function throttle(fn, delay) {
         let canRun = true;
         return function() {
@@ -2840,7 +2843,7 @@
             direction: direction
         };
     }
-    var css$1 = "\n.as-hover-btn[data-v-3952be4c] {\r\n  position: fixed;\r\n  z-index: 99999;\r\n  font-weight: 600;\r\n  font-size: 17px;\r\n  color: var(--as-primary-color);\r\n  background: #fff;\r\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\r\n  border: 1px var(--as-border-color) solid;\r\n  opacity: 0.6;\r\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-3952be4c] {\r\n  top: 0;\r\n  left: 50%;\r\n  transform: translateY(0) translateX(-50%);\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-3952be4c] {\r\n  left: 0;\r\n  top: 50%;\r\n  transform: translateY(-200%) translateX(0) rotate(90deg);\r\n  transform-origin: 0 100%;\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-3952be4c] {\r\n  transition: transform 0.2s;\r\n  transform: translateY(-100%) translateX(-50%);\n}\r\n";
+    var css$1 = "\n.as-hover-btn[data-v-379a68eb] {\r\n  position: fixed;\r\n  z-index: 99999;\r\n  font-weight: 600;\r\n  font-size: 17px;\r\n  color: var(--as-primary-color);\r\n  background: #fff;\r\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\r\n  border: 1px var(--as-border-color) solid;\r\n  opacity: 0.6;\r\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-379a68eb] {\r\n  top: 0;\r\n  left: 50%;\r\n  transform: translateY(0) translateX(-50%);\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-379a68eb] {\r\n  left: 0;\r\n  top: 50%;\r\n  transform: translateY(-200%) translateX(0) rotate(90deg);\r\n  transform-origin: 0 100%;\r\n  padding: 0 16px;\r\n  height: 28px;\r\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-379a68eb] {\r\n  transition: transform 0.2s;\r\n  transform: translateY(-100%) translateX(-50%);\n}\r\n";
     injectStyle(css$1);
     const _sfc_main$1 = {
         name: "hover-btn",
@@ -2882,7 +2885,7 @@
             onClick: _cache[1] || (_cache[1] = (...args) => $setup.handleClick && $setup.handleClick(...args))
         }, " All Search ", 34);
     }
-    var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-3952be4c" ] ]);
+    var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-379a68eb" ], [ "__file", "E:\\myProject\\all-search\\src\\components\\hover-btn.vue" ] ]);
     var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n.body-horizontal [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n\n.body-vertical {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
@@ -2952,7 +2955,7 @@
             mode: $setup.mode
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.withDirectives(Vue.createVNode(_component_hoverBtn, null, null, 512), [ [ Vue.vShow, $setup.visible ] ]) ], 64);
     }
-    var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ] ]);
+    var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ], [ "__file", "E:\\myProject\\all-search\\src\\as-script\\index.vue" ] ]);
     function delAsDataSet(item) {
         delete item.dataset.asMarginTop;
         delete item.dataset.asTransform;
