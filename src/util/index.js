@@ -1,6 +1,6 @@
 import pkg from '../../package.json'
 import store from './store'
-import { isString } from '../components/scrollbar/src/util'
+// import { isString } from '../components/scrollbar/src/util'
 
 export const version = pkg.version
 

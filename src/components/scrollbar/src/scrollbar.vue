@@ -140,7 +140,7 @@ export default defineComponent({
       sizeWidth.value = width + GAP < offsetWidth ? width + 'px' : ''
     }
 
-    const handleScroll = (e) => {
+    const handleScroll = () => {
       if (wrap.value) {
         const offsetHeight = wrap.value.offsetHeight - GAP
         const offsetWidth = wrap.value.offsetWidth - GAP
