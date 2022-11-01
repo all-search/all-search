@@ -48,10 +48,7 @@ export const list = [
     url: /\/\/www\.zhihu\.com\/search\?/
   },
   {
-    url: /\/\/www\.so\.com\/s/,
-    style: {
-      2: `.body-vertical #header { z-index: 2000!important; }`
-    }
+    url: /\/\/www\.so\.com\/s/
   },
   {
     url: /\/\/so\.baike\.com\/doc/
@@ -144,12 +141,10 @@ export const list = [
     url: /\/\/subhd\.tv\/search/
   },
   {
-    url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/,
-    query: ['text', 'q']
+    url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/
   },
   {
-    url: /\/\/fanyi\.baidu\.com/,
-    selectors: '.baidu_translate_input'
+    url: /\/\/fanyi\.baidu\.com/
   },
   {
     url: /\/\/.*\.bing\.com\/dict\/search\?q=/

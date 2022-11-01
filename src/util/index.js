@@ -11,33 +11,6 @@ export function getQueryString (name, url) {
   return decodeURIComponent(!m ? '' : m[2])
 }
 
-export function getKeywordInput () {
-  const dom = document.getElementsByTagName('input')
-  for (let i = 0; i < dom.length; i++) {
-    if (
-      dom[i].clientWidth > 80 &&
-      dom[i].clientHeight > 0 &&
-      dom[i].value &&
-      decodeURI(document.location.href).includes(dom[i].value)
-    ) {
-      return dom[i].value
-    }
-  }
-}
-
-export function getKeyword () {
-  const el = document.querySelector('input[type=\'search\'],input[type=\'text\'][autocomplete=\'off\'],input[autocomplete=\'off\']:not([type])') ||
-    document.querySelector('input[type=\'text\'][name][value],input[name][value]:not([type])')
-  if (el) {
-    if (el.nodeName === 'INPUT' || el.localName === 'textarea') {
-      return el.value
-    } else {
-      return el.textContent
-    }
-  }
-  return ''
-}
-
 export function checkBody () {
   let time = 0
   return new Promise((resolve, reject) => {

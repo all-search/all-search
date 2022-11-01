@@ -13,7 +13,7 @@ export default [
   },
   {
     nameZh: '掘金',
-    url: 'https://juejin.im/search?query=%s&type=all'
+    url: 'https://juejin.cn/search?query=%s&type=all'
   },
   {
     nameZh: 'Can I Use',

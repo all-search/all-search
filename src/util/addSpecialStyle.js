@@ -1,7 +1,9 @@
 function delAsDataSet (item) {
-  delete item.dataset.asMarginTop
-  delete item.dataset.asTransform
-  delete item.dataset.asBorderTop
+  if (item.dataset) {
+    delete item.dataset.asMarginTop
+    delete item.dataset.asTransform
+    delete item.dataset.asBorderTop
+  }
 }
 
 function getParent (el) {
