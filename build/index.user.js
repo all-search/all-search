@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转, 支持任意网站展示
-// @version      1.3.8
-// @description  2022-10-31更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.3.9
+// @description  2022-11-1更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.8";
+    var version$1 = "1.3.9";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -107,17 +107,6 @@
         const r = new RegExp("(\\?|#|&)" + name + "=([^&#]*)(&|#|$)");
         const m = url.match(r);
         return decodeURIComponent(!m ? "" : m[2]);
-    }
-    function getKeyword() {
-        const el = document.querySelector("input[type='search'],input[type='text'][autocomplete='off'],input[autocomplete='off']:not([type])") || document.querySelector("input[type='text'][name][value],input[name][value]:not([type])");
-        if (el) {
-            if (el.nodeName === "INPUT" || el.localName === "textarea") {
-                return el.value;
-            } else {
-                return el.textContent;
-            }
-        }
-        return "";
     }
     function checkBody() {
         let time = 0;
@@ -311,7 +300,7 @@
         url: "https://stackoverflow.com/search?q=%s"
     }, {
         nameZh: "掘金",
-        url: "https://juejin.im/search?query=%s&type=all"
+        url: "https://juejin.cn/search?query=%s&type=all"
     }, {
         nameZh: "Can I Use",
         url: "http://caniuse.com/#search=%s",
@@ -636,10 +625,7 @@
     }, {
         url: /\/\/www\.zhihu\.com\/search\?/
     }, {
-        url: /\/\/www\.so\.com\/s/,
-        style: {
-            2: `.body-vertical #header { z-index: 2000!important; }`
-        }
+        url: /\/\/www\.so\.com\/s/
     }, {
         url: /\/\/so\.baike\.com\/doc/
     }, {
@@ -705,11 +691,9 @@
     }, {
         url: /\/\/subhd\.tv\/search/
     }, {
-        url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/,
-        query: [ "text", "q" ]
+        url: /\/\/translate\.google(?:\.\D{1,4}){1,2}/
     }, {
-        url: /\/\/fanyi\.baidu\.com/,
-        selectors: ".baidu_translate_input"
+        url: /\/\/fanyi\.baidu\.com/
     }, {
         url: /\/\/.*\.bing\.com\/dict\/search\?q=/
     }, {
@@ -2025,6 +2009,63 @@
         }) ], 64);
     }
     var popper = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
+    function findInNodeList(list) {
+        return [].find.call(list, item => isVisible(item));
+    }
+    function isVisible(element) {
+        const style = getComputedStyle(element);
+        return !!element.getClientRects().length && style.visibility !== "hidden" && style.width !== 0 && style.height !== 0 && style.opacity !== 0;
+    }
+    function getSearchDom() {
+        const el = document.querySelector("input[type=search],input[type=text][autocomplete=off],input[autocomplete=off]:not([type])") || document.querySelector("input[type=text][name][value],input[name][value]:not([type])");
+        if (el) {
+            return el;
+        }
+        const autofocusOrSearch = document.querySelector("input[autofocus],input[type=search]");
+        if (autofocusOrSearch && isVisible(autofocusOrSearch)) {
+            return autofocusOrSearch;
+        }
+        const idOrClassContainSearch = document.querySelectorAll("input[id*=search],input[class*=search]");
+        if (idOrClassContainSearch.length) {
+            const element = findInNodeList(idOrClassContainSearch);
+            if (element) {
+                return element;
+            }
+        }
+        const placeholderContainSearch = document.querySelectorAll("input[placeholder*=search],input[placeholder*=搜索]");
+        if (placeholderContainSearch.length) {
+            const element = findInNodeList(placeholderContainSearch);
+            if (element) {
+                return element;
+            }
+        }
+        const textInputTypes = [ "hidden", "button", "checkbox", "color", "file", "image", "radio", "range", "reset", "submit" ];
+        const selector = textInputTypes.map(t => `[type=${t}]`).join(",");
+        const firstInput = document.querySelector(`input:not(${selector}),textarea`);
+        if (firstInput && isVisible(firstInput)) {
+            return firstInput;
+        }
+        const inputSearch = document.getElementsByTagName("input");
+        const sameKeywordInput = [].find.call(inputSearch, item => {
+            if (item.value && decodeURI(window.location.pathname + window.location.search).includes(item.value)) {
+                return item;
+            }
+        });
+        if (sameKeywordInput) {
+            return sameKeywordInput;
+        }
+    }
+    function getKeyword() {
+        const el = getSearchDom();
+        if (el) {
+            if ([ "INPUT", "TEXTAREA" ].includes(el.nodeName)) {
+                return el.value;
+            } else {
+                return el.textContent;
+            }
+        }
+        console.log("没有找到搜索关键字");
+    }
     var css$b = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 0.25px 4px 0 0;\n}";
     injectStyle(css$b);
     const _sfc_main$b = {
@@ -2200,15 +2241,17 @@
                 let keyword = getKeyword();
                 const selectors = currentSite.selectors;
                 const query = currentSite.query;
-                if (selectors) {
-                    const el = document.querySelector(selectors);
-                    keyword = el ? el.value : "";
-                } else if (query) {
-                    query.some(name => {
-                        const word = getQueryString(name);
-                        keyword = word;
-                        return !!word;
-                    });
+                if (keyword === undefined) {
+                    if (selectors) {
+                        const el = document.querySelector(selectors);
+                        keyword = el ? el.value : "";
+                    } else if (query) {
+                        query.some(name => {
+                            const word = getQueryString(name);
+                            keyword = word;
+                            return !!word;
+                        });
+                    }
                 }
                 return keyword;
             };
@@ -2962,9 +3005,11 @@
     }
     var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ] ]);
     function delAsDataSet(item) {
-        delete item.dataset.asMarginTop;
-        delete item.dataset.asTransform;
-        delete item.dataset.asBorderTop;
+        if (item.dataset) {
+            delete item.dataset.asMarginTop;
+            delete item.dataset.asTransform;
+            delete item.dataset.asBorderTop;
+        }
     }
     function getParent(el) {
         let current = el;
