@@ -8,7 +8,7 @@ import vue from '@vitejs/plugin-vue'
 import { terser } from 'rollup-plugin-terser'
 import styles from 'rollup-plugin-styles'
 import externalGlobals from 'rollup-plugin-external-globals'
-import { proMeta, devMeta } from './src/config/meta'
+import { proMeta, devMeta, localFileName, devFileName } from './src/config/meta'
 
 const styleInjectPath = require
   .resolve('./src/util/injectStyle.js')
@@ -21,7 +21,7 @@ const config =  {
   output: [
     {
       name: 'allSearch',
-      file: 'build/index.user.js',
+      file: isDev ? `build/${localFileName}` : 'build/index.user.js',
       format: 'iife',
       plugins: [
         terser({
@@ -32,7 +32,7 @@ const config =  {
             preamble: proMeta
           }
         }),
-        buildDev(devMeta)
+        isDev ? buildDev(devMeta) : ''
       ]
     }
   ],
@@ -72,9 +72,7 @@ function buildDev(text) {
   return {
     name: "rollup-plugin-buildDev",
     generateBundle() {
-      if (isDev) {
-        fs.writeFileSync(path.join(__dirname, '/build/index.dev.js'), text)
-      }
+      fs.writeFileSync(path.join(__dirname, `/build/${devFileName}`), text)
     }
   }
 }

@@ -4,9 +4,11 @@ import pkg from '../../package.json'
 const now = new Date()
 
 const fileName = 'index.user.js'
+export const localFileName = 'index.local.js'
+export const devFileName = 'index.dev.js'
 const scriptUrl = `https://unpkg.com/all-search@latest/build/${fileName}`
 
-const meta = `// @name         ${pkg.name} 全搜，搜索引擎快捷跳转, 支持任意网站展示
+const meta = `// @name         ${pkg.name} 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      ${pkg.version}
 // @description  ${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       ${pkg.author}
@@ -33,6 +35,6 @@ ${meta}
 
 export const devMeta = `// ==UserScript==
 ${meta}
-// @require      file:///${path.join(__dirname, `/build/${fileName}`)}
+// @require      file:///${path.join(__dirname, `/build/${localFileName}`)}
 // ==/UserScript==
 `
