@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      1.3.9
-// @description  2022-11-3更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2022-11-4更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -3042,8 +3042,11 @@
         }
     }
     function changeStyle(item) {
+        if (!item) {
+            return;
+        }
         const style = window.getComputedStyle(item);
-        const styleMap = item.computedStyleMap();
+        const styleMap = item.computedStyleMap && item.computedStyleMap();
         const top = styleMap ? styleMap.get("top").value : null;
         if (top === "auto") {
             return;

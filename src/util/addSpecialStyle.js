@@ -39,8 +39,11 @@ function getRealFixedNode (item) {
 }
 
 function changeStyle (item) {
+  if (!item) {
+    return
+  }
   const style = window.getComputedStyle(item)
-  const styleMap = item.computedStyleMap()
+  const styleMap = item.computedStyleMap && item.computedStyleMap()
   const top = styleMap ? styleMap.get('top').value : null
   if (top === 'auto') {
     return
