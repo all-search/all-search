@@ -66,6 +66,7 @@
     "rollup-plugin-styles": "^4.0.0",
     "rollup-plugin-terser": "^5.2.0",
     "sass": "^1.32.8",
-    "sass-loader": "^10.1.1"
+    "sass-loader": "^10.1.1",
+    "vite": "^2.6.7"
   }
 }
