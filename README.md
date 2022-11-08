@@ -14,10 +14,9 @@ Similar tools recommended.
 
 ## Script URL
 The difference between Tampermonkey's and ScriptCat's scripts has been smoothed out
-* [jsdelivr URL](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
-* [unpkg URL](https://unpkg.com/all-search@latest/build/index.user.js)
-* [iQDNS/iQZone URL](https://raw.iqiq.io/endday/all-search/master/build/index.user.js)
-* [KGitHub URL](https://raw.kgithub.com/endday/all-search/master/build/index.user.js)
+* [GitHub URL](https://raw.github.com/endday/all-search/release/index.user.js)
+* [iQDNS/iQZone URL](https://raw.iqiq.io/endday/all-search/release/index.user.js)
+* [KGitHub URL](https://raw.kgithub.com/endday/all-search/release/index.user.js)
 
 ### greasyFork
 * [greasyfork URL](https://greasyfork.org/zh-CN/scripts/397993-all-search)

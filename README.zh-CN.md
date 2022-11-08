@@ -14,10 +14,9 @@
 
 ## 脚本地址
 油猴和脚本猫的脚本差异已经抹平
-* [jsdelivr地址](https://cdn.jsdelivr.net/npm/all-search@latest/build/index.user.js)
-* [unpkg地址](https://unpkg.com/all-search@latest/build/index.user.js)
-* [iQDNS/iQZone地址](https://raw.iqiq.io/endday/all-search/master/build/index.user.js)
-* [KGitHub地址](https://raw.kgithub.com/endday/all-search/master/build/index.user.js)
+* [GitHub 地址](https://raw.github.com/endday/all-search/release/index.user.js)
+* [iQDNS/iQZone 地址](https://raw.iqiq.io/endday/all-search/release/index.user.js)
+* [KGitHub 地址](https://raw.kgithub.com/endday/all-search/release/index.user.js)
 
 ### greasyFork
 * [greasyfork地址](https://greasyfork.org/zh-CN/scripts/397993-all-search)

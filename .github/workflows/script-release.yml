@@ -1,10 +1,10 @@
-name: Deploy Github Pages
+name: Release script
 on:
   push:
     branches:
       - master
 jobs:
-  build-and-deploy:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,11 +18,10 @@ jobs:
 
       - name: Build
         run: |
-          npm run build
-          cp dist/index.html dist/404.html
+          npm run tmBuild
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages # The branch the action should deploy to.
+          branch: release # The branch the action should deploy to.
           folder: dist # The folder the action should deploy.

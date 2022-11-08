@@ -6,7 +6,7 @@ const now = new Date()
 const fileName = 'index.user.js'
 export const localFileName = 'index.local.js'
 export const devFileName = 'index.dev.js'
-const scriptUrl = `https://unpkg.com/all-search@latest/build/${fileName}`
+const scriptUrl = `https://raw.github.com/endday/all-search/release/${fileName}`
 
 const meta = `// @name         ${pkg.name} 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      ${pkg.version}
@@ -35,6 +35,6 @@ ${meta}
 
 export const devMeta = `// ==UserScript==
 ${meta}
-// @require      file:///${path.join(__dirname, `/build/${localFileName}`)}
+// @require      file:///${path.join(__dirname, `/dist/${localFileName}`)}
 // ==/UserScript==
 `

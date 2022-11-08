@@ -21,7 +21,7 @@ const config =  {
   output: [
     {
       name: 'allSearch',
-      file: isDev ? `build/${localFileName}` : 'build/index.user.js',
+      file: isDev ? `dist/${localFileName}` : 'dist/index.user.js',
       format: 'iife',
       plugins: [
         terser({
@@ -37,7 +37,7 @@ const config =  {
     }
   ],
   plugins: [
-    // del({ targets: 'build/*' }),
+    // del({ targets: 'dist/*' }),
     vue(),
     json(),
     styles({
@@ -72,7 +72,7 @@ function buildDev(text) {
   return {
     name: "rollup-plugin-buildDev",
     generateBundle() {
-      fs.writeFileSync(path.join(__dirname, `/build/${devFileName}`), text)
+      fs.writeFileSync(path.join(__dirname, `/dist/${devFileName}`), text)
     }
   }
 }

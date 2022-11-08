@@ -1,0 +1,27 @@
+name: Deploy Github Pages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 14.x # 配置Node环境
+        uses: actions/setup-node@v3 # 配置脚本来自 https://github.com/actions/setup-node
+        with:
+          node-version: 14
+
+      - name: Install 🔧
+        uses: bahmutov/npm-install@v1
+
+      - name: Build
+        run: |
+          npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: dist # The folder the action should deploy.
