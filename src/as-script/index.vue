@@ -13,6 +13,7 @@
     <hoverBtn v-show="visible"/>
     <iconfont/>
   </template>
+  <selectionBar/>
 </template>
 
 <script>
@@ -28,6 +29,7 @@ import asMenu from '../components/menu'
 import sideBar from '../components/side-bar'
 import hoverBtn from '../components/hover-btn'
 import iconfont from '../components/iconfont'
+import selectionBar from '../components/selection-bar'
 
 export default {
   name: 'all-search',
@@ -36,7 +38,8 @@ export default {
     asMenu,
     sideBar,
     hoverBtn,
-    iconfont
+    iconfont,
+    selectionBar
   },
   setup () {
     const { isFullScreen } = useFullScreen()

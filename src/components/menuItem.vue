@@ -29,6 +29,7 @@
            @click.ctrl.exact="handleClick(child, true)"
            @click.middle.exact="handleClick(child, true)">
           <favicon
+            class="as-url-icon"
             :url="child.url"
             :icon="child.icon"
           />
@@ -50,6 +51,9 @@ import { getKeyword } from '../util/getKeyword'
 import icon from './icon'
 import favicon from './favicon'
 import { onTap } from '../util/tap'
+import { selection } from './selection'
+
+let isTap = false
 
 export default {
   name: 'menuItem',
@@ -68,7 +72,6 @@ export default {
     }
   },
   setup (props) {
-    let isTap = false
     const categoryRef = ref(null)
     const currentSite = site
     const classList = computed(() =>
@@ -82,6 +85,9 @@ export default {
       item.show = value
     }
     const defaultKeyword = () => {
+      if (selection && selection.value) {
+        return selection.value
+      }
       let keyword = getKeyword()
       const selectors = currentSite.selectors
       const query = currentSite.query
@@ -226,11 +232,19 @@ a.as-menu-item {
   color: var(--as-primary-text-color);
 }
 
+.as-url-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+}
+
 .as-subMenu-container {
-  background: #fff;
+  //background: #fff;
   border: 1px solid #e4e7ed;
   box-shadow: 0 0 12px rgba(0, 0, 0, .12);
   border-radius: 4px;
+  backdrop-filter: blur(3px);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .as-subMenu {

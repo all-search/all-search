@@ -65,6 +65,16 @@
                   v-model="favicon">隐藏
                 </as-radio>
               </form-item>
+              <form-item label="工具栏">
+                <as-radio
+                  :label="1"
+                  v-model="toolbar">显示
+                </as-radio>
+                <as-radio
+                  :label="2"
+                  v-model="toolbar">隐藏
+                </as-radio>
+              </form-item>
               <form-item label="主题色">
                 <color
                   name="primaryColor"
@@ -124,6 +134,7 @@ import useAlign from './useAlign'
 import useSwitchShow from '../components/useSwitchShow'
 import useColor from '../components/useColor'
 import useFavicon from './useFavicon'
+import useToolbar from './useToolbar'
 import overlay from '../components/overlay'
 import radio from '../components/radio'
 import formItem from '../components/form-item'
@@ -153,6 +164,7 @@ export default {
     const { primaryColor, bgColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
     const { favicon } = useFavicon()
+    const { toolbar } = useToolbar()
     function clearIconCache () {
       if (window.confirm('确认要清除图标的缓存吗', )) {
         delSession('iconCache')
@@ -173,6 +185,7 @@ export default {
       alignList,
       align,
       favicon,
+      toolbar,
       primaryColor,
       bgColor,
       primaryTextColor,

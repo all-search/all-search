@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="favicon === 1"
-    class="as-url-icon">
+    class="as-img-icon">
     <img
       :class="{error: isError}"
       :src="img"
@@ -83,10 +83,7 @@ export default {
 </script>
 
 <style lang="scss">
-.as-url-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 10px;
+.as-img-icon {
   border: none;
   position: relative;
   font-size: 0;

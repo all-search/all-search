@@ -26,6 +26,10 @@
             index="/config/edit">
             编辑
           </el-menu-item>
+          <el-menu-item
+            index="/config/toolbar">
+            工具栏
+          </el-menu-item>
         </el-menu>
       </div>
       <a class="gh-btn"

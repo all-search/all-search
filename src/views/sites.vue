@@ -37,22 +37,28 @@
               </el-icon>
             </el-button>
           </el-button-group>
-          <el-button
-            :type="cate.data.visible ? 'primary': 'info'"
-            plain
-            @click="changeVisible(cate.data)">
-            <el-icon>
-              <View/>
-            </el-icon>
-          </el-button>
-          <el-button
-            plain
-            type="danger"
-            @click="removeTab(cate.name)">
-            <el-icon>
-              <Remove/>
-            </el-icon>
-          </el-button>
+          <el-tooltip
+            content="展示隐藏"
+            placement="top">
+            <el-button
+              :type="cate.data.visible ? 'primary': 'info'"
+              plain
+              @click="changeVisible(cate.data)">
+              <el-icon>
+                <View/>
+              </el-icon>
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="删除"
+            placement="top">
+            <el-button
+              plain
+              type="danger"
+              @click="removeTab(cate.name)">
+              <el-icon><Delete /></el-icon>
+            </el-button>
+          </el-tooltip>
         </div>
       </div>
       <draggable
@@ -86,9 +92,7 @@
               trigger="click"
               @command="addToPersonal($event, item)">
               <el-button>
-                <el-icon>
-                  <Plus/>
-                </el-icon>
+                <el-icon><Plus/></el-icon>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -101,23 +105,30 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
-            <el-button
-              :type="item.data.visible ? 'primary': 'info'"
-              plain
-              @click="changeVisible(item.data)">
-              <el-icon>
-                <View v-if="item.data.visible"/>
-                <Hide v-else/>
-              </el-icon>
-            </el-button>
-            <el-button
-              :plain="true"
-              type="danger"
-              @click="deleteUrl(j)">
-              <el-icon>
-                <Remove/>
-              </el-icon>
-            </el-button>
+            <el-tooltip
+              content="展示隐藏"
+              placement="top">
+              <el-button
+                :type="item.data.visible ? 'primary': 'info'"
+                plain
+                @click="changeVisible(item.data)">
+                <el-icon>
+                  <View v-if="item.data.visible"/>
+                  <Hide v-else/>
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+            <el-tooltip
+              content="删除"
+              placement="top">
+              <el-button
+                title="删除"
+                :plain="true"
+                type="danger"
+                @click="deleteUrl(j)">
+                <el-icon><Delete /></el-icon>
+              </el-button>
+            </el-tooltip>
           </div>
         </div>
       </draggable>
@@ -156,9 +167,8 @@
 
 <script>
 import { VueDraggableNext } from 'vue-draggable-next'
-import { delSession, setSession, version } from '../util'
+import { delSession, setSession } from '../util'
 import { initSites } from '../util/sites'
-import sites from '../config/sites'
 
 export default {
   name: 'sites',
@@ -166,15 +176,9 @@ export default {
     draggable: VueDraggableNext
   },
   data: () => ({
-    sites,
     localSites: [],
     tab: '',
-    tabName: '',
-    dragging: false,
-    dialog: false,
-    tipsText: '',
-    isModifyCateName: false,
-    cateNameZh: ''
+    tabName: ''
   }),
   computed: {
     personalCategory () {
@@ -298,7 +302,6 @@ export default {
     },
     save () {
       setSession('sites', this.formatSites())
-      setSession('sites-version', version)
       this.$message.success('保存成功')
     }
   }

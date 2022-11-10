@@ -34,6 +34,14 @@ export default createRouter({
           meta: {
             nameZh: '网址配置'
           }
+        },
+        {
+          path: 'toolbar',
+          name: 'toolbar',
+          component: () => import('../views/toolbar'),
+          meta: {
+            nameZh: '工具栏配置'
+          }
         }
       ]
     },

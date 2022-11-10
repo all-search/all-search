@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { getSession, setSession } from '../util/index'
 
-const name = 'favicon'
+const name = 'showToolbar'
 const session = getSession(name)
 
 const getVal = val => {
@@ -10,7 +10,7 @@ const getVal = val => {
 
 const valRef = ref(getVal(session))
 
-const favicon = computed({
+const toolbar = computed({
   get: () => valRef.value,
   set: val => {
     valRef.value = val
@@ -18,9 +18,9 @@ const favicon = computed({
   }
 })
 
-export default function useFavicon () {
+export default function useToolbar () {
   return {
-    favicon
+    toolbar
   }
 }
 
