@@ -32,7 +32,7 @@ export const protectStyle = function () {
   Node.prototype.__as_hooks__ = true
 }
 
-export const addStyleForCurrentSite = function (mode, site, remove = false) {
+export const changeBodyClass = function (mode, site, remove = false) {
   const modeVal = unref(mode)
   checkBody().then(() => {
     initBodyClass(modeVal, site, remove)

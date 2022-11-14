@@ -13,7 +13,7 @@
 
 <script>
 import { computed, watch, ref, reactive, unref } from 'vue'
-import { addStyleForCurrentSite } from '../util/initStyle'
+import { changeBodyClass } from '../util/initStyle'
 import { siteInfo } from '../config/loadList'
 import { routerChange } from '../util/routerChange'
 import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
@@ -49,33 +49,32 @@ export default {
       `as-${mode.value}`,
       show.value ? 'as-show' : 'as-hide'
     ]))
+
     const visible = computed(() => {
       return !site.invisible && !unref(fullScreen)
     })
 
     function updateSite () {
-      const curSite = siteInfo(true)
-      site.url = curSite.url
-      site.invisible = curSite.invisible
-      site.disabled = curSite.disabled
-      site.style = curSite.style
-      site.selectors = curSite.selectors
-      site.query = curSite.query
+      site = Object.assign({}, site, siteInfo(true))
     }
 
     updateSite()
+
     watch([mode, show], ([newMode, newShow]) => {
-      addStyleForCurrentSite(newMode, site, !newShow)
+      changeBodyClass(newMode, site, !newShow)
     }, {
       immediate: true
     })
+
     onFullScreenChange(() => {
       fullScreen.value = isFullScreen()
     })
+
     routerChange(() => {
       updateSite()
-      addStyleForCurrentSite(mode, site, !show.value)
+      changeBodyClass(mode, site, !show.value)
     })
+
     return {
       disabled: site.disabled,
       mode,
