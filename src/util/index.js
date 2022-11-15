@@ -229,7 +229,7 @@ export function getAsRoot () {
 }
 
 export function createAsRoot () {
-  let el = document.createElement('div')
+  const el = document.createElement('div')
   el.id = 'all-search'
   return el
 }

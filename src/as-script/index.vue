@@ -1,19 +1,25 @@
 <template>
-  <div v-show="visible"
-       style="opacity: 0"
-       class="as-container"
-       :class="classList">
-    <logo :mode="mode"/>
-    <as-menu
-      :mode="mode"/>
-    <side-bar/>
-  </div>
-  <hoverBtn v-show="visible"/>
+  <template v-if="!disabled">
+    <div
+      v-show="visible"
+      style="opacity: 0"
+      class="as-container"
+      :class="classList">
+      <logo :mode="mode"/>
+      <as-menu
+        :mode="mode"/>
+      <side-bar/>
+    </div>
+    <hoverBtn v-show="visible"/>
+  </template>
 </template>
 
 <script>
 import { computed, watch, ref, reactive, unref } from 'vue'
-import { changeBodyClass } from '../util/initStyle'
+import { passTmMethods } from '../util'
+import iconfont from '../assets/iconfont'
+import { initSpecialStyle } from '../util/addSpecialStyle'
+import { changeBodyClass, protectStyle } from '../util/initStyle'
 import { siteInfo } from '../config/loadList'
 import { routerChange } from '../util/routerChange'
 import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
@@ -23,6 +29,7 @@ import logo from '../components/logo'
 import asMenu from '../components/menu'
 import sideBar from '../components/side-bar'
 import hoverBtn from '../components/hover-btn'
+
 
 export default {
   name: 'all-search',
@@ -56,23 +63,44 @@ export default {
 
     function updateSite () {
       site = Object.assign({}, site, siteInfo(true))
+      if (!site.disabled) {
+        console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
+      }
     }
 
     updateSite()
 
-    watch([mode, show], ([newMode, newShow]) => {
-      changeBodyClass(newMode, site, !newShow)
-    }, {
-      immediate: true
-    })
+    watch(
+      [mode, () => site, show],
+      ([newMode, newSite, newShow]) => {
+        changeBodyClass(newMode, newSite, !newShow)
+      },
+      {
+        immediate: true,
+        deep: true
+      }
+    )
 
     onFullScreenChange(() => {
       fullScreen.value = isFullScreen()
     })
 
+    let isInit = false
+
+    function init () {
+      if (isInit) {
+        return
+      }
+      passTmMethods()
+      protectStyle()
+      iconfont()
+      initSpecialStyle()
+      isInit = true
+    }
+
     routerChange(() => {
       updateSite()
-      changeBodyClass(mode, site, !show.value)
+      init()
     })
 
     return {
