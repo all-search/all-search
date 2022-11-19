@@ -43,7 +43,7 @@
 <script>
 import { computed, unref, ref } from 'vue'
 import popper from './popper'
-import { siteInfo } from '../config/loadList'
+import { site } from '../config/siteInfo.js'
 import { getQueryString, isMobile } from '../util/index'
 import { getKeyword } from '../util/getKeyword'
 import icon from './icon'
@@ -67,7 +67,7 @@ export default {
   },
   setup (props) {
     const isMobileRef = ref(isMobile())
-    const currentSite = siteInfo()
+    const currentSite = site
     const classList = computed(() =>
       props.mode === 'horizontal' ? 'horizontal' : 'vertical'
     )

@@ -15,13 +15,12 @@
 </template>
 
 <script>
-import { computed, watch, ref, reactive, unref } from 'vue'
+import { computed, watch, ref, unref } from 'vue'
 import { passTmMethods } from '../util'
 import iconfont from '../assets/iconfont'
 import { initSpecialStyle } from '../util/addSpecialStyle'
 import { changeBodyClass, protectStyle } from '../util/initStyle'
-import { siteInfo } from '../config/loadList'
-import { routerChange } from '../util/routerChange'
+import { site } from '../config/siteInfo'
 import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
 import useMode from '../components/useMode'
 import useSwitchShow from '../components/useSwitchShow'
@@ -42,14 +41,6 @@ export default {
   setup () {
     const fullScreen = ref(false)
     const { mode } = useMode()
-    let site = reactive({
-      url: '',
-      invisible: false,
-      disabled: false,
-      style: {},
-      keyword: null
-    })
-
     const { show } = useSwitchShow()
 
     const classList = computed(() => ([
@@ -60,15 +51,6 @@ export default {
     const visible = computed(() => {
       return !site.invisible && !unref(fullScreen)
     })
-
-    function updateSite () {
-      site = Object.assign({}, site, siteInfo(true))
-      if (!site.disabled) {
-        console.log(`all-search running 全搜运行中(${process.env.NODE_ENV})`)
-      }
-    }
-
-    updateSite()
 
     watch(
       [mode, () => site, show],
@@ -87,8 +69,8 @@ export default {
 
     let isInit = false
 
-    function init () {
-      if (isInit) {
+    function init (site) {
+      if (isInit || site.disabled) {
         return
       }
       passTmMethods()
@@ -98,9 +80,10 @@ export default {
       isInit = true
     }
 
-    routerChange(() => {
-      updateSite()
-      init()
+    watch([()=> site], ([newSite]) => {
+      init(newSite)
+    }, {
+      immediate: true
     })
 
     return {
