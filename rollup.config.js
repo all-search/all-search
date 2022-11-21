@@ -16,7 +16,7 @@ const styleInjectPath = require
 
 const isDev = process.env.NODE_ENV === 'development'
 
-const config =  {
+const config = {
   input: 'src/as-script/main.js',
   output: [
     {
@@ -68,10 +68,14 @@ const config =  {
   ]
 }
 
-function buildDev(text) {
+function buildDev (text) {
   return {
-    name: "rollup-plugin-buildDev",
-    generateBundle() {
+    name: 'rollup-plugin-buildDev',
+    generateBundle () {
+      const dist = path.join(__dirname, 'dist')
+      if (!fs.existsSync(dist)) {
+        fs.mkdirSync(dist)
+      }
       fs.writeFileSync(path.join(__dirname, `/dist/${devFileName}`), text)
     }
   }
