@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.3.10
-// @description  2022-11-21更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.3.11
+// @description  2022-11-23更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.10";
+    var version$1 = "1.3.11";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -107,26 +107,6 @@
         const r = new RegExp("(\\?|#|&)" + name + "=([^&#]*)(&|#|$)");
         const m = url.match(r);
         return decodeURIComponent(!m ? "" : m[2]);
-    }
-    function checkBody() {
-        let time = 0;
-        return new Promise((resolve, reject) => {
-            if (document && document.body) {
-                resolve();
-            } else {
-                const id = setInterval((function() {
-                    time += 1;
-                    if (document && document.body) {
-                        clearInterval(id);
-                        resolve();
-                    }
-                    if (time === 50) {
-                        clearInterval(id);
-                        reject(new Error("timeOut"));
-                    }
-                }), 200);
-            }
-        });
     }
     function getName(name) {
         if (name) {
@@ -374,13 +354,6 @@
             return output;
         };
     }
-    const initBodyClass = (mode, currentSite, remove = false) => {
-        const body = document.body;
-        body.classList.remove("body-vertical", "body-horizontal");
-        if (!remove && !currentSite.invisible && mode) {
-            body.classList.add(`body-${mode}`);
-        }
-    };
     const protectStyle = function() {
         if (Node.prototype.__as_hooks__) {
             return;
@@ -393,11 +366,13 @@
         });
         Node.prototype.__as_hooks__ = true;
     };
-    const changeBodyClass = function(mode, site, remove = false) {
-        const modeVal = Vue.unref(mode);
-        checkBody().then(() => {
-            initBodyClass(modeVal, site, remove);
-        });
+    const changeBodyStyle = function(modeRef, remove = true) {
+        const mode = Vue.unref(modeRef);
+        const el = getAsRoot();
+        el.classList.remove("body-vertical", "body-horizontal");
+        if (!remove) {
+            el.classList.add(`body-${mode}`);
+        }
     };
     var search = [ {
         nameZh: "百度",
@@ -896,6 +871,7 @@
     const routerChange = cb => {
         history.pushState = withHookAfter(history.pushState, cb);
         history.replaceState = withHookAfter(history.replaceState, cb);
+        window.addEventListener("popstate", cb);
         window.addEventListener("yt-navigate-finish", cb);
         window.addEventListener("hashchange", cb);
     };
@@ -954,8 +930,12 @@
         };
     }
     routerChange(() => {
-        site = getSite();
+        const newSite = getSite();
+        Object.keys(site).forEach(key => {
+            site[key] = newSite[key] || "";
+        });
     });
+    const isFullScreenRef = Vue.ref(false);
     function isFullScreen() {
         return document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
     }
@@ -976,6 +956,17 @@
             document.removeEventListener("mozfullscreenchange", handler);
             document.removeEventListener("MSFullscreenChange", handler);
             document.removeEventListener("resize", handleResize);
+        };
+    }
+    function useFullScreen() {
+        const removeListener = onFullScreenChange(() => {
+            isFullScreenRef.value = isFullScreen();
+        });
+        Vue.onUnmounted(() => {
+            removeListener();
+        });
+        return {
+            isFullScreen: isFullScreenRef
         };
     }
     const session$3 = getSession("mode");
@@ -3085,7 +3076,7 @@
         }, " All Search ", 34);
     }
     var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-ad24c1fe" ] ]);
-    var css = '.body-horizontal {\n  margin-top: 30px !important;\n}\n.body-horizontal [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n\n.body-vertical {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var css = '.body-horizontal + body {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",
@@ -3096,19 +3087,17 @@
             hoverBtn: hoverBtn
         },
         setup() {
-            const fullScreen = Vue.ref(false);
+            const {isFullScreen: isFullScreen} = useFullScreen();
             const {mode: mode} = useMode();
             const {show: show} = useSwitchShow();
             const classList = Vue.computed(() => [ `as-${mode.value}`, show.value ? "as-show" : "as-hide" ]);
-            const visible = Vue.computed(() => !site.invisible && !Vue.unref(fullScreen));
-            Vue.watch([ mode, () => site, show ], ([newMode, newSite, newShow]) => {
-                changeBodyClass(newMode, newSite, !newShow);
+            const visible = Vue.computed(() => !site.invisible && !Vue.unref(isFullScreen));
+            Vue.watch([ mode, () => site, show ], ([newMode, site, newShow]) => {
+                const remove = site.invisible || site.disabled || !newShow;
+                changeBodyStyle(newMode, remove);
             }, {
                 immediate: true,
                 deep: true
-            });
-            onFullScreenChange(() => {
-                fullScreen.value = isFullScreen();
             });
             let isInit = false;
             function init(site) {
@@ -3121,7 +3110,7 @@
                 initSpecialStyle();
                 isInit = true;
             }
-            Vue.watch([ () => site ], ([newSite]) => {
+            Vue.watch(site, newSite => {
                 init(newSite);
             }, {
                 immediate: true
