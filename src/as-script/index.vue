@@ -11,13 +11,13 @@
       <side-bar/>
     </div>
     <hoverBtn v-show="visible"/>
+    <iconfont/>
   </template>
 </template>
 
 <script>
 import { computed, watch, unref } from 'vue'
 import { passTmMethods } from '../util'
-import iconfont from '../assets/iconfont'
 import { initSpecialStyle } from '../util/addSpecialStyle'
 import { changeBodyStyle, protectStyle } from '../util/initStyle'
 import { site } from '../config/siteInfo'
@@ -28,6 +28,7 @@ import logo from '../components/logo'
 import asMenu from '../components/menu'
 import sideBar from '../components/side-bar'
 import hoverBtn from '../components/hover-btn'
+import iconfont from '../components/iconfont'
 
 
 export default {
@@ -36,7 +37,8 @@ export default {
     logo,
     asMenu,
     sideBar,
-    hoverBtn
+    hoverBtn,
+    iconfont
   },
   setup () {
     const { isFullScreen } = useFullScreen()
@@ -72,7 +74,6 @@ export default {
       }
       passTmMethods()
       protectStyle()
-      iconfont()
       initSpecialStyle()
       isInit = true
     }
