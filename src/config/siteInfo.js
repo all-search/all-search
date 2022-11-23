@@ -63,7 +63,10 @@ function getSite () {
 }
 
 routerChange(() => {
-  site = getSite()
+  const newSite = getSite()
+  Object.keys(site).forEach(key => {
+    site[key] = newSite[key] || ''
+  })
 })
 
 

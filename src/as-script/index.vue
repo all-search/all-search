@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import { computed, watch, ref, unref } from 'vue'
+import { computed, watch, unref } from 'vue'
 import { passTmMethods } from '../util'
 import iconfont from '../assets/iconfont'
 import { initSpecialStyle } from '../util/addSpecialStyle'
-import { changeBodyClass, protectStyle } from '../util/initStyle'
+import { changeBodyStyle, protectStyle } from '../util/initStyle'
 import { site } from '../config/siteInfo'
-import { onFullScreenChange, isFullScreen } from '../util/fullScreen'
+import { useFullScreen } from '../util/fullScreen'
 import useMode from '../components/useMode'
 import useSwitchShow from '../components/useSwitchShow'
 import logo from '../components/logo'
@@ -39,7 +39,7 @@ export default {
     hoverBtn
   },
   setup () {
-    const fullScreen = ref(false)
+    const { isFullScreen } = useFullScreen()
     const { mode } = useMode()
     const { show } = useSwitchShow()
 
@@ -49,23 +49,20 @@ export default {
     ]))
 
     const visible = computed(() => {
-      return !site.invisible && !unref(fullScreen)
+      return !site.invisible && !unref(isFullScreen)
     })
 
     watch(
       [mode, () => site, show],
-      ([newMode, newSite, newShow]) => {
-        changeBodyClass(newMode, newSite, !newShow)
+      ([newMode, site, newShow]) => {
+        const remove = site.invisible || site.disabled || !newShow
+        changeBodyStyle(newMode, remove)
       },
       {
         immediate: true,
         deep: true
       }
     )
-
-    onFullScreenChange(() => {
-      fullScreen.value = isFullScreen()
-    })
 
     let isInit = false
 
@@ -80,7 +77,7 @@ export default {
       isInit = true
     }
 
-    watch([()=> site], ([newSite]) => {
+    watch(site, newSite => {
       init(newSite)
     }, {
       immediate: true
@@ -99,7 +96,7 @@ export default {
 <style lang="scss">
 @import "../assets/common.scss";
 
-.body-horizontal {
+.body-horizontal + body {
   margin-top: $height !important;
 
   [data-as-margin-top] {
@@ -116,7 +113,7 @@ export default {
   }
 }
 
-.body-vertical {
+.body-vertical + body {
   margin-left: $verticalWidth !important;
 }
 

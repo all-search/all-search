@@ -1,18 +1,10 @@
 import { unref } from 'vue'
 import {
-  checkBody
+  getAsRoot
 } from './index'
 import {
   withHookBefore
 } from './hook'
-
-export const initBodyClass = (mode, currentSite, remove = false) => {
-  const body = document.body
-  body.classList.remove('body-vertical', 'body-horizontal')
-  if (!remove && !currentSite.invisible && mode) {
-    body.classList.add(`body-${mode}`)
-  }
-}
 
 export const protectStyle = function () {
   if (Node.prototype.__as_hooks__) {
@@ -32,9 +24,11 @@ export const protectStyle = function () {
   Node.prototype.__as_hooks__ = true
 }
 
-export const changeBodyClass = function (mode, site, remove = false) {
-  const modeVal = unref(mode)
-  checkBody().then(() => {
-    initBodyClass(modeVal, site, remove)
-  })
+export const changeBodyStyle = function (modeRef, remove = true) {
+  const mode = unref(modeRef)
+  const el = getAsRoot()
+  el.classList.remove('body-vertical', 'body-horizontal')
+  if (!remove) {
+    el.classList.add(`body-${mode}`)
+  }
 }

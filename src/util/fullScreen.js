@@ -1,3 +1,7 @@
+import { ref, onUnmounted } from 'vue'
+
+const isFullScreenRef = ref(false)
+
 export function openFullScreen (el) {
   if (el.requestFullscreen) {
     return el.requestFullscreen()
@@ -43,7 +47,6 @@ export function onFullScreenChange (handler) {
       handler()
     }
   }
-
   document.addEventListener('fullscreenchange', handler)
   document.addEventListener('webkitfullscreenchange', handler)
   document.addEventListener('mozfullscreenchange', handler)
@@ -56,5 +59,17 @@ export function onFullScreenChange (handler) {
     document.removeEventListener('mozfullscreenchange', handler)
     document.removeEventListener('MSFullscreenChange', handler)
     document.removeEventListener('resize', handleResize)
+  }
+}
+
+export function useFullScreen () {
+  const removeListener = onFullScreenChange(() => {
+    isFullScreenRef.value = isFullScreen()
+  })
+  onUnmounted(() => {
+    removeListener()
+  })
+  return {
+    isFullScreen: isFullScreenRef
   }
 }
