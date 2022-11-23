@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.3.11
+// @version      1.3.12
 // @description  2022-11-23更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.11";
+    var version$1 = "1.3.12";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -186,38 +186,6 @@
     const isMobile = function() {
         return /mobile|android|webos|iphone|ipod|blackberry|iphone os|ipad/i.test(navigator.userAgent);
     };
-    function iconfont(e) {
-        var t, a, l, o, h, i, n = '<svg><symbol id="icon-disk" viewBox="0 0 1024 1024"><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z"  ></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024"><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z"  ></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024"><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z"  ></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024"><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z"  ></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024"><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z"  ></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024"><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z"  ></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024"><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z"  ></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024"><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z"  ></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024"><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z"  ></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024"><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z"  ></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024"><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z"  ></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024"><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z"  ></path></symbol></svg>', v = (v = document.getElementsByTagName("script"))[v.length - 1].getAttribute("data-injectcss");
-        if (v && !e.__iconfont__svg__cssinject__) {
-            e.__iconfont__svg__cssinject__ = !0;
-            try {
-                document.write("<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>");
-            } catch (e) {
-                console && console.log(e);
-            }
-        }
-        function m() {
-            h || (h = !0, l());
-        }
-        t = function() {
-            var e, t, a;
-            (a = document.createElement("div")).innerHTML = n, n = null, (t = a.getElementsByTagName("svg")[0]) && (t.setAttribute("aria-hidden", "true"), 
-            t.style.position = "absolute", t.style.width = 0, t.style.height = 0, t.style.overflow = "hidden", 
-            e = t, (a = document.body).firstChild ? (t = a.firstChild).parentNode.insertBefore(e, t) : a.appendChild(e));
-        }, document.addEventListener ? ~[ "complete", "loaded", "interactive" ].indexOf(document.readyState) ? setTimeout(t, 0) : (a = function() {
-            document.removeEventListener("DOMContentLoaded", a, !1), t();
-        }, document.addEventListener("DOMContentLoaded", a, !1)) : document.attachEvent && (l = t, 
-        o = e.document, h = !1, (i = function() {
-            try {
-                o.documentElement.doScroll("left");
-            } catch (e) {
-                return void setTimeout(i, 50);
-            }
-            m();
-        })(), o.onreadystatechange = function() {
-            "complete" == o.readyState && (o.onreadystatechange = null, m());
-        });
-    }
     function delAsDataSet(item) {
         if (item.dataset) {
             delete item.dataset.asMarginTop;
@@ -1092,8 +1060,8 @@
             }, 0);
         }
     }
-    var css$e = "@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
-    injectStyle(css$e);
+    var css$f = "@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
+    injectStyle(css$f);
     var _export_sfc = (sfc, props) => {
         const target = sfc.__vccOpts || sfc;
         for (const [key, val] of props) {
@@ -1101,7 +1069,7 @@
         }
         return target;
     };
-    const _sfc_main$f = {
+    const _sfc_main$g = {
         name: "logo",
         props: {
             mode: {
@@ -1116,19 +1084,19 @@
             };
         }
     };
-    const _hoisted_1$9 = Vue.createElementVNode("p", {
+    const _hoisted_1$a = Vue.createElementVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    const _hoisted_2$6 = [ _hoisted_1$9 ];
-    function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_2$7 = [ _hoisted_1$a ];
+    function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
         return !$setup.isMobile ? (Vue.openBlock(), Vue.createElementBlock("a", {
             key: 0,
             class: Vue.normalizeClass([ "as-title", `as-title-${$props.mode}` ]),
             href: "https://github.com/endday/all-search",
             target: "_blank"
-        }, _hoisted_2$6, 2)) : Vue.createCommentVNode("", true);
+        }, _hoisted_2$7, 2)) : Vue.createCommentVNode("", true);
     }
-    var logo = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ] ]);
+    var logo = _export_sfc(_sfc_main$g, [ [ "render", _sfc_render$g ] ]);
     var MapShim = function() {
         if (typeof Map !== "undefined") {
             return Map;
@@ -1693,7 +1661,7 @@
         style.webkitTransform = translate;
         return style;
     };
-    const _sfc_main$e = Vue.defineComponent({
+    const _sfc_main$f = Vue.defineComponent({
         props: {
             vertical: Boolean,
             size: {
@@ -1799,7 +1767,7 @@
             };
         }
     });
-    function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createBlock(Vue.Transition, {
             name: "as-scrollbar-fade"
         }, {
@@ -1816,8 +1784,8 @@
             _: 1
         });
     }
-    var Bar = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ] ]);
-    const _sfc_main$d = Vue.defineComponent({
+    var Bar = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ] ]);
+    const _sfc_main$e = Vue.defineComponent({
         components: {
             Bar: Bar
         },
@@ -1963,13 +1931,13 @@
             };
         }
     });
-    const _hoisted_1$8 = {
+    const _hoisted_1$9 = {
         ref: "scrollbar",
         class: "as-scrollbar"
     };
-    function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_bar = Vue.resolveComponent("bar");
-        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$8, [ Vue.createElementVNode("div", {
+        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$9, [ Vue.createElementVNode("div", {
             ref: "wrap",
             class: Vue.normalizeClass([ _ctx.wrapClass, "as-scrollbar__wrap", _ctx.native ? "" : "as-scrollbar__wrap--hidden-default" ]),
             style: Vue.normalizeStyle(_ctx.renderWrapStyle),
@@ -1996,9 +1964,9 @@
             always: _ctx.always
         }, null, 8, [ "move", "ratio", "size", "always" ]) ], 64)) : Vue.createCommentVNode("", true) ], 512);
     }
-    var scrollbar = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
-    var css$d = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\n";
-    injectStyle(css$d);
+    var scrollbar = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ] ]);
+    var css$e = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\n";
+    injectStyle(css$e);
     function useTimeout() {
         let timeoutHandle;
         const registerTimeout = (fn, delay) => {
@@ -2041,9 +2009,9 @@
             window.removeEventListener("pointerdown", listener);
         };
     }
-    var css$c = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 99999;\n  position: relative;\n}\n.popover-content .arrow,\n.popover-content .arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n.popover-content .arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/*.popover-content[data-popper-placement^="bottom"] {\n  .arrow {\n    top: -10px;\n    border-width: 0 8px 10px 8px;\n    border-color: transparent transparent var(--border-color) transparent;\n    margin-left: -8px;\n\n    &::before {\n      top: 1px;\n      left: -7px;\n      border-width: 0 7px 9px 7px;\n      border-color: transparent transparent var(--background-color) transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="top"] {\n  .arrow {\n    bottom: -10px;\n    border-width: 10px 8px 0 8px;\n    border-color: var(--border-color) transparent transparent transparent;\n    margin-left: -8px;\n\n    &::before {\n      bottom: 1px;\n      left: -7px;\n      border-width: 9px 7px 0 7px;\n      border-color: var(--background-color) transparent transparent transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="left"] {\n  .arrow {\n    right: -10px;\n    margin-top: -8px;\n    border-width: 8px 0 8px 10px;\n    border-color: transparent transparent transparent var(--border-color);\n\n    &::before {\n      right: 1px;\n      top: -7px;\n      border-width: 7px 0 7px 9px;\n      border-color: transparent transparent transparent var(--background-color);\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="right"] {\n  .arrow {\n    left: -10px;\n    margin-top: -8px;\n    border-width: 8px 10px 8px 0;\n    border-color: transparent var(--border-color) transparent transparent;\n\n    &::before {\n      left: 1px;\n      top: -7px;\n      border-width: 7px 9px 7px 0;\n      border-color: transparent var(--background-color) transparent transparent;\n    }\n  }\n}*/\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
-    injectStyle(css$c);
-    const _sfc_main$c = {
+    var css$d = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 99999;\n  position: relative;\n}\n.popover-content .arrow,\n.popover-content .arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n.popover-content .arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/*.popover-content[data-popper-placement^="bottom"] {\n  .arrow {\n    top: -10px;\n    border-width: 0 8px 10px 8px;\n    border-color: transparent transparent var(--border-color) transparent;\n    margin-left: -8px;\n\n    &::before {\n      top: 1px;\n      left: -7px;\n      border-width: 0 7px 9px 7px;\n      border-color: transparent transparent var(--background-color) transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="top"] {\n  .arrow {\n    bottom: -10px;\n    border-width: 10px 8px 0 8px;\n    border-color: var(--border-color) transparent transparent transparent;\n    margin-left: -8px;\n\n    &::before {\n      bottom: 1px;\n      left: -7px;\n      border-width: 9px 7px 0 7px;\n      border-color: var(--background-color) transparent transparent transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="left"] {\n  .arrow {\n    right: -10px;\n    margin-top: -8px;\n    border-width: 8px 0 8px 10px;\n    border-color: transparent transparent transparent var(--border-color);\n\n    &::before {\n      right: 1px;\n      top: -7px;\n      border-width: 7px 0 7px 9px;\n      border-color: transparent transparent transparent var(--background-color);\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="right"] {\n  .arrow {\n    left: -10px;\n    margin-top: -8px;\n    border-width: 8px 10px 8px 0;\n    border-color: transparent var(--border-color) transparent transparent;\n\n    &::before {\n      left: 1px;\n      top: -7px;\n      border-width: 7px 9px 7px 0;\n      border-color: transparent var(--background-color) transparent transparent;\n    }\n  }\n}*/\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
+    injectStyle(css$d);
+    const _sfc_main$d = {
         props: {
             placement: {
                 type: String,
@@ -2122,8 +2090,8 @@
             };
         }
     };
-    const _hoisted_1$7 = [ "data-show", "data-initialized" ];
-    function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_1$8 = [ "data-show", "data-initialized" ];
+    function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.renderSlot(_ctx.$slots, "trigger", Vue.mergeProps({
             ref: "trigger"
         }, {
@@ -2146,11 +2114,11 @@
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
             }, [ $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
                 key: 0
-            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$7), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
+            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$8), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
             _: 3
         }) ], 64);
     }
-    var popper = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
+    var popper = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
     function findInNodeList(list) {
         return [].find.call(list, item => isVisible(item));
     }
@@ -2208,9 +2176,9 @@
         }
         console.log("没有找到搜索关键字");
     }
-    var css$b = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 0.25px 4px 0 0;\n}";
-    injectStyle(css$b);
-    const _sfc_main$b = {
+    var css$c = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 0.25px 4px 0 0;\n}";
+    injectStyle(css$c);
+    const _sfc_main$c = {
         name: "icon",
         props: {
             name: {
@@ -2219,17 +2187,17 @@
             }
         }
     };
-    const _hoisted_1$6 = {
+    const _hoisted_1$7 = {
         class: "as-icon as-menu-item-icon",
         "aria-hidden": "true"
     };
-    const _hoisted_2$5 = [ "xlink:href" ];
-    function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
-        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1$6, [ Vue.createElementVNode("use", {
+    const _hoisted_2$6 = [ "xlink:href" ];
+    function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1$7, [ Vue.createElementVNode("use", {
             "xlink:href": `#icon-${$props.name}`
-        }, null, 8, _hoisted_2$5) ]);
+        }, null, 8, _hoisted_2$6) ]);
     }
-    var icon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
+    var icon = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
     let el$1 = document.createElement("a");
     const replaceUrl = function(val) {
         const lowerCaseVal = val.toLowerCase();
@@ -2279,10 +2247,10 @@
             favicon: favicon$1
         };
     }
-    var css$a = '.as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
-    injectStyle(css$a);
+    var css$b = '.as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
+    injectStyle(css$b);
     const iconCache = Vue.reactive(getSession("iconCache") || {});
-    const _sfc_main$a = {
+    const _sfc_main$b = {
         name: "favicon",
         props: {
             url: {
@@ -2336,13 +2304,13 @@
             };
         }
     };
-    const _hoisted_1$5 = {
+    const _hoisted_1$6 = {
         key: 0,
         class: "as-url-icon"
     };
-    const _hoisted_2$4 = [ "src" ];
-    function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
-        return $setup.favicon === 1 ? (Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$5, [ Vue.createElementVNode("img", {
+    const _hoisted_2$5 = [ "src" ];
+    function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+        return $setup.favicon === 1 ? (Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$6, [ Vue.createElementVNode("img", {
             class: Vue.normalizeClass({
                 error: $setup.isError
             }),
@@ -2350,12 +2318,12 @@
             crossOrigin: "",
             onError: _cache[0] || (_cache[0] = (...args) => $setup.handleError && $setup.handleError(...args)),
             onLoad: _cache[1] || (_cache[1] = (...args) => $setup.handleLoad && $setup.handleLoad(...args))
-        }, null, 42, _hoisted_2$4) ])) : Vue.createCommentVNode("", true);
+        }, null, 42, _hoisted_2$5) ])) : Vue.createCommentVNode("", true);
     }
-    var favicon = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
-    var css$9 = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
-    injectStyle(css$9);
-    const _sfc_main$9 = {
+    var favicon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
+    var css$a = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
+    injectStyle(css$a);
+    const _sfc_main$a = {
         name: "menuItem",
         components: {
             popper: popper,
@@ -2423,14 +2391,14 @@
             };
         }
     };
-    const _hoisted_1$4 = [ "onMouseenter", "onMouseleave" ];
-    const _hoisted_2$3 = [ "textContent" ];
+    const _hoisted_1$5 = [ "onMouseenter", "onMouseleave" ];
+    const _hoisted_2$4 = [ "textContent" ];
     const _hoisted_3$3 = {
         class: "as-subMenu"
     };
     const _hoisted_4$2 = [ "onClick", "onMouseup" ];
     const _hoisted_5$1 = [ "textContent" ];
-    function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_icon = Vue.resolveComponent("icon");
         const _component_favicon = Vue.resolveComponent("favicon");
         const _component_popper = Vue.resolveComponent("popper");
@@ -2450,7 +2418,7 @@
             }, null, 8, [ "name" ]), Vue.createElementVNode("span", {
                 class: "as-menu-item-title",
                 textContent: Vue.toDisplayString($props.item.nameZh)
-            }, null, 8, _hoisted_2$3) ], 42, _hoisted_1$4) ]),
+            }, null, 8, _hoisted_2$4) ], 42, _hoisted_1$5) ]),
             default: Vue.withCtx(() => [ Vue.createElementVNode("ul", _hoisted_3$3, [ (Vue.openBlock(true), 
             Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($props.item.list, (child, i) => Vue.withDirectives((Vue.openBlock(), 
             Vue.createElementBlock("li", {
@@ -2469,7 +2437,7 @@
             _: 1
         }, 8, [ "placement" ]);
     }
-    var menuItem = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ] ]);
+    var menuItem = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
     const NAME = "align";
     const session = getSession(NAME);
     const list = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]);
@@ -2494,9 +2462,9 @@
             align: align
         };
     }
-    var css$8 = ".as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}\n\n.el-scrollbar__bar {\n  display: none;\n}";
-    injectStyle(css$8);
-    const _sfc_main$8 = {
+    var css$9 = ".as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}\n\n.el-scrollbar__bar {\n  display: none;\n}";
+    injectStyle(css$9);
+    const _sfc_main$9 = {
         name: "as-menu",
         components: {
             scrollbar: scrollbar,
@@ -2528,7 +2496,7 @@
             };
         }
     };
-    function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_menu_item = Vue.resolveComponent("menu-item");
         const _component_scrollbar = Vue.resolveComponent("scrollbar");
         return Vue.openBlock(), Vue.createBlock(_component_scrollbar, {
@@ -2549,7 +2517,7 @@
             _: 1
         });
     }
-    var asMenu = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ] ]);
+    var asMenu = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ] ]);
     const primaryColor = Vue.ref("");
     const bgColor = Vue.ref("");
     const primaryTextColor = Vue.ref("");
@@ -2596,9 +2564,9 @@
             primaryTextColor: primaryTextColor
         };
     }
-    var css$7 = ".as-overlay {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 999991;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  overflow: auto;\n}";
-    injectStyle(css$7);
-    const _sfc_main$7 = {
+    var css$8 = ".as-overlay {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 999991;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  overflow: auto;\n}";
+    injectStyle(css$8);
+    const _sfc_main$8 = {
         name: "overlay",
         setup(props, {emit: emit}) {
             let mouseDownTarget = false;
@@ -2622,7 +2590,7 @@
             };
         }
     };
-    function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("div", {
             class: "as-overlay",
             onMousedown: _cache[0] || (_cache[0] = (...args) => $setup.onMouseDown && $setup.onMouseDown(...args)),
@@ -2630,10 +2598,10 @@
             onClick: _cache[2] || (_cache[2] = (...args) => $setup.onMaskClick && $setup.onMaskClick(...args))
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 32);
     }
-    var overlay = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ] ]);
-    var css$6 = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
-    injectStyle(css$6);
-    const _sfc_main$6 = {
+    var overlay = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ] ]);
+    var css$7 = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
+    injectStyle(css$7);
+    const _sfc_main$7 = {
         name: "as-radio",
         props: {
             modelValue: {
@@ -2658,27 +2626,27 @@
             };
         }
     };
-    const _hoisted_1$3 = {
+    const _hoisted_1$4 = {
         class: "as-radio as-radio-animate"
     };
-    const _hoisted_2$2 = [ "value" ];
+    const _hoisted_2$3 = [ "value" ];
     const _hoisted_3$2 = Vue.createElementVNode("i", {
         class: "as-radio-icon"
     }, null, -1);
     const _hoisted_4$1 = {
         class: "as-radio-label"
     };
-    function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
-        return Vue.openBlock(), Vue.createElementBlock("label", _hoisted_1$3, [ Vue.withDirectives(Vue.createElementVNode("input", {
+    function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.openBlock(), Vue.createElementBlock("label", _hoisted_1$4, [ Vue.withDirectives(Vue.createElementVNode("input", {
             type: "radio",
             value: $props.label,
             "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.model = $event)
-        }, null, 8, _hoisted_2$2), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3$2, Vue.createElementVNode("span", _hoisted_4$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
+        }, null, 8, _hoisted_2$3), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3$2, Vue.createElementVNode("span", _hoisted_4$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
     }
-    var radio = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ] ]);
-    var css$5 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
-    injectStyle(css$5);
-    const _sfc_main$5 = {
+    var radio = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ] ]);
+    var css$6 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
+    injectStyle(css$6);
+    const _sfc_main$6 = {
         name: "form-item",
         props: {
             labelWidth: {
@@ -2703,21 +2671,21 @@
             };
         }
     };
-    const _hoisted_1$2 = [ "textContent" ];
-    function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_1$3 = [ "textContent" ];
+    function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("div", null, [ Vue.createElementVNode("label", {
             class: "as-label",
             style: Vue.normalizeStyle($setup.labelStyle),
             textContent: Vue.toDisplayString($props.label)
-        }, null, 12, _hoisted_1$2), Vue.createElementVNode("div", {
+        }, null, 12, _hoisted_1$3), Vue.createElementVNode("div", {
             class: "as-content",
             style: Vue.normalizeStyle($setup.contentStyle)
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 4) ]);
     }
-    var formItem = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ] ]);
-    var css$4 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
-    injectStyle(css$4);
-    const _sfc_main$4 = {
+    var formItem = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ] ]);
+    var css$5 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
+    injectStyle(css$5);
+    const _sfc_main$5 = {
         name: "xButton",
         props: {
             type: {
@@ -2726,15 +2694,15 @@
             }
         }
     };
-    function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("button", {
             class: Vue.normalizeClass([ "as-button", `as-button__${$props.type}` ])
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 2);
     }
-    var button = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
-    var css$3 = '@charset "UTF-8";\n.as-color-set .as-color-label {\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  vertical-align: middle;\n}\n.as-color-set .input—color {\n  width: 30px;\n  height: 30px;\n  padding: 4px;\n  border: 1px solid #e6e6e6;\n  border-radius: 4px;\n  background-color: var(--as-secondary-background-color);\n  box-sizing: border-box;\n}\n.as-color-set .input—color::-webkit-color-swatch {\n  border: 0;\n}\n.as-color-set .input—color::-webkit-color-swatch-wrapper {\n  padding: 0;\n}\n.as-color-set .reset-btn {\n  margin-left: 20px;\n}';
-    injectStyle(css$3);
-    const _sfc_main$3 = {
+    var button = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ] ]);
+    var css$4 = '@charset "UTF-8";\n.as-color-set .as-color-label {\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  vertical-align: middle;\n}\n.as-color-set .input—color {\n  width: 30px;\n  height: 30px;\n  padding: 4px;\n  border: 1px solid #e6e6e6;\n  border-radius: 4px;\n  background-color: var(--as-secondary-background-color);\n  box-sizing: border-box;\n}\n.as-color-set .input—color::-webkit-color-swatch {\n  border: 0;\n}\n.as-color-set .input—color::-webkit-color-swatch-wrapper {\n  padding: 0;\n}\n.as-color-set .reset-btn {\n  margin-left: 20px;\n}';
+    injectStyle(css$4);
+    const _sfc_main$4 = {
         name: "color",
         components: {
             asButton: button
@@ -2765,16 +2733,16 @@
             };
         }
     };
-    const _hoisted_1$1 = {
+    const _hoisted_1$2 = {
         class: "as-color-set"
     };
-    const _hoisted_2$1 = {
+    const _hoisted_2$2 = {
         class: "as-color-label"
     };
     const _hoisted_3$1 = Vue.createTextVNode(" 重置 ");
-    function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_asButton = Vue.resolveComponent("asButton");
-        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$1, [ Vue.createElementVNode("label", _hoisted_2$1, [ Vue.withDirectives(Vue.createElementVNode("input", {
+        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$2, [ Vue.createElementVNode("label", _hoisted_2$2, [ Vue.withDirectives(Vue.createElementVNode("input", {
             class: "input—color",
             type: "color",
             "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.model = $event)
@@ -2787,10 +2755,10 @@
             _: 1
         }, 8, [ "onClick" ]) ]);
     }
-    var color = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ] ]);
-    var css$2 = ".as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
-    injectStyle(css$2);
-    const _sfc_main$2 = {
+    var color = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
+    var css$3 = ".as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
+    injectStyle(css$3);
+    const _sfc_main$3 = {
         name: "side-bar",
         components: {
             overlay: overlay,
@@ -2835,10 +2803,10 @@
             };
         }
     };
-    const _hoisted_1 = Vue.createElementVNode("header", {
+    const _hoisted_1$1 = Vue.createElementVNode("header", {
         class: "header"
     }, " 设置 ", -1);
-    const _hoisted_2 = Vue.createTextVNode("横向 ");
+    const _hoisted_2$1 = Vue.createTextVNode("横向 ");
     const _hoisted_3 = Vue.createTextVNode("竖向 ");
     const _hoisted_4 = Vue.createTextVNode("显示 ");
     const _hoisted_5 = Vue.createTextVNode("隐藏 ");
@@ -2854,7 +2822,7 @@
         href: "https://github.com/endday/all-search/issues",
         target: "_blank"
     }, " 意见反馈 ") ], -1);
-    function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_as_radio = Vue.resolveComponent("as-radio");
         const _component_form_item = Vue.resolveComponent("form-item");
         const _component_color = Vue.resolveComponent("color");
@@ -2886,7 +2854,7 @@
                         role: "dialog",
                         class: "as-side-bar",
                         onClick: _cache[11] || (_cache[11] = Vue.withModifiers(() => {}, [ "stop" ]))
-                    }, [ _hoisted_1, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
+                    }, [ _hoisted_1$1, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
                         label: "方向"
                     }, {
                         default: Vue.withCtx(() => [ Vue.createVNode(_component_as_radio, {
@@ -2894,7 +2862,7 @@
                             modelValue: $setup.mode,
                             "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.mode = $event)
                         }, {
-                            default: Vue.withCtx(() => [ _hoisted_2 ]),
+                            default: Vue.withCtx(() => [ _hoisted_2$1 ]),
                             _: 1
                         }, 8, [ "modelValue" ]), Vue.createVNode(_component_as_radio, {
                             label: "vertical",
@@ -2998,7 +2966,7 @@
             _: 1
         }) ])) ], 64);
     }
-    var sideBar = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ] ]);
+    var sideBar = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ] ]);
     function throttle(fn, delay) {
         let canRun = true;
         return function() {
@@ -3033,9 +3001,9 @@
             direction: direction
         };
     }
-    var css$1 = "\n.as-hover-btn[data-v-ad24c1fe] {\n  position: fixed;\n  z-index: 99999;\n  font-weight: 600;\n  font-size: 17px;\n  color: var(--as-primary-color);\n  background: #fff;\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\n  border: 1px var(--as-border-color) solid;\n  opacity: 0.6;\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-ad24c1fe] {\n  top: 0;\n  left: 50%;\n  transform: translateY(0) translateX(-50%);\n  padding: 0 16px;\n  height: 28px;\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-ad24c1fe] {\n  left: 0;\n  top: 50%;\n  transform: translateY(-200%) translateX(0) rotate(90deg);\n  transform-origin: 0 100%;\n  padding: 0 16px;\n  height: 28px;\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-ad24c1fe] {\n  transition: transform 0.2s;\n  transform: translateY(-100%) translateX(-50%);\n}\n";
-    injectStyle(css$1);
-    const _sfc_main$1 = {
+    var css$2 = "\n.as-hover-btn[data-v-ad24c1fe] {\n  position: fixed;\n  z-index: 99999;\n  font-weight: 600;\n  font-size: 17px;\n  color: var(--as-primary-color);\n  background: #fff;\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\n  border: 1px var(--as-border-color) solid;\n  opacity: 0.6;\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-ad24c1fe] {\n  top: 0;\n  left: 50%;\n  transform: translateY(0) translateX(-50%);\n  padding: 0 16px;\n  height: 28px;\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-ad24c1fe] {\n  left: 0;\n  top: 50%;\n  transform: translateY(-200%) translateX(0) rotate(90deg);\n  transform-origin: 0 100%;\n  padding: 0 16px;\n  height: 28px;\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-ad24c1fe] {\n  transition: transform 0.2s;\n  transform: translateY(-100%) translateX(-50%);\n}\n";
+    injectStyle(css$2);
+    const _sfc_main$2 = {
         name: "hover-btn",
         setup() {
             let {show: show, scrollHide: scrollHide} = useSwitchShow();
@@ -3068,14 +3036,30 @@
             };
         }
     };
-    function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("div", {
             class: Vue.normalizeClass([ "as-hover-btn", $setup.className ]),
             onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.handleMouseEnter && $setup.handleMouseEnter(...args)),
             onClick: _cache[1] || (_cache[1] = (...args) => $setup.handleClick && $setup.handleClick(...args))
         }, " All Search ", 34);
     }
-    var hoverBtn = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-ad24c1fe" ] ]);
+    var hoverBtn = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ], [ "__scopeId", "data-v-ad24c1fe" ] ]);
+    var css$1 = "\n.svgfont[data-v-4f20014d] {\n  display: inline-block;\n  width: 1em;\n  height: 1em;\n  fill: currentColor;\n  vertical-align: -0.1em;\n  font-size: 16px;\n}\n";
+    injectStyle(css$1);
+    const _sfc_main$1 = {
+        name: "svg"
+    };
+    const _hoisted_1 = {
+        style: {
+            display: "none"
+        }
+    };
+    const _hoisted_2 = Vue.createStaticVNode('<symbol id="icon-disk" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z" data-v-4f20014d></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z" data-v-4f20014d></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z" data-v-4f20014d></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z" data-v-4f20014d></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z" data-v-4f20014d></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z" data-v-4f20014d></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z" data-v-4f20014d></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z" data-v-4f20014d></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z" data-v-4f20014d></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z" data-v-4f20014d></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z" data-v-4f20014d></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z" data-v-4f20014d></path></symbol>', 12);
+    const _hoisted_14 = [ _hoisted_2 ];
+    function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1, _hoisted_14);
+    }
+    var iconfont = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-4f20014d" ] ]);
     var css = '.body-horizontal + body {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
@@ -3084,7 +3068,8 @@
             logo: logo,
             asMenu: asMenu,
             sideBar: sideBar,
-            hoverBtn: hoverBtn
+            hoverBtn: hoverBtn,
+            iconfont: iconfont
         },
         setup() {
             const {isFullScreen: isFullScreen} = useFullScreen();
@@ -3106,7 +3091,6 @@
                 }
                 passTmMethods();
                 protectStyle();
-                iconfont();
                 initSpecialStyle();
                 isInit = true;
             }
@@ -3128,6 +3112,7 @@
         const _component_as_menu = Vue.resolveComponent("as-menu");
         const _component_side_bar = Vue.resolveComponent("side-bar");
         const _component_hoverBtn = Vue.resolveComponent("hoverBtn");
+        const _component_iconfont = Vue.resolveComponent("iconfont");
         return !$setup.disabled ? (Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, {
             key: 0
         }, [ Vue.withDirectives(Vue.createElementVNode("div", {
@@ -3139,7 +3124,7 @@
             mode: $setup.mode
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_as_menu, {
             mode: $setup.mode
-        }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.withDirectives(Vue.createVNode(_component_hoverBtn, null, null, 512), [ [ Vue.vShow, $setup.visible ] ]) ], 64)) : Vue.createCommentVNode("", true);
+        }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.withDirectives(Vue.createVNode(_component_hoverBtn, null, null, 512), [ [ Vue.vShow, $setup.visible ] ]), Vue.createVNode(_component_iconfont) ], 64)) : Vue.createCommentVNode("", true);
     }
     var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ] ]);
     const el = getAsRoot();
