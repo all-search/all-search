@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.3.12
-// @description  2022-11-23更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.3.13
+// @description  2022-11-24更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -22,8 +22,129 @@
 
 (function() {
     "use strict";
+    function delAsDataSet(item) {
+        if (item.dataset) {
+            delete item.dataset.asMarginTop;
+            delete item.dataset.asTransform;
+            delete item.dataset.asBorderTop;
+        }
+    }
+    function getParent(el) {
+        let current = el;
+        while (current.offsetParent) {
+            if (current.offsetParent.tagName === "BODY") {
+                return current;
+            } else {
+                current = current.offsetParent;
+            }
+        }
+        const style = window.getComputedStyle(current);
+        if (style.position !== "fixed") {
+            delAsDataSet(current);
+            return null;
+        }
+        return current;
+    }
+    function getRealFixedNode(item) {
+        const style = window.getComputedStyle(item);
+        const position = style.getPropertyValue("position");
+        const display = style.getPropertyValue("display");
+        if (display === "none") {
+            return null;
+        } else if (position === "fixed") {
+            return item;
+        } else if (position === "absolute") {
+            return getParent(item);
+        } else {
+            return null;
+        }
+    }
+    function changeStyle(item) {
+        if (!item) {
+            return;
+        }
+        const style = window.getComputedStyle(item);
+        const styleMap = item.computedStyleMap && item.computedStyleMap();
+        const top = styleMap ? styleMap.get("top").value : null;
+        if (top === "auto") {
+            return;
+        }
+        if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
+            return;
+        }
+        const marginTop = style.marginTop;
+        const transform = style.transform;
+        if (marginTop === "0px") {
+            item.dataset.asMarginTop = "1";
+        } else if (transform === "none") {
+            item.dataset.asTransform = "1";
+        } else {
+            item.dataset.asBorderTop = "1";
+        }
+        item.dataset.asHasSet = (parseInt(item.dataset.asHasSet) || 0) + 1;
+    }
+    let isSelfChange = false;
+    function getFixedNodeList(list, deep = false) {
+        const weakSet = new WeakSet;
+        const newList = [];
+        const nodes = list.filter(item => item).map(item => {
+            delAsDataSet(item);
+            if (deep) {
+                const nodes = Array.from(item.querySelectorAll("*"));
+                nodes.map(item => {
+                    delAsDataSet(item);
+                    return getRealFixedNode(item);
+                }).filter(item => item).forEach(item => {
+                    if (!weakSet.has(item)) {
+                        newList.push(item);
+                        weakSet.add(item);
+                    }
+                });
+            }
+            return getRealFixedNode(item);
+        }).filter(item => item);
+        nodes.forEach(item => {
+            if (!weakSet.has(item)) {
+                newList.push(item);
+                weakSet.add(item);
+            }
+        });
+        return newList;
+    }
+    function fixedDomPosition() {
+        const nodes = Array.from(document.body.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
+        getFixedNodeList(nodes).forEach(item => {
+            changeStyle(item);
+        });
+    }
+    function mutationObserver() {
+        const targetNode = document;
+        const config = {
+            attributes: true,
+            childList: true,
+            subtree: true,
+            attributeFilter: [ "style", "class" ]
+        };
+        const callback = function(mutationsList) {
+            if (isSelfChange) {
+                isSelfChange = false;
+            } else {
+                isSelfChange = true;
+                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
+                getFixedNodeList(filterNodes, true).forEach(item => {
+                    changeStyle(item);
+                });
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+    }
+    function initSpecialStyle() {
+        fixedDomPosition();
+        mutationObserver();
+    }
     var name$1 = "all-search";
-    var version$1 = "1.3.12";
+    var version$1 = "1.3.13";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -48,7 +169,7 @@
         "@popperjs/core": "^2.9.2",
         axios: "^0.21.1",
         "core-js": "^3.9.1",
-        "element-plus": "^2.2.0",
+        "element-plus": "^2.2.22",
         jsoneditor: "^9.9.0",
         "resize-observer-polyfill": "^1.5.1",
         vue: "^3.2.36",
@@ -186,127 +307,6 @@
     const isMobile = function() {
         return /mobile|android|webos|iphone|ipod|blackberry|iphone os|ipad/i.test(navigator.userAgent);
     };
-    function delAsDataSet(item) {
-        if (item.dataset) {
-            delete item.dataset.asMarginTop;
-            delete item.dataset.asTransform;
-            delete item.dataset.asBorderTop;
-        }
-    }
-    function getParent(el) {
-        let current = el;
-        while (current.offsetParent) {
-            if (current.offsetParent.tagName === "BODY") {
-                return current;
-            } else {
-                current = current.offsetParent;
-            }
-        }
-        const style = window.getComputedStyle(current);
-        if (style.position !== "fixed") {
-            delAsDataSet(current);
-            return null;
-        }
-        return current;
-    }
-    function getRealFixedNode(item) {
-        const style = window.getComputedStyle(item);
-        const position = style.getPropertyValue("position");
-        const display = style.getPropertyValue("display");
-        if (display === "none") {
-            return null;
-        } else if (position === "fixed") {
-            return item;
-        } else if (position === "absolute") {
-            return getParent(item);
-        } else {
-            return null;
-        }
-    }
-    function changeStyle(item) {
-        if (!item) {
-            return;
-        }
-        const style = window.getComputedStyle(item);
-        const styleMap = item.computedStyleMap && item.computedStyleMap();
-        const top = styleMap ? styleMap.get("top").value : null;
-        if (top === "auto") {
-            return;
-        }
-        if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
-            return;
-        }
-        const marginTop = style.marginTop;
-        const transform = style.transform;
-        if (marginTop === "0px") {
-            item.dataset.asMarginTop = "1";
-        } else if (transform === "none") {
-            item.dataset.asTransform = "1";
-        } else {
-            item.dataset.asBorderTop = "1";
-        }
-        item.dataset.asHasSet = (parseInt(item.dataset.asHasSet) || 0) + 1;
-    }
-    let isSelfChange = false;
-    function getFixedNodeList(list, deep = false) {
-        const weakSet = new WeakSet;
-        const newList = [];
-        const nodes = list.filter(item => item).map(item => {
-            delAsDataSet(item);
-            if (deep) {
-                const nodes = Array.from(item.querySelectorAll("*"));
-                nodes.map(item => {
-                    delAsDataSet(item);
-                    return getRealFixedNode(item);
-                }).filter(item => item).forEach(item => {
-                    if (!weakSet.has(item)) {
-                        newList.push(item);
-                        weakSet.add(item);
-                    }
-                });
-            }
-            return getRealFixedNode(item);
-        }).filter(item => item);
-        nodes.forEach(item => {
-            if (!weakSet.has(item)) {
-                newList.push(item);
-                weakSet.add(item);
-            }
-        });
-        return newList;
-    }
-    function fixedDomPosition() {
-        const nodes = Array.from(document.body.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
-        getFixedNodeList(nodes).forEach(item => {
-            changeStyle(item);
-        });
-    }
-    function mutationObserver() {
-        const targetNode = document;
-        const config = {
-            attributes: true,
-            childList: true,
-            subtree: true,
-            attributeFilter: [ "style", "class" ]
-        };
-        const callback = function(mutationsList) {
-            if (isSelfChange) {
-                isSelfChange = false;
-            } else {
-                isSelfChange = true;
-                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
-                getFixedNodeList(filterNodes, true).forEach(item => {
-                    changeStyle(item);
-                });
-            }
-        };
-        const observer = new MutationObserver(callback);
-        observer.observe(targetNode, config);
-    }
-    function initSpecialStyle() {
-        fixedDomPosition();
-        mutationObserver();
-    }
     function withHookBefore(originalFn, hookFn) {
         return function() {
             if (hookFn.apply(this, arguments) === false) {
@@ -1060,7 +1060,7 @@
             }, 0);
         }
     }
-    var css$f = "@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
+    var css$f = ".row {\n  display: flex;\n}\n\n.column {\n  display: flex;\n  flex-direction: column;\n}\n\n.col {\n  flex: 1;\n}\n\n.row.items-center, .column.items-center {\n  align-items: center;\n}\n\n.row.items-end, .column.items-end {\n  align-items: flex-end;\n}\n\n.row.items-stretch, .column.items-stretch {\n  align-items: stretch;\n}\n\n.row.justify-center, .column.justify-center {\n  justify-content: center;\n}\n\n.row.justify-end, .column.justify-end {\n  justify-content: flex-end;\n}\n\n.row.justify-between, .column.justify-between {\n  justify-content: space-between;\n}\n\n.row.flex-wrap {\n  flex-wrap: wrap;\n}\n\n.row.content-center {\n  align-content: center;\n}\n\n.row.content-end {\n  align-content: end;\n}\n\n@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
     injectStyle(css$f);
     var _export_sfc = (sfc, props) => {
         const target = sfc.__vccOpts || sfc;
@@ -2321,7 +2321,7 @@
         }, null, 42, _hoisted_2$5) ])) : Vue.createCommentVNode("", true);
     }
     var favicon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
-    var css$a = '.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
+    var css$a = '.row {\n  display: flex;\n}\n\n.column {\n  display: flex;\n  flex-direction: column;\n}\n\n.col {\n  flex: 1;\n}\n\n.row.items-center, .column.items-center {\n  align-items: center;\n}\n\n.row.items-end, .column.items-end {\n  align-items: flex-end;\n}\n\n.row.items-stretch, .column.items-stretch {\n  align-items: stretch;\n}\n\n.row.justify-center, .column.justify-center {\n  justify-content: center;\n}\n\n.row.justify-end, .column.justify-end {\n  justify-content: flex-end;\n}\n\n.row.justify-between, .column.justify-between {\n  justify-content: space-between;\n}\n\n.row.flex-wrap {\n  flex-wrap: wrap;\n}\n\n.row.content-center {\n  align-content: center;\n}\n\n.row.content-end {\n  align-content: end;\n}\n\n.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
     injectStyle(css$a);
     const _sfc_main$a = {
         name: "menuItem",
@@ -2462,7 +2462,7 @@
             align: align
         };
     }
-    var css$9 = ".as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}\n\n.el-scrollbar__bar {\n  display: none;\n}";
+    var css$9 = ".row {\n  display: flex;\n}\n\n.column {\n  display: flex;\n  flex-direction: column;\n}\n\n.col {\n  flex: 1;\n}\n\n.row.items-center, .column.items-center {\n  align-items: center;\n}\n\n.row.items-end, .column.items-end {\n  align-items: flex-end;\n}\n\n.row.items-stretch, .column.items-stretch {\n  align-items: stretch;\n}\n\n.row.justify-center, .column.justify-center {\n  justify-content: center;\n}\n\n.row.justify-end, .column.justify-end {\n  justify-content: flex-end;\n}\n\n.row.justify-between, .column.justify-between {\n  justify-content: space-between;\n}\n\n.row.flex-wrap {\n  flex-wrap: wrap;\n}\n\n.row.content-center {\n  align-content: center;\n}\n\n.row.content-end {\n  align-content: end;\n}\n\n.as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}\n\n.el-scrollbar__bar {\n  display: none;\n}";
     injectStyle(css$9);
     const _sfc_main$9 = {
         name: "as-menu",
@@ -2564,7 +2564,7 @@
             primaryTextColor: primaryTextColor
         };
     }
-    var css$8 = ".as-overlay {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 999991;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  overflow: auto;\n}";
+    var css$8 = ".row {\n  display: flex;\n}\n\n.column {\n  display: flex;\n  flex-direction: column;\n}\n\n.col {\n  flex: 1;\n}\n\n.row.items-center, .column.items-center {\n  align-items: center;\n}\n\n.row.items-end, .column.items-end {\n  align-items: flex-end;\n}\n\n.row.items-stretch, .column.items-stretch {\n  align-items: stretch;\n}\n\n.row.justify-center, .column.justify-center {\n  justify-content: center;\n}\n\n.row.justify-end, .column.justify-end {\n  justify-content: flex-end;\n}\n\n.row.justify-between, .column.justify-between {\n  justify-content: space-between;\n}\n\n.row.flex-wrap {\n  flex-wrap: wrap;\n}\n\n.row.content-center {\n  align-content: center;\n}\n\n.row.content-end {\n  align-content: end;\n}\n\n.as-overlay {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 999991;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  overflow: auto;\n}";
     injectStyle(css$8);
     const _sfc_main$8 = {
         name: "overlay",
@@ -2756,7 +2756,7 @@
         }, 8, [ "onClick" ]) ]);
     }
     var color = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
-    var css$3 = ".as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
+    var css$3 = ".row {\n  display: flex;\n}\n\n.column {\n  display: flex;\n  flex-direction: column;\n}\n\n.col {\n  flex: 1;\n}\n\n.row.items-center, .column.items-center {\n  align-items: center;\n}\n\n.row.items-end, .column.items-end {\n  align-items: flex-end;\n}\n\n.row.items-stretch, .column.items-stretch {\n  align-items: stretch;\n}\n\n.row.justify-center, .column.justify-center {\n  justify-content: center;\n}\n\n.row.justify-end, .column.justify-end {\n  justify-content: flex-end;\n}\n\n.row.justify-between, .column.justify-between {\n  justify-content: space-between;\n}\n\n.row.flex-wrap {\n  flex-wrap: wrap;\n}\n\n.row.content-center {\n  align-content: center;\n}\n\n.row.content-end {\n  align-content: end;\n}\n\n.as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
     injectStyle(css$3);
     const _sfc_main$3 = {
         name: "side-bar",
@@ -3060,7 +3060,7 @@
         return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1, _hoisted_14);
     }
     var iconfont = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-4f20014d" ] ]);
-    var css = '.body-horizontal + body {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var css = '.row {\n  display: flex;\n}\n\n.column {\n  display: flex;\n  flex-direction: column;\n}\n\n.col {\n  flex: 1;\n}\n\n.row.items-center, .column.items-center {\n  align-items: center;\n}\n\n.row.items-end, .column.items-end {\n  align-items: flex-end;\n}\n\n.row.items-stretch, .column.items-stretch {\n  align-items: stretch;\n}\n\n.row.justify-center, .column.justify-center {\n  justify-content: center;\n}\n\n.row.justify-end, .column.justify-end {\n  justify-content: flex-end;\n}\n\n.row.justify-between, .column.justify-between {\n  justify-content: space-between;\n}\n\n.row.flex-wrap {\n  flex-wrap: wrap;\n}\n\n.row.content-center {\n  align-content: center;\n}\n\n.row.content-end {\n  align-content: end;\n}\n\n.body-horizontal + body {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",
@@ -3089,7 +3089,6 @@
                 if (isInit || site.disabled) {
                     return;
                 }
-                passTmMethods();
                 protectStyle();
                 initSpecialStyle();
                 isInit = true;
@@ -3127,6 +3126,7 @@
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.withDirectives(Vue.createVNode(_component_hoverBtn, null, null, 512), [ [ Vue.vShow, $setup.visible ] ]), Vue.createVNode(_component_iconfont) ], 64)) : Vue.createCommentVNode("", true);
     }
     var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ] ]);
+    passTmMethods();
     const el = getAsRoot();
     if (!el) {
         const app = Vue.createApp(index);
