@@ -2,7 +2,8 @@
   <jsonEditor
     :value="localSites"
     @reset="reset"
-    @save="save"/>
+    @save="save"
+    @change="change"/>
 </template>
 
 <script>
@@ -40,6 +41,9 @@ export default {
       this.localSites = val
       setSession('sites', val)
       this.$message.success('保存成功')
+    },
+    change (val) {
+      this.localSites = val
     }
   }
 }

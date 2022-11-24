@@ -5,3 +5,52 @@ $primary: #1890ff;
 $mainZIndex: 999990;
 $overlayZIndex: 999991;
 
+.row {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.col {
+  flex: 1;
+}
+
+.row.items-center, .column.items-center {
+  align-items: center;
+}
+
+.row.items-end, .column.items-end {
+  align-items: flex-end;
+}
+
+.row.items-stretch, .column.items-stretch {
+  align-items: stretch;
+}
+
+.row.justify-center, .column.justify-center {
+  justify-content: center
+}
+
+.row.justify-end, .column.justify-end {
+  justify-content: flex-end
+}
+
+.row.justify-between, .column.justify-between {
+  justify-content: space-between
+}
+
+.row.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.row.content-center {
+  align-content: center;
+}
+
+.row.content-end {
+  align-content: end;
+}
+

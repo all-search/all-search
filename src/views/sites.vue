@@ -44,7 +44,6 @@
             <el-icon>
               <View/>
             </el-icon>
-            {{ cate.data.visible ? '隐藏' : '展示' }}
           </el-button>
           <el-button
             plain
@@ -53,7 +52,6 @@
             <el-icon>
               <Remove/>
             </el-icon>
-            删除
           </el-button>
         </div>
       </div>
@@ -72,15 +70,15 @@
               <DCaret/>
             </el-icon>
           </el-button>
-          <div class="hd">
-            <el-input
-              class="input"
-              v-model="item.nameZh"/>
-          </div>
           <div class="bd">
-            <el-input
-              class="input"
-              v-model="item.url"/>
+            <div class="row">
+              <el-input
+                class="input col"
+                v-model="item.nameZh"/>
+              <el-input
+                class="input col"
+                v-model="item.url"/>
+            </div>
           </div>
           <div class="ft">
             <el-dropdown
@@ -91,7 +89,6 @@
                 <el-icon>
                   <Plus/>
                 </el-icon>
-                添加
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -109,9 +106,9 @@
               plain
               @click="changeVisible(item.data)">
               <el-icon>
-                <View/>
+                <View v-if="item.data.visible"/>
+                <Hide v-else/>
               </el-icon>
-              {{ item.data.visible ? '隐藏' : '展示' }}
             </el-button>
             <el-button
               :plain="true"
@@ -120,13 +117,12 @@
               <el-icon>
                 <Remove/>
               </el-icon>
-              删除
             </el-button>
           </div>
         </div>
       </draggable>
       <div
-        class="url-item">
+        class="url-item btn-container">
         <el-button
           @click="addNewUrl(cate)">
           添加网址
@@ -392,8 +388,8 @@ export default {
     margin-right: 10px;
   }
 
-  .input {
-    margin: 0 20px 0 0;
+  .input + .input {
+    margin-left: 10px;
   }
 
   .cate-name {
@@ -421,15 +417,10 @@ export default {
 
   .btn-container {
     box-shadow: 0 -2px 8px #f0f1f2;
-    margin-left: 220px;
-    margin-right: 20px;
+    margin: 0 20px;
     padding: 10px;
     background-color: #fff;
     border-radius: 3px 3px 0 0;
-  }
-
-  .el-button {
-    /*border-radius: 0;*/
   }
 }
 

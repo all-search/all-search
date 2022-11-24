@@ -2,9 +2,11 @@ import { createApp } from 'vue'
 import index from './index'
 import {
   createAsRoot,
-  getAsRoot
+  getAsRoot,
+  passTmMethods
 } from '../util/index'
 
+passTmMethods()
 const el = getAsRoot()
 
 if (!el) {

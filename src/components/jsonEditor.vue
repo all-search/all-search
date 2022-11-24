@@ -5,6 +5,12 @@
       <el-button
         size="small"
         type="primary"
+        @click="importFormClipboard">
+        剪贴板导入
+      </el-button>
+      <el-button
+        size="small"
+        type="primary"
         @click="reset">
         重置
       </el-button>
@@ -136,10 +142,23 @@ export default {
       })
     }
 
+    function importFormClipboard () {
+      navigator.clipboard
+        .readText()
+        .then(value => {
+          ctx.emit('change', value)
+          ElMessage.success('获取剪贴板成功')
+        })
+        .catch((v) => {
+          ElMessage.error('获取剪贴板失败: ', v)
+        })
+    }
+
     return {
       jsoneditor,
       reset,
-      save
+      save,
+      importFormClipboard
     }
   }
 }
@@ -156,8 +175,7 @@ export default {
 
   .btn-container {
     box-shadow: 0 -2px 8px #f0f1f2;
-    margin-left: 220px;
-    margin-right: 20px;
+    margin: 0 20px;
     padding: 10px;
     background-color: #fff;
     border-radius: 3px 3px 0 0;

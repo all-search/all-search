@@ -17,7 +17,6 @@
 
 <script>
 import { computed, watch, unref } from 'vue'
-import { passTmMethods } from '../util'
 import { initSpecialStyle } from '../util/addSpecialStyle'
 import { changeBodyStyle, protectStyle } from '../util/initStyle'
 import { site } from '../config/siteInfo'
@@ -72,7 +71,6 @@ export default {
       if (isInit || site.disabled) {
         return
       }
-      passTmMethods()
       protectStyle()
       initSpecialStyle()
       isInit = true
