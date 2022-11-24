@@ -5,8 +5,14 @@
       <el-button
         size="small"
         type="primary"
+        @click="exportToClipboard">
+        导出到剪贴板
+      </el-button>
+      <el-button
+        size="small"
+        type="primary"
         @click="importFormClipboard">
-        剪贴板导入
+        从剪贴板导入
       </el-button>
       <el-button
         size="small"
@@ -29,6 +35,7 @@ import { onMounted, ref, watch } from 'vue'
 import JSONEditor from 'jsoneditor'
 import 'jsoneditor/dist/jsoneditor.css'
 import { ElMessage } from 'element-plus'
+import clipboard from '../util/clipboard'
 
 export default {
   name: 'jsonEditor',
@@ -37,7 +44,7 @@ export default {
       type: [Object, Array]
     }
   },
-  emits: ['reset', 'save'],
+  emits: ['reset', 'save', 'change'],
   setup (props, ctx) {
     const jsoneditor = ref(null)
     let instance = null
@@ -142,22 +149,48 @@ export default {
       })
     }
 
+    function jsonParse (val) {
+      if (val) {
+        if (typeof val !== 'string') {
+          return val
+        } else {
+          try {
+            return JSON.parse(val)
+          } catch (e) {
+            return null
+          }
+        }
+      }
+      return null
+    }
+
     function importFormClipboard () {
       navigator.clipboard
         .readText()
         .then(value => {
-          ctx.emit('change', value)
-          ElMessage.success('获取剪贴板成功')
+          const json = jsonParse(value)
+          if (json) {
+            ctx.emit('change', json)
+            ElMessage.success('导入成功')
+          } else {
+            ElMessage.error('获取到的网址格式有误')
+          }
         })
         .catch((v) => {
           ElMessage.error('获取剪贴板失败: ', v)
         })
     }
 
+    function exportToClipboard () {
+      clipboard(JSON.stringify(props.value))
+      ElMessage.success('成功导出到剪贴板')
+    }
+
     return {
       jsoneditor,
       reset,
       save,
+      exportToClipboard,
       importFormClipboard
     }
   }
