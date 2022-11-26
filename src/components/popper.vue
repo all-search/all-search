@@ -15,7 +15,6 @@
         style="display: none"
         @mouseenter="show"
         @mouseleave="hide">
-        <!--        <div class="arrow" data-popper-arrow />-->
         <template v-if="loaded">
           <slot/>
         </template>
@@ -38,7 +37,7 @@ export default {
     },
     strategy: {
       type: String,
-      default: 'absolute'
+      default: 'fixed'
     },
     popperClass: {
       type: String,
@@ -63,21 +62,7 @@ export default {
         popover.value,
         {
           strategy: props.strategy,
-          placement: props.placement,
-          modifiers: [
-            /*{
-              name: 'arrow',
-              options: {
-                padding: 24
-              }
-            },*/
-            {
-              name: 'offset',
-              options: {
-                offset: [0, 0]
-              }
-            }
-          ]
+          placement: props.placement
         }
       )
     }
@@ -164,70 +149,6 @@ export default {
 .popover-content[data-initialized="true"] {
   display: block;
 }
-
-/*.popover-content[data-popper-placement^="bottom"] {
-  .arrow {
-    top: -10px;
-    border-width: 0 8px 10px 8px;
-    border-color: transparent transparent var(--border-color) transparent;
-    margin-left: -8px;
-
-    &::before {
-      top: 1px;
-      left: -7px;
-      border-width: 0 7px 9px 7px;
-      border-color: transparent transparent var(--background-color) transparent;
-    }
-  }
-}
-
-.popover-content[data-popper-placement^="top"] {
-  .arrow {
-    bottom: -10px;
-    border-width: 10px 8px 0 8px;
-    border-color: var(--border-color) transparent transparent transparent;
-    margin-left: -8px;
-
-    &::before {
-      bottom: 1px;
-      left: -7px;
-      border-width: 9px 7px 0 7px;
-      border-color: var(--background-color) transparent transparent transparent;
-    }
-  }
-}
-
-.popover-content[data-popper-placement^="left"] {
-  .arrow {
-    right: -10px;
-    margin-top: -8px;
-    border-width: 8px 0 8px 10px;
-    border-color: transparent transparent transparent var(--border-color);
-
-    &::before {
-      right: 1px;
-      top: -7px;
-      border-width: 7px 0 7px 9px;
-      border-color: transparent transparent transparent var(--background-color);
-    }
-  }
-}
-
-.popover-content[data-popper-placement^="right"] {
-  .arrow {
-    left: -10px;
-    margin-top: -8px;
-    border-width: 8px 10px 8px 0;
-    border-color: transparent var(--border-color) transparent transparent;
-
-    &::before {
-      left: 1px;
-      top: -7px;
-      border-width: 7px 9px 7px 0;
-      border-color: transparent var(--background-color) transparent transparent;
-    }
-  }
-}*/
 
 /* 可以为进入和离开动画设置不同的持续时间和动画函数 */
 .slide-fade-enter-active {

@@ -24,6 +24,9 @@ function getParent (el) {
 }
 
 function getRealFixedNode (item) {
+  if (!item || !isElement(item)) {
+    return null
+  }
   const style = window.getComputedStyle(item)
   const position = style.getPropertyValue('position')
   const display = style.getPropertyValue('display')
@@ -38,8 +41,15 @@ function getRealFixedNode (item) {
   }
 }
 
+function isElement (obj) {
+  return obj
+    && obj instanceof Element
+    && obj.nodeType === 1
+    && obj.tagName !== undefined
+}
+
 function changeStyle (item) {
-  if (!item) {
+  if (!item || !isElement(item)) {
     return
   }
   const style = window.getComputedStyle(item)
@@ -47,6 +57,8 @@ function changeStyle (item) {
   const top = styleMap ? styleMap.get('top').value : null
   if (top === 'auto') {
     return
+  } else if (style.top === '0px') {
+    item.style.top = '0px'
   }
   if (
     item.dataset.asMarginTop ||
@@ -57,14 +69,17 @@ function changeStyle (item) {
   }
   const marginTop = style.marginTop
   const transform = style.transform
-  if (marginTop === '0px') {
+  const transition = style.transition
+  if (marginTop === '0px' && !transition.includes('margin')) {
+    item.dataset.asHasSet = 'asMarginTop'
     item.dataset.asMarginTop = '1'
   } else if (transform === 'none') {
+    item.dataset.asHasSet = 'asTransform'
     item.dataset.asTransform = '1'
   } else {
+    item.dataset.asHasSet = 'asBorderTop'
     item.dataset.asBorderTop = '1'
   }
-  item.dataset.asHasSet = (parseInt(item.dataset.asHasSet) || 0) + 1
 }
 
 let isSelfChange = false

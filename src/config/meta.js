@@ -20,7 +20,7 @@ const meta = `// @name         ${pkg.name} 全搜，搜索引擎快捷跳转，�
 // @noframes
 // @include      *
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
-// @require      https://unpkg.com/@popperjs/core@2.11.5/dist/umd/popper-lite.min.js
+// @require      https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper-lite.min.js
 // @run-at       document-body
 // @grant        GM_getValue
 // @grant        GM_setValue
