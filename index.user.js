@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.3.13
-// @description  2022-11-24更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.3.14
+// @description  2022-11-26更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -11,7 +11,7 @@
 // @noframes
 // @include      *
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
-// @require      https://unpkg.com/@popperjs/core@2.11.5/dist/umd/popper-lite.min.js
+// @require      https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper-lite.min.js
 // @run-at       document-body
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -46,6 +46,9 @@
         return current;
     }
     function getRealFixedNode(item) {
+        if (!item || !isElement(item)) {
+            return null;
+        }
         const style = window.getComputedStyle(item);
         const position = style.getPropertyValue("position");
         const display = style.getPropertyValue("display");
@@ -59,8 +62,11 @@
             return null;
         }
     }
+    function isElement(obj) {
+        return obj && obj instanceof Element && obj.nodeType === 1 && obj.tagName !== undefined;
+    }
     function changeStyle(item) {
-        if (!item) {
+        if (!item || !isElement(item)) {
             return;
         }
         const style = window.getComputedStyle(item);
@@ -68,20 +74,25 @@
         const top = styleMap ? styleMap.get("top").value : null;
         if (top === "auto") {
             return;
+        } else if (style.top === "0px") {
+            item.style.top = "0px";
         }
         if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
             return;
         }
         const marginTop = style.marginTop;
         const transform = style.transform;
-        if (marginTop === "0px") {
+        const transition = style.transition;
+        if (marginTop === "0px" && !transition.includes("margin")) {
+            item.dataset.asHasSet = "asMarginTop";
             item.dataset.asMarginTop = "1";
         } else if (transform === "none") {
+            item.dataset.asHasSet = "asTransform";
             item.dataset.asTransform = "1";
         } else {
+            item.dataset.asHasSet = "asBorderTop";
             item.dataset.asBorderTop = "1";
         }
-        item.dataset.asHasSet = (parseInt(item.dataset.asHasSet) || 0) + 1;
     }
     let isSelfChange = false;
     function getFixedNodeList(list, deep = false) {
@@ -144,7 +155,7 @@
         mutationObserver();
     }
     var name$1 = "all-search";
-    var version$1 = "1.3.13";
+    var version$1 = "1.3.14";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -2009,7 +2020,7 @@
             window.removeEventListener("pointerdown", listener);
         };
     }
-    var css$d = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 99999;\n  position: relative;\n}\n.popover-content .arrow,\n.popover-content .arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n.popover-content .arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/*.popover-content[data-popper-placement^="bottom"] {\n  .arrow {\n    top: -10px;\n    border-width: 0 8px 10px 8px;\n    border-color: transparent transparent var(--border-color) transparent;\n    margin-left: -8px;\n\n    &::before {\n      top: 1px;\n      left: -7px;\n      border-width: 0 7px 9px 7px;\n      border-color: transparent transparent var(--background-color) transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="top"] {\n  .arrow {\n    bottom: -10px;\n    border-width: 10px 8px 0 8px;\n    border-color: var(--border-color) transparent transparent transparent;\n    margin-left: -8px;\n\n    &::before {\n      bottom: 1px;\n      left: -7px;\n      border-width: 9px 7px 0 7px;\n      border-color: var(--background-color) transparent transparent transparent;\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="left"] {\n  .arrow {\n    right: -10px;\n    margin-top: -8px;\n    border-width: 8px 0 8px 10px;\n    border-color: transparent transparent transparent var(--border-color);\n\n    &::before {\n      right: 1px;\n      top: -7px;\n      border-width: 7px 0 7px 9px;\n      border-color: transparent transparent transparent var(--background-color);\n    }\n  }\n}\n\n.popover-content[data-popper-placement^="right"] {\n  .arrow {\n    left: -10px;\n    margin-top: -8px;\n    border-width: 8px 10px 8px 0;\n    border-color: transparent var(--border-color) transparent transparent;\n\n    &::before {\n      left: 1px;\n      top: -7px;\n      border-width: 7px 9px 7px 0;\n      border-color: transparent var(--background-color) transparent transparent;\n    }\n  }\n}*/\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
+    var css$d = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 99999;\n  position: relative;\n}\n.popover-content .arrow,\n.popover-content .arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n.popover-content .arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
     injectStyle(css$d);
     const _sfc_main$d = {
         props: {
@@ -2019,7 +2030,7 @@
             },
             strategy: {
                 type: String,
-                default: "absolute"
+                default: "fixed"
             },
             popperClass: {
                 type: String,
@@ -2040,13 +2051,7 @@
                 }
                 popperInstance.value = Popper.createPopper(target, popover.value, {
                     strategy: props.strategy,
-                    placement: props.placement,
-                    modifiers: [ {
-                        name: "offset",
-                        options: {
-                            offset: [ 0, 0 ]
-                        }
-                    } ]
+                    placement: props.placement
                 });
             }
             function destroyPopover() {
