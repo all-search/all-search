@@ -5,10 +5,11 @@
     <template #trigger="{ show, hide }">
       <a class="as-menu-item no-underline"
          :class="classList"
+         ref="categoryRef"
          @mouseenter="show($event.target)"
          @mouseleave="hide"
          href="javascript:void 0"
-         @click.exact="handleCateClick(item, false, isMobile)"
+         @click.exact="handleCateClick(item, false)"
          @click.ctrl.exact="handleCateClick(item, true)"
          @click.middle.exact="handleCateClick(item, true)">
         <icon :name="item.name"/>
@@ -41,13 +42,14 @@
 </template>
 
 <script>
-import { computed, unref, ref } from 'vue'
+import { computed, ref } from 'vue'
 import popper from './popper'
 import { site } from '../config/siteInfo.js'
-import { getQueryString, isMobile } from '../util/index'
+import { getQueryString } from '../util/index'
 import { getKeyword } from '../util/getKeyword'
 import icon from './icon'
 import favicon from './favicon'
+import { onTap } from '../util/tap'
 
 export default {
   name: 'menuItem',
@@ -66,7 +68,8 @@ export default {
     }
   },
   setup (props) {
-    const isMobileRef = ref(isMobile())
+    let isTap = false
+    const categoryRef = ref(null)
     const currentSite = site
     const classList = computed(() =>
       props.mode === 'horizontal' ? 'horizontal' : 'vertical'
@@ -96,17 +99,16 @@ export default {
       }
       return keyword
     }
-    const handleCateClick = (cate, newWin, disabled) => {
+    const handleCateClick = (cate, newWin) => {
+      if (isTap) {
+        return
+      }
       const urlItem = cate.list
         .filter(item => item.data.visible)
         .find(item => item.url.indexOf(window.location.hostname) === -1)
-      handleClick(urlItem, newWin, disabled)
+      handleClick(urlItem, newWin)
     }
-    const handleClick = (item, newWin, disabled) => {
-      const disVal = unref(disabled)
-      if (disVal) {
-        return
-      }
+    const handleClick = (item, newWin) => {
       const keyword = defaultKeyword()
       if (newWin) {
         window.open(item.url.replace('%s', keyword))
@@ -115,13 +117,17 @@ export default {
       }
     }
 
+    onTap(categoryRef, () => {
+      isTap = true
+    })
+
     return {
       placement,
       classList,
       handleMenuShow,
       handleClick,
       handleCateClick,
-      isMobile: isMobileRef
+      categoryRef
     }
   }
 }
