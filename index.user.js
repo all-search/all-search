@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      1.3.14
-// @description  2022-11-26更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2022-11-27更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -22,138 +22,6 @@
 
 (function() {
     "use strict";
-    function delAsDataSet(item) {
-        if (item.dataset) {
-            delete item.dataset.asMarginTop;
-            delete item.dataset.asTransform;
-            delete item.dataset.asBorderTop;
-        }
-    }
-    function getParent(el) {
-        let current = el;
-        while (current.offsetParent) {
-            if (current.offsetParent.tagName === "BODY") {
-                return current;
-            } else {
-                current = current.offsetParent;
-            }
-        }
-        const style = window.getComputedStyle(current);
-        if (style.position !== "fixed") {
-            delAsDataSet(current);
-            return null;
-        }
-        return current;
-    }
-    function getRealFixedNode(item) {
-        if (!item || !isElement(item)) {
-            return null;
-        }
-        const style = window.getComputedStyle(item);
-        const position = style.getPropertyValue("position");
-        const display = style.getPropertyValue("display");
-        if (display === "none") {
-            return null;
-        } else if (position === "fixed") {
-            return item;
-        } else if (position === "absolute") {
-            return getParent(item);
-        } else {
-            return null;
-        }
-    }
-    function isElement(obj) {
-        return obj && obj instanceof Element && obj.nodeType === 1 && obj.tagName !== undefined;
-    }
-    function changeStyle(item) {
-        if (!item || !isElement(item)) {
-            return;
-        }
-        const style = window.getComputedStyle(item);
-        const styleMap = item.computedStyleMap && item.computedStyleMap();
-        const top = styleMap ? styleMap.get("top").value : null;
-        if (top === "auto") {
-            return;
-        } else if (style.top === "0px") {
-            item.style.top = "0px";
-        }
-        if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
-            return;
-        }
-        const marginTop = style.marginTop;
-        const transform = style.transform;
-        const transition = style.transition;
-        if (marginTop === "0px" && !transition.includes("margin")) {
-            item.dataset.asHasSet = "asMarginTop";
-            item.dataset.asMarginTop = "1";
-        } else if (transform === "none") {
-            item.dataset.asHasSet = "asTransform";
-            item.dataset.asTransform = "1";
-        } else {
-            item.dataset.asHasSet = "asBorderTop";
-            item.dataset.asBorderTop = "1";
-        }
-    }
-    let isSelfChange = false;
-    function getFixedNodeList(list, deep = false) {
-        const weakSet = new WeakSet;
-        const newList = [];
-        const nodes = list.filter(item => item).map(item => {
-            delAsDataSet(item);
-            if (deep) {
-                const nodes = Array.from(item.querySelectorAll("*"));
-                nodes.map(item => {
-                    delAsDataSet(item);
-                    return getRealFixedNode(item);
-                }).filter(item => item).forEach(item => {
-                    if (!weakSet.has(item)) {
-                        newList.push(item);
-                        weakSet.add(item);
-                    }
-                });
-            }
-            return getRealFixedNode(item);
-        }).filter(item => item);
-        nodes.forEach(item => {
-            if (!weakSet.has(item)) {
-                newList.push(item);
-                weakSet.add(item);
-            }
-        });
-        return newList;
-    }
-    function fixedDomPosition() {
-        const nodes = Array.from(document.body.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
-        getFixedNodeList(nodes).forEach(item => {
-            changeStyle(item);
-        });
-    }
-    function mutationObserver() {
-        const targetNode = document;
-        const config = {
-            attributes: true,
-            childList: true,
-            subtree: true,
-            attributeFilter: [ "style", "class" ]
-        };
-        const callback = function(mutationsList) {
-            if (isSelfChange) {
-                isSelfChange = false;
-            } else {
-                isSelfChange = true;
-                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName)).map(mutation => mutation.target);
-                getFixedNodeList(filterNodes, true).forEach(item => {
-                    changeStyle(item);
-                });
-            }
-        };
-        const observer = new MutationObserver(callback);
-        observer.observe(targetNode, config);
-    }
-    function initSpecialStyle() {
-        fixedDomPosition();
-        mutationObserver();
-    }
     var name$1 = "all-search";
     var version$1 = "1.3.14";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
@@ -318,6 +186,139 @@
     const isMobile = function() {
         return /mobile|android|webos|iphone|ipod|blackberry|iphone os|ipad/i.test(navigator.userAgent);
     };
+    function delAsDataSet(item) {
+        if (item.dataset) {
+            delete item.dataset.asMarginTop;
+            delete item.dataset.asTransform;
+            delete item.dataset.asBorderTop;
+        }
+    }
+    function getParent(el) {
+        let current = el;
+        while (current.offsetParent) {
+            if (current.offsetParent.tagName === "BODY") {
+                return current;
+            } else {
+                current = current.offsetParent;
+            }
+        }
+        const style = window.getComputedStyle(current);
+        if (style.position !== "fixed") {
+            delAsDataSet(current);
+            return null;
+        }
+        return current;
+    }
+    function getRealFixedNode(item) {
+        if (!item || !isElement(item)) {
+            return null;
+        }
+        const style = window.getComputedStyle(item);
+        const position = style.getPropertyValue("position");
+        const display = style.getPropertyValue("display");
+        if (display === "none") {
+            return null;
+        } else if (position === "fixed") {
+            return item;
+        } else if (position === "absolute") {
+            return getParent(item);
+        } else {
+            return null;
+        }
+    }
+    function isElement(obj) {
+        return obj && obj instanceof Element && obj.nodeType === 1 && obj.tagName !== undefined;
+    }
+    function changeStyle(item) {
+        if (!item || !isElement(item)) {
+            return;
+        }
+        const style = window.getComputedStyle(item);
+        const styleMap = item.computedStyleMap && item.computedStyleMap();
+        const top = styleMap ? styleMap.get("top").value : null;
+        if (top === "auto") {
+            return;
+        } else if (style.top === "0px") {
+            item.style.top = "0px";
+        }
+        if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
+            return;
+        }
+        const marginTop = style.marginTop;
+        const transform = style.transform;
+        const transition = style.transition;
+        if (marginTop === "0px" && !transition.includes("margin")) {
+            item.dataset.asHasSet = "asMarginTop";
+            item.dataset.asMarginTop = "1";
+        } else if (transform === "none") {
+            item.dataset.asHasSet = "asTransform";
+            item.dataset.asTransform = "1";
+        } else {
+            item.dataset.asHasSet = "asBorderTop";
+            item.dataset.asBorderTop = "1";
+        }
+    }
+    let isSelfChange = false;
+    function getFixedNodeList(list, deep = false) {
+        const weakSet = new WeakSet;
+        const newList = [];
+        const nodes = list.filter(item => item).map(item => {
+            delAsDataSet(item);
+            if (deep) {
+                const nodes = Array.from(item.querySelectorAll("*"));
+                nodes.map(item => {
+                    delAsDataSet(item);
+                    return getRealFixedNode(item);
+                }).filter(item => item).forEach(item => {
+                    if (!weakSet.has(item)) {
+                        newList.push(item);
+                        weakSet.add(item);
+                    }
+                });
+            }
+            return getRealFixedNode(item);
+        }).filter(item => item);
+        nodes.forEach(item => {
+            if (!weakSet.has(item)) {
+                newList.push(item);
+                weakSet.add(item);
+            }
+        });
+        return newList;
+    }
+    function fixedDomPosition() {
+        const nodes = Array.from(document.body.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
+        getFixedNodeList(nodes).forEach(item => {
+            changeStyle(item);
+        });
+    }
+    function mutationObserver() {
+        const targetNode = document.body;
+        const config = {
+            attributes: true,
+            childList: true,
+            subtree: true,
+            attributeFilter: [ "style", "class" ]
+        };
+        const callback = function(mutationsList) {
+            if (isSelfChange) {
+                isSelfChange = false;
+            } else {
+                isSelfChange = true;
+                const root = getAsRoot();
+                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName) && !root.contains(mutation.target)).map(mutation => mutation.target);
+                getFixedNodeList(filterNodes, true).forEach(item => {
+                    changeStyle(item);
+                });
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+    }
+    function initSpecialStyle() {
+        fixedDomPosition();
+        mutationObserver();
+    }
     function withHookBefore(originalFn, hookFn) {
         return function() {
             if (hookFn.apply(this, arguments) === false) {
@@ -2370,17 +2371,17 @@
                 }
                 return keyword;
             };
-            const handleCateClick = (cate, isOpen, disabled) => {
+            const handleCateClick = (cate, newWin, disabled) => {
                 const urlItem = cate.list.filter(item => item.data.visible).find(item => item.url.indexOf(window.location.hostname) === -1);
-                handleClick(urlItem, isOpen, disabled);
+                handleClick(urlItem, newWin, disabled);
             };
-            const handleClick = (item, isOpen, disabled) => {
+            const handleClick = (item, newWin, disabled) => {
                 const disVal = Vue.unref(disabled);
                 if (disVal) {
                     return;
                 }
                 const keyword = defaultKeyword();
-                if (isOpen) {
+                if (newWin) {
                     window.open(item.url.replace("%s", keyword));
                 } else {
                     window.location.href = item.url.replace("%s", keyword);
@@ -3065,7 +3066,7 @@
         return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1, _hoisted_14);
     }
     var iconfont = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-4f20014d" ] ]);
-    var css = '.row {\n  display: flex;\n}\n\n.column {\n  display: flex;\n  flex-direction: column;\n}\n\n.col {\n  flex: 1;\n}\n\n.row.items-center, .column.items-center {\n  align-items: center;\n}\n\n.row.items-end, .column.items-end {\n  align-items: flex-end;\n}\n\n.row.items-stretch, .column.items-stretch {\n  align-items: stretch;\n}\n\n.row.justify-center, .column.justify-center {\n  justify-content: center;\n}\n\n.row.justify-end, .column.justify-end {\n  justify-content: flex-end;\n}\n\n.row.justify-between, .column.justify-between {\n  justify-content: space-between;\n}\n\n.row.flex-wrap {\n  flex-wrap: wrap;\n}\n\n.row.content-center {\n  align-content: center;\n}\n\n.row.content-end {\n  align-content: end;\n}\n\n.body-horizontal + body {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var css = '.row {\n  display: flex;\n}\n\n.column {\n  display: flex;\n  flex-direction: column;\n}\n\n.col {\n  flex: 1;\n}\n\n.row.items-center, .column.items-center {\n  align-items: center;\n}\n\n.row.items-end, .column.items-end {\n  align-items: flex-end;\n}\n\n.row.items-stretch, .column.items-stretch {\n  align-items: stretch;\n}\n\n.row.justify-center, .column.justify-center {\n  justify-content: center;\n}\n\n.row.justify-end, .column.justify-end {\n  justify-content: flex-end;\n}\n\n.row.justify-between, .column.justify-between {\n  justify-content: space-between;\n}\n\n.row.flex-wrap {\n  flex-wrap: wrap;\n}\n\n.row.content-center {\n  align-content: center;\n}\n\n.row.content-end {\n  align-content: end;\n}\n\n.body-horizontal + body {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n.body-horizontal + body [data-as-has-set] {\n  transition-duration: 0s;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",
