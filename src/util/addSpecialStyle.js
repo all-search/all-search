@@ -1,3 +1,5 @@
+import { getAsRoot } from './index'
+
 function delAsDataSet (item) {
   if (item.dataset) {
     delete item.dataset.asMarginTop
@@ -128,7 +130,7 @@ function fixedDomPosition () {
 
 function mutationObserver () {
   // 选择需要观察变动的节点
-  const targetNode = document
+  const targetNode = document.body
   // 观察器的配置（需要观察什么变动）
   const config = {
     attributes: true,
@@ -142,11 +144,13 @@ function mutationObserver () {
       isSelfChange = false
     } else {
       isSelfChange = true
+      const root = getAsRoot()
       const filterNodes = mutationsList
         .filter(mutation =>
           (mutation.type === 'attributes' && ['style', 'class', 'id'].includes(mutation.attributeName))
           || (mutation.type === 'childList' && mutation.addedNodes.length)
           && !['BODY', 'STYLE'].includes(mutation.target.tagName)
+          && !root.contains(mutation.target)
         )
         .map(mutation => mutation.target)
       getFixedNodeList(filterNodes, true).forEach(item => {

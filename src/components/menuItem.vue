@@ -96,19 +96,19 @@ export default {
       }
       return keyword
     }
-    const handleCateClick = (cate, isOpen, disabled) => {
+    const handleCateClick = (cate, newWin, disabled) => {
       const urlItem = cate.list
         .filter(item => item.data.visible)
         .find(item => item.url.indexOf(window.location.hostname) === -1)
-      handleClick(urlItem, isOpen, disabled)
+      handleClick(urlItem, newWin, disabled)
     }
-    const handleClick = (item, isOpen, disabled) => {
+    const handleClick = (item, newWin, disabled) => {
       const disVal = unref(disabled)
       if (disVal) {
         return
       }
       const keyword = defaultKeyword()
-      if (isOpen) {
+      if (newWin) {
         window.open(item.url.replace('%s', keyword))
       } else {
         window.location.href = item.url.replace('%s', keyword)

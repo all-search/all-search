@@ -110,6 +110,10 @@ export default {
     border-top: rgba(0, 0, 0, 0) $height solid;
     box-sizing: content-box;
   }
+
+  [data-as-has-set] {
+    transition-duration: 0s;
+  }
 }
 
 .body-vertical + body {
