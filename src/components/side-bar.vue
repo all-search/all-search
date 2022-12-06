@@ -27,6 +27,16 @@
               设置
             </header>
             <section>
+              <form-item label="工具栏">
+                <as-radio
+                  :label="1"
+                  v-model="toolbar">显示
+                </as-radio>
+                <as-radio
+                  :label="2"
+                  v-model="toolbar">隐藏
+                </as-radio>
+              </form-item>
               <form-item label="方向">
                 <as-radio
                   label="horizontal"
@@ -63,16 +73,6 @@
                 <as-radio
                   :label="2"
                   v-model="favicon">隐藏
-                </as-radio>
-              </form-item>
-              <form-item label="工具栏">
-                <as-radio
-                  :label="1"
-                  v-model="toolbar">显示
-                </as-radio>
-                <as-radio
-                  :label="2"
-                  v-model="toolbar">隐藏
                 </as-radio>
               </form-item>
               <form-item label="主题色">

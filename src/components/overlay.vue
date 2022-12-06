@@ -48,6 +48,5 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   overflow: auto;
-  backdrop-filter: saturate(180%) blur(3px);
 }
 </style>

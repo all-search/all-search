@@ -239,12 +239,10 @@ a.as-menu-item {
 }
 
 .as-subMenu-container {
-  //background: #fff;
+  background: var(--as-bg-color);
   border: 1px solid #e4e7ed;
   box-shadow: 0 0 12px rgba(0, 0, 0, .12);
   border-radius: 4px;
-  backdrop-filter: blur(3px);
-  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .as-subMenu {
