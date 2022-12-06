@@ -9,9 +9,15 @@
       v-for="(item, i) in list"
       :key="i"
       :url="item.url"
+      :title="item.nameZh"
       @click.exact="handleClick(item, false)"
       @click.ctrl.exact="handleClick(item, true)"
       @click.middle.exact="handleClick(item, true)"/>
+    <div class="tool-bar-item">
+      <icon
+        class="as-more-icon"
+        name="more"/>
+    </div>
   </div>
 </template>
 
@@ -22,6 +28,7 @@ import { selection } from './selection'
 import { initToolbar } from '../util/sites'
 import useToolbar from './useToolbar'
 import favicon from './favicon'
+import icon from './icon'
 
 function getSelection () {
   return window.getSelection().toString().trim()
@@ -46,7 +53,8 @@ function scrollLeft () {
 export default {
   name: 'selection-bar',
   components: {
-    favicon
+    favicon,
+    icon
   },
   setup () {
     const { toolbar: show } = useToolbar()
@@ -78,8 +86,10 @@ export default {
           const height = toolbarClientRect.bottom - toolbarClientRect.top
           const selectionRect = getSelectionRect()
           if (selectionRect) {
-            styleObj.top = scrollTop() + selectionRect.top - height - 4
-            styleObj.left = scrollLeft() + selectionRect.x - 10
+            console.log(selectionRect)
+            const { x, right, left, top } = selectionRect
+            styleObj.top = scrollTop() + top - height - 5
+            styleObj.left = scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2)
           }
         }
       })
@@ -152,13 +162,18 @@ export default {
 .tool-bar-item {
   margin: 0;
   padding: 2px;
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   border: 1px solid #FFF;
   cursor: pointer;
 
   &:hover {
     border-color: var(--as-border-color);
   }
+}
+
+.as-more-icon {
+  display: block;
+  font-size: 20px;
 }
 </style>
