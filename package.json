@@ -17,6 +17,7 @@
     "type": "git",
     "url": "git@github.com:endday/all-search.git"
   },
+  "packageManager": "pnpm@7.18.0",
   "scripts": {
     "serve": "vue-cli-service serve --fix",
     "tmServe": "vue-cli-service serve --fix --tm",
