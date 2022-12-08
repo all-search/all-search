@@ -13,11 +13,12 @@
     <hoverBtn v-show="visible"/>
     <iconfont/>
   </template>
-  <selectionBar/>
+  <selectionBar @openDialog="openDialog"/>
+  <mainDialog v-model:visible="dialogVisible"/>
 </template>
 
 <script>
-import { computed, watch, unref } from 'vue'
+import { computed, watch, unref, ref } from 'vue'
 import { initSpecialStyle } from '../util/addSpecialStyle'
 import { changeBodyStyle, protectStyle } from '../util/initStyle'
 import { site } from '../config/siteInfo'
@@ -30,6 +31,7 @@ import sideBar from '../components/side-bar'
 import hoverBtn from '../components/hover-btn'
 import iconfont from '../components/iconfont'
 import selectionBar from '../components/selection-bar'
+import mainDialog from '../components/main-dialog'
 
 export default {
   name: 'all-search',
@@ -39,7 +41,8 @@ export default {
     sideBar,
     hoverBtn,
     iconfont,
-    selectionBar
+    selectionBar,
+    mainDialog
   },
   setup () {
     const { isFullScreen } = useFullScreen()
@@ -84,11 +87,19 @@ export default {
       immediate: true
     })
 
+    const dialogVisible = ref(false)
+
+    function openDialog () {
+      dialogVisible.value = true
+    }
+
     return {
       disabled: site.disabled,
       mode,
       classList,
-      visible
+      visible,
+      dialogVisible,
+      openDialog
     }
   }
 }

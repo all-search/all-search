@@ -1,6 +1,6 @@
 <template>
   <div class="as-dialog"
-       v-show="visible">
+       v-show="localVisible">
     <div class="as-dialog-container"
          :style="style">
       <div class="as-dialog__header">
@@ -42,7 +42,7 @@ export default {
       default: ''
     }
   },
-  setup (props, context) {
+  setup (props, ctx) {
     const style = computed(() => {
       const obj = {}
       if (props.width) {
@@ -50,12 +50,19 @@ export default {
       }
       return obj
     })
+    const localVisible = computed({
+      get: () => props.visible,
+      set: value => {
+        ctx.emit('update:visible', value)
+      }
+    })
     const handleClose = () => {
-      context.emit('change', false)
+      localVisible.value = false
     }
     return {
       style,
-      handleClose
+      handleClose,
+      localVisible
     }
   }
 }
@@ -70,6 +77,7 @@ export default {
     left: 0;
     overflow: auto;
     margin: 0;
+    z-index: 99999;
     &__mask {
       position: fixed;
       left: 0;
@@ -87,6 +95,7 @@ export default {
       box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
       box-sizing: border-box;
       min-width: 50%;
+      max-width: 80%;
       z-index: 99;
       margin: 40vh auto 50px;
       transform: translateY(-40%);

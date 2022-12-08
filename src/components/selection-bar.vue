@@ -13,10 +13,13 @@
       @click.exact="handleClick(item, false)"
       @click.ctrl.exact="handleClick(item, true)"
       @click.middle.exact="handleClick(item, true)"/>
-    <div class="tool-bar-item">
+    <div
+      class="tool-bar-item"
+      @click="openMainDialog">
       <icon
         class="as-more-icon"
-        name="more"/>
+        name="more"
+      />
     </div>
   </div>
 </template>
@@ -56,7 +59,7 @@ export default {
     favicon,
     icon
   },
-  setup () {
+  setup (props, ctx) {
     const { toolbar: show } = useToolbar()
     const list = reactive(initToolbar('tm'))
     const visible = ref(false)
@@ -131,6 +134,10 @@ export default {
       }
     }
 
+    function openMainDialog () {
+      ctx.emit('open-dialog')
+    }
+
     return {
       show,
       list,
@@ -138,7 +145,8 @@ export default {
       toolbarEle,
       style,
       selectionShort,
-      handleClick
+      handleClick,
+      openMainDialog
     }
   }
 }
