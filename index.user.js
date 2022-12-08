@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      1.3.15
-// @description  2022-12-3更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2022-12-8更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -33,6 +33,7 @@
         type: "git",
         url: "git@github.com:endday/all-search.git"
     };
+    var packageManager = "pnpm@7.18.0";
     var scripts = {
         serve: "vue-cli-service serve --fix",
         tmServe: "vue-cli-service serve --fix --tm",
@@ -46,7 +47,7 @@
     var dependencies = {
         "@element-plus/icons-vue": "^2.0.4",
         "@popperjs/core": "^2.9.2",
-        axios: "^0.21.1",
+        axios: "^0.21.4",
         "core-js": "^3.9.1",
         "element-plus": "^2.2.22",
         jsoneditor: "^9.9.0",
@@ -56,6 +57,7 @@
         "vue-router": "^4.0.5"
     };
     var devDependencies = {
+        "@babel/eslint-parser": "^7.19.1",
         "@commitlint/cli": "^17.1.2",
         "@commitlint/config-conventional": "^17.1.0",
         "@rollup/plugin-babel": "^5.3.1",
@@ -63,24 +65,24 @@
         "@rollup/plugin-json": "^4.0.3",
         "@rollup/plugin-node-resolve": "^13.3.0",
         "@rollup/plugin-replace": "^4.0.0",
+        "@rollup/plugin-terser": "^0.2.0",
         "@vitejs/plugin-vue": "^2.3.3",
         "@vue/cli-plugin-babel": "^5.0.0",
         "@vue/cli-plugin-eslint": "^5.0.0",
         "@vue/cli-service": "^5.0.0",
         "@vue/compiler-sfc": "^3.0.7",
         autoprefixer: "^10.4.7",
-        "babel-eslint": "^10.1.0",
         "babel-plugin-import": "^1.13.3",
         "cross-env": "^7.0.3",
         eslint: "^7.32.0",
         "eslint-plugin-vue": "^7.7.0",
         husky: "^8.0.1",
+        "lint-staged": "^13.1.0",
         postcss: "^8.4.13",
         rollup: "^2.72.1",
         "rollup-plugin-delete": "^1.2.0",
         "rollup-plugin-external-globals": "^0.6.1",
         "rollup-plugin-styles": "^4.0.0",
-        "rollup-plugin-terser": "^5.2.0",
         sass: "^1.32.8",
         "sass-loader": "^10.1.1",
         vite: "^2.6.7"
@@ -94,7 +96,11 @@
         homepage: homepage,
         license: license,
         repository: repository,
+        packageManager: packageManager,
         scripts: scripts,
+        "lint-staged": {
+            "*.{js,vue,ts,jsx,tsx}": [ "eslint --fix" ]
+        },
         dependencies: dependencies,
         devDependencies: devDependencies
     };
@@ -262,35 +268,35 @@
     function getFixedNodeList(list, deep = false) {
         const weakSet = new WeakSet;
         const newList = [];
-        const nodes = list.filter(item => item).map(item => {
+        const nodes = list.filter((item => item)).map((item => {
             delAsDataSet(item);
             if (deep) {
                 const nodes = Array.from(item.querySelectorAll("*"));
-                nodes.map(item => {
+                nodes.map((item => {
                     delAsDataSet(item);
                     return getRealFixedNode(item);
-                }).filter(item => item).forEach(item => {
+                })).filter((item => item)).forEach((item => {
                     if (!weakSet.has(item)) {
                         newList.push(item);
                         weakSet.add(item);
                     }
-                });
+                }));
             }
             return getRealFixedNode(item);
-        }).filter(item => item);
-        nodes.forEach(item => {
+        })).filter((item => item));
+        nodes.forEach((item => {
             if (!weakSet.has(item)) {
                 newList.push(item);
                 weakSet.add(item);
             }
-        });
+        }));
         return newList;
     }
     function fixedDomPosition() {
-        const nodes = Array.from(document.body.querySelectorAll("*")).filter(item => item.tagName !== "STYLE");
-        getFixedNodeList(nodes).forEach(item => {
+        const nodes = Array.from(document.body.querySelectorAll("*")).filter((item => item.tagName !== "STYLE"));
+        getFixedNodeList(nodes).forEach((item => {
             changeStyle(item);
-        });
+        }));
     }
     function mutationObserver() {
         const targetNode = document.body;
@@ -306,10 +312,10 @@
             } else {
                 isSelfChange = true;
                 const root = getAsRoot();
-                const filterNodes = mutationsList.filter(mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName) && !root.contains(mutation.target)).map(mutation => mutation.target);
-                getFixedNodeList(filterNodes, true).forEach(item => {
+                const filterNodes = mutationsList.filter((mutation => mutation.type === "attributes" && [ "style", "class", "id" ].includes(mutation.attributeName) || mutation.type === "childList" && mutation.addedNodes.length && ![ "BODY", "STYLE" ].includes(mutation.target.tagName) && !root.contains(mutation.target))).map((mutation => mutation.target));
+                getFixedNodeList(filterNodes, true).forEach((item => {
                     changeStyle(item);
-                });
+                }));
             }
         };
         const observer = new MutationObserver(callback);
@@ -338,12 +344,12 @@
         if (Node.prototype.__as_hooks__) {
             return;
         }
-        Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, e => {
+        Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, (e => {
             if (e && e.tagName === "STYLE") {
                 return !(e.classList.contains("as-icon") || e.classList.contains("as-style") || e.classList.contains("elPopover") || e.classList.contains("elScrollbar"));
             }
             return true;
-        });
+        }));
         Node.prototype.__as_hooks__ = true;
     };
     const changeBodyStyle = function(modeRef, remove = true) {
@@ -676,18 +682,18 @@
         nameZh: "常用",
         name: "personal",
         list: []
-    } ].map(item => ({
+    } ].map((item => ({
         ...item,
         data: {
             visible: true
         },
-        list: item.list.map(child => ({
+        list: item.list.map((child => ({
             ...child,
             data: {
                 visible: true
             }
-        }))
-    }));
+        })))
+    })));
     function initSites(type) {
         let sitesData = list$2;
         const localSites = getSession("sites");
@@ -695,10 +701,10 @@
             sitesData = localSites;
         }
         if (type === "tm") {
-            sitesData = sitesData.filter(item => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible).map(item => ({
+            sitesData = sitesData.filter((item => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible)).map((item => ({
                 ...item,
                 show: false
-            }));
+            })));
         }
         return sitesData;
     }
@@ -860,15 +866,15 @@
         let targetItem = null;
         let urlObj = null;
         const curItem = new URL(window.location.href);
-        initSites("tm").some(category => {
-            category.list.find(item => {
+        initSites("tm").some((category => {
+            category.list.find((item => {
                 const menuItem = new URL(item.url);
                 if (menuItem.hostname === curItem.hostname && menuItem.pathname === curItem.pathname) {
                     targetItem = item;
                     urlObj = menuItem;
                 }
-            });
-        });
+            }));
+        }));
         if (urlObj) {
             for (const key of urlObj.searchParams.keys()) {
                 if (!curItem.searchParams.has(key)) {
@@ -879,7 +885,7 @@
         return targetItem;
     }
     function getSite() {
-        const target = list$1.find(item => item.url.test(window.location.href.toLowerCase()));
+        const target = list$1.find((item => item.url.test(window.location.href.toLowerCase())));
         const menuItem = getMenuItem();
         if (target) {
             return {
@@ -909,12 +915,12 @@
             query: null
         };
     }
-    routerChange(() => {
+    routerChange((() => {
         const newSite = getSite();
-        Object.keys(site).forEach(key => {
+        Object.keys(site).forEach((key => {
             site[key] = newSite[key] || "";
-        });
-    });
+        }));
+    }));
     const isFullScreenRef = Vue.ref(false);
     function isFullScreen() {
         return document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
@@ -939,12 +945,12 @@
         };
     }
     function useFullScreen() {
-        const removeListener = onFullScreenChange(() => {
+        const removeListener = onFullScreenChange((() => {
             isFullScreenRef.value = isFullScreen();
-        });
-        Vue.onUnmounted(() => {
+        }));
+        Vue.onUnmounted((() => {
             removeListener();
-        });
+        }));
         return {
             isFullScreen: isFullScreenRef
         };
@@ -1058,7 +1064,7 @@
             styleNode.styleSheet.cssText += styles;
             styles = "";
         } else if (!id) {
-            id = raf.setTimeout(() => {
+            id = raf.setTimeout((() => {
                 const cssNode = document.createElement("style");
                 cssNode.setAttribute("type", "text/css");
                 cssNode.classList.add("as-style");
@@ -1069,7 +1075,7 @@
                 const container = asRoot || document.body || document.head || document.documentElement || document;
                 container.appendChild(cssNode);
                 id = null;
-            }, 0);
+            }), 0);
         }
     }
     var css$f = "#all-search .row {\n  display: flex;\n}\n#all-search .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end {\n  align-content: end;\n}\n\n@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
@@ -1588,9 +1594,9 @@
     const isString = val => typeof val === "string";
     const toObject = arr => {
         let obj = {};
-        arr.map(item => {
+        arr.map((item => {
             obj[item.key] = item.value;
-        });
+        }));
         return obj;
     };
     const SCOPE = "MElScrollbar";
@@ -1602,9 +1608,9 @@
         for (const entry of entries) {
             const listeners = entry.target.__resizeListeners__ || [];
             if (listeners.length) {
-                listeners.forEach(fn => {
+                listeners.forEach((fn => {
                     fn();
-                });
+                }));
             }
         }
     };
@@ -1700,13 +1706,13 @@
             let onselectstartStore = null;
             const {proxy: proxy} = Vue.getCurrentInstance();
             const scrollbar = proxy.$parent;
-            const bar = Vue.computed(() => BAR_MAP[props.vertical ? "vertical" : "horizontal"]);
-            const offsetRatio = Vue.computed(() => instance.value[bar.value.offset] ** 2 / scrollbar.wrap[bar.value.scrollSize] / props.ratio / thumb.value[bar.value.offset]);
-            const thumbStyle = Vue.computed(() => renderThumbStyle({
+            const bar = Vue.computed((() => BAR_MAP[props.vertical ? "vertical" : "horizontal"]));
+            const offsetRatio = Vue.computed((() => instance.value[bar.value.offset] ** 2 / scrollbar.wrap[bar.value.scrollSize] / props.ratio / thumb.value[bar.value.offset]));
+            const thumbStyle = Vue.computed((() => renderThumbStyle({
                 size: props.size,
                 move: props.move,
                 bar: bar.value
-            }));
+            })));
             const mouseMoveDocumentHandler = e => {
                 if (cursorDown === false) return;
                 const prevPage = barStore[bar.value.axis];
@@ -1757,17 +1763,17 @@
                 cursorLeave = true;
                 visible.value = cursorDown;
             };
-            Vue.onMounted(() => {
-                Vue.nextTick(() => {
+            Vue.onMounted((() => {
+                Vue.nextTick((() => {
                     on(scrollbar.scrollbar, "mousemove", mouseMoveScrollbarHandler);
                     on(scrollbar.scrollbar, "mouseleave", mouseLeaveScrollbarHandler);
-                });
-            });
-            Vue.onBeforeUnmount(() => {
+                }));
+            }));
+            Vue.onBeforeUnmount((() => {
                 off(document, "mouseup", this.mouseUpDocumentHandler);
                 off(scrollbar.scrollbar, "mousemove", this.mouseMoveScrollbarHandler);
                 off(scrollbar.scrollbar, "mouseleave", this.mouseLeaveScrollbarHandler);
-            });
+            }));
             return {
                 clickThumbHandler: clickThumbHandler,
                 clickTrackHandler: clickTrackHandler,
@@ -1783,7 +1789,7 @@
         return Vue.openBlock(), Vue.createBlock(Vue.Transition, {
             name: "as-scrollbar-fade"
         }, {
-            default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createElementVNode("div", {
+            default: Vue.withCtx((() => [ Vue.withDirectives(Vue.createElementVNode("div", {
                 ref: "instance",
                 class: Vue.normalizeClass([ "as-scrollbar__bar", "is-" + _ctx.bar.key ]),
                 onMousedown: _cache[1] || (_cache[1] = (...args) => _ctx.clickTrackHandler && _ctx.clickTrackHandler(...args))
@@ -1792,7 +1798,7 @@
                 class: "as-scrollbar__thumb",
                 style: Vue.normalizeStyle(_ctx.thumbStyle),
                 onMousedown: _cache[0] || (_cache[0] = (...args) => _ctx.clickThumbHandler && _ctx.clickThumbHandler(...args))
-            }, null, 36) ], 34), [ [ Vue.vShow, _ctx.always || _ctx.visible ] ]) ]),
+            }, null, 36) ], 34), [ [ Vue.vShow, _ctx.always || _ctx.visible ] ]) ])),
             _: 1
         });
     }
@@ -1857,7 +1863,7 @@
             const ratioX = Vue.ref(1);
             const SCOPE = "AScrollbar";
             const GAP = 4;
-            const renderWrapStyle = Vue.computed(() => {
+            const renderWrapStyle = Vue.computed((() => {
                 let style = props.wrapStyle;
                 if (isArray(style)) {
                     style = toObject(style);
@@ -1868,7 +1874,7 @@
                     style += addUnit(props.maxHeight) ? `max-height: ${addUnit(props.maxHeight)};` : "";
                 }
                 return style;
-            });
+            }));
             const update = () => {
                 if (!wrap.value) return;
                 const offsetHeight = wrap.value.offsetHeight - GAP;
@@ -1908,7 +1914,7 @@
                 }
                 wrap.value.scrollLeft = value;
             };
-            Vue.onMounted(() => {
+            Vue.onMounted((() => {
                 if (!props.native) {
                     Vue.nextTick(update);
                 }
@@ -1916,14 +1922,14 @@
                     addResizeListener(resize.value, update);
                     addEventListener("resize", update);
                 }
-            });
-            Vue.onBeforeUnmount(() => {
+            }));
+            Vue.onBeforeUnmount((() => {
                 if (!props.noresize) {
                     removeResizeListener(resize.value, update);
                     removeEventListener("resize", this.update);
                 }
-            });
-            Vue.onUpdated(() => update());
+            }));
+            Vue.onUpdated((() => update()));
             return {
                 scrollbar: scrollbar,
                 wrap: wrap,
@@ -1959,7 +1965,7 @@
             class: Vue.normalizeClass([ "as-scrollbar__view", _ctx.viewClass ]),
             style: Vue.normalizeStyle(_ctx.viewStyle)
         }, {
-            default: Vue.withCtx(() => [ Vue.renderSlot(_ctx.$slots, "default") ]),
+            default: Vue.withCtx((() => [ Vue.renderSlot(_ctx.$slots, "default") ])),
             _: 3
         }, 8, [ "class", "style" ])) ], 38), !_ctx.native ? (Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, {
             key: 0
@@ -2002,10 +2008,10 @@
             const composedPath = event.composedPath();
             if (!el || el === event.target || composedPath.includes(el) || !shouldListen.value) return;
             if (ignore && ignore.length > 0) {
-                if (ignore.some(target => {
+                if (ignore.some((target => {
                     const el = target;
                     return el && (event.target === el || composedPath.includes(el));
-                })) return;
+                }))) return;
             }
             handler(event);
         };
@@ -2069,9 +2075,9 @@
                     });
                 }
             }
-            Vue.onUnmounted(() => {
+            Vue.onUnmounted((() => {
                 stopFn();
-            });
+            }));
             function show(target) {
                 loaded.value = true;
                 visible.value = true;
@@ -2080,10 +2086,10 @@
                 handleClickOutside(target);
             }
             function hide() {
-                registerTimeout(() => {
+                registerTimeout((() => {
                     visible.value = false;
                     destroyPopover();
-                }, 100);
+                }), 100);
             }
             return {
                 visible: visible,
@@ -2106,7 +2112,7 @@
         })), Vue.createVNode(Vue.Transition, {
             name: "slide-fade"
         }, {
-            default: Vue.withCtx(() => [ (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
+            default: Vue.withCtx((() => [ (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
                 to: "#all-search"
             }, [ Vue.withDirectives(Vue.createElementVNode("div", {
                 class: Vue.normalizeClass([ $props.popperClass, "popover-content" ]),
@@ -2120,13 +2126,13 @@
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
             }, [ $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
                 key: 0
-            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$8), [ [ Vue.vShow, $setup.visible ] ]) ])) ]),
+            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$8), [ [ Vue.vShow, $setup.visible ] ]) ])) ])),
             _: 3
         }) ], 64);
     }
     var popper = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
     function findInNodeList(list) {
-        return [].find.call(list, item => isVisible(item));
+        return [].find.call(list, (item => isVisible(item)));
     }
     function isVisible(element) {
         const style = getComputedStyle(element);
@@ -2156,17 +2162,17 @@
             }
         }
         const textInputTypes = [ "hidden", "button", "checkbox", "color", "file", "image", "radio", "range", "reset", "submit" ];
-        const selector = textInputTypes.map(t => `[type=${t}]`).join(",");
+        const selector = textInputTypes.map((t => `[type=${t}]`)).join(",");
         const firstInput = document.querySelector(`input:not(${selector}),textarea`);
         if (firstInput && isVisible(firstInput)) {
             return firstInput;
         }
         const inputSearch = document.getElementsByTagName("input");
-        const sameKeywordInput = [].find.call(inputSearch, item => {
+        const sameKeywordInput = [].find.call(inputSearch, (item => {
             if (item.value && decodeURI(window.location.pathname + window.location.search).includes(item.value)) {
                 return item;
             }
-        });
+        }));
         if (sameKeywordInput) {
             return sameKeywordInput;
         }
@@ -2271,7 +2277,7 @@
         setup(props) {
             const isError = Vue.ref(false);
             const {hostname: hostname, origin: origin} = parseUrl(props.url);
-            const img = Vue.computed(() => {
+            const img = Vue.computed((() => {
                 if (isError.value) {
                     return `${origin}/favicon.ico`;
                 } else if (iconCache[hostname]) {
@@ -2279,7 +2285,7 @@
                 } else {
                     return `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`;
                 }
-            });
+            }));
             const {favicon: favicon} = useFavicon();
             function getBase64Image(image) {
                 let canvas = document.createElement("canvas");
@@ -2359,22 +2365,22 @@
                 callback(event);
             }
         }
-        Vue.watch(target, el => {
+        Vue.watch(target, (el => {
             if (el && !hasListener) {
                 el.addEventListener("touchstart", handleTouchStart);
                 el.addEventListener("touchmove", handleTouchMove);
                 el.addEventListener("touchend", handleTouchEnd);
                 hasListener = true;
             }
-        });
-        Vue.onUnmounted(() => {
+        }));
+        Vue.onUnmounted((() => {
             const el = Vue.unref(target);
             if (el) {
                 el.removeEventListener("touchstart", handleTouchStart);
                 el.removeEventListener("touchmove", handleTouchMove);
                 el.removeEventListener("touchend", handleTouchEnd);
             }
-        });
+        }));
     };
     var css$a = '#all-search .row {\n  display: flex;\n}\n#all-search .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end {\n  align-content: end;\n}\n\n.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
     injectStyle(css$a);
@@ -2398,8 +2404,8 @@
             let isTap = false;
             const categoryRef = Vue.ref(null);
             const currentSite = site;
-            const classList = Vue.computed(() => props.mode === "horizontal" ? "horizontal" : "vertical");
-            const placement = Vue.computed(() => props.mode === "horizontal" ? "bottom-start" : "right-start");
+            const classList = Vue.computed((() => props.mode === "horizontal" ? "horizontal" : "vertical"));
+            const placement = Vue.computed((() => props.mode === "horizontal" ? "bottom-start" : "right-start"));
             const handleMenuShow = (value, item) => {
                 item.show = value;
             };
@@ -2412,11 +2418,11 @@
                         const el = document.querySelector(selectors);
                         keyword = el ? el.value : "";
                     } else if (query) {
-                        query.some(name => {
+                        query.some((name => {
                             const word = getQueryString(name);
                             keyword = word;
                             return !!word;
-                        });
+                        }));
                     }
                 }
                 return keyword;
@@ -2425,7 +2431,7 @@
                 if (isTap) {
                     return;
                 }
-                const urlItem = cate.list.filter(item => item.data.visible).find(item => item.url.indexOf(window.location.hostname) === -1);
+                const urlItem = cate.list.filter((item => item.data.visible)).find((item => item.url.indexOf(window.location.hostname) === -1));
                 handleClick(urlItem, newWin);
             };
             const handleClick = (item, newWin) => {
@@ -2436,9 +2442,9 @@
                     window.location.href = item.url.replace("%s", keyword);
                 }
             };
-            onTap(categoryRef, () => {
+            onTap(categoryRef, (() => {
                 isTap = true;
-            });
+            }));
             return {
                 placement: placement,
                 classList: classList,
@@ -2451,11 +2457,11 @@
     };
     const _hoisted_1$5 = [ "onMouseenter", "onMouseleave" ];
     const _hoisted_2$4 = [ "textContent" ];
-    const _hoisted_3$3 = {
+    const _hoisted_3$1 = {
         class: "as-subMenu"
     };
-    const _hoisted_4$2 = [ "onClick", "onMouseup" ];
-    const _hoisted_5$1 = [ "textContent" ];
+    const _hoisted_4$1 = [ "onClick", "onMouseup" ];
+    const _hoisted_5 = [ "textContent" ];
     function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_icon = Vue.resolveComponent("icon");
         const _component_favicon = Vue.resolveComponent("favicon");
@@ -2464,35 +2470,35 @@
             placement: $setup.placement,
             "popper-class": "as-subMenu-container"
         }, {
-            trigger: Vue.withCtx(({show: show, hide: hide}) => [ Vue.createElementVNode("a", {
+            trigger: Vue.withCtx((({show: show, hide: hide}) => [ Vue.createElementVNode("a", {
                 class: Vue.normalizeClass([ "as-menu-item no-underline", $setup.classList ]),
                 ref: "categoryRef",
                 onMouseenter: $event => show($event.target),
                 onMouseleave: hide,
                 href: "javascript:void 0",
-                onClick: [ _cache[0] || (_cache[0] = Vue.withModifiers($event => $setup.handleCateClick($props.item, false), [ "exact" ])), _cache[1] || (_cache[1] = Vue.withModifiers($event => $setup.handleCateClick($props.item, true), [ "ctrl", "exact" ])) ],
-                onMouseup: _cache[2] || (_cache[2] = Vue.withModifiers($event => $setup.handleCateClick($props.item, true), [ "middle", "exact" ]))
+                onClick: [ _cache[0] || (_cache[0] = Vue.withModifiers(($event => $setup.handleCateClick($props.item, false)), [ "exact" ])), _cache[1] || (_cache[1] = Vue.withModifiers(($event => $setup.handleCateClick($props.item, true)), [ "ctrl", "exact" ])) ],
+                onMouseup: _cache[2] || (_cache[2] = Vue.withModifiers(($event => $setup.handleCateClick($props.item, true)), [ "middle", "exact" ]))
             }, [ Vue.createVNode(_component_icon, {
                 name: $props.item.name
             }, null, 8, [ "name" ]), Vue.createElementVNode("span", {
                 class: "as-menu-item-title",
                 textContent: Vue.toDisplayString($props.item.nameZh)
-            }, null, 8, _hoisted_2$4) ], 42, _hoisted_1$5) ]),
-            default: Vue.withCtx(() => [ Vue.createElementVNode("ul", _hoisted_3$3, [ (Vue.openBlock(true), 
-            Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($props.item.list, (child, i) => Vue.withDirectives((Vue.openBlock(), 
+            }, null, 8, _hoisted_2$4) ], 42, _hoisted_1$5) ])),
+            default: Vue.withCtx((() => [ Vue.createElementVNode("ul", _hoisted_3$1, [ (Vue.openBlock(true), 
+            Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($props.item.list, ((child, i) => Vue.withDirectives((Vue.openBlock(), 
             Vue.createElementBlock("li", {
                 key: `${$props.item.name}_${i}`
             }, [ Vue.createElementVNode("a", {
                 href: "javascript:void 0",
-                onClick: [ Vue.withModifiers($event => $setup.handleClick(child), [ "exact" ]), Vue.withModifiers($event => $setup.handleClick(child, true), [ "ctrl", "exact" ]) ],
-                onMouseup: Vue.withModifiers($event => $setup.handleClick(child, true), [ "middle", "exact" ])
+                onClick: [ Vue.withModifiers(($event => $setup.handleClick(child)), [ "exact" ]), Vue.withModifiers(($event => $setup.handleClick(child, true)), [ "ctrl", "exact" ]) ],
+                onMouseup: Vue.withModifiers(($event => $setup.handleClick(child, true)), [ "middle", "exact" ])
             }, [ Vue.createVNode(_component_favicon, {
                 url: child.url,
                 icon: child.icon
             }, null, 8, [ "url", "icon" ]), Vue.createElementVNode("p", {
                 class: "as-subMenu-text",
                 textContent: Vue.toDisplayString(child.nameZh)
-            }, null, 8, _hoisted_5$1) ], 40, _hoisted_4$2) ])), [ [ Vue.vShow, child.data.visible ] ])), 128)) ]) ]),
+            }, null, 8, _hoisted_5) ], 40, _hoisted_4$1) ])), [ [ Vue.vShow, child.data.visible ] ]))), 128)) ]) ])),
             _: 1
         }, 8, [ "placement" ]);
     }
@@ -2543,10 +2549,10 @@
                 showTimeout: 50,
                 hideTimeout: 200
             });
-            const menuClass = Vue.computed(() => ({
+            const menuClass = Vue.computed((() => ({
                 "as-horizontal-menu": props.mode === "horizontal",
                 "as-vertical-menu": props.mode === "vertical"
-            }));
+            })));
             return {
                 sites: sites,
                 data: data,
@@ -2562,17 +2568,17 @@
             class: "as-menu-container",
             noresize: ""
         }, {
-            default: Vue.withCtx(() => [ Vue.createElementVNode("ul", {
+            default: Vue.withCtx((() => [ Vue.createElementVNode("ul", {
                 class: Vue.normalizeClass([ "as-menu", $setup.menuClass ]),
                 style: Vue.normalizeStyle({
                     justifyContent: $setup.align
                 })
-            }, [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.sites, item => (Vue.openBlock(), 
+            }, [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.sites, (item => (Vue.openBlock(), 
             Vue.createBlock(_component_menu_item, {
                 key: item.name,
                 item: item,
                 mode: $props.mode
-            }, null, 8, [ "item", "mode" ]))), 128)) ], 6) ]),
+            }, null, 8, [ "item", "mode" ])))), 128)) ], 6) ])),
             _: 1
         });
     }
@@ -2580,18 +2586,18 @@
     const primaryColor = Vue.ref("");
     const bgColor = Vue.ref("");
     const primaryTextColor = Vue.ref("");
-    Vue.watch(primaryColor, value => {
+    Vue.watch(primaryColor, (value => {
         setCssValue("primary-color", value);
         setSession("primary-color", value);
-    });
-    Vue.watch(bgColor, value => {
+    }));
+    Vue.watch(bgColor, (value => {
         setCssValue("bg-color", value);
         setSession("bg-color", value);
-    });
-    Vue.watch(primaryTextColor, value => {
+    }));
+    Vue.watch(primaryTextColor, (value => {
         setCssValue("primary-text-color", value);
         setSession("primary-text-color", value);
-    });
+    }));
     const getCssValue = name => {
         const el = document.getElementById("all-search");
         return getComputedStyle(el).getPropertyValue(`--as-${name}`).trim();
@@ -2612,11 +2618,11 @@
         colorVal.value = session;
     };
     function useColor() {
-        Vue.onMounted(() => {
+        Vue.onMounted((() => {
             initColor("primary-color", "#1890ff");
             initColor("bg-color", "#ffffff");
             initColor("primary-text-color", "#606266");
-        });
+        }));
         return {
             primaryColor: primaryColor,
             bgColor: bgColor,
@@ -2658,7 +2664,7 @@
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 32);
     }
     var overlay = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ] ]);
-    var css$7 = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
+    var css$7 = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
     injectStyle(css$7);
     const _sfc_main$7 = {
         name: "as-radio",
@@ -2689,10 +2695,10 @@
         class: "as-radio as-radio-animate"
     };
     const _hoisted_2$3 = [ "value" ];
-    const _hoisted_3$2 = Vue.createElementVNode("i", {
+    const _hoisted_3 = Vue.createElementVNode("i", {
         class: "as-radio-icon"
     }, null, -1);
-    const _hoisted_4$1 = {
+    const _hoisted_4 = {
         class: "as-radio-label"
     };
     function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
@@ -2700,7 +2706,7 @@
             type: "radio",
             value: $props.label,
             "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.model = $event)
-        }, null, 8, _hoisted_2$3), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3$2, Vue.createElementVNode("span", _hoisted_4$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
+        }, null, 8, _hoisted_2$3), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3, Vue.createElementVNode("span", _hoisted_4, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
     }
     var radio = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ] ]);
     var css$6 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
@@ -2718,12 +2724,12 @@
             }
         },
         setup(props) {
-            const labelStyle = Vue.computed(() => ({
+            const labelStyle = Vue.computed((() => ({
                 width: `${props.labelWidth}px`
-            }));
-            const contentStyle = Vue.computed(() => ({
+            })));
+            const contentStyle = Vue.computed((() => ({
                 marginLeft: `${props.labelWidth}px`
-            }));
+            })));
             return {
                 labelStyle: labelStyle,
                 contentStyle: contentStyle
@@ -2742,7 +2748,7 @@
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 4) ]);
     }
     var formItem = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ] ]);
-    var css$5 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
+    var css$5 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
     injectStyle(css$5);
     const _sfc_main$5 = {
         name: "xButton",
@@ -2798,7 +2804,6 @@
     const _hoisted_2$2 = {
         class: "as-color-label"
     };
-    const _hoisted_3$1 = Vue.createTextVNode(" 重置 ");
     function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_asButton = Vue.resolveComponent("asButton");
         return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$2, [ Vue.createElementVNode("label", _hoisted_2$2, [ Vue.withDirectives(Vue.createElementVNode("input", {
@@ -2810,12 +2815,12 @@
             type: "text",
             onClick: $setup.reset
         }, {
-            default: Vue.withCtx(() => [ _hoisted_3$1 ]),
+            default: Vue.withCtx((() => [ Vue.createTextVNode(" 重置 ") ])),
             _: 1
         }, 8, [ "onClick" ]) ]);
     }
     var color = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
-    var css$3 = "#all-search .row {\n  display: flex;\n}\n#all-search .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end {\n  align-content: end;\n}\n\n.as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  -webkit-animation: rtl-drawer-animation 0.3s linear;\n          animation: rtl-drawer-animation 0.3s linear;\n}\n\n@-webkit-keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
+    var css$3 = "#all-search .row {\n  display: flex;\n}\n#all-search .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end {\n  align-content: end;\n}\n\n.as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear;\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
     injectStyle(css$3);
     const _sfc_main$3 = {
         name: "side-bar",
@@ -2865,12 +2870,7 @@
     const _hoisted_1$1 = Vue.createElementVNode("header", {
         class: "header"
     }, " 设置 ", -1);
-    const _hoisted_2$1 = Vue.createTextVNode("横向 ");
-    const _hoisted_3 = Vue.createTextVNode("竖向 ");
-    const _hoisted_4 = Vue.createTextVNode("显示 ");
-    const _hoisted_5 = Vue.createTextVNode("隐藏 ");
-    const _hoisted_6 = Vue.createTextVNode(" 清除 ");
-    const _hoisted_7 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
+    const _hoisted_2$1 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -2901,140 +2901,140 @@
             name: "overlay",
             appear: ""
         }, {
-            default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createVNode(_component_overlay, {
+            default: Vue.withCtx((() => [ Vue.withDirectives(Vue.createVNode(_component_overlay, {
                 onClick: $setup.onMaskClick
             }, {
-                default: Vue.withCtx(() => [ Vue.createVNode(Vue.Transition, {
+                default: Vue.withCtx((() => [ Vue.createVNode(Vue.Transition, {
                     name: "drawer",
                     appear: ""
                 }, {
-                    default: Vue.withCtx(() => [ Vue.withDirectives(Vue.createElementVNode("div", {
+                    default: Vue.withCtx((() => [ Vue.withDirectives(Vue.createElementVNode("div", {
                         "aria-modal": "true",
                         role: "dialog",
                         class: "as-side-bar",
-                        onClick: _cache[11] || (_cache[11] = Vue.withModifiers(() => {}, [ "stop" ]))
+                        onClick: _cache[11] || (_cache[11] = Vue.withModifiers((() => {}), [ "stop" ]))
                     }, [ _hoisted_1$1, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
                         label: "方向"
                     }, {
-                        default: Vue.withCtx(() => [ Vue.createVNode(_component_as_radio, {
+                        default: Vue.withCtx((() => [ Vue.createVNode(_component_as_radio, {
                             label: "horizontal",
                             modelValue: $setup.mode,
                             "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.mode = $event)
                         }, {
-                            default: Vue.withCtx(() => [ _hoisted_2$1 ]),
+                            default: Vue.withCtx((() => [ Vue.createTextVNode("横向 ") ])),
                             _: 1
                         }, 8, [ "modelValue" ]), Vue.createVNode(_component_as_radio, {
                             label: "vertical",
                             modelValue: $setup.mode,
                             "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.mode = $event)
                         }, {
-                            default: Vue.withCtx(() => [ _hoisted_3 ]),
+                            default: Vue.withCtx((() => [ Vue.createTextVNode("竖向 ") ])),
                             _: 1
-                        }, 8, [ "modelValue" ]) ]),
+                        }, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "对齐"
                     }, {
-                        default: Vue.withCtx(() => [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.alignList, ([key, value]) => (Vue.openBlock(), 
+                        default: Vue.withCtx((() => [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.alignList, (([key, value]) => (Vue.openBlock(), 
                         Vue.createBlock(_component_as_radio, {
                             key: key,
                             label: key,
                             modelValue: $setup.align,
                             "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.align = $event)
                         }, {
-                            default: Vue.withCtx(() => [ Vue.createTextVNode(Vue.toDisplayString(value), 1) ]),
+                            default: Vue.withCtx((() => [ Vue.createTextVNode(Vue.toDisplayString(value), 1) ])),
                             _: 2
-                        }, 1032, [ "label", "modelValue" ]))), 128)) ]),
+                        }, 1032, [ "label", "modelValue" ])))), 128)) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "滚动隐藏"
                     }, {
-                        default: Vue.withCtx(() => [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.options, ([key, value]) => (Vue.openBlock(), 
+                        default: Vue.withCtx((() => [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.options, (([key, value]) => (Vue.openBlock(), 
                         Vue.createBlock(_component_as_radio, {
                             key: key,
                             label: key,
                             modelValue: $setup.scrollHide,
                             "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.scrollHide = $event)
                         }, {
-                            default: Vue.withCtx(() => [ Vue.createTextVNode(Vue.toDisplayString(value), 1) ]),
+                            default: Vue.withCtx((() => [ Vue.createTextVNode(Vue.toDisplayString(value), 1) ])),
                             _: 2
-                        }, 1032, [ "label", "modelValue" ]))), 128)) ]),
+                        }, 1032, [ "label", "modelValue" ])))), 128)) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "图标"
                     }, {
-                        default: Vue.withCtx(() => [ Vue.createVNode(_component_as_radio, {
+                        default: Vue.withCtx((() => [ Vue.createVNode(_component_as_radio, {
                             label: 1,
                             modelValue: $setup.favicon,
                             "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.favicon = $event)
                         }, {
-                            default: Vue.withCtx(() => [ _hoisted_4 ]),
+                            default: Vue.withCtx((() => [ Vue.createTextVNode("显示 ") ])),
                             _: 1
                         }, 8, [ "modelValue" ]), Vue.createVNode(_component_as_radio, {
                             label: 2,
                             modelValue: $setup.favicon,
                             "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.favicon = $event)
                         }, {
-                            default: Vue.withCtx(() => [ _hoisted_5 ]),
+                            default: Vue.withCtx((() => [ Vue.createTextVNode("隐藏 ") ])),
                             _: 1
-                        }, 8, [ "modelValue" ]) ]),
+                        }, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "主题色"
                     }, {
-                        default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
+                        default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
                             "default-value": "#1890ff",
                             modelValue: $setup.primaryColor,
                             "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => $setup.primaryColor = $event)
-                        }, null, 8, [ "modelValue" ]) ]),
+                        }, null, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "背景色"
                     }, {
-                        default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
+                        default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
                             "default-value": "#ffffff",
                             modelValue: $setup.bgColor,
                             "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => $setup.bgColor = $event)
-                        }, null, 8, [ "modelValue" ]) ]),
+                        }, null, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "文字色"
                     }, {
-                        default: Vue.withCtx(() => [ Vue.createVNode(_component_color, {
+                        default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
                             "default-value": "#606266",
                             modelValue: $setup.primaryTextColor,
                             "onUpdate:modelValue": _cache[10] || (_cache[10] = $event => $setup.primaryTextColor = $event)
-                        }, null, 8, [ "modelValue" ]) ]),
+                        }, null, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
                         label: "图标缓存"
                     }, {
-                        default: Vue.withCtx(() => [ Vue.createVNode(_component_as_button, {
+                        default: Vue.withCtx((() => [ Vue.createVNode(_component_as_button, {
                             type: "text",
                             onClick: $setup.clearIconCache
                         }, {
-                            default: Vue.withCtx(() => [ _hoisted_6 ]),
+                            default: Vue.withCtx((() => [ Vue.createTextVNode(" 清除 ") ])),
                             _: 1
-                        }, 8, [ "onClick" ]) ]),
+                        }, 8, [ "onClick" ]) ])),
                         _: 1
-                    }) ]), _hoisted_7 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ]),
+                    }) ]), _hoisted_2$1 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ])),
                     _: 1
-                }) ]),
+                }) ])),
                 _: 1
-            }, 8, [ "onClick" ]), [ [ Vue.vShow, $setup.visible ] ]) ]),
+            }, 8, [ "onClick" ]), [ [ Vue.vShow, $setup.visible ] ]) ])),
             _: 1
         }) ])) ], 64);
     }
     var sideBar = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ] ]);
-    function throttle(fn, delay) {
+    function throttle(fn, delay = 500) {
         let canRun = true;
         return function() {
             if (!canRun) return;
             canRun = false;
-            setTimeout(() => {
+            setTimeout((() => {
                 fn.apply(this, arguments);
                 canRun = true;
-            }, delay);
+            }), delay);
         };
     }
     const y = Vue.ref(0);
@@ -3078,16 +3078,16 @@
                 }
             };
             const {direction: direction} = useScroll();
-            Vue.watch(direction, value => {
+            Vue.watch(direction, (value => {
                 if (show.value && scrollHide.value && (value === scrollHide.value || scrollHide.value === "all")) {
                     show.value = false;
                 }
-            });
+            }));
             const {mode: mode} = useMode();
-            const className = Vue.computed(() => ({
+            const className = Vue.computed((() => ({
                 "as-hide": !show.value,
                 [`as-hover-btn-${mode.value}`]: true
-            }));
+            })));
             return {
                 handleMouseEnter: handleMouseEnter,
                 handleClick: handleClick,
@@ -3134,12 +3134,12 @@
             const {isFullScreen: isFullScreen} = useFullScreen();
             const {mode: mode} = useMode();
             const {show: show} = useSwitchShow();
-            const classList = Vue.computed(() => [ `as-${mode.value}`, show.value ? "as-show" : "as-hide" ]);
-            const visible = Vue.computed(() => !site.invisible && !Vue.unref(isFullScreen));
-            Vue.watch([ mode, () => site, show ], ([newMode, site, newShow]) => {
+            const classList = Vue.computed((() => [ `as-${mode.value}`, show.value ? "as-show" : "as-hide" ]));
+            const visible = Vue.computed((() => !site.invisible && !Vue.unref(isFullScreen)));
+            Vue.watch([ mode, () => site, show ], (([newMode, site, newShow]) => {
                 const remove = site.invisible || site.disabled || !newShow;
                 changeBodyStyle(newMode, remove);
-            }, {
+            }), {
                 immediate: true,
                 deep: true
             });
@@ -3152,9 +3152,9 @@
                 initSpecialStyle();
                 isInit = true;
             }
-            Vue.watch(site, newSite => {
+            Vue.watch(site, (newSite => {
                 init(newSite);
-            }, {
+            }), {
                 immediate: true
             });
             return {
