@@ -5,7 +5,7 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import json from '@rollup/plugin-json'
 import vue from '@vitejs/plugin-vue'
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser';
 import styles from 'rollup-plugin-styles'
 import externalGlobals from 'rollup-plugin-external-globals'
 import { proMeta, devMeta, localFileName, devFileName } from './src/config/meta'
