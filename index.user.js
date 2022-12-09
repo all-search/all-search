@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.3.15
-// @description  2022-12-8更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.3.16
+// @description  2022-12-9更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.15";
+    var version$1 = "1.3.16";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -201,9 +201,10 @@
     }
     function getParent(el) {
         let current = el;
-        while (current.offsetParent) {
+        let go = true;
+        while (go && current.offsetParent) {
             if (current.offsetParent.tagName === "BODY") {
-                return current;
+                go = false;
             } else {
                 current = current.offsetParent;
             }
@@ -220,13 +221,11 @@
             return null;
         }
         const style = window.getComputedStyle(item);
-        const position = style.getPropertyValue("position");
-        const display = style.getPropertyValue("display");
-        if (display === "none") {
+        if (style.display === "none") {
             return null;
-        } else if (position === "fixed") {
+        } else if (style.position === "fixed") {
             return item;
-        } else if (position === "absolute") {
+        } else if (style.position === "absolute") {
             return getParent(item);
         } else {
             return null;
@@ -271,8 +270,7 @@
         const nodes = list.filter((item => item)).map((item => {
             delAsDataSet(item);
             if (deep) {
-                const nodes = Array.from(item.querySelectorAll("*"));
-                nodes.map((item => {
+                Array.from(item.querySelectorAll("*")).map((item => {
                     delAsDataSet(item);
                     return getRealFixedNode(item);
                 })).filter((item => item)).forEach((item => {
