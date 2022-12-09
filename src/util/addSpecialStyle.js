@@ -10,9 +10,10 @@ function delAsDataSet (item) {
 
 function getParent (el) {
   let current = el
-  while (current.offsetParent) {
+  let go = true
+  while (go && current.offsetParent) {
     if (current.offsetParent.tagName === 'BODY') {
-      return current
+      go = false
     } else {
       current = current.offsetParent
     }
@@ -30,13 +31,11 @@ function getRealFixedNode (item) {
     return null
   }
   const style = window.getComputedStyle(item)
-  const position = style.getPropertyValue('position')
-  const display = style.getPropertyValue('display')
-  if (display === 'none') {
+  if (style.display === 'none') {
     return null
-  } else if (position === 'fixed') {
+  } else if (style.position === 'fixed') {
     return item
-  } else if (position === 'absolute') {
+  } else if (style.position === 'absolute') {
     return getParent(item)
   } else {
     return null
@@ -94,8 +93,7 @@ function getFixedNodeList (list, deep = false) {
     .map(item => {
       delAsDataSet(item)
       if (deep) {
-        const nodes = Array.from(item.querySelectorAll('*'))
-        nodes
+        Array.from(item.querySelectorAll('*'))
           .map(item => {
             delAsDataSet(item)
             return getRealFixedNode(item)
