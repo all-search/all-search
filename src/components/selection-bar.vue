@@ -10,9 +10,9 @@
       :key="i"
       :url="item.url"
       :title="item.nameZh"
-      @click.exact="handleClick(item, false)"
-      @click.ctrl.exact="handleClick(item, true)"
-      @click.middle.exact="handleClick(item, true)"/>
+      @click.exact="handleClick(item, true)"
+      @click.ctrl.exact="handleClick(item, false)"
+      @click.middle.exact="handleClick(item, false)"/>
     <div
       class="tool-bar-item"
       @click="openMainDialog">
@@ -174,6 +174,7 @@ export default {
   height: 20px;
   border: 1px solid #FFF;
   cursor: pointer;
+  box-sizing: content-box;
 
   &:hover {
     border-color: var(--as-border-color);
