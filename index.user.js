@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      1.3.16
-// @description  2022-12-9更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2022-12-10更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -113,6 +113,39 @@
         const r = new RegExp("(\\?|#|&)" + name + "=([^&#]*)(&|#|$)");
         const m = url.match(r);
         return decodeURIComponent(!m ? "" : m[2]);
+    }
+    function checkBody() {
+        let time = 0;
+        return new Promise(((resolve, reject) => {
+            if (document && document.body) {
+                resolve();
+            } else {
+                const id = setInterval((function() {
+                    time += 1;
+                    if (document && document.body) {
+                        clearInterval(id);
+                        resolve();
+                    }
+                    if (time === 50) {
+                        clearInterval(id);
+                        reject(new Error("timeOut"));
+                    }
+                }), 200);
+                if ([ "complete", "loaded", "interactive" ].includes(document.readyState)) {
+                    if (document && document.body) {
+                        clearInterval(id);
+                        resolve();
+                    }
+                } else {
+                    document.addEventListener("DOMContentLoaded", (function() {
+                        if (document && document.body) {
+                            clearInterval(id);
+                            resolve();
+                        }
+                    }));
+                }
+            }
+        }));
     }
     function getName(name) {
         if (name) {
@@ -291,9 +324,11 @@
         return newList;
     }
     function fixedDomPosition() {
-        const nodes = Array.from(document.body.querySelectorAll("*")).filter((item => item.tagName !== "STYLE"));
-        getFixedNodeList(nodes).forEach((item => {
-            changeStyle(item);
+        checkBody().then((() => {
+            const nodes = Array.from(document.body.querySelectorAll("*")).filter((item => item.tagName !== "STYLE"));
+            getFixedNodeList(nodes).forEach((item => {
+                changeStyle(item);
+            }));
         }));
     }
     function mutationObserver() {
@@ -2243,13 +2278,13 @@
     }
     const name = "favicon";
     const session$1 = getSession(name);
-    const getValue = val => val || 1;
-    const valRef = Vue.ref(getValue(session$1));
+    const getValue$1 = val => val || 1;
+    const valRef = Vue.ref(getValue$1(session$1));
     const favicon$1 = Vue.computed({
         get: () => valRef.value,
         set: val => {
             valRef.value = val;
-            setSession(name, getValue(val));
+            setSession(name, getValue$1(val));
         }
     });
     function useFavicon() {
@@ -2581,45 +2616,65 @@
         });
     }
     var asMenu = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ] ]);
-    const primaryColor = Vue.ref("");
-    const bgColor = Vue.ref("");
-    const primaryTextColor = Vue.ref("");
-    Vue.watch(primaryColor, (value => {
-        setCssValue("primary-color", value);
-        setSession("primary-color", value);
-    }));
-    Vue.watch(bgColor, (value => {
-        setCssValue("bg-color", value);
-        setSession("bg-color", value);
-    }));
-    Vue.watch(primaryTextColor, (value => {
-        setCssValue("primary-text-color", value);
-        setSession("primary-text-color", value);
-    }));
-    const getCssValue = name => {
-        const el = document.getElementById("all-search");
-        return getComputedStyle(el).getPropertyValue(`--as-${name}`).trim();
+    const reg = /^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/;
+    const defaultVal = {
+        "primary-color": "#1890ff",
+        "bg-color": "#ffffff",
+        "primary-text-color": "#606266"
     };
-    const setCssValue = (name, value) => {
+    function setCssValue(name, value) {
         const el = document.getElementById("all-search");
         el.style.setProperty(`--as-${name}`, value);
+    }
+    function getValue(name) {
+        const session = getSession(name);
+        if (reg.test(session)) {
+            return session;
+        } else {
+            return defaultVal[name];
+        }
+    }
+    const valMap = {
+        "primary-color": Vue.ref(getValue("primary-color")),
+        "bg-color": Vue.ref(getValue("bg-color")),
+        "primary-text-color": Vue.ref(getValue("primary-text-color"))
     };
-    const map = {
-        "primary-color": primaryColor,
-        "bg-color": bgColor,
-        "primary-text-color": primaryTextColor
-    };
-    const initColor = (name, defaultValue) => {
-        const colorDefault = getCssValue(name) || defaultValue;
-        const session = getSession(name) || colorDefault;
-        const colorVal = map[name];
-        colorVal.value = session;
-    };
+    function setValue(name, value) {
+        const formatVal = reg.test(value) ? value : defaultVal[name];
+        setCssValue(name, formatVal);
+        setSession(name, formatVal);
+        valMap[name].value = formatVal;
+    }
+    const primaryColor = Vue.computed({
+        get: () => valMap["primary-color"].value,
+        set: val => {
+            setValue("primary-color", val);
+        }
+    });
+    const bgColor = Vue.computed({
+        get: () => valMap["bg-color"].value,
+        set: val => {
+            setValue("bg-color", val);
+        }
+    });
+    const primaryTextColor = Vue.computed({
+        get: () => valMap["primary-text-color"].value,
+        set: val => {
+            setValue("primary-text-color", val);
+        }
+    });
+    function initColor(name) {
+        const value = getSession(name);
+        if (reg.test(value)) {
+            const formatVal = reg.test(value) ? value : defaultVal[name];
+            setCssValue(name, formatVal);
+        }
+    }
     function useColor() {
         Vue.onMounted((() => {
-            initColor("primary-color", "#1890ff");
-            initColor("bg-color", "#ffffff");
-            initColor("primary-text-color", "#606266");
+            initColor("primary-color");
+            initColor("bg-color");
+            initColor("primary-text-color");
         }));
         return {
             primaryColor: primaryColor,
@@ -2773,9 +2828,6 @@
         props: {
             modelValue: {
                 type: [ String, Number ]
-            },
-            defaultValue: {
-                type: [ String, Number ]
             }
         },
         setup(props, ctx) {
@@ -2788,7 +2840,7 @@
                 }
             });
             const reset = () => {
-                model.value = props.defaultValue;
+                model.value = "";
             };
             return {
                 model: model,
@@ -2981,7 +3033,7 @@
                         label: "主题色"
                     }, {
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
-                            "default-value": "#1890ff",
+                            name: "primaryColor",
                             modelValue: $setup.primaryColor,
                             "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => $setup.primaryColor = $event)
                         }, null, 8, [ "modelValue" ]) ])),
@@ -2990,7 +3042,7 @@
                         label: "背景色"
                     }, {
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
-                            "default-value": "#ffffff",
+                            name: "bgColor",
                             modelValue: $setup.bgColor,
                             "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => $setup.bgColor = $event)
                         }, null, 8, [ "modelValue" ]) ])),
@@ -2999,7 +3051,7 @@
                         label: "文字色"
                     }, {
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
-                            "default-value": "#606266",
+                            name: "primaryTextColor",
                             modelValue: $setup.primaryTextColor,
                             "onUpdate:modelValue": _cache[10] || (_cache[10] = $event => $setup.primaryTextColor = $event)
                         }, null, 8, [ "modelValue" ]) ])),
