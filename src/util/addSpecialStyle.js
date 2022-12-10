@@ -1,4 +1,4 @@
-import { getAsRoot } from './index'
+import { checkBody, getAsRoot } from './index'
 
 function delAsDataSet (item) {
   if (item.dataset) {
@@ -119,10 +119,12 @@ function getFixedNodeList (list, deep = false) {
 }
 
 function fixedDomPosition () {
-  const nodes = Array.from(document.body.querySelectorAll('*'))
-    .filter(item => item.tagName !== 'STYLE')
-  getFixedNodeList(nodes).forEach(item => {
-    changeStyle(item)
+  checkBody().then(()=> {
+    const nodes = Array.from(document.body.querySelectorAll('*'))
+      .filter(item => item.tagName !== 'STYLE')
+    getFixedNodeList(nodes).forEach(item => {
+      changeStyle(item)
+    })
   })
 }
 

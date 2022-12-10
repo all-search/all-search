@@ -28,6 +28,19 @@ export function checkBody () {
           reject(new Error('timeOut'))
         }
       }, 200)
+      if (['complete', 'loaded', 'interactive'].includes(document.readyState)) {
+        if (document && document.body) {
+          clearInterval(id)
+          resolve()
+        }
+      } else {
+        document.addEventListener('DOMContentLoaded', function () {
+          if (document && document.body) {
+            clearInterval(id)
+            resolve()
+          }
+        })
+      }
     }
   })
 }

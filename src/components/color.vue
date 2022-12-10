@@ -28,9 +28,6 @@ export default {
   props: {
     modelValue: {
       type: [String, Number]
-    },
-    defaultValue: {
-      type: [String, Number]
     }
   },
   setup (props, ctx) {
@@ -43,7 +40,7 @@ export default {
       }
     })
     const reset = () => {
-      model.value = props.defaultValue
+      model.value = ''
     }
     return {
       model,

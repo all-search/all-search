@@ -67,17 +67,17 @@
               </form-item>
               <form-item label="主题色">
                 <color
-                  default-value="#1890ff"
+                  name="primaryColor"
                   v-model="primaryColor"/>
               </form-item>
               <form-item label="背景色">
                 <color
-                  default-value="#ffffff"
+                  name="bgColor"
                   v-model="bgColor"/>
               </form-item>
               <form-item label="文字色">
                 <color
-                  default-value="#606266"
+                  name="primaryTextColor"
                   v-model="primaryTextColor"/>
               </form-item>
               <form-item label="图标缓存">
