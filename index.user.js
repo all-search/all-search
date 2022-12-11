@@ -11,8 +11,8 @@
 // @noframes
 // @include      *
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
-// @require      https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper-lite.js
-// @run-at       document-body
+// @require      https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper-lite.min.js
+// @run-at       document-idle
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
