@@ -141,13 +141,11 @@
   <div class="fixed-footer">
     <div class="btn-container">
       <el-button
-        size="small"
         type="primary"
         @click="reset">
         重置
       </el-button>
       <el-button
-        size="small"
         type="success"
         @click="save">
         保存
@@ -353,10 +351,6 @@ export default {
 
   &.invisible {
     color: #C0C4CC;
-  }
-
-  &:hover {
-    background-color: #f5f7fa;
   }
 
   & + & {
