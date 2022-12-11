@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      1.3.16
-// @description  2022-12-10更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2022-12-11更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -11,7 +11,7 @@
 // @noframes
 // @include      *
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
-// @require      https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper-lite.min.js
+// @require      https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper-lite.js
 // @run-at       document-body
 // @grant        GM_getValue
 // @grant        GM_setValue
