@@ -89,7 +89,6 @@ export default {
           const height = toolbarClientRect.bottom - toolbarClientRect.top
           const selectionRect = getSelectionRect()
           if (selectionRect) {
-            console.log(selectionRect)
             const { x, right, left, top } = selectionRect
             styleObj.top = scrollTop() + top - height - 5
             styleObj.left = scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2)

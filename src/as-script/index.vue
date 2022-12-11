@@ -11,8 +11,8 @@
       <side-bar/>
     </div>
     <hoverBtn v-show="visible"/>
-    <iconfont/>
   </template>
+  <iconfont/>
   <selectionBar @openDialog="openDialog"/>
   <mainDialog v-model:visible="dialogVisible"/>
 </template>
