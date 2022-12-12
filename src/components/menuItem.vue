@@ -1,5 +1,5 @@
 <template>
-  <popper
+  <popper-comp
     :placement="placement"
     popper-class="as-subMenu-container">
     <template #trigger="{ show, hide }">
@@ -38,12 +38,12 @@
         </a>
       </li>
     </ul>
-  </popper>
+  </popper-comp>
 </template>
 
 <script>
 import { computed, ref } from 'vue'
-import popper from './popper'
+import popperComp from './popper'
 import { site } from '../config/siteInfo.js'
 import { getQueryString } from '../util/index'
 import { getKeyword } from '../util/getKeyword'
@@ -54,7 +54,7 @@ import { onTap } from '../util/tap'
 export default {
   name: 'menuItem',
   components: {
-    popper,
+    popperComp,
     icon,
     favicon
   },
