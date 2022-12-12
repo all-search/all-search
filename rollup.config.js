@@ -37,7 +37,6 @@ const config = {
     }
   ],
   plugins: [
-    // del({ targets: 'dist/*' }),
     vue(),
     json(),
     styles({

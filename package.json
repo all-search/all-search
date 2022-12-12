@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "1.3.16",
+  "version": "1.3.17",
   "keywords": [
     "searchEngineJump",
     "tool",
@@ -17,6 +17,12 @@
     "type": "git",
     "url": "git@github.com:endday/all-search.git"
   },
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "unpkg": "dist/index.user.js",
+  "jsdelivr": "dist/index.user.js",
   "packageManager": "pnpm@7.18.0",
   "scripts": {
     "serve": "vue-cli-service serve --fix",
@@ -27,11 +33,6 @@
     "tmDev": "cross-env NODE_ENV=development rollup -c -w",
     "tmBuild": "cross-env NODE_ENV=production rollup -c",
     "prepare": "husky install"
-  },
-  "lint-staged": {
-    "*.{js,vue,ts,jsx,tsx}": [
-      "eslint --fix"
-    ]
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",
