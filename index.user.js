@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.3.16
+// @version      1.3.17
 // @description  2022-12-12更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
@@ -11,7 +11,7 @@
 // @noframes
 // @include      *
 // @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
-// @require      https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper-lite.min.js
+// @require      https://unpkg.com/all-search@1.3.17/lib/popper-lite.min.js
 // @run-at       document-idle
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.16";
+    var version$1 = "1.3.17";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -33,6 +33,9 @@
         type: "git",
         url: "git@github.com:endday/all-search.git"
     };
+    var files = [ "dist", "lib" ];
+    var unpkg = "dist/index.user.js";
+    var jsdelivr = "dist/index.user.js";
     var packageManager = "pnpm@7.18.0";
     var scripts = {
         serve: "vue-cli-service serve --fix",
@@ -96,11 +99,11 @@
         homepage: homepage,
         license: license,
         repository: repository,
+        files: files,
+        unpkg: unpkg,
+        jsdelivr: jsdelivr,
         packageManager: packageManager,
         scripts: scripts,
-        "lint-staged": {
-            "*.{js,vue,ts,jsx,tsx}": [ "eslint --fix" ]
-        },
         dependencies: dependencies,
         devDependencies: devDependencies
     };
