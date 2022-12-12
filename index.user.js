@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      1.3.16
-// @description  2022-12-11更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2022-12-12更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -2163,7 +2163,7 @@
             _: 3
         }) ], 64);
     }
-    var popper = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
+    var popperComp = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
     function findInNodeList(list) {
         return [].find.call(list, (item => isVisible(item)));
     }
@@ -2420,7 +2420,7 @@
     const _sfc_main$a = {
         name: "menuItem",
         components: {
-            popper: popper,
+            popperComp: popperComp,
             icon: icon,
             favicon: favicon
         },
@@ -2498,8 +2498,8 @@
     function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_icon = Vue.resolveComponent("icon");
         const _component_favicon = Vue.resolveComponent("favicon");
-        const _component_popper = Vue.resolveComponent("popper");
-        return Vue.openBlock(), Vue.createBlock(_component_popper, {
+        const _component_popper_comp = Vue.resolveComponent("popper-comp");
+        return Vue.openBlock(), Vue.createBlock(_component_popper_comp, {
             placement: $setup.placement,
             "popper-class": "as-subMenu-container"
         }, {
