@@ -13,8 +13,8 @@
     <hoverBtn v-show="visible"/>
   </template>
   <iconfont/>
-  <selectionBar @openDialog="openDialog"/>
-  <mainDialog v-model:visible="dialogVisible"/>
+  <selection-bar @openDialog="openDialog"/>
+  <search-dialog v-model:visible="dialogVisible"/>
 </template>
 
 <script>
@@ -31,7 +31,7 @@ import sideBar from '../components/side-bar'
 import hoverBtn from '../components/hover-btn'
 import iconfont from '../components/iconfont'
 import selectionBar from '../components/selection-bar'
-import mainDialog from '../components/main-dialog'
+import searchDialog from '../components/search-dialog'
 
 export default {
   name: 'all-search',
@@ -42,7 +42,7 @@ export default {
     hoverBtn,
     iconfont,
     selectionBar,
-    mainDialog
+    searchDialog
   },
   setup () {
     const { isFullScreen } = useFullScreen()
