@@ -4,6 +4,10 @@ export default [
     url: 'http://fanyi.baidu.com/#auto/zh/%s'
   },
   {
+    nameZh: '火山翻译',
+    url: 'https://translate.volcengine.com/translate?source_language=detect&target_language=en&text=%s'
+  },
+  {
     nameZh: 'DeepL',
     url: 'https://www.deepl.com/translator#zh/en/%s',
     icon: 'https://www.deepl.com/img/favicon/favicon_96.png'
