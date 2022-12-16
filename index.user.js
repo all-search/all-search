@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      1.3.17
-// @description  2022-12-12更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2022-12-16更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -424,6 +424,9 @@
     var translate = [ {
         nameZh: "百度翻译",
         url: "http://fanyi.baidu.com/#auto/zh/%s"
+    }, {
+        nameZh: "火山翻译",
+        url: "https://translate.volcengine.com/translate?source_language=detect&target_language=en&text=%s"
     }, {
         nameZh: "DeepL",
         url: "https://www.deepl.com/translator#zh/en/%s",
