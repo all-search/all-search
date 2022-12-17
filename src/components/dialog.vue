@@ -3,12 +3,9 @@
        v-show="localVisible">
     <div class="as-dialog-container"
          :style="style">
-      <!--      <div class="as-dialog__header">
-              <p v-text="title"></p>
-              <span class="as-dialog__close"
-                    @click="handleClose">
-              </span>
-            </div>-->
+      <div class="as-dialog__header">
+        <slot name="header"></slot>
+      </div>
       <div class="as-dialog__body">
         <slot></slot>
       </div>
@@ -75,7 +72,6 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  overflow: auto;
   margin: 0;
   z-index: 99999;
 
@@ -91,9 +87,9 @@ export default {
 
   &-container {
     position: relative;
-    //background: #fff;
-    border-radius: 2px;
-    //box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
     box-sizing: border-box;
     min-width: 50%;
     max-width: 80%;
@@ -103,18 +99,11 @@ export default {
   }
 
   &__header {
-    padding: 20px 20px 10px;
     position: relative;
-
-    p {
-      margin: 0;
-      line-height: 24px;
-      height: 24px;
-    }
   }
 
   &__body {
-    padding: 30px 20px;
+    padding: 0 20px 20px;
     color: #666;
     font-size: 14px;
     word-break: break-all;

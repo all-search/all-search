@@ -86,8 +86,4 @@ export default {
   flex-direction: column;
 }
 
-.el-scrollbar__bar {
-  display: none;
-}
-
 </style>
