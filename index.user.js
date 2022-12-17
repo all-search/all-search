@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.3.17
-// @description  2022-12-16更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.3.18
+// @description  2022-12-17更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$1 = "all-search";
-    var version$1 = "1.3.17";
+    var version$1 = "1.3.18";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -200,6 +200,14 @@
             if (item) {
                 window.localStorage.setItem(formatName, item);
             }
+        }
+    };
+    let delSession = function(name) {
+        const formatName = getName(name);
+        if (window.GM_deleteValue) {
+            window.GM_deleteValue(formatName);
+        } else {
+            window.localStorage.removeItem(formatName);
         }
     };
     function getAsRoot() {
@@ -656,7 +664,7 @@
     } ];
     var disk = [ {
         nameZh: "百度网盘",
-        url: "https://pan.baidu.com/disk/home?#/search?key=%s"
+        url: "https://pan.baidu.com/disk/main#/index?category=all&search=%s"
     }, {
         nameZh: "大力盘",
         url: "https://www.dalipan.com/search?keyword=%s"
@@ -911,7 +919,9 @@
                 if (menuItem.hostname === curItem.hostname && menuItem.pathname === curItem.pathname) {
                     targetItem = item;
                     urlObj = menuItem;
+                    return true;
                 }
+                return false;
             }));
         }));
         if (urlObj) {
@@ -2900,11 +2910,16 @@
             const {primaryColor: primaryColor, bgColor: bgColor, primaryTextColor: primaryTextColor} = useColor();
             const {show: show, options: options, scrollHide: scrollHide} = useSwitchShow();
             const {favicon: favicon} = useFavicon();
-            const clearIconCache = function() {
+            function clearIconCache() {
                 if (window.confirm("确认要清除图标的缓存吗")) {
-                    setSession("iconCache", {});
+                    delSession("iconCache");
                 }
-            };
+            }
+            function resetSites() {
+                if (window.confirm("确认要重置所有网址吗")) {
+                    delSession("sites");
+                }
+            }
             return {
                 mode: mode,
                 visible: visible,
@@ -2919,7 +2934,8 @@
                 show: show,
                 options: options,
                 scrollHide: scrollHide,
-                clearIconCache: clearIconCache
+                clearIconCache: clearIconCache,
+                resetSites: resetSites
             };
         }
     };
@@ -3073,6 +3089,17 @@
                             _: 1
                         }, 8, [ "onClick" ]) ])),
                         _: 1
+                    }), Vue.createVNode(_component_form_item, {
+                        label: "重置网址"
+                    }, {
+                        default: Vue.withCtx((() => [ Vue.createVNode(_component_as_button, {
+                            type: "text",
+                            onClick: $setup.resetSites
+                        }, {
+                            default: Vue.withCtx((() => [ Vue.createTextVNode(" 重置 ") ])),
+                            _: 1
+                        }, 8, [ "onClick" ]) ])),
+                        _: 1
                     }) ]), _hoisted_2$1 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ])),
                     _: 1
                 }) ])),
@@ -3175,7 +3202,7 @@
         return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1, _hoisted_14);
     }
     var iconfont = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-4f20014d" ] ]);
-    var css = '#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n\n.body-horizontal + body {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n.body-horizontal + body [data-as-has-set] {\n  transition-duration: 0s;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var css = '#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n\n.body-horizontal + body {\n  margin-top: 30px !important;\n  position: relative !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n.body-horizontal + body [data-as-has-set] {\n  transition-duration: 0s;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",
