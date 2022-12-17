@@ -12,11 +12,15 @@ function getMenuItem () {
   initSites('tm').some(category => {
     category.list.find(item => {
       const menuItem = new URL(item.url)
-      if (menuItem.hostname === curItem.hostname &&
-        menuItem.pathname === curItem.pathname) {
+      if (
+        menuItem.hostname === curItem.hostname &&
+        menuItem.pathname === curItem.pathname
+      ) {
         targetItem = item
         urlObj = menuItem
+        return true
       }
+      return false
     })
   })
   if (urlObj) {

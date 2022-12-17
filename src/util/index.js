@@ -105,6 +105,17 @@ export let setSession = function (name, value) {
   }
 }
 
+export let delSession = function (name) {
+  const formatName = getName(name)
+  // eslint-disable-next-line
+  if (window.GM_deleteValue) {
+    // eslint-disable-next-line
+    window.GM_deleteValue(formatName)
+  } else {
+    window.localStorage.removeItem(formatName)
+  }
+}
+
 export function addStyle (styleContent) {
   if (!styleContent) {
     return

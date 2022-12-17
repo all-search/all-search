@@ -87,6 +87,13 @@
                   清除
                 </as-button>
               </form-item>
+              <form-item label="重置网址">
+                <as-button
+                  type="text"
+                  @click="resetSites">
+                  重置
+                </as-button>
+              </form-item>
             </section>
             <footer>
               <a class="link"
@@ -111,7 +118,7 @@
 
 <script>
 import { ref } from 'vue'
-import { setSession } from '../util'
+import { delSession } from '../util'
 import useMode from '../components/useMode'
 import useAlign from './useAlign'
 import useSwitchShow from '../components/useSwitchShow'
@@ -146,9 +153,15 @@ export default {
     const { primaryColor, bgColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
     const { favicon } = useFavicon()
-    const clearIconCache = function () {
+    function clearIconCache () {
       if (window.confirm('确认要清除图标的缓存吗', )) {
-        setSession('iconCache', {})
+        delSession('iconCache')
+      }
+    }
+
+    function resetSites () {
+      if (window.confirm('确认要重置所有网址吗', )) {
+        delSession('sites')
       }
     }
 
@@ -166,7 +179,8 @@ export default {
       show,
       options,
       scrollHide,
-      clearIconCache
+      clearIconCache,
+      resetSites
     }
   }
 }

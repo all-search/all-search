@@ -1,7 +1,7 @@
 export default [
   {
     nameZh: '百度网盘',
-    url: 'https://pan.baidu.com/disk/home?#/search?key=%s'
+    url: 'https://pan.baidu.com/disk/main#/index?category=all&search=%s'
   },
   {
     nameZh: '大力盘',

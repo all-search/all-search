@@ -156,7 +156,7 @@
 
 <script>
 import { VueDraggableNext } from 'vue-draggable-next'
-import { setSession, version } from '../util'
+import { delSession, setSession, version } from '../util'
 import { initSites } from '../util/sites'
 import sites from '../config/sites'
 
@@ -280,11 +280,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const localSites = JSON.parse(JSON.stringify(this.sites))
-        this.localSites = localSites.map(item => ({
-          ...item,
-          nameZhBackup: item.nameZh
-        }))
+        delSession('sites')
         this.$message.success('重置成功')
       })
     },

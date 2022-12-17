@@ -29,7 +29,6 @@ import sideBar from '../components/side-bar'
 import hoverBtn from '../components/hover-btn'
 import iconfont from '../components/iconfont'
 
-
 export default {
   name: 'all-search',
   components: {
@@ -97,6 +96,7 @@ export default {
 
 .body-horizontal + body {
   margin-top: $height !important;
+  position: relative !important;
 
   [data-as-margin-top] {
     margin-top: $height !important;
