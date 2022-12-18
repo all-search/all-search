@@ -25,5 +25,6 @@ export default {
   fill: currentColor;
   overflow: hidden;
   margin: 0.25px 4px 0 0;
+  display: inline-block;
 }
 </style>

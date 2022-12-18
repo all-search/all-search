@@ -40,11 +40,12 @@ The difference between Tampermonkey's and ScriptCat's scripts has been smoothed 
 * Auto-hide function, triggered by button, can also be changed to scroll up or down to trigger hide
 * Auto-loading support for newly added URLs (i.e., those added by the user, can be displayed automatically)
 * Adaptive style, no additional adaptations required
+* Text selection toolbar
+* Global pop-up search
 
 ## Todo list
 * English support
-* Text selection toolbar
-* Shortcuts to evoke global search bar (TBD)
+* Shortcut open global pop-up search (TBD)
 * Google Pluginization (TBD)
 
 ## Compatibility and Performance
