@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.3.18
-// @description  2022-12-17更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.4.0
+// @description  2022-12-18更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -22,8 +22,8 @@
 
 (function() {
     "use strict";
-    var name$1 = "all-search";
-    var version$1 = "1.3.18";
+    var name$2 = "all-search";
+    var version$1 = "1.4.0";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -91,7 +91,7 @@
         vite: "^2.6.7"
     };
     var pkg = {
-        name: name$1,
+        name: name$2,
         version: version$1,
         keywords: keywords,
         description: description,
@@ -741,12 +741,20 @@
             }
         })))
     })));
-    function initSites(type) {
-        let sitesData = list$2;
-        const localSites = getSession("sites");
-        if (localSites) {
-            sitesData = localSites;
+    var toolbar$1 = [ {
+        nameZh: "百度",
+        url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
+    }, {
+        nameZh: "百度翻译",
+        url: "https://fanyi.baidu.com/#auto/zh/%s"
+    } ].map((item => ({
+        ...item,
+        data: {
+            visible: true
         }
+    })));
+    function initSites(type) {
+        let sitesData = getSession("sites") || list$2;
         if (type === "tm") {
             sitesData = sitesData.filter((item => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible)).map((item => ({
                 ...item,
@@ -754,6 +762,24 @@
             })));
         }
         return sitesData;
+    }
+    function initToolbar(opt = {
+        type: "",
+        reset: false
+    }) {
+        const toolbarClone = JSON.parse(JSON.stringify(toolbar$1));
+        const list = opt.reset ? toolbarClone : getSession("toolbar") || toolbarClone;
+        if (opt.type === "tm") {
+            return list.filter((item => item.data && item.data.visible)).map((item => ({
+                nameZh: item.nameZh,
+                url: item.url
+            })));
+        }
+        return list.map((item => ({
+            nameZh: item.nameZh,
+            url: item.url,
+            data: item.data
+        })));
     }
     const width = 100;
     const list$1 = [ {
@@ -1004,14 +1030,14 @@
             isFullScreen: isFullScreenRef
         };
     }
-    const session$3 = getSession("mode");
+    const session$4 = getSession("mode");
     const getMode = val => {
         if (![ "vertical", "horizontal" ].includes(val)) {
             return "horizontal";
         }
         return val;
     };
-    const modeRef = Vue.ref(getMode(session$3));
+    const modeRef = Vue.ref(getMode(session$4));
     const mode = Vue.computed({
         get: () => modeRef.value,
         set: val => {
@@ -1029,13 +1055,13 @@
         show: true,
         scrollHide: false
     };
-    const session$2 = getSession("switchShow") || defaultOpt;
+    const session$3 = getSession("switchShow") || defaultOpt;
     const getOpts = val => options.has(val) ? val : false;
     const getOpt = val => Object.assign({}, defaultOpt, {
         show: Boolean(val.show),
         scrollHide: getOpts(val.scrollHide)
     });
-    let data = Vue.reactive(getOpt(session$2));
+    let data = Vue.reactive(getOpt(session$3));
     const show = Vue.computed({
         get: () => data.show,
         set: val => {
@@ -1127,8 +1153,8 @@
             }), 0);
         }
     }
-    var css$f = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n\n@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
-    injectStyle(css$f);
+    var css$i = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n@media screen and (max-width: 750px) {\n  .as-title-horizontal {\n    display: none;\n  }\n}\n.as-title-horizontal {\n  min-width: 90px;\n  margin: 0 10px;\n}\n\n.as-title-vertical {\n  width: 100%;\n}\n\n.as-title {\n  text-decoration: none !important;\n  padding: 0;\n  margin: 0;\n  color: var(--as-primary-color);\n}\n\n.as-title-inner {\n  padding: 0;\n  font-size: 17px;\n  height: 30px;\n  line-height: 30px;\n  font-weight: 600;\n  color: var(--as-primary-color);\n  margin: 0 auto;\n  text-align: center;\n  cursor: pointer;\n}";
+    injectStyle(css$i);
     var _export_sfc = (sfc, props) => {
         const target = sfc.__vccOpts || sfc;
         for (const [key, val] of props) {
@@ -1136,7 +1162,7 @@
         }
         return target;
     };
-    const _sfc_main$g = {
+    const _sfc_main$j = {
         name: "logo",
         props: {
             mode: {
@@ -1151,19 +1177,19 @@
             };
         }
     };
-    const _hoisted_1$a = Vue.createElementVNode("p", {
+    const _hoisted_1$c = Vue.createElementVNode("p", {
         class: "as-title-inner"
     }, " All Search ", -1);
-    const _hoisted_2$7 = [ _hoisted_1$a ];
-    function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_2$9 = [ _hoisted_1$c ];
+    function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
         return !$setup.isMobile ? (Vue.openBlock(), Vue.createElementBlock("a", {
             key: 0,
             class: Vue.normalizeClass([ "as-title", `as-title-${$props.mode}` ]),
             href: "https://github.com/endday/all-search",
             target: "_blank"
-        }, _hoisted_2$7, 2)) : Vue.createCommentVNode("", true);
+        }, _hoisted_2$9, 2)) : Vue.createCommentVNode("", true);
     }
-    var logo = _export_sfc(_sfc_main$g, [ [ "render", _sfc_render$g ] ]);
+    var logo = _export_sfc(_sfc_main$j, [ [ "render", _sfc_render$j ] ]);
     var MapShim = function() {
         if (typeof Map !== "undefined") {
             return Map;
@@ -1728,7 +1754,7 @@
         style.webkitTransform = translate;
         return style;
     };
-    const _sfc_main$f = Vue.defineComponent({
+    const _sfc_main$i = Vue.defineComponent({
         props: {
             vertical: Boolean,
             size: {
@@ -1834,7 +1860,7 @@
             };
         }
     });
-    function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createBlock(Vue.Transition, {
             name: "as-scrollbar-fade"
         }, {
@@ -1851,8 +1877,8 @@
             _: 1
         });
     }
-    var Bar = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ] ]);
-    const _sfc_main$e = Vue.defineComponent({
+    var Bar = _export_sfc(_sfc_main$i, [ [ "render", _sfc_render$i ] ]);
+    const _sfc_main$h = Vue.defineComponent({
         components: {
             Bar: Bar
         },
@@ -1998,13 +2024,13 @@
             };
         }
     });
-    const _hoisted_1$9 = {
+    const _hoisted_1$b = {
         ref: "scrollbar",
         class: "as-scrollbar"
     };
-    function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_bar = Vue.resolveComponent("bar");
-        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$9, [ Vue.createElementVNode("div", {
+        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$b, [ Vue.createElementVNode("div", {
             ref: "wrap",
             class: Vue.normalizeClass([ _ctx.wrapClass, "as-scrollbar__wrap", _ctx.native ? "" : "as-scrollbar__wrap--hidden-default" ]),
             style: Vue.normalizeStyle(_ctx.renderWrapStyle),
@@ -2031,9 +2057,9 @@
             always: _ctx.always
         }, null, 8, [ "move", "ratio", "size", "always" ]) ], 64)) : Vue.createCommentVNode("", true) ], 512);
     }
-    var scrollbar = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ] ]);
-    var css$e = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\n";
-    injectStyle(css$e);
+    var scrollbar = _export_sfc(_sfc_main$h, [ [ "render", _sfc_render$h ] ]);
+    var css$h = ":root{--as-text-color-secondary:#909399}.as-scrollbar{--as-scrollbar-opacity:.3;--as-scrollbar-background-color:var(--as-text-color-secondary);--as-scrollbar-hover-opacity:.5;--as-scrollbar-hover-background-color:var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}\n";
+    injectStyle(css$h);
     function useTimeout() {
         let timeoutHandle;
         const registerTimeout = (fn, delay) => {
@@ -2076,9 +2102,9 @@
             window.removeEventListener("pointerdown", listener);
         };
     }
-    var css$d = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 99999;\n  position: relative;\n}\n.popover-content .arrow,\n.popover-content .arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n.popover-content .arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
-    injectStyle(css$d);
-    const _sfc_main$d = {
+    var css$g = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 99999;\n  position: relative;\n}\n.popover-content .arrow,\n.popover-content .arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n.popover-content .arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
+    injectStyle(css$g);
+    const _sfc_main$g = {
         props: {
             placement: {
                 type: String,
@@ -2151,8 +2177,8 @@
             };
         }
     };
-    const _hoisted_1$8 = [ "data-show", "data-initialized" ];
-    function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_1$a = [ "data-show", "data-initialized" ];
+    function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ Vue.renderSlot(_ctx.$slots, "trigger", Vue.mergeProps({
             ref: "trigger"
         }, {
@@ -2175,11 +2201,11 @@
                 onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
             }, [ $setup.loaded ? Vue.renderSlot(_ctx.$slots, "default", {
                 key: 0
-            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$8), [ [ Vue.vShow, $setup.visible ] ]) ])) ])),
+            }) : Vue.createCommentVNode("", true) ], 42, _hoisted_1$a), [ [ Vue.vShow, $setup.visible ] ]) ])) ])),
             _: 3
         }) ], 64);
     }
-    var popperComp = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
+    var popperComp = _export_sfc(_sfc_main$g, [ [ "render", _sfc_render$g ] ]);
     function findInNodeList(list) {
         return [].find.call(list, (item => isVisible(item)));
     }
@@ -2237,9 +2263,9 @@
         }
         console.log("没有找到搜索关键字");
     }
-    var css$c = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 0.25px 4px 0 0;\n}";
-    injectStyle(css$c);
-    const _sfc_main$c = {
+    var css$f = ".as-icon {\n  font-size: 20px;\n  width: 1em;\n  height: 1em;\n  vertical-align: -0.15em;\n  fill: currentColor;\n  overflow: hidden;\n  margin: 0.25px 4px 0 0;\n  display: inline-block;\n}";
+    injectStyle(css$f);
+    const _sfc_main$f = {
         name: "icon",
         props: {
             name: {
@@ -2248,17 +2274,17 @@
             }
         }
     };
-    const _hoisted_1$7 = {
+    const _hoisted_1$9 = {
         class: "as-icon as-menu-item-icon",
         "aria-hidden": "true"
     };
-    const _hoisted_2$6 = [ "xlink:href" ];
-    function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
-        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1$7, [ Vue.createElementVNode("use", {
+    const _hoisted_2$8 = [ "xlink:href" ];
+    function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1$9, [ Vue.createElementVNode("use", {
             "xlink:href": `#icon-${$props.name}`
-        }, null, 8, _hoisted_2$6) ]);
+        }, null, 8, _hoisted_2$8) ]);
     }
-    var icon = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
+    var icon = _export_sfc(_sfc_main$f, [ [ "render", _sfc_render$f ] ]);
     let el$1 = document.createElement("a");
     const replaceUrl = function(val) {
         const lowerCaseVal = val.toLowerCase();
@@ -2292,15 +2318,15 @@
             hash: el$1.hash
         };
     }
-    const name = "favicon";
-    const session$1 = getSession(name);
-    const getValue$1 = val => val || 1;
-    const valRef = Vue.ref(getValue$1(session$1));
+    const name$1 = "favicon";
+    const session$2 = getSession(name$1);
+    const getVal$2 = val => val || 1;
+    const valRef$1 = Vue.ref(getVal$2(session$2));
     const favicon$1 = Vue.computed({
-        get: () => valRef.value,
+        get: () => valRef$1.value,
         set: val => {
-            valRef.value = val;
-            setSession(name, getValue$1(val));
+            valRef$1.value = val;
+            setSession(name$1, getVal$2(val));
         }
     });
     function useFavicon() {
@@ -2308,10 +2334,10 @@
             favicon: favicon$1
         };
     }
-    var css$b = '.as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-url-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-url-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-url-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-url-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
-    injectStyle(css$b);
+    var css$e = '.as-img-icon {\n  border: none;\n  position: relative;\n  font-size: 0;\n}\n.as-img-icon img {\n  width: 100%;\n  height: 100%;\n  border: none;\n  vertical-align: top;\n}\n.as-img-icon img.error {\n  display: inline-block;\n  transform: scale(1);\n  content: "";\n  color: transparent;\n}\n.as-img-icon img.error::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: #f5f5f5 no-repeat center/50% 50%;\n}\n.as-img-icon img.error::after {\n  content: attr(alt);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  line-height: 2;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  font-size: 12px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}';
+    injectStyle(css$e);
     const iconCache = Vue.reactive(getSession("iconCache") || {});
-    const _sfc_main$b = {
+    const _sfc_main$e = {
         name: "favicon",
         props: {
             url: {
@@ -2365,13 +2391,13 @@
             };
         }
     };
-    const _hoisted_1$6 = {
+    const _hoisted_1$8 = {
         key: 0,
-        class: "as-url-icon"
+        class: "as-img-icon"
     };
-    const _hoisted_2$5 = [ "src" ];
-    function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
-        return $setup.favicon === 1 ? (Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$6, [ Vue.createElementVNode("img", {
+    const _hoisted_2$7 = [ "src" ];
+    function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+        return $setup.favicon === 1 ? (Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$8, [ Vue.createElementVNode("img", {
             class: Vue.normalizeClass({
                 error: $setup.isError
             }),
@@ -2379,9 +2405,9 @@
             crossOrigin: "",
             onError: _cache[0] || (_cache[0] = (...args) => $setup.handleError && $setup.handleError(...args)),
             onLoad: _cache[1] || (_cache[1] = (...args) => $setup.handleLoad && $setup.handleLoad(...args))
-        }, null, 42, _hoisted_2$5) ])) : Vue.createCommentVNode("", true);
+        }, null, 42, _hoisted_2$7) ])) : Vue.createCommentVNode("", true);
     }
-    var favicon = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
+    var favicon = _export_sfc(_sfc_main$e, [ [ "render", _sfc_render$e ] ]);
     const onTap = (target, callback) => {
         let tapStartTime = 0;
         let tapEndTime = 0;
@@ -2431,9 +2457,11 @@
             }
         }));
     };
-    var css$a = '#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n\n.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-subMenu-container {\n  background: #fff;\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
-    injectStyle(css$a);
-    const _sfc_main$a = {
+    const selection = Vue.ref("");
+    var css$d = '#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.as-menu-item.horizontal {\n  position: relative;\n  padding: 0 16px;\n}\n.as-menu-item.horizontal::after {\n  content: "";\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-bottom: 2px solid var(--as-primary-color);\n}\n.as-menu-item.horizontal:hover::after {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media screen and (max-width: 750px) {\n  .as-menu-item.horizontal {\n    padding: 0 10px;\n  }\n}\n.as-menu-item.vertical {\n  margin: 5px 0;\n  position: relative;\n}\n.as-menu-item.vertical::after {\n  content: "";\n  transform: scaleY(0);\n  opacity: 0;\n  transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  border-right: 2.5px solid var(--as-primary-color);\n}\n.as-menu-item.vertical:hover::after {\n  transform: scaleY(1);\n  opacity: 1;\n}\n.as-menu-item.vertical .as-menu-item-title {\n  margin-right: 6px;\n}\n\n.as-menu-item.no-underline {\n  text-decoration: none;\n}\n\n.as-menu-item:visited {\n  color: var(--as-primary-text-color);\n}\n\na.as-menu-item {\n  height: 30px;\n  line-height: 30px;\n  list-style: none;\n  position: relative;\n  color: var(--as-primary-text-color);\n  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);\n  box-sizing: border-box;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\na.as-menu-item:hover {\n  border-color: var(--as-primary-color);\n}\na.as-menu-item:hover .as-menu-item-icon, a.as-menu-item:hover .as-menu-item-title {\n  color: var(--as-primary-color);\n}\n\n.as-menu-item-icon {\n  color: var(--as-primary-text-color);\n}\n\n.as-url-icon {\n  width: 16px;\n  height: 16px;\n  margin-right: 10px;\n}\n\n.as-subMenu-container {\n  background: var(--as-bg-color);\n  border: 1px solid #e4e7ed;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);\n  border-radius: 4px;\n}\n\n.as-subMenu {\n  list-style: none;\n  padding: 0;\n  min-width: 90px;\n  box-sizing: border-box;\n  margin: 4px 0;\n}\n.as-subMenu li {\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.as-subMenu li a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  padding: 0 16px;\n  text-decoration: none;\n}\n.as-subMenu li:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}\n.as-subMenu .as-subMenu-text {\n  flex: 1;\n  font-size: 14px;\n  text-overflow: ellipsis;\n  color: var(--as-primary-text-color);\n  white-space: nowrap;\n  margin: 0;\n  line-height: 34px;\n  font-weight: normal;\n  text-align: left;\n}';
+    injectStyle(css$d);
+    let isTap = false;
+    const _sfc_main$d = {
         name: "menuItem",
         components: {
             popperComp: popperComp,
@@ -2450,7 +2478,6 @@
             }
         },
         setup(props) {
-            let isTap = false;
             const categoryRef = Vue.ref(null);
             const currentSite = site;
             const classList = Vue.computed((() => props.mode === "horizontal" ? "horizontal" : "vertical"));
@@ -2459,6 +2486,9 @@
                 item.show = value;
             };
             const defaultKeyword = () => {
+                if (selection && selection.value) {
+                    return selection.value;
+                }
                 let keyword = getKeyword();
                 const selectors = currentSite.selectors;
                 const query = currentSite.query;
@@ -2504,14 +2534,14 @@
             };
         }
     };
-    const _hoisted_1$5 = [ "onMouseenter", "onMouseleave" ];
-    const _hoisted_2$4 = [ "textContent" ];
-    const _hoisted_3$1 = {
+    const _hoisted_1$7 = [ "onMouseenter", "onMouseleave" ];
+    const _hoisted_2$6 = [ "textContent" ];
+    const _hoisted_3$3 = {
         class: "as-subMenu"
     };
-    const _hoisted_4$1 = [ "onClick", "onMouseup" ];
-    const _hoisted_5 = [ "textContent" ];
-    function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_4$2 = [ "onClick", "onMouseup" ];
+    const _hoisted_5$1 = [ "textContent" ];
+    function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_icon = Vue.resolveComponent("icon");
         const _component_favicon = Vue.resolveComponent("favicon");
         const _component_popper_comp = Vue.resolveComponent("popper-comp");
@@ -2532,8 +2562,8 @@
             }, null, 8, [ "name" ]), Vue.createElementVNode("span", {
                 class: "as-menu-item-title",
                 textContent: Vue.toDisplayString($props.item.nameZh)
-            }, null, 8, _hoisted_2$4) ], 42, _hoisted_1$5) ])),
-            default: Vue.withCtx((() => [ Vue.createElementVNode("ul", _hoisted_3$1, [ (Vue.openBlock(true), 
+            }, null, 8, _hoisted_2$6) ], 42, _hoisted_1$7) ])),
+            default: Vue.withCtx((() => [ Vue.createElementVNode("ul", _hoisted_3$3, [ (Vue.openBlock(true), 
             Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($props.item.list, ((child, i) => Vue.withDirectives((Vue.openBlock(), 
             Vue.createElementBlock("li", {
                 key: `${$props.item.name}_${i}`
@@ -2542,32 +2572,33 @@
                 onClick: [ Vue.withModifiers(($event => $setup.handleClick(child)), [ "exact" ]), Vue.withModifiers(($event => $setup.handleClick(child, true)), [ "ctrl", "exact" ]) ],
                 onMouseup: Vue.withModifiers(($event => $setup.handleClick(child, true)), [ "middle", "exact" ])
             }, [ Vue.createVNode(_component_favicon, {
+                class: "as-url-icon",
                 url: child.url,
                 icon: child.icon
             }, null, 8, [ "url", "icon" ]), Vue.createElementVNode("p", {
                 class: "as-subMenu-text",
                 textContent: Vue.toDisplayString(child.nameZh)
-            }, null, 8, _hoisted_5) ], 40, _hoisted_4$1) ])), [ [ Vue.vShow, child.data.visible ] ]))), 128)) ]) ])),
+            }, null, 8, _hoisted_5$1) ], 40, _hoisted_4$2) ])), [ [ Vue.vShow, child.data.visible ] ]))), 128)) ]) ])),
             _: 1
         }, 8, [ "placement" ]);
     }
-    var menuItem = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
+    var menuItem = _export_sfc(_sfc_main$d, [ [ "render", _sfc_render$d ] ]);
     const NAME = "align";
-    const session = getSession(NAME);
+    const session$1 = getSession(NAME);
     const list = new Map([ [ "flex-start", "开始" ], [ "center", "居中" ], [ "flex-end", "末尾" ] ]);
-    const getVal = val => {
+    const getVal$1 = val => {
         if (list.has(val)) {
             return val;
         }
         return "flex-start";
     };
-    const alignRef = Vue.ref(getVal(session));
+    const alignRef = Vue.ref(getVal$1(session$1));
     const alignList = Vue.reactive(list);
     const align = Vue.computed({
         get: () => alignRef.value,
         set: val => {
             alignRef.value = val;
-            setSession(NAME, getVal(val));
+            setSession(NAME, getVal$1(val));
         }
     });
     function useAlign() {
@@ -2576,9 +2607,9 @@
             align: align
         };
     }
-    var css$9 = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n\n.as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}\n\n.el-scrollbar__bar {\n  display: none;\n}";
-    injectStyle(css$9);
-    const _sfc_main$9 = {
+    var css$c = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}";
+    injectStyle(css$c);
+    const _sfc_main$c = {
         name: "as-menu",
         components: {
             scrollbar: scrollbar,
@@ -2610,7 +2641,7 @@
             };
         }
     };
-    function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_menu_item = Vue.resolveComponent("menu-item");
         const _component_scrollbar = Vue.resolveComponent("scrollbar");
         return Vue.openBlock(), Vue.createBlock(_component_scrollbar, {
@@ -2631,7 +2662,7 @@
             _: 1
         });
     }
-    var asMenu = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ] ]);
+    var asMenu = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
     const reg = /^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/;
     const defaultVal = {
         "primary-color": "#1890ff",
@@ -2698,9 +2729,25 @@
             primaryTextColor: primaryTextColor
         };
     }
-    var css$8 = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n\n.as-overlay {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 999991;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  overflow: auto;\n}";
-    injectStyle(css$8);
-    const _sfc_main$8 = {
+    const name = "showToolbar";
+    const session = getSession(name);
+    const getVal = val => val || 1;
+    const valRef = Vue.ref(getVal(session));
+    const toolbar = Vue.computed({
+        get: () => valRef.value,
+        set: val => {
+            valRef.value = val;
+            setSession(name, getVal(val));
+        }
+    });
+    function useToolbar() {
+        return {
+            toolbar: toolbar
+        };
+    }
+    var css$b = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.as-overlay {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 999991;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.3);\n  overflow: auto;\n}";
+    injectStyle(css$b);
+    const _sfc_main$b = {
         name: "overlay",
         setup(props, {emit: emit}) {
             let mouseDownTarget = false;
@@ -2724,7 +2771,7 @@
             };
         }
     };
-    function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("div", {
             class: "as-overlay",
             onMousedown: _cache[0] || (_cache[0] = (...args) => $setup.onMouseDown && $setup.onMouseDown(...args)),
@@ -2732,10 +2779,10 @@
             onClick: _cache[2] || (_cache[2] = (...args) => $setup.onMaskClick && $setup.onMaskClick(...args))
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 32);
     }
-    var overlay = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ] ]);
-    var css$7 = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
-    injectStyle(css$7);
-    const _sfc_main$7 = {
+    var overlay = _export_sfc(_sfc_main$b, [ [ "render", _sfc_render$b ] ]);
+    var css$a = '/* radio */\nlabel.as-radio {\n  color: var(--as-primary-text-color);\n  font-weight: 500;\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  font-size: 14px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n}\nlabel.as-radio + label.as-radio {\n  margin-left: 14px;\n}\nlabel.as-radio input {\n  position: absolute;\n  opacity: 0;\n  visibility: hidden;\n}\nlabel.as-radio .as-radio-icon {\n  display: inline-block;\n  position: relative;\n  width: 12px;\n  height: 12px;\n  background: var(--as-bg-color);\n  border: 1px solid #979797;\n  border-radius: 50%;\n  vertical-align: -2px;\n}\nlabel.as-radio input:checked + .as-radio-icon:after {\n  position: absolute;\n  content: "";\n  width: 6px;\n  height: 6px;\n  background-color: var(--as-bg-color);\n  border-radius: 50%;\n  top: 3px;\n  left: 3px;\n}\nlabel.as-radio input:checked + .as-radio-icon {\n  background: var(--as-primary-color);\n  border: 1px solid var(--as-primary-color);\n}\nlabel.as-radio input:disabled + .as-radio-icon {\n  background-color: #e8e8e8;\n  border: solid 1px #979797;\n}\nlabel.as-radio input:disabled:checked + .as-radio-icon:after {\n  background-color: #c1c1c1;\n}\nlabel.as-radio.as-radio-animate .as-radio-icon {\n  transition: background-color ease-out 0.3s;\n}\nlabel.as-radio .as-radio-label {\n  margin-left: 6px;\n  font-size: 14px;\n}';
+    injectStyle(css$a);
+    const _sfc_main$a = {
         name: "as-radio",
         props: {
             modelValue: {
@@ -2760,27 +2807,27 @@
             };
         }
     };
-    const _hoisted_1$4 = {
+    const _hoisted_1$6 = {
         class: "as-radio as-radio-animate"
     };
-    const _hoisted_2$3 = [ "value" ];
-    const _hoisted_3 = Vue.createElementVNode("i", {
+    const _hoisted_2$5 = [ "value" ];
+    const _hoisted_3$2 = Vue.createElementVNode("i", {
         class: "as-radio-icon"
     }, null, -1);
-    const _hoisted_4 = {
+    const _hoisted_4$1 = {
         class: "as-radio-label"
     };
-    function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
-        return Vue.openBlock(), Vue.createElementBlock("label", _hoisted_1$4, [ Vue.withDirectives(Vue.createElementVNode("input", {
+    function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.openBlock(), Vue.createElementBlock("label", _hoisted_1$6, [ Vue.withDirectives(Vue.createElementVNode("input", {
             type: "radio",
             value: $props.label,
             "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.model = $event)
-        }, null, 8, _hoisted_2$3), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3, Vue.createElementVNode("span", _hoisted_4, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
+        }, null, 8, _hoisted_2$5), [ [ Vue.vModelRadio, $setup.model ] ]), _hoisted_3$2, Vue.createElementVNode("span", _hoisted_4$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ]);
     }
-    var radio = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ] ]);
-    var css$6 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
-    injectStyle(css$6);
-    const _sfc_main$6 = {
+    var radio = _export_sfc(_sfc_main$a, [ [ "render", _sfc_render$a ] ]);
+    var css$9 = ".as-label {\n  vertical-align: middle;\n  float: left;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  line-height: 40px;\n  padding: 0 12px 0 0;\n  box-sizing: border-box;\n}\n\n.as-content {\n  line-height: 40px;\n  position: relative;\n  font-size: 14px;\n}";
+    injectStyle(css$9);
+    const _sfc_main$9 = {
         name: "form-item",
         props: {
             labelWidth: {
@@ -2805,21 +2852,21 @@
             };
         }
     };
-    const _hoisted_1$3 = [ "textContent" ];
-    function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
+    const _hoisted_1$5 = [ "textContent" ];
+    function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("div", null, [ Vue.createElementVNode("label", {
             class: "as-label",
             style: Vue.normalizeStyle($setup.labelStyle),
             textContent: Vue.toDisplayString($props.label)
-        }, null, 12, _hoisted_1$3), Vue.createElementVNode("div", {
+        }, null, 12, _hoisted_1$5), Vue.createElementVNode("div", {
             class: "as-content",
             style: Vue.normalizeStyle($setup.contentStyle)
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 4) ]);
     }
-    var formItem = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ] ]);
-    var css$5 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
-    injectStyle(css$5);
-    const _sfc_main$5 = {
+    var formItem = _export_sfc(_sfc_main$9, [ [ "render", _sfc_render$9 ] ]);
+    var css$8 = ".as-button {\n  display: inline-block;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  background: #fff;\n  border: 1px solid #dcdfe6;\n  color: var(--as-primary-text-color);\n  text-align: center;\n  box-sizing: border-box;\n  outline: none;\n  margin: 0;\n  transition: 0.1s;\n  font-weight: 500;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  padding: 12px 20px;\n  font-size: 14px;\n  border-radius: 4px;\n}\n\n.as-button.as-button__text {\n  border-color: transparent;\n  color: var(--as-primary-color);\n  background: transparent;\n  padding-left: 0;\n  padding-right: 0;\n}\n\n.as-button.as-button__primary {\n  color: #fff;\n  background-color: var(--as-primary-color);\n  border-color: var(--as-primary-color);\n}";
+    injectStyle(css$8);
+    const _sfc_main$8 = {
         name: "xButton",
         props: {
             type: {
@@ -2828,15 +2875,15 @@
             }
         }
     };
-    function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("button", {
             class: Vue.normalizeClass([ "as-button", `as-button__${$props.type}` ])
         }, [ Vue.renderSlot(_ctx.$slots, "default") ], 2);
     }
-    var button = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ] ]);
-    var css$4 = '@charset "UTF-8";\n.as-color-set .as-color-label {\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  vertical-align: middle;\n}\n.as-color-set .input—color {\n  width: 30px;\n  height: 30px;\n  padding: 4px;\n  border: 1px solid #e6e6e6;\n  border-radius: 4px;\n  background-color: var(--as-secondary-background-color);\n  box-sizing: border-box;\n}\n.as-color-set .input—color::-webkit-color-swatch {\n  border: 0;\n}\n.as-color-set .input—color::-webkit-color-swatch-wrapper {\n  padding: 0;\n}\n.as-color-set .reset-btn {\n  margin-left: 20px;\n}';
-    injectStyle(css$4);
-    const _sfc_main$4 = {
+    var button = _export_sfc(_sfc_main$8, [ [ "render", _sfc_render$8 ] ]);
+    var css$7 = '@charset "UTF-8";\n.as-color-set .as-color-label {\n  line-height: 1;\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n  white-space: nowrap;\n  outline: none;\n  vertical-align: middle;\n}\n.as-color-set .input—color {\n  width: 30px;\n  height: 30px;\n  padding: 4px;\n  border: 1px solid #e6e6e6;\n  border-radius: 4px;\n  background-color: var(--as-secondary-background-color);\n  box-sizing: border-box;\n}\n.as-color-set .input—color::-webkit-color-swatch {\n  border: 0;\n}\n.as-color-set .input—color::-webkit-color-swatch-wrapper {\n  padding: 0;\n}\n.as-color-set .reset-btn {\n  margin-left: 20px;\n}';
+    injectStyle(css$7);
+    const _sfc_main$7 = {
         name: "color",
         components: {
             asButton: button
@@ -2864,15 +2911,15 @@
             };
         }
     };
-    const _hoisted_1$2 = {
+    const _hoisted_1$4 = {
         class: "as-color-set"
     };
-    const _hoisted_2$2 = {
+    const _hoisted_2$4 = {
         class: "as-color-label"
     };
-    function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_asButton = Vue.resolveComponent("asButton");
-        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$2, [ Vue.createElementVNode("label", _hoisted_2$2, [ Vue.withDirectives(Vue.createElementVNode("input", {
+        return Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$4, [ Vue.createElementVNode("label", _hoisted_2$4, [ Vue.withDirectives(Vue.createElementVNode("input", {
             class: "input—color",
             type: "color",
             "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.model = $event)
@@ -2885,10 +2932,10 @@
             _: 1
         }, 8, [ "onClick" ]) ]);
     }
-    var color = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ] ]);
-    var css$3 = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n\n.as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear;\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
-    injectStyle(css$3);
-    const _sfc_main$3 = {
+    var color = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ] ]);
+    var css$6 = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear;\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
+    injectStyle(css$6);
+    const _sfc_main$6 = {
         name: "side-bar",
         components: {
             overlay: overlay,
@@ -2910,6 +2957,7 @@
             const {primaryColor: primaryColor, bgColor: bgColor, primaryTextColor: primaryTextColor} = useColor();
             const {show: show, options: options, scrollHide: scrollHide} = useSwitchShow();
             const {favicon: favicon} = useFavicon();
+            const {toolbar: toolbar} = useToolbar();
             function clearIconCache() {
                 if (window.confirm("确认要清除图标的缓存吗")) {
                     delSession("iconCache");
@@ -2928,6 +2976,7 @@
                 alignList: alignList,
                 align: align,
                 favicon: favicon,
+                toolbar: toolbar,
                 primaryColor: primaryColor,
                 bgColor: bgColor,
                 primaryTextColor: primaryTextColor,
@@ -2939,10 +2988,10 @@
             };
         }
     };
-    const _hoisted_1$1 = Vue.createElementVNode("header", {
+    const _hoisted_1$3 = Vue.createElementVNode("header", {
         class: "header"
     }, " 设置 ", -1);
-    const _hoisted_2$1 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
+    const _hoisted_2$3 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
         class: "link",
         title: "all-search",
         href: "https://endday.github.io/all-search/",
@@ -2953,7 +3002,7 @@
         href: "https://github.com/endday/all-search/issues",
         target: "_blank"
     }, " 意见反馈 ") ], -1);
-    function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_as_radio = Vue.resolveComponent("as-radio");
         const _component_form_item = Vue.resolveComponent("form-item");
         const _component_color = Vue.resolveComponent("color");
@@ -2984,21 +3033,40 @@
                         "aria-modal": "true",
                         role: "dialog",
                         class: "as-side-bar",
-                        onClick: _cache[11] || (_cache[11] = Vue.withModifiers((() => {}), [ "stop" ]))
-                    }, [ _hoisted_1$1, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
+                        onClick: _cache[13] || (_cache[13] = Vue.withModifiers((() => {}), [ "stop" ]))
+                    }, [ _hoisted_1$3, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
+                        label: "工具栏"
+                    }, {
+                        default: Vue.withCtx((() => [ Vue.createVNode(_component_as_radio, {
+                            label: 1,
+                            modelValue: $setup.toolbar,
+                            "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.toolbar = $event)
+                        }, {
+                            default: Vue.withCtx((() => [ Vue.createTextVNode("显示 ") ])),
+                            _: 1
+                        }, 8, [ "modelValue" ]), Vue.createVNode(_component_as_radio, {
+                            label: 2,
+                            modelValue: $setup.toolbar,
+                            "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.toolbar = $event)
+                        }, {
+                            default: Vue.withCtx((() => [ Vue.createTextVNode("隐藏 ") ])),
+                            _: 1
+                        }, 8, [ "modelValue" ]) ])),
+                        _: 1
+                    }), Vue.createVNode(_component_form_item, {
                         label: "方向"
                     }, {
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_as_radio, {
                             label: "horizontal",
                             modelValue: $setup.mode,
-                            "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => $setup.mode = $event)
+                            "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.mode = $event)
                         }, {
                             default: Vue.withCtx((() => [ Vue.createTextVNode("横向 ") ])),
                             _: 1
                         }, 8, [ "modelValue" ]), Vue.createVNode(_component_as_radio, {
                             label: "vertical",
                             modelValue: $setup.mode,
-                            "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => $setup.mode = $event)
+                            "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.mode = $event)
                         }, {
                             default: Vue.withCtx((() => [ Vue.createTextVNode("竖向 ") ])),
                             _: 1
@@ -3012,7 +3080,7 @@
                             key: key,
                             label: key,
                             modelValue: $setup.align,
-                            "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => $setup.align = $event)
+                            "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.align = $event)
                         }, {
                             default: Vue.withCtx((() => [ Vue.createTextVNode(Vue.toDisplayString(value), 1) ])),
                             _: 2
@@ -3026,7 +3094,7 @@
                             key: key,
                             label: key,
                             modelValue: $setup.scrollHide,
-                            "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => $setup.scrollHide = $event)
+                            "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.scrollHide = $event)
                         }, {
                             default: Vue.withCtx((() => [ Vue.createTextVNode(Vue.toDisplayString(value), 1) ])),
                             _: 2
@@ -3038,14 +3106,14 @@
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_as_radio, {
                             label: 1,
                             modelValue: $setup.favicon,
-                            "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => $setup.favicon = $event)
+                            "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => $setup.favicon = $event)
                         }, {
                             default: Vue.withCtx((() => [ Vue.createTextVNode("显示 ") ])),
                             _: 1
                         }, 8, [ "modelValue" ]), Vue.createVNode(_component_as_radio, {
                             label: 2,
                             modelValue: $setup.favicon,
-                            "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => $setup.favicon = $event)
+                            "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => $setup.favicon = $event)
                         }, {
                             default: Vue.withCtx((() => [ Vue.createTextVNode("隐藏 ") ])),
                             _: 1
@@ -3057,7 +3125,7 @@
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
                             name: "primaryColor",
                             modelValue: $setup.primaryColor,
-                            "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => $setup.primaryColor = $event)
+                            "onUpdate:modelValue": _cache[10] || (_cache[10] = $event => $setup.primaryColor = $event)
                         }, null, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
@@ -3066,7 +3134,7 @@
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
                             name: "bgColor",
                             modelValue: $setup.bgColor,
-                            "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => $setup.bgColor = $event)
+                            "onUpdate:modelValue": _cache[11] || (_cache[11] = $event => $setup.bgColor = $event)
                         }, null, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
@@ -3075,7 +3143,7 @@
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
                             name: "primaryTextColor",
                             modelValue: $setup.primaryTextColor,
-                            "onUpdate:modelValue": _cache[10] || (_cache[10] = $event => $setup.primaryTextColor = $event)
+                            "onUpdate:modelValue": _cache[12] || (_cache[12] = $event => $setup.primaryTextColor = $event)
                         }, null, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
@@ -3100,7 +3168,7 @@
                             _: 1
                         }, 8, [ "onClick" ]) ])),
                         _: 1
-                    }) ]), _hoisted_2$1 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ])),
+                    }) ]), _hoisted_2$3 ], 512), [ [ Vue.vShow, $setup.visible ] ]) ])),
                     _: 1
                 }) ])),
                 _: 1
@@ -3108,7 +3176,7 @@
             _: 1
         }) ])) ], 64);
     }
-    var sideBar = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ] ]);
+    var sideBar = _export_sfc(_sfc_main$6, [ [ "render", _sfc_render$6 ] ]);
     function throttle(fn, delay = 500) {
         let canRun = true;
         return function() {
@@ -3143,9 +3211,9 @@
             direction: direction
         };
     }
-    var css$2 = "\n.as-hover-btn[data-v-ad24c1fe] {\n  position: fixed;\n  z-index: 99999;\n  font-weight: 600;\n  font-size: 17px;\n  color: var(--as-primary-color);\n  background: #fff;\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\n  border: 1px var(--as-border-color) solid;\n  opacity: 0.6;\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-ad24c1fe] {\n  top: 0;\n  left: 50%;\n  transform: translateY(0) translateX(-50%);\n  padding: 0 16px;\n  height: 28px;\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-ad24c1fe] {\n  left: 0;\n  top: 50%;\n  transform: translateY(-200%) translateX(0) rotate(90deg);\n  transform-origin: 0 100%;\n  padding: 0 16px;\n  height: 28px;\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-ad24c1fe] {\n  transition: transform 0.2s;\n  transform: translateY(-100%) translateX(-50%);\n}\n";
-    injectStyle(css$2);
-    const _sfc_main$2 = {
+    var css$5 = "\n.as-hover-btn[data-v-ad24c1fe] {\n  position: fixed;\n  z-index: 99999;\n  font-weight: 600;\n  font-size: 17px;\n  color: var(--as-primary-color);\n  background: #fff;\n  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);\n  border: 1px var(--as-border-color) solid;\n  opacity: 0.6;\n  cursor: pointer;\n}\n.as-hover-btn-horizontal[data-v-ad24c1fe] {\n  top: 0;\n  left: 50%;\n  transform: translateY(0) translateX(-50%);\n  padding: 0 16px;\n  height: 28px;\n  line-height: 28px;\n}\n.as-hover-btn-vertical[data-v-ad24c1fe] {\n  left: 0;\n  top: 50%;\n  transform: translateY(-200%) translateX(0) rotate(90deg);\n  transform-origin: 0 100%;\n  padding: 0 16px;\n  height: 28px;\n  line-height: 28px;\n}\n.hover-btn.as-hide[data-v-ad24c1fe] {\n  transition: transform 0.2s;\n  transform: translateY(-100%) translateX(-50%);\n}\n";
+    injectStyle(css$5);
+    const _sfc_main$5 = {
         name: "hover-btn",
         setup() {
             let {show: show, scrollHide: scrollHide} = useSwitchShow();
@@ -3178,31 +3246,340 @@
             };
         }
     };
-    function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
+    function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
         return Vue.openBlock(), Vue.createElementBlock("div", {
             class: Vue.normalizeClass([ "as-hover-btn", $setup.className ]),
             onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.handleMouseEnter && $setup.handleMouseEnter(...args)),
             onClick: _cache[1] || (_cache[1] = (...args) => $setup.handleClick && $setup.handleClick(...args))
         }, " All Search ", 34);
     }
-    var hoverBtn = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ], [ "__scopeId", "data-v-ad24c1fe" ] ]);
-    var css$1 = "\n.svgfont[data-v-4f20014d] {\n  display: inline-block;\n  width: 1em;\n  height: 1em;\n  fill: currentColor;\n  vertical-align: -0.1em;\n  font-size: 16px;\n}\n";
-    injectStyle(css$1);
-    const _sfc_main$1 = {
+    var hoverBtn = _export_sfc(_sfc_main$5, [ [ "render", _sfc_render$5 ], [ "__scopeId", "data-v-ad24c1fe" ] ]);
+    var css$4 = "\n.svgfont[data-v-69434329] {\n  display: inline-block;\n  width: 1em;\n  height: 1em;\n  fill: currentColor;\n  vertical-align: -0.1em;\n  font-size: 16px;\n}\n";
+    injectStyle(css$4);
+    const _sfc_main$4 = {
         name: "svg"
     };
-    const _hoisted_1 = {
+    const _hoisted_1$2 = {
         style: {
             display: "none"
         }
     };
-    const _hoisted_2 = Vue.createStaticVNode('<symbol id="icon-disk" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z" data-v-4f20014d></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z" data-v-4f20014d></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z" data-v-4f20014d></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z" data-v-4f20014d></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z" data-v-4f20014d></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z" data-v-4f20014d></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z" data-v-4f20014d></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z" data-v-4f20014d></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z" data-v-4f20014d></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z" data-v-4f20014d></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z" data-v-4f20014d></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024" data-v-4f20014d><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z" data-v-4f20014d></path></symbol>', 12);
-    const _hoisted_14 = [ _hoisted_2 ];
-    function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
-        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1, _hoisted_14);
+    const _hoisted_2$2 = Vue.createStaticVNode('<symbol id="icon-disk" viewBox="0 0 1024 1024" data-v-69434329><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z" data-v-69434329></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024" data-v-69434329><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z" data-v-69434329></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024" data-v-69434329><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z" data-v-69434329></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024" data-v-69434329><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z" data-v-69434329></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024" data-v-69434329><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z" data-v-69434329></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024" data-v-69434329><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z" data-v-69434329></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024" data-v-69434329><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z" data-v-69434329></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024" data-v-69434329><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z" data-v-69434329></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024" data-v-69434329><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z" data-v-69434329></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024" data-v-69434329><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z" data-v-69434329></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024" data-v-69434329><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z" data-v-69434329></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024" data-v-69434329><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z" data-v-69434329></path></symbol><symbol id="icon-more" viewBox="0 0 1024 1024" data-v-69434329><path d="M437.333333 224C437.333333 183.466667 471.466667 149.333333 512 149.333333s74.666667 34.133333 74.666667 74.666667S552.533333 298.666667 512 298.666667s-74.666667-34.133333-74.666667-74.666667zM439.466667 512c0-40.533333 34.133333-74.666667 74.666666-74.666667s74.666667 34.133333 74.666667 74.666667-34.133333 74.666667-74.666667 74.666667-74.666667-34.133333-74.666666-74.666667zM437.333333 800c0-40.533333 34.133333-74.666667 74.666667-74.666667s74.666667 34.133333 74.666667 74.666667S552.533333 874.666667 512 874.666667s-74.666667-34.133333-74.666667-74.666667z" data-v-69434329></path></symbol>', 13);
+    const _hoisted_15 = [ _hoisted_2$2 ];
+    function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1$2, _hoisted_15);
     }
-    var iconfont = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ], [ "__scopeId", "data-v-4f20014d" ] ]);
-    var css = '#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n\n.body-horizontal + body {\n  margin-top: 30px !important;\n  position: relative !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n.body-horizontal + body [data-as-has-set] {\n  transition-duration: 0s;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
+    var iconfont = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ], [ "__scopeId", "data-v-69434329" ] ]);
+    var css$3 = ".bar-container[data-v-c66b00f6] {\n  display: flex;\n  padding: 2px;\n  max-width: 300px;\n  position: absolute;\n  z-index: 99999;\n  background-color: #fff;\n  color: #444;\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 2px 3px 0 rgba(0, 0, 0, 0.1);\n  border-radius: 2px;\n  cursor: pointer;\n  white-space: nowrap;\n}\n\n.tool-bar-item[data-v-c66b00f6] {\n  margin: 0;\n  padding: 2px;\n  width: 20px;\n  height: 20px;\n  border: 1px solid #FFF;\n  cursor: pointer;\n  box-sizing: content-box;\n}\n.tool-bar-item[data-v-c66b00f6][data-v-c66b00f6]:hover {\n  border-color: var(--as-border-color);\n}\n\n.as-more-icon[data-v-c66b00f6] {\n  display: block;\n  font-size: 20px;\n}";
+    injectStyle(css$3);
+    function getSelection() {
+        return window.getSelection().toString().trim();
+    }
+    function getSelectionRect() {
+        const selection = window.getSelection();
+        if (selection.rangeCount) {
+            return selection.getRangeAt(0).getBoundingClientRect();
+        }
+        return null;
+    }
+    function scrollTop() {
+        return document.documentElement.scrollTop || document.body.scrollTop;
+    }
+    function scrollLeft() {
+        return document.documentElement.scrollLeft || document.body.scrollLeft;
+    }
+    const _sfc_main$3 = {
+        name: "selection-bar",
+        components: {
+            favicon: favicon,
+            icon: icon
+        },
+        setup(props, ctx) {
+            const {toolbar: show} = useToolbar();
+            const list = Vue.reactive(initToolbar("tm"));
+            const visible = Vue.ref(false);
+            const toolbarEle = Vue.ref(null);
+            const styleObj = Vue.reactive({
+                top: 0,
+                left: 0
+            });
+            const style = Vue.computed((() => ({
+                top: `${styleObj.top - 20}px`,
+                left: `${styleObj.left}px`
+            })));
+            const selectionShort = Vue.computed((() => {
+                if (selection.value.length > 12) {
+                    return `${selection.value.substr(0, 12)}...`;
+                } else {
+                    return selection.value;
+                }
+            }));
+            let selectStart = false;
+            function changeVisible(val) {
+                visible.value = Boolean(val);
+                Vue.nextTick((() => {
+                    if (val) {
+                        const toolbarClientRect = toolbarEle.value.getBoundingClientRect();
+                        const height = toolbarClientRect.bottom - toolbarClientRect.top;
+                        const selectionRect = getSelectionRect();
+                        if (selectionRect) {
+                            const {x: x, right: right, left: left, top: top} = selectionRect;
+                            styleObj.top = scrollTop() + top - height;
+                            styleObj.left = scrollLeft() + x + (right - left) / 2 - toolbarClientRect.width / 2;
+                        }
+                    }
+                }));
+            }
+            window.addEventListener("mousedown", (function(e) {
+                const include = e.target && getAsRoot().contains(e.target);
+                if (!include) {
+                    changeVisible(false);
+                }
+            }), true);
+            window.addEventListener("mouseup", (function(e) {
+                const include = e.target && getAsRoot().contains(e.target);
+                if (!include) {
+                    selection.value = getSelection();
+                    changeVisible(!!selection.value && selectStart);
+                }
+                selectStart = false;
+            }), true);
+            document.addEventListener("selectionchange", (function() {}), true);
+            document.addEventListener("selectstart", (function() {
+                selectStart = true;
+            }), false);
+            function handleClick(item, newWin) {
+                const keyword = selection.value;
+                if (newWin) {
+                    window.open(item.url.replace("%s", keyword));
+                } else {
+                    window.location.href = item.url.replace("%s", keyword);
+                }
+            }
+            function openMainDialog() {
+                ctx.emit("open-dialog");
+            }
+            return {
+                show: show,
+                list: list,
+                visible: visible,
+                toolbarEle: toolbarEle,
+                style: style,
+                selectionShort: selectionShort,
+                handleClick: handleClick,
+                openMainDialog: openMainDialog
+            };
+        }
+    };
+    function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
+        const _component_favicon = Vue.resolveComponent("favicon");
+        const _component_icon = Vue.resolveComponent("icon");
+        return $setup.show === 1 ? Vue.withDirectives((Vue.openBlock(), Vue.createElementBlock("div", {
+            key: 0,
+            class: "bar-container",
+            ref: "toolbarEle",
+            style: Vue.normalizeStyle($setup.style)
+        }, [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.list, ((item, i) => (Vue.openBlock(), 
+        Vue.createBlock(_component_favicon, {
+            class: "tool-bar-item",
+            key: i,
+            url: item.url,
+            title: item.nameZh,
+            onClick: [ Vue.withModifiers(($event => $setup.handleClick(item, true)), [ "exact" ]), Vue.withModifiers(($event => $setup.handleClick(item, false)), [ "ctrl", "exact" ]) ],
+            onMouseup: Vue.withModifiers(($event => $setup.handleClick(item, false)), [ "middle", "exact" ])
+        }, null, 8, [ "url", "title", "onClick", "onMouseup" ])))), 128)), Vue.createElementVNode("div", {
+            class: "tool-bar-item",
+            onClick: _cache[0] || (_cache[0] = (...args) => $setup.openMainDialog && $setup.openMainDialog(...args))
+        }, [ Vue.createVNode(_component_icon, {
+            class: "as-more-icon",
+            name: "more"
+        }) ]) ], 4)), [ [ Vue.vShow, $setup.visible ] ]) : Vue.createCommentVNode("", true);
+    }
+    var selectionBar = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ], [ "__scopeId", "data-v-c66b00f6" ] ]);
+    var css$2 = '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  margin: 0;\n  z-index: 99999;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  -webkit-backdrop-filter: blur(5px);\n          backdrop-filter: blur(5px);\n}\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 10px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  min-width: 50%;\n  max-width: 80%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n.as-dialog__header {\n  position: relative;\n}\n.as-dialog__body {\n  padding: 0 20px 20px;\n  color: #666;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}';
+    injectStyle(css$2);
+    const _sfc_main$2 = {
+        name: "as-dialog",
+        model: {
+            prop: "visible",
+            event: "change"
+        },
+        props: {
+            visible: {
+                type: Boolean,
+                default: false
+            },
+            title: {
+                type: String,
+                default: ""
+            },
+            width: {
+                type: String,
+                default: ""
+            }
+        },
+        setup(props, ctx) {
+            const style = Vue.computed((() => {
+                const obj = {};
+                if (props.width) {
+                    obj.width = props.width;
+                }
+                return obj;
+            }));
+            const localVisible = Vue.computed({
+                get: () => props.visible,
+                set: value => {
+                    ctx.emit("update:visible", value);
+                }
+            });
+            const handleClose = () => {
+                localVisible.value = false;
+            };
+            return {
+                style: style,
+                handleClose: handleClose,
+                localVisible: localVisible
+            };
+        }
+    };
+    const _hoisted_1$1 = {
+        class: "as-dialog"
+    };
+    const _hoisted_2$1 = {
+        class: "as-dialog__header"
+    };
+    const _hoisted_3$1 = {
+        class: "as-dialog__body"
+    };
+    function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
+        return Vue.withDirectives((Vue.openBlock(), Vue.createElementBlock("div", _hoisted_1$1, [ Vue.createElementVNode("div", {
+            class: "as-dialog-container",
+            style: Vue.normalizeStyle($setup.style)
+        }, [ Vue.createElementVNode("div", _hoisted_2$1, [ Vue.renderSlot(_ctx.$slots, "header") ]), Vue.createElementVNode("div", _hoisted_3$1, [ Vue.renderSlot(_ctx.$slots, "default") ]) ], 4), Vue.createElementVNode("div", {
+            class: "as-dialog__mask",
+            onClick: _cache[0] || (_cache[0] = (...args) => $setup.handleClose && $setup.handleClose(...args))
+        }) ], 512)), [ [ Vue.vShow, $setup.localVisible ] ]);
+    }
+    var asDialog = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ] ]);
+    var css$1 = ".se-header {\n  padding: 15px 20px;\n  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);\n}\n\n.se-input-box {\n  border: 1px solid #ccc;\n  background-color: #FFFFFF;\n  overflow: hidden;\n  display: flex;\n  border-radius: 6px;\n  height: 40px;\n  align-items: center;\n  transition: 0.2s;\n  color: #222;\n}\n.se-input-box:hover {\n  border-color: rgba(223, 225, 229, 0);\n  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);\n}\n.se-input-box .se-input {\n  color: var(--as-primary-text-color);\n  background-color: transparent;\n  font-size: 16px;\n  height: 100%;\n  width: 100%;\n  line-height: 20px;\n  margin: 0 20px;\n  outline: none;\n  border: none;\n}\n\n.se-scrollbar-container {\n  height: 50vh;\n}\n\n.se-container {\n  margin-top: 10px;\n  display: flex;\n  border-radius: 6px;\n  flex-wrap: wrap;\n}\n\n.cate-container {\n  flex: 0 0 150px;\n  margin-bottom: 20px;\n}\n\n.cate-name {\n  padding: 0 10px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 16px;\n}\n\n.cate-list {\n  list-style: none;\n  min-width: 110px;\n  box-sizing: border-box;\n}\n.cate-list .cate-item {\n  box-sizing: border-box;\n  padding: 0 10px;\n}\n.cate-list .cate-item .as-subMenu-text {\n  margin: 0;\n}\n.cate-list .cate-item a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  text-decoration: none;\n}\n.cate-list .cate-item:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}";
+    injectStyle(css$1);
+    const _sfc_main$1 = {
+        name: "search-dialog",
+        components: {
+            asDialog: asDialog,
+            icon: icon,
+            favicon: favicon,
+            scrollbar: scrollbar
+        },
+        props: {
+            visible: {
+                type: Boolean,
+                default: false
+            }
+        },
+        emits: [ "update:visible" ],
+        setup(props, ctx) {
+            const localVisible = Vue.computed({
+                get: () => props.visible,
+                set: value => {
+                    ctx.emit("update:visible", value);
+                }
+            });
+            Vue.watch(selection, (val => {
+                inputValue.value = val;
+            }));
+            const inputValue = Vue.ref("");
+            const sites = Vue.reactive(initSites("tm"));
+            const handleClick = (item, newWin) => {
+                const keyword = inputValue.value;
+                if (newWin) {
+                    window.open(item.url.replace("%s", keyword));
+                } else {
+                    window.location.href = item.url.replace("%s", keyword);
+                }
+            };
+            return {
+                localVisible: localVisible,
+                sites: sites,
+                inputValue: inputValue,
+                handleClick: handleClick
+            };
+        }
+    };
+    const _hoisted_1 = {
+        class: "se-header"
+    };
+    const _hoisted_2 = {
+        class: "se-input-box"
+    };
+    const _hoisted_3 = {
+        class: "se-container"
+    };
+    const _hoisted_4 = {
+        class: "cate-name"
+    };
+    const _hoisted_5 = [ "textContent" ];
+    const _hoisted_6 = {
+        class: "cate-list"
+    };
+    const _hoisted_7 = [ "onClick", "onMouseup" ];
+    const _hoisted_8 = [ "textContent" ];
+    function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+        const _component_icon = Vue.resolveComponent("icon");
+        const _component_favicon = Vue.resolveComponent("favicon");
+        const _component_scrollbar = Vue.resolveComponent("scrollbar");
+        const _component_as_dialog = Vue.resolveComponent("as-dialog");
+        return Vue.openBlock(), Vue.createBlock(_component_as_dialog, {
+            visible: $setup.localVisible,
+            "onUpdate:visible": _cache[1] || (_cache[1] = $event => $setup.localVisible = $event)
+        }, {
+            header: Vue.withCtx((() => [ Vue.createElementVNode("div", _hoisted_1, [ Vue.createElementVNode("div", _hoisted_2, [ $setup.localVisible ? Vue.withDirectives((Vue.openBlock(), 
+            Vue.createElementBlock("input", {
+                key: 0,
+                autofocus: "",
+                autocomplete: "off",
+                class: "se-input",
+                placeholder: "输入并搜索",
+                type: "text",
+                "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => $setup.inputValue = $event)
+            }, null, 512)), [ [ Vue.vModelText, $setup.inputValue ] ]) : Vue.createCommentVNode("", true) ]) ]) ])),
+            default: Vue.withCtx((() => [ Vue.createVNode(_component_scrollbar, {
+                class: "se-scrollbar-container",
+                noresize: ""
+            }, {
+                default: Vue.withCtx((() => [ Vue.createElementVNode("div", _hoisted_3, [ (Vue.openBlock(true), 
+                Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.sites, (item => (Vue.openBlock(), 
+                Vue.createElementBlock("div", {
+                    key: item.name,
+                    class: "cate-container"
+                }, [ Vue.createElementVNode("p", _hoisted_4, [ Vue.createVNode(_component_icon, {
+                    name: item.name
+                }, null, 8, [ "name" ]), Vue.createElementVNode("span", {
+                    textContent: Vue.toDisplayString(item.nameZh)
+                }, null, 8, _hoisted_5) ]), Vue.createElementVNode("ul", _hoisted_6, [ (Vue.openBlock(true), 
+                Vue.createElementBlock(Vue.Fragment, null, Vue.renderList(item.list, ((child, i) => (Vue.openBlock(), 
+                Vue.createElementBlock("li", {
+                    key: `${item.name}_${i}`,
+                    class: "cate-item"
+                }, [ Vue.createElementVNode("a", {
+                    href: "javascript:void 0",
+                    onClick: [ Vue.withModifiers(($event => $setup.handleClick(child)), [ "exact" ]), Vue.withModifiers(($event => $setup.handleClick(child, true)), [ "ctrl", "exact" ]) ],
+                    onMouseup: Vue.withModifiers(($event => $setup.handleClick(child, true)), [ "middle", "exact" ])
+                }, [ Vue.createVNode(_component_favicon, {
+                    class: "as-url-icon",
+                    url: child.url,
+                    icon: child.icon
+                }, null, 8, [ "url", "icon" ]), Vue.createElementVNode("p", {
+                    class: "as-subMenu-text",
+                    textContent: Vue.toDisplayString(child.nameZh)
+                }, null, 8, _hoisted_8) ], 40, _hoisted_7) ])))), 128)) ]) ])))), 128)) ]) ])),
+                _: 1
+            }) ])),
+            _: 1
+        }, 8, [ "visible" ]);
+    }
+    var searchDialog = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render$1 ] ]);
+    var css = '#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.body-horizontal + body {\n  margin-top: 30px !important;\n  position: relative !important;\n}\n.body-horizontal + body [data-as-margin-top] {\n  margin-top: 30px !important;\n}\n.body-horizontal + body [data-as-transform] {\n  transform: translateY(30px);\n}\n.body-horizontal + body [data-as-border-top] {\n  border-top: rgba(0, 0, 0, 0) 30px solid;\n  box-sizing: content-box;\n}\n.body-horizontal + body [data-as-has-set] {\n  transition-duration: 0s;\n}\n\n.body-vertical + body {\n  margin-left: 90px !important;\n}\n\nbody, #all-search {\n  --as-horizontal-height: $height;\n  --as-primary-color: #1890ff;\n  --as-bg-color: #ffffff;\n  --as-primary-text-color: #606266;\n  --as-secondary-background-color: #f5f7fa;\n  --as-border-color: #e8e8e8;\n}\n\n#all-search {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n}\n\n/*@media (prefers-color-scheme: dark) {\n  #all-search {\n    --as-primary-color: #3d9be9;\n    --as-bg-color: #212121;\n    --as-primary-text-color: #e0e0e0;\n    --as-secondary-background-color: #444;\n    --as-border-color: #212121;\n  }\n}*/\n.as-horizontal {\n  height: 30px;\n  width: 100%;\n  top: 0;\n  border-bottom: 1px var(--as-border-color) solid;\n  flex-direction: row;\n  transition: transform 0.1s;\n}\n.as-horizontal.as-hide {\n  transform: translateY(-100%);\n}\n.as-horizontal.as-show {\n  transform: translateY(0);\n}\n\n.as-vertical {\n  height: 100%;\n  width: 90px;\n  top: 0;\n  left: 0;\n  border-right: 1px var(--as-border-color) solid;\n  flex-direction: column;\n  transition: transform 0.1s;\n}\n.as-vertical.as-hide {\n  transform: translateX(-100%);\n}\n.as-vertical.as-show {\n  transform: translateX(0);\n}\n\n.as-container {\n  opacity: 1 !important;\n  position: fixed;\n  display: flex;\n  background-color: var(--as-bg-color);\n  z-index: 999990;\n}';
     injectStyle(css);
     const _sfc_main = {
         name: "all-search",
@@ -3211,7 +3588,9 @@
             asMenu: asMenu,
             sideBar: sideBar,
             hoverBtn: hoverBtn,
-            iconfont: iconfont
+            iconfont: iconfont,
+            selectionBar: selectionBar,
+            searchDialog: searchDialog
         },
         setup() {
             const {isFullScreen: isFullScreen} = useFullScreen();
@@ -3240,11 +3619,17 @@
             }), {
                 immediate: true
             });
+            const dialogVisible = Vue.ref(false);
+            function openDialog() {
+                dialogVisible.value = true;
+            }
             return {
                 disabled: site.disabled,
                 mode: mode,
                 classList: classList,
-                visible: visible
+                visible: visible,
+                dialogVisible: dialogVisible,
+                openDialog: openDialog
             };
         }
     };
@@ -3254,7 +3639,10 @@
         const _component_side_bar = Vue.resolveComponent("side-bar");
         const _component_hoverBtn = Vue.resolveComponent("hoverBtn");
         const _component_iconfont = Vue.resolveComponent("iconfont");
-        return !$setup.disabled ? (Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, {
+        const _component_selection_bar = Vue.resolveComponent("selection-bar");
+        const _component_search_dialog = Vue.resolveComponent("search-dialog");
+        return Vue.openBlock(), Vue.createElementBlock(Vue.Fragment, null, [ !$setup.disabled ? (Vue.openBlock(), 
+        Vue.createElementBlock(Vue.Fragment, {
             key: 0
         }, [ Vue.withDirectives(Vue.createElementVNode("div", {
             style: {
@@ -3265,7 +3653,12 @@
             mode: $setup.mode
         }, null, 8, [ "mode" ]), Vue.createVNode(_component_as_menu, {
             mode: $setup.mode
-        }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.withDirectives(Vue.createVNode(_component_hoverBtn, null, null, 512), [ [ Vue.vShow, $setup.visible ] ]), Vue.createVNode(_component_iconfont) ], 64)) : Vue.createCommentVNode("", true);
+        }, null, 8, [ "mode" ]), Vue.createVNode(_component_side_bar) ], 2), [ [ Vue.vShow, $setup.visible ] ]), Vue.withDirectives(Vue.createVNode(_component_hoverBtn, null, null, 512), [ [ Vue.vShow, $setup.visible ] ]) ], 64)) : Vue.createCommentVNode("", true), Vue.createVNode(_component_iconfont), Vue.createVNode(_component_selection_bar, {
+            onOpenDialog: $setup.openDialog
+        }, null, 8, [ "onOpenDialog" ]), Vue.createVNode(_component_search_dialog, {
+            visible: $setup.dialogVisible,
+            "onUpdate:visible": _cache[0] || (_cache[0] = $event => $setup.dialogVisible = $event)
+        }, null, 8, [ "visible" ]) ], 64);
     }
     var index = _export_sfc(_sfc_main, [ [ "render", _sfc_render ] ]);
     passTmMethods();
