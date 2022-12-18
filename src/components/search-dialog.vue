@@ -161,7 +161,6 @@ export default {
   display: flex;
   border-radius: 6px;
   flex-wrap: wrap;
-  background-color: #f8f8f8;
 }
 
 .cate-container {
@@ -185,6 +184,10 @@ export default {
     box-sizing: border-box;
     padding: 0 10px;
 
+    .as-subMenu-text {
+      margin: 0;
+    }
+
     a {
       display: flex;
       align-items: center;
@@ -197,7 +200,5 @@ export default {
       color: var(--as-primary-color);
     }
   }
-
-
 }
 </style>
