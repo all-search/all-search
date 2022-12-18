@@ -126,13 +126,13 @@ export default {
   background-color: #FFFFFF;
   overflow: hidden;
   display: flex;
-  border-radius: 20px;
+  border-radius: 6px;
   height: 40px;
-  width: 50%;
+  //width: 50%;
   align-items: center;
   transition: .2s;
   color: #222;
-  margin: 0 auto;
+  //margin: 0 auto;
 
   &:hover {
     border-color: rgba(223, 225, 229, 0);
@@ -161,6 +161,7 @@ export default {
   display: flex;
   border-radius: 6px;
   flex-wrap: wrap;
+  background-color: #f8f8f8;
 }
 
 .cate-container {

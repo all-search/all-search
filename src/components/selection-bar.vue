@@ -69,7 +69,7 @@ export default {
       left: 0
     })
     const style = computed(() => ({
-      top: `${styleObj.top}px`,
+      top: `${styleObj.top - 20}px`,
       left: `${styleObj.left}px`
     }))
     const selectionShort = computed(() => {
@@ -90,7 +90,7 @@ export default {
           const selectionRect = getSelectionRect()
           if (selectionRect) {
             const { x, right, left, top } = selectionRect
-            styleObj.top = scrollTop() + top - height - 5
+            styleObj.top = scrollTop() + top - height
             styleObj.left = scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2)
           }
         }
