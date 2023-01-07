@@ -68,10 +68,12 @@ export default {
       top: 0,
       left: 0
     })
+
     const style = computed(() => ({
       top: `${styleObj.top - 20}px`,
       left: `${styleObj.left}px`
     }))
+
     const selectionShort = computed(() => {
       if (selection.value.length > 12) {
         return `${selection.value.substr(0, 12)}...`
@@ -109,6 +111,8 @@ export default {
       if (!include) {
         selection.value = getSelection()
         changeVisible(!!selection.value && selectStart)
+      } else {
+        selection.value = ''
       }
       selectStart = false
     }, true)
