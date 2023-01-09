@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { reactive, ref, computed, nextTick } from 'vue'
+import { reactive, ref, unref, computed, nextTick } from 'vue'
 import { getAsRoot } from '../util'
 import { selection } from './selection'
 import { initToolbar } from '../util/sites'
@@ -87,7 +87,7 @@ export default {
       visible.value = Boolean(val)
       nextTick(() => {
         if (val) {
-          const toolbarClientRect = toolbarEle.value.getBoundingClientRect()
+          const toolbarClientRect = unref(toolbarEle).getBoundingClientRect()
           const height = toolbarClientRect.bottom - toolbarClientRect.top
           const selectionRect = getSelectionRect()
           if (selectionRect) {
@@ -99,6 +99,10 @@ export default {
       })
     }
 
+    function isToolbarContains (el) {
+      return unref(toolbarEle).contains(el)
+    }
+
     window.addEventListener('mousedown', function (e) {
       const include = e.target && getAsRoot().contains(e.target)
       if (!include) {
@@ -108,11 +112,14 @@ export default {
 
     window.addEventListener('mouseup', function (e) {
       const include = e.target && getAsRoot().contains(e.target)
+      const isToolbar = e.target && isToolbarContains(e.target)
       if (!include) {
         selection.value = getSelection()
         changeVisible(!!selection.value && selectStart)
-      } else {
+      } else if (!isToolbar) {
         selection.value = ''
+      } else if (isToolbar) {
+        changeVisible(false)
       }
       selectStart = false
     }, true)
