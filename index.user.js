@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.4.1
-// @description  2023-1-7更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.4.2
+// @description  2023-1-9更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$2 = "all-search";
-    var version$1 = "1.4.1";
+    var version$1 = "1.4.2";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -3270,7 +3270,7 @@
         return Vue.openBlock(), Vue.createElementBlock("svg", _hoisted_1$2, _hoisted_15);
     }
     var iconfont = _export_sfc(_sfc_main$4, [ [ "render", _sfc_render$4 ], [ "__scopeId", "data-v-69434329" ] ]);
-    var css$3 = ".bar-container[data-v-70741a40] {\n  display: flex;\n  padding: 2px;\n  max-width: 300px;\n  position: absolute;\n  z-index: 99999;\n  background-color: #fff;\n  color: #444;\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 2px 3px 0 rgba(0, 0, 0, 0.1);\n  border-radius: 2px;\n  cursor: pointer;\n  white-space: nowrap;\n}\n\n.tool-bar-item[data-v-70741a40] {\n  margin: 0;\n  padding: 2px;\n  width: 20px;\n  height: 20px;\n  border: 1px solid #FFF;\n  cursor: pointer;\n  box-sizing: content-box;\n}\n.tool-bar-item[data-v-70741a40][data-v-70741a40]:hover {\n  border-color: var(--as-border-color);\n}\n\n.as-more-icon[data-v-70741a40] {\n  display: block;\n  font-size: 20px;\n}";
+    var css$3 = ".bar-container[data-v-da107592] {\n  display: flex;\n  padding: 2px;\n  max-width: 300px;\n  position: absolute;\n  z-index: 99999;\n  background-color: #fff;\n  color: #444;\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 2px 3px 0 rgba(0, 0, 0, 0.1);\n  border-radius: 2px;\n  cursor: pointer;\n  white-space: nowrap;\n}\n\n.tool-bar-item[data-v-da107592] {\n  margin: 0;\n  padding: 2px;\n  width: 20px;\n  height: 20px;\n  border: 1px solid #FFF;\n  cursor: pointer;\n  box-sizing: content-box;\n}\n.tool-bar-item[data-v-da107592][data-v-da107592]:hover {\n  border-color: var(--as-border-color);\n}\n\n.as-more-icon[data-v-da107592] {\n  display: block;\n  font-size: 20px;\n}";
     injectStyle(css$3);
     function getSelection() {
         return window.getSelection().toString().trim();
@@ -3319,7 +3319,7 @@
                 visible.value = Boolean(val);
                 Vue.nextTick((() => {
                     if (val) {
-                        const toolbarClientRect = toolbarEle.value.getBoundingClientRect();
+                        const toolbarClientRect = Vue.unref(toolbarEle).getBoundingClientRect();
                         const height = toolbarClientRect.bottom - toolbarClientRect.top;
                         const selectionRect = getSelectionRect();
                         if (selectionRect) {
@@ -3330,6 +3330,9 @@
                     }
                 }));
             }
+            function isToolbarContains(el) {
+                return Vue.unref(toolbarEle).contains(el);
+            }
             window.addEventListener("mousedown", (function(e) {
                 const include = e.target && getAsRoot().contains(e.target);
                 if (!include) {
@@ -3338,11 +3341,14 @@
             }), true);
             window.addEventListener("mouseup", (function(e) {
                 const include = e.target && getAsRoot().contains(e.target);
+                const isToolbar = e.target && isToolbarContains(e.target);
                 if (!include) {
                     selection.value = getSelection();
                     changeVisible(!!selection.value && selectStart);
-                } else {
+                } else if (!isToolbar) {
                     selection.value = "";
+                } else if (isToolbar) {
+                    changeVisible(false);
                 }
                 selectStart = false;
             }), true);
@@ -3397,7 +3403,7 @@
             name: "more"
         }) ]) ], 4)), [ [ Vue.vShow, $setup.visible ] ]) : Vue.createCommentVNode("", true);
     }
-    var selectionBar = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ], [ "__scopeId", "data-v-70741a40" ] ]);
+    var selectionBar = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ], [ "__scopeId", "data-v-da107592" ] ]);
     var css$2 = '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  margin: 0;\n  z-index: 99999;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  -webkit-backdrop-filter: blur(5px);\n          backdrop-filter: blur(5px);\n}\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 10px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  min-width: 50%;\n  max-width: 80%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n.as-dialog__header {\n  position: relative;\n}\n.as-dialog__body {\n  padding: 0 20px 20px;\n  color: #666;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}';
     injectStyle(css$2);
     const _sfc_main$2 = {
