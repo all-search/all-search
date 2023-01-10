@@ -14,7 +14,9 @@
   </template>
   <iconfont/>
   <selection-bar @openDialog="openDialog"/>
-  <search-dialog v-model:visible="dialogVisible"/>
+  <search-dialog
+    :keyword="keyword"
+    v-model:visible="dialogVisible"/>
 </template>
 
 <script>
@@ -88,8 +90,10 @@ export default {
     })
 
     const dialogVisible = ref(false)
+    const keyword = ref('')
 
-    function openDialog () {
+    function openDialog (text) {
+      keyword.value = text
       dialogVisible.value = true
     }
 
@@ -99,7 +103,8 @@ export default {
       classList,
       visible,
       dialogVisible,
-      openDialog
+      openDialog,
+      keyword
     }
   }
 }

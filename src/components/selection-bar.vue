@@ -145,7 +145,7 @@ export default {
     }
 
     function openMainDialog () {
-      ctx.emit('open-dialog')
+      ctx.emit('open-dialog', selection.value)
     }
 
     return {

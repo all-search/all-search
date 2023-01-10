@@ -62,7 +62,6 @@ import asDialog from './dialog'
 import icon from './icon'
 import favicon from './favicon'
 import { initSites } from '../util/sites'
-import { selection } from './selection'
 import scrollbar from './scrollbar/src/scrollbar'
 
 export default {
@@ -77,6 +76,10 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    keyword: {
+      type: [String, Number],
+      default: ''
     }
   },
   emits: ['update:visible'],
@@ -88,8 +91,8 @@ export default {
       }
     })
 
-    watch(selection, val => {
-      inputValue.value = val
+    watch(() => props.visible, val => {
+      inputValue.value = val ? props.keyword : ''
     })
 
     const inputValue = ref('')
