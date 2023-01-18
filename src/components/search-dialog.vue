@@ -182,6 +182,7 @@ export default {
   list-style: none;
   min-width: 110px;
   box-sizing: border-box;
+  padding: 0;
 
   .cate-item {
     box-sizing: border-box;
