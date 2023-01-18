@@ -4,7 +4,6 @@ import { getSession, setSession } from '../util/index'
 const reg = /^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/
 const defaultVal = {
   'primary-color': '#1890ff',
-  'bg-color': '#ffffff',
   'primary-text-color': '#606266'
 }
 
@@ -24,7 +23,6 @@ function getValue (name) {
 
 const valMap = {
   'primary-color': ref(getValue('primary-color')),
-  'bg-color': ref(getValue('bg-color')),
   'primary-text-color': ref(getValue('primary-text-color'))
 }
 
@@ -40,13 +38,6 @@ const primaryColor = computed({
   get: () => valMap['primary-color'].value,
   set: val => {
     setValue('primary-color', val)
-  }
-})
-
-const bgColor = computed({
-  get: () => valMap['bg-color'].value,
-  set: val => {
-    setValue('bg-color', val)
   }
 })
 
@@ -68,12 +59,10 @@ function initColor (name) {
 export default function useColor () {
   onMounted(() => {
     initColor('primary-color')
-    initColor('bg-color')
     initColor('primary-text-color')
   })
   return {
     primaryColor,
-    bgColor,
     primaryTextColor
   }
 }

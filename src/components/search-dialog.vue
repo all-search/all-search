@@ -119,27 +119,34 @@ export default {
 </script>
 
 <style lang="scss">
+$bg: rgba(242, 242, 242, .9);
+$bg1: #f3f3f3 radial-gradient(#eff4f9 75%, #f3f3f3 100%) no-repeat fixed;
+$bg2: rgba(255, 255, 255, 0.67);
+
 .se-header {
   padding: 15px 20px;
   box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);
+  background: #f3f3f3 radial-gradient(#eff4f9 75%, #f3f3f3 100%) no-repeat fixed;
 }
 
 .se-input-box {
   border: 1px solid #ccc;
-  background-color: #FFFFFF;
+  background-color: $bg2;
   overflow: hidden;
   display: flex;
   border-radius: 6px;
   height: 40px;
-  //width: 50%;
   align-items: center;
   transition: .2s;
   color: #222;
-  //margin: 0 auto;
 
   &:hover {
-    border-color: rgba(223, 225, 229, 0);
+    border-color: #fff;
     box-shadow: 0 1px 6px rgb(32 33 36 / 28%);
+  }
+
+  &:active {
+    border-color: #fff;
   }
 
   .se-input {
@@ -157,6 +164,8 @@ export default {
 
 .se-scrollbar-container {
   height: 50vh;
+  padding: 0 20px 20px;
+  background: $bg1;
 }
 
 .se-container {
@@ -168,7 +177,10 @@ export default {
 
 .cate-container {
   flex: 0 0 150px;
-  margin-bottom: 20px;
+  margin: 0 10px 10px 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: $bg2;
+  padding: 6px;
 }
 
 .cate-name {
@@ -176,6 +188,8 @@ export default {
   height: 36px;
   line-height: 36px;
   font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 
 .cate-list {
@@ -197,10 +211,11 @@ export default {
       align-items: center;
       height: 34px;
       text-decoration: none;
+      color: var(--as-primary-text-color);
     }
 
     &:hover {
-      background-color: var(--as-secondary-background-color);
+      background-color: #fff;
       color: var(--as-primary-color);
     }
   }

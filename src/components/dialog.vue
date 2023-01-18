@@ -87,7 +87,7 @@ export default {
 
   &-container {
     position: relative;
-    background: #fff;
+    background: rgba(243, 243, 243, .85);
     border-radius: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
     box-sizing: border-box;
@@ -96,6 +96,8 @@ export default {
     z-index: 99;
     margin: 40vh auto 50px;
     transform: translateY(-40%);
+    overflow: hidden;
+    backdrop-filter: saturate(3) blur(20px);
   }
 
   &__header {
@@ -103,7 +105,6 @@ export default {
   }
 
   &__body {
-    padding: 0 20px 20px;
     color: #666;
     font-size: 14px;
     word-break: break-all;
