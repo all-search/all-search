@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { computed, watch, unref, ref } from 'vue'
+import { computed, watch, unref, ref, toRefs } from 'vue'
 import { initSpecialStyle } from '../util/addSpecialStyle'
 import { changeBodyStyle, protectStyle } from '../util/initStyle'
 import { site } from '../config/siteInfo'
@@ -97,8 +97,10 @@ export default {
       dialogVisible.value = true
     }
 
+    const { disabled } = toRefs(site)
+
     return {
-      disabled: site.disabled,
+      disabled,
       mode,
       classList,
       visible,

@@ -18,7 +18,7 @@ function isVisible (element) {
 export function getSearchDom () {
   const el = document.querySelector('input[type=search],input[type=text][autocomplete=off],input[autocomplete=off]:not([type])') ||
     document.querySelector('input[type=text][name][value],input[name][value]:not([type])')
-  if (el) {
+  if (el && isVisible(el)) {
     return el
   }
   // 选择第一个 type 为 search 或存在 autofocus 且在页面显示的
