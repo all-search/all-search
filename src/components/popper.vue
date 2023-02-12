@@ -102,7 +102,7 @@ export default {
       registerTimeout(() => {
         visible.value = false
         destroyPopover()
-      }, 100)
+      }, 50)
     }
 
     return {
