@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.4.4
-// @description  2023-1-18更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.4.5
+// @description  2023-3-7更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$2 = "all-search";
-    var version$1 = "1.4.4";
+    var version$1 = "1.4.5";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -2511,7 +2511,7 @@
                     return;
                 }
                 const urlItem = cate.list.filter((item => item.data.visible)).find((item => item.url.indexOf(window.location.hostname) === -1));
-                handleClick(urlItem, newWin);
+                return handleClick(urlItem, newWin);
             };
             const handleClick = (item, newWin) => {
                 const keyword = defaultKeyword();
@@ -2520,6 +2520,7 @@
                 } else {
                     window.location.href = item.url.replace("%s", keyword);
                 }
+                return false;
             };
             onTap(categoryRef, (() => {
                 isTap = true;
