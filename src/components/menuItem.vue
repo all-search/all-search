@@ -112,7 +112,7 @@ export default {
       const urlItem = cate.list
         .filter(item => item.data.visible)
         .find(item => item.url.indexOf(window.location.hostname) === -1)
-      handleClick(urlItem, newWin)
+      return handleClick(urlItem, newWin)
     }
     const handleClick = (item, newWin) => {
       const keyword = defaultKeyword()
@@ -121,6 +121,7 @@ export default {
       } else {
         window.location.href = item.url.replace('%s', keyword)
       }
+      return false
     }
 
     onTap(categoryRef, () => {
