@@ -100,7 +100,12 @@ export default {
     }
 
     function isToolbarContains (el) {
-      return unref(toolbarEle).contains(el)
+      const toolbarEleValue = unref(toolbarEle)
+      if(toolbarEleValue) {
+        return toolbarEleValue.contains(el)
+      } else {
+        return false
+      }
     }
 
     window.addEventListener('mousedown', function (e) {
