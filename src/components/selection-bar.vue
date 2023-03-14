@@ -86,15 +86,19 @@ export default {
     function changeVisible (val) {
       visible.value = Boolean(val)
       nextTick(() => {
-        if (val) {
-          const toolbarClientRect = unref(toolbarEle).getBoundingClientRect()
-          const height = toolbarClientRect.bottom - toolbarClientRect.top
-          const selectionRect = getSelectionRect()
-          if (selectionRect) {
-            const { x, right, left, top } = selectionRect
-            styleObj.top = scrollTop() + top - height
-            styleObj.left = scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2)
-          }
+        if (!val) {
+          return
+        }
+        if (!unref(toolbarEle)) {
+          return
+        }
+        const toolbarClientRect = unref(toolbarEle).getBoundingClientRect()
+        const height = toolbarClientRect.bottom - toolbarClientRect.top
+        const selectionRect = getSelectionRect()
+        if (selectionRect) {
+          const { x, right, left, top } = selectionRect
+          styleObj.top = scrollTop() + top - height
+          styleObj.left = scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2)
         }
       })
     }
