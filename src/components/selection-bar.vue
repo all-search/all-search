@@ -101,7 +101,7 @@ export default {
 
     function isToolbarContains (el) {
       const toolbarEleValue = unref(toolbarEle)
-      if(toolbarEleValue) {
+      if (toolbarEleValue) {
         return toolbarEleValue.contains(el)
       } else {
         return false
