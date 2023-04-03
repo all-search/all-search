@@ -48,7 +48,7 @@ export function getSearchDom () {
   // 选择第一个在页面显示的
   const textInputTypes = ['hidden', 'button', 'checkbox', 'color', 'file', 'image', 'radio', 'range', 'reset', 'submit']
   const selector = textInputTypes.map(t => `[type=${t}]`).join(',')
-  const firstInput = document.querySelector(`input:not(${selector}),textarea`)
+  const firstInput = document.querySelector(`input:not(${selector}), textarea`)
   if (firstInput && isVisible(firstInput)) {
     return firstInput
   }
@@ -70,11 +70,13 @@ export function getSearchDom () {
 export function getKeyword () {
   const el = getSearchDom()
   if (el) {
+    let val = ''
     if (['INPUT', 'TEXTAREA'].includes(el.nodeName)) {
-      return el.value
+      val = el.value
     } else {
-      return el.textContent
+      val = el.textContent
     }
+    return encodeURIComponent(val)
   }
   console.log('没有找到搜索关键字')
 }

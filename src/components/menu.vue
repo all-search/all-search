@@ -1,11 +1,11 @@
 <template>
   <scrollbar
     class="as-menu-container"
+    :style="{justifyContent: align}"
     noresize>
     <ul
       class="as-menu"
-      :class="menuClass"
-      :style="{justifyContent: align}">
+      :class="menuClass">
       <menu-item
         v-for="item in sites"
         :key="item.name"
@@ -66,6 +66,7 @@ export default {
 
 .as-menu-container {
   flex: 1;
+  display: flex;
 }
 
 .as-menu {
