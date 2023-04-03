@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.4.7
-// @description  2023-3-14更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.4.8
+// @description  2023-4-3更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$2 = "all-search";
-    var version$1 = "1.4.7";
+    var version$1 = "1.4.8";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -2239,7 +2239,7 @@
         }
         const textInputTypes = [ "hidden", "button", "checkbox", "color", "file", "image", "radio", "range", "reset", "submit" ];
         const selector = textInputTypes.map((t => `[type=${t}]`)).join(",");
-        const firstInput = document.querySelector(`input:not(${selector}),textarea`);
+        const firstInput = document.querySelector(`input:not(${selector}), textarea`);
         if (firstInput && isVisible(firstInput)) {
             return firstInput;
         }
@@ -2256,11 +2256,13 @@
     function getKeyword() {
         const el = getSearchDom();
         if (el) {
+            let val = "";
             if ([ "INPUT", "TEXTAREA" ].includes(el.nodeName)) {
-                return el.value;
+                val = el.value;
             } else {
-                return el.textContent;
+                val = el.textContent;
             }
+            return encodeURIComponent(val);
         }
         console.log("没有找到搜索关键字");
     }
@@ -2609,7 +2611,7 @@
             align: align
         };
     }
-    var css$c = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.as-menu-container {\n  flex: 1;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}";
+    var css$c = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.as-menu-container {\n  flex: 1;\n  display: flex;\n}\n\n.as-menu {\n  padding: 0;\n  margin: 0;\n  white-space: nowrap;\n  border: 0;\n  box-shadow: none;\n  background-color: var(--as-bg-color);\n  display: flex;\n}\n\n.as-horizontal-menu {\n  flex-direction: row;\n}\n\n.as-vertical-menu {\n  flex-direction: column;\n}";
     injectStyle(css$c);
     const _sfc_main$c = {
         name: "as-menu",
@@ -2648,21 +2650,21 @@
         const _component_scrollbar = Vue.resolveComponent("scrollbar");
         return Vue.openBlock(), Vue.createBlock(_component_scrollbar, {
             class: "as-menu-container",
+            style: Vue.normalizeStyle({
+                justifyContent: $setup.align
+            }),
             noresize: ""
         }, {
             default: Vue.withCtx((() => [ Vue.createElementVNode("ul", {
-                class: Vue.normalizeClass([ "as-menu", $setup.menuClass ]),
-                style: Vue.normalizeStyle({
-                    justifyContent: $setup.align
-                })
+                class: Vue.normalizeClass([ "as-menu", $setup.menuClass ])
             }, [ (Vue.openBlock(true), Vue.createElementBlock(Vue.Fragment, null, Vue.renderList($setup.sites, (item => (Vue.openBlock(), 
             Vue.createBlock(_component_menu_item, {
                 key: item.name,
                 item: item,
                 mode: $props.mode
-            }, null, 8, [ "item", "mode" ])))), 128)) ], 6) ])),
+            }, null, 8, [ "item", "mode" ])))), 128)) ], 2) ])),
             _: 1
-        });
+        }, 8, [ "style" ]);
     }
     var asMenu = _export_sfc(_sfc_main$c, [ [ "render", _sfc_render$c ] ]);
     const reg = /^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/;
