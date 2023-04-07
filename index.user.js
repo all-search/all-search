@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @version      1.4.8
-// @description  2023-4-3更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2023-4-7更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/endday/all-search
@@ -2998,7 +2998,7 @@
     const _hoisted_2$3 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
         class: "link",
         title: "all-search",
-        href: "https://endday.github.io/all-search/",
+        href: "https://all-search.github.io/script/",
         target: "_blank"
     }, " 设置页 "), Vue.createElementVNode("a", {
         class: "link",
