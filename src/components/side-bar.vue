@@ -108,7 +108,7 @@
             <footer>
               <a class="link"
                  title="all-search"
-                 href="https://endday.github.io/all-search/"
+                 href="https://all-search.github.io/script/"
                  target="_blank">
                 设置页
               </a>

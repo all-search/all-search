@@ -26,10 +26,10 @@ The difference between Tampermonkey's and ScriptCat's scripts has been smoothed 
 
 ## Set page
 * [code cloud](https://endday.gitee.io/all-search/)
-* [github](https://endday.github.io/all-search/)
+* [github](https://all-search.github.io/script/)
 
 ## Features
-* [GUI Add URL](https://endday.github.io/all-search/)
+* [GUI Add URL](https://all-search.github.io/script/)
 * Drag to change category sorting
 * Support vertical and horizontal layout
 * Click on a category to use the first URL of the category to open it

@@ -26,10 +26,10 @@
 
 ## 设置地址
 * [码云](https://endday.gitee.io/all-search/)
-* [github](https://endday.github.io/all-search/)
+* [github](https://all-search.github.io/script/)
 
 ## 特色功能
-* [图形界面添加网址](https://endday.github.io/all-search/)
+* [图形界面添加网址](https://all-search.github.io/script/)
 * 拖动改变分类排序
 * 支持垂直和横向布局
 * 点击分类使用分类第一个地址打开
