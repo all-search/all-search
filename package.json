@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "keywords": [
     "searchEngineJump",
     "tool",
@@ -11,11 +11,11 @@
   ],
   "description": "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.",
   "author": "endday",
-  "homepage": "https://github.com/endday/all-search",
+  "homepage": "https://github.com/all-search/all-search",
   "license": "GPL-3.0-only",
   "repository": {
     "type": "git",
-    "url": "git@github.com:endday/all-search.git"
+    "url": "git@github.com:all-search/all-search.git"
   },
   "files": [
     "dist",

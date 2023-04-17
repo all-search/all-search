@@ -108,13 +108,13 @@
             <footer>
               <a class="link"
                  title="all-search"
-                 href="https://all-search.github.io/script/"
+                 href="https://all-search.github.io/all-search"
                  target="_blank">
                 设置页
               </a>
               <a class="link"
                  title="github"
-                 href="https://github.com/endday/all-search/issues"
+                 href="https://github.com/all-search/all-search/issues"
                  target="_blank">
                 意见反馈
               </a>

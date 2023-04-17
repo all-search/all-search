@@ -2,7 +2,7 @@
   <a
     v-if="!isMobile"
     class="as-title"
-    href="https://github.com/endday/all-search"
+    href="https://github.com/all-search/all-search"
     target="_blank"
     :class="`as-title-${mode}`">
     <p class="as-title-inner">

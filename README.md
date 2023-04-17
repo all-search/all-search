@@ -1,4 +1,4 @@
-![all-search](https://socialify.git.ci/endday/all-search/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern=Plus&stargazers=1&theme=Light)
+![all-search](https://socialify.git.ci/all-search/all-search/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern=Plus&stargazers=1&theme=Light)
 
 [English](./README.md) | [简体中文](./README.zh-CN.md)
 ## all-search, a search engine jump menu
@@ -14,9 +14,9 @@ Similar tools recommended.
 
 ## Script URL
 The difference between Tampermonkey's and ScriptCat's scripts has been smoothed out
-* [GitHub URL](https://raw.github.com/endday/all-search/release/index.user.js)
-* [iQDNS/iQZone URL](https://raw.iqiq.io/endday/all-search/release/index.user.js)
-* [KGitHub URL](https://raw.kgithub.com/endday/all-search/release/index.user.js)
+* [GitHub URL](https://raw.github.com/all-search/all-search/release/index.user.js)
+* [iQDNS/iQZone URL](https://raw.iqiq.io/all-search/all-search/release/index.user.js)
+* [KGitHub URL](https://raw.kgithub.com/all-search/all-search/release/index.user.js)
 
 ### greasyFork
 * [greasyfork URL](https://greasyfork.org/zh-CN/scripts/397993-all-search)

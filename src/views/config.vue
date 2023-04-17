@@ -33,7 +33,7 @@
         </el-menu>
       </div>
       <a class="gh-btn"
-         href="https://github.com/endday/all-search">
+         href="https://github.com/all-search/all-search">
         <span class="gh-icon"/>
       </a>
     </el-header>
