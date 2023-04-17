@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.4.8
-// @description  2023-4-7更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.4.9
+// @description  2023-4-17更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
-// @homepageURL  https://github.com/endday/all-search
-// @updateURL    https://raw.github.com/endday/all-search/release/index.user.js
-// @downloadURL  https://raw.github.com/endday/all-search/release/index.user.js
+// @homepageURL  https://github.com/all-search/all-search
+// @updateURL    https://raw.github.com/all-search/all-search/release/index.user.js
+// @downloadURL  https://raw.github.com/all-search/all-search/release/index.user.js
 // @supportURL
 // @noframes
 // @include      *
@@ -23,15 +23,15 @@
 (function() {
     "use strict";
     var name$2 = "all-search";
-    var version$1 = "1.4.8";
+    var version$1 = "1.4.9";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
-    var homepage = "https://github.com/endday/all-search";
+    var homepage = "https://github.com/all-search/all-search";
     var license = "GPL-3.0-only";
     var repository = {
         type: "git",
-        url: "git@github.com:endday/all-search.git"
+        url: "git@github.com:all-search/all-search.git"
     };
     var files = [ "dist", "lib" ];
     var unpkg = "dist/index.user.js";
@@ -922,7 +922,7 @@
     }, {
         url: /\/\/www\.startpage\.com\/sp\/search/
     }, {
-        url: /\/\/endday\.github\.io/,
+        url: /\/\/all-search\.github\.io/,
         invisible: true
     }, {
         url: /\/\/endday\.gitee\.io/,
@@ -1186,7 +1186,7 @@
         return !$setup.isMobile ? (Vue.openBlock(), Vue.createElementBlock("a", {
             key: 0,
             class: Vue.normalizeClass([ "as-title", `as-title-${$props.mode}` ]),
-            href: "https://github.com/endday/all-search",
+            href: "https://github.com/all-search/all-search",
             target: "_blank"
         }, _hoisted_2$9, 2)) : Vue.createCommentVNode("", true);
     }
@@ -2998,12 +2998,12 @@
     const _hoisted_2$3 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
         class: "link",
         title: "all-search",
-        href: "https://all-search.github.io/script/",
+        href: "https://all-search.github.io/all-search",
         target: "_blank"
     }, " 设置页 "), Vue.createElementVNode("a", {
         class: "link",
         title: "github",
-        href: "https://github.com/endday/all-search/issues",
+        href: "https://github.com/all-search/all-search/issues",
         target: "_blank"
     }, " 意见反馈 ") ], -1);
     function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
