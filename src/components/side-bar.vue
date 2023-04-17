@@ -24,7 +24,7 @@
             class="as-side-bar"
             @click.stop>
             <header class="header">
-              设置
+              全搜 all-search
             </header>
             <section>
               <form-item label="工具栏">
@@ -79,11 +79,6 @@
                 <color
                   name="primaryColor"
                   v-model="primaryColor"/>
-              </form-item>
-              <form-item label="背景色">
-                <color
-                  name="bgColor"
-                  v-model="bgColor"/>
               </form-item>
               <form-item label="文字色">
                 <color
@@ -167,7 +162,7 @@ export default {
 
     const { mode } = useMode()
     const { alignList, align } = useAlign()
-    const { primaryColor, bgColor, primaryTextColor } = useColor()
+    const { primaryColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
     const { favicon } = useFavicon()
     const { toolbar } = useToolbar()
@@ -193,7 +188,6 @@ export default {
       favicon,
       toolbar,
       primaryColor,
-      bgColor,
       primaryTextColor,
       show,
       options,
@@ -245,7 +239,7 @@ export default {
   bottom: 0;
   position: absolute;
   box-sizing: border-box;
-  background-color: var(--as-bg-color);
+  background: var(--as-bg-color) radial-gradient(#eff4f9 75%, #f3f3f3 100%) no-repeat fixed;
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 10px -5px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12);
@@ -256,14 +250,17 @@ export default {
     align-items: center;
     color: var(--as-primary-text-color);
     display: flex;
-    margin-bottom: 32px;
-    padding: 20px 24px 0;
+    padding: 32px 24px;
   }
 
   > section {
     padding: 10px 24px;
+    margin: 0 12px;
     height: 100%;
     flex: 1;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,.1);
+    background: rgba(255,255,255,.67);
   }
 
   > footer {
