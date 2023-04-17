@@ -2165,7 +2165,7 @@
                 registerTimeout((() => {
                     visible.value = false;
                     destroyPopover();
-                }), 100);
+                }), 50);
             }
             return {
                 visible: visible,
@@ -2670,7 +2670,6 @@
     const reg = /^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/;
     const defaultVal = {
         "primary-color": "#1890ff",
-        "bg-color": "#ffffff",
         "primary-text-color": "#606266"
     };
     function setCssValue(name, value) {
@@ -2687,7 +2686,6 @@
     }
     const valMap = {
         "primary-color": Vue.ref(getValue("primary-color")),
-        "bg-color": Vue.ref(getValue("bg-color")),
         "primary-text-color": Vue.ref(getValue("primary-text-color"))
     };
     function setValue(name, value) {
@@ -2700,12 +2698,6 @@
         get: () => valMap["primary-color"].value,
         set: val => {
             setValue("primary-color", val);
-        }
-    });
-    const bgColor = Vue.computed({
-        get: () => valMap["bg-color"].value,
-        set: val => {
-            setValue("bg-color", val);
         }
     });
     const primaryTextColor = Vue.computed({
@@ -2724,12 +2716,10 @@
     function useColor() {
         Vue.onMounted((() => {
             initColor("primary-color");
-            initColor("bg-color");
             initColor("primary-text-color");
         }));
         return {
             primaryColor: primaryColor,
-            bgColor: bgColor,
             primaryTextColor: primaryTextColor
         };
     }
@@ -2937,7 +2927,7 @@
         }, 8, [ "onClick" ]) ]);
     }
     var color = _export_sfc(_sfc_main$7, [ [ "render", _sfc_render$7 ] ]);
-    var css$6 = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background-color: var(--as-bg-color);\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  margin-bottom: 32px;\n  padding: 20px 24px 0;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  height: 100%;\n  flex: 1;\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear;\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
+    var css$6 = "#all-search .row, .all-search-config .row {\n  display: flex;\n}\n#all-search .column, .all-search-config .column {\n  display: flex;\n  flex-direction: column;\n}\n#all-search .col, .all-search-config .col {\n  flex: 1;\n}\n#all-search .row.items-center, #all-search .column.items-center, .all-search-config .row.items-center, .all-search-config .column.items-center {\n  align-items: center;\n}\n#all-search .row.items-end, #all-search .column.items-end, .all-search-config .row.items-end, .all-search-config .column.items-end {\n  align-items: flex-end;\n}\n#all-search .row.items-stretch, #all-search .column.items-stretch, .all-search-config .row.items-stretch, .all-search-config .column.items-stretch {\n  align-items: stretch;\n}\n#all-search .row.justify-center, #all-search .column.justify-center, .all-search-config .row.justify-center, .all-search-config .column.justify-center {\n  justify-content: center;\n}\n#all-search .row.justify-end, #all-search .column.justify-end, .all-search-config .row.justify-end, .all-search-config .column.justify-end {\n  justify-content: flex-end;\n}\n#all-search .row.justify-between, #all-search .column.justify-between, .all-search-config .row.justify-between, .all-search-config .column.justify-between {\n  justify-content: space-between;\n}\n#all-search .row.flex-wrap, .all-search-config .row.flex-wrap {\n  flex-wrap: wrap;\n}\n#all-search .row.content-center, .all-search-config .row.content-center {\n  align-content: center;\n}\n#all-search .row.content-end, .all-search-config .row.content-end {\n  align-content: end;\n}\n#all-search p, .all-search-config p {\n  margin: 0;\n}\n\n.as-setting {\n  position: relative;\n}\n.as-setting.horizontal {\n  box-shadow: -4px 0 10px 0 rgba(0, 0, 0, 0.12);\n  display: flex;\n}\n\n.as-setting-btn {\n  line-height: 30px;\n  padding: 0 14px;\n  position: relative;\n  margin: 0;\n  white-space: nowrap;\n  cursor: pointer;\n  font-size: 14px;\n  color: var(--as-primary-text-color);\n  text-align: center;\n}\n.as-setting-btn:hover {\n  color: var(--as-primary-color);\n  background-color: rgba(0, 0, 0, 0.04);\n}\n\n.as-side-bar {\n  width: 20vw;\n  min-width: 300px;\n  right: 0;\n  height: 100%;\n  top: 0;\n  bottom: 0;\n  position: absolute;\n  box-sizing: border-box;\n  background: var(--as-bg-color) radial-gradient(#eff4f9 75%, #f3f3f3 100%) no-repeat fixed;\n  display: flex;\n  flex-direction: column;\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);\n  overflow: hidden;\n}\n.as-side-bar > header {\n  font-size: 16px;\n  align-items: center;\n  color: var(--as-primary-text-color);\n  display: flex;\n  padding: 32px 24px;\n}\n.as-side-bar > section {\n  padding: 10px 24px;\n  margin: 0 12px;\n  height: 100%;\n  flex: 1;\n  border-radius: 4px;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  background: rgba(255, 255, 255, 0.67);\n}\n.as-side-bar > footer {\n  padding: 10px 24px 30px;\n}\n.as-side-bar > footer .link {\n  font-size: 14px;\n  text-decoration: none;\n}\n.as-side-bar > footer .link:visited {\n  color: var(--as-primary-text-color);\n}\n.as-side-bar > footer .link + .link {\n  margin-left: 20px;\n}\n\n.overlay-enter-active, .overlay-leave-active {\n  transition: opacity 0.3s;\n}\n\n.overlay-enter-from, .overlay-leave-to {\n  opacity: 0;\n}\n\n.overlay-enter-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear reverse;\n}\n\n.overlay-leave-active .as-side-bar {\n  animation: rtl-drawer-animation 0.3s linear;\n}\n\n@keyframes rtl-drawer-animation {\n  0% {\n    transform: translate(0);\n  }\n  to {\n    transform: translate(100%);\n  }\n}";
     injectStyle(css$6);
     const _sfc_main$6 = {
         name: "side-bar",
@@ -2958,7 +2948,7 @@
             };
             const {mode: mode} = useMode();
             const {alignList: alignList, align: align} = useAlign();
-            const {primaryColor: primaryColor, bgColor: bgColor, primaryTextColor: primaryTextColor} = useColor();
+            const {primaryColor: primaryColor, primaryTextColor: primaryTextColor} = useColor();
             const {show: show, options: options, scrollHide: scrollHide} = useSwitchShow();
             const {favicon: favicon} = useFavicon();
             const {toolbar: toolbar} = useToolbar();
@@ -2982,7 +2972,6 @@
                 favicon: favicon,
                 toolbar: toolbar,
                 primaryColor: primaryColor,
-                bgColor: bgColor,
                 primaryTextColor: primaryTextColor,
                 show: show,
                 options: options,
@@ -2994,18 +2983,23 @@
     };
     const _hoisted_1$3 = Vue.createElementVNode("header", {
         class: "header"
-    }, " 设置 ", -1);
+    }, " 全搜 all-search ", -1);
     const _hoisted_2$3 = Vue.createElementVNode("footer", null, [ Vue.createElementVNode("a", {
         class: "link",
-        title: "all-search",
-        href: "https://all-search.github.io/all-search",
+        title: "菜单设置页",
+        href: "https://all-search.github.io/all-search/config/sites",
         target: "_blank"
-    }, " 设置页 "), Vue.createElementVNode("a", {
+    }, " 菜单设置 "), Vue.createElementVNode("a", {
+        class: "link",
+        title: "工具栏设置页",
+        href: "https://all-search.github.io/all-search/config/toolbar",
+        target: "_blank"
+    }, " 工具栏设置 "), Vue.createElementVNode("a", {
         class: "link",
         title: "github",
         href: "https://github.com/all-search/all-search/issues",
         target: "_blank"
-    }, " 意见反馈 ") ], -1);
+    }, " 反馈 ") ], -1);
     function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
         const _component_as_radio = Vue.resolveComponent("as-radio");
         const _component_form_item = Vue.resolveComponent("form-item");
@@ -3037,7 +3031,7 @@
                         "aria-modal": "true",
                         role: "dialog",
                         class: "as-side-bar",
-                        onClick: _cache[13] || (_cache[13] = Vue.withModifiers((() => {}), [ "stop" ]))
+                        onClick: _cache[12] || (_cache[12] = Vue.withModifiers((() => {}), [ "stop" ]))
                     }, [ _hoisted_1$3, Vue.createElementVNode("section", null, [ Vue.createVNode(_component_form_item, {
                         label: "工具栏"
                     }, {
@@ -3133,21 +3127,12 @@
                         }, null, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
-                        label: "背景色"
-                    }, {
-                        default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
-                            name: "bgColor",
-                            modelValue: $setup.bgColor,
-                            "onUpdate:modelValue": _cache[11] || (_cache[11] = $event => $setup.bgColor = $event)
-                        }, null, 8, [ "modelValue" ]) ])),
-                        _: 1
-                    }), Vue.createVNode(_component_form_item, {
                         label: "文字色"
                     }, {
                         default: Vue.withCtx((() => [ Vue.createVNode(_component_color, {
                             name: "primaryTextColor",
                             modelValue: $setup.primaryTextColor,
-                            "onUpdate:modelValue": _cache[12] || (_cache[12] = $event => $setup.primaryTextColor = $event)
+                            "onUpdate:modelValue": _cache[11] || (_cache[11] = $event => $setup.primaryTextColor = $event)
                         }, null, 8, [ "modelValue" ]) ])),
                         _: 1
                     }), Vue.createVNode(_component_form_item, {
@@ -3417,7 +3402,7 @@
         }) ]) ], 4)), [ [ Vue.vShow, $setup.visible ] ]) : Vue.createCommentVNode("", true);
     }
     var selectionBar = _export_sfc(_sfc_main$3, [ [ "render", _sfc_render$3 ], [ "__scopeId", "data-v-5cf737f0" ] ]);
-    var css$2 = '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  margin: 0;\n  z-index: 99999;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  -webkit-backdrop-filter: blur(5px);\n          backdrop-filter: blur(5px);\n}\n.as-dialog-container {\n  position: relative;\n  background: #fff;\n  border-radius: 10px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  min-width: 50%;\n  max-width: 80%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n}\n.as-dialog__header {\n  position: relative;\n}\n.as-dialog__body {\n  padding: 0 20px 20px;\n  color: #666;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}';
+    var css$2 = '@charset "UTF-8";\n.as-dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  margin: 0;\n  z-index: 99999;\n}\n.as-dialog__mask {\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  -webkit-backdrop-filter: blur(5px);\n          backdrop-filter: blur(5px);\n}\n.as-dialog-container {\n  position: relative;\n  background: rgba(243, 243, 243, 0.85);\n  border-radius: 10px;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);\n  box-sizing: border-box;\n  min-width: 50%;\n  max-width: 80%;\n  z-index: 99;\n  margin: 40vh auto 50px;\n  transform: translateY(-40%);\n  overflow: hidden;\n  -webkit-backdrop-filter: saturate(3) blur(20px);\n          backdrop-filter: saturate(3) blur(20px);\n}\n.as-dialog__header {\n  position: relative;\n}\n.as-dialog__body {\n  color: #666;\n  font-size: 14px;\n  word-break: break-all;\n}\n.as-dialog__footer {\n  padding: 10px 20px 20px;\n  text-align: right;\n  box-sizing: border-box;\n}\n.as-dialog__close {\n  display: inline-block;\n  position: absolute;\n  top: 16px;\n  right: 24px;\n  padding: 0;\n  background: transparent;\n  cursor: pointer;\n  font-size: 16px;\n  color: #909399;\n}\n.as-dialog__close:before {\n  content: "✖";\n}';
     injectStyle(css$2);
     const _sfc_main$2 = {
         name: "as-dialog",
@@ -3482,7 +3467,7 @@
         }) ], 512)), [ [ Vue.vShow, $setup.localVisible ] ]);
     }
     var asDialog = _export_sfc(_sfc_main$2, [ [ "render", _sfc_render$2 ] ]);
-    var css$1 = ".se-header {\n  padding: 15px 20px;\n  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);\n}\n\n.se-input-box {\n  border: 1px solid #ccc;\n  background-color: #FFFFFF;\n  overflow: hidden;\n  display: flex;\n  border-radius: 6px;\n  height: 40px;\n  align-items: center;\n  transition: 0.2s;\n  color: #222;\n}\n.se-input-box:hover {\n  border-color: rgba(223, 225, 229, 0);\n  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);\n}\n.se-input-box .se-input {\n  color: var(--as-primary-text-color);\n  background-color: transparent;\n  font-size: 16px;\n  height: 100%;\n  width: 100%;\n  line-height: 20px;\n  margin: 0 20px;\n  outline: none;\n  border: none;\n}\n\n.se-scrollbar-container {\n  height: 50vh;\n}\n\n.se-container {\n  margin-top: 10px;\n  display: flex;\n  border-radius: 6px;\n  flex-wrap: wrap;\n}\n\n.cate-container {\n  flex: 0 0 150px;\n  margin-bottom: 20px;\n}\n\n.cate-name {\n  padding: 0 10px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 16px;\n}\n\n.cate-list {\n  list-style: none;\n  min-width: 110px;\n  box-sizing: border-box;\n  padding: 0;\n}\n.cate-list .cate-item {\n  box-sizing: border-box;\n  padding: 0 10px;\n}\n.cate-list .cate-item .as-subMenu-text {\n  margin: 0;\n}\n.cate-list .cate-item a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  text-decoration: none;\n}\n.cate-list .cate-item:hover {\n  background-color: var(--as-secondary-background-color);\n  color: var(--as-primary-color);\n}";
+    var css$1 = ".se-header {\n  padding: 15px 20px;\n  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);\n  background: #f3f3f3 radial-gradient(#eff4f9 75%, #f3f3f3 100%) no-repeat fixed;\n}\n\n.se-input-box {\n  border: 1px solid #ccc;\n  background-color: rgba(255, 255, 255, 0.67);\n  overflow: hidden;\n  display: flex;\n  border-radius: 6px;\n  height: 40px;\n  align-items: center;\n  transition: 0.2s;\n  color: #222;\n}\n.se-input-box:hover {\n  border-color: #fff;\n  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);\n}\n.se-input-box:active {\n  border-color: #fff;\n}\n.se-input-box .se-input {\n  color: var(--as-primary-text-color);\n  background-color: transparent;\n  font-size: 16px;\n  height: 100%;\n  width: 100%;\n  line-height: 20px;\n  margin: 0 20px;\n  outline: none;\n  border: none;\n}\n\n.se-scrollbar-container {\n  height: 50vh;\n  padding: 0 20px 20px;\n  background: #f3f3f3 radial-gradient(#eff4f9 75%, #f3f3f3 100%) no-repeat fixed;\n}\n\n.se-container {\n  margin-top: 10px;\n  display: flex;\n  border-radius: 6px;\n  flex-wrap: wrap;\n}\n\n.cate-container {\n  flex: 0 0 150px;\n  margin: 0 10px 10px 0;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  background: rgba(255, 255, 255, 0.67);\n  padding: 6px;\n}\n\n.cate-name {\n  padding: 0 10px;\n  height: 36px;\n  line-height: 36px;\n  font-size: 16px;\n  display: flex;\n  align-items: center;\n}\n\n.cate-list {\n  list-style: none;\n  min-width: 110px;\n  box-sizing: border-box;\n  padding: 0;\n}\n.cate-list .cate-item {\n  box-sizing: border-box;\n  padding: 0 10px;\n}\n.cate-list .cate-item .as-subMenu-text {\n  margin: 0;\n}\n.cate-list .cate-item a {\n  display: flex;\n  align-items: center;\n  height: 34px;\n  text-decoration: none;\n  color: var(--as-primary-text-color);\n}\n.cate-list .cate-item:hover {\n  background-color: #fff;\n  color: var(--as-primary-color);\n}";
     injectStyle(css$1);
     const _sfc_main$1 = {
         name: "search-dialog",
