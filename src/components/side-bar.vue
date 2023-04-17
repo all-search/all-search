@@ -107,16 +107,22 @@
             </section>
             <footer>
               <a class="link"
-                 title="all-search"
-                 href="https://all-search.github.io/all-search"
+                 title="菜单设置页"
+                 href="https://all-search.github.io/all-search/config/sites"
                  target="_blank">
-                设置页
+                菜单设置
+              </a>
+              <a class="link"
+                 title="工具栏设置页"
+                 href="https://all-search.github.io/all-search/config/toolbar"
+                 target="_blank">
+                工具栏设置
               </a>
               <a class="link"
                  title="github"
                  href="https://github.com/all-search/all-search/issues"
                  target="_blank">
-                意见反馈
+                反馈
               </a>
             </footer>
           </div>
