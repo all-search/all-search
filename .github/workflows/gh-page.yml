@@ -41,7 +41,7 @@ jobs:
 
       - name: Build
         run: |
-          npm run build
+          npm run build:site
           cp dist/index.html dist/404.html
 
       - name: Deploy 🚀

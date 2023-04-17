@@ -19,7 +19,7 @@ const meta = `// @name         ${pkg.name} 全搜，搜索引擎快捷跳转，�
 // @supportURL
 // @noframes
 // @include      *
-// @require      https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js
+// @require      https://unpkg.com/vue@3.3.4/dist/vue.global.prod.js
 // @require      https://unpkg.com/all-search@1.3.17/lib/popper-lite.min.js
 // @run-at       document-idle
 // @grant        GM_getValue

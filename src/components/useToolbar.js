@@ -1,21 +1,9 @@
-import { ref, computed } from 'vue'
-import { getSession, setSession } from '../util/index'
+import useConfig from './useConfig'
 
-const name = 'showToolbar'
-const session = getSession(name)
-
-const getVal = val => {
-  return val || 1
-}
-
-const valRef = ref(getVal(session))
-
-const toolbar = computed({
-  get: () => valRef.value,
-  set: val => {
-    valRef.value = val
-    setSession(name, getVal(val))
-  }
+const toolbar = useConfig({
+  name: 'showToolbar',
+  defaultVal: 1,
+  reg: /[1|2]/
 })
 
 export default function useToolbar () {

@@ -8,7 +8,7 @@
 
 <script>
 import jsonEditor from '../components/jsonEditor'
-import { setSession } from '../util'
+import { setStorage } from '../util/tmMethods'
 import { initSites } from '../util/sites'
 import sites from '../config/sites'
 
@@ -39,7 +39,7 @@ export default {
     },
     save (val) {
       this.localSites = val
-      setSession('sites', val)
+      setStorage('sites', val)
       this.$message.success('保存成功')
     },
     change (val) {

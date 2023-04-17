@@ -87,7 +87,7 @@ export default {
     }
 
     onUnmounted(() => {
-      stopFn()
+      stopFn && stopFn()
     })
 
     function show (target) {

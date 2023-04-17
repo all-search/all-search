@@ -1,15 +1,15 @@
-import { reactive } from 'vue'
-import { initSites } from '../util/sites.js'
+import { reactive, watch } from 'vue'
+import useSites from '../components/useSites'
 import { list } from './loadList.js'
 import { routerChange } from '../util/routerChange'
 
-export let site = reactive(getSite())
+const { sites } = useSites('tm')
 
 function getMenuItem () {
   let targetItem = null
   let urlObj = null
   const curItem = new URL(window.location.href)
-  initSites('tm').some(category => {
+  sites.value.some(category => {
     category.list.find(item => {
       const menuItem = new URL(item.url)
       if (
@@ -66,11 +66,19 @@ function getSite () {
   }
 }
 
-routerChange(() => {
+watch(sites, () => {
+  updateCurrentSite()
+})
+
+function updateCurrentSite () {
   const newSite = getSite()
   Object.keys(site).forEach(key => {
     site[key] = newSite[key] || ''
   })
+}
+
+routerChange(() => {
+  updateCurrentSite()
 })
 
-
+export let site = reactive(getSite())

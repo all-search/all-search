@@ -1,21 +1,9 @@
-import { ref, computed } from 'vue'
-import { getSession, setSession } from '../util/index'
+import useConfig from './useConfig'
 
-const name = 'favicon'
-const session = getSession(name)
-
-const getVal = val => {
-  return val || 1
-}
-
-const valRef = ref(getVal(session))
-
-const favicon = computed({
-  get: () => valRef.value,
-  set: val => {
-    valRef.value = val
-    setSession(name, getVal(val))
-  }
+const favicon = useConfig({
+  name: 'favicon',
+  defaultVal: 1,
+  reg: /[1|2]/
 })
 
 export default function useFavicon () {

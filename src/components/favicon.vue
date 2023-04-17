@@ -15,9 +15,12 @@
 import { computed, reactive, ref } from 'vue'
 import parseUrl from '../util/parseUrl'
 import useFavicon from './useFavicon'
-import { getSession, setSession } from '../util/index'
+import { getStorage, setStorage } from '../util/storage'
 
-const iconCache = reactive(getSession('iconCache') || {})
+let iconCache = reactive({})
+getStorage('iconCache').then(iconData => {
+  iconCache = iconData
+})
 
 export default {
   name: 'favicon',
@@ -60,9 +63,9 @@ export default {
     function handleLoad (e) {
       if (!isError.value && !img.value.startsWith('data:image')) {
         const base64 = getBase64Image(e.target)
-        if(base64) {
+        if (base64) {
           iconCache[hostname] = base64
-          setSession('iconCache', iconCache)
+          setStorage('iconCache', iconCache)
         }
       }
     }

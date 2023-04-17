@@ -6,7 +6,10 @@ export const list = [
     url: /\/\/www\.google\.com(.hk)?\/search/
   },
   {
-    url: /\/\/www\.baidu\.com\/(s|baidu)\?/
+    url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
+    style: {
+      1: '.selected-search-box { transform: translateY(-30px);}'
+    }
   },
   {
     url: /\/\/[^.]*\.bing\.com\/search/

@@ -1,9 +1,24 @@
 import sites from '../config/sites'
 import toolbar from '../config/toolbar'
-import { getSession } from './index'
+import { getStorage } from '../util/storage'
+
+let sitesData = []
+
+function getSites (val) {
+  if (Array.isArray(val) && val.length > 0) {
+    return val
+  } else {
+    return sites
+  }
+}
+
+getStorage('sites').then(val => {
+  sitesData = getSites(val)
+}).catch(() => {
+  sitesData = sites
+})
 
 export function initSites (type) {
-  let sitesData = getSession('sites') || sites
   if (type === 'tm') {
     sitesData = sitesData
       .filter(item =>
@@ -19,6 +34,14 @@ export function initSites (type) {
   return sitesData
 }
 
+let toolbarSession
+
+getStorage('toolbar').then(val => {
+  toolbarSession = val
+}).catch(() => {
+  toolbarSession = null
+})
+
 export function initToolbar (opt = {
   type: '',
   reset: false
@@ -26,7 +49,7 @@ export function initToolbar (opt = {
   const toolbarClone = JSON.parse(JSON.stringify(toolbar))
   const list = opt.reset
     ? toolbarClone
-    : getSession('toolbar') || toolbarClone
+    : toolbarSession || toolbarClone
   if (opt.type === 'tm') {
     return list
       .filter(item =>

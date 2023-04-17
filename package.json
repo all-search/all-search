@@ -2,9 +2,9 @@
   "name": "all-search",
   "version": "1.4.10",
   "keywords": [
-    "searchEngineJump",
-    "tool",
     "tamperMonkey",
+    "user-script",
+    "tool",
     "web",
     "javascript",
     "vue3"
@@ -25,14 +25,14 @@
   "jsdelivr": "dist/index.user.js",
   "packageManager": "pnpm@7.18.0",
   "scripts": {
-    "serve": "vue-cli-service serve --fix",
-    "tmServe": "vue-cli-service serve --fix --tm",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "pretmBuild": "npm run lint",
-    "tmDev": "cross-env NODE_ENV=development rollup -c -w",
-    "tmBuild": "cross-env NODE_ENV=production rollup -c",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dev:plugin": "vite build --watch --mode plugin",
+    "build:plugin": "vite build",
+    "dev:script": "vite --mode script",
+    "build:script": "vite build --mode script",
+    "dev:site": "vite dev --mode site",
+    "build:site": "vite build --mode site"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",
@@ -42,7 +42,7 @@
     "element-plus": "^2.2.22",
     "jsoneditor": "^9.9.0",
     "resize-observer-polyfill": "^1.5.1",
-    "vue": "^3.2.36",
+    "vue": "^3.3.4",
     "vue-draggable-next": "^2.0.1",
     "vue-router": "^4.0.5"
   },
@@ -50,13 +50,7 @@
     "@babel/eslint-parser": "^7.19.1",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-commonjs": "^22.0.0",
-    "@rollup/plugin-json": "^4.0.3",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@rollup/plugin-replace": "^4.0.0",
-    "@rollup/plugin-terser": "^0.2.0",
-    "@vitejs/plugin-vue": "^2.3.3",
+    "@vitejs/plugin-vue": "^4.3.4",
     "@vue/cli-plugin-babel": "^5.0.0",
     "@vue/cli-plugin-eslint": "^5.0.0",
     "@vue/cli-service": "^5.0.0",
@@ -68,14 +62,13 @@
     "eslint-plugin-vue": "^7.7.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.1.0",
+    "minimist": "^1.2.7",
     "postcss": "^8.4.13",
-    "rollup": "^2.72.1",
-    "rollup-plugin-delete": "^1.2.0",
     "rollup-plugin-external-globals": "^0.6.1",
-    "rollup-plugin-styles": "^4.0.0",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
-    "vite": "^2.6.7",
-    "minimist": "^1.2.7"
+    "vite": "^4.4.9",
+    "vite-plugin-crx-mv3": "^0.1.5",
+    "vite-plugin-monkey": "^3.5.0"
   }
 }

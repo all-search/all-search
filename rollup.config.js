@@ -17,7 +17,7 @@ const styleInjectPath = require
 const isDev = process.env.NODE_ENV === 'development'
 
 const config = {
-  input: 'src/as-script/main.js',
+  input: 'src/content-scripts/main.js',
   output: [
     {
       name: 'allSearch',

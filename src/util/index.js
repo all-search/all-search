@@ -1,6 +1,5 @@
+import { GM_getValue, GM_setValue, GM_getResourceText } from '$';
 import pkg from '../../package.json'
-import store from './store'
-// import { isString } from '../components/scrollbar/src/util'
 
 export const version = pkg.version
 
@@ -45,7 +44,7 @@ export function checkBody () {
   })
 }
 
-function getName (name) {
+export function getName (name) {
   if (name) {
     return `__allSearch__${name}`
   }
@@ -67,50 +66,47 @@ function isJson (str) {
   }
 }
 
-export let getSession = function (name) {
+export function parseJson (val) {
+  if (isJson(val)) {
+    try {
+      return JSON.parse(val)
+    } catch (e) {
+      return val
+    }
+  }
+  return val
+}
+
+export let getSession = async function (name) {
   const formatName = getName(name)
   let item
-  // eslint-disable-next-line
-  if (window.GM_getValue) {
-    // eslint-disable-next-line
-    item = window.GM_getValue(formatName)
+  if (GM_getValue) {
+    item = GM_getValue(formatName)
   } else {
-    item = window.localStorage.getItem(formatName)
+    return Error('getSession没有找到GM_getValue')
   }
   if (item) {
-    if (isJson(item)) {
-      try {
-        return JSON.parse(item)
-      } catch (e) {
-        return item
-      }
-    } else {
-      return item
-    }
+    return parseJson(item)
   }
   return null
 }
 
 export let setSession = function (name, value) {
   const formatName = getName(name)
-  // eslint-disable-next-line
-  if (window.GM_setValue) {
-    // eslint-disable-next-line
-    window.GM_setValue(formatName, value)
+  if (GM_setValue) {
+    GM_setValue(formatName, value)
+    return Promise.resolve()
   } else {
-    const item = JSON.stringify(value)
-    if (item) {
-      window.localStorage.setItem(formatName, item)
-    }
+    return Promise.reject(Error('setSession没有找到GM_getValue'))
   }
 }
 
 export let delSession = function (name) {
   const formatName = getName(name)
   // eslint-disable-next-line
-  if (window.GM_deleteValue) {
+  if (GM_deleteValue) {
     // eslint-disable-next-line
-    window.GM_deleteValue(formatName)
+    GM_deleteValue(formatName)
   } else {
     window.localStorage.removeItem(formatName)
   }
@@ -150,8 +146,8 @@ function addLink (url, name) {
 
 export function addStyleResource (name, link) {
   let styleContent
-  if (window.GM_getResourceText) {
-    styleContent = window.GM_getResourceText(name)
+  if (GM_getResourceText) {
+    styleContent = GM_getResourceText(name)
   }
   if (styleContent) {
     addStyleContent(styleContent, name)
@@ -256,32 +252,6 @@ export function createAsRoot () {
   const el = document.createElement('div')
   el.id = 'all-search'
   return el
-}
-
-const scriptLoaded = getName('script-loaded')
-const pageLoaded = getName('page-loaded')
-
-export function passTmMethods () {
-  const emit = function () {
-    document.dispatchEvent(new CustomEvent(scriptLoaded, {
-      detail: {
-        version,
-        getSession,
-        setSession
-      }
-    }))
-  }
-  document.addEventListener(pageLoaded, emit)
-  emit()
-}
-
-export function getTmMethods () {
-  document.addEventListener(scriptLoaded, (event) => {
-    store.tmVersion = event.detail.version
-    getSession = event.detail.getSession
-    setSession = event.detail.setSession
-  })
-  document.dispatchEvent(new Event(pageLoaded))
 }
 
 export const isMobile = function () {

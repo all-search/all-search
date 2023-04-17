@@ -14,13 +14,15 @@ function getParent (el) {
   while (go && current.offsetParent) {
     if (current.offsetParent.tagName === 'BODY') {
       go = false
+      // delAsDataSet(current)
+      // return current
     } else {
       current = current.offsetParent
     }
   }
   const style = window.getComputedStyle(current)
   if (style.position !== 'fixed') {
-    delAsDataSet(current)
+    // delAsDataSet(current)
     return null
   }
   return current
@@ -83,7 +85,7 @@ function changeStyle (item) {
   }
 }
 
-let isSelfChange = false
+// let isSelfChange = false
 
 function getFixedNodeList (list, deep = false) {
   const weakSet = new WeakSet()
@@ -119,7 +121,7 @@ function getFixedNodeList (list, deep = false) {
 }
 
 function fixedDomPosition () {
-  checkBody().then(()=> {
+  checkBody().then(() => {
     const nodes = Array.from(document.body.querySelectorAll('*'))
       .filter(item => item.tagName !== 'STYLE')
     getFixedNodeList(nodes).forEach(item => {
@@ -140,23 +142,27 @@ function mutationObserver () {
   }
   // 当观察到变动时执行的回调函数
   const callback = function (mutationsList) {
-    if (isSelfChange) {
-      isSelfChange = false
-    } else {
-      isSelfChange = true
-      const root = getAsRoot()
-      const filterNodes = mutationsList
-        .filter(mutation =>
-          (mutation.type === 'attributes' && ['style', 'class', 'id'].includes(mutation.attributeName))
-          || (mutation.type === 'childList' && mutation.addedNodes.length)
-          && !['BODY', 'STYLE'].includes(mutation.target.tagName)
-          && !root.contains(mutation.target)
-        )
-        .map(mutation => mutation.target)
-      getFixedNodeList(filterNodes, true).forEach(item => {
-        changeStyle(item)
+    // if (isSelfChange) {
+    //   isSelfChange = false
+    // } else {
+    //   isSelfChange = true
+    // }
+    const root = getAsRoot()
+    const filterNodes = mutationsList
+      .filter(mutation => {
+        if (['BODY', 'STYLE'].includes(mutation.target.tagName) || root.contains(mutation.target)) {
+          return false
+        } else if (mutation.type === 'attributes') {
+          return ['style', 'class', 'id'].includes(mutation.attributeName)
+        } else if (mutation.type === 'childList') {
+          return mutation.addedNodes.length > 0
+        }
+        return false
       })
-    }
+      .map(mutation => mutation.target)
+    getFixedNodeList(filterNodes, true).forEach(item => {
+      changeStyle(item)
+    })
   }
   // 创建一个观察器实例并传入回调函数
   const observer = new MutationObserver(callback)

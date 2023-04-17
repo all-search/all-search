@@ -4,7 +4,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
 import './assets/normalize.css'
 import './assets/common.scss'
-import { getTmMethods } from './util'
+import { getTmMethods } from './util/tmMethods'
 import router from './route'
 import App from './App'
 

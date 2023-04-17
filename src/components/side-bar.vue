@@ -1,8 +1,10 @@
 <template>
-  <div class="as-setting" :class="mode">
+  <div
+    class="as-setting"
+    :class="mode">
     <div
       class="as-setting-btn"
-      @click="show = false">
+      @click="hide">
       收起
     </div>
     <div
@@ -133,7 +135,7 @@ import { delSession } from '../util'
 import useMode from '../components/useMode'
 import useAlign from './useAlign'
 import useSwitchShow from '../components/useSwitchShow'
-import useColor from '../components/useColor'
+import useColor from './useColor'
 import useFavicon from './useFavicon'
 import useToolbar from './useToolbar'
 import overlay from '../components/overlay'
@@ -160,22 +162,27 @@ export default {
       visible.value = false
     }
 
-    const { mode } = useMode()
-    const { alignList, align } = useAlign()
+    const { value: mode } = useMode()
+    const { list: alignList, value: align } = useAlign()
     const { primaryColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
     const { favicon } = useFavicon()
     const { toolbar } = useToolbar()
+
     function clearIconCache () {
-      if (window.confirm('确认要清除图标的缓存吗', )) {
+      if (window.confirm('确认要清除图标的缓存吗')) {
         delSession('iconCache')
       }
     }
 
     function resetSites () {
-      if (window.confirm('确认要重置所有网址吗', )) {
+      if (window.confirm('确认要重置所有网址吗')) {
         delSession('sites')
       }
+    }
+
+    const hide = () => {
+      show.value = false
     }
 
     return {
@@ -193,7 +200,8 @@ export default {
       options,
       scrollHide,
       clearIconCache,
-      resetSites
+      resetSites,
+      hide
     }
   }
 }
@@ -259,8 +267,8 @@ export default {
     height: 100%;
     flex: 1;
     border-radius: 4px;
-    border: 1px solid rgba(0,0,0,.1);
-    background: rgba(255,255,255,.67);
+    border: 1px solid rgba(0, 0, 0, .1);
+    background: rgba(255, 255, 255, .67);
   }
 
   > footer {

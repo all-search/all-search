@@ -6,23 +6,22 @@
       class="as-container"
       :class="classList">
       <logo :mode="mode"/>
-      <as-menu
-        :mode="mode"/>
+      <as-menu :mode="mode"/>
       <side-bar/>
     </div>
     <hoverBtn v-show="visible"/>
+    <iconfont/>
+    <selection-bar @openDialog="openDialog"/>
+    <search-dialog
+      :keyword="keyword"
+      v-model:visible="dialogVisible"/>
   </template>
-  <iconfont/>
-  <selection-bar @openDialog="openDialog"/>
-  <search-dialog
-    :keyword="keyword"
-    v-model:visible="dialogVisible"/>
 </template>
 
 <script>
-import { computed, watch, unref, ref, toRefs } from 'vue'
+import { computed, watch, unref, ref, toRefs, toValue, watchEffect } from 'vue'
 import { initSpecialStyle } from '../util/addSpecialStyle'
-import { changeBodyStyle, protectStyle } from '../util/initStyle'
+import { addCustomStyle, changeBodyStyle, protectStyle } from '../util/initStyle'
 import { site } from '../config/siteInfo'
 import { useFullScreen } from '../util/fullScreen'
 import useMode from '../components/useMode'
@@ -48,29 +47,22 @@ export default {
   },
   setup () {
     const { isFullScreen } = useFullScreen()
-    const { mode } = useMode()
+    const { value: mode } = useMode()
     const { show } = useSwitchShow()
 
     const classList = computed(() => ([
-      `as-${mode.value}`,
-      show.value ? 'as-show' : 'as-hide'
+      `as-${toValue(mode)}`,
+      toValue(show) ? 'as-show' : 'as-hide'
     ]))
 
     const visible = computed(() => {
       return !site.invisible && !unref(isFullScreen)
     })
 
-    watch(
-      [mode, () => site, show],
-      ([newMode, site, newShow]) => {
-        const remove = site.invisible || site.disabled || !newShow
-        changeBodyStyle(newMode, remove)
-      },
-      {
-        immediate: true,
-        deep: true
-      }
-    )
+    watchEffect(() => {
+      const remove = site.invisible || site.disabled || !toValue(show)
+      changeBodyStyle(toValue(mode), remove)
+    })
 
     let isInit = false
 
@@ -80,6 +72,7 @@ export default {
       }
       protectStyle()
       initSpecialStyle()
+      addCustomStyle(toValue(mode), site)
       isInit = true
     }
 
@@ -115,9 +108,14 @@ export default {
 <style lang="scss">
 @import "../assets/common.scss";
 
+.body-horizontal {
+  height: $height;
+  width: 100%;
+}
+
 .body-horizontal + body {
-  margin-top: $height !important;
-  position: relative !important;
+  //margin-top: $height !important;
+  //position: relative !important;
 
   [data-as-margin-top] {
     margin-top: $height !important;
@@ -135,6 +133,11 @@ export default {
   [data-as-has-set] {
     transition-duration: 0s;
   }
+}
+
+.body-vertical {
+  height: 100%;
+  width: $verticalWidth;
 }
 
 .body-vertical + body {

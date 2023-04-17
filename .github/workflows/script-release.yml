@@ -41,7 +41,7 @@ jobs:
 
       - name: Build
         run: |
-          npm run tmBuild
+          npm run build:script
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

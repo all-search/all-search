@@ -1,28 +1,14 @@
-import { ref, computed } from 'vue'
-import { getSession, setSession } from '../util/index'
+import useConfig from './useConfig'
 
-const session = getSession('mode')
-
-const getMode = val => {
-  if (!['vertical', 'horizontal'].includes(val)) {
-    return 'horizontal'
-  }
-  return val
-}
-
-const modeRef = ref(getMode(session))
-
-const mode = computed({
-  get: () => modeRef.value,
-  set: val => {
-    modeRef.value = val
-    setSession('mode', getMode(val))
-  }
+const value = useConfig({
+  name: 'mode',
+  defaultVal: 'horizontal',
+  reg: /[vertical|horizontal]/
 })
 
 export default function useMode () {
   return {
-    mode
+    value
   }
 }
 

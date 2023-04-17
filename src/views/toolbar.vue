@@ -87,7 +87,7 @@
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { VueDraggableNext } from 'vue-draggable-next'
-import { setSession } from '../util'
+import { setStorage } from '../util/tmMethods'
 import { initToolbar } from '../util/sites'
 
 export default {
@@ -138,7 +138,7 @@ export default {
     }
 
     function save () {
-      setSession('toolbar', formatSites())
+      setStorage('toolbar', formatSites())
       ElMessage.success('保存成功')
     }
 

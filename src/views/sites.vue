@@ -56,7 +56,9 @@
               plain
               type="danger"
               @click="removeTab(cate.name)">
-              <el-icon><Delete /></el-icon>
+              <el-icon>
+                <Delete/>
+              </el-icon>
             </el-button>
           </el-tooltip>
         </div>
@@ -92,7 +94,9 @@
               trigger="click"
               @command="addToPersonal($event, item)">
               <el-button>
-                <el-icon><Plus/></el-icon>
+                <el-icon>
+                  <Plus/>
+                </el-icon>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -126,7 +130,9 @@
                 :plain="true"
                 type="danger"
                 @click="deleteUrl(j)">
-                <el-icon><Delete /></el-icon>
+                <el-icon>
+                  <Delete/>
+                </el-icon>
               </el-button>
             </el-tooltip>
           </div>
@@ -166,45 +172,46 @@
 </template>
 
 <script>
+import { computed, ref } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import { delSession, setSession } from '../util'
-import { initSites } from '../util/sites'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { delStorage, setStorage } from '../util/tmMethods'
+import useSites from '../components/useSites'
 
 export default {
   name: 'sites',
   components: {
     draggable: VueDraggableNext
   },
-  data: () => ({
-    localSites: [],
-    tab: '',
-    tabName: ''
-  }),
-  computed: {
-    personalCategory () {
-      return this.localSites.filter(item => item.name.indexOf('personal') > -1)
-    }
-  },
-  mounted () {
-    this.initSites()
-  },
-  methods: {
-    initSites () {
-      this.localSites = initSites().map(item => ({
+  methods: {},
+  setup () {
+    const localSites = ref([])
+    const tab = ref('')
+    const tabName = ref('')
+    const personalCategory = computed(() => {
+      return localSites.value.filter(item => item.name.indexOf('personal') > -1)
+    })
+
+    function init () {
+      const { sites } = useSites()
+      localSites.value = sites.value.map(item => ({
         ...item,
         nameZhBackup: item.nameZh
       }))
-      this.tabName = this.localSites[0].name
-    },
-    tabChange (value) {
-      this.tabName = value
-    },
-    changeVisible (data) {
+      tabName.value = localSites.value[0].name
+    }
+
+    function tabChange (value) {
+      tabName.value = value
+    }
+
+    function changeVisible (data) {
       data.visible = !data.visible
-    },
-    addCategory () {
-      const i = this.personalCategory.length
-      this.localSites.push({
+    }
+
+    function addCategory () {
+      const i = personalCategory.value.length
+      localSites.value.push({
         nameZh: '新分类',
         nameZhBackup: '新分类',
         name: `personal-${i + 1}`,
@@ -213,19 +220,22 @@ export default {
           visible: true
         }
       })
-      this.tabName = `personal-${i + 1}`
-    },
-    addToPersonal (cate, item) {
+      tabName.value = `personal-${i + 1}`
+    }
+
+    function addToPersonal (cate, item) {
       cate.list.push(item)
-      this.$message('添加成功')
-    },
-    deleteUrl (j) {
-      const currentTab = this.localSites.find(item => item.name === this.tabName)
+      ElMessage('添加成功')
+    }
+
+    function deleteUrl (j) {
+      const currentTab = localSites.value.find(item => item.name === tabName.value)
       if (currentTab) {
         currentTab.list.splice(j, 1)
       }
-    },
-    addNewUrl (cate) {
+    }
+
+    function addNewUrl (cate) {
       cate.list.push({
         nameZh: '新网址',
         url: 'https://www.baidu.com/s?wd=%s&ie=utf-8',
@@ -233,63 +243,69 @@ export default {
           visible: true
         }
       })
-    },
-    removeTab (targetName) {
-      this.$confirm('确定要删除这个分类吗？', '提示', {
+    }
+
+    function removeTab (targetName) {
+      ElMessageBox.confirm('确定要删除这个分类吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const tabs = this.localSites
-        if (this.tabName === targetName) {
+        const tabs = localSites.value
+        if (tabName.value === targetName) {
           tabs.forEach((tab, index) => {
             if (tab.name === targetName) {
               let nextTab = tabs[index + 1] || tabs[index - 1]
               if (nextTab) {
-                this.tabName = nextTab.name
+                tabName.value = nextTab.name
               }
             }
           })
         }
-        const i = this.localSites.findIndex(item => item.name === targetName)
+        const i = localSites.value.findIndex(item => item.name === targetName)
         if (i > -1) {
-          this.localSites.splice(i, 1)
+          localSites.value.splice(i, 1)
         }
       }).catch(() => {
 
       })
-    },
-    isPersonal (cate) {
+    }
+
+    function isPersonal (cate) {
       return cate.name.indexOf('personal') > -1
-    },
-    moveLeft (i) {
+    }
+
+    function moveLeft (i) {
       const j = i - 1
       if (j >= 0) {
-        const list = this.localSites;
+        const list = localSites.value;
         [list[i], list[j]] = [list[j], list[i]]
-        this.localSites = list
+        localSites.value = list
       }
-    },
-    moveRight (i) {
+    }
+
+    function moveRight (i) {
       const j = i + 1
-      if (j < this.localSites.length) {
-        const list = this.localSites;
+      if (j < localSites.value.length) {
+        const list = localSites.value;
         [list[i], list[j]] = [list[j], list[i]]
-        this.localSites = list
+        localSites.value = list
       }
-    },
-    reset () {
-      this.$confirm('重置操作将还原所有网址数据，确定要重置吗？', '提示', {
+    }
+
+    function reset () {
+      ElMessageBox.confirm('重置操作将还原所有网址数据，确定要重置吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delSession('sites')
-        this.$message.success('重置成功')
+        delStorage('sites')
+        ElMessage.success('重置成功')
       })
-    },
-    formatSites () {
-      return this.localSites.map(item => ({
+    }
+
+    function formatSites () {
+      return localSites.value.map(item => ({
         nameZh: item.nameZh,
         name: item.name,
         list: item.list.map(child => ({
@@ -299,10 +315,33 @@ export default {
         })),
         data: item.data
       }))
-    },
-    save () {
-      setSession('sites', this.formatSites())
-      this.$message.success('保存成功')
+    }
+
+    function save () {
+      setStorage('sites', this.formatSites())
+      ElMessage.success('保存成功')
+    }
+
+    init()
+
+    return {
+      localSites,
+      tab,
+      tabName,
+      personalCategory,
+      tabChange,
+      changeVisible,
+      addCategory,
+      addToPersonal,
+      deleteUrl,
+      addNewUrl,
+      removeTab,
+      isPersonal,
+      moveLeft,
+      moveRight,
+      reset,
+      formatSites,
+      save
     }
   }
 }

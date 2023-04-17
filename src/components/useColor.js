@@ -1,68 +1,45 @@
-import { onMounted, computed, ref } from 'vue'
-import { getSession, setSession } from '../util/index'
+import useConfig from './useConfig'
+import { watchEffect } from 'vue'
 
 const reg = /^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/
-const defaultVal = {
-  'primary-color': '#1890ff',
-  'primary-text-color': '#606266'
-}
 
-function setCssValue (name, value) {
+function setCssValue (name, value, defaultVal) {
   const el = document.getElementById('all-search')
-  el.style.setProperty(`--as-${name}`, value)
+  const formatVal = reg.test(value) ? value : defaultVal
+  el.style.setProperty(`--as-${name}`, formatVal)
 }
 
-function getValue (name) {
-  const session = getSession(name)
-  if (reg.test(session)) {
-    return session
-  } else {
-    return defaultVal[name]
-  }
-}
-
-const valMap = {
-  'primary-color': ref(getValue('primary-color')),
-  'primary-text-color': ref(getValue('primary-text-color'))
-}
-
-
-function setValue (name, value) {
-  const formatVal = reg.test(value) ? value : defaultVal[name]
-  setCssValue(name, formatVal)
-  setSession(name, formatVal)
-  valMap[name].value = formatVal
-}
-
-const primaryColor = computed({
-  get: () => valMap['primary-color'].value,
-  set: val => {
-    setValue('primary-color', val)
-  }
+const primaryColor = useConfig({
+  name: 'primaryColor',
+  defaultVal: '#1890ff',
+  reg
 })
 
-const primaryTextColor = computed({
-  get: () => valMap['primary-text-color'].value,
-  set: val => {
-    setValue('primary-text-color', val)
-  }
+const bgColor = useConfig({
+  name: 'bgColor',
+  defaultVal: '#ffffff',
+  reg
 })
 
-function initColor (name) {
-  const value = getSession(name)
-  if (reg.test(value)) {
-    const formatVal = reg.test(value) ? value : defaultVal[name]
-    setCssValue(name, formatVal)
-  }
-}
+const primaryTextColor = useConfig({
+  name: 'primaryTextColor',
+  defaultVal: '#606266',
+  reg
+})
 
 export default function useColor () {
-  onMounted(() => {
-    initColor('primary-color')
-    initColor('primary-text-color')
+  watchEffect(() => {
+    setCssValue('primary-color', primaryColor.value, '#1890ff')
+  })
+  watchEffect(() => {
+    setCssValue('bg-color', bgColor.value, '#ffffff')
+  })
+  watchEffect(() => {
+    setCssValue('primary-text-color', primaryTextColor.value, '#606266')
   })
   return {
     primaryColor,
+    bgColor,
     primaryTextColor
   }
 }

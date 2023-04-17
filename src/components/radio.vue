@@ -22,10 +22,10 @@ export default {
   name: 'as-radio',
   props: {
     modelValue: {
-      type: [String, Number]
+      type: [String, Number, Boolean]
     },
     label: {
-      type: [String, Number],
+      type: [String, Number, Boolean],
       default: ''
     }
   },

@@ -20,9 +20,9 @@
 import { computed, reactive } from 'vue'
 import scrollbar from './scrollbar/src/scrollbar'
 import './scrollbar/css/scrollbar.css'
-import { initSites } from '../util/sites'
 import menuItem from './menuItem'
 import useAlign from './useAlign'
+import useSites from './useSites'
 
 export default {
   name: 'as-menu',
@@ -38,8 +38,8 @@ export default {
     }
   },
   setup (props) {
-    const sites = reactive(initSites('tm'))
-    const { align } = useAlign()
+    const { sites } = useSites('tm')
+    const { value: align } = useAlign()
 
     const data = reactive({
       showTimeout: 50,
