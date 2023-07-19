@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
-// @version      1.4.9
-// @description  2023-4-17更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @version      1.4.10
+// @description  2023-7-19更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @author       endday
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/all-search/all-search
@@ -23,7 +23,7 @@
 (function() {
     "use strict";
     var name$2 = "all-search";
-    var version$1 = "1.4.9";
+    var version$1 = "1.4.10";
     var keywords = [ "searchEngineJump", "tool", "tamperMonkey", "web", "javascript", "vue3" ];
     var description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
     var author = "endday";
@@ -2103,7 +2103,7 @@
             window.removeEventListener("pointerdown", listener);
         };
     }
-    var css$g = '@charset "UTF-8";\n.popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 99999;\n  position: relative;\n}\n.popover-content .arrow,\n.popover-content .arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n.popover-content .arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.popover-content[data-initialized=true] {\n  display: block;\n}\n\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
+    var css$g = '@charset "UTF-8";\n.as-popover-content {\n  --background-color: white;\n  --border-color: lightgray;\n  display: none;\n  pointer-events: none;\n  opacity: 0;\n  z-index: 99999;\n  position: relative;\n}\n.as-popover-content .arrow,\n.as-popover-content .arrow::before {\n  width: 0;\n  height: 0;\n  border-style: solid;\n}\n.as-popover-content .arrow::before {\n  content: "";\n  position: absolute;\n}\n\n.as-popover-content[data-show=true] {\n  opacity: 1;\n  pointer-events: initial;\n}\n\n.as-popover-content[data-initialized=true] {\n  display: block;\n}\n\n/* 可以为进入和离开动画设置不同的持续时间和动画函数 */\n.slide-fade-enter-active {\n  transition: all 0.3s ease-out;\n}\n\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n\n.slide-fade-enter-from,\n.slide-fade-leave-to {\n  transform: translateX(20px);\n  opacity: 0;\n}';
     injectStyle(css$g);
     const _sfc_main$g = {
         props: {
@@ -2191,7 +2191,7 @@
             default: Vue.withCtx((() => [ (Vue.openBlock(), Vue.createBlock(Vue.Teleport, {
                 to: "#all-search"
             }, [ Vue.withDirectives(Vue.createElementVNode("div", {
-                class: Vue.normalizeClass([ $props.popperClass, "popover-content" ]),
+                class: Vue.normalizeClass([ $props.popperClass, "as-popover-content" ]),
                 ref: "popover",
                 "data-show": $setup.visible,
                 "data-initialized": $setup.popperInstance !== null,
