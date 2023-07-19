@@ -11,7 +11,7 @@
         ref="popover"
         :data-show="visible"
         :data-initialized="popperInstance !== null"
-        class="popover-content"
+        class="as-popover-content"
         style="display: none"
         @mouseenter="show"
         @mouseleave="hide">
@@ -119,7 +119,7 @@ export default {
 </script>
 
 <style lang="scss">
-.popover-content {
+.as-popover-content {
   --background-color: white;
   --border-color: lightgray;
   display: none;
@@ -141,12 +141,12 @@ export default {
   }
 }
 
-.popover-content[data-show="true"] {
+.as-popover-content[data-show="true"] {
   opacity: 1;
   pointer-events: initial;
 }
 
-.popover-content[data-initialized="true"] {
+.as-popover-content[data-initialized="true"] {
   display: block;
 }
 
