@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { delStorage, setStorage } from '../util/storage'
@@ -191,14 +191,22 @@ export default {
     const personalCategory = computed(() => {
       return localSites.value.filter(item => item.name.indexOf('personal') > -1)
     })
+    const { sites } = useSites()
 
-    function init () {
-      const { sites } = useSites()
-      localSites.value = sites.value.map(item => ({
+    watch(sites, value => {
+      init(value)
+    }, {
+      immediate: true
+    })
+
+    function init (val) {
+      localSites.value = (val || []).map(item => ({
         ...item,
         nameZhBackup: item.nameZh
       }))
-      tabName.value = localSites.value[0].name
+      if (localSites.value[0]) {
+        tabName.value = localSites.value[0].name
+      }
     }
 
     function tabChange (value) {
@@ -299,9 +307,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delStorage('sites').then(() => {
-          init()
-        })
+        delStorage('sites')
         ElMessage.success('重置成功')
       })
     }
@@ -323,8 +329,6 @@ export default {
       setStorage('sites', formatSites())
       ElMessage.success('保存成功')
     }
-
-    init()
 
     return {
       localSites,
