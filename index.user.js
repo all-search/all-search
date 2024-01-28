@@ -977,12 +977,12 @@
     }
     return sites2;
   }
+  getStorage("sites").then((val) => {
+    sitesData$1.value = getSites$1(val);
+  }).catch(() => {
+    sitesData$1.value = list$2;
+  });
   function useSites(type) {
-    getStorage("sites").then((val) => {
-      sitesData$1.value = getSites$1(val);
-    }).catch(() => {
-      sitesData$1.value = list$2;
-    });
     return {
       sites: vue.computed(() => initSites$1(sitesData$1.value, type))
     };
