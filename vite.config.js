@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import crx from 'vite-plugin-crx-mv3'
 import externalGlobals from 'rollup-plugin-external-globals'
-import monkey, { cdn } from 'vite-plugin-monkey'
+import monkey from 'vite-plugin-monkey'
 import scriptConfig from './src/config/script-config'
 
 export default defineConfig(({ mode }) => {
@@ -49,6 +49,7 @@ export default defineConfig(({ mode }) => {
     }
   } else if (mode === 'site') {
     return {
+      base: '/all-search',
       outputDir: 'dist/',
       resolve: {
         alias: {

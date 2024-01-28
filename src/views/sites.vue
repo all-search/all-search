@@ -183,7 +183,6 @@ export default {
   components: {
     draggable: VueDraggableNext
   },
-  methods: {},
   setup () {
     const localSites = ref([])
     const tab = ref('')
