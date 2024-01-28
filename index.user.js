@@ -903,7 +903,10 @@
       }
     }))
   }));
-  function getStorage$1(name2) {
+  vue.reactive({
+    tmVersion: ""
+  });
+  function getStorageFn(name2) {
     const formatName = getName(name2);
     return new Promise((resolve, reject) => {
       if (!_GM_getValue) {
@@ -916,7 +919,7 @@
       return resolve(parseJson(item));
     });
   }
-  function setStorage$1(name2, value2) {
+  function setStorageFn(name2, value2) {
     const formatName = getName(name2);
     return new Promise((resolve, reject) => {
       if (value2 === void 0) {
@@ -929,7 +932,7 @@
       }
     });
   }
-  function delStorage$1(name2) {
+  function delStorageFn(name2) {
     const formatName = getName(name2);
     return new Promise((resolve, reject) => {
       if (!_GM_deleteValue) {
@@ -938,6 +941,25 @@
       _GM_deleteValue(formatName);
       return resolve(true);
     });
+  }
+  let getStorage = getStorageFn;
+  let setStorage = setStorageFn;
+  let delStorage = delStorageFn;
+  const scriptLoaded = getName("script-loaded");
+  const pageLoaded = getName("page-loaded");
+  function initTmMethods() {
+    const emit = function() {
+      document.dispatchEvent(new CustomEvent(scriptLoaded, {
+        detail: {
+          version,
+          getStorage,
+          setStorage,
+          delStorage
+        }
+      }));
+    };
+    document.addEventListener(pageLoaded, emit);
+    emit();
   }
   const sitesData$1 = vue.ref([]);
   function getSites$1(val) {
@@ -956,7 +978,7 @@
     }
     return sites2;
   }
-  getStorage$1("sites").then((val) => {
+  getStorage("sites").then((val) => {
     sitesData$1.value = getSites$1(val);
   }).catch(() => {
     sitesData$1.value = list$2;
@@ -1291,7 +1313,7 @@
   }
   async function initVal(name2, defaultVal, reg2 = "") {
     try {
-      const session = await getStorage$1(name2);
+      const session = await getStorage(name2);
       if (reg2 && reg2.test(session)) {
         return session;
       } else {
@@ -1311,7 +1333,7 @@
     return vue.computed({
       get: () => valRef.value,
       set: (val) => {
-        setStorage$1(name2, isDef(val) ? val : defaultVal).then((val2) => {
+        setStorage(name2, isDef(val) ? val : defaultVal).then((val2) => {
           valRef.value = val2;
         });
       }
@@ -2554,7 +2576,7 @@
     };
   }
   let iconCache = vue.reactive({});
-  getStorage$1("iconCache").then((iconData) => {
+  getStorage("iconCache").then((iconData) => {
     iconCache = iconData;
   });
   const _sfc_main$e = {
@@ -2595,7 +2617,7 @@
           const base64 = getBase64Image(e.target);
           if (base64) {
             iconCache[hostname] = base64;
-            setStorage$1("iconCache", iconCache);
+            setStorage("iconCache", iconCache);
           }
         }
       }
@@ -3550,7 +3572,7 @@
       return list$2;
     }
   }
-  getStorage$1("sites").then((val) => {
+  getStorage("sites").then((val) => {
     sitesData = getSites(val);
   }).catch(() => {
     sitesData = list$2;
@@ -3565,7 +3587,7 @@
     return sitesData;
   }
   let toolbarSession;
-  getStorage$1("toolbar").then((val) => {
+  getStorage("toolbar").then((val) => {
     toolbarSession = val;
   }).catch(() => {
     toolbarSession = null;
@@ -4040,28 +4062,6 @@
     ], 64)) : vue.createCommentVNode("", true);
   }
   const index = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-  vue.reactive({
-    tmVersion: ""
-  });
-  let getStorage = getStorage$1;
-  let setStorage = setStorage$1;
-  let delStorage = delStorage$1;
-  const scriptLoaded = getName("script-loaded");
-  const pageLoaded = getName("page-loaded");
-  function initTmMethods() {
-    const emit = function() {
-      document.dispatchEvent(new CustomEvent(scriptLoaded, {
-        detail: {
-          version,
-          getStorage,
-          setStorage,
-          delStorage
-        }
-      }));
-    };
-    document.addEventListener(pageLoaded, emit);
-    emit();
-  }
   initTmMethods();
   const el = getAsRoot();
   if (!el) {
