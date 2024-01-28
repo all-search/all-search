@@ -299,7 +299,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delStorage('sites')
+        delStorage('sites').then(() => {
+          init()
+        })
         ElMessage.success('重置成功')
       })
     }
@@ -318,7 +320,7 @@ export default {
     }
 
     function save () {
-      setStorage('sites', this.formatSites())
+      setStorage('sites', formatSites())
       ElMessage.success('保存成功')
     }
 
