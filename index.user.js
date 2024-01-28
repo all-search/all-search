@@ -944,7 +944,6 @@
   }
   let getStorage = getStorageFn;
   let setStorage = setStorageFn;
-  let delStorage = delStorageFn;
   const scriptLoaded = getName("script-loaded");
   const pageLoaded = getName("page-loaded");
   function initTmMethods() {
@@ -952,9 +951,9 @@
       document.dispatchEvent(new CustomEvent(scriptLoaded, {
         detail: {
           version,
-          getStorage,
-          setStorage,
-          delStorage
+          getStorage: getStorageFn,
+          setStorage: setStorageFn,
+          delStorage: delStorageFn
         }
       }));
     };
@@ -978,12 +977,12 @@
     }
     return sites2;
   }
-  getStorage("sites").then((val) => {
-    sitesData$1.value = getSites$1(val);
-  }).catch(() => {
-    sitesData$1.value = list$2;
-  });
   function useSites(type) {
+    getStorage("sites").then((val) => {
+      sitesData$1.value = getSites$1(val);
+    }).catch(() => {
+      sitesData$1.value = list$2;
+    });
     return {
       sites: vue.computed(() => initSites$1(sitesData$1.value, type))
     };
