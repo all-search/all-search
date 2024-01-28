@@ -138,6 +138,8 @@ export default {
 .body-vertical {
   height: 100%;
   width: $verticalWidth;
+  position: fixed;
+  z-index: 999999;
 }
 
 .body-vertical + body {
@@ -155,7 +157,6 @@ body, #all-search {
 
 #all-search {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  position: fixed;
 }
 
 /*@media (prefers-color-scheme: dark) {
