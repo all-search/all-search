@@ -8,7 +8,7 @@
 
 <script>
 import jsonEditor from '../components/jsonEditor'
-import { setStorage } from '../util/tmMethods'
+import { setStorage } from '../util/storage'
 import { initSites } from '../util/sites'
 import sites from '../config/sites'
 

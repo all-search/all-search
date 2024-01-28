@@ -1,7 +1,8 @@
 import { GM_getValue, GM_setValue, GM_deleteValue } from '$'
-import { getName, parseJson } from './index'
+import { getName, parseJson, version } from './index'
+import store from './store'
 
-export function getStorage (name) {
+function getStorageFn (name) {
   const formatName = getName(name)
   return new Promise((resolve,reject) => {
     if(!GM_getValue) {
@@ -15,7 +16,7 @@ export function getStorage (name) {
   })
 }
 
-export function setStorage (name, value) {
+function setStorageFn (name, value) {
   const formatName = getName(name)
   return new Promise((resolve,reject) => {
     if(value === void 0) {
@@ -29,7 +30,7 @@ export function setStorage (name, value) {
   })
 }
 
-export function delStorage (name) {
+function delStorageFn (name) {
   const formatName = getName(name)
   return new Promise((resolve,reject) => {
     if(!GM_deleteValue) {
@@ -40,3 +41,34 @@ export function delStorage (name) {
   })
 }
 
+export let getStorage = getStorageFn
+export let setStorage = setStorageFn
+export let delStorage = delStorageFn
+
+const scriptLoaded = getName('script-loaded')
+const pageLoaded = getName('page-loaded')
+
+export function initTmMethods () {
+  const emit = function () {
+    document.dispatchEvent(new CustomEvent(scriptLoaded, {
+      detail: {
+        version,
+        getStorage,
+        setStorage,
+        delStorage
+      }
+    }))
+  }
+  document.addEventListener(pageLoaded, emit)
+  emit()
+}
+
+export function getTmMethods () {
+  document.addEventListener(scriptLoaded, (event) => {
+    store.tmVersion = event.detail.version
+    getStorage = event.detail.getStorage
+    setStorage = event.detail.setStorage
+    delStorage = event.detail.delStorage
+  })
+  document.dispatchEvent(new Event(pageLoaded))
+}

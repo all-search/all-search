@@ -7,7 +7,7 @@ import {
 
 import {
   initTmMethods
-} from '../util/tmMethods'
+} from '../util/storage'
 
 initTmMethods()
 const el = getAsRoot()

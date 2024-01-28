@@ -1,6 +1,6 @@
 import sites from '../config/sites'
 import toolbar from '../config/toolbar'
-import { getStorage } from '../util/storage'
+import { getStorage } from './storage'
 
 let sitesData = []
 
