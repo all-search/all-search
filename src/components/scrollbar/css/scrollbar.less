@@ -1,82 +1,83 @@
 
-:root{
-    --as-text-color-secondary: #909399;
+:root {
+  --as-text-color-secondary: #909399;
 }
 
 .as-scrollbar {
-    --as-scrollbar-opacity: 0.3;
-    --as-scrollbar-background-color: var(--as-text-color-secondary);
-    --as-scrollbar-hover-opacity: 0.5;
-    --as-scrollbar-hover-background-color: var(--as-text-color-secondary);
-    overflow: hidden;
-    position: relative;
-    height: 100%
+  --as-scrollbar-opacity: 0.3;
+  --as-scrollbar-background-color: var(--as-text-color-secondary);
+  --as-scrollbar-hover-opacity: 0.5;
+  --as-scrollbar-hover-background-color: var(--as-text-color-secondary);
+  overflow: hidden;
+  position: relative;
+  height: 100%
 }
 
 .as-scrollbar__wrap {
-    overflow: auto;
-    height: 100%
+  overflow: auto;
+  height: 100%;
+  width: 100%;
 }
 
 .as-scrollbar__wrap--hidden-default {
-    scrollbar-width: none
+  scrollbar-width: none
 }
 
 .as-scrollbar__wrap--hidden-default::-webkit-scrollbar {
-    display: none
+  display: none
 }
 
 .as-scrollbar__thumb {
-    position: relative;
-    display: block;
-    width: 0;
-    height: 0;
-    cursor: pointer;
-    border-radius: inherit;
-    background-color: var(--as-scrollbar-background-color,var(--as-text-color-secondary));
-    transition: var(--as-transition-duration) background-color;
-    opacity: var(--as-scrollbar-opacity,.3)
+  position: relative;
+  display: block;
+  width: 0;
+  height: 0;
+  cursor: pointer;
+  border-radius: inherit;
+  background-color: var(--as-scrollbar-background-color, var(--as-text-color-secondary));
+  transition: var(--as-transition-duration) background-color;
+  opacity: var(--as-scrollbar-opacity, .3)
 }
 
 .as-scrollbar__thumb:hover {
-    background-color: var(--as-scrollbar-hover-background-color,var(--as-text-color-secondary));
-    opacity: var(--as-scrollbar-hover-opacity,.5)
+  background-color: var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));
+  opacity: var(--as-scrollbar-hover-opacity, .5)
 }
 
 .as-scrollbar__bar {
-    position: absolute;
-    right: 2px;
-    bottom: 2px;
-    z-index: 1;
-    border-radius: 4px
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  z-index: 1;
+  border-radius: 4px
 }
 
 .as-scrollbar__bar.is-vertical {
-    width: 6px;
-    top: 2px
+  width: 6px;
+  top: 2px
 }
 
-.as-scrollbar__bar.is-vertical>div {
-    width: 100%
+.as-scrollbar__bar.is-vertical > div {
+  width: 100%
 }
 
 .as-scrollbar__bar.is-horizontal {
-    height: 6px;
-    left: 2px
+  height: 6px;
+  left: 2px
 }
 
-.as-scrollbar__bar.is-horizontal>div {
-    height: 100%
+.as-scrollbar__bar.is-horizontal > div {
+  height: 100%
 }
 
 .as-scrollbar-fade-enter-active {
-    transition: opacity .34s ease-out
+  transition: opacity .34s ease-out
 }
 
 .as-scrollbar-fade-leave-active {
-    transition: opacity .12s ease-out
+  transition: opacity .12s ease-out
 }
 
-.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active {
-    opacity: 0
+.as-scrollbar-fade-enter-from, .as-scrollbar-fade-leave-active {
+  opacity: 0
 }
