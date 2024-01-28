@@ -28,13 +28,12 @@ function initSites (sites, type) {
   return sites
 }
 
-getStorage('sites').then(val => {
-  sitesData.value = getSites(val)
-}).catch(() => {
-  sitesData.value = sites
-})
-
 export default function useSites (type) {
+  getStorage('sites').then(val => {
+    sitesData.value = getSites(val)
+  }).catch(() => {
+    sitesData.value = sites
+  })
   return {
     sites: computed(() => initSites(sitesData.value, type))
   }

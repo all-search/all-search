@@ -53,9 +53,9 @@ export function initTmMethods () {
     document.dispatchEvent(new CustomEvent(scriptLoaded, {
       detail: {
         version,
-        getStorage,
-        setStorage,
-        delStorage
+        getStorage: getStorageFn,
+        setStorage: setStorageFn,
+        delStorage: delStorageFn
       }
     }))
   }
