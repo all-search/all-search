@@ -155,6 +155,7 @@ body, #all-search {
 
 #all-search {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  position: fixed;
 }
 
 /*@media (prefers-color-scheme: dark) {
