@@ -3,7 +3,7 @@
 // @namespace    all-search
 // @version      1.5.0
 // @author       endday
-// @description  2024-1-28更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-1-29更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
@@ -80,9 +80,6 @@
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@vitejs/plugin-vue": "^4.3.4",
-    "@vue/cli-plugin-babel": "^5.0.0",
-    "@vue/cli-plugin-eslint": "^5.0.0",
-    "@vue/cli-service": "^5.0.0",
     "@vue/compiler-sfc": "^3.0.7",
     autoprefixer: "^10.4.7",
     "babel-plugin-import": "^1.13.3",
