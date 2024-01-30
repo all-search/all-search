@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      1.5.0
+// @version      1.5.1
 // @author       endday
-// @description  2024-1-29更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-1-30更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
 // @downloadURL  https://raw.github.com/all-search/all-search/release/index.user.js
 // @updateURL    https://raw.github.com/all-search/all-search/release/index.user.js
 // @match        *://*/*
-// @require      https://unpkg.zhimg.com/vue@3.4.13/dist/vue.global.prod.js
-// @require      https://www.unpkg.com/@popperjs/core@2.11.8/dist/umd/popper-lite.min.js
+// @require      https://registry.npmmirror.com/vue/3.4.15/files/dist/vue.global.prod.js
+// @require      https://registry.npmmirror.com/@popperjs/core/2.11.8/files/dist/umd/popper-lite.min.js
 // @grant        GM_addStyle
 // @grant        GM_deleteValue
 // @grant        GM_getValue
@@ -29,7 +29,7 @@
   var _GM_getValue = /* @__PURE__ */ (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = /* @__PURE__ */ (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
   const name = "all-search";
-  const version$1 = "1.5.0";
+  const version$1 = "1.5.1";
   const keywords = [
     "tamperMonkey",
     "user-script",
@@ -52,7 +52,7 @@
   ];
   const unpkg = "dist/index.user.js";
   const jsdelivr = "dist/index.user.js";
-  const packageManager = "pnpm@7.18.0";
+  const packageManager = "pnpm@8.15.1";
   const scripts = {
     lint: "vue-cli-service lint",
     prepare: "husky install",
