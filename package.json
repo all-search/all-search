@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "keywords": [
     "tamperMonkey",
     "user-script",
@@ -23,7 +23,7 @@
   ],
   "unpkg": "dist/index.user.js",
   "jsdelivr": "dist/index.user.js",
-  "packageManager": "pnpm@7.18.0",
+  "packageManager": "pnpm@8.15.1",
   "scripts": {
     "lint": "vue-cli-service lint",
     "prepare": "husky install",
