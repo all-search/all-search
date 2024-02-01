@@ -1,11 +1,11 @@
 <template>
   <scrollbar
     class="as-menu-container"
+    :class="menuClass"
     :style="{justifyContent: align}"
     noresize>
     <ul
-      class="as-menu"
-      :class="menuClass">
+      class="as-menu">
       <menu-item
         v-for="item in sites"
         :key="item.name"
@@ -46,8 +46,8 @@ export default {
     })
 
     const menuClass = computed(() => ({
-      'as-horizontal-menu': props.mode === 'horizontal',
-      'as-vertical-menu': props.mode === 'vertical'
+      'as-horizontal': props.mode === 'horizontal',
+      'as-vertical': props.mode === 'vertical'
     }))
 
     return {
@@ -78,12 +78,19 @@ export default {
   display: flex;
 }
 
-.as-horizontal-menu {
-  flex-direction: row;
+.as-horizontal{
+  .as-menu {
+    flex-direction: row;
+  }
 }
 
-.as-vertical-menu {
-  flex-direction: column;
-}
+.as-vertical {
+  .as-menu {
+    flex-direction: column;
+  }
 
+  .as-scrollbar__wrap {
+    height: auto;
+  }
+}
 </style>
