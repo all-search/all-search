@@ -1,13 +1,26 @@
 // 判断 NodeList 中是否有可用的
 function findInNodeList (list) {
-  return [].find.call(list, (item) => isVisible(item))
+  return [].find.call(list, (item) => isValidate(item))
+}
+
+function isValidate (el) {
+  return isInput(el) && isVisible(el)
+}
+
+function isInput (el) {
+  if (['input', 'textarea'].includes(el.nodeName.toLowerCase())) {
+    // input不确定是不是有textarea，有空再验证，
+    // 不确定是不是都大写，所以全都转小写
+    return ['text', 'search', 'textarea'].includes(el.type)
+  }
+  return true
 }
 
 // 判断元素是否可见
-function isVisible (element) {
-  const style = getComputedStyle(element)
+function isVisible (el) {
+  const style = getComputedStyle(el)
   return (
-    !!element.getClientRects().length &&
+    !!el.getClientRects().length &&
     style.visibility !== 'hidden' &&
     style.width !== 0 &&
     style.height !== 0 &&
@@ -16,32 +29,33 @@ function isVisible (element) {
 }
 
 export function getSearchDom () {
+  // const el = document.querySelector('input[type=search],input[type=text][autocomplete=off],input[autocomplete=off]:not([type]),textarea[type=search]') ||
   const el = document.querySelector('input[type=search],input[type=text][autocomplete=off],input[autocomplete=off]:not([type])') ||
     document.querySelector('input[type=text][name][value],input[name][value]:not([type])')
-  if (el && isVisible(el)) {
+  if (el && isValidate(el)) {
     return el
   }
   // 选择第一个 type 为 search 或存在 autofocus 且在页面显示的
   const autofocusOrSearch = document.querySelector('input[autofocus],input[type=search]')
-  if (autofocusOrSearch && isVisible(autofocusOrSearch)) {
+  if (autofocusOrSearch && isValidate(autofocusOrSearch)) {
     return autofocusOrSearch
   }
 
   // 选择第一个 id/class 中包含[search]关键词且在页面显示的
   const idOrClassContainSearch = document.querySelectorAll('input[id*=search],input[class*=search]')
   if (idOrClassContainSearch.length) {
-    const element = findInNodeList(idOrClassContainSearch)
-    if (element) {
-      return element
+    const el = findInNodeList(idOrClassContainSearch)
+    if (el && isValidate(el)) {
+      return el
     }
   }
 
   // 选择第一个 placeholder 中包含[search/搜索]关键词且在页面显示的
   const placeholderContainSearch = document.querySelectorAll('input[placeholder*=search],input[placeholder*=搜索]')
   if (placeholderContainSearch.length) {
-    const element = findInNodeList(placeholderContainSearch)
-    if (element) {
-      return element
+    const el = findInNodeList(placeholderContainSearch)
+    if (el && isValidate(el)) {
+      return el
     }
   }
 
@@ -49,7 +63,7 @@ export function getSearchDom () {
   const textInputTypes = ['hidden', 'button', 'checkbox', 'color', 'file', 'image', 'radio', 'range', 'reset', 'submit']
   const selector = textInputTypes.map(t => `[type=${t}]`).join(',')
   const firstInput = document.querySelector(`input:not(${selector}), textarea`)
-  if (firstInput && isVisible(firstInput)) {
+  if (firstInput && isValidate(firstInput)) {
     return firstInput
   }
 
