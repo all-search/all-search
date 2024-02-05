@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      1.5.2
+// @version      1.5.3
 // @author       endday
-// @description  2024-2-1更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-2-5更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
@@ -29,7 +29,7 @@
   var _GM_getValue = /* @__PURE__ */ (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = /* @__PURE__ */ (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
   const name = "all-search";
-  const version$1 = "1.5.2";
+  const version$1 = "1.5.3";
   const keywords = [
     "tamperMonkey",
     "user-script",
@@ -2439,39 +2439,48 @@
   }
   const popperComp = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$g]]);
   function findInNodeList(list2) {
-    return [].find.call(list2, (item) => isVisible(item));
+    return [].find.call(list2, (item) => isValidate(item));
   }
-  function isVisible(element) {
-    const style = getComputedStyle(element);
-    return !!element.getClientRects().length && style.visibility !== "hidden" && style.width !== 0 && style.height !== 0 && style.opacity !== 0;
+  function isValidate(el2) {
+    return isInput(el2) && isVisible(el2);
+  }
+  function isInput(el2) {
+    if (["input", "textarea"].includes(el2.nodeName.toLowerCase())) {
+      return ["text", "search", "textarea"].includes(el2.type);
+    }
+    return true;
+  }
+  function isVisible(el2) {
+    const style = getComputedStyle(el2);
+    return !!el2.getClientRects().length && style.visibility !== "hidden" && style.width !== 0 && style.height !== 0 && style.opacity !== 0;
   }
   function getSearchDom() {
     const el2 = document.querySelector("input[type=search],input[type=text][autocomplete=off],input[autocomplete=off]:not([type])") || document.querySelector("input[type=text][name][value],input[name][value]:not([type])");
-    if (el2 && isVisible(el2)) {
+    if (el2 && isValidate(el2)) {
       return el2;
     }
     const autofocusOrSearch = document.querySelector("input[autofocus],input[type=search]");
-    if (autofocusOrSearch && isVisible(autofocusOrSearch)) {
+    if (autofocusOrSearch && isValidate(autofocusOrSearch)) {
       return autofocusOrSearch;
     }
     const idOrClassContainSearch = document.querySelectorAll("input[id*=search],input[class*=search]");
     if (idOrClassContainSearch.length) {
-      const element = findInNodeList(idOrClassContainSearch);
-      if (element) {
-        return element;
+      const el3 = findInNodeList(idOrClassContainSearch);
+      if (el3 && isValidate(el3)) {
+        return el3;
       }
     }
     const placeholderContainSearch = document.querySelectorAll("input[placeholder*=search],input[placeholder*=搜索]");
     if (placeholderContainSearch.length) {
-      const element = findInNodeList(placeholderContainSearch);
-      if (element) {
-        return element;
+      const el3 = findInNodeList(placeholderContainSearch);
+      if (el3 && isValidate(el3)) {
+        return el3;
       }
     }
     const textInputTypes = ["hidden", "button", "checkbox", "color", "file", "image", "radio", "range", "reset", "submit"];
     const selector = textInputTypes.map((t) => `[type=${t}]`).join(",");
     const firstInput = document.querySelector(`input:not(${selector}), textarea`);
-    if (firstInput && isVisible(firstInput)) {
+    if (firstInput && isValidate(firstInput)) {
       return firstInput;
     }
     const inputSearch = document.getElementsByTagName("input");
