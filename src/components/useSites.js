@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import sites from '../config/sites'
-import { getStorage } from '../util/storage'
+import { getStorage, delStorage } from '../util/storage'
 
 const sitesData = ref([])
 
@@ -34,8 +34,15 @@ getStorage('sites').then(val => {
   sitesData.value = sites
 })
 
+function resetSites () {
+  if (window.confirm('确认要重置所有网址吗')) {
+    delStorage('sites')
+  }
+}
+
 export default function useSites (type) {
   return {
-    sites: computed(() => initSites(sitesData.value, type))
+    sites: computed(() => initSites(sitesData.value, type)),
+    resetSites
   }
 }

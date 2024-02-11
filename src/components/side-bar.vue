@@ -138,6 +138,7 @@ import useSwitchShow from '../components/useSwitchShow'
 import useColor from './useColor'
 import useFavicon from './useFavicon'
 import useToolbar from './useToolbar'
+import useSites from './useSites'
 import overlay from '../components/overlay'
 import radio from '../components/radio'
 import formItem from '../components/form-item'
@@ -166,20 +167,9 @@ export default {
     const { list: alignList, value: align } = useAlign()
     const { primaryColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
-    const { favicon } = useFavicon()
+    const { favicon, clearIconCache } = useFavicon()
     const { toolbar } = useToolbar()
-
-    function clearIconCache () {
-      if (window.confirm('确认要清除图标的缓存吗')) {
-        delSession('iconCache')
-      }
-    }
-
-    function resetSites () {
-      if (window.confirm('确认要重置所有网址吗')) {
-        delSession('sites')
-      }
-    }
+    const { resetSites } = useSites('tm')
 
     const hide = () => {
       show.value = false

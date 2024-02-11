@@ -1,4 +1,4 @@
-import { GM_getValue, GM_setValue, GM_getResourceText } from '$';
+import { GM_getResourceText } from '$'
 import pkg from '../../package.json'
 
 export const version = pkg.version
@@ -75,30 +75,6 @@ export function parseJson (val) {
     }
   }
   return val
-}
-
-export let getSession = async function (name) {
-  const formatName = getName(name)
-  let item
-  if (GM_getValue) {
-    item = GM_getValue(formatName)
-  } else {
-    return Error('getSession没有找到GM_getValue')
-  }
-  if (item) {
-    return parseJson(item)
-  }
-  return null
-}
-
-export let setSession = function (name, value) {
-  const formatName = getName(name)
-  if (GM_setValue) {
-    GM_setValue(formatName, value)
-    return Promise.resolve()
-  } else {
-    return Promise.reject(Error('setSession没有找到GM_getValue'))
-  }
 }
 
 export let delSession = function (name) {
