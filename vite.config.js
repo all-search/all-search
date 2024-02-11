@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import crx from 'vite-plugin-crx-mv3'
+// import crx from 'vite-plugin-crx-mv3'
 import externalGlobals from 'rollup-plugin-external-globals'
 import monkey from 'vite-plugin-monkey'
 import scriptConfig from './src/config/script-config'
+import { crx } from '@crxjs/vite-plugin'
+import manifest from './manifest.json'
 
 export default defineConfig(({ mode }) => {
   if (mode === 'plugin') {
@@ -17,7 +19,7 @@ export default defineConfig(({ mode }) => {
       plugins: [
         vue(),
         crx({
-          manifest: './src/manifest.json'
+          manifest
         })
       ],
       build: {

@@ -12,15 +12,20 @@
 </template>
 
 <script>
-import { computed, reactive, ref } from 'vue'
+import { computed, ref, toValue } from 'vue'
 import parseUrl from '../util/parseUrl'
 import useFavicon from './useFavicon'
 import { getStorage, setStorage } from '../util/storage'
+import { debounce } from '../util'
 
-let iconCache = reactive({})
-getStorage('iconCache').then(iconData => {
-  iconCache = iconData
+const iconCache = ref({})
+getStorage('iconCache', 'local').then(iconData => {
+  iconCache.value = iconData || {}
 })
+
+const setStorageDebounce = debounce(() => {
+  setStorage('iconCache', iconCache, 'local')
+}, 1000)
 
 export default {
   name: 'favicon',
@@ -38,11 +43,12 @@ export default {
     const isError = ref(false)
 
     const { hostname, origin } = parseUrl(props.url)
+    const cache = toValue(iconCache)
     const img = computed(() => {
       if (isError.value) {
         return `${origin}/favicon.ico`
-      } else if (iconCache[hostname]) {
-        return iconCache[hostname]
+      } else if (cache[hostname]) {
+        return cache[hostname]
       } else {
         return `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`
       }
@@ -64,8 +70,8 @@ export default {
       if (!isError.value && !img.value.startsWith('data:image')) {
         const base64 = getBase64Image(e.target)
         if (base64) {
-          iconCache[hostname] = base64
-          setStorage('iconCache', iconCache)
+          toValue(iconCache)[hostname] = base64
+          setStorageDebounce()
         }
       }
     }

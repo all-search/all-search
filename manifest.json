@@ -12,13 +12,13 @@
         "<all_urls>"
       ],
       "js": [
-        "as-script/main.js"
+        "content-scripts/main.js"
       ],
       "run_at": "document_idle"
     }
   ],
-  "background": {
-    "service_worker": "background/index.js"
+  "side_panel": {
+    "default_path": "sidePanel/index.html"
   },
   "web_accessible_resources": [
     {
@@ -31,7 +31,8 @@
     }
   ],
   "permissions": [
-    "storage"
+    "storage",
+    "sidePanel"
   ],
   "manifest_version": 3
 }
