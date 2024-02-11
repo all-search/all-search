@@ -183,14 +183,6 @@
     }
     return val;
   }
-  let delSession = function(name2) {
-    const formatName = getName(name2);
-    if (GM_deleteValue) {
-      GM_deleteValue(formatName);
-    } else {
-      window.localStorage.removeItem(formatName);
-    }
-  };
   function RAFInterval(callback, period, runNow) {
     const needCount = period / 1e3 * 60;
     let times = 0;
@@ -940,6 +932,7 @@
   }
   let getStorage = getStorageFn;
   let setStorage = setStorageFn;
+  let delStorage = delStorageFn;
   const scriptLoaded = getName("script-loaded");
   const pageLoaded = getName("page-loaded");
   function initTmMethods() {
@@ -978,9 +971,15 @@
   }).catch(() => {
     sitesData$1.value = list$2;
   });
+  function resetSites() {
+    if (window.confirm("确认要重置所有网址吗")) {
+      delStorage("sites");
+    }
+  }
   function useSites(type) {
     return {
-      sites: vue.computed(() => initSites$1(sitesData$1.value, type))
+      sites: vue.computed(() => initSites$1(sitesData$1.value, type)),
+      resetSites
     };
   }
   const width = 100;
@@ -2574,9 +2573,17 @@
     defaultVal: 1,
     reg: /[1|2]/
   });
+  function clearIconCache() {
+    if (window.confirm("确认要清除图标的缓存吗")) {
+      delStorage("iconCache").then(() => {
+        console.log("清除成功");
+      });
+    }
+  }
   function useFavicon() {
     return {
-      favicon: favicon$1
+      favicon: favicon$1,
+      clearIconCache
     };
   }
   let iconCache = vue.reactive({});
@@ -3186,18 +3193,9 @@
       const { list: alignList, value: align } = useAlign();
       const { primaryColor: primaryColor2, primaryTextColor: primaryTextColor2 } = useColor();
       const { show: show2, options: options2, scrollHide: scrollHide2 } = useSwitchShow();
-      const { favicon: favicon2 } = useFavicon();
+      const { favicon: favicon2, clearIconCache: clearIconCache2 } = useFavicon();
       const { toolbar: toolbar2 } = useToolbar();
-      function clearIconCache() {
-        if (window.confirm("确认要清除图标的缓存吗")) {
-          delSession("iconCache");
-        }
-      }
-      function resetSites() {
-        if (window.confirm("确认要重置所有网址吗")) {
-          delSession("sites");
-        }
-      }
+      const { resetSites: resetSites2 } = useSites("tm");
       const hide = () => {
         show2.value = false;
       };
@@ -3215,8 +3213,8 @@
         show: show2,
         options: options2,
         scrollHide: scrollHide2,
-        clearIconCache,
-        resetSites,
+        clearIconCache: clearIconCache2,
+        resetSites: resetSites2,
         hide
       };
     }
