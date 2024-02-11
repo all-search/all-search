@@ -41,9 +41,27 @@ export default defineConfig(({ mode }) => {
             fileName: 'index.user.js',
             externalGlobals: {
               vue: ['Vue', () => `https://registry.npmmirror.com/vue/3.4.15/files/dist/vue.global.prod.js`],
-              '@popperjs/core': ['Popper', () => `https://registry.npmmirror.com/@popperjs/core/2.11.8/files/dist/umd/popper-lite.min.js`],
+              '@popperjs/core': ['Popper', () => `https://registry.npmmirror.com/@popperjs/core/2.11.8/files/dist/umd/popper-lite.min.js`]
             },
-          },
+            cssSideEffects: () => {
+              return (e) => {
+                if (typeof window.GM_addStyle == 'function') {
+                  window.GM_addStyle(e)
+                  return
+                }
+                const styleNode = document.querySelector('#as-style-common')
+                if (styleNode) {
+                  styleNode.styleSheet.cssText += e
+                } else {
+                  const o = document.createElement('style')
+                  o.classList.add('as-style')
+                  o.id = 'as-style-common'
+                  o.textContent = e
+                  document.head.append(o)
+                }
+              }
+            }
+          }
         })
       ]
     }
