@@ -28,7 +28,7 @@
           </el-menu-item>
           <el-menu-item
             index="/config/toolbar">
-            工具栏
+            滑词工具栏
           </el-menu-item>
         </el-menu>
       </div>

@@ -29,7 +29,7 @@
               全搜 all-search
             </header>
             <section>
-              <form-item label="工具栏">
+              <form-item label="滑词工具栏">
                 <as-radio
                   :label="1"
                   v-model="toolbar">显示
@@ -110,10 +110,10 @@
                 菜单设置
               </a>
               <a class="link"
-                 title="工具栏设置页"
+                 title="滑词工具栏设置页"
                  href="https://all-search.github.io/all-search/config/toolbar"
                  target="_blank">
-                工具栏设置
+                滑词工具栏设置
               </a>
               <a class="link"
                  title="github"
@@ -131,7 +131,6 @@
 
 <script>
 import { ref } from 'vue'
-import { delSession } from '../util'
 import useMode from '../components/useMode'
 import useAlign from './useAlign'
 import useSwitchShow from '../components/useSwitchShow'
