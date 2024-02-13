@@ -8,16 +8,15 @@
 </template>
 
 <script>
-import { watch, computed, toValue } from 'vue'
+import { computed, toValue } from 'vue'
 import { isMobile } from '../util/index'
 import useSwitchShow from './useSwitchShow'
-import useScroll from '../util/useScroll'
 import useMode from '../components/useMode'
 
 export default {
   name: 'hover-btn',
   setup () {
-    const { show, scrollHide } = useSwitchShow()
+    const { show } = useSwitchShow()
     const isMobileVal = isMobile()
     const handleMouseEnter = () => {
       if (!isMobileVal) {
@@ -30,23 +29,11 @@ export default {
       }
     }
 
-    const { direction } = useScroll()
-    watch(direction, value => {
-      if (
-        (show.value && scrollHide.value) &&
-        (value === scrollHide.value || scrollHide.value === 'all')
-      ) {
-        show.value = false
-      }
-    })
-
     const { value: mode } = useMode()
-    const className = computed(() => {
-      return {
-        'as-hide': !show.value,
-        [`as-hover-btn-${toValue(mode)}`]: true
-      }
-    })
+    const className = computed(() => ({
+      'as-hide': !show.value,
+      [`as-hover-btn-${toValue(mode)}`]: true
+    }))
 
     return {
       handleMouseEnter,

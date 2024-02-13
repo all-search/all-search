@@ -57,11 +57,11 @@
 </template>
 
 <script>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import asDialog from './dialog'
 import icon from './icon'
 import favicon from './favicon'
-import { initSites } from '../util/sites'
+import useSites from './useSites'
 import scrollbar from './scrollbar/src/scrollbar'
 
 export default {
@@ -97,7 +97,7 @@ export default {
 
     const inputValue = ref('')
 
-    const sites = reactive(initSites('tm'))
+    const { sites } = useSites('tm')
 
     const handleClick = (item, newWin) => {
       const keyword = inputValue.value

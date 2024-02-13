@@ -29,7 +29,9 @@
               全搜 all-search
             </header>
             <section>
-              <form-item label="滑词工具栏">
+              <form-item
+                label-width="84"
+                label="滑词工具栏">
                 <as-radio
                   :label="1"
                   v-model="toolbar">显示

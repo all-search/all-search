@@ -1,6 +1,6 @@
 <template>
   <div class="bar-container"
-       v-if="show === 1"
+       v-if="toolbarVisible === 1"
        v-show="visible"
        ref="toolbarEle"
        :style="style">
@@ -28,7 +28,6 @@
 import { reactive, ref, unref, computed, nextTick } from 'vue'
 import { getAsRoot } from '../util'
 import { selection } from './selection'
-import { initToolbar } from '../util/sites'
 import useToolbar from './useToolbar'
 import favicon from './favicon'
 import icon from './icon'
@@ -60,8 +59,7 @@ export default {
     icon
   },
   setup (props, ctx) {
-    const { toolbar: show } = useToolbar()
-    const list = reactive(initToolbar('tm'))
+    const { visible: toolbarVisible, list } = useToolbar('tm')
     const visible = ref(false)
     const toolbarEle = ref(null)
     const styleObj = reactive({
@@ -158,7 +156,7 @@ export default {
     }
 
     return {
-      show,
+      toolbarVisible,
       list,
       visible,
       toolbarEle,
