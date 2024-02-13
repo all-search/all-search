@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      1.5.5
+// @version      1.5.6
 // @author       endday
-// @description  2024-2-12更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-2-13更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
@@ -19,7 +19,7 @@
 // @noframes
 // ==/UserScript==
 
-(a=>{if(typeof window.GM_addStyle=="function"){window.GM_addStyle(a);return}const e=document.querySelector("#as-style-common");if(e)e.styleSheet.cssText+=a;else{const o=document.createElement("style");o.classList.add("as-style"),o.id="as-style-common",o.textContent=a,document.head.append(o)}})(' @charset "UTF-8";@media screen and (max-width: 750px){.as-title-horizontal{display:none}}.as-title-horizontal{min-width:90px;margin:0 10px}.as-title-vertical{width:100%}.as-title{text-decoration:none!important;padding:0;margin:0;color:var(--as-primary-color)}.as-title-inner{padding:0;font-size:17px;height:30px;line-height:30px;font-weight:600;color:var(--as-primary-color);margin:0 auto;text-align:center;cursor:pointer}:root{--as-text-color-secondary: #909399}.as-scrollbar{--as-scrollbar-opacity: .3;--as-scrollbar-background-color: var(--as-text-color-secondary);--as-scrollbar-hover-opacity: .5;--as-scrollbar-hover-background-color: var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}.as-popover-content{--background-color: white;--border-color: lightgray;display:none;pointer-events:none;opacity:0;z-index:99999;position:relative}.as-popover-content .arrow,.as-popover-content .arrow:before{width:0;height:0;border-style:solid}.as-popover-content .arrow:before{content:"";position:absolute}.as-popover-content[data-show=true]{opacity:1;pointer-events:initial}.as-popover-content[data-initialized=true]{display:block}.slide-fade-enter-active{transition:all .3s ease-out}.slide-fade-leave-active{transition:all .8s cubic-bezier(1,.5,.8,1)}.slide-fade-enter-from,.slide-fade-leave-to{transform:translate(20px);opacity:0}.as-icon{font-size:20px;width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden;margin:.25px 4px 0 0;display:inline-block}.as-img-icon{border:none;position:relative;font-size:0}.as-img-icon img{width:100%;height:100%;border:none;vertical-align:top}.as-img-icon img.error{display:inline-block;transform:scale(1);content:"";color:transparent}.as-img-icon img.error:before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#f5f5f5 no-repeat center/50% 50%}.as-img-icon img.error:after{content:attr(alt);position:absolute;left:0;bottom:0;width:100%;line-height:2;background-color:#00000080;color:#fff;font-size:12px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.as-menu-item.horizontal{position:relative;padding:0 16px}.as-menu-item.horizontal:after{content:"";transform:scaleX(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;right:0;left:0;bottom:0;border-bottom:2px solid var(--as-primary-color)}.as-menu-item.horizontal:hover:after{transform:scaleX(1);opacity:1}@media screen and (max-width: 750px){.as-menu-item.horizontal{padding:0 10px}}.as-menu-item.vertical{margin:5px 0;position:relative}.as-menu-item.vertical:after{content:"";transform:scaleY(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;top:0;bottom:0;right:0;border-right:2.5px solid var(--as-primary-color)}.as-menu-item.vertical:hover:after{transform:scaleY(1);opacity:1}.as-menu-item.vertical .as-menu-item-title{margin-right:6px}.as-menu-item.no-underline{text-decoration:none}.as-menu-item:visited{color:var(--as-primary-text-color)}a.as-menu-item{height:30px;line-height:30px;list-style:none;position:relative;color:var(--as-primary-text-color);transition:color .3s cubic-bezier(.645,.045,.355,1),border-color .3s cubic-bezier(.645,.045,.355,1),background .3s cubic-bezier(.645,.045,.355,1);box-sizing:border-box;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}a.as-menu-item:hover{border-color:var(--as-primary-color)}a.as-menu-item:hover .as-menu-item-icon,a.as-menu-item:hover .as-menu-item-title{color:var(--as-primary-color)}.as-menu-item-icon{color:var(--as-primary-text-color)}.as-url-icon{width:16px;height:16px;margin-right:10px}.as-subMenu-container{background:var(--as-bg-color);border:1px solid #e4e7ed;box-shadow:0 0 12px #0000001f;border-radius:4px}.as-subMenu{list-style:none;padding:0;min-width:90px;box-sizing:border-box;margin:4px 0}.as-subMenu li{overflow:hidden;box-sizing:border-box}.as-subMenu li a{display:flex;align-items:center;height:34px;padding:0 16px;text-decoration:none}.as-subMenu li:hover{background-color:var(--as-secondary-background-color);color:var(--as-primary-color)}.as-subMenu .as-subMenu-text{flex:1;font-size:14px;text-overflow:ellipsis;color:var(--as-primary-text-color);white-space:nowrap;margin:0;line-height:34px;font-weight:400;text-align:left}.as-menu-container{flex:1;display:flex}.as-menu{padding:0;margin:0;white-space:nowrap;border:0;box-shadow:none;background-color:var(--as-bg-color);display:flex}.as-horizontal .as-menu{flex-direction:row}.as-vertical .as-menu{flex-direction:column}.as-vertical .as-scrollbar__wrap{height:auto}.as-overlay{position:fixed;top:0;right:0;bottom:0;left:0;z-index:999991;height:100%;background-color:#0000004d;overflow:auto}label.as-radio{color:var(--as-primary-text-color);font-weight:500;line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;font-size:14px;-webkit-user-select:none;-moz-user-select:none;user-select:none}label.as-radio+label.as-radio{margin-left:14px}label.as-radio input{position:absolute;opacity:0;visibility:hidden}label.as-radio .as-radio-icon{display:inline-block;position:relative;width:12px;height:12px;background:var(--as-bg-color);border:1px solid #979797;border-radius:50%;vertical-align:-2px}label.as-radio input:checked+.as-radio-icon:after{position:absolute;content:"";width:6px;height:6px;background-color:var(--as-bg-color);border-radius:50%;top:3px;left:3px}label.as-radio input:checked+.as-radio-icon{background:var(--as-primary-color);border:1px solid var(--as-primary-color)}label.as-radio input:disabled+.as-radio-icon{background-color:#e8e8e8;border:solid 1px #979797}label.as-radio input:disabled:checked+.as-radio-icon:after{background-color:#c1c1c1}label.as-radio.as-radio-animate .as-radio-icon{transition:background-color ease-out .3s}label.as-radio .as-radio-label{margin-left:6px;font-size:14px}.as-label{vertical-align:middle;float:left;font-size:14px;color:var(--as-primary-text-color);line-height:40px;padding:0 12px 0 0;box-sizing:border-box}.as-content{line-height:40px;position:relative;font-size:14px}.as-button{display:inline-block;line-height:1;white-space:nowrap;cursor:pointer;background:#fff;border:1px solid #dcdfe6;color:var(--as-primary-text-color);text-align:center;box-sizing:border-box;outline:none;margin:0;transition:.1s;font-weight:500;-webkit-user-select:none;-moz-user-select:none;user-select:none;padding:12px 20px;font-size:14px;border-radius:4px}.as-button.as-button__text{border-color:transparent;color:var(--as-primary-color);background:transparent;padding-left:0;padding-right:0}.as-button.as-button__primary{color:#fff;background-color:var(--as-primary-color);border-color:var(--as-primary-color)}.as-color-set .as-color-label{line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;vertical-align:middle}.as-color-set .input\u2014color{width:30px;height:30px;padding:4px;border:1px solid #e6e6e6;border-radius:4px;background-color:var(--as-secondary-background-color);box-sizing:border-box}.as-color-set .input\u2014color::-webkit-color-swatch{border:0}.as-color-set .input\u2014color::-webkit-color-swatch-wrapper{padding:0}.as-color-set .reset-btn{margin-left:20px}.as-setting{position:relative}.as-setting.horizontal{box-shadow:-4px 0 10px #0000001f;display:flex}.as-setting-btn{line-height:30px;padding:0 14px;position:relative;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;color:var(--as-primary-text-color);text-align:center}.as-setting-btn:hover{color:var(--as-primary-color);background-color:#0000000a}.as-side-bar{width:20vw;min-width:300px;right:0;height:100%;top:0;bottom:0;position:absolute;box-sizing:border-box;background:var(--as-bg-color) radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed;display:flex;flex-direction:column;box-shadow:0 8px 10px -5px #0003,0 16px 24px 2px #00000024,0 6px 30px 5px #0000001f;overflow:hidden}.as-side-bar>header{font-size:16px;align-items:center;color:var(--as-primary-text-color);display:flex;padding:32px 24px}.as-side-bar>section{padding:10px 24px;margin:0 12px;height:100%;flex:1;border-radius:4px;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.67)}.as-side-bar>footer{padding:10px 24px 30px}.as-side-bar>footer .link{font-size:14px;text-decoration:none}.as-side-bar>footer .link:visited{color:var(--as-primary-text-color)}.as-side-bar>footer .link+.link{margin-left:20px}.overlay-enter-active,.overlay-leave-active{transition:opacity .3s}.overlay-enter-from,.overlay-leave-to{opacity:0}.overlay-enter-active .as-side-bar{animation:rtl-drawer-animation .3s linear reverse}.overlay-leave-active .as-side-bar{animation:rtl-drawer-animation .3s linear}@keyframes rtl-drawer-animation{0%{transform:translate(0)}to{transform:translate(100%)}}.as-hover-btn[data-v-43cd6676]{position:fixed;z-index:99999;font-weight:600;font-size:17px;color:var(--as-primary-color);background:#fff;box-shadow:0 1px 4px #00152914;border:1px var(--as-border-color) solid;opacity:.6;cursor:pointer}.as-hover-btn-horizontal[data-v-43cd6676]{top:0;left:50%;transform:translateY(0) translate(-50%);padding:0 16px;height:28px;line-height:28px}.as-hover-btn-vertical[data-v-43cd6676]{left:0;top:50%;transform:translateY(-200%) translate(0) rotate(90deg);transform-origin:0 100%;padding:0 16px;height:28px;line-height:28px}.hover-btn.as-hide[data-v-43cd6676]{transition:transform .2s;transform:translateY(-100%) translate(-50%)}.bar-container[data-v-4dbbf22d]{display:flex;padding:2px;max-width:300px;position:absolute;z-index:99999;background-color:#fff;color:#444;box-shadow:0 0 0 1px #0000000d,0 2px 3px #0000001a;border-radius:2px;cursor:pointer;white-space:nowrap}.tool-bar-item[data-v-4dbbf22d]{margin:0;padding:2px;width:20px;height:20px;border:1px solid #FFF;cursor:pointer;box-sizing:content-box}.tool-bar-item[data-v-4dbbf22d]:hover{border-color:var(--as-border-color)}.as-more-icon[data-v-4dbbf22d]{display:block;font-size:20px}.as-dialog{position:fixed;top:0;right:0;bottom:0;left:0;margin:0;z-index:99999}.as-dialog__mask{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}.as-dialog-container{position:relative;background:rgba(243,243,243,.85);border-radius:10px;box-shadow:0 1px 3px #0000004d;box-sizing:border-box;min-width:50%;max-width:80%;z-index:99;margin:40vh auto 50px;transform:translateY(-40%);overflow:hidden;-webkit-backdrop-filter:saturate(3) blur(20px);backdrop-filter:saturate(3) blur(20px)}.as-dialog__header{position:relative}.as-dialog__body{color:#666;font-size:14px;word-break:break-all}.as-dialog__footer{padding:10px 20px 20px;text-align:right;box-sizing:border-box}.as-dialog__close{display:inline-block;position:absolute;top:16px;right:24px;padding:0;background:transparent;cursor:pointer;font-size:16px;color:#909399}.as-dialog__close:before{content:"\u2716"}.se-header{padding:15px 20px;box-shadow:0 1px 6px #20212447;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed}.se-input-box{border:1px solid #ccc;background-color:#ffffffab;overflow:hidden;display:flex;border-radius:6px;height:40px;align-items:center;transition:.2s;color:#222}.se-input-box:hover{border-color:#fff;box-shadow:0 1px 6px #20212447}.se-input-box:active{border-color:#fff}.se-input-box .se-input{color:var(--as-primary-text-color);background-color:transparent;font-size:16px;height:100%;width:100%;line-height:20px;margin:0 20px;outline:none;border:none}.se-scrollbar-container{height:50vh;padding:0 20px 20px;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed}.se-container{margin-top:10px;display:flex;border-radius:6px;flex-wrap:wrap}.cate-container{flex:0 0 150px;margin:0 10px 10px 0;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.67);padding:6px}.cate-name{padding:0 10px;height:36px;line-height:36px;font-size:16px;display:flex;align-items:center}.cate-list{list-style:none;min-width:110px;box-sizing:border-box;padding:0}.cate-list .cate-item{box-sizing:border-box;padding:0 10px}.cate-list .cate-item .as-subMenu-text{margin:0}.cate-list .cate-item a{display:flex;align-items:center;height:34px;text-decoration:none;color:var(--as-primary-text-color)}.cate-list .cate-item:hover{background-color:#fff;color:var(--as-primary-color)}#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}#all-search p,.all-search-config p{margin:0}.body-horizontal{height:30px;width:100%}.body-horizontal+body [data-as-margin-top]{margin-top:30px!important}.body-horizontal+body [data-as-transform]{transform:translateY(30px)}.body-horizontal+body [data-as-border-top]{border-top:rgba(0,0,0,0) 30px solid;box-sizing:content-box}.body-horizontal+body [data-as-has-set]{transition-duration:0s}.body-vertical{height:100%;width:90px;position:fixed;z-index:999999}.body-vertical+body{margin-left:90px!important}body,#all-search{--as-horizontal-height: $height;--as-primary-color: #1890ff;--as-bg-color: #ffffff;--as-primary-text-color: #606266;--as-secondary-background-color: #f5f7fa;--as-border-color: #e8e8e8}#all-search{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"}.as-horizontal{height:30px;width:100%;top:0;border-bottom:1px var(--as-border-color) solid;flex-direction:row;transition:transform .1s}.as-horizontal.as-hide{transform:translateY(-100%)}.as-horizontal.as-show{transform:translateY(0)}.as-vertical{height:100%;width:90px;top:0;left:0;border-right:1px var(--as-border-color) solid;flex-direction:column;transition:transform .1s}.as-vertical.as-hide{transform:translate(-100%)}.as-vertical.as-show{transform:translate(0)}.as-container{opacity:1!important;position:fixed;display:flex;background-color:var(--as-bg-color);z-index:999990} ');
+(e=>{if(typeof window.GM_addStyle=="function"){window.GM_addStyle(e);return}const a=document.querySelector("#as-style-common");if(a)a.styleSheet.cssText+=e;else{const o=document.createElement("style");o.classList.add("as-style"),o.id="as-style-common",o.textContent=e,document.head.append(o)}})(' @charset "UTF-8";@media screen and (max-width: 750px){.as-title-horizontal{display:none}}.as-title-horizontal{min-width:90px;margin:0 10px}.as-title-vertical{width:100%}.as-title{text-decoration:none!important;padding:0;margin:0;color:var(--as-primary-color)}.as-title-inner{padding:0;font-size:17px;height:30px;line-height:30px;font-weight:600;color:var(--as-primary-color);margin:0 auto;text-align:center;cursor:pointer}:root{--as-text-color-secondary: #909399}.as-scrollbar{--as-scrollbar-opacity: .3;--as-scrollbar-background-color: var(--as-text-color-secondary);--as-scrollbar-hover-opacity: .5;--as-scrollbar-hover-background-color: var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}.as-popover-content{--background-color: white;--border-color: lightgray;display:none;pointer-events:none;opacity:0;z-index:99999;position:relative}.as-popover-content .arrow,.as-popover-content .arrow:before{width:0;height:0;border-style:solid}.as-popover-content .arrow:before{content:"";position:absolute}.as-popover-content[data-show=true]{opacity:1;pointer-events:initial}.as-popover-content[data-initialized=true]{display:block}.slide-fade-enter-active{transition:all .3s ease-out}.slide-fade-leave-active{transition:all .8s cubic-bezier(1,.5,.8,1)}.slide-fade-enter-from,.slide-fade-leave-to{transform:translate(20px);opacity:0}.as-icon{font-size:20px;width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden;margin:.25px 4px 0 0;display:inline-block}.as-img-icon{border:none;position:relative;font-size:0}.as-img-icon img{width:100%;height:100%;border:none;vertical-align:top}.as-img-icon img.error{display:inline-block;transform:scale(1);content:"";color:transparent}.as-img-icon img.error:before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#f5f5f5 no-repeat center/50% 50%}.as-img-icon img.error:after{content:attr(alt);position:absolute;left:0;bottom:0;width:100%;line-height:2;background-color:#00000080;color:#fff;font-size:12px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.as-menu-item.horizontal{position:relative;padding:0 16px}.as-menu-item.horizontal:after{content:"";transform:scaleX(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;right:0;left:0;bottom:0;border-bottom:2px solid var(--as-primary-color)}.as-menu-item.horizontal:hover:after{transform:scaleX(1);opacity:1}@media screen and (max-width: 750px){.as-menu-item.horizontal{padding:0 10px}}.as-menu-item.vertical{margin:5px 0;position:relative}.as-menu-item.vertical:after{content:"";transform:scaleY(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;top:0;bottom:0;right:0;border-right:2.5px solid var(--as-primary-color)}.as-menu-item.vertical:hover:after{transform:scaleY(1);opacity:1}.as-menu-item.vertical .as-menu-item-title{margin-right:6px}.as-menu-item.no-underline{text-decoration:none}.as-menu-item:visited{color:var(--as-primary-text-color)}a.as-menu-item{height:30px;line-height:30px;list-style:none;position:relative;color:var(--as-primary-text-color);transition:color .3s cubic-bezier(.645,.045,.355,1),border-color .3s cubic-bezier(.645,.045,.355,1),background .3s cubic-bezier(.645,.045,.355,1);box-sizing:border-box;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}a.as-menu-item:hover{border-color:var(--as-primary-color)}a.as-menu-item:hover .as-menu-item-icon,a.as-menu-item:hover .as-menu-item-title{color:var(--as-primary-color)}.as-menu-item-icon{color:var(--as-primary-text-color)}.as-url-icon{width:16px;height:16px;margin-right:10px}.as-subMenu-container{background:var(--as-bg-color);border:1px solid #e4e7ed;box-shadow:0 0 12px #0000001f;border-radius:4px}.as-subMenu{list-style:none;padding:0;min-width:90px;box-sizing:border-box;margin:4px 0}.as-subMenu li{overflow:hidden;box-sizing:border-box}.as-subMenu li a{display:flex;align-items:center;height:34px;padding:0 16px;text-decoration:none}.as-subMenu li:hover{background-color:var(--as-secondary-background-color);color:var(--as-primary-color)}.as-subMenu .as-subMenu-text{flex:1;font-size:14px;text-overflow:ellipsis;color:var(--as-primary-text-color);white-space:nowrap;margin:0;line-height:34px;font-weight:400;text-align:left}.as-menu-container{flex:1;display:flex}.as-menu{padding:0;margin:0;white-space:nowrap;border:0;box-shadow:none;background-color:var(--as-bg-color);display:flex}.as-horizontal .as-menu{flex-direction:row}.as-vertical .as-menu{flex-direction:column}.as-vertical .as-scrollbar__wrap{height:auto}.as-overlay{position:fixed;top:0;right:0;bottom:0;left:0;z-index:999991;height:100%;background-color:#0000004d;overflow:auto}label.as-radio{color:var(--as-primary-text-color);font-weight:500;line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;font-size:14px;-webkit-user-select:none;-moz-user-select:none;user-select:none}label.as-radio+label.as-radio{margin-left:14px}label.as-radio input{position:absolute;opacity:0;visibility:hidden}label.as-radio .as-radio-icon{display:inline-block;position:relative;width:12px;height:12px;background:var(--as-bg-color);border:1px solid #979797;border-radius:50%;vertical-align:-2px}label.as-radio input:checked+.as-radio-icon:after{position:absolute;content:"";width:6px;height:6px;background-color:var(--as-bg-color);border-radius:50%;top:3px;left:3px}label.as-radio input:checked+.as-radio-icon{background:var(--as-primary-color);border:1px solid var(--as-primary-color)}label.as-radio input:disabled+.as-radio-icon{background-color:#e8e8e8;border:solid 1px #979797}label.as-radio input:disabled:checked+.as-radio-icon:after{background-color:#c1c1c1}label.as-radio.as-radio-animate .as-radio-icon{transition:background-color ease-out .3s}label.as-radio .as-radio-label{margin-left:6px;font-size:14px}.as-label{vertical-align:middle;float:left;font-size:14px;color:var(--as-primary-text-color);line-height:40px;padding:0 12px 0 0;box-sizing:border-box}.as-content{line-height:40px;position:relative;font-size:14px}.as-button{display:inline-block;line-height:1;white-space:nowrap;cursor:pointer;background:#fff;border:1px solid #dcdfe6;color:var(--as-primary-text-color);text-align:center;box-sizing:border-box;outline:none;margin:0;transition:.1s;font-weight:500;-webkit-user-select:none;-moz-user-select:none;user-select:none;padding:12px 20px;font-size:14px;border-radius:4px}.as-button.as-button__text{border-color:transparent;color:var(--as-primary-color);background:transparent;padding-left:0;padding-right:0}.as-button.as-button__primary{color:#fff;background-color:var(--as-primary-color);border-color:var(--as-primary-color)}.as-color-set .as-color-label{line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;vertical-align:middle}.as-color-set .input\u2014color{width:30px;height:30px;padding:4px;border:1px solid #e6e6e6;border-radius:4px;background-color:var(--as-secondary-background-color);box-sizing:border-box}.as-color-set .input\u2014color::-webkit-color-swatch{border:0}.as-color-set .input\u2014color::-webkit-color-swatch-wrapper{padding:0}.as-color-set .reset-btn{margin-left:20px}.as-setting{position:relative}.as-setting.horizontal{box-shadow:-4px 0 10px #0000001f;display:flex}.as-setting-btn{line-height:30px;padding:0 14px;position:relative;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;color:var(--as-primary-text-color);text-align:center}.as-setting-btn:hover{color:var(--as-primary-color);background-color:#0000000a}.as-side-bar{width:20vw;min-width:300px;right:0;height:100%;top:0;bottom:0;position:absolute;box-sizing:border-box;background:var(--as-bg-color) radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed;display:flex;flex-direction:column;box-shadow:0 8px 10px -5px #0003,0 16px 24px 2px #00000024,0 6px 30px 5px #0000001f;overflow:hidden}.as-side-bar>header{font-size:16px;align-items:center;color:var(--as-primary-text-color);display:flex;padding:32px 24px}.as-side-bar>section{padding:10px 24px;margin:0 12px;height:100%;flex:1;border-radius:4px;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.67)}.as-side-bar>footer{padding:10px 24px 30px}.as-side-bar>footer .link{font-size:14px;text-decoration:none}.as-side-bar>footer .link:visited{color:var(--as-primary-text-color)}.as-side-bar>footer .link+.link{margin-left:20px}.overlay-enter-active,.overlay-leave-active{transition:opacity .3s}.overlay-enter-from,.overlay-leave-to{opacity:0}.overlay-enter-active .as-side-bar{animation:rtl-drawer-animation .3s linear reverse}.overlay-leave-active .as-side-bar{animation:rtl-drawer-animation .3s linear}@keyframes rtl-drawer-animation{0%{transform:translate(0)}to{transform:translate(100%)}}.as-hover-btn[data-v-8c5914e9]{position:fixed;z-index:99999;font-weight:600;font-size:17px;color:var(--as-primary-color);background:#fff;box-shadow:0 1px 4px #00152914;border:1px var(--as-border-color) solid;opacity:.6;cursor:pointer}.as-hover-btn-horizontal[data-v-8c5914e9]{top:0;left:50%;transform:translateY(0) translate(-50%);padding:0 16px;height:28px;line-height:28px}.as-hover-btn-vertical[data-v-8c5914e9]{left:0;top:50%;transform:translateY(-200%) translate(0) rotate(90deg);transform-origin:0 100%;padding:0 16px;height:28px;line-height:28px}.hover-btn.as-hide[data-v-8c5914e9]{transition:transform .2s;transform:translateY(-100%) translate(-50%)}.bar-container[data-v-10e6a147]{display:flex;padding:2px;max-width:300px;position:absolute;z-index:99999;background-color:#fff;color:#444;box-shadow:0 0 0 1px #0000000d,0 2px 3px #0000001a;border-radius:2px;cursor:pointer;white-space:nowrap}.tool-bar-item[data-v-10e6a147]{margin:0;padding:2px;width:20px;height:20px;border:1px solid #FFF;cursor:pointer;box-sizing:content-box}.tool-bar-item[data-v-10e6a147]:hover{border-color:var(--as-border-color)}.as-more-icon[data-v-10e6a147]{display:block;font-size:20px}.as-dialog{position:fixed;top:0;right:0;bottom:0;left:0;margin:0;z-index:99999}.as-dialog__mask{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}.as-dialog-container{position:relative;background:rgba(243,243,243,.85);border-radius:10px;box-shadow:0 1px 3px #0000004d;box-sizing:border-box;min-width:50%;max-width:80%;z-index:99;margin:40vh auto 50px;transform:translateY(-40%);overflow:hidden;-webkit-backdrop-filter:saturate(3) blur(20px);backdrop-filter:saturate(3) blur(20px)}.as-dialog__header{position:relative}.as-dialog__body{color:#666;font-size:14px;word-break:break-all}.as-dialog__footer{padding:10px 20px 20px;text-align:right;box-sizing:border-box}.as-dialog__close{display:inline-block;position:absolute;top:16px;right:24px;padding:0;background:transparent;cursor:pointer;font-size:16px;color:#909399}.as-dialog__close:before{content:"\u2716"}.se-header{padding:15px 20px;box-shadow:0 1px 6px #20212447;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed}.se-input-box{border:1px solid #ccc;background-color:#ffffffab;overflow:hidden;display:flex;border-radius:6px;height:40px;align-items:center;transition:.2s;color:#222}.se-input-box:hover{border-color:#fff;box-shadow:0 1px 6px #20212447}.se-input-box:active{border-color:#fff}.se-input-box .se-input{color:var(--as-primary-text-color);background-color:transparent;font-size:16px;height:100%;width:100%;line-height:20px;margin:0 20px;outline:none;border:none}.se-scrollbar-container{height:50vh;padding:0 20px 20px;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed}.se-container{margin-top:10px;display:flex;border-radius:6px;flex-wrap:wrap}.cate-container{flex:0 0 150px;margin:0 10px 10px 0;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.67);padding:6px}.cate-name{padding:0 10px;height:36px;line-height:36px;font-size:16px;display:flex;align-items:center}.cate-list{list-style:none;min-width:110px;box-sizing:border-box;padding:0}.cate-list .cate-item{box-sizing:border-box;padding:0 10px}.cate-list .cate-item .as-subMenu-text{margin:0}.cate-list .cate-item a{display:flex;align-items:center;height:34px;text-decoration:none;color:var(--as-primary-text-color)}.cate-list .cate-item:hover{background-color:#fff;color:var(--as-primary-color)}#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}#all-search p,.all-search-config p{margin:0}.body-horizontal{height:30px;width:100%}.body-horizontal+body [data-as-margin-top]{margin-top:30px!important}.body-horizontal+body [data-as-transform]{transform:translateY(30px)}.body-horizontal+body [data-as-border-top]{border-top:rgba(0,0,0,0) 30px solid;box-sizing:content-box}.body-horizontal+body [data-as-has-set]{transition-duration:0s}.body-vertical{height:100%;width:90px;position:fixed;z-index:999999}.body-vertical+body{margin-left:90px!important}body,#all-search{--as-horizontal-height: $height;--as-primary-color: #1890ff;--as-bg-color: #ffffff;--as-primary-text-color: #606266;--as-secondary-background-color: #f5f7fa;--as-border-color: #e8e8e8}#all-search{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"}.as-horizontal{height:30px;width:100%;top:0;border-bottom:1px var(--as-border-color) solid;flex-direction:row;transition:transform .1s}.as-horizontal.as-hide{transform:translateY(-100%)}.as-horizontal.as-show{transform:translateY(0)}.as-vertical{height:100%;width:90px;top:0;left:0;border-right:1px var(--as-border-color) solid;flex-direction:column;transition:transform .1s}.as-vertical.as-hide{transform:translate(-100%)}.as-vertical.as-show{transform:translate(0)}.as-container{opacity:1!important;position:fixed;display:flex;background-color:var(--as-bg-color);z-index:999990} ');
 
 (function (vue, core) {
   'use strict';
@@ -28,7 +28,7 @@
   var _GM_getValue = /* @__PURE__ */ (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = /* @__PURE__ */ (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
   const name = "all-search";
-  const version$1 = "1.5.5";
+  const version$1 = "1.5.6";
   const keywords = [
     "tamperMonkey",
     "user-script",
@@ -981,15 +981,15 @@
     document.addEventListener(pageLoaded, emit);
     emit();
   }
-  const sitesData$1 = vue.ref([]);
-  function getSites$1(val) {
+  const sitesData = vue.ref([]);
+  function getSites(val) {
     if (Array.isArray(val) && val.length > 0) {
       return val;
     } else {
       return list$2;
     }
   }
-  function initSites$1(sites2, type) {
+  function initSites(sites2, type) {
     if (type === "tm") {
       return sites2.filter((item) => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible).map((item) => ({
         ...item,
@@ -999,9 +999,9 @@
     return sites2;
   }
   getStorage("sites").then((val) => {
-    sitesData$1.value = getSites$1(val);
+    sitesData.value = getSites(val);
   }).catch(() => {
-    sitesData$1.value = list$2;
+    sitesData.value = list$2;
   });
   function resetSites() {
     if (window.confirm("确认要重置所有网址吗")) {
@@ -1010,7 +1010,7 @@
   }
   function useSites(type) {
     return {
-      sites: vue.computed(() => initSites$1(sitesData$1.value, type)),
+      sites: vue.computed(() => initSites(sitesData.value, type)),
       resetSites
     };
   }
@@ -1234,12 +1234,12 @@
     window.addEventListener("yt-navigate-finish", cb);
     window.addEventListener("hashchange", cb);
   };
-  const { sites } = useSites("tm");
+  const { sites: sites$1 } = useSites("tm");
   function getMenuItem() {
     let targetItem = null;
     let urlObj = null;
     const curItem = new URL(window.location.href);
-    sites.value.some((category) => {
+    sites$1.value.some((category) => {
       category.list.find((item) => {
         const menuItem2 = new URL(item.url);
         if (menuItem2.hostname === curItem.hostname && menuItem2.pathname === curItem.pathname) {
@@ -1290,7 +1290,7 @@
       query: null
     };
   }
-  vue.watch(sites, () => {
+  vue.watch(sites$1, () => {
     updateCurrentSite();
   });
   function updateCurrentSite() {
@@ -1337,10 +1337,13 @@
       isFullScreen: isFullScreenRef
     };
   }
-  async function initVal(name2, defaultVal, reg2 = "") {
+  const isDef = (val) => val !== void 0 && val !== null;
+  async function init(name2, defaultVal, reg2 = "") {
     try {
       const session = await getStorage(name2);
       if (reg2 && reg2.test(session)) {
+        return session;
+      } else if (isDef(session)) {
         return session;
       } else {
         return defaultVal;
@@ -1349,19 +1352,23 @@
       return defaultVal;
     }
   }
-  const isDef = (val) => val !== void 0 && val !== null;
   function useConfig(params) {
-    const { name: name2, defaultVal, reg: reg2 } = params;
-    const valRef = vue.ref(defaultVal || "");
-    initVal(name2, defaultVal, reg2).then((val) => {
-      valRef.value = val;
+    const { name: name2, initVal, defaultVal, reg: reg2 } = params;
+    let val = "";
+    if (isDef(initVal)) {
+      val = initVal;
+    } else if (isDef(defaultVal)) {
+      val = defaultVal;
+    }
+    const valRef = vue.ref(val);
+    init(name2, defaultVal, reg2).then((val2) => {
+      valRef.value = val2;
     });
     return vue.computed({
       get: () => valRef.value,
-      set: (val) => {
-        setStorage(name2, isDef(val) ? val : defaultVal).then((val2) => {
-          valRef.value = val2;
-        });
+      set: (val2) => {
+        valRef.value = val2;
+        setStorage(name2, isDef(val2) ? val2 : defaultVal);
       }
     });
   }
@@ -1375,6 +1382,52 @@
       value: value$1
     };
   }
+  function throttle$1(fn, delay = 500) {
+    let canRun = true;
+    return function() {
+      if (!canRun)
+        return;
+      canRun = false;
+      setTimeout(() => {
+        fn.apply(this, arguments);
+        canRun = true;
+      }, delay);
+    };
+  }
+  const y = vue.ref(0);
+  const direction$1 = vue.ref("");
+  function getDirection(newVal, oldVal, limit) {
+    if (newVal < oldVal - limit) {
+      return "top";
+    } else if (newVal > oldVal + limit) {
+      return "bottom";
+    } else {
+      return "mid";
+    }
+  }
+  function useScroll(triggerLimit = 0) {
+    const scrollHandler = throttle$1(function(e) {
+      const eventTarget = e.target === document ? e.target.documentElement : e.target;
+      const scrollTop2 = eventTarget.scrollTop;
+      const distance = getDirection(scrollTop2, y.value, triggerLimit);
+      vue.nextTick().then(() => {
+        direction$1.value = distance;
+      });
+      y.value = scrollTop2;
+    }, 200);
+    if (window) {
+      window.addEventListener("scroll", scrollHandler);
+    }
+    vue.onBeforeUnmount(() => {
+      if (window) {
+        window.removeEventListener("scroll", scrollHandler);
+      }
+    });
+    return {
+      y,
+      direction: direction$1
+    };
+  }
   const options = vue.reactive(/* @__PURE__ */ new Map([
     [false, "关闭"],
     ["top", "向上"],
@@ -1383,12 +1436,19 @@
   ]));
   const show = useConfig({
     name: "switchShow",
-    defaultVal: true
+    defaultVal: true,
+    initVal: false
   });
   const scrollHide = useConfig({
     name: "scrollHide",
     defaultVal: false,
     reg: /[false|top|bottom|all]/
+  });
+  const { direction } = useScroll(100);
+  vue.watch([direction, scrollHide], ([newDirection, newScrollHide]) => {
+    if (show.value && newScrollHide && (newDirection === newScrollHide || newScrollHide === "all")) {
+      show.value = false;
+    }
   });
   function useSwitchShow() {
     return {
@@ -1526,7 +1586,7 @@
     };
   }();
   var trailingTimeout = 2;
-  function throttle$1(callback, delay) {
+  function throttle(callback, delay) {
     var leadingCall = false, trailingCall = false, lastCallTime = 0;
     function resolvePending() {
       if (leadingCall) {
@@ -1568,7 +1628,7 @@
         this.mutationsObserver_ = null;
         this.observers_ = [];
         this.onTransitionEnd_ = this.onTransitionEnd_.bind(this);
-        this.refresh = throttle$1(this.refresh.bind(this), REFRESH_DELAY);
+        this.refresh = throttle(this.refresh.bind(this), REFRESH_DELAY);
       }
       ResizeObserverController2.prototype.addObserver = function(observer) {
         if (!~this.observers_.indexOf(observer)) {
@@ -2034,7 +2094,7 @@
       always: Boolean
     },
     setup(props) {
-      const visible = vue.ref(false);
+      const visible2 = vue.ref(false);
       const barStore = vue.reactive({});
       let cursorDown = false;
       let cursorLeave = false;
@@ -2074,7 +2134,7 @@
         off(document, "mouseup", mouseUpDocumentHandler);
         document.onselectstart = onselectstartStore;
         if (cursorLeave) {
-          visible.value = false;
+          visible2.value = false;
         }
       };
       const startDrag = (e) => {
@@ -2104,11 +2164,11 @@
       };
       const mouseMoveScrollbarHandler = () => {
         cursorLeave = false;
-        visible.value = !!props.size;
+        visible2.value = !!props.size;
       };
       const mouseLeaveScrollbarHandler = () => {
         cursorLeave = true;
-        visible.value = cursorDown;
+        visible2.value = cursorDown;
       };
       vue.onMounted(() => {
         vue.nextTick(() => {
@@ -2117,16 +2177,16 @@
         });
       });
       vue.onBeforeUnmount(() => {
-        off(document, "mouseup", this.mouseUpDocumentHandler);
-        off(scrollbar2.scrollbar, "mousemove", this.mouseMoveScrollbarHandler);
-        off(scrollbar2.scrollbar, "mouseleave", this.mouseLeaveScrollbarHandler);
+        off(document, "mouseup", mouseUpDocumentHandler);
+        off(scrollbar2.scrollbar, "mousemove", mouseMoveScrollbarHandler);
+        off(scrollbar2.scrollbar, "mouseleave", mouseLeaveScrollbarHandler);
       });
       return {
         clickThumbHandler,
         clickTrackHandler,
         thumbStyle,
         bar,
-        visible,
+        visible: visible2,
         instance,
         thumb
       };
@@ -2378,7 +2438,7 @@
       }
     },
     setup(props) {
-      const visible = vue.ref(false);
+      const visible2 = vue.ref(false);
       const loaded = vue.ref(false);
       const trigger = vue.ref(null);
       const popover = vue.ref(null);
@@ -2386,7 +2446,7 @@
       const { registerTimeout, cancelTimeout } = useTimeout();
       function createPopover(target) {
         if (popperInstance.value) {
-          visible.value = true;
+          visible2.value = true;
           return;
         }
         popperInstance.value = core.createPopper(
@@ -2419,19 +2479,19 @@
       });
       function show2(target) {
         loaded.value = true;
-        visible.value = true;
+        visible2.value = true;
         createPopover(target);
         cancelTimeout();
         handleClickOutside(target);
       }
       function hide() {
         registerTimeout(() => {
-          visible.value = false;
+          visible2.value = false;
           destroyPopover();
         }, 50);
       }
       return {
-        visible,
+        visible: visible2,
         loaded,
         trigger,
         popover,
@@ -3000,14 +3060,52 @@
       primaryTextColor
     };
   }
-  const toolbar$1 = useConfig({
+  const toolbar = [
+    {
+      nameZh: "百度",
+      url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
+    },
+    {
+      nameZh: "百度翻译",
+      url: "https://fanyi.baidu.com/#auto/zh/%s"
+    }
+  ].map((item) => ({
+    ...item,
+    data: {
+      visible: true
+    }
+  }));
+  const sites = vue.ref([]);
+  function getList(val) {
+    if (Array.isArray(val) && val.length > 0) {
+      return val;
+    } else {
+      return toolbar;
+    }
+  }
+  getStorage("toolbar").then((val) => {
+    sites.value = getList(val);
+  }).catch(() => {
+    sites.value = toolbar;
+  });
+  function initToolBar(list2, type) {
+    if (type === "tm") {
+      return list2.filter((item) => item.data && item.data.visible).map((item) => ({
+        nameZh: item.nameZh,
+        url: item.url
+      }));
+    }
+    return list2;
+  }
+  const visible = useConfig({
     name: "showToolbar",
     defaultVal: 1,
     reg: /[1|2]/
   });
-  function useToolbar() {
+  function useToolbar(type) {
     return {
-      toolbar: toolbar$1
+      visible,
+      list: vue.computed(() => initToolBar(sites.value, type))
     };
   }
   const _sfc_main$b = {
@@ -3214,12 +3312,12 @@
       asButton: button
     },
     setup() {
-      const visible = vue.ref(false);
+      const visible2 = vue.ref(false);
       const open = () => {
-        visible.value = true;
+        visible2.value = true;
       };
       const onMaskClick = () => {
-        visible.value = false;
+        visible2.value = false;
       };
       const { value: mode } = useMode();
       const { list: alignList, value: align } = useAlign();
@@ -3233,7 +3331,7 @@
       };
       return {
         mode,
-        visible,
+        visible: visible2,
         open,
         onMaskClick,
         alignList,
@@ -3313,7 +3411,10 @@
                     }, [
                       _hoisted_1$3,
                       vue.createElementVNode("section", null, [
-                        vue.createVNode(_component_form_item, { label: "滑词工具栏" }, {
+                        vue.createVNode(_component_form_item, {
+                          "label-width": "84",
+                          label: "滑词工具栏"
+                        }, {
                           default: vue.withCtx(() => [
                             vue.createVNode(_component_as_radio, {
                               label: 1,
@@ -3492,45 +3593,10 @@
     ], 64);
   }
   const sideBar = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$6]]);
-  function throttle(fn, delay = 500) {
-    let canRun = true;
-    return function() {
-      if (!canRun)
-        return;
-      canRun = false;
-      setTimeout(() => {
-        fn.apply(this, arguments);
-        canRun = true;
-      }, delay);
-    };
-  }
-  const y = vue.ref(0);
-  const direction = vue.ref(0);
-  function useScroll() {
-    const scrollHandler = throttle(function(e) {
-      const eventTarget = e.target === document ? e.target.documentElement : e.target;
-      const scrollTop2 = eventTarget.scrollTop;
-      if (scrollTop2 < y.value) {
-        direction.value = "top";
-      } else if (scrollTop2 > y.value) {
-        direction.value = "bottom";
-      } else {
-        direction.value = "mid";
-      }
-      y.value = scrollTop2;
-    }, 50);
-    if (window) {
-      window.addEventListener("scroll", scrollHandler);
-    }
-    return {
-      y,
-      direction
-    };
-  }
   const _sfc_main$5 = {
     name: "hover-btn",
     setup() {
-      const { show: show2, scrollHide: scrollHide2 } = useSwitchShow();
+      const { show: show2 } = useSwitchShow();
       const isMobileVal = isMobile();
       const handleMouseEnter = () => {
         if (!isMobileVal) {
@@ -3542,19 +3608,11 @@
           show2.value = true;
         }
       };
-      const { direction: direction2 } = useScroll();
-      vue.watch(direction2, (value2) => {
-        if (show2.value && scrollHide2.value && (value2 === scrollHide2.value || scrollHide2.value === "all")) {
-          show2.value = false;
-        }
-      });
       const { value: mode } = useMode();
-      const className = vue.computed(() => {
-        return {
-          "as-hide": !show2.value,
-          [`as-hover-btn-${vue.toValue(mode)}`]: true
-        };
-      });
+      const className = vue.computed(() => ({
+        "as-hide": !show2.value,
+        [`as-hover-btn-${vue.toValue(mode)}`]: true
+      }));
       return {
         handleMouseEnter,
         handleClick,
@@ -3569,7 +3627,7 @@
       onClick: _cache[1] || (_cache[1] = (...args) => $setup.handleClick && $setup.handleClick(...args))
     }, " All Search ", 34);
   }
-  const hoverBtn = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$5], ["__scopeId", "data-v-43cd6676"]]);
+  const hoverBtn = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$5], ["__scopeId", "data-v-8c5914e9"]]);
   const _sfc_main$4 = {
     name: "iconfont"
   };
@@ -3582,67 +3640,6 @@
     return vue.openBlock(), vue.createElementBlock("svg", _hoisted_1$2, _hoisted_16);
   }
   const iconfont = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$4]]);
-  const toolbar = [
-    {
-      nameZh: "百度",
-      url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
-    },
-    {
-      nameZh: "百度翻译",
-      url: "https://fanyi.baidu.com/#auto/zh/%s"
-    }
-  ].map((item) => ({
-    ...item,
-    data: {
-      visible: true
-    }
-  }));
-  let sitesData = [];
-  function getSites(val) {
-    if (Array.isArray(val) && val.length > 0) {
-      return val;
-    } else {
-      return list$2;
-    }
-  }
-  getStorage("sites").then((val) => {
-    sitesData = getSites(val);
-  }).catch(() => {
-    sitesData = list$2;
-  });
-  function initSites(type) {
-    if (type === "tm") {
-      sitesData = sitesData.filter((item) => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible).map((item) => ({
-        ...item,
-        show: false
-      }));
-    }
-    return sitesData;
-  }
-  let toolbarSession;
-  getStorage("toolbar").then((val) => {
-    toolbarSession = val;
-  }).catch(() => {
-    toolbarSession = null;
-  });
-  function initToolbar(opt = {
-    type: "",
-    reset: false
-  }) {
-    const toolbarClone = JSON.parse(JSON.stringify(toolbar));
-    const list2 = opt.reset ? toolbarClone : toolbarSession || toolbarClone;
-    if (opt.type === "tm") {
-      return list2.filter((item) => item.data && item.data.visible).map((item) => ({
-        nameZh: item.nameZh,
-        url: item.url
-      }));
-    }
-    return list2.map((item) => ({
-      nameZh: item.nameZh,
-      url: item.url,
-      data: item.data
-    }));
-  }
   function getSelection() {
     return window.getSelection().toString().trim();
   }
@@ -3666,9 +3663,8 @@
       icon
     },
     setup(props, ctx) {
-      const { toolbar: show2 } = useToolbar();
-      const list2 = vue.reactive(initToolbar("tm"));
-      const visible = vue.ref(false);
+      const { visible: toolbarVisible, list: list2 } = useToolbar("tm");
+      const visible2 = vue.ref(false);
       const toolbarEle = vue.ref(null);
       const styleObj = vue.reactive({
         top: 0,
@@ -3687,7 +3683,7 @@
       });
       let selectStart = false;
       function changeVisible(val) {
-        visible.value = Boolean(val);
+        visible2.value = Boolean(val);
         vue.nextTick(() => {
           if (!val) {
             return;
@@ -3749,9 +3745,9 @@
         ctx.emit("open-dialog", selection.value);
       }
       return {
-        show: show2,
+        toolbarVisible,
         list: list2,
-        visible,
+        visible: visible2,
         toolbarEle,
         style,
         selectionShort,
@@ -3763,7 +3759,7 @@
   function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_favicon = vue.resolveComponent("favicon");
     const _component_icon = vue.resolveComponent("icon");
-    return $setup.show === 1 ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", {
+    return $setup.toolbarVisible === 1 ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", {
       key: 0,
       class: "bar-container",
       ref: "toolbarEle",
@@ -3795,7 +3791,7 @@
       [vue.vShow, $setup.visible]
     ]) : vue.createCommentVNode("", true);
   }
-  const selectionBar = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$3], ["__scopeId", "data-v-4dbbf22d"]]);
+  const selectionBar = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$3], ["__scopeId", "data-v-10e6a147"]]);
   const _sfc_main$2 = {
     name: "as-dialog",
     model: {
@@ -3895,7 +3891,7 @@
         inputValue.value = val ? props.keyword : "";
       });
       const inputValue = vue.ref("");
-      const sites2 = vue.reactive(initSites("tm"));
+      const { sites: sites2 } = useSites("tm");
       const handleClick = (item, newWin) => {
         const keyword = inputValue.value;
         if (newWin) {
@@ -4023,7 +4019,7 @@
         `as-${vue.toValue(mode)}`,
         vue.toValue(show2) ? "as-show" : "as-hide"
       ]);
-      const visible = vue.computed(() => {
+      const visible2 = vue.computed(() => {
         return !site.invisible && !vue.unref(isFullScreen2);
       });
       vue.watchEffect(() => {
@@ -4031,7 +4027,7 @@
         changeBodyStyle(vue.toValue(mode), remove);
       });
       let isInit = false;
-      function init(site2) {
+      function init2(site2) {
         if (isInit || site2.disabled) {
           return;
         }
@@ -4041,7 +4037,7 @@
         isInit = true;
       }
       vue.watch(site, (newSite) => {
-        init(newSite);
+        init2(newSite);
       }, {
         immediate: true
       });
@@ -4056,7 +4052,7 @@
         disabled,
         mode,
         classList,
-        visible,
+        visible: visible2,
         dialogVisible,
         openDialog,
         keyword
