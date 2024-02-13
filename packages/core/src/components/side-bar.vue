@@ -134,18 +134,18 @@
 
 <script>
 import { ref } from 'vue'
-import useMode from '../components/useMode'
+import useMode from './useMode'
 import useAlign from './useAlign'
-import useSwitchShow from '../components/useSwitchShow'
+import useSwitchShow from './useSwitchShow'
 import useColor from './useColor'
 import useFavicon from './useFavicon'
 import useToolbar from './useToolbar'
 import useSites from './useSites'
-import overlay from '../components/overlay'
-import radio from '../components/radio'
-import formItem from '../components/form-item'
-import color from '../components/color'
-import button from '../components/button'
+import overlay from './overlay'
+import radio from './radio'
+import formItem from './form-item'
+import color from './color'
+import button from './button'
 
 export default {
   name: 'side-bar',
@@ -210,7 +210,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/common.scss";
+@import "../assets/common";
 
 .as-setting {
   position: relative;

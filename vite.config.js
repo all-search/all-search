@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 // import crx from 'vite-plugin-crx-mv3'
 import externalGlobals from 'rollup-plugin-external-globals'
 import monkey from 'vite-plugin-monkey'
-import scriptConfig from './src/config/script-config'
+import scriptConfig from './packages/core/src/config/script-config'
 import { crx } from '@crxjs/vite-plugin'
 import manifest from './manifest.json'
 

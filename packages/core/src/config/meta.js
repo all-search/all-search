@@ -1,5 +1,5 @@
 import path from 'path'
-import pkg from '../../package.json'
+import pkg from '../../../../package.json'
 
 const now = new Date()
 

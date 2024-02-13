@@ -46,7 +46,7 @@
 import { computed, ref } from 'vue'
 import popperComp from './popper'
 import { site } from '../config/siteInfo.js'
-import { getQueryString } from '../util/index'
+import { getQueryString } from '../util'
 import { getKeyword } from '../util/getKeyword'
 import icon from './icon'
 import favicon from './favicon'

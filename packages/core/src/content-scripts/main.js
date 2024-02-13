@@ -3,7 +3,7 @@ import index from './index'
 import {
   createAsRoot,
   getAsRoot
-} from '../util/index'
+} from '../util'
 
 import {
   initTmMethods

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { isMobile } from '../util/index'
+import { isMobile } from '../util'
 
 export default {
   name: 'logo',
