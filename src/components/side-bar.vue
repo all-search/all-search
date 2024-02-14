@@ -34,11 +34,11 @@
                 label="滑词工具栏">
                 <as-radio
                   :label="1"
-                  v-model="toolbar">显示
+                  v-model="toolbarVisible">显示
                 </as-radio>
                 <as-radio
                   :label="2"
-                  v-model="toolbar">隐藏
+                  v-model="toolbarVisible">隐藏
                 </as-radio>
               </form-item>
               <form-item label="方向">
@@ -169,7 +169,7 @@ export default {
     const { primaryColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
     const { favicon, clearIconCache } = useFavicon()
-    const { toolbar } = useToolbar()
+    const { visible: toolbarVisible } = useToolbar()
     const { resetSites } = useSites('tm')
 
     const hide = () => {
@@ -184,7 +184,7 @@ export default {
       alignList,
       align,
       favicon,
-      toolbar,
+      toolbarVisible,
       primaryColor,
       primaryTextColor,
       show,
