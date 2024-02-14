@@ -3,7 +3,7 @@ import { reactive, watch } from 'vue'
 import useScroll from '../util/useScroll'
 
 const options = reactive(new Map([
-  [false, '关闭'],
+  ['none', '关闭'],
   ['top', '向上'],
   ['bottom', '向下'],
   ['all', '滚动']
@@ -11,24 +11,25 @@ const options = reactive(new Map([
 
 const show = useConfig({
   name: 'switchShow',
-  defaultVal: true,
-  initVal: false
+  defaultVal: 1,
+  initVal: 2,
+  reg: /[1|2]/
 })
 
 const scrollHide = useConfig({
   name: 'scrollHide',
-  defaultVal: false,
-  reg: /[false|top|bottom|all]/
+  defaultVal: 'none',
+  reg: /[none|top|bottom|all]/
 })
 
 const { direction } = useScroll(100)
 
 watch([direction, scrollHide], ([newDirection, newScrollHide]) => {
   if (
-    (show.value && newScrollHide) &&
+    (show.value && newScrollHide !== 'none') &&
     (newDirection === newScrollHide || newScrollHide === 'all')
   ) {
-    show.value = false
+    show.value = 2
   }
 })
 

@@ -20,18 +20,18 @@ export default {
     const isMobileVal = isMobile()
     const handleMouseEnter = () => {
       if (!isMobileVal) {
-        show.value = true
+        show.value = 1
       }
     }
     const handleClick = () => {
       if (isMobileVal) {
-        show.value = true
+        show.value = 1
       }
     }
 
     const { value: mode } = useMode()
     const className = computed(() => ({
-      'as-hide': !show.value,
+      'as-hide': show.value === 2,
       [`as-hover-btn-${toValue(mode)}`]: true
     }))
 

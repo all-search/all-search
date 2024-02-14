@@ -65,7 +65,8 @@
                   v-for="[key, value] in options"
                   :key="key"
                   :label="key"
-                  v-model="scrollHide">
+                  v-model="scrollHide"
+                  @change="changeScrollHide">
                   {{ value }}
                 </as-radio>
               </form-item>
@@ -173,7 +174,15 @@ export default {
     const { resetSites } = useSites('tm')
 
     const hide = () => {
-      show.value = false
+      show.value = 1
+    }
+
+    function changeScrollHide (e) {
+      if (e.target.value === 'none') {
+        show.value = 1
+      } else {
+        show.value = 2
+      }
     }
 
     return {
@@ -192,7 +201,8 @@ export default {
       scrollHide,
       clearIconCache,
       resetSites,
-      hide
+      hide,
+      changeScrollHide
     }
   }
 }

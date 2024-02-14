@@ -52,7 +52,7 @@ export default {
 
     const classList = computed(() => ([
       `as-${toValue(mode)}`,
-      toValue(show) ? 'as-show' : 'as-hide'
+      toValue(show) === 1 ? 'as-show' : 'as-hide'
     ]))
 
     const visible = computed(() => {
@@ -60,7 +60,7 @@ export default {
     })
 
     watchEffect(() => {
-      const remove = site.invisible || site.disabled || !toValue(show)
+      const remove = site.invisible || site.disabled || toValue(show) === 2
       changeBodyStyle(toValue(mode), remove)
     })
 
