@@ -3,7 +3,7 @@
 // @namespace    all-search
 // @version      1.5.6
 // @author       endday
-// @description  2024-2-13更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-2-14更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
@@ -3324,7 +3324,7 @@
       const { primaryColor: primaryColor2, primaryTextColor: primaryTextColor2 } = useColor();
       const { show: show2, options: options2, scrollHide: scrollHide2 } = useSwitchShow();
       const { favicon: favicon2, clearIconCache: clearIconCache2 } = useFavicon();
-      const { toolbar: toolbar2 } = useToolbar();
+      const { visible: toolbarVisible } = useToolbar();
       const { resetSites: resetSites2 } = useSites("tm");
       const hide = () => {
         show2.value = false;
@@ -3337,7 +3337,7 @@
         alignList,
         align,
         favicon: favicon2,
-        toolbar: toolbar2,
+        toolbarVisible,
         primaryColor: primaryColor2,
         primaryTextColor: primaryTextColor2,
         show: show2,
@@ -3418,8 +3418,8 @@
                           default: vue.withCtx(() => [
                             vue.createVNode(_component_as_radio, {
                               label: 1,
-                              modelValue: $setup.toolbar,
-                              "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.toolbar = $event)
+                              modelValue: $setup.toolbarVisible,
+                              "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.toolbarVisible = $event)
                             }, {
                               default: vue.withCtx(() => [
                                 vue.createTextVNode("显示 ")
@@ -3428,8 +3428,8 @@
                             }, 8, ["modelValue"]),
                             vue.createVNode(_component_as_radio, {
                               label: 2,
-                              modelValue: $setup.toolbar,
-                              "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $setup.toolbar = $event)
+                              modelValue: $setup.toolbarVisible,
+                              "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $setup.toolbarVisible = $event)
                             }, {
                               default: vue.withCtx(() => [
                                 vue.createTextVNode("隐藏 ")
