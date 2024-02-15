@@ -1,4 +1,4 @@
-import pkg from '../../../../package.json'
+import pkg from '../../../package.json'
 
 const now = new Date()
 const fileName = 'index.user.js'

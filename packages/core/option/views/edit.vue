@@ -8,10 +8,10 @@
 
 <script>
 import { ElMessage, ElMessageBox } from 'element-plus'
-import jsonEditor from '../components/jsonEditor'
-import { setStorage } from '../util/storage'
-import sites from '../config/sites'
-import useSites from '../components/useSites'
+import jsonEditor from '../../components/jsonEditor'
+import { setStorage } from '../../util/storage'
+import sites from '../../config/sites'
+import useSites from '../../components/useSites'
 import { ref } from 'vue'
 
 export default {

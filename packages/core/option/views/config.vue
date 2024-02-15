@@ -53,7 +53,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { Menu } from '@element-plus/icons-vue'
-import versionAlert from '../components/version-alert'
+import versionAlert from '../../components/version-alert'
 
 export default {
   name: 'config',
@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/common";
+@import "../../assets/common";
 
 #logo {
   height: 64px;

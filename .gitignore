@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+dist-ssr
+extension/manifest.json
 
 # local env files
 .env.local
@@ -19,3 +21,16 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+*.crx
+*.local
+*.log
+*.pem
+*.xpi
+*.zip
+
+.vite-ssg-dist
+.vite-ssg-temp
+src/auto-imports.d.ts
+src/components.d.ts
+.eslintcache

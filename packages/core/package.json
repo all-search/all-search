@@ -1,4 +1,7 @@
 {
   "name": "@all-search/core",
-  "private": true
+  "private": true,
+  "exports": {
+    "./*": "./*"
+  }
 }

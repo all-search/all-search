@@ -1,4 +1,4 @@
-import { GM_getValue, GM_setValue, GM_deleteValue } from '$'
+import { GM_getValue, GM_setValue, GM_deleteValue } from 'vite-plugin-monkey/dist/client'
 import browser from 'webextension-polyfill'
 import { getName, parseJson, version } from './index'
 import store from './store'

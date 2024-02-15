@@ -27,12 +27,8 @@
   "scripts": {
     "lint": "vue-cli-service lint",
     "prepare": "husky install",
-    "dev:plugin": "vite build --watch --mode plugin",
-    "build:plugin": "vite build",
-    "dev:script": "vite --mode script",
-    "build:script": "vite build --mode script",
-    "dev:site": "vite dev --mode site",
-    "build:site": "vite build --mode site"
+    "dev": "vite build --watch --mode development",
+    "build": "vite build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",
@@ -67,8 +63,7 @@
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "vite": "^4.4.9",
-    "vite-plugin-crx-mv3": "^0.1.5",
-    "vite-plugin-monkey": "^3.5.0",
-    "@crxjs/vite-plugin": "^2.0.0-beta.23"
+    "vite-plugin-crx-mv3": "^0.1.7",
+    "vite-plugin-monkey": "^3.5.0"
   }
 }

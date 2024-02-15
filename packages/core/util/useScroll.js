@@ -1,5 +1,5 @@
 import { ref, onBeforeUnmount, nextTick } from 'vue'
-import { throttle } from '../util/debounce'
+import { throttle } from './debounce'
 
 // const getScrollTop = () => window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
 

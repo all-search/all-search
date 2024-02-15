@@ -175,8 +175,8 @@
 import { computed, ref, watch } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { delStorage, setStorage } from '../util/storage'
-import useSites from '../components/useSites'
+import { delStorage, setStorage } from '../../util/storage'
+import useSites from '../../components/useSites'
 
 export default {
   name: 'sites',

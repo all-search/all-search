@@ -12,13 +12,14 @@
         "<all_urls>"
       ],
       "js": [
-        "content-scripts/main.js"
+        "./contentScripts/index.js"
       ],
       "run_at": "document_idle"
     }
   ],
-  "side_panel": {
-    "default_path": "sidePanel/index.html"
+  "options_ui": {
+    "page": "options/index.html",
+    "chrome_style": true
   },
   "web_accessible_resources": [
     {
@@ -31,8 +32,7 @@
     }
   ],
   "permissions": [
-    "storage",
-    "sidePanel"
+    "storage"
   ],
   "manifest_version": 3
 }

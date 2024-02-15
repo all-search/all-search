@@ -9,9 +9,9 @@
 
 <script>
 import { computed, toValue } from 'vue'
-import { isMobile } from '../util/index'
+import { isMobile } from '../util'
 import useSwitchShow from './useSwitchShow'
-import useMode from '../components/useMode'
+import useMode from './useMode'
 
 export default {
   name: 'hover-btn',

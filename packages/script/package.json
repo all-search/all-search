@@ -1,4 +1,11 @@
 {
-  "name": "@all-search/plugin",
-  "private": true
+  "name": "@all-search/script",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@all-search/core": "workspace:*"
+  }
 }
