@@ -3,7 +3,7 @@ import index from '@all-search/core/contentScripts/index'
 import {
   createAsRoot,
   getAsRoot
-} from '@all-search/core/util/index.js'
+} from '@all-search/core/util'
 
 const el = getAsRoot()
 if (!el) {
