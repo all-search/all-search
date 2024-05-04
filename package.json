@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "keywords": [
     "tamperMonkey",
     "user-script",
@@ -37,7 +37,6 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",
     "@popperjs/core": "^2.9.2",
-    "axios": "^0.21.4",
     "core-js": "^3.9.1",
     "element-plus": "^2.2.22",
     "jsoneditor": "^9.9.0",

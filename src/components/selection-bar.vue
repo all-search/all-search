@@ -1,9 +1,10 @@
 <template>
-  <div class="bar-container"
-       v-if="toolbarVisible === 1"
-       v-show="visible"
-       ref="toolbarEle"
-       :style="style">
+  <div
+    v-if="toolbarVisible === 1"
+    v-show="visible"
+    class="bar-container"
+    ref="toolbarEle"
+    :style="style">
     <favicon
       class="tool-bar-item"
       v-for="(item, i) in list"
@@ -32,11 +33,11 @@ import useToolbar from './useToolbar'
 import favicon from './favicon'
 import icon from './icon'
 
-function getSelection () {
+function getSelection() {
   return window.getSelection().toString().trim()
 }
 
-function getSelectionRect () {
+function getSelectionRect() {
   const selection = window.getSelection()
   if (selection.rangeCount) {
     return selection.getRangeAt(0).getBoundingClientRect()
@@ -44,11 +45,11 @@ function getSelectionRect () {
   return null
 }
 
-function scrollTop () {
+function scrollTop() {
   return document.documentElement.scrollTop || document.body.scrollTop
 }
 
-function scrollLeft () {
+function scrollLeft() {
   return document.documentElement.scrollLeft || document.body.scrollLeft
 }
 
@@ -58,8 +59,11 @@ export default {
     favicon,
     icon
   },
-  setup (props, ctx) {
-    const { visible: toolbarVisible, list } = useToolbar('tm')
+  setup(props, ctx) {
+    const {
+      visible: toolbarVisible,
+      list
+    } = useToolbar('tm')
     const visible = ref(false)
     const toolbarEle = ref(null)
     const styleObj = reactive({
@@ -81,7 +85,7 @@ export default {
     })
     let selectStart = false
 
-    function changeVisible (val) {
+    function changeVisible(val) {
       visible.value = Boolean(val)
       nextTick(() => {
         if (!val) {
@@ -94,14 +98,14 @@ export default {
         const height = toolbarClientRect.bottom - toolbarClientRect.top
         const selectionRect = getSelectionRect()
         if (selectionRect) {
-          const { x, right, left, top } = selectionRect
+          const {x, right, left, top} = selectionRect
           styleObj.top = scrollTop() + top - height
           styleObj.left = scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2)
         }
       })
     }
 
-    function isToolbarContains (el) {
+    function isToolbarContains(el) {
       const toolbarEleValue = unref(toolbarEle)
       if (toolbarEleValue) {
         return toolbarEleValue.contains(el)
@@ -142,7 +146,7 @@ export default {
       selectStart = true
     }, false)
 
-    function handleClick (item, newWin) {
+    function handleClick(item, newWin) {
       const keyword = selection.value
       if (newWin) {
         window.open(item.url.replace('%s', keyword))
@@ -151,7 +155,7 @@ export default {
       }
     }
 
-    function openMainDialog () {
+    function openMainDialog() {
       ctx.emit('open-dialog', selection.value)
     }
 

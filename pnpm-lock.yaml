@@ -11,9 +11,6 @@ dependencies:
   '@popperjs/core':
     specifier: ^2.9.2
     version: 2.11.8
-  axios:
-    specifier: ^0.21.4
-    version: 0.21.4
   core-js:
     specifier: ^3.9.1
     version: 3.35.1
@@ -1279,14 +1276,6 @@ packages:
       postcss-value-parser: 4.2.0
     dev: true
 
-  /axios@0.21.4:
-    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
-    dependencies:
-      follow-redirects: 1.15.5
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
   /babel-plugin-import@1.13.8:
     resolution: {integrity: sha512-36babpjra5m3gca44V6tSTomeBlPA7cHUynrE2WiQIm3rEGD9xy28MKsx5IdO45EbnpJY7Jrgd00C6Dwt/l/2Q==}
     dependencies:
@@ -2045,16 +2034,6 @@ packages:
   /flatted@3.2.9:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
     dev: true
-
-  /follow-redirects@1.15.5:
-    resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dev: false
 
   /fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}

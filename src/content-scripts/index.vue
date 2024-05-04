@@ -1,5 +1,6 @@
 <template>
-  <template v-if="!disabled">
+  <template
+    v-if="!disabled">
     <div
       v-show="visible"
       style="opacity: 0"
@@ -10,12 +11,16 @@
       <side-bar/>
     </div>
     <hoverBtn v-show="visible"/>
-    <iconfont/>
-    <selection-bar @openDialog="openDialog"/>
+  </template>
+  <template
+    v-if="toolbarVisible === 1">
+    <selection-bar
+      @openDialog="openDialog"/>
     <search-dialog
       :keyword="keyword"
       v-model:visible="dialogVisible"/>
   </template>
+  <iconfont v-if="!disabled || toolbarVisible === 1"/>
 </template>
 
 <script>
@@ -33,6 +38,7 @@ import hoverBtn from '../components/hover-btn'
 import iconfont from '../components/iconfont'
 import selectionBar from '../components/selection-bar'
 import searchDialog from '../components/search-dialog'
+import useToolbar from '../components/useToolbar'
 
 export default {
   name: 'all-search',
@@ -45,10 +51,11 @@ export default {
     selectionBar,
     searchDialog
   },
-  setup () {
+  setup() {
     const { isFullScreen } = useFullScreen()
     const { value: mode } = useMode()
     const { show } = useSwitchShow()
+    const { visible: toolbarVisible } = useToolbar('tm')
 
     const classList = computed(() => ([
       `as-${toValue(mode)}`,
@@ -66,7 +73,7 @@ export default {
 
     let isInit = false
 
-    function init (site) {
+    function init(site) {
       if (isInit || site.disabled) {
         return
       }
@@ -85,7 +92,7 @@ export default {
     const dialogVisible = ref(false)
     const keyword = ref('')
 
-    function openDialog (text) {
+    function openDialog(text) {
       keyword.value = text
       dialogVisible.value = true
     }
@@ -99,7 +106,8 @@ export default {
       visible,
       dialogVisible,
       openDialog,
-      keyword
+      keyword,
+      toolbarVisible
     }
   }
 }
