@@ -1,6 +1,6 @@
 {
   "name": "all-search",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "keywords": [
     "tamperMonkey",
     "user-script",
@@ -27,8 +27,6 @@
   "scripts": {
     "lint": "vue-cli-service lint",
     "prepare": "husky install",
-    "dev:plugin": "vite build --watch --mode plugin",
-    "build:plugin": "vite build",
     "dev:script": "vite --mode script",
     "build:script": "vite build --mode script",
     "dev:site": "vite dev --mode site",

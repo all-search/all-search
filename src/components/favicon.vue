@@ -39,14 +39,25 @@ export default {
 
     const { hostname, origin } = parseUrl(props.url)
     const img = computed(() => {
-      if (isError.value) {
-        return `${origin}/favicon.ico`
-      } else if (iconCache[hostname]) {
+      if (iconCache[hostname]) {
         return iconCache[hostname]
+      } else if (!isError.value) {
+        return faviconApi.value
       } else {
-        return `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`
+        return ''
       }
     })
+
+    const i = ref(0)
+
+    const faviconApis = ref([
+      props.icon,
+      `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`,
+      `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname)}`,
+      `${origin}/favicon.ico`
+    ])
+
+    const faviconApi = computed(() => faviconApis.value.filter(j => j)[i.value])
 
     const { favicon } = useFavicon()
 
@@ -70,8 +81,14 @@ export default {
       }
     }
 
-    function handleError () {
-      isError.value = true
+    function handleError (e) {
+      const src = e.currentTarget.src
+      if (src === faviconApi.value) {
+        if (i.value === faviconApis.value.length - 1) {
+          isError.value = true
+        }
+        i.value++
+      }
     }
 
     return {
