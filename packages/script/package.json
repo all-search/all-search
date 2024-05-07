@@ -6,6 +6,5 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@all-search/core": "workspace:*"
   }
 }

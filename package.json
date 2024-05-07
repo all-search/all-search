@@ -48,7 +48,7 @@
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@types/webextension-polyfill": "^0.10.7",
-    "@vitejs/plugin-vue": "^4.3.4",
+    "@vitejs/plugin-vue": "^5.0.4",
     "@vue/compiler-sfc": "^3.0.7",
     "autoprefixer": "^10.4.7",
     "babel-plugin-import": "^1.13.3",
@@ -59,12 +59,10 @@
     "lint-staged": "^13.1.0",
     "minimist": "^1.2.7",
     "postcss": "^8.4.13",
-    "rollup-plugin-external-globals": "^0.6.1",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
-    "vite": "^4.4.9",
-    "vite-plugin-crx-mv3": "^0.1.7",
+    "vite": "^5.2.7",
     "vite-plugin-monkey": "^3.5.0",
-    "wxt": "^0.17.5"
+    "wxt": "^0.17.10"
   }
 }

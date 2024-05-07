@@ -1,5 +1,5 @@
-import browser from 'webextension-polyfill'
+import { defineBackground } from 'wxt'
 
-browser.runtime.onUpdateAvailable.addListener(() => {
-  console.log('插件有新的版本了')
+export default defineBackground(() => {
+  console.log('Hello background!', { id: browser.runtime.id })
 })

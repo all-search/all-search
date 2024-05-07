@@ -1,5 +1,5 @@
-import { getTmMethods } from '@all-search/core/util/storage'
+import { getTmMethods } from '@/util/storage'
 
 getTmMethods()
 
-export * from '@all-search/core/option/main'
+export * from '@/option/main'

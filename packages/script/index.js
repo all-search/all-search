@@ -1,13 +1,13 @@
 import { createApp } from 'vue'
-import index from '@all-search/core/contentScripts/index'
+import index from '@/contentScripts/index'
 import {
   createAsRoot,
   getAsRoot
-} from '@all-search/core/util/index.js'
+} from '@/util/index.js'
 
 import {
   initTmMethods
-} from '@all-search/core/util/storage'
+} from '@/util/storage'
 
 initTmMethods()
 const el = getAsRoot()

@@ -1,5 +1,5 @@
 import { GM_getResourceText } from 'vite-plugin-monkey/dist/client';
-import pkg from '../../../package.json'
+import pkg from '../../package.json'
 
 export const version = pkg.version
 
