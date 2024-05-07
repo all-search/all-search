@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      1.5.7
+// @version      1.5.8
 // @author       endday
-// @description  2024-5-4更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-5-7更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
@@ -28,7 +28,7 @@
   var _GM_getValue = /* @__PURE__ */ (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = /* @__PURE__ */ (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
   const name = "all-search";
-  const version$1 = "1.5.7";
+  const version$1 = "1.5.8";
   const keywords = [
     "tamperMonkey",
     "user-script",
@@ -55,8 +55,6 @@
   const scripts = {
     lint: "vue-cli-service lint",
     prepare: "husky install",
-    "dev:plugin": "vite build --watch --mode plugin",
-    "build:plugin": "vite build",
     "dev:script": "vite --mode script",
     "build:script": "vite build --mode script",
     "dev:site": "vite dev --mode site",
@@ -2698,14 +2696,22 @@
       const isError = vue.ref(false);
       const { hostname, origin } = parseUrl(props.url);
       const img = vue.computed(() => {
-        if (isError.value) {
-          return `${origin}/favicon.ico`;
-        } else if (iconCache[hostname]) {
+        if (iconCache[hostname]) {
           return iconCache[hostname];
+        } else if (!isError.value) {
+          return faviconApi.value;
         } else {
-          return `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`;
+          return "";
         }
       });
+      const i = vue.ref(0);
+      const faviconApis = vue.ref([
+        props.icon,
+        `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`,
+        `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname)}`,
+        `${origin}/favicon.ico`
+      ]);
+      const faviconApi = vue.computed(() => faviconApis.value.filter((j) => j)[i.value]);
       const { favicon: favicon2 } = useFavicon();
       function getBase64Image(image2) {
         let canvas = document.createElement("canvas");
@@ -2724,8 +2730,14 @@
           }
         }
       }
-      function handleError() {
-        isError.value = true;
+      function handleError(e) {
+        const src = e.currentTarget.src;
+        if (src === faviconApi.value) {
+          if (i.value === faviconApis.value.length - 1) {
+            isError.value = true;
+          }
+          i.value++;
+        }
       }
       return {
         img,
