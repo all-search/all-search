@@ -18,7 +18,7 @@ export default [
   },
   {
     nameZh: '酷我音乐',
-    url: 'http://sou.kuwo.cn/ws/NSearch?type=all&key=%s'
+    url: 'https://kuwo.cn/search/list?key=%s'
   },
   {
     nameZh: '酷狗',
