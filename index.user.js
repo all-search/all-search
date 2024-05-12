@@ -3,7 +3,7 @@
 // @namespace    all-search
 // @version      1.5.8
 // @author       endday
-// @description  2024-5-7更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-5-12更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
@@ -597,7 +597,7 @@
     },
     {
       nameZh: "酷我音乐",
-      url: "http://sou.kuwo.cn/ws/NSearch?type=all&key=%s"
+      url: "https://kuwo.cn/search/list?key=%s"
     },
     {
       nameZh: "酷狗",
