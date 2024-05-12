@@ -344,12 +344,13 @@ export default {
     }
 
     function iconConfirm () {
-      if (!currentItem.value.icon) {
-        return ElMessage.error('上传失败')
-      }
       const { url } = currentItem.value
       const { hostname } = parseUrl(url)
-      iconCache.value[hostname] = currentItem.value.icon
+      if (!currentItem.value.icon) {
+        iconCache.value[hostname]  = ''
+      } else {
+        iconCache.value[hostname] = currentItem.value.icon
+      }
       dialogVisible.value = false
     }
 
