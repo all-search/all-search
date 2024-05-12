@@ -133,6 +133,7 @@ export default {
       return list.value.map(child => ({
         nameZh: child.nameZh,
         url: child.url,
+        icon: child.icon || '',
         data: child.data
       }))
     }

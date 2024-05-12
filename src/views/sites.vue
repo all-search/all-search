@@ -431,6 +431,7 @@ export default {
         list: item.list.map(child => ({
           nameZh: child.nameZh,
           url: child.url,
+          icon: child.icon || '',
           data: child.data
         })),
         data: item.data
