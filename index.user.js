@@ -2714,7 +2714,7 @@
       const faviconApi = vue.computed(() => faviconApis.value.filter((j) => j)[i.value]);
       const { favicon: favicon2 } = useFavicon();
       function getBase64Image(image2) {
-        let canvas = document.createElement("canvas");
+        const canvas = document.createElement("canvas");
         canvas.width = image2.width;
         canvas.height = image2.height;
         let context = canvas.getContext("2d");
