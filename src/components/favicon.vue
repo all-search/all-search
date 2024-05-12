@@ -62,7 +62,7 @@ export default {
     const { favicon } = useFavicon()
 
     function getBase64Image (image) {
-      let canvas = document.createElement('canvas')
+      const canvas = document.createElement('canvas')
       canvas.width = image.width
       canvas.height = image.height
       let context = canvas.getContext('2d')

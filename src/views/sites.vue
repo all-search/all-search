@@ -229,8 +229,9 @@
 import { computed, ref, watch } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { delStorage, setStorage } from '../util/storage'
+import { delStorage, getStorage, setStorage } from '../util/storage'
 import useSites from '../components/useSites'
+import parseUrl from '../util/parseUrl'
 
 export default {
   name: 'sites',
@@ -245,9 +246,6 @@ export default {
       return localSites.value.filter(item => item.name.indexOf('personal') > -1)
     })
     const { sites } = useSites()
-    const currentTab = computed(() => {
-      return localSites.value.find(item => item.name === tabName.value)
-    })
 
     watch(sites, value => {
       init(value)
@@ -291,13 +289,24 @@ export default {
     const dialogVisible = ref(false)
     const currentItem = ref(null)
     const elUpload = ref(null)
-    let itemIndex = 0
     const fileList = ref([])
 
-    function addIcon (item, j) {
+    const iconCache = ref({})
+    getStorage('iconCache').then(iconData => {
+      iconCache.value = iconData
+    })
+
+    function addIcon (item) {
       dialogVisible.value = true
+      const { url } = item
+      const { hostname } = parseUrl(url)
+      const iconBase64 = iconCache.value[hostname]
       currentItem.value = JSON.parse(JSON.stringify(item))
-      itemIndex = j
+      if (iconBase64) {
+        currentItem.value.icon = JSON.parse(JSON.stringify(iconBase64))
+      } else {
+        currentItem.value.icon = ''
+      }
     }
 
     function getBase64 (file) {
@@ -330,7 +339,7 @@ export default {
     }
 
     function handleIconRemove () {
-      delete currentItem.value.icon
+      currentItem.value.icon = ''
       elUpload.value.clearFiles()
     }
 
@@ -338,7 +347,9 @@ export default {
       if (!currentItem.value.icon) {
         return ElMessage.error('上传失败')
       }
-      currentTab.value.list[itemIndex].icon = currentItem.value.icon
+      const { url } = currentItem.value
+      const { hostname } = parseUrl(url)
+      iconCache.value[hostname] = currentItem.value.icon
       dialogVisible.value = false
     }
 
@@ -440,6 +451,7 @@ export default {
 
     function save () {
       setStorage('sites', formatSites())
+      setStorage('iconCache', iconCache.value)
       ElMessage.success('保存成功')
     }
 
