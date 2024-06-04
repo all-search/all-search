@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      1.5.8
+// @version      1.5.9
 // @author       endday
-// @description  2024-5-12更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-6-4更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
@@ -28,7 +28,7 @@
   var _GM_getValue = /* @__PURE__ */ (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = /* @__PURE__ */ (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
   const name = "all-search";
-  const version$1 = "1.5.8";
+  const version$1 = "1.5.9";
   const keywords = [
     "tamperMonkey",
     "user-script",
@@ -3339,7 +3339,7 @@
       const { visible: toolbarVisible } = useToolbar();
       const { resetSites: resetSites2 } = useSites("tm");
       const hide = () => {
-        show2.value = 1;
+        show2.value = 2;
       };
       function changeScrollHide(e) {
         if (e.target.value === "none") {
