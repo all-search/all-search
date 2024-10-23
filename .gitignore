@@ -3,6 +3,8 @@ node_modules
 /dist
 dist-ssr
 extension/manifest.json
+.wxt/
+.output/
 
 # local env files
 .env.local

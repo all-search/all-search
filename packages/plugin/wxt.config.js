@@ -1,16 +1,20 @@
 import { defineConfig } from 'wxt'
-import vue from '@vitejs/plugin-vue'
 
+// See https://wxt.dev/api/config.html
 export default defineConfig({
-  // My WXT config
-  srcDir: './',
-  entrypointsDir: 'entries',
-  imports: {
-    addons: {
-      vueTemplate: true
-    }
+  manifest: {
+    permissions: ['storage'],
   },
-  vite: () => ({
-    plugins: [vue()]
-  })
+  modules: ['@wxt-dev/module-vue'],
+  runner: {
+    startUrls: ['https://www.baidu.com']
+  },
+  entrypointsDir: "entries",
+  vite() {
+    return {
+      resolve: {
+        extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
+      }
+    }
+  }
 })

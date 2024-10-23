@@ -40,14 +40,12 @@
     "resize-observer-polyfill": "^1.5.1",
     "vue": "^3.3.4",
     "vue-draggable-next": "^2.0.1",
-    "vue-router": "^4.0.5",
-    "webextension-polyfill": "^0.10.0"
+    "vue-router": "^4.0.5"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
-    "@types/webextension-polyfill": "^0.10.7",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/compiler-sfc": "^3.0.7",
     "autoprefixer": "^10.4.7",
@@ -63,6 +61,7 @@
     "sass-loader": "^10.1.1",
     "vite": "^5.2.7",
     "vite-plugin-monkey": "^3.5.0",
-    "wxt": "^0.17.10"
+    "@wxt-dev/module-vue": "^1.0.0",
+    "wxt": "^0.19.12"
   }
 }

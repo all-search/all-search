@@ -1,13 +1,15 @@
 import { GM_getValue, GM_setValue, GM_deleteValue } from 'vite-plugin-monkey/dist/client'
-import browser from 'webextension-polyfill'
+import { storage } from 'wxt/storage'
 import { getName, parseJson, version } from './index'
 import store from './store'
 
-function getStorageFn (name, type = 'sync') {
+const isPlugin = import.meta.env.VITE_TARGET === 'plugin'
+
+function getStorageFn (name) {
   const formatName = getName(name)
   return new Promise((resolve, reject) => {
-    if (browser && browser.storage) {
-      browser.storage[type].get(formatName).then((result) => {
+    if (isPlugin) {
+      storage.getItem(`local:${formatName}`).then((result) => {
         if (result[formatName] === void 0) {
           reject(`没有获取到key:${name}的变量`)
         } else {
@@ -29,17 +31,17 @@ function getStorageFn (name, type = 'sync') {
   })
 }
 
-function setStorageFn (name, value, type = 'sync') {
+function setStorageFn (name, value) {
   const formatName = getName(name)
   return new Promise((resolve, reject) => {
     if (value === void 0) {
       reject(Error('setStorage'))
     } else {
-      if (browser && browser.storage) {
-        browser.storage[type].set({ [formatName]: value }).then(() => {
+      if (isPlugin) {
+        storage.setItem(`local:${formatName}`, value).then(() => {
           resolve(value)
-        }).catch(() => {
-          reject(false)
+        }).catch(err => {
+          reject(err)
         })
       } else if (!GM_setValue) {
         reject(Error('没有找到GM_setValue'))
@@ -51,20 +53,21 @@ function setStorageFn (name, value, type = 'sync') {
   })
 }
 
-function delStorageFn (name, type = 'sync') {
+function delStorageFn (name) {
   const formatName = getName(name)
   return new Promise((resolve, reject) => {
-    if (browser && browser.storage) {
-      browser.storage[type].remove(formatName).then(() => {
+    if (isPlugin) {
+      storage.removeItem(`local:${formatName}`).then(() => {
         resolve(true)
-      }).catch(() => {
-        reject(false)
+      }).catch(err => {
+        reject(err)
       })
     } else if (!GM_deleteValue) {
       return reject(Error('没有找到GM_deleteValue'))
+    } else {
+      GM_deleteValue(formatName)
+      resolve(true)
     }
-    GM_deleteValue(formatName)
-    return resolve(true)
   })
 }
 

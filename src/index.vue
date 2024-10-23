@@ -20,19 +20,19 @@
 
 <script>
 import { computed, watch, unref, ref, toRefs, toValue, watchEffect } from 'vue'
-import { initSpecialStyle } from '../util/addSpecialStyle'
-import { addCustomStyle, changeBodyStyle, protectStyle } from '../util/initStyle'
-import { site } from '../config/siteInfo'
-import { useFullScreen } from '../util/fullScreen'
-import useMode from '../components/useMode'
-import useSwitchShow from '../components/useSwitchShow'
-import logo from '../components/logo'
-import asMenu from '../components/menu'
-import sideBar from '../components/side-bar'
-import hoverBtn from '../components/hover-btn'
-import iconfont from '../components/iconfont'
-import selectionBar from '../components/selection-bar'
-import searchDialog from '../components/search-dialog'
+import { initSpecialStyle } from './util/addSpecialStyle'
+import { addCustomStyle, changeBodyStyle, protectStyle } from './util/initStyle'
+import { site } from './config/siteInfo'
+import { useFullScreen } from './util/fullScreen'
+import useMode from './components/useMode'
+import useSwitchShow from './components/useSwitchShow'
+import logo from './components/logo'
+import asMenu from './components/menu'
+import sideBar from './components/side-bar'
+import hoverBtn from './components/hover-btn'
+import iconfont from './components/iconfont'
+import selectionBar from './components/selection-bar'
+import searchDialog from './components/search-dialog'
 
 export default {
   name: 'all-search',
@@ -106,7 +106,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/common";
+@import "./assets/common";
 
 .body-horizontal {
   height: $height;
