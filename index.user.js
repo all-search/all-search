@@ -3,7 +3,7 @@
 // @namespace    all-search
 // @version      1.5.9
 // @author       endday
-// @description  2024-6-4更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2024-12-19更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
