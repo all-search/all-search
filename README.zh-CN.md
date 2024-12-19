@@ -77,5 +77,6 @@ npm run tmBuild
 会打包出油猴使用的index.user.js
 
 #### 反馈与交流
-[QQ群地址](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
-<br>QQ群号 148498263
+[腾讯频道](https://pd.qq.com/s/2bmefcl98)
+
+频道号 pd15449687

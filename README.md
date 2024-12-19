@@ -77,5 +77,6 @@ npm run tmBuild
 will package out the index.user.js used by Tampermonkey
 
 #### Feedback and communication
-[QQ group](https://qm.qq.com/cgi-bin/qm/qr?k=AKKJzfydYb3ZTya7k5yT4HUcA37zQfcO&jump_from=webapi)
-<br>QQ group number 148498263
+[Tencent Channel](https://pd.qq.com/s/2bmefcl98)
+
+Channel No. pd15449687
