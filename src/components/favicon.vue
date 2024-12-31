@@ -48,6 +48,9 @@ export default {
     const { hostname, origin } = parseUrl(props.url)
     const cache = toValue(iconCache)
     const img = computed(() => {
+      if (!isLoaded.value) {
+        return ''
+      }
       if (cache[hostname]) {
         return cache[hostname]
       } else if (!isError.value) {
