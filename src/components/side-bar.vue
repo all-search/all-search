@@ -174,7 +174,7 @@ export default {
     const { resetSites } = useSites('tm')
 
     const hide = () => {
-      show.value = 1
+      show.value = 2
     }
 
     function changeScrollHide (e) {

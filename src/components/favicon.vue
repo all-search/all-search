@@ -50,14 +50,25 @@ export default {
       } else if (cache[hostname]) {
         return cache[hostname]
       } else {
-        return `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`
+        return ''
       }
     })
+
+    const i = ref(0)
+
+    const faviconApis = ref([
+      props.icon,
+      `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`,
+      `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname)}`,
+      `${origin}/favicon.ico`
+    ])
+
+    const faviconApi = computed(() => faviconApis.value.filter(j => j)[i.value])
 
     const { favicon } = useFavicon()
 
     function getBase64Image (image) {
-      let canvas = document.createElement('canvas')
+      const canvas = document.createElement('canvas')
       canvas.width = image.width
       canvas.height = image.height
       let context = canvas.getContext('2d')
@@ -76,8 +87,14 @@ export default {
       }
     }
 
-    function handleError () {
-      isError.value = true
+    function handleError (e) {
+      const src = e.currentTarget.src
+      if (src === faviconApi.value) {
+        if (i.value === faviconApis.value.length - 1) {
+          isError.value = true
+        }
+        i.value++
+      }
     }
 
     return {

@@ -81,14 +81,22 @@
           <div class="bd">
             <div class="row">
               <el-input
-                class="input col"
+                class="input nameZh"
                 v-model="item.nameZh"/>
               <el-input
-                class="input col"
+                class="input url"
                 v-model="item.url"/>
             </div>
           </div>
           <div class="ft">
+            <el-button
+              class="addIcon"
+              title="图标"
+              @click="addIcon(item, j)">
+              <el-icon>
+                <Picture/>
+              </el-icon>
+            </el-button>
             <el-dropdown
               v-if="!isPersonal(cate) && personalCategory.length"
               trigger="click"
@@ -154,20 +162,66 @@
         <Plus/>
       </el-icon>
     </el-button>
-  </div>
-  <div class="fixed-footer">
-    <div class="btn-container">
-      <el-button
-        type="primary"
-        @click="reset">
-        重置
-      </el-button>
-      <el-button
-        type="success"
-        @click="save">
-        保存
-      </el-button>
+    <div class="fixed-footer">
+      <div class="btn-container">
+        <el-button
+          type="primary"
+          @click="reset">
+          重置
+        </el-button>
+        <el-button
+          type="success"
+          @click="save">
+          保存
+        </el-button>
+      </div>
     </div>
+    <el-dialog
+      title="编辑图标"
+      v-model="dialogVisible">
+      <el-upload
+        ref="elUpload"
+        class="icon-uploader"
+        action="#"
+        :limit="1"
+        :auto-upload="false"
+        :show-file-list="false"
+        accept="image/*"
+        :on-change="handleIconChange">
+        <el-button
+          type="primary">
+          上传
+        </el-button>
+        <template #tip>
+          <div class="el-upload__tip">
+            请尽量上传小于20kb的图片，以避免性能问题
+          </div>
+        </template>
+      </el-upload>
+      <template
+        v-if="currentItem && currentItem.icon">
+        <div
+          class="icon-upload-preview">
+          <img :src="currentItem.icon" alt="">
+        </div>
+        <el-button
+          type="danger"
+          @click="handleIconRemove">
+          删除
+        </el-button>
+      </template>
+      <template #footer>
+        <el-button
+          type="primary"
+          @click="iconConfirm">
+          确定
+        </el-button>
+        <el-button
+          @click="iconCancel">
+          取消
+        </el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -175,8 +229,9 @@
 import { computed, ref, watch } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { delStorage, setStorage } from '../../util/storage'
+import { delStorage, getStorage, setStorage } from '../../util/storage'
 import useSites from '../../components/useSites'
+import parseUrl from '../util/parseUrl'
 
 export default {
   name: 'sites',
@@ -208,10 +263,6 @@ export default {
       }
     }
 
-    function tabChange (value) {
-      tabName.value = value
-    }
-
     function changeVisible (data) {
       data.visible = !data.visible
     }
@@ -233,6 +284,80 @@ export default {
     function addToPersonal (cate, item) {
       cate.list.push(item)
       ElMessage('添加成功')
+    }
+
+    const dialogVisible = ref(false)
+    const currentItem = ref(null)
+    const elUpload = ref(null)
+    const fileList = ref([])
+
+    const iconCache = ref({})
+    getStorage('iconCache').then(iconData => {
+      iconCache.value = iconData
+    })
+
+    function addIcon (item) {
+      dialogVisible.value = true
+      const { url } = item
+      const { hostname } = parseUrl(url)
+      const iconBase64 = iconCache.value[hostname]
+      currentItem.value = JSON.parse(JSON.stringify(item))
+      if (iconBase64) {
+        currentItem.value.icon = JSON.parse(JSON.stringify(iconBase64))
+      } else {
+        currentItem.value.icon = ''
+      }
+    }
+
+    function getBase64 (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        let imgResult = ''
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          imgResult = reader.result
+        }
+        reader.onerror = error => {
+          reject(error)
+        }
+        reader.onloadend = () => {
+          resolve(imgResult)
+        }
+      })
+    }
+
+    function handleIconChange (file) {
+      if (!/^image\/*/.test(file.raw.type)) {
+        return ElMessage.error(`上传的文件类型为${file.raw.type}，请上传正确的图片`)
+      }
+      getBase64(file.raw).then(res => {
+        currentItem.value.icon = res
+        console.log(res)
+      }).catch(() => {
+        ElMessage.error('上传失败')
+      })
+    }
+
+    function handleIconRemove () {
+      currentItem.value.icon = ''
+      elUpload.value.clearFiles()
+    }
+
+    function iconConfirm () {
+      const { url } = currentItem.value
+      const { hostname } = parseUrl(url)
+      if (!currentItem.value.icon) {
+        iconCache.value[hostname]  = ''
+      } else {
+        iconCache.value[hostname] = currentItem.value.icon
+      }
+      dialogVisible.value = false
+    }
+
+    function iconCancel () {
+      currentItem.value = null
+      elUpload.value.clearFiles()
+      dialogVisible.value = false
     }
 
     function deleteUrl (j) {
@@ -318,6 +443,7 @@ export default {
         list: item.list.map(child => ({
           nameZh: child.nameZh,
           url: child.url,
+          icon: child.icon || '',
           data: child.data
         })),
         data: item.data
@@ -326,6 +452,7 @@ export default {
 
     function save () {
       setStorage('sites', formatSites())
+      setStorage('iconCache', iconCache.value)
       ElMessage.success('保存成功')
     }
 
@@ -334,11 +461,19 @@ export default {
       tab,
       tabName,
       personalCategory,
-      tabChange,
       changeVisible,
       addCategory,
+      addIcon,
       addToPersonal,
       deleteUrl,
+      dialogVisible,
+      currentItem,
+      elUpload,
+      fileList,
+      iconConfirm,
+      iconCancel,
+      handleIconChange,
+      handleIconRemove,
       addNewUrl,
       removeTab,
       isPersonal,
@@ -411,9 +546,21 @@ export default {
     }
   }
 
+  .addIcon {
+    margin-right: 10px;
+  }
+
   .name {
     width: 100px;
     margin: 0;
+  }
+
+  .nameZh {
+    flex: 1;
+  }
+
+  .url {
+    flex: 3;
   }
 
   .hd {
@@ -471,8 +618,21 @@ export default {
   }
 }
 
-</style>
+.icon-upload-preview {
+  width: 128px;
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin: 10px 0;
 
-<style>
-
+  img {
+    width: 100%;
+  }
+}
 </style>

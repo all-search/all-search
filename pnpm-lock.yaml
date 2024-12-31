@@ -14,9 +14,7 @@ importers:
       '@popperjs/core':
         specifier: ^2.9.2
         version: 2.11.8
-      axios:
-        specifier: ^0.21.4
-        version: 0.21.4
+
       core-js:
         specifier: ^3.9.1
         version: 3.35.1
