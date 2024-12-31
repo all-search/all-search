@@ -3,6 +3,7 @@
     v-if="favicon === 1"
     class="as-img-icon">
     <img
+      v-if="isLoaded"
       :class="{error: isError}"
       :src="img"
       crossOrigin=""
@@ -19,12 +20,14 @@ import { getStorage, setStorage } from '../util/storage'
 import { debounce } from '../util'
 
 const iconCache = ref({})
+const isLoaded = ref(false)
 getStorage('iconCache', 'local').then(iconData => {
+  isLoaded.value = true
   iconCache.value = iconData || {}
 })
 
 const setStorageDebounce = debounce(() => {
-  setStorage('iconCache', iconCache, 'local')
+  setStorage('iconCache', iconCache.value)
 }, 1000)
 
 export default {
@@ -45,16 +48,16 @@ export default {
     const { hostname, origin } = parseUrl(props.url)
     const cache = toValue(iconCache)
     const img = computed(() => {
-      if (isError.value) {
-        return `${origin}/favicon.ico`
-      } else if (cache[hostname]) {
+      if (cache[hostname]) {
         return cache[hostname]
+      } else if (!isError.value) {
+        return faviconApi.value
       } else {
-        return ''
+        return `${origin}/favicon.ico`
       }
     })
 
-    const i = ref(0)
+    const index = ref(0)
 
     const faviconApis = ref([
       props.icon,
@@ -63,7 +66,7 @@ export default {
       `${origin}/favicon.ico`
     ])
 
-    const faviconApi = computed(() => faviconApis.value.filter(j => j)[i.value])
+    const faviconApi = computed(() => faviconApis.value.filter(j => j)[index.value])
 
     const { favicon } = useFavicon()
 
@@ -81,7 +84,7 @@ export default {
       if (!isError.value && !img.value.startsWith('data:image')) {
         const base64 = getBase64Image(e.target)
         if (base64) {
-          toValue(iconCache)[hostname] = base64
+          iconCache.value[hostname] = base64
           setStorageDebounce()
         }
       }
@@ -90,10 +93,10 @@ export default {
     function handleError (e) {
       const src = e.currentTarget.src
       if (src === faviconApi.value) {
-        if (i.value === faviconApis.value.length - 1) {
+        if (index.value === faviconApis.value.length - 1) {
           isError.value = true
         }
-        i.value++
+        index.value++
       }
     }
 
@@ -102,7 +105,8 @@ export default {
       favicon,
       handleLoad,
       handleError,
-      isError
+      isError,
+      isLoaded
     }
   }
 }

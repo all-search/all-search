@@ -1,5 +1,6 @@
 <template>
   <popper-comp
+    tag="li"
     :placement="placement"
     popper-class="as-subMenu-container">
     <template #trigger="{ show, hide }">

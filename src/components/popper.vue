@@ -1,18 +1,22 @@
 <template>
-  <slot ref="trigger"
-        name="trigger"
-        v-bind="{ show, hide }"/>
+  <component
+    :is="tag"
+    ref="trigger">
+    <slot
+      name="trigger"
+      v-bind="{ show, hide }"
+    />
+  </component>
   <transition name="slide-fade">
     <Teleport
+      name="teleport"
       to="#all-search">
       <div
         v-show="visible"
         :class="popperClass"
         ref="popover"
-        :data-show="visible"
-        :data-initialized="popperInstance !== null"
         class="as-popover-content"
-        style="display: none"
+        :style="floatingStyles"
         @mouseenter="show"
         @mouseleave="hide">
         <template v-if="loaded">
@@ -25,12 +29,15 @@
 
 <script>
 import { ref, onUnmounted } from 'vue'
-import { createPopper } from '@popperjs/core'
+import { useFloating, flip, shift } from '@floating-ui/vue'
 import useTimeout from '../util/useTimeout.js'
 import { onClickOutside } from '../util/onClickOutside'
 
 export default {
   props: {
+    tag: {
+      default: 'div'
+    },
     placement: {
       type: String,
       default: 'auto'
@@ -49,35 +56,46 @@ export default {
     const loaded = ref(false)
     const trigger = ref(null)
     const popover = ref(null)
-    const popperInstance = ref(null)
     const { registerTimeout, cancelTimeout } = useTimeout()
 
-    function createPopover (target) {
-      if (popperInstance.value) {
-        visible.value = true
-        return
-      }
-      popperInstance.value = createPopper(
-        target,
-        popover.value,
-        {
-          strategy: props.strategy,
-          placement: props.placement
-        }
-      )
+    function initFloat () {
+      // console.log(trigger.value)
+      return useFloating(trigger, popover, {
+        middleware: [
+          shift(2),
+          flip()
+        ],
+        placement: props.placement,
+        strategy: props.strategy
+      })
     }
 
-    function destroyPopover () {
-      if (popperInstance.value) {
-        popperInstance.value.destroy()
-        popperInstance.value = null
-      }
+    function show (target) {
+      loaded.value = true
+      // trigger.value = target
+      // floating.value = popover.value
+      cancelTimeout()
+      handleClickOutside(trigger.value)
+      visible.value = true
+    }
+
+    function hide () {
+      registerTimeout(() => {
+        visible.value = false
+      }, 50)
     }
 
     let stopFn
 
     function handleClickOutside (target) {
       if (!stopFn) {
+        stopFn = onClickOutside(target, hide, {
+          ignore: [
+            popover.value
+          ]
+        })
+      } else {
+        stopFn()
         stopFn = onClickOutside(target, hide, {
           ignore: [
             popover.value
@@ -90,27 +108,14 @@ export default {
       stopFn && stopFn()
     })
 
-    function show (target) {
-      loaded.value = true
-      visible.value = true
-      createPopover(target)
-      cancelTimeout()
-      handleClickOutside(target)
-    }
-
-    function hide () {
-      registerTimeout(() => {
-        visible.value = false
-        destroyPopover()
-      }, 50)
-    }
+    const { floatingStyles } = initFloat()
 
     return {
       visible,
       loaded,
       trigger,
       popover,
-      popperInstance,
+      floatingStyles,
       show,
       hide
     }
@@ -122,9 +127,6 @@ export default {
 .as-popover-content {
   --background-color: white;
   --border-color: lightgray;
-  display: none;
-  pointer-events: none;
-  opacity: 0;
   z-index: 99999;
   position: relative;
 
@@ -141,22 +143,13 @@ export default {
   }
 }
 
-.as-popover-content[data-show="true"] {
-  opacity: 1;
-  pointer-events: initial;
-}
-
-.as-popover-content[data-initialized="true"] {
-  display: block;
-}
-
 /* 可以为进入和离开动画设置不同的持续时间和动画函数 */
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
 }
 
 .slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
 .slide-fade-enter-from,

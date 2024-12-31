@@ -1,3 +1,4 @@
+import { toValue } from 'vue'
 import { GM_getValue, GM_setValue, GM_deleteValue } from 'vite-plugin-monkey/dist/client'
 import { storage } from 'wxt/storage'
 import { getName, parseJson, version } from './index'
@@ -10,10 +11,11 @@ function getStorageFn (name) {
   return new Promise((resolve, reject) => {
     if (isPlugin) {
       storage.getItem(`local:${formatName}`).then((result) => {
-        if (result[formatName] === void 0) {
+        console.log(result)
+        if (result === void 0) {
           reject(`没有获取到key:${name}的变量`)
         } else {
-          resolve(parseJson(result[formatName]))
+          resolve(parseJson(result))
         }
       }).catch(() => {
         reject(`没有获取到key:${name}的变量`)
@@ -31,16 +33,22 @@ function getStorageFn (name) {
   })
 }
 
-function setStorageFn (name, value) {
+function setStorageFn (name, refOrValue) {
   const formatName = getName(name)
+  const value = toValue(refOrValue)
   return new Promise((resolve, reject) => {
     if (value === void 0) {
       reject(Error('setStorage'))
     } else {
       if (isPlugin) {
         storage.setItem(`local:${formatName}`, value).then(() => {
+          console.log(value)
+          storage.getItem(`local:${formatName}`).then((result) => {
+            console.log(result)
+          })
           resolve(value)
         }).catch(err => {
+          console.log(err)
           reject(err)
         })
       } else if (!GM_setValue) {
