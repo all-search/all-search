@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/common";
+@use "../assets/common" as *;
 
 @media screen and (max-width: 750px) {
   .as-title-horizontal {

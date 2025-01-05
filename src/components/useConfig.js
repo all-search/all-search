@@ -6,9 +6,7 @@ const isDef = val => val !== undefined && val !== null
 async function init (name, defaultVal, reg = '') {
   try {
     const session = await getStorage(name)
-    if (reg && reg.test(session)) {
-      return session
-    } else if (isDef(session)) {
+    if (isDef(session) && reg && reg.test(session)) {
       return session
     } else {
       return defaultVal

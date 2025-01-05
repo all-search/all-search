@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/common";
+@use "../../assets/common" as *;
 
 #logo {
   height: 64px;

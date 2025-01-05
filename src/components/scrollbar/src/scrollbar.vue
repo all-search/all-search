@@ -210,5 +210,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "../css/scrollbar";
+@use "../css/scrollbar" as *;
 </style>

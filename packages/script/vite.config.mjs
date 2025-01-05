@@ -16,8 +16,7 @@ export default defineConfig({
       build: {
         fileName: 'index.user.js',
         externalGlobals: {
-          vue: ['Vue', () => `https://registry.npmmirror.com/vue/3.4.15/files/dist/vue.global.prod.js`],
-          '@popperjs/core': ['Popper', () => `https://registry.npmmirror.com/@popperjs/core/2.11.8/files/dist/umd/popper-lite.min.js`]
+          vue: ['Vue', () => `https://registry.npmmirror.com/vue/3.4.15/files/dist/vue.global.prod.js`]
         },
         cssSideEffects: () => {
           return (e) => {

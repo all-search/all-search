@@ -114,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./assets/common";
+@use "./assets/common" as *;
 
 .body-horizontal {
   height: $height;

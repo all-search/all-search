@@ -27,13 +27,14 @@
   "scripts": {
     "lint": "vue-cli-service lint",
     "prepare": "husky install",
-    "dev": "vite build --watch --mode development",
-    "build": "vite build"
+    "dev:script": "cd ./packages/script && npm run dev",
+    "build:script": "cd ./packages/script && npm run build",
+    "dev:plugin": "cd ./packages/plugin && npm run dev",
+    "build:plugin": "cd ./packages/plugin && npm run build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",
     "@floating-ui/vue": "^1.1.5",
-    "@popperjs/core": "^2.9.2",
     "core-js": "^3.9.1",
     "element-plus": "^2.2.22",
     "jsoneditor": "^9.9.0",
@@ -61,7 +62,7 @@
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "vite": "^5.2.7",
-    "vite-plugin-monkey": "^3.5.0",
+    "vite-plugin-monkey": "^5.0.4",
     "wxt": "^0.19.12"
   }
 }

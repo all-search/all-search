@@ -210,7 +210,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/common";
+@use "../assets/common" as *;
 
 .as-setting {
   position: relative;
