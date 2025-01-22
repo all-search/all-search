@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      1.5.9
+// @version      1.5.10
 // @author       endday
-// @description  2024-12-19更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2025-1-22更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
@@ -28,7 +28,7 @@
   var _GM_getValue = /* @__PURE__ */ (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = /* @__PURE__ */ (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
   const name = "all-search";
-  const version$1 = "1.5.9";
+  const version$1 = "1.5.10";
   const keywords = [
     "tamperMonkey",
     "user-script",
@@ -3379,10 +3379,10 @@
     }, " 菜单设置 "),
     /* @__PURE__ */ vue.createElementVNode("a", {
       class: "link",
-      title: "滑词工具栏设置页",
+      title: "划词工具栏设置页",
       href: "https://all-search.github.io/all-search/config/toolbar",
       target: "_blank"
-    }, " 滑词工具栏设置 "),
+    }, " 划词工具栏设置 "),
     /* @__PURE__ */ vue.createElementVNode("a", {
       class: "link",
       title: "github",
@@ -3433,7 +3433,7 @@
                       vue.createElementVNode("section", null, [
                         vue.createVNode(_component_form_item, {
                           "label-width": "84",
-                          label: "滑词工具栏"
+                          label: "划词工具栏"
                         }, {
                           default: vue.withCtx(() => [
                             vue.createVNode(_component_as_radio, {
