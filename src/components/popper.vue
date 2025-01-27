@@ -1,7 +1,7 @@
 <template>
   <component
     :is="tag"
-    ref="trigger">
+    ref="triggerRef">
     <slot
       name="trigger"
       v-bind="{ show, hide }"
@@ -9,12 +9,13 @@
   </component>
   <transition name="slide-fade">
     <Teleport
+      v-if="visible"
       name="teleport"
       to="#all-search">
       <div
-        v-show="visible"
+        v-show="isPositioned"
         :class="popperClass"
-        ref="popover"
+        ref="popoverRef"
         class="as-popover-content"
         :style="floatingStyles"
         @mouseenter="show"
@@ -28,8 +29,8 @@
 </template>
 
 <script>
-import { ref, onUnmounted } from 'vue'
-import { useFloating, flip, shift } from '@floating-ui/vue'
+import { ref, watch, computed, onUnmounted } from 'vue'
+import { useFloating } from '@floating-ui/vue'
 import useTimeout from '../util/useTimeout.js'
 import { onClickOutside } from '../util/onClickOutside'
 
@@ -54,28 +55,35 @@ export default {
   setup (props) {
     const visible = ref(false)
     const loaded = ref(false)
-    const trigger = ref(null)
-    const popover = ref(null)
+    const triggerRef = ref(null)
+    const popoverRef = ref(null)
     const { registerTimeout, cancelTimeout } = useTimeout()
 
-    function initFloat () {
-      // console.log(trigger.value)
-      return useFloating(trigger, popover, {
-        middleware: [
-          shift(2),
-          flip()
-        ],
-        placement: props.placement,
-        strategy: props.strategy
+    function init () {
+      return useFloating(triggerRef, popoverRef, {
+        open: visible,
+        transform: false,
+        strategy: 'fixed',
+        placement: props.placement// props.placement
       })
     }
 
-    function show (target) {
+    let ctx = init()
+
+    const floatingStyles = computed(() => ctx.floatingStyles.value)
+    const isPositioned = computed(() => ctx.isPositioned.value)
+
+    watch(() => props.placement, () => {
+      ctx = init()
+    })
+
+    function show () {
       loaded.value = true
       // trigger.value = target
       // floating.value = popover.value
+      // floatingStyles.value = init().floatingStyles.value
       cancelTimeout()
-      handleClickOutside(trigger.value)
+      handleClickOutside(triggerRef.value)
       visible.value = true
     }
 
@@ -91,14 +99,14 @@ export default {
       if (!stopFn) {
         stopFn = onClickOutside(target, hide, {
           ignore: [
-            popover.value
+            popoverRef.value
           ]
         })
       } else {
         stopFn()
         stopFn = onClickOutside(target, hide, {
           ignore: [
-            popover.value
+            popoverRef.value
           ]
         })
       }
@@ -108,13 +116,12 @@ export default {
       stopFn && stopFn()
     })
 
-    const { floatingStyles } = initFloat()
-
     return {
       visible,
       loaded,
-      trigger,
-      popover,
+      isPositioned,
+      triggerRef,
+      popoverRef,
       floatingStyles,
       show,
       hide
@@ -124,10 +131,12 @@ export default {
 </script>
 
 <style lang="scss">
+@use "../assets/common" as *;
+
 .as-popover-content {
   --background-color: white;
   --border-color: lightgray;
-  z-index: 99999;
+  z-index: $overlayZIndex;
   position: relative;
 
   .arrow,
@@ -154,7 +163,7 @@ export default {
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateX(20px);
+  transform: translateY(20px);
   opacity: 0;
 }
 </style>

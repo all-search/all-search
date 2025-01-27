@@ -11,7 +11,6 @@ function getStorageFn (name) {
   return new Promise((resolve, reject) => {
     if (isPlugin) {
       storage.getItem(`local:${formatName}`).then((result) => {
-        console.log(result)
         if (result === void 0) {
           reject(`没有获取到key:${name}的变量`)
         } else {
@@ -42,7 +41,6 @@ function setStorageFn (name, refOrValue) {
     } else {
       if (isPlugin) {
         storage.setItem(`local:${formatName}`, value).then(() => {
-          console.log(value)
           storage.getItem(`local:${formatName}`).then((result) => {
             console.log(result)
           })

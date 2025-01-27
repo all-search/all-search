@@ -27,10 +27,10 @@
   "scripts": {
     "lint": "vue-cli-service lint",
     "prepare": "husky install",
-    "dev:script": "cd ./packages/script && npm run dev",
-    "build:script": "cd ./packages/script && npm run build",
-    "dev:plugin": "cd ./packages/plugin && npm run dev",
-    "build:plugin": "cd ./packages/plugin && npm run build"
+    "dev:script": "pnpm run -C packages/script dev",
+    "build:script": "pnpm run -C packages/script build",
+    "dev:plugin": "pnpm run -C packages/plugin dev",
+    "build:plugin": "pnpm run -C packages/plugin build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",

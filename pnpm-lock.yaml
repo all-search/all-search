@@ -97,6 +97,8 @@ importers:
         specifier: ^0.19.12
         version: 0.19.23(@types/node@20.5.1)(sass@1.83.0)
 
+  packages/options: {}
+
   packages/plugin: {}
 
   packages/script: {}

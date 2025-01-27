@@ -79,6 +79,7 @@ export default {
       props.mode === 'horizontal' ? 'horizontal' : 'vertical'
     )
     const placement = computed(() =>
+      // 'right-start'
       props.mode === 'horizontal' ? 'bottom-start' : 'right-start'
     )
 

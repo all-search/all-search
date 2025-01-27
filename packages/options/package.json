@@ -1,0 +1,10 @@
+{
+  "name": "@all-search/options",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+  }
+}

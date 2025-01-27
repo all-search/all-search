@@ -2,10 +2,10 @@ import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
-import '../assets/normalize.css'
-import '../assets/common.scss'
-import router from './route'
-import App from './App'
+import '../../../../src/assets/normalize.css'
+import '../../../../src/assets/common.scss'
+import router from '../../../options/route'
+import App from '../../../options/App.vue'
 
 const app = createApp(App)
 app.use(router)

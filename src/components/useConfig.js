@@ -22,12 +22,14 @@ export default function useConfig (params) {
   let val = ''
   if (isDef(initVal)) {
     val = initVal
-  } else if (isDef(defaultVal)) {
-    val = defaultVal
   }
   const valRef = ref(val)
   init(name, defaultVal, reg).then(val => {
     valRef.value = val
+  }).catch(() => {
+    if (isDef(defaultVal)) {
+      valRef.value = defaultVal
+    }
   })
   return computed({
     get: () => valRef.value,

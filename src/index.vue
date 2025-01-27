@@ -1,6 +1,6 @@
 <template>
   <template
-    v-if="!disabled">
+    v-if="!disabled && mode">
     <div
       v-show="visible"
       style="opacity: 0"
@@ -147,7 +147,7 @@ export default {
   height: 100%;
   width: $verticalWidth;
   position: fixed;
-  z-index: 999999;
+  z-index: 99990;
 }
 
 .body-vertical + body {
@@ -165,6 +165,7 @@ body, #all-search {
 
 #all-search {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  position: relative;
 }
 
 /*@media (prefers-color-scheme: dark) {
