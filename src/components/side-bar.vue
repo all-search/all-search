@@ -31,7 +31,7 @@
             <section>
               <form-item
                 label-width="84"
-                label="滑词工具栏">
+                label="划词工具栏">
                 <as-radio
                   :label="1"
                   v-model="toolbarVisible">显示
@@ -113,10 +113,10 @@
                 菜单设置
               </a>
               <a class="link"
-                 title="滑词工具栏设置页"
+                 title="划词工具栏设置页"
                  href="https://all-search.github.io/all-search/config/toolbar"
                  target="_blank">
-                滑词工具栏设置
+                划词工具栏设置
               </a>
               <a class="link"
                  title="github"

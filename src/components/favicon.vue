@@ -22,8 +22,9 @@ import { debounce } from '../util'
 const iconCache = ref({})
 const isLoaded = ref(false)
 getStorage('iconCache', 'local').then(iconData => {
-  isLoaded.value = true
   iconCache.value = iconData || {}
+}).finally(() => {
+  isLoaded.value = true
 })
 
 const setStorageDebounce = debounce(() => {
