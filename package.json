@@ -30,7 +30,9 @@
     "dev:script": "pnpm run -C packages/script dev",
     "build:script": "pnpm run -C packages/script build",
     "dev:plugin": "pnpm run -C packages/plugin dev",
-    "build:plugin": "pnpm run -C packages/plugin build"
+    "build:plugin": "pnpm run -C packages/plugin build",
+    "dev:options": "pnpm run -C packages/options dev",
+    "build:options": "pnpm run -C packages/options build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",

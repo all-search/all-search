@@ -1,7 +1,12 @@
 // https://eslint.org/docs/user-guide/configuring
 module.exports = {
   root: true,
-  ignorePatterns: ["lib/", "dist/"],
+  ignorePatterns: [
+    'lib/',
+    'dist/',
+    '.wxt/',
+    '.output/'
+  ],
   parserOptions: {
     parser: '@babel/eslint-parser'
   },

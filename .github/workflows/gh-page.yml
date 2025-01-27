@@ -59,13 +59,13 @@ jobs:
       - name: Build
         run: |
           npm run build:site
-          cp dist/index.html dist/404.html
+          cp packages/options/dist/index.html packages/options/dist/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: 'dist'
+          path: 'packages/options/dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
