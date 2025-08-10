@@ -17,7 +17,7 @@ import { isMobile } from '../util'
 export default {
   name: 'logo',
   props: {
-    mode: {
+    direction: {
       type: String,
       default: 'horizontal',
       validator: val => ['horizontal', 'vertical'].indexOf(val) > -1

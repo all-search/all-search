@@ -1,8 +1,7 @@
 <template>
   <popper-comp
     tag="li"
-    :placement="placement"
-    popper-class="as-subMenu-container">
+    :placement="placement">
     <template #trigger="{ show, hide }">
       <a class="as-menu-item no-underline"
          :class="classList"
@@ -20,26 +19,31 @@
         </span>
       </a>
     </template>
-    <ul class="as-subMenu">
-      <li
-        v-for="(child, i) in item.list"
-        :key="`${item.name}_${i}`"
-        v-show="child.data.visible">
-        <a href="javascript:void 0"
-           @click.exact="handleClick(child)"
-           @click.ctrl.exact="handleClick(child, true)"
-           @click.middle.exact="handleClick(child, true)">
-          <favicon
-            class="as-url-icon"
-            :url="child.url"
-            :icon="child.icon"
-          />
-          <p class="as-subMenu-text"
-             v-text="child.nameZh">
-          </p>
-        </a>
-      </li>
-    </ul>
+    <template #default="{isPositioned}">
+      <div class="as-subMenu-container">
+        <ul class="as-subMenu"
+            v-if="item.list && item.list.length">
+          <li
+            v-for="(child, i) in item.list"
+            :key="`${item.name}_${i}`"
+            v-show="child.data.visible">
+            <a href="javascript:void 0"
+               @click.exact="handleClick(child)"
+               @click.ctrl.exact="handleClick(child, true)"
+               @click.middle.exact="handleClick(child, true)">
+              <favicon
+                class="as-url-icon"
+                :url="child.url"
+                :icon="child.icon"
+              />
+              <p class="as-subMenu-text"
+                 v-text="child.nameZh">
+              </p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </template>
   </popper-comp>
 </template>
 
@@ -67,21 +71,31 @@ export default {
     item: {
       type: Object
     },
-    mode: {
+    direction: {
       type: String,
       default: 'horizontal'
+    },
+    mode: {
+      type: String,
+      default: 'top'
     }
   },
   setup (props) {
     const categoryRef = ref(null)
     const currentSite = site
     const classList = computed(() =>
-      props.mode === 'horizontal' ? 'horizontal' : 'vertical'
+      props.direction === 'horizontal' ? 'horizontal' : 'vertical'
     )
-    const placement = computed(() =>
-      // 'right-start'
-      props.mode === 'horizontal' ? 'bottom-start' : 'right-start'
-    )
+    const placementMap = {
+      top: 'bottom-start',
+      bottom: 'top-start',
+      left: 'right-start',
+      right: 'left-start'
+    }
+    const placement = computed(() => {
+      console.log(placementMap[props.mode])
+      return placementMap[props.mode] || 'bottom-start'
+    })
 
     const handleMenuShow = (value, item) => {
       item.show = value

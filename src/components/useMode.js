@@ -1,14 +1,23 @@
+import { computed } from 'vue'
 import useConfig from './useConfig'
 
 const value = useConfig({
   name: 'mode',
-  defaultVal: 'horizontal',
-  reg: /[vertical|horizontal]/
+  defaultVal: 'top',
+  reg: /[top|bottom|rigth|left]/
 })
+
+const obj = {
+  'top': 'horizontal',
+  'bottom': 'horizontal',
+  'left': 'vertical',
+  'right': 'vertical'
+}
 
 export default function useMode () {
   return {
-    value
+    value,
+    direction: computed(() => obj[value.value])
   }
 }
 

@@ -29,11 +29,14 @@ export default {
       }
     }
 
-    const { value: mode } = useMode()
-    const className = computed(() => ({
-      'as-hide': show.value === 2,
-      [`as-hover-btn-${toValue(mode)}`]: true
-    }))
+    const { value: mode, direction } = useMode()
+    const className = computed(() => {
+      return {
+        'as-hide': show.value === 2,
+        [`as-hover-btn-${toValue(mode)}`]: true,
+        [`as-hover-btn-${toValue(direction)}`]: true
+      }
+    })
 
     return {
       handleMouseEnter,
@@ -67,6 +70,15 @@ export default {
   line-height: 28px;
 }
 
+.as-hover-btn-top {
+  top: 0;
+}
+
+.as-hover-btn-bottom {
+  bottom: 0;
+}
+
+
 .as-hover-btn-vertical {
   left: 0;
   top: 50%;
@@ -75,6 +87,14 @@ export default {
   padding: 0 16px;
   height: 28px;
   line-height: 28px;
+}
+
+.as-hover-btn-left {
+  left: 0;
+}
+
+.as-hover-btn-right {
+  right: 0;
 }
 
 .hover-btn.as-hide {
