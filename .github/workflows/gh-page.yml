@@ -58,7 +58,7 @@ jobs:
 
       - name: Build
         run: |
-          npm run build:site
+          npm run build:options
           cp packages/options/dist/index.html packages/options/dist/404.html
 
       - name: Upload artifact

@@ -10,6 +10,7 @@
         v-for="item in sites"
         :key="item.name"
         :item="item"
+        :direction="direction"
         :mode="mode">
       </menu-item>
     </ul>
@@ -30,10 +31,14 @@ export default {
     menuItem
   },
   props: {
-    mode: {
+    direction: {
       type: String,
       default: 'horizontal',
       validator: val => ['horizontal', 'vertical'].indexOf(val) > -1
+    },
+    mode: {
+      type: String,
+      default: 'top'
     }
   },
   setup (props) {
@@ -78,7 +83,7 @@ export default {
   display: flex;
 }
 
-.as-horizontal{
+.as-horizontal {
   .as-menu {
     flex-direction: row;
   }
@@ -91,6 +96,7 @@ export default {
 
   .as-scrollbar__wrap {
     height: auto;
+    width: 100%;
   }
 }
 </style>

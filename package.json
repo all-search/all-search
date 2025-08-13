@@ -23,7 +23,6 @@
   ],
   "unpkg": "dist/index.user.js",
   "jsdelivr": "dist/index.user.js",
-  "packageManager": "pnpm@8.15.1",
   "scripts": {
     "lint": "vue-cli-service lint",
     "prepare": "husky install",

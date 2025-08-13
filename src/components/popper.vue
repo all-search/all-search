@@ -8,23 +8,18 @@
     />
   </component>
   <transition name="slide-fade">
-    <Teleport
-      v-if="visible"
-      name="teleport"
-      to="#all-search">
-      <div
-        v-show="isPositioned"
-        :class="popperClass"
-        ref="popoverRef"
-        class="as-popover-content"
-        :style="floatingStyles"
-        @mouseenter="show"
-        @mouseleave="hide">
-        <template v-if="loaded">
-          <slot/>
-        </template>
-      </div>
-    </Teleport>
+    <div
+      v-show="visible"
+      :class="popperClass"
+      ref="popoverRef"
+      class="as-popover-content"
+      :style="floatingStyles"
+      @mouseenter="show"
+      @mouseleave="hide">
+      <template v-if="loaded">
+        <slot v-bind="{isPositioned}"/>
+      </template>
+    </div>
   </transition>
 </template>
 
@@ -134,8 +129,6 @@ export default {
 @use "../assets/common" as *;
 
 .as-popover-content {
-  --background-color: white;
-  --border-color: lightgray;
   z-index: $overlayZIndex;
   position: relative;
 

@@ -1,7 +1,7 @@
 <template>
   <div
     class="as-setting"
-    :class="mode">
+    :class="direction">
     <div
       class="as-setting-btn"
       @click="hide">
@@ -43,12 +43,20 @@
               </form-item>
               <form-item label="方向">
                 <as-radio
-                  label="horizontal"
-                  v-model="mode">横向
+                  label="top"
+                  v-model="mode">居顶
                 </as-radio>
                 <as-radio
-                  label="vertical"
-                  v-model="mode">竖向
+                  label="bottom"
+                  v-model="mode">居底
+                </as-radio>
+                <as-radio
+                  label="left"
+                  v-model="mode">居左
+                </as-radio>
+                <as-radio
+                  label="right"
+                  v-model="mode">居右
                 </as-radio>
               </form-item>
               <form-item label="对齐">
@@ -165,7 +173,7 @@ export default {
       visible.value = false
     }
 
-    const { value: mode } = useMode()
+    const { value: mode, direction } = useMode()
     const { list: alignList, value: align } = useAlign()
     const { primaryColor, primaryTextColor } = useColor()
     const { show, options, scrollHide } = useSwitchShow()
@@ -187,6 +195,7 @@ export default {
 
     return {
       mode,
+      direction,
       visible,
       open,
       onMaskClick,

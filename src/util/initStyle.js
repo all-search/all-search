@@ -43,8 +43,9 @@ export const protectStyle = function () {
   Node.prototype.__as_hooks__ = true
 }
 
-export const changeBodyStyle = function (mode, remove = true) {
+export const changeBodyStyle = function (mode, direction, remove = true) {
   const el = getAsRoot()
+  el.classList.remove('body-top', 'body-bottom', 'body-left', 'body-right')
   el.classList.remove('body-vertical', 'body-horizontal')
   if (!remove) {
     el.classList.add(`body-${mode}`)

@@ -6,8 +6,11 @@
       style="opacity: 0"
       class="as-container"
       :class="classList">
-      <logo :mode="mode"/>
-      <as-menu :mode="mode"/>
+      <logo :direction="direction"/>
+      <as-menu
+        :direction="direction"
+        :mode="mode"
+      />
       <side-bar/>
     </div>
     <hoverBtn v-show="visible"/>
@@ -53,11 +56,12 @@ export default {
   },
   setup() {
     const { isFullScreen } = useFullScreen()
-    const { value: mode } = useMode()
+    const { value: mode, direction } = useMode()
     const { show } = useSwitchShow()
     const { visible: toolbarVisible } = useToolbar('tm')
 
     const classList = computed(() => ([
+      `as-${toValue(direction)}`,
       `as-${toValue(mode)}`,
       toValue(show) === 1 ? 'as-show' : 'as-hide'
     ]))
@@ -68,7 +72,7 @@ export default {
 
     watchEffect(() => {
       const remove = site.invisible || site.disabled || toValue(show) === 2
-      changeBodyStyle(toValue(mode), remove)
+      changeBodyStyle(toValue(mode), toValue(direction), remove)
     })
 
     let isInit = false
@@ -107,7 +111,8 @@ export default {
       dialogVisible,
       openDialog,
       keyword,
-      toolbarVisible
+      toolbarVisible,
+      direction
     }
   }
 }
@@ -122,9 +127,12 @@ export default {
 }
 
 .body-horizontal + body {
-  //margin-top: $height !important;
-  //position: relative !important;
+  [data-as-has-set] {
+    transition-duration: 0s;
+  }
+}
 
+.body-top + body {
   [data-as-margin-top] {
     margin-top: $height !important;
   }
@@ -137,9 +145,20 @@ export default {
     border-top: rgba(0, 0, 0, 0) $height solid;
     box-sizing: content-box;
   }
+}
 
-  [data-as-has-set] {
-    transition-duration: 0s;
+.body-bottom + body {
+  [data-as-margin-bottom] {
+    margin-bottom: $height !important;
+  }
+
+  [data-as-transform] {
+    transform: translateY(-$height);
+  }
+
+  [data-as-border-top] {
+    border-bottom: rgba(0, 0, 0, 0) $height solid;
+    box-sizing: content-box;
   }
 }
 
@@ -150,8 +169,12 @@ export default {
   z-index: 99990;
 }
 
-.body-vertical + body {
+.body-left + body {
   margin-left: $verticalWidth !important;
+}
+
+.body-right + body {
+  margin-right: $verticalWidth !important;
 }
 
 body, #all-search {
@@ -181,17 +204,26 @@ body, #all-search {
 .as-horizontal {
   height: $height;
   width: 100%;
-  top: 0;
-  border-bottom: 1px var(--as-border-color) solid;
   flex-direction: row;
   transition: transform 0.1s;
+  &.as-show {
+    transform: translateY(0);
+  }
+}
 
+.as-top {
+  top: 0;
+  border-bottom: 1px var(--as-border-color) solid;
   &.as-hide {
     transform: translateY(-100%);
   }
+}
 
-  &.as-show {
-    transform: translateY(0);
+.as-bottom {
+  bottom: 0;
+  border-top: 1px var(--as-border-color) solid;
+  &.as-hide {
+    transform: translateY(100%);
   }
 }
 
@@ -199,17 +231,27 @@ body, #all-search {
   height: 100%;
   width: $verticalWidth;
   top: 0;
-  left: 0;
-  border-right: 1px var(--as-border-color) solid;
   flex-direction: column;
   transition: transform 0.1s;
 
+  &.as-show {
+    transform: translateX(0);
+  }
+}
+
+.as-left {
+  left: 0;
+  border-right: 1px var(--as-border-color) solid;
   &.as-hide {
     transform: translateX(-100%);
   }
+}
 
-  &.as-show {
-    transform: translateX(0);
+.as-right {
+  right: 0;
+  border-left: 1px var(--as-border-color) solid;
+  &.as-hide {
+    transform: translateX(100%);
   }
 }
 
