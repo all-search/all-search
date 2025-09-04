@@ -19,7 +19,7 @@
         </span>
       </a>
     </template>
-    <template #default="{isPositioned}">
+    <template #default="{}">
       <div class="as-subMenu-container">
         <ul class="as-subMenu"
             v-if="item.list && item.list.length">
@@ -93,7 +93,6 @@ export default {
       right: 'left-start'
     }
     const placement = computed(() => {
-      console.log(placementMap[props.mode])
       return placementMap[props.mode] || 'bottom-start'
     })
 
