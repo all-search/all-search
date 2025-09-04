@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted, nextTick, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import { useFloating, shift, flip, offset, autoUpdate } from '@floating-ui/vue'
 import useTimeout from '../util/useTimeout.js'
 import { onClickOutside } from '../util/onClickOutside'
@@ -155,7 +155,7 @@ onUnmounted(() => {
 
 .slide-fade-enter-from[data-placement='top-start'],
 .slide-fade-leave-to[data-placement='top-start'] {
-  transform: translateY(-100%);
+  transform: translateY(100%);
   transform-origin: bottom center;
 }
 

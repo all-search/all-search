@@ -7,8 +7,13 @@ module.exports = {
     '.wxt/',
     '.output/'
   ],
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: '@babel/eslint-parser'
+    ecmaVersion: 2021,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true
+    }
   },
   env: {
     node: true,
@@ -16,8 +21,8 @@ module.exports = {
     es2021: true
   },
   extends: [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended'
+    'eslint:recommended',
+    'plugin:vue/vue3-essential'
   ],
   // required to lint *.vue files
   plugins: [
