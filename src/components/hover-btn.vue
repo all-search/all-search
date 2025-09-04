@@ -62,7 +62,6 @@ export default {
 }
 
 .as-hover-btn-horizontal {
-  top: 0;
   left: 50%;
   transform: translateY(0) translateX(-50%);
   padding: 0 16px;
@@ -80,10 +79,7 @@ export default {
 
 
 .as-hover-btn-vertical {
-  left: 0;
   top: 50%;
-  transform: translateY(-200%) translateX(0) rotate(90deg);
-  transform-origin: 0 100%;
   padding: 0 16px;
   height: 28px;
   line-height: 28px;
@@ -91,10 +87,16 @@ export default {
 
 .as-hover-btn-left {
   left: 0;
+  right: unset;
+  transform: translateY(-200%) translateX(0) rotate(90deg);
+  transform-origin: 0 100%;
 }
 
 .as-hover-btn-right {
   right: 0;
+  left: unset;
+  transform-origin: top right;
+  transform: translateY(0) translateX(0) rotate(90deg);
 }
 
 .hover-btn.as-hide {

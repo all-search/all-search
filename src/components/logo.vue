@@ -4,7 +4,7 @@
     class="as-title"
     href="https://github.com/all-search/all-search"
     target="_blank"
-    :class="`as-title-${mode}`">
+    :class="`as-title-${direction}`">
     <p class="as-title-inner">
       All Search
     </p>
@@ -15,7 +15,7 @@
 import { isMobile } from '../util'
 
 export default {
-  name: 'logo',
+  name: 'logo-comp',
   props: {
     direction: {
       type: String,
