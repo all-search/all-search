@@ -116,6 +116,10 @@ onUnmounted(() => {
 .as-popover-content {
   z-index: $overlayZIndex;
   position: relative;
+  /* 性能优化：启用硬件加速 */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 
   .arrow,
   .arrow::before {
@@ -130,15 +134,15 @@ onUnmounted(() => {
   }
 }
 
-/* 可以为进入和离开动画设置不同的持续时间和动画函数 */
+/* 统一的动画设置，提供更好的视觉一致性 */
 .slide-fade-enter-active {
-  transition: transform 0.1s ease-out,
-  opacity 0.1s ease-out;
+  transition: transform 0.15s cubic-bezier(.645, .045, .355, 1),
+              opacity 0.15s cubic-bezier(.645, .045, .355, 1);
 }
 
 .slide-fade-leave-active {
-  transition: transform 0.1s cubic-bezier(1, 0.5, 0.8, 1),
-  opacity 0.1s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: transform 0.1s cubic-bezier(.645, .045, .355, 1),
+              opacity 0.1s cubic-bezier(.645, .045, .355, 1);
 }
 
 .slide-fade-enter-from,

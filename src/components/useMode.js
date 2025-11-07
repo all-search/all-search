@@ -4,7 +4,7 @@ import useConfig from './useConfig'
 const value = useConfig({
   name: 'mode',
   defaultVal: 'top',
-  reg: /[top|bottom|rigth|left]/
+  reg: /^(top|bottom|right|left)$/
 })
 
 const obj = {

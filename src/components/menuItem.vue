@@ -93,7 +93,8 @@ export default {
       right: 'left-start'
     }
     const placement = computed(() => {
-      return placementMap[props.mode] || 'bottom-start'
+      const result = placementMap[props.mode]
+      return result
     })
 
     const handleMenuShow = (value, item) => {
