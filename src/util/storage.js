@@ -1,6 +1,6 @@
 import { toValue } from 'vue'
 import { GM_getValue, GM_setValue, GM_deleteValue } from 'vite-plugin-monkey/dist/client'
-import { storage } from 'wxt/storage'
+import { storage } from '@wxt-dev/storage'
 import { getName, parseJson, version } from './index'
 import store from './store'
 

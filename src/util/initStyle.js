@@ -48,6 +48,6 @@ export const changeBodyStyle = function (mode, direction, remove = true) {
   el.classList.remove('body-top', 'body-bottom', 'body-left', 'body-right')
   el.classList.remove('body-vertical', 'body-horizontal')
   if (!remove) {
-    el.classList.add(`body-${mode}`)
+    el.classList.add(`body-${mode}`, `body-${direction}`)
   }
 }

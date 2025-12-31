@@ -11,7 +11,5 @@
     "zip:firefox": "wxt zip -b firefox",
     "compile": "vue-tsc --noEmit",
     "postinstall": "wxt prepare"
-  },
-  "dependencies": {
   }
 }
