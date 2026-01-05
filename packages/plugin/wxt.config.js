@@ -1,5 +1,10 @@
 import { defineConfig } from 'wxt'
 import pkg from '../../package.json'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   manifest: {
@@ -20,6 +25,9 @@ export default defineConfig({
   vite() {
     return {
       resolve: {
+        alias: {
+          '@src': path.resolve(__dirname, '../../src')
+        },
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
       }
     }

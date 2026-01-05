@@ -34,6 +34,7 @@ import { site } from './config/siteInfo'
 import { useFullScreen } from './util/fullScreen'
 import useMode from './components/useMode'
 import useSwitchShow from './components/useSwitchShow'
+import useAutoHide from './components/useAutoHide'
 import logo from './components/logo'
 import asMenu from './components/menu'
 import sideBar from './components/side-bar'
@@ -58,6 +59,7 @@ export default {
     const { isFullScreen } = useFullScreen()
     const { value: mode, direction } = useMode()
     const { show } = useSwitchShow()
+    useAutoHide()
     const { visible: toolbarVisible } = useToolbar('tm')
 
     const classList = computed(() => ([

@@ -11,7 +11,8 @@ export default defineConfig(({ mode }) => {
   return {
     resolve: {
       alias: {
-        '$': 'vite-plugin-monkey/dist/client'
+        '$': 'vite-plugin-monkey/dist/client',
+        '@src': path.resolve(__dirname, 'src')
       },
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
     },

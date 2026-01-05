@@ -53,7 +53,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { Menu } from '@element-plus/icons-vue'
-import versionAlert from '../../../src/components/version-alert'
+import versionAlert from '@src/components/version-alert'
 
 export default {
   name: 'config',
@@ -72,11 +72,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@use "../../../src/assets/common" as *;
+<style lang="scss">
+@use "@src/assets/common" as *;
 
-#logo {
-  height: 64px;
+.form-title {
+  font-size: 16px;
   line-height: 64px;
   float: left;
   font-size: 18px;

@@ -77,17 +77,6 @@ export function parseJson (val) {
   return val
 }
 
-export let delSession = function (name) {
-  const formatName = getName(name)
-  // eslint-disable-next-line
-  if (GM_deleteValue) {
-    // eslint-disable-next-line
-    GM_deleteValue(formatName)
-  } else {
-    window.localStorage.removeItem(formatName)
-  }
-}
-
 export function addStyle (styleContent) {
   if (!styleContent) {
     return
@@ -172,11 +161,9 @@ export function removeNode (cssSelectorOrFunction) {
       }
     } else if (typeof (cssSelectorOrFunction) === 'function') {
       cssSelectorOrFunction()
-    } else {
-      console.log('未知命令：' + cssSelectorOrFunction)
     }
   } catch (e) {
-    console.log(e)
+    // ignore
   }
 }
 
@@ -213,7 +200,7 @@ export function addStyleContent (css, className, addToTarget, isReload = false) 
       try {
         addTo.appendChild(cssNode)
       } catch (e) {
-        console.log(e.message)
+        // ignore
       }
       return true
     }

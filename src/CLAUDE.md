@@ -59,7 +59,7 @@
 
 #### 功能组件
 - `menu.vue` - 搜索引擎菜单（核心组件）
-- `menuItem.vue` - 菜单项
+- `menu-item.vue` - 菜单项
 - `side-bar.vue` - 侧边栏（设置入口）
 - `search-dialog.vue` - 搜索对话框
 - `version-alert.vue` - 版本更新提示
@@ -72,7 +72,7 @@
 
 #### 表单组件
 - `form-item.vue` - 表单项
-- `jsonEditor.vue` - JSON 编辑器封装
+- `json-editor.vue` - JSON 编辑器封装
 
 ### Composables（组合式函数）
 

@@ -20,7 +20,7 @@
 <script>
 import { computed, reactive } from 'vue'
 import scrollbar from './scrollbar/src/scrollbar'
-import menuItem from './menuItem'
+import menuItem from './menu-item'
 import useAlign from './useAlign'
 import useSites from './useSites'
 

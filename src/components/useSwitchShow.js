@@ -1,6 +1,5 @@
 import useConfig from './useConfig'
-import { reactive, watch } from 'vue'
-import useScroll from '../util/useScroll'
+import { reactive } from 'vue'
 
 const options = reactive(new Map([
   ['none', '关闭'],
@@ -20,17 +19,6 @@ const scrollHide = useConfig({
   name: 'scrollHide',
   defaultVal: 'none',
   reg: /[none|top|bottom|all]/
-})
-
-const { direction } = useScroll(100)
-
-watch([direction, scrollHide], ([newDirection, newScrollHide]) => {
-  if (
-    (show.value && newScrollHide !== 'none') &&
-    (newDirection === newScrollHide || newScrollHide === 'all')
-  ) {
-    show.value = 2
-  }
 })
 
 export default function useSwitchShow () {

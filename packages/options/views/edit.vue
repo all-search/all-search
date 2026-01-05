@@ -1,5 +1,5 @@
 <template>
-  <jsonEditor
+  <json-editor
     :value="localSites"
     @reset="reset"
     @save="save"
@@ -8,10 +8,10 @@
 
 <script>
 import { ElMessage, ElMessageBox } from 'element-plus'
-import jsonEditor from '../../../src/components/jsonEditor'
-import { setStorage } from '../../../src/util/storage'
-import sites from '../../../src/config/sites'
-import useSites from '../../../src/components/useSites'
+import jsonEditor from '@src/components/json-editor'
+import { setStorage } from '@src/util/storage'
+import sites from '@src/config/sites'
+import useSites from '@src/components/useSites'
 import { ref } from 'vue'
 
 export default {

@@ -1,7 +1,7 @@
-import App from '../../../src/index.vue'
+import App from '@src/index.vue'
 import { createApp } from 'vue'
 import { defineContentScript, createIntegratedUi } from '#imports'
-import { getStorage } from '../../../src/util/storage'
+import { getStorage } from '@src/util/storage'
 
 export default defineContentScript({
   matches: ['<all_urls>'],
