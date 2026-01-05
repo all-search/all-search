@@ -4,15 +4,15 @@
 - [ ] **引入 TypeScript**: 目前项目主要使用 JS，缺乏类型约束。引入 TS 可以显著降低维护成本，尤其是在处理复杂的搜索引擎配置和存储逻辑时。
 - [x] **统一路径别名**: 目前在所有 package 中统一配置 `@src/` 指向 `src/`（避开 WXT 默认别名冲突）。
 - [ ] **合并 Vite 配置**: `packages/script` 和 `packages/options` 的 `vite.config` 存在重复逻辑，建议提取公共配置到根目录。
-- [ ] **优化环境变量管理**: 目前使用 `VITE_TARGET === 'plugin'` 来区分环境。建议利用 Vite 的 `define` 或插件注入更优雅的 Provider，而不是在业务代码中到处写 `if (isPlugin)`。
+- [x] **优化环境变量管理**: 创建了 `src/env.js` 统一管理 `VITE_TARGET` 及 Feature Flags，已在 `storage.js` 中应用。
 
 ## 2. 核心逻辑重构 (Medium Priority)
 - [ ] **解耦 "上帝组件" `src/index.vue`**: 
     - 拆分样式初始化逻辑到专门的 `StyleManager` 类或 Hook。
     - 将布局模式逻辑（Top/Bottom/Left/Right）抽离为独立的布局组件。
-- [ ] **重构 `src/util/storage.js`**:
-    - 目前的 `initTmMethods` 和 `getTmMethods` 依赖于 DOM 事件分发，逻辑较为零散。建议封装一个统一的 `StorageAdapter` 接口，在入口处根据环境注入具体的实现。
-- [ ] **改进 `src/util/index.js`**:
+- [x] **重构 `src/util/storage.js`**:
+    - 使用适配器模式封装了 TM、插件和网页桥接三种存储实现，移除了硬编码的环境判断。
+- [x] **改进 `src/util/index.js`**:
     - 该文件包含了大量 DOM 操作和工具函数（如 `RAFInterval`, `addStyleContent`），建议按功能拆分为 `dom.js`, `string.js`, `timer.js` 等小模块。
     - 移除已废弃或冗余的 `delSession` 等函数。
 
@@ -27,6 +27,8 @@
 - [ ] **单元测试**: 为 `src/util/` 下的工具函数编写 Jest/Vitest 测试，确保逻辑重构后的稳定性。
 
 ## 5. 代码清理
-- [ ] **手动删除旧文件**: `src/components/menuItem.vue` 和 `src/components/jsonEditor.vue`（已创建新文件并更新引用，需手动删除旧文件）。
+- [ ] **手动删除旧文件**: 
+    - `src/components/menuItem.vue` 和 `src/components/jsonEditor.vue`
+    - `src/util/storage.js`, `src/util/storage-tm.js`, `src/util/storage-ext.js`, `src/util/storage-bridge.js`
 - [ ] 统一组件命名规范（目前存在 `menuItem.vue` 和 `form-item.vue` 混合使用的情况，建议统一为 kebab-case 或 PascalCase）。
 - [x] 清理 `src/util/index.js` 中未使用的变量和 `console.log`。

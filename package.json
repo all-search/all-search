@@ -24,7 +24,7 @@
   "unpkg": "dist/index.user.js",
   "jsdelivr": "dist/index.user.js",
   "scripts": {
-    "lint": "vue-cli-service lint",
+    "lint": "eslint --ext .js,.vue src packages --fix",
     "prepare": "husky install",
     "dev:script": "pnpm run -C packages/script dev",
     "build:script": "pnpm run -C packages/script build",
