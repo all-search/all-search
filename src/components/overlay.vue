@@ -1,3 +1,27 @@
+<script setup lang="ts">
+const emit = defineEmits<{
+  (e: 'click', event: MouseEvent): void
+}>()
+
+let mouseDownTarget = false
+let mouseUpTarget = false
+
+const onMaskClick = (e: MouseEvent) => {
+  if (mouseDownTarget && mouseUpTarget) {
+    emit('click', e)
+  }
+  mouseDownTarget = mouseUpTarget = false
+}
+
+const onMouseDown = (e: MouseEvent) => {
+  mouseDownTarget = e.target === e.currentTarget
+}
+
+const onMouseUp = (e: MouseEvent) => {
+  mouseUpTarget = e.target === e.currentTarget
+}
+</script>
+
 <template>
   <div class="as-overlay"
        @mousedown="onMouseDown"
@@ -6,34 +30,6 @@
     <slot></slot>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'overlay',
-  setup (props, { emit }) {
-    let mouseDownTarget = false
-    let mouseUpTarget = false
-    const onMaskClick = (e) => {
-      if (mouseDownTarget && mouseUpTarget) {
-        emit('click', e)
-      }
-      mouseDownTarget = mouseUpTarget = false
-    }
-    const onMouseDown = (e) => {
-      mouseDownTarget = e.target === e.currentTarget
-    }
-    const onMouseUp = (e) => {
-      mouseUpTarget = e.target === e.currentTarget
-    }
-
-    return {
-      onMouseDown,
-      onMouseUp,
-      onMaskClick
-    }
-  }
-}
-</script>
 
 <style lang="scss">
 @use "../assets/common" as *;

@@ -1,20 +1,14 @@
+<script setup lang="ts">
+defineProps<{
+  name?: string
+}>()
+</script>
+
 <template>
   <svg class="as-icon as-menu-item-icon" aria-hidden="true">
     <use :xlink:href="`#icon-${name}`"></use>
   </svg>
 </template>
-
-<script>
-export default {
-  name: 'icon',
-  props: {
-    name: {
-      type: String,
-      default: ''
-    }
-  }
-}
-</script>
 
 <style lang="scss">
 .as-icon {

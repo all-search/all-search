@@ -1,22 +1,16 @@
+<script setup lang="ts">
+defineProps<{
+  type?: 'primary' | 'text'
+}>()
+</script>
+
 <template>
   <button
     class="as-button"
-    :class="`as-button__${type}`">
+    :class="type ? `as-button__${type}` : ''">
     <slot></slot>
   </button>
 </template>
-
-<script>
-export default {
-  name: 'xButton',
-  props: {
-    type: {
-      type: String,
-      default: 'primary'
-    }
-  }
-}
-</script>
 
 <style lang="scss">
   .as-button {

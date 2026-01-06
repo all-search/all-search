@@ -1,4 +1,5 @@
 import { GM_getResourceText } from 'vite-plugin-monkey/dist/client'
+import { getStorage } from './storage'
 
 /**
  * 检查 body 是否已加载
@@ -184,8 +185,7 @@ export function addStyleResource (name: string, link: string): void {
  * 创建并初始化应用根节点位置
  */
 export async function initAppAnchor (): Promise<HTMLElement> {
-  const { getStorage } = await import('./storage')
-  const mode = await getStorage('mode') || 'top'
+  const mode = await getStorage<string>('mode') || 'top'
 
   let anchor = document.getElementById('all-search')
   if (!anchor) {

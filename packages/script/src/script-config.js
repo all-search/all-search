@@ -16,5 +16,6 @@ export default {
   downloadURL: scriptUrl,
   match: ['*://*/*'],
   noframes: true,
-  'run-at': 'document-idle'
+  'run-at': 'document-idle',
+  grant: ['GM_addStyle', 'GM_setValue', 'GM_getValue', 'GM_deleteValue', 'GM_listValues']
 }

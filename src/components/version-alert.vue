@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import { reactive } from 'vue'
+import store from '../util/store'
+
+const data = reactive({
+  notInstall: false,
+  notLatest: false
+})
+
+setTimeout(() => {
+  if (!store.tmVersion) {
+    data.notInstall = true
+  }
+}, 2000)
+</script>
+
 <template>
   <el-alert
     class="version-alert"
@@ -8,31 +24,6 @@
     show-icon
     :closable="false"/>
 </template>
-
-<script>
-import { reactive } from 'vue'
-import store from '../util/store'
-
-export default {
-  name: 'version-alert',
-  setup () {
-    const data = reactive({
-      notInstall: false,
-      notLatest: false
-    })
-
-    setTimeout(() => {
-      if (!store.tmVersion) {
-        data.notInstall = true
-      }
-    }, 2000)
-
-    return {
-      data
-    }
-  }
-}
-</script>
 
 <style>
   .version-alert {

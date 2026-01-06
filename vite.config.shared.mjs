@@ -19,7 +19,22 @@ export const sharedConfig = {
     vue()
   ],
   build: {
-    target: 'es2015'
+    target: 'es2015',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('element-plus')) {
+              return 'element-plus';
+            }
+            if (id.includes('jsoneditor')) {
+              return 'jsoneditor';
+            }
+            return 'vendor';
+          }
+        }
+      }
+    }
   }
 }
 

@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import asButton from './button.vue'
+
+const props = defineProps<{
+  modelValue?: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+
+const model = computed({
+  get () {
+    return props.modelValue || ''
+  },
+  set (value) {
+    emit('update:modelValue', value)
+  }
+})
+
+const reset = () => {
+  model.value = ''
+}
+</script>
+
 <template>
   <div class="as-color-set">
     <label class="as-color-label">
@@ -15,40 +41,6 @@
     </asButton>
   </div>
 </template>
-
-<script>
-import { computed } from 'vue'
-import asButton from './button'
-
-export default {
-  name: 'color',
-  components: {
-    asButton
-  },
-  props: {
-    modelValue: {
-      type: [String, Number]
-    }
-  },
-  setup (props, ctx) {
-    const model = computed({
-      get () {
-        return props.modelValue
-      },
-      set (value) {
-        ctx.emit('update:modelValue', value)
-      }
-    })
-    const reset = () => {
-      model.value = ''
-    }
-    return {
-      model,
-      reset
-    }
-  }
-}
-</script>
 
 <style lang="scss">
 .as-color-set {

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useApp } from './useApp'
 import logo from './components/logo.vue'
 import asMenu from './components/menu.vue'

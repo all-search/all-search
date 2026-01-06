@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { computed, toValue } from 'vue'
+import { isMobile } from '../util'
+import useSwitchShow from './useSwitchShow'
+import useMode from './useMode'
+
+const { show } = useSwitchShow()
+const isMobileVal = isMobile()
+const handleMouseEnter = () => {
+  if (!isMobileVal) {
+    show.value = 1
+  }
+}
+const handleClick = () => {
+  if (isMobileVal) {
+    show.value = 1
+  }
+}
+
+const { value: mode, direction } = useMode()
+const className = computed(() => {
+  return {
+    'as-hide': show.value === 2,
+    [`as-hover-btn-${toValue(mode)}`]: true,
+    [`as-hover-btn-${toValue(direction)}`]: true
+  }
+})
+</script>
+
 <template>
   <div class="as-hover-btn"
        :class="className"
@@ -6,46 +35,6 @@
     All Search
   </div>
 </template>
-
-<script>
-import { computed, toValue } from 'vue'
-import { isMobile } from '../util'
-import useSwitchShow from './useSwitchShow'
-import useMode from './useMode'
-
-export default {
-  name: 'hover-btn',
-  setup () {
-    const { show } = useSwitchShow()
-    const isMobileVal = isMobile()
-    const handleMouseEnter = () => {
-      if (!isMobileVal) {
-        show.value = 1
-      }
-    }
-    const handleClick = () => {
-      if (isMobileVal) {
-        show.value = 1
-      }
-    }
-
-    const { value: mode, direction } = useMode()
-    const className = computed(() => {
-      return {
-        'as-hide': show.value === 2,
-        [`as-hover-btn-${toValue(mode)}`]: true,
-        [`as-hover-btn-${toValue(direction)}`]: true
-      }
-    })
-
-    return {
-      handleMouseEnter,
-      handleClick,
-      className
-    }
-  }
-}
-</script>
 
 <style scoped>
 .as-hover-btn {

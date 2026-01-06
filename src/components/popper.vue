@@ -18,41 +18,37 @@
   </transition>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onUnmounted } from 'vue'
 import { useFloating, shift, flip, offset, autoUpdate } from '@floating-ui/vue'
-import useTimeout from '../util/useTimeout.js'
+import useTimeout from '../util/useTimeout'
 import { onClickOutside } from '../util/onClickOutside'
 
-const props = defineProps({
-  tag: {
-    default: 'div'
-  },
-  placement: {
-    type: String,
-    default: 'auto'
-  },
-  strategy: {
-    type: String,
-    default: 'fixed'
-  },
-  popperClass: {
-    type: String,
-    default: ''
-  }
+const props = withDefaults(defineProps<{
+  tag?: string
+  placement?: any
+  strategy?: 'fixed' | 'absolute'
+  popperClass?: string
+}>(), {
+  tag: 'div',
+  placement: 'auto',
+  strategy: 'fixed',
+  popperClass: ''
 })
 
 const visible = ref(false)
 const loaded = ref(false)
-const triggerRef = ref(null)
-const popoverRef = ref(null)
+const triggerRef = ref<HTMLElement | null>(null)
+const popoverRef = ref<HTMLElement | null>(null)
 const { registerTimeout, cancelTimeout } = useTimeout()
 
 
 function show () {
   loaded.value = true
   cancelTimeout()
-  handleClickOutside(triggerRef.value)
+  if (triggerRef.value) {
+    handleClickOutside(triggerRef.value)
+  }
   visible.value = true
 }
 
@@ -62,23 +58,17 @@ function hide () {
   }, 50)
 }
 
-let stopFn
+let stopFn: (() => void) | undefined
 
-function handleClickOutside (target) {
-  if (!stopFn) {
-    stopFn = onClickOutside(target, hide, {
-      ignore: [
-        popoverRef.value
-      ]
-    })
-  } else {
+function handleClickOutside (target: HTMLElement) {
+  if (stopFn) {
     stopFn()
-    stopFn = onClickOutside(target, hide, {
-      ignore: [
-        popoverRef.value
-      ]
-    })
   }
+  stopFn = onClickOutside(target, hide, {
+    ignore: [
+      popoverRef.value as HTMLElement
+    ]
+  })
 }
 
 const {

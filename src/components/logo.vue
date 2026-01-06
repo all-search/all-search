@@ -1,6 +1,16 @@
+<script setup lang="ts">
+import { isMobile } from '../util'
+
+defineProps<{
+  direction?: 'horizontal' | 'vertical'
+}>()
+
+const mobile = isMobile()
+</script>
+
 <template>
   <a
-    v-if="!isMobile"
+    v-if="!mobile"
     class="as-title"
     href="https://github.com/all-search/all-search"
     target="_blank"
@@ -10,26 +20,6 @@
     </p>
   </a>
 </template>
-
-<script>
-import { isMobile } from '../util'
-
-export default {
-  name: 'logo-comp',
-  props: {
-    direction: {
-      type: String,
-      default: 'horizontal',
-      validator: val => ['horizontal', 'vertical'].indexOf(val) > -1
-    }
-  },
-  setup () {
-    return {
-      isMobile: isMobile()
-    }
-  }
-}
-</script>
 
 <style lang="scss">
 @use "../assets/common" as *;

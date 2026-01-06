@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { computed, reactive } from 'vue'
+import scrollbar from './scrollbar/src/scrollbar'
+import menuItem from './menu-item.vue'
+import useAlign from './useAlign'
+import useSites from './useSites'
+
+const props = withDefaults(defineProps<{
+  direction?: 'horizontal' | 'vertical'
+  mode?: string
+}>(), {
+  direction: 'horizontal',
+  mode: 'top'
+})
+
+const { sites } = useSites('tm')
+const { value: align } = useAlign()
+
+const data = reactive({
+  showTimeout: 50,
+  hideTimeout: 200
+})
+
+const menuClass = computed(() => ({
+  'as-horizontal': props.mode === 'horizontal',
+  'as-vertical': props.mode === 'vertical'
+}))
+</script>
+
 <template>
   <scrollbar
     class="as-menu-container"
@@ -16,54 +45,6 @@
     </ul>
   </scrollbar>
 </template>
-
-<script>
-import { computed, reactive } from 'vue'
-import scrollbar from './scrollbar/src/scrollbar'
-import menuItem from './menu-item'
-import useAlign from './useAlign'
-import useSites from './useSites'
-
-export default {
-  name: 'as-menu',
-  components: {
-    scrollbar,
-    menuItem
-  },
-  props: {
-    direction: {
-      type: String,
-      default: 'horizontal',
-      validator: val => ['horizontal', 'vertical'].indexOf(val) > -1
-    },
-    mode: {
-      type: String,
-      default: 'top'
-    }
-  },
-  setup (props) {
-    const { sites } = useSites('tm')
-    const { value: align } = useAlign()
-
-    const data = reactive({
-      showTimeout: 50,
-      hideTimeout: 200
-    })
-
-    const menuClass = computed(() => ({
-      'as-horizontal': props.mode === 'horizontal',
-      'as-vertical': props.mode === 'vertical'
-    }))
-
-    return {
-      sites,
-      data,
-      align,
-      menuClass
-    }
-  }
-}
-</script>
 
 <style lang="scss">
 @use "../assets/common" as *;

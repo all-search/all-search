@@ -1,3 +1,91 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import popperComp from './popper.vue'
+import { site } from '../config/siteInfo'
+import { getQueryString } from '../util'
+import { getKeyword } from '../util/getKeyword'
+import icon from './icon.vue'
+import favicon from './favicon.vue'
+import { onTap } from '../util/tap'
+import { selection } from './selection'
+import { Site, SiteCategory } from '../types/site'
+
+const props = withDefaults(defineProps<{
+  item: SiteCategory
+  direction?: string
+  mode?: string
+}>(), {
+  direction: 'horizontal',
+  mode: 'top'
+})
+
+const categoryRef = ref<HTMLElement | null>(null)
+const currentSite = site
+const classList = computed(() =>
+  props.direction === 'horizontal' ? 'horizontal' : 'vertical'
+)
+const placementMap: Record<string, string> = {
+  top: 'bottom-start',
+  bottom: 'top-start',
+  left: 'right-start',
+  right: 'left-start'
+}
+const placement = computed(() => {
+  return (placementMap[props.mode || ''] || 'bottom-start') as any
+})
+
+const defaultKeyword = () => {
+  if (selection && selection.value) {
+    return selection.value
+  }
+  let keyword = getKeyword()
+  const selectors = currentSite.selectors
+  const query = currentSite.query
+  if (keyword === undefined) {
+    if (selectors) {
+      const el = document.querySelector(selectors) as HTMLInputElement
+      keyword = el ? el.value : ''
+    } else if (query) {
+      const queryList = Array.isArray(query) ? query : [query]
+      queryList.some(name => {
+        const word = getQueryString(name)
+        keyword = word
+        return !!word
+      })
+    }
+  }
+  return keyword || ''
+}
+
+const handleClick = (item: Site, newWin?: boolean) => {
+  const keyword = defaultKeyword()
+  const url = (item.url as string).replace('%s', keyword)
+  if (newWin) {
+    window.open(url)
+  } else {
+    window.location.href = url
+  }
+  return false
+}
+
+let isTap = false
+const handleCateClick = (cate: SiteCategory, newWin: boolean) => {
+  if (isTap) {
+    return
+  }
+  const urlItem = cate.list
+    .filter(item => item.data?.visible)
+    .find(item => (item.url as string).indexOf(window.location.hostname) === -1)
+  if (urlItem) {
+    return handleClick(urlItem, newWin)
+  }
+}
+
+onTap(categoryRef, () => {
+  isTap = true
+})
+</script>
+
 <template>
   <popper-comp
     tag="li"
@@ -26,14 +114,14 @@
           <li
             v-for="(child, i) in item.list"
             :key="`${item.name}_${i}`"
-            v-show="child.data.visible">
+            v-show="child.data?.visible">
             <a href="javascript:void 0"
                @click.exact="handleClick(child)"
                @click.ctrl.exact="handleClick(child, true)"
                @click.middle.exact="handleClick(child, true)">
               <favicon
                 class="as-url-icon"
-                :url="child.url"
+                :url="(child.url as string)"
                 :icon="child.icon"
               />
               <p class="as-subMenu-text"
@@ -46,116 +134,6 @@
     </template>
   </popper-comp>
 </template>
-
-<script>
-import { computed, ref } from 'vue'
-import popperComp from './popper'
-import { site } from '../config/siteInfo'
-import { getQueryString } from '../util'
-import { getKeyword } from '../util/getKeyword'
-import icon from './icon'
-import favicon from './favicon'
-import { onTap } from '../util/tap'
-import { selection } from './selection'
-
-let isTap = false
-
-export default {
-  name: 'menu-item',
-  components: {
-    popperComp,
-    icon,
-    favicon
-  },
-  props: {
-    item: {
-      type: Object
-    },
-    direction: {
-      type: String,
-      default: 'horizontal'
-    },
-    mode: {
-      type: String,
-      default: 'top'
-    }
-  },
-  setup (props) {
-    const categoryRef = ref(null)
-    const currentSite = site
-    const classList = computed(() =>
-      props.direction === 'horizontal' ? 'horizontal' : 'vertical'
-    )
-    const placementMap = {
-      top: 'bottom-start',
-      bottom: 'top-start',
-      left: 'right-start',
-      right: 'left-start'
-    }
-    const placement = computed(() => {
-      const result = placementMap[props.mode]
-      return result
-    })
-
-    const handleMenuShow = (value, item) => {
-      item.show = value
-    }
-    const defaultKeyword = () => {
-      if (selection && selection.value) {
-        return selection.value
-      }
-      let keyword = getKeyword()
-      const selectors = currentSite.selectors
-      const query = currentSite.query
-      if (keyword === undefined) {
-        if (selectors) {
-          const el = document.querySelector(selectors)
-          keyword = el ? el.value : ''
-        } else if (query) {
-          const queryList = Array.isArray(query) ? query : [query]
-          queryList.some(name => {
-            const word = getQueryString(name)
-            keyword = word
-            return !!word
-          })
-        }
-      }
-      return keyword
-    }
-    const handleCateClick = (cate, newWin) => {
-      if (isTap) {
-        return
-      }
-      const urlItem = cate.list
-        .filter(item => item.data.visible)
-        .find(item => item.url.indexOf(window.location.hostname) === -1)
-      return handleClick(urlItem, newWin)
-    }
-    const handleClick = (item, newWin) => {
-      const keyword = defaultKeyword()
-      if (newWin) {
-        window.open(item.url.replace('%s', keyword))
-      } else {
-        window.location.href = item.url.replace('%s', keyword)
-      }
-      return false
-    }
-
-    onTap(categoryRef, () => {
-      isTap = true
-    })
-
-    return {
-      placement,
-      classList,
-      handleMenuShow,
-      handleClick,
-      handleCateClick,
-      categoryRef
-    }
-  }
-}
-</script>
 <style lang="scss">
 @use "../assets/common" as *;
 
