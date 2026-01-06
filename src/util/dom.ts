@@ -153,7 +153,7 @@ export function addStyleContent (css: string, className?: string, addToTarget?: 
       }
       cssNode.setAttribute('type', 'text/css')
       cssNode.innerHTML = css
-      
+
       try {
         if (addTo) {
           addTo.appendChild(cssNode)

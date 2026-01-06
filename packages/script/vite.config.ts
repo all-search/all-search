@@ -2,10 +2,11 @@ import { defineConfig } from 'vite'
 import monkey from 'vite-plugin-monkey'
 import mkcert from 'vite-plugin-mkcert'
 import scriptConfig from './src/script-config'
-import sharedConfig from '../../vite.config.shared.mjs'
+import sharedConfig from '../../vite.config.shared'
 
 export default defineConfig({
   ...sharedConfig,
+  // @ts-ignore
   outputDir: 'dist/',
   server: {
     host: 'localhost',
@@ -15,7 +16,7 @@ export default defineConfig({
     }
   },
   plugins: [
-    ...sharedConfig.plugins,
+    ...(sharedConfig.plugins || []),
     mkcert({
       source: 'coding'
     }),
@@ -29,7 +30,7 @@ export default defineConfig({
         },
         cssSideEffects: (e) => {
           const styleId = 'as-style-common';
-          let styleNode = document.getElementById(styleId);
+          const styleNode = document.getElementById(styleId);
           if (styleNode) {
             styleNode.textContent = e;
           } else {
@@ -38,7 +39,7 @@ export default defineConfig({
             o.classList.add('as-style');
             o.setAttribute('data-as-protected', 'true');
             o.textContent = e;
-            document.head.append(o);
+            (document.head || document.documentElement).append(o);
           }
         }
       }
