@@ -81,6 +81,7 @@ export default {
   box-shadow: none;
   background-color: var(--as-bg-color);
   display: flex;
+  list-style: none;
 }
 
 .as-horizontal {

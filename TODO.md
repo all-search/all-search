@@ -1,7 +1,12 @@
 # 项目重构与优化 TODO
 
 ## 1. 架构与工程化 (High Priority)
-- [ ] **引入 TypeScript**: 目前项目主要使用 JS，缺乏类型约束。引入 TS 可以显著降低维护成本，尤其是在处理复杂的搜索引擎配置和存储逻辑时。
+- [ ] **引入 TypeScript (渐进式重构)**:
+    - [x] **阶段 1：基础设施搭建**：安装 TS 依赖，配置 `tsconfig.json`（开启 `allowJs`），更新 ESLint 配置支持 TS。
+    - [x] **阶段 2：核心配置类型化**：定义搜索引擎配置（Sites）、存储数据结构（Storage）的全局类型声明（`.d.ts`）。
+    - [ ] **阶段 3：工具函数迁移**：将 `src/util/` 下的基础工具函数（已完成 `common.ts`, `dom.ts`）重构为 `.ts`。
+    - [ ] **阶段 4：组件按需迁移**：先从简单组件（Button, Icon）开始，逐步迁移核心组件（Menu, SearchDialog）到 `<script setup lang="ts">`。
+    - [ ] **阶段 5：全量类型检查**：逐步收紧 `tsconfig` 校验规则，消除 `any`，最终实现全量类型覆盖。
 - [x] **统一路径别名**: 目前在所有 package 中统一配置 `@src/` 指向 `src/`（避开 WXT 默认别名冲突）。
 - [ ] **合并 Vite 配置**: `packages/script` 和 `packages/options` 的 `vite.config` 存在重复逻辑，建议提取公共配置到根目录。
 - [x] **优化环境变量管理**: 创建了 `src/env.js` 统一管理 `VITE_TARGET` 及 Feature Flags，已在 `storage.js` 中应用。

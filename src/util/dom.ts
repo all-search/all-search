@@ -1,6 +1,9 @@
 import { GM_getResourceText } from 'vite-plugin-monkey/dist/client'
 
-export function checkBody () {
+/**
+ * 检查 body 是否已加载
+ */
+export function checkBody (): Promise<void> {
   let time = 0
   return new Promise((resolve, reject) => {
     if (document && document.body) {
@@ -34,25 +37,35 @@ export function checkBody () {
   })
 }
 
-export function addStyle (styleContent) {
+/**
+ * 添加简单的样式节点
+ */
+export function addStyle (styleContent: string): void {
   if (!styleContent) {
     return
   }
   const style = document.createElement('style')
   style.innerHTML = styleContent
-  style.class = 'all-search-style'
+  // 注意：className 是标准的，class 是非标准的
+  style.className = 'all-search-style'
   const head = document.getElementsByTagName('head')[0]
-  head.appendChild(style)
+  if (head) {
+    head.appendChild(style)
+  }
 }
 
-function addLink (url, name) {
+/**
+ * 添加外部链接样式
+ */
+function addLink (url: string, name?: string): void {
   if (!url) {
     return
   }
   if (name) {
     const list = document.styleSheets
     for (let i = 0; i < list.length; i++) {
-      if (list[i].ownerNode.className === name) {
+      const node = list[i].ownerNode as HTMLElement
+      if (node && node.className === name) {
         return
       }
     }
@@ -61,17 +74,21 @@ function addLink (url, name) {
   link.href = url
   link.rel = 'stylesheet'
   link.type = 'text/css'
-  link.crossorigin = 'anonymous'
+  link.setAttribute('crossorigin', 'anonymous')
   const head = document.getElementsByTagName('head')[0]
-  head.appendChild(link)
+  if (head) {
+    head.appendChild(link)
+  }
 }
 
-export function RAFInterval (callback, period, runNow) {
-  // 一秒60次，对应1秒1000ms
+/**
+ * 基于 requestAnimationFrame 的定时执行
+ */
+export function RAFInterval (callback: () => boolean | void, period: number, runNow?: boolean): void {
   const needCount = period / 1000 * 60
-  let times = 0 // 已经计数的数量
+  let times = 0
 
-  if (runNow === true) { // 对于立即执行函数的立即判定，否则进行
+  if (runNow === true) {
     const shouldFinish = callback()
     if (shouldFinish) {
       return
@@ -80,14 +97,11 @@ export function RAFInterval (callback, period, runNow) {
 
   function step () {
     if (times < needCount) {
-      // 计数未结束-继续计数
       times++
       requestAnimationFrame(step)
     } else {
-      // 计数结束-停止计数，判定结果
       const shouldFinish = callback() || false
       if (!shouldFinish) {
-        // 返回值为false，重启计数器
         times = 0
         requestAnimationFrame(step)
       }
@@ -97,13 +111,14 @@ export function RAFInterval (callback, period, runNow) {
   requestAnimationFrame(step)
 }
 
-export function removeNode (cssSelectorOrFunction) {
+/**
+ * 移除指定的 DOM 节点或运行移除逻辑
+ */
+export function removeNode (cssSelectorOrFunction: string | (() => void)): void {
   try {
     if (typeof (cssSelectorOrFunction) === 'string') {
-      let removeNodes = document.querySelectorAll(cssSelectorOrFunction)
-      for (let i = 0; i < removeNodes.length; i++) {
-        removeNodes[i].remove()
-      }
+      const removeNodes = document.querySelectorAll(cssSelectorOrFunction)
+      removeNodes.forEach(node => node.remove())
     } else if (typeof (cssSelectorOrFunction) === 'function') {
       cssSelectorOrFunction()
     }
@@ -112,38 +127,36 @@ export function removeNode (cssSelectorOrFunction) {
   }
 }
 
-export function addStyleContent (css, className, addToTarget, isReload = false) {
-  // 添加CSS代码，不考虑文本载入时间，只执行一次-无论成功与否，带有className
-  RAFInterval(function () {
-    /**
-     * addToTarget这里不要使用head标签,head标签的css会在html载入时加载，
-     * html加载后似乎不会再次加载，body会自动加载
-     * **/
-    let addTo = document.querySelector(addToTarget)
-    if (typeof (addToTarget) === 'undefined') {
-      addTo = (document.body || document.head || document.documentElement || document)
+/**
+ * 添加 CSS 内容到指定容器
+ */
+export function addStyleContent (css: string, className?: string, addToTarget?: string, isReload = false): void {
+  RAFInterval(() => {
+    let addTo: Node | null = null
+    if (typeof addToTarget !== 'undefined') {
+      addTo = document.querySelector(addToTarget)
+    } else {
+      addTo = document.body || document.head || document.documentElement || document
     }
-    // 如果没有目标节点(则直接加) || 有目标节点且找到了节点(进行新增)
-    if (typeof (addToTarget) === 'undefined' ||
-      (typeof (addToTarget) !== 'undefined' &&
-        document.querySelector(addToTarget) !== null)
-    ) {
-      // 如果true 强行覆盖，不管有没有--先删除
-      // 如果false，不覆盖，但是如果有的话，要退出，不存在则新增--无需删除
-      if (isReload) {
+
+    if (typeof addToTarget === 'undefined' || (addToTarget !== undefined && document.querySelector(addToTarget) !== null)) {
+      if (isReload && className) {
         removeNode('.' + className)
-      } else if (!isReload && document.querySelector('.' + className) !== null) {
-        // 节点存在 && 不准备覆盖
+      } else if (!isReload && className && document.querySelector('.' + className) !== null) {
         return true
       }
-      let cssNode = document.createElement('style')
+
+      const cssNode = document.createElement('style')
       if (className) {
         cssNode.className = className
       }
       cssNode.setAttribute('type', 'text/css')
       cssNode.innerHTML = css
+      
       try {
-        addTo.appendChild(cssNode)
+        if (addTo) {
+          addTo.appendChild(cssNode)
+        }
       } catch (e) {
         // ignore
       }
@@ -152,8 +165,11 @@ export function addStyleContent (css, className, addToTarget, isReload = false) 
   }, 20, true)
 }
 
-export function addStyleResource (name, link) {
-  let styleContent
+/**
+ * 从资源中载入样式
+ */
+export function addStyleResource (name: string, link: string): void {
+  let styleContent: string | undefined
   if (GM_getResourceText) {
     styleContent = GM_getResourceText(name)
   }
@@ -164,11 +180,17 @@ export function addStyleResource (name, link) {
   }
 }
 
-export function getAsRoot () {
+/**
+ * 获取根节点
+ */
+export function getAsRoot (): HTMLElement | null {
   return document.getElementById('all-search')
 }
 
-export function createAsRoot () {
+/**
+ * 创建根节点
+ */
+export function createAsRoot (): HTMLElement {
   const el = document.createElement('div')
   el.id = 'all-search'
   return el

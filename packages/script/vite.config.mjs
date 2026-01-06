@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import monkey from 'vite-plugin-monkey'
+import mkcert from 'vite-plugin-mkcert'
 import scriptConfig from './src/script-config'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -15,7 +16,17 @@ export default defineConfig({
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
   },
+  server: {
+    host: 'localhost',
+    https: true,
+    headers: {
+      'Access-Control-Allow-Private-Network': 'true'
+    }
+  },
   plugins: [
+    mkcert({
+      source: 'coding'
+    }),
     vue(),
     monkey({
       entry: 'index.js',

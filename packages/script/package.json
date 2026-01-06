@@ -5,6 +5,7 @@
     "dev": "vite",
     "build": "vite build"
   },
-  "dependencies": {
+  "devDependencies": {
+    "vite-plugin-mkcert": "^1.17.9"
   }
 }
