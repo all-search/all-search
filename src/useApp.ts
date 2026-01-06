@@ -1,19 +1,23 @@
-import { computed, watch, ref, unref, toValue, watchEffect } from 'vue'
-import { initSpecialStyle } from './util/addSpecialStyle'
-import { addCustomStyle, changeBodyStyle, protectStyle } from './util/initStyle'
+import { computed, ref, unref, toValue } from 'vue'
 import { site } from './config/siteInfo'
 import { useFullScreen } from './util/fullScreen'
 import useMode from './components/useMode'
 import useSwitchShow from './components/useSwitchShow'
 import useAutoHide from './components/useAutoHide'
 import useToolbar from './components/useToolbar'
+import { useStyleManager } from './useStyleManager'
 
 export function useApp () {
   const { isFullScreen } = useFullScreen()
   const { value: mode, direction } = useMode()
   const { show } = useSwitchShow()
-  useAutoHide()
   const { visible: toolbarVisible } = useToolbar('tm')
+
+  // 自动化隐藏逻辑
+  useAutoHide()
+
+  // 样式管理解耦
+  useStyleManager(mode, direction, show)
 
   const classList = computed(() => ([
     `as-${toValue(direction)}`,
@@ -23,33 +27,6 @@ export function useApp () {
 
   const visible = computed(() => {
     return !site.invisible && !unref(isFullScreen)
-  })
-
-  // 同步 Body 样式状态
-  watchEffect(() => {
-    const remove = site.invisible || site.disabled || toValue(show) === 2
-    changeBodyStyle(toValue(mode), toValue(direction), remove)
-  })
-
-  let isInit = false
-
-  /**
-   * 初始化样式保护与站点适配
-   */
-  function init (currentSite: typeof site) {
-    if (isInit || currentSite.disabled) {
-      return
-    }
-    protectStyle()
-    initSpecialStyle()
-    addCustomStyle(toValue(mode), currentSite as any)
-    isInit = true
-  }
-
-  watch(site, newSite => {
-    init(newSite)
-  }, {
-    immediate: true
   })
 
   // 搜索弹窗逻辑
