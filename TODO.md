@@ -4,7 +4,7 @@
 - [ ] **引入 TypeScript (渐进式重构)**:
     - [x] **阶段 1：基础设施搭建**：安装 TS 依赖，配置 `tsconfig.json`（开启 `allowJs`），更新 ESLint 配置支持 TS。
     - [x] **阶段 2：核心配置类型化**：定义搜索引擎配置（Sites）、存储数据结构（Storage）的全局类型声明（`.d.ts`）。
-    - [ ] **阶段 3：工具函数迁移**：将 `src/util/` 下的基础工具函数（已完成 `common.ts`, `dom.ts`）重构为 `.ts`。
+    - [x] **阶段 3：工具函数迁移**：将 `src/util/` 下的基础工具函数（已完成 `common.ts`, `dom.ts`, `debounce.ts`, `raf.ts` 等）重构为 `.ts`。
     - [ ] **阶段 4：组件按需迁移**：先从简单组件（Button, Icon）开始，逐步迁移核心组件（Menu, SearchDialog）到 `<script setup lang="ts">`。
     - [ ] **阶段 5：全量类型检查**：逐步收紧 `tsconfig` 校验规则，消除 `any`，最终实现全量类型覆盖。
 - [x] **统一路径别名**: 目前在所有 package 中统一配置 `@src/` 指向 `src/`（避开 WXT 默认别名冲突）。
@@ -32,8 +32,7 @@
 - [ ] **单元测试**: 为 `src/util/` 下的工具函数编写 Jest/Vitest 测试，确保逻辑重构后的稳定性。
 
 ## 5. 代码清理
-- [ ] **手动删除旧文件**: 
-    - `src/components/menuItem.vue` 和 `src/components/jsonEditor.vue`
-    - `src/util/storage.js`, `src/util/storage-tm.js`, `src/util/storage-ext.js`, `src/util/storage-bridge.js`
-- [ ] 统一组件命名规范（目前存在 `menuItem.vue` 和 `form-item.vue` 混合使用的情况，建议统一为 kebab-case 或 PascalCase）。
+- [x] **手动删除旧文件**:
+    - [x] `src/components/menuItem.vue` 和 `src/components/jsonEditor.vue`
+    - [x] `src/util/storage.js`, `src/util/storage-tm.js`, `src/util/storage-ext.js`, `src/util/storage-bridge.js`- [ ] 统一组件命名规范（目前存在 `menuItem.vue` 和 `form-item.vue` 混合使用的情况，建议统一为 kebab-case 或 PascalCase）。
 - [x] 清理 `src/util/index.js` 中未使用的变量和 `console.log`。

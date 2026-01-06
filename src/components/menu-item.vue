@@ -50,7 +50,7 @@
 <script>
 import { computed, ref } from 'vue'
 import popperComp from './popper'
-import { site } from '../config/siteInfo.js'
+import { site } from '../config/siteInfo'
 import { getQueryString } from '../util'
 import { getKeyword } from '../util/getKeyword'
 import icon from './icon'
@@ -112,7 +112,8 @@ export default {
           const el = document.querySelector(selectors)
           keyword = el ? el.value : ''
         } else if (query) {
-          query.some(name => {
+          const queryList = Array.isArray(query) ? query : [query]
+          queryList.some(name => {
             const word = getQueryString(name)
             keyword = word
             return !!word

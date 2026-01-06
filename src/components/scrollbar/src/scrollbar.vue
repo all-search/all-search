@@ -59,7 +59,7 @@ import {
   removeResizeListener,
   debugWarn,
   isNumber
-} from './util.js'
+} from './util.ts'
 
 export default defineComponent({
   components: { Bar },

@@ -15,7 +15,7 @@ export default defineConfig({
     permissions: ['storage']
   },
   modules: ['@wxt-dev/module-vue'],
-  runner: {
+  webExt: {
     startUrls: ['https://www.baidu.com']
   },
   entrypointsDir: "entries",

@@ -12,9 +12,9 @@ export { debounce }
  */
 export function getQueryString (name: string, url?: string): string {
   const targetUrl = url || window.location.href
-  const r = new RegExp('(?|#|&)' + name + '=([^&#]*)(&|#|$)')
+  const r = new RegExp('[?#&]' + name + '=([^&#]*)(&|#|$)')
   const m = targetUrl.match(r)
-  return decodeURIComponent(!m ? '' : m[2])
+  return decodeURIComponent(!m ? '' : m[1])
 }
 
 /**

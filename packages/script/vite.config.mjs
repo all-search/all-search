@@ -1,21 +1,12 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
 import monkey from 'vite-plugin-monkey'
 import mkcert from 'vite-plugin-mkcert'
 import scriptConfig from './src/script-config'
-import path from 'path'
-import { fileURLToPath } from 'url'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+import sharedConfig from '../../vite.config.shared.mjs'
 
 export default defineConfig({
+  ...sharedConfig,
   outputDir: 'dist/',
-  resolve: {
-    alias: {
-      '@src': path.resolve(__dirname, '../../src')
-    },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
-  },
   server: {
     host: 'localhost',
     https: true,
@@ -24,12 +15,12 @@ export default defineConfig({
     }
   },
   plugins: [
+    ...sharedConfig.plugins,
     mkcert({
       source: 'coding'
     }),
-    vue(),
     monkey({
-      entry: 'index.js',
+      entry: 'index.ts',
       userscript: scriptConfig,
       build: {
         fileName: 'index.user.js',

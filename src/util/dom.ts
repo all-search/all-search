@@ -181,17 +181,32 @@ export function addStyleResource (name: string, link: string): void {
 }
 
 /**
+ * 创建并初始化应用根节点位置
+ */
+export async function initAppAnchor (): Promise<HTMLElement> {
+  const { getStorage } = await import('./storage')
+  const mode = await getStorage('mode') || 'top'
+
+  let anchor = document.getElementById('all-search')
+  if (!anchor) {
+    anchor = document.createElement('div')
+    anchor.id = 'all-search'
+
+    // 根据布局模式决定插入位置
+    if (mode === 'bottom') {
+      // bottom 模式：插入到 html 之后，解决 z-index 问题
+      document.documentElement.appendChild(anchor)
+    } else {
+      // 其他模式：插入到 body 之前（默认行为）
+      document.documentElement.insertBefore(anchor, document.body)
+    }
+  }
+  return anchor
+}
+
+/**
  * 获取根节点
  */
 export function getAsRoot (): HTMLElement | null {
   return document.getElementById('all-search')
-}
-
-/**
- * 创建根节点
- */
-export function createAsRoot (): HTMLElement {
-  const el = document.createElement('div')
-  el.id = 'all-search'
-  return el
 }
