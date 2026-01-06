@@ -1,4 +1,4 @@
-import { ref, computed, WritableComputedRef, Ref } from 'vue'
+import { ref, computed, WritableComputedRef, Ref, nextTick } from 'vue'
 import { getStorage, setStorage } from '../util/storage'
 
 const isDef = (val: any) => val !== undefined && val !== null
@@ -16,11 +16,18 @@ async function init<T> (name: string, defaultVal: T, reg?: RegExp): Promise<T> {
   }
 }
 
+interface NextOptions<T> {
+  value?: T;
+  rollback?: boolean;
+}
+
 interface UseConfigParams<T> {
   name: string;
   initVal?: T;
   defaultVal: T;
   reg?: RegExp;
+  get?: (val: T) => T;
+  set?: (val: T, next: (options?: NextOptions<T>) => void) => void;
 }
 
 export default function useConfig<T> (params: UseConfigParams<T>): WritableComputedRef<T> {
@@ -37,10 +44,29 @@ export default function useConfig<T> (params: UseConfigParams<T>): WritableCompu
   })
 
   return computed({
-    get: () => valRef.value,
-    set: (val: T) => {
-      valRef.value = val
-      setStorage<T>(name, isDef(val) ? val : defaultVal)
+    get: () => params.get ? params.get(valRef.value) : valRef.value,
+    set: (v: T) => {
+      const next = (options?: NextOptions<T>) => {
+        if (options?.rollback === true) {
+          const oldVal = valRef.value
+          // 通过先清空再恢复，强制触发 Vue 的响应式更新以回滚 UI
+          valRef.value = undefined as any
+          nextTick(() => {
+            valRef.value = oldVal
+          })
+          return
+        }
+
+        const finalVal = (options && 'value' in options) ? options.value : v
+        valRef.value = finalVal as T
+        setStorage<T>(name, isDef(finalVal) ? (finalVal as T) : defaultVal)
+      }
+
+      if (params.set) {
+        params.set(v, next)
+      } else {
+        next()
+      }
     }
   })
 }
