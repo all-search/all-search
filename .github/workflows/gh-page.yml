@@ -2,7 +2,7 @@ name: Deploy Github Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["master"]
+    branches: ["master", "test-actions"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -29,10 +29,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js 18.x # 配置Node环境
+      - name: Use Node.js 20.x # 配置Node环境
         uses: actions/setup-node@v4 # 配置脚本来自 https://github.com/actions/setup-node
         with:
-          node-version: 18
+          node-version: 20
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm
@@ -58,7 +58,7 @@ jobs:
 
       - name: Build
         run: |
-          npm run build:options
+          pnpm run build:options
           cp packages/options/dist/index.html packages/options/dist/404.html
 
       - name: Upload artifact
@@ -68,4 +68,5 @@ jobs:
           path: 'packages/options/dist'
       - name: Deploy to GitHub Pages
         id: deployment
+        if: github.ref == 'refs/heads/master'
         uses: actions/deploy-pages@v4

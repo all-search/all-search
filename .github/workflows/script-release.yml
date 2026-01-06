@@ -3,30 +3,32 @@ on:
   push:
     branches:
       - master
+      - test-actions
+  workflow_dispatch:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 14.x # 配置Node环境
-        uses: actions/setup-node@v3 # 配置脚本来自 https://github.com/actions/setup-node
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 8
           run_install: false
 
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         name: Setup pnpm cache
@@ -41,10 +43,10 @@ jobs:
 
       - name: Build
         run: |
-          npm run build:script
+          pnpm run build:script
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: release # The branch the action should deploy to.
-          folder: dist # The folder the action should deploy.
+          branch: ${{ github.ref == 'refs/heads/master' && 'release' || 'test-release' }}
+          folder: packages/script/dist
