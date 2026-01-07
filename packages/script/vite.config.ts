@@ -28,19 +28,33 @@ export default defineConfig({
         externalGlobals: {
           vue: ['Vue', () => `https://registry.npmmirror.com/vue/3.4.15/files/dist/vue.global.prod.js`]
         },
-        cssSideEffects: (e) => {
-          const styleId = 'as-style-common';
-          const styleNode = document.getElementById(styleId);
-          if (styleNode) {
-            styleNode.textContent = e;
+        cssSideEffects: (css) => {
+          const inject = () => {
+            const hostId = 'all-search';
+            const styleId = 'as-style-common';
+            const host = document.getElementById(hostId);
+
+            // 优先注入影子，如果没有影子则注入 head
+            const container = host?.shadowRoot || document.head || document.documentElement;
+            let style = container.querySelector('#' + styleId);
+
+            if (!style) {
+              style = document.createElement('style');
+              style.id = styleId;
+              container.append(style);
+            }
+            style.textContent = css;
+          };
+
+          // 1. 正常的页面加载监听
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', inject);
           } else {
-            const o = document.createElement('style');
-            o.id = styleId;
-            o.classList.add('as-style');
-            o.setAttribute('data-as-protected', 'true');
-            o.textContent = e;
-            (document.head || document.documentElement).append(o);
+            inject();
           }
+
+          // 2. 监听自定义事件：当业务逻辑创建好 Shadow DOM 后通知我
+          window.addEventListener('as-inject-style', inject);
         }
       }
     })

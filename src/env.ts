@@ -12,6 +12,6 @@ export interface Features {
 }
 
 export const features: Features = {
-  useShadowDom: isPlugin,
+  useShadowDom: true, // 统一开启 Shadow DOM
   useGmApi: isScript
 }

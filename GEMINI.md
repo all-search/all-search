@@ -16,7 +16,53 @@
 - **UI 组件库**: Element Plus
 - **构建工具**: Vite, WXT, pnpm
 - **样式**: SCSS
+- **隔离技术**: Shadow DOM (仅用于注入脚本/插件 Content Script)
 - **其他**: 使用 `@floating-ui/vue` 处理定位，`jsoneditor` 用于配置编辑。
+
+## Shadow DOM & 样式隔离
+
+本项目在注入脚本（Content Script）中全面采用 Shadow DOM 技术，以实现与原网页的完全样式隔离。
+
+### 1. 核心 DOM 获取函数 (Unified DOM Access)
+为了兼容脚本版和插件版不同的 DOM 结构，必须统一使用 `src/util/dom.ts` 提供的获取函数：
+
+| 函数名 | 返回内容 | 作用 |
+| :--- | :--- | :--- |
+| **`getAsRoot()`** | **宿主元素 (Host)** | 即 `#all-search` 或 `<all-search-ui>`。用于操作类名（如布局切换 `body-top`）。 |
+| **`getAsShadowRoot()`** | **影子根 (ShadowRoot)** | 隔离层的根节点。用于查询影子内部的样式或节点。 |
+| **`getAsMountAnchor()`** | **挂载锚点 (MountAnchor)** | 影子根内部的 `div#as-mount-anchor`。用于 Vue 应用挂载和 `Teleport` 目标。 |
+
+### 2. 样式隔离与注入逻辑
+- **样式作用域**: 脚本版和插件版均在 Shadow DOM 中运行。
+- **布局切换**: 通过 `getAsRoot().classList.add('body-top')` 修改宿主类名，内部 CSS 使用 `:host(.body-top)` 进行响应。
+- **样式注入**: 
+  - 静态样式由各构建工具（WXT/Monkey）自动注入影子根。
+  - 动态样式使用 `injectStyle(css)`，它会自动通过 `getAsShadowRoot()` 寻找注入目标。
+- **自动注入**: 插件版由 WXT 自动处理。脚本版由 `vite-plugin-monkey` 的 `cssSideEffects` 钩子处理。
+- **动态注入**: 若需动态添加样式，使用 `injectStyle(css)` 函数，它会自动定位当前环境的影子根。
+- **注意**: 影子根内部无法直接继承原网页的 CSS。若需使用全局图标或字体，需在 `common.scss` 中包含相关定义。
+
+### 3. Vue Teleport 使用
+- **严禁** 直接传送至 `body` 或 `#all-search`。
+- **推荐做法**: 
+  ```typescript
+  import { getAsRoot } from '@src/util'
+  const teleportTarget = getAsRoot()
+  // <teleport v-if="teleportTarget" :to="teleportTarget">
+  ```
+
+## 环境适配逻辑
+
+项目通过 `src/env.ts` 区分不同的运行平台，开发时应优先使用以下变量：
+
+- **`isScript`**: 是否为油猴脚本环境（基于 `VITE_TARGET=script`）。
+- **`isPlugin`**: 是否为浏览器扩展环境（基于 `VITE_TARGET=plugin`）。
+- **`features.useShadowDom`**: 全局 Shadow DOM 开关，目前默认开启。
+
+### 开发规范
+- **组件风格**: 使用 Vue 3 `<script setup>` 或标准组合式 API。
+- **样式**: 优先使用 SCSS，变量统一定义在 `src/assets/common.scss`。
+- **存储适配**: 统一使用 `src/util/storage.js` 中的抽象层，以兼容用户脚本（GM storage）和扩展程序（browser storage）环境。
 
 ## 快速开始
 

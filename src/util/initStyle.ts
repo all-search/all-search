@@ -61,7 +61,7 @@ export const protectStyle = function (): void {
  */
 export const changeBodyStyle = function (mode: string, direction: string, remove: boolean = true): void {
   const el = getAsRoot()
-  if (!el) return
+  if (!el || !el.classList) return
   el.classList.remove('body-top', 'body-bottom', 'body-left', 'body-right')
   el.classList.remove('body-vertical', 'body-horizontal')
   if (!remove) {

@@ -51,7 +51,7 @@ const {
 @use "./assets/common" as *;
 @use "./assets/layout";
 
-body, #all-search {
+:host, #all-search {
   --as-horizontal-height: #{$height};
   --as-primary-color: #1890ff;
   --as-bg-color: #ffffff;
@@ -60,7 +60,7 @@ body, #all-search {
   --as-border-color: #e8e8e8;
 }
 
-#all-search {
+:host, #all-search {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   position: relative;
 }

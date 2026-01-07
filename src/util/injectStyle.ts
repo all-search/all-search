@@ -1,29 +1,41 @@
 import raf from './raf'
+import { getAsRoot } from './dom'
 
 let id: symbol | null = null
 let styles = ''
 
 export function injectStyle (cssContent: string): void {
   styles += cssContent
-  const styleNode = document.querySelector('#as-style-common') as any
+  
+  const host = getAsRoot()
+  const container = host?.shadowRoot
+  
+  if (!container) {
+    return
+  }
+
+  const styleNode = container.querySelector('#as-style-common') as any
   
   if (styleNode && styleNode.styleSheet) {
     styleNode.styleSheet.cssText += styles
     styles = ''
   } else if (!id) {
     id = raf.setTimeout(() => {
-      const cssNode = document.createElement('style')
-      cssNode.setAttribute('type', 'text/css')
-      cssNode.classList.add('as-style')
-      cssNode.id = 'as-style-common'
-      cssNode.appendChild(document.createTextNode(styles))
-      styles = ''
-      
-      const asRoot = document.getElementById('all-search')
-      const container = (asRoot || document.body || document.head || document.documentElement || document)
-      if (container) {
-        container.appendChild(cssNode)
+      const currentHost = getAsRoot()
+      const currentContainer = currentHost?.shadowRoot
+      if (!currentContainer) return
+
+      let currentStyleNode = currentContainer.querySelector('#as-style-common')
+      if (!currentStyleNode) {
+        currentStyleNode = document.createElement('style')
+        currentStyleNode.setAttribute('type', 'text/css')
+        currentStyleNode.classList.add('as-style')
+        currentStyleNode.id = 'as-style-common'
+        currentContainer.appendChild(currentStyleNode)
       }
+      
+      currentStyleNode.appendChild(document.createTextNode(styles))
+      styles = ''
       id = null
     }, 0)
   }

@@ -29,6 +29,10 @@ const { favicon, clearIconCache } = useFavicon()
 const { visible: toolbarVisible } = useToolbar()
 const { resetSites } = useSites('tm')
 
+import { getAsMountAnchor } from '@src/util'
+
+const teleportTarget = getAsMountAnchor()
+
 const hide = () => {
   show.value = 2
 }
@@ -57,7 +61,7 @@ function changeScrollHide (e: any) {
       设置
     </div>
   </div>
-  <teleport to="#all-search">
+  <teleport v-if="teleportTarget" :to="teleportTarget">
     <transition name="overlay" appear>
       <overlay
         v-show="visible"

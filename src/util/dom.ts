@@ -1,5 +1,4 @@
-import { GM_getResourceText } from 'vite-plugin-monkey/dist/client'
-import { getStorage } from './storage'
+import { isScript, isPlugin } from '../env'
 
 /**
  * 检查 body 是否已加载
@@ -47,7 +46,6 @@ export function addStyle (styleContent: string): void {
   }
   const style = document.createElement('style')
   style.innerHTML = styleContent
-  // 注意：className 是标准的，class 是非标准的
   style.className = 'all-search-style'
   const head = document.getElementsByTagName('head')[0]
   if (head) {
@@ -56,29 +54,18 @@ export function addStyle (styleContent: string): void {
 }
 
 /**
- * 添加外部链接样式
+ * 移除指定的 DOM 节点或运行移除逻辑
  */
-function addLink (url: string, name?: string): void {
-  if (!url) {
-    return
-  }
-  if (name) {
-    const list = document.styleSheets
-    for (let i = 0; i < list.length; i++) {
-      const node = list[i].ownerNode as HTMLElement
-      if (node && node.className === name) {
-        return
-      }
+export function removeNode (cssSelectorOrFunction: string | (() => void)): void {
+  try {
+    if (typeof (cssSelectorOrFunction) === 'string') {
+      const removeNodes = document.querySelectorAll(cssSelectorOrFunction)
+      removeNodes.forEach(node => node.remove())
+    } else if (typeof (cssSelectorOrFunction) === 'function') {
+      cssSelectorOrFunction()
     }
-  }
-  const link = document.createElement('link')
-  link.href = url
-  link.rel = 'stylesheet'
-  link.type = 'text/css'
-  link.setAttribute('crossorigin', 'anonymous')
-  const head = document.getElementsByTagName('head')[0]
-  if (head) {
-    head.appendChild(link)
+  } catch (e) {
+    // ignore
   }
 }
 
@@ -113,19 +100,38 @@ export function RAFInterval (callback: () => boolean | void, period: number, run
 }
 
 /**
- * 移除指定的 DOM 节点或运行移除逻辑
+ * 获取宿主节点 (Host / Anchor)
  */
-export function removeNode (cssSelectorOrFunction: string | (() => void)): void {
-  try {
-    if (typeof (cssSelectorOrFunction) === 'string') {
-      const removeNodes = document.querySelectorAll(cssSelectorOrFunction)
-      removeNodes.forEach(node => node.remove())
-    } else if (typeof (cssSelectorOrFunction) === 'function') {
-      cssSelectorOrFunction()
-    }
-  } catch (e) {
-    // ignore
+export function getAsRoot (): HTMLElement | null {
+  if (isScript) {
+    return document.getElementById('all-search')
   }
+  if (isPlugin) {
+    return document.querySelector('all-search-ui') as HTMLElement
+  }
+  return document.getElementById('all-search') || document.querySelector('all-search-ui') as HTMLElement
+}
+
+/**
+ * 获取影子根 (ShadowRoot)
+ */
+export function getAsShadowRoot (): ShadowRoot | null {
+  return getAsRoot()?.shadowRoot || null
+}
+
+/**
+ * 获取影子内部的挂载锚点 (用于 Vue 挂载和 Teleport)
+ */
+export function getAsMountAnchor (): HTMLElement | null {
+  const shadow = getAsShadowRoot()
+  if (!shadow) return null
+  
+  // 脚本版：使用我们手动创建的 id
+  const anchor = shadow.getElementById('as-mount-anchor')
+  if (anchor) return anchor
+  
+  // 插件版 (WXT) 或回退：使用第一个子节点
+  return shadow.firstElementChild as HTMLElement
 }
 
 /**
@@ -137,13 +143,14 @@ export function addStyleContent (css: string, className?: string, addToTarget?: 
     if (typeof addToTarget !== 'undefined') {
       addTo = document.querySelector(addToTarget)
     } else {
-      addTo = document.body || document.head || document.documentElement || document
+      // 默认注入到影子根
+      addTo = getAsShadowRoot() || document.body || document.head || document.documentElement || document
     }
 
     if (typeof addToTarget === 'undefined' || (addToTarget !== undefined && document.querySelector(addToTarget) !== null)) {
       if (isReload && className) {
         removeNode('.' + className)
-      } else if (!isReload && className && document.querySelector('.' + className) !== null) {
+      } else if (!isReload && className && (addTo as HTMLElement).querySelector?.('.' + className)) {
         return true
       }
 
@@ -169,44 +176,16 @@ export function addStyleContent (css: string, className?: string, addToTarget?: 
 /**
  * 从资源中载入样式
  */
-export function addStyleResource (name: string, link: string): void {
+export function addStyleResource (name: string): void {
   let styleContent: string | undefined
-  if (GM_getResourceText) {
+  // @ts-ignore
+  if (isScript && typeof GM_getResourceText !== 'undefined') {
+    // @ts-ignore
     styleContent = GM_getResourceText(name)
   }
   if (styleContent) {
     addStyleContent(styleContent, name)
   } else {
-    addLink(link, name)
+    // 这里暂时保持原样，Link 无法注入 ShadowRoot
   }
-}
-
-/**
- * 创建并初始化应用根节点位置
- */
-export async function initAppAnchor (): Promise<HTMLElement> {
-  const mode = await getStorage<string>('mode') || 'top'
-
-  let anchor = document.getElementById('all-search')
-  if (!anchor) {
-    anchor = document.createElement('div')
-    anchor.id = 'all-search'
-
-    // 根据布局模式决定插入位置
-    if (mode === 'bottom') {
-      // bottom 模式：插入到 html 之后，解决 z-index 问题
-      document.documentElement.appendChild(anchor)
-    } else {
-      // 其他模式：插入到 body 之前（默认行为）
-      document.documentElement.insertBefore(anchor, document.body)
-    }
-  }
-  return anchor
-}
-
-/**
- * 获取根节点
- */
-export function getAsRoot (): HTMLElement | null {
-  return document.getElementById('all-search')
 }
