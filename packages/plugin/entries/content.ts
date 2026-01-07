@@ -5,18 +5,25 @@ import { defineContentScript, createShadowRootUi } from '#imports'
 import { getStorage } from '@src/util/storage'
 // @ts-ignore
 import type { ContentScriptContext } from 'wxt/client'
+import css from '@src/assets/host.scss?inline'
+import { addStyle } from '@src/util/dom'
 
 export default defineContentScript({
   matches: ['<all_urls>'],
+  cssInjectionMode: "ui",
 
   async main (ctx: ContentScriptContext) {
+    // 注入基础样式到 head，用于支撑宿主元素和 body 的布局同步
+    addStyle(css)
+
     const mode = await getStorage<string>('mode') || 'top'
 
     const ui = await createShadowRootUi(ctx, {
       name: 'all-search-ui',
       position: 'inline',
       anchor: 'html',
-      append: (anchor, container) => {
+      css,
+      append: (anchor: HTMLElement, container: HTMLElement) => {
         if (mode === 'bottom') {
           anchor.appendChild(container)
         } else {

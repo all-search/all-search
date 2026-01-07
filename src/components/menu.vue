@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-import scrollbar from './scrollbar/src/scrollbar'
+import { computed } from 'vue'
+import scrollbar from './scrollbar/src/scrollbar.vue'
 import menuItem from './menu-item.vue'
 import useAlign from './useAlign'
 import useSites from './useSites'
@@ -15,11 +15,6 @@ const props = withDefaults(defineProps<{
 
 const { sites } = useSites('tm')
 const { value: align } = useAlign()
-
-const data = reactive({
-  showTimeout: 50,
-  hideTimeout: 200
-})
 
 const menuClass = computed(() => ({
   'as-horizontal': props.mode === 'horizontal',

@@ -1,0 +1,34 @@
+@use "./common" as *;
+@use "./layout";
+
+:host, #all-search {
+  --as-horizontal-height: #{$height};
+  --as-primary-color: #1890ff;
+  --as-bg-color: #ffffff;
+  --as-primary-text-color: #606266;
+  --as-secondary-background-color: #f5f7fa;
+  --as-border-color: #e8e8e8;
+}
+
+:host, #all-search {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  position: relative;
+}
+
+// 统一适配 Shadow DOM 内部生成的模拟 html > body 结构
+:host {
+  display: block;
+
+  // 在 Shadow DOM 内部，这些选择器仅匹配模拟的标签
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  body {
+    height: var(--as-horizontal-height);
+  }
+}

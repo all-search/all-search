@@ -5,7 +5,7 @@ import { debounce } from '../util'
 
 const iconCache = ref<Record<string, string>>({})
 const isLoaded = ref(false)
-getStorage('iconCache', 'local').then(iconData => {
+getStorage('iconCache').then(iconData => {
   iconCache.value = (iconData as Record<string, string>) || {}
 }).finally(() => {
   isLoaded.value = true

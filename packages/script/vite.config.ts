@@ -10,7 +10,6 @@ export default defineConfig({
   outputDir: 'dist/',
   server: {
     host: 'localhost',
-    https: true,
     headers: {
       'Access-Control-Allow-Private-Network': 'true'
     }
@@ -22,7 +21,7 @@ export default defineConfig({
     }),
     monkey({
       entry: 'index.ts',
-      userscript: scriptConfig,
+      userscript: scriptConfig as any,
       build: {
         fileName: 'index.user.js',
         externalGlobals: {
@@ -33,15 +32,17 @@ export default defineConfig({
             const hostId = 'all-search';
             const styleId = 'as-style-common';
             const host = document.getElementById(hostId);
+            const shadowRoot = host?.shadowRoot;
 
-            // 优先注入影子，如果没有影子则注入 head
-            const container = host?.shadowRoot || document.head || document.documentElement;
-            let style = container.querySelector('#' + styleId);
+            // 寻找注入容器：优先寻找影子内部的模拟 head，然后是影子根，最后是文档 head
+            const container: any = shadowRoot?.querySelector('head') || shadowRoot || document.head || document.documentElement;
+
+            let style = container?.querySelector('#' + styleId);
 
             if (!style) {
               style = document.createElement('style');
               style.id = styleId;
-              container.append(style);
+              container?.append(style);
             }
             style.textContent = css;
           };

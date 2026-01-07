@@ -21,25 +21,36 @@ async function init (): Promise<void> {
   // 手动创建 Shadow Root
   const shadowRoot = host.shadowRoot || host.attachShadow({ mode: 'open' })
   
-  // 创建一个内部挂载锚点，方便 getAsMountAnchor 获取
-  let mountAnchor = shadowRoot.getElementById('as-mount-anchor')
-  if (!mountAnchor) {
-    mountAnchor = document.createElement('div')
-    mountAnchor.id = 'as-mount-anchor'
-    shadowRoot.appendChild(mountAnchor)
+  // 模拟 WXT 的结构: html > head + body
+  let mockHtml = shadowRoot.querySelector('html')
+  if (!mockHtml) {
+    mockHtml = document.createElement('html')
+    const mockHead = document.createElement('head')
+    const mockBody = document.createElement('body')
+    mockBody.id = 'as-mount-anchor'
+    mockHtml.appendChild(mockHead)
+    mockHtml.appendChild(mockBody)
+    shadowRoot.appendChild(mockHtml)
   }
 
+  const mountAnchor = shadowRoot.getElementById('as-mount-anchor')
+  
   // 抛出事件通知 vite-plugin-monkey 的 cssSideEffects 注入样式
   window.dispatchEvent(new CustomEvent('as-inject-style'))
   
   // 开发模式补丁：vite-plugin-monkey 在 dev 模式下可能直接注入到 head
-  // 我们需要把这些样式搬进 shadowRoot，否则 Shadow DOM 内部无样式
+  // 我们需要把这些样式搬进 shadowRoot 内部的 head，否则 Shadow DOM 内部无样式
   if (process.env.NODE_ENV === 'development') {
     const migrateStyles = () => {
+      const mockHead = shadowRoot.querySelector('head');
+      if (!mockHead) return;
+      
       const styles = document.querySelectorAll('style[data-vite-dev-id]');
       styles.forEach(style => {
-        if (!shadowRoot.contains(style)) {
-          shadowRoot.appendChild(style.cloneNode(true));
+        const devId = style.getAttribute('data-vite-dev-id') || '';
+        // 仅搬运属于本项目 (all-search) 的样式，避免污染
+        if (devId.includes('all-search') && !mockHead.contains(style)) {
+          mockHead.appendChild(style.cloneNode(true));
         }
       });
     };
@@ -50,7 +61,7 @@ async function init (): Promise<void> {
   }
 
   // 检查是否已经挂载过（防止某些情况下重复执行）
-  if (!(host as any).__vue_app__) {
+  if (!(host as any).__vue_app__ && mountAnchor) {
     const app = createApp(index)
     app.mount(mountAnchor)
     ;(host as any).__vue_app__ = app

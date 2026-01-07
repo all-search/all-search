@@ -27,14 +27,6 @@ const style = computed(() => ({
   left: `${styleObj.left}px`
 }))
 
-const selectionShort = computed(() => {
-  if (selection.value.length > 12) {
-    return `${selection.value.substr(0, 12)}...`
-  } else {
-    return selection.value
-  }
-})
-
 function getSelectionText() {
   return window.getSelection()?.toString().trim() || ''
 }
@@ -88,14 +80,14 @@ function isToolbarContains(el: Node) {
 }
 
 window.addEventListener('mousedown', function (e) {
-  const include = e.target && getAsRoot().contains(e.target as Node)
+  const include = e.target && getAsRoot()?.contains(e.target as Node)
   if (!include) {
     changeVisible(false)
   }
 }, true)
 
 window.addEventListener('mouseup', function (e) {
-  const include = e.target && getAsRoot().contains(e.target as Node)
+  const include = e.target && getAsRoot()?.contains(e.target as Node)
   const isToolbar = e.target && isToolbarContains(e.target as Node)
   if (!include) {
     selection.value = getSelectionText()

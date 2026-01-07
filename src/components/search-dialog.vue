@@ -4,7 +4,7 @@ import asDialog from './dialog.vue'
 import icon from './icon.vue'
 import favicon from './favicon.vue'
 import useSites from './useSites'
-import scrollbar from './scrollbar/src/scrollbar'
+import scrollbar from './scrollbar/src/scrollbar.vue'
 import { Site } from '../types/site'
 
 const props = withDefaults(defineProps<{

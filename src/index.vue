@@ -48,20 +48,5 @@ const {
 </template>
 
 <style lang="scss">
-@use "./assets/common" as *;
-@use "./assets/layout";
-
-:host, #all-search {
-  --as-horizontal-height: #{$height};
-  --as-primary-color: #1890ff;
-  --as-bg-color: #ffffff;
-  --as-primary-text-color: #606266;
-  --as-secondary-background-color: #f5f7fa;
-  --as-border-color: #e8e8e8;
-}
-
-:host, #all-search {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  position: relative;
-}
+@use "./assets/host";
 </style>

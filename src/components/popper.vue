@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, onUnmounted, toRef } from 'vue'
 import { useFloating, shift, flip, offset, autoUpdate } from '@floating-ui/vue'
 import useTimeout from '../util/useTimeout'
 import { onClickOutside } from '../util/onClickOutside'
@@ -41,6 +41,7 @@ const loaded = ref(false)
 const triggerRef = ref<HTMLElement | null>(null)
 const popoverRef = ref<HTMLElement | null>(null)
 const { registerTimeout, cancelTimeout } = useTimeout()
+const placementRef = toRef(props, 'placement')
 
 
 function show () {
@@ -74,11 +75,10 @@ function handleClickOutside (target: HTMLElement) {
 const {
   placement,
   isPositioned,
-  update,
   floatingStyles
 } = useFloating(triggerRef, popoverRef, {
   transform: false,
-  placement: props.placement,
+  placement: placementRef,
   strategy: props.strategy,
   whileElementsMounted: autoUpdate,
   middleware: [
@@ -87,13 +87,6 @@ const {
     shift({ padding: 5 })
   ]
 })
-
-watch(() => props.placement, (newVal) => {
-  update({
-    placement: newVal
-  })
-})
-
 
 onUnmounted(() => {
   stopFn && stopFn()
