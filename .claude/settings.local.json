@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "WebSearch",
+      "WebFetch(domain:floating-ui.com)",
+      "Bash(dir:*)",
+      "Bash(nul:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

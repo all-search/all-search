@@ -19,16 +19,27 @@
 :host {
   display: block;
 
-  // 在 Shadow DOM 内部，这些选择器仅匹配模拟的标签
-  html, body {
-    height: 100%;
+  // Shadow DOM 内部 html/body 默认只撑开所需高度
+  html,
+  body {
     width: 100%;
     margin: 0;
     padding: 0;
     overflow: visible;
   }
 
+  html {
+    //min-height: var(--as-horizontal-height);
+  }
+
   body {
-    height: var(--as-horizontal-height);
+    //height: var(--as-horizontal-height);
+  }
+
+  &.as-host-vertical {
+    html,
+    body {
+      height: 100%;
+    }
   }
 }

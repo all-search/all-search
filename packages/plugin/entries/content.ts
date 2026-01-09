@@ -2,10 +2,12 @@ import App from '@src/index.vue'
 import { createApp, App as VueApp } from 'vue'
 // @ts-ignore
 import { defineContentScript, createShadowRootUi } from '#imports'
-import { getStorage } from '@src/util/storage'
+import { getMountMode } from '@src/util/mount'
+import { LayoutService } from '@src/util/layoutService'
 // @ts-ignore
 import type { ContentScriptContext } from 'wxt/client'
-import css from '@src/assets/host.scss?inline'
+import globalCss from '@src/assets/global.scss?inline'
+import internalCss from '@src/assets/internal.scss?inline'
 import { addStyle } from '@src/util/dom'
 
 export default defineContentScript({
@@ -14,31 +16,37 @@ export default defineContentScript({
 
   async main (ctx: ContentScriptContext) {
     // 注入基础样式到 head，用于支撑宿主元素和 body 的布局同步
-    addStyle(css)
+    addStyle(globalCss)
 
-    const mode = await getStorage<string>('mode') || 'top'
+    const mode = await getMountMode()
+
+    let activeApp: VueApp<Element> | null = null
 
     const ui = await createShadowRootUi(ctx, {
       name: 'all-search-ui',
       position: 'inline',
       anchor: 'html',
-      css,
+      css: internalCss,
       append: (anchor: HTMLElement, container: HTMLElement) => {
-        if (mode === 'bottom') {
-          anchor.appendChild(container)
-        } else {
-          // 确保插入到 body 之前，避免被 body 内部样式影响
-          const body = document.body || document.documentElement
-          body.parentElement?.insertBefore(container, body)
-        }
+        // 使用统一的挂载逻辑
+        LayoutService.refresh(mode, container)
       },
       onMount: (container: HTMLElement) => {
+        if (activeApp) {
+          activeApp.unmount()
+          container.innerHTML = ''
+        }
+
         const app = createApp(App)
         app.mount(container)
+        activeApp = app
         return app
       },
       onRemove: (app: VueApp | undefined) => {
         app?.unmount()
+        if (activeApp === app) {
+          activeApp = null
+        }
       }
     })
 

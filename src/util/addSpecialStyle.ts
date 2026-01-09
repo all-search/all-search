@@ -1,4 +1,4 @@
-import { checkBody, getAsRoot } from './index'
+import { checkBody, getAsRoot, debounce } from './index'
 
 function delAsDataSet (item: any) {
   if (item && item.dataset) {
@@ -8,6 +8,9 @@ function delAsDataSet (item: any) {
   }
 }
 
+/**
+ * 获取真正的 fixed 祖先节点
+ */
 function getParent (el: HTMLElement): HTMLElement | null {
   let current: HTMLElement | null = el
   let go = true
@@ -89,52 +92,96 @@ function changeStyle (item: HTMLElement): void {
   }
 }
 
-function getFixedNodeList (list: (Element | null)[], deep = false): HTMLElement[] {
+function getFixedNodeList (list: (Node | Element | null)[]): HTMLElement[] {
   const weakSet = new WeakSet()
   const newList: HTMLElement[] = []
   
-  const nodes = list
-    .filter((item): item is Element => !!item)
-    .map(item => {
-      delAsDataSet(item)
-      if (deep) {
-        Array.from(item.querySelectorAll('*'))
-          .map(child => {
-            delAsDataSet(child)
-            return getRealFixedNode(child)
-          })
-          .filter((child): child is HTMLElement => !!child)
-          .forEach(child => {
-            if (!weakSet.has(child)) {
-              newList.push(child)
-              weakSet.add(child)
-            }
-          })
-      }
-      return getRealFixedNode(item)
-    })
-    .filter((item): item is HTMLElement => !!item)
-
-  nodes.forEach(item => {
-    if (!weakSet.has(item)) {
-      newList.push(item)
-      weakSet.add(item)
+  list.forEach(node => {
+    if (!isElement(node)) return
+    
+    const item = node as Element
+    delAsDataSet(item)
+    
+    const fixedNode = getRealFixedNode(item)
+    if (fixedNode && !weakSet.has(fixedNode)) {
+      newList.push(fixedNode)
+      weakSet.add(fixedNode)
     }
   })
   
   return newList
 }
 
-function fixedDomPosition () {
+const FULL_SCAN_BATCH_SIZE = 400
+let cancelFullScan = false
+let fullScanHandle: number | null = null
+
+const scheduleFullScanTask = (task: () => void): number => {
+  const idleCb = (window as any).requestIdleCallback
+  if (typeof idleCb === 'function') {
+    return idleCb(() => task())
+  }
+  return window.setTimeout(task, 16)
+}
+
+const clearFullScanTask = (): void => {
+  if (fullScanHandle !== null) {
+    const cancelIdle = (window as any).cancelIdleCallback
+    if (typeof cancelIdle === 'function') {
+      cancelIdle(fullScanHandle)
+    } else {
+      clearTimeout(fullScanHandle)
+    }
+    fullScanHandle = null
+  }
+}
+
+function startFullScan (root: HTMLElement): void {
+  cancelFullScan = true
+  clearFullScanTask()
+  cancelFullScan = false
+
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT)
+  let current = walker.currentNode as Element | null
+
+  const processBatch = () => {
+    if (cancelFullScan) {
+      return
+    }
+    const batch: Element[] = []
+    let count = 0
+    while (current && count < FULL_SCAN_BATCH_SIZE) {
+      batch.push(current)
+      current = walker.nextNode() as Element | null
+      count++
+    }
+    if (batch.length) {
+      getFixedNodeList(batch).forEach(item => {
+        changeStyle(item)
+      })
+    }
+
+    if (current && !cancelFullScan) {
+      fullScanHandle = scheduleFullScanTask(processBatch)
+    } else {
+      fullScanHandle = null
+    }
+  }
+
+  processBatch()
+}
+
+/**
+ * 防抖执行全量位置修正
+ */
+const debouncedFixedDomPosition = debounce(() => {
   checkBody().then(() => {
     if (!document.body) return
-    const nodes = Array.from(document.body.querySelectorAll('*'))
-      .filter(item => item.tagName !== 'STYLE')
-    getFixedNodeList(nodes).forEach(item => {
-      changeStyle(item)
-    })
+    startFullScan(document.body)
   })
-}
+}, 300)
+
+let observer: MutationObserver | null = null
 
 function mutationObserver () {
   const targetNode = document.body
@@ -149,26 +196,39 @@ function mutationObserver () {
     const root = getAsRoot()
     if (!root) return
 
-    const filterNodes = mutationsList
-      .filter(mutation => {
-        const target = mutation.target as HTMLElement
-        if (['BODY', 'STYLE'].includes(target.tagName) || root.contains(target)) {
-          return false
-        } else if (mutation.type === 'attributes') {
-          return ['style', 'class', 'id'].includes(mutation.attributeName || '')
-        } else if (mutation.type === 'childList') {
-          return mutation.addedNodes.length > 0
-        }
-        return false
-      })
-      .map(mutation => mutation.target as Element)
+    // 收集变动的节点
+    const changedNodes: Node[] = []
+    let needsFullScan = false
 
-    getFixedNodeList(filterNodes, true).forEach(item => {
-      changeStyle(item)
-    })
+    for (const mutation of mutationsList) {
+      const target = mutation.target as HTMLElement
+      // 忽略我们自己的组件
+      if (['BODY', 'STYLE', 'SCRIPT'].includes(target.tagName) || root.contains(target)) {
+        continue
+      }
+
+      if (mutation.type === 'childList') {
+        if (mutation.addedNodes.length > 50) {
+          // 如果一次性添加了大量节点（如首屏加载），执行全量扫描（防抖）
+          needsFullScan = true
+          break
+        }
+        mutation.addedNodes.forEach(node => changedNodes.push(node))
+      } else if (mutation.type === 'attributes') {
+        changedNodes.push(mutation.target)
+      }
+    }
+
+    if (needsFullScan) {
+      debouncedFixedDomPosition()
+    } else if (changedNodes.length > 0) {
+      getFixedNodeList(changedNodes).forEach(item => {
+        changeStyle(item)
+      })
+    }
   }
 
-  const observer = new MutationObserver(callback)
+  observer = new MutationObserver(callback)
   observer.observe(targetNode, config)
 }
 
@@ -176,6 +236,18 @@ function mutationObserver () {
  * 初始化特殊样式适配（处理 fixed 遮挡等问题）
  */
 export function initSpecialStyle (): void {
-  fixedDomPosition()
+  debouncedFixedDomPosition()
   mutationObserver()
+}
+
+/**
+ * 停止监听（用于性能回收）
+ */
+export function disconnectSpecialStyle (): void {
+  cancelFullScan = true
+  clearFullScanTask()
+  if (observer) {
+    observer.disconnect()
+    observer = null
+  }
 }

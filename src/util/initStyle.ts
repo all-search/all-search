@@ -2,10 +2,7 @@ import {
   getAsRoot,
   removeNode,
   addStyleContent
-} from './index'
-import {
-  withHookBefore
-} from './hook'
+} from './dom'
 import { Site } from '../types/site'
 
 /**
@@ -30,41 +27,23 @@ export const addCustomStyle = (mode: string, currentSite: Site, remove?: boolean
 }
 
 /**
- * 保护样式不被页面脚本移除
+ * 同步宿主页面布局
+ * 通过给 Shadow DOM 宿主元素添加类名，配合 global.scss 里的兄弟选择器推开 body
  */
-export const protectStyle = function (): void {
-  interface HookedNode extends Node {
-    __as_hooks__?: boolean;
-  }
-  const nodeProto = Node.prototype as HookedNode
-  if (nodeProto.__as_hooks__) {
-    return
-  }
-  const originalRemoveChild = nodeProto.removeChild
-  nodeProto.removeChild = withHookBefore(originalRemoveChild, (e: Node) => {
-    if (e && (e as HTMLElement).tagName === 'STYLE') {
-      const el = e as HTMLElement
-      return !(
-        el.classList.contains('as-icon') ||
-        el.classList.contains('as-style') ||
-        el.classList.contains('elPopover') ||
-        el.classList.contains('elScrollbar')
-      )
-    }
-    return true
-  }) as any
-  nodeProto.__as_hooks__ = true
-}
-
-/**
- * 切换 Body 样式
- */
-export const changeBodyStyle = function (mode: string, direction: string, remove: boolean = true): void {
+export const syncHostLayout = function (mode: string, direction: string, isVisible: boolean): void {
   const el = getAsRoot()
   if (!el || !el.classList) return
-  el.classList.remove('body-top', 'body-bottom', 'body-left', 'body-right')
-  el.classList.remove('body-vertical', 'body-horizontal')
-  if (!remove) {
-    el.classList.add(`body-${mode}`, `body-${direction}`)
-  }
+
+  // 1. 同步显示/隐藏状态类
+  el.classList.toggle('as-host-show', isVisible)
+  el.classList.toggle('as-host-hide', !isVisible)
+
+  // 2. 清理和同步位置类
+  const positionClasses = ['as-host-top', 'as-host-bottom', 'as-host-left', 'as-host-right']
+  el.classList.remove(...positionClasses)
+  el.classList.add(`as-host-${mode}`)
+
+  // 3. 同步方向类
+  el.classList.remove('as-host-horizontal', 'as-host-vertical')
+  el.classList.add(`as-host-${direction}`)
 }

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import useMode from './useMode'
 import useAlign from './useAlign'
-import useSwitchShow from './useSwitchShow'
+import useSwitchShow, { SHOW_STATUS } from './useSwitchShow'
 import useColor from './useColor'
 import useFavicon from './useFavicon'
 import useToolbar from './useToolbar'
@@ -34,14 +34,14 @@ import { getAsMountAnchor } from '@src/util'
 const teleportTarget = getAsMountAnchor()
 
 const hide = () => {
-  show.value = 2
+  show.value = SHOW_STATUS.COLLAPSED
 }
 
 function changeScrollHide (e: any) {
   if (e.target.value === 'none') {
-    show.value = 1
+    show.value = SHOW_STATUS.VISIBLE
   } else {
-    show.value = 2
+    show.value = SHOW_STATUS.COLLAPSED
   }
 }
 </script>

@@ -1,20 +1,25 @@
-import { watch } from 'vue'
+import { watch, WatchStopHandle } from 'vue'
 import useScroll from '../util/useScroll'
-import useSwitchShow from './useSwitchShow'
+import useSwitchShow, { SHOW_STATUS } from './useSwitchShow'
 
 /**
  * 自动隐藏 Hook
  */
-export default function useAutoHide (): void {
+export default function useAutoHide (): () => void {
   const { direction } = useScroll(100)
   const { show, scrollHide } = useSwitchShow()
 
-  watch([direction, scrollHide], ([newDirection, newScrollHide]) => {
+  const stop: WatchStopHandle = watch([direction, scrollHide], ([newDirection, newScrollHide]) => {
     if (
-      (show.value && newScrollHide !== 'none') &&
+      show.value === SHOW_STATUS.VISIBLE &&
+      newScrollHide !== 'none' &&
       (newDirection === newScrollHide || newScrollHide === 'all')
     ) {
-      show.value = 2
+      show.value = SHOW_STATUS.COLLAPSED
     }
   })
+
+  return () => {
+    stop()
+  }
 }

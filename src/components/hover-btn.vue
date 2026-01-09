@@ -1,26 +1,26 @@
 <script setup lang="ts">
 import { computed, toValue } from 'vue'
 import { isMobile } from '../util'
-import useSwitchShow from './useSwitchShow'
+import useSwitchShow, { SHOW_STATUS } from './useSwitchShow'
 import useMode from './useMode'
 
 const { show } = useSwitchShow()
 const isMobileVal = isMobile()
 const handleMouseEnter = () => {
   if (!isMobileVal) {
-    show.value = 1
+    show.value = SHOW_STATUS.VISIBLE
   }
 }
 const handleClick = () => {
   if (isMobileVal) {
-    show.value = 1
+    show.value = SHOW_STATUS.VISIBLE
   }
 }
 
 const { value: mode, direction } = useMode()
 const className = computed(() => {
   return {
-    'as-hide': show.value === 2,
+    'as-hide': show.value === SHOW_STATUS.COLLAPSED,
     [`as-hover-btn-${toValue(mode)}`]: true,
     [`as-hover-btn-${toValue(direction)}`]: true
   }

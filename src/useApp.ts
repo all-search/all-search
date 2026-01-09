@@ -1,4 +1,4 @@
-import { computed, ref, unref, toValue } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { site } from './config/siteInfo'
 import { useFullScreen } from './util/fullScreen'
 import useMode from './components/useMode'
@@ -19,12 +19,6 @@ export function useApp () {
   // 样式管理解耦
   useStyleManager(mode, direction, show)
 
-  const classList = computed(() => ([
-    `as-${toValue(direction)}`,
-    `as-${toValue(mode)}`,
-    toValue(show) === 1 ? 'as-show' : 'as-hide'
-  ]))
-
   const visible = computed(() => {
     return !site.invisible && !unref(isFullScreen)
   })
@@ -43,7 +37,7 @@ export function useApp () {
   return {
     disabled,
     mode,
-    classList,
+    show,
     visible,
     dialogVisible,
     openDialog,

@@ -1,5 +1,3 @@
-import { isScript, isPlugin } from '../env'
-
 /**
  * 检查 body 是否已加载
  */
@@ -103,13 +101,7 @@ export function RAFInterval (callback: () => boolean | void, period: number, run
  * 获取宿主节点 (Host / Anchor)
  */
 export function getAsRoot (): HTMLElement | null {
-  if (isScript) {
-    return document.getElementById('all-search')
-  }
-  if (isPlugin) {
-    return document.querySelector('all-search-ui') as HTMLElement
-  }
-  return document.getElementById('all-search') || document.querySelector('all-search-ui') as HTMLElement
+  return (document.querySelector('all-search-ui') || document.getElementById('all-search')) as HTMLElement
 }
 
 /**
@@ -117,6 +109,14 @@ export function getAsRoot (): HTMLElement | null {
  */
 export function getAsShadowRoot (): ShadowRoot | null {
   return getAsRoot()?.shadowRoot || null
+}
+
+/**
+ * 获取影子内部的样式容器 (head)
+ */
+export function getAsShadowHead (): HTMLElement | null {
+  const shadow = getAsShadowRoot()
+  return shadow?.querySelector('head') as HTMLElement || null
 }
 
 /**
@@ -130,8 +130,8 @@ export function getAsMountAnchor (): HTMLElement | null {
   const anchor = shadow.getElementById('as-mount-anchor')
   if (anchor) return anchor
   
-  // 插件版 (WXT) 或回退：使用第一个子节点
-  return shadow.firstElementChild as HTMLElement
+  // 插件版 (WXT) 或回退：使用 body 标签
+  return shadow.querySelector('body') as HTMLElement || shadow.firstElementChild as HTMLElement
 }
 
 /**
@@ -143,8 +143,8 @@ export function addStyleContent (css: string, className?: string, addToTarget?: 
     if (typeof addToTarget !== 'undefined') {
       addTo = document.querySelector(addToTarget)
     } else {
-      // 默认注入到影子根
-      addTo = getAsShadowRoot() || document.body || document.head || document.documentElement || document
+      // 优先级：内部 head > 内部 body (anchor) > 影子根 > 全局 head
+      addTo = getAsShadowHead() || getAsMountAnchor() || getAsShadowRoot() || document.head
     }
 
     if (typeof addToTarget === 'undefined' || (addToTarget !== undefined && document.querySelector(addToTarget) !== null)) {
@@ -171,21 +171,4 @@ export function addStyleContent (css: string, className?: string, addToTarget?: 
       return true
     }
   }, 20, true)
-}
-
-/**
- * 从资源中载入样式
- */
-export function addStyleResource (name: string): void {
-  let styleContent: string | undefined
-  // @ts-ignore
-  if (isScript && typeof GM_getResourceText !== 'undefined') {
-    // @ts-ignore
-    styleContent = GM_getResourceText(name)
-  }
-  if (styleContent) {
-    addStyleContent(styleContent, name)
-  } else {
-    // 这里暂时保持原样，Link 无法注入 ShadowRoot
-  }
 }

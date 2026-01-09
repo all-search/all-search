@@ -19,6 +19,12 @@ export const sharedConfig: UserConfig = {
   plugins: [
     vue()
   ],
+  server: {
+    host: 'localhost',
+    headers: {
+      'Access-Control-Allow-Private-Network': 'true'
+    }
+  },
   build: {
     target: 'es2015',
     rollupOptions: {

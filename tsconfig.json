@@ -20,6 +20,15 @@
     "allowJs": true,
     "checkJs": false
   },
-  "include": ["vite-env.d.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "packages/**/*.ts", "packages/**/*.vue"],
+  "include": [
+    "vite-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "packages/**/*.ts",
+    "packages/**/*.vue",
+    "tests/**/*.ts"
+  ],
   "exclude": ["node_modules", "dist", ".output"]
 }

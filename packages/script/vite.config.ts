@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import monkey from 'vite-plugin-monkey'
-import mkcert from 'vite-plugin-mkcert'
 import scriptConfig from './src/script-config'
 import sharedConfig from '../../vite.config.shared'
 
@@ -8,17 +7,8 @@ export default defineConfig({
   ...sharedConfig,
   // @ts-ignore
   outputDir: 'dist/',
-  server: {
-    host: 'localhost',
-    headers: {
-      'Access-Control-Allow-Private-Network': 'true'
-    }
-  },
   plugins: [
     ...(sharedConfig.plugins || []),
-    mkcert({
-      source: 'coding'
-    }),
     monkey({
       entry: 'index.ts',
       userscript: scriptConfig as any,
@@ -34,7 +24,7 @@ export default defineConfig({
             const host = document.getElementById(hostId);
             const shadowRoot = host?.shadowRoot;
 
-            // 寻找注入容器：优先寻找影子内部的模拟 head，然后是影子根，最后是文档 head
+            // 寻找注入容器：优先寻找内部的 head，然后是 shadowRoot，最后是文档 head
             const container: any = shadowRoot?.querySelector('head') || shadowRoot || document.head || document.documentElement;
 
             let style = container?.querySelector('#' + styleId);
