@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { computed, toValue } from 'vue'
+import { isMobile } from '../util'
+import useSwitchShow, { SHOW_STATUS } from './useSwitchShow'
+import useMode from './useMode'
+
+const { show } = useSwitchShow()
+const isMobileVal = isMobile()
+const handleMouseEnter = () => {
+  if (!isMobileVal) {
+    show.value = SHOW_STATUS.VISIBLE
+  }
+}
+const handleClick = () => {
+  if (isMobileVal) {
+    show.value = SHOW_STATUS.VISIBLE
+  }
+}
+
+const { value: mode, direction } = useMode()
+const className = computed(() => {
+  return {
+    'as-hide': show.value === SHOW_STATUS.COLLAPSED,
+    [`as-hover-btn-${toValue(mode)}`]: true,
+    [`as-hover-btn-${toValue(direction)}`]: true
+  }
+})
+</script>
+
 <template>
   <div class="as-hover-btn"
        :class="className"
@@ -6,43 +35,6 @@
     All Search
   </div>
 </template>
-
-<script>
-import { computed, toValue } from 'vue'
-import { isMobile } from '../util/index'
-import useSwitchShow from './useSwitchShow'
-import useMode from '../components/useMode'
-
-export default {
-  name: 'hover-btn',
-  setup () {
-    const { show } = useSwitchShow()
-    const isMobileVal = isMobile()
-    const handleMouseEnter = () => {
-      if (!isMobileVal) {
-        show.value = 1
-      }
-    }
-    const handleClick = () => {
-      if (isMobileVal) {
-        show.value = 1
-      }
-    }
-
-    const { value: mode } = useMode()
-    const className = computed(() => ({
-      'as-hide': show.value === 2,
-      [`as-hover-btn-${toValue(mode)}`]: true
-    }))
-
-    return {
-      handleMouseEnter,
-      handleClick,
-      className
-    }
-  }
-}
-</script>
 
 <style scoped>
 .as-hover-btn {
@@ -59,7 +51,6 @@ export default {
 }
 
 .as-hover-btn-horizontal {
-  top: 0;
   left: 50%;
   transform: translateY(0) translateX(-50%);
   padding: 0 16px;
@@ -67,14 +58,34 @@ export default {
   line-height: 28px;
 }
 
+.as-hover-btn-top {
+  top: 0;
+}
+
+.as-hover-btn-bottom {
+  bottom: 0;
+}
+
+
 .as-hover-btn-vertical {
-  left: 0;
   top: 50%;
-  transform: translateY(-200%) translateX(0) rotate(90deg);
-  transform-origin: 0 100%;
   padding: 0 16px;
   height: 28px;
   line-height: 28px;
+}
+
+.as-hover-btn-left {
+  left: 0;
+  right: unset;
+  transform: translateY(-200%) translateX(0) rotate(90deg);
+  transform-origin: 0 100%;
+}
+
+.as-hover-btn-right {
+  right: 0;
+  left: unset;
+  transform-origin: top right;
+  transform: translateY(0) translateX(0) rotate(90deg);
 }
 
 .hover-btn.as-hide {

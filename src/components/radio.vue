@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = defineProps<{
+  modelValue?: string | number | boolean
+  label?: string | number | boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string | number | boolean | undefined): void
+}>()
+
+const model = computed({
+  get () {
+    return props.modelValue
+  },
+  set (value) {
+    emit('update:modelValue', value)
+  }
+})
+</script>
+
 <template>
   <label
     class="as-radio as-radio-animate">
@@ -14,36 +36,6 @@
     </span>
   </label>
 </template>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  name: 'as-radio',
-  props: {
-    modelValue: {
-      type: [String, Number, Boolean]
-    },
-    label: {
-      type: [String, Number, Boolean],
-      default: ''
-    }
-  },
-  setup (props, ctx) {
-    const model = computed({
-      get () {
-        return props.modelValue
-      },
-      set (value) {
-        ctx.emit('update:modelValue', value)
-      }
-    })
-    return {
-      model
-    }
-  }
-}
-</script>
 
 <style lang="scss">
   /* radio */

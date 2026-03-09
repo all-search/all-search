@@ -1,132 +1,108 @@
 <template>
-  <slot ref="trigger"
-        name="trigger"
-        v-bind="{ show, hide }"/>
+  <component :is="tag" ref="triggerRef">
+    <slot name="trigger" v-bind="{ show, hide }"/>
+  </component>
   <transition name="slide-fade">
-    <Teleport
-      to="#all-search">
-      <div
-        v-show="visible"
-        :class="popperClass"
-        ref="popover"
-        :data-show="visible"
-        :data-initialized="popperInstance !== null"
-        class="as-popover-content"
-        style="display: none"
-        @mouseenter="show"
-        @mouseleave="hide">
-        <template v-if="loaded">
-          <slot/>
-        </template>
-      </div>
-    </Teleport>
+    <div v-if="visible"
+         :class="popperClass"
+         ref="popoverRef"
+         class="as-popover-content"
+         :style="floatingStyles"
+         :data-placement="placement"
+         @mouseenter="show"
+         @mouseleave="hide">
+      <template v-if="loaded">
+        <slot v-bind="{ isPositioned }"/>
+      </template>
+    </div>
   </transition>
 </template>
 
-<script>
-import { ref, onUnmounted } from 'vue'
-import { createPopper } from '@popperjs/core'
-import useTimeout from '../util/useTimeout.js'
+<script setup lang="ts">
+import { ref, onUnmounted, toRef } from 'vue'
+import { useFloating, shift, flip, offset, autoUpdate } from '@floating-ui/vue'
+import useTimeout from '../util/useTimeout'
 import { onClickOutside } from '../util/onClickOutside'
 
-export default {
-  props: {
-    placement: {
-      type: String,
-      default: 'auto'
-    },
-    strategy: {
-      type: String,
-      default: 'fixed'
-    },
-    popperClass: {
-      type: String,
-      default: ''
-    }
-  },
-  setup (props) {
-    const visible = ref(false)
-    const loaded = ref(false)
-    const trigger = ref(null)
-    const popover = ref(null)
-    const popperInstance = ref(null)
-    const { registerTimeout, cancelTimeout } = useTimeout()
+const props = withDefaults(defineProps<{
+  tag?: string
+  placement?: any
+  strategy?: 'fixed' | 'absolute'
+  popperClass?: string
+}>(), {
+  tag: 'div',
+  placement: 'auto',
+  strategy: 'fixed',
+  popperClass: ''
+})
 
-    function createPopover (target) {
-      if (popperInstance.value) {
-        visible.value = true
-        return
-      }
-      popperInstance.value = createPopper(
-        target,
-        popover.value,
-        {
-          strategy: props.strategy,
-          placement: props.placement
-        }
-      )
-    }
+const visible = ref(false)
+const loaded = ref(false)
+const triggerRef = ref<HTMLElement | null>(null)
+const popoverRef = ref<HTMLElement | null>(null)
+const { registerTimeout, cancelTimeout } = useTimeout()
+const placementRef = toRef(props, 'placement')
 
-    function destroyPopover () {
-      if (popperInstance.value) {
-        popperInstance.value.destroy()
-        popperInstance.value = null
-      }
-    }
 
-    let stopFn
-
-    function handleClickOutside (target) {
-      if (!stopFn) {
-        stopFn = onClickOutside(target, hide, {
-          ignore: [
-            popover.value
-          ]
-        })
-      }
-    }
-
-    onUnmounted(() => {
-      stopFn && stopFn()
-    })
-
-    function show (target) {
-      loaded.value = true
-      visible.value = true
-      createPopover(target)
-      cancelTimeout()
-      handleClickOutside(target)
-    }
-
-    function hide () {
-      registerTimeout(() => {
-        visible.value = false
-        destroyPopover()
-      }, 50)
-    }
-
-    return {
-      visible,
-      loaded,
-      trigger,
-      popover,
-      popperInstance,
-      show,
-      hide
-    }
+function show () {
+  loaded.value = true
+  cancelTimeout()
+  if (triggerRef.value) {
+    handleClickOutside(triggerRef.value)
   }
+  visible.value = true
 }
+
+function hide () {
+  registerTimeout(() => {
+    visible.value = false
+  }, 50)
+}
+
+let stopFn: (() => void) | undefined
+
+function handleClickOutside (target: HTMLElement) {
+  if (stopFn) {
+    stopFn()
+  }
+  stopFn = onClickOutside(target, hide, {
+    ignore: [
+      popoverRef.value as HTMLElement
+    ]
+  })
+}
+
+const {
+  placement,
+  isPositioned,
+  floatingStyles
+} = useFloating(triggerRef, popoverRef, {
+  transform: false,
+  placement: placementRef,
+  strategy: props.strategy,
+  whileElementsMounted: autoUpdate,
+  middleware: [
+    offset(5),
+    flip(),
+    shift({ padding: 5 })
+  ]
+})
+
+onUnmounted(() => {
+  stopFn && stopFn()
+})
 </script>
 
 <style lang="scss">
+@use "../assets/common" as *;
+
 .as-popover-content {
-  --background-color: white;
-  --border-color: lightgray;
-  display: none;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 99999;
+  z-index: $overlayZIndex;
   position: relative;
+  /* 性能优化：启用硬件加速 */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 
   .arrow,
   .arrow::before {
@@ -141,27 +117,44 @@ export default {
   }
 }
 
-.as-popover-content[data-show="true"] {
-  opacity: 1;
-  pointer-events: initial;
-}
-
-.as-popover-content[data-initialized="true"] {
-  display: block;
-}
-
-/* 可以为进入和离开动画设置不同的持续时间和动画函数 */
+/* 统一的动画设置，提供更好的视觉一致性 */
 .slide-fade-enter-active {
-  transition: all 0.3s ease-out;
+  transition: transform 0.15s cubic-bezier(.645, .045, .355, 1),
+              opacity 0.15s cubic-bezier(.645, .045, .355, 1);
 }
 
 .slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: transform 0.1s cubic-bezier(.645, .045, .355, 1),
+              opacity 0.1s cubic-bezier(.645, .045, .355, 1);
 }
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateX(20px);
   opacity: 0;
+}
+
+/* 处理带有-start后缀的placement值 */
+.slide-fade-enter-from[data-placement='bottom-start'],
+.slide-fade-leave-to[data-placement='bottom-start'] {
+  transform: translateY(-100%);
+  transform-origin: top center;
+}
+
+.slide-fade-enter-from[data-placement='top-start'],
+.slide-fade-leave-to[data-placement='top-start'] {
+  transform: translateY(100%);
+  transform-origin: bottom center;
+}
+
+.slide-fade-enter-from[data-placement='left-start'],
+.slide-fade-leave-to[data-placement='left-start'] {
+  transform: translateX(100%);
+  transform-origin: center right;
+}
+
+.slide-fade-enter-from[data-placement='right-start'],
+.slide-fade-leave-to[data-placement='right-start'] {
+  transform: translateX(-100%);
+  transform-origin: center left;
 }
 </style>

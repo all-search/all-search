@@ -1,0 +1,11 @@
+# AI-Rulez 配置文件
+# 从 CLAUDE.md 同步到 GEMINI.md
+
+# 源文件
+source: CLAUDE.md
+
+# 生成器配置
+generators:
+  # Gemini CLI
+  - type: gemini
+    output: GEMINI.md

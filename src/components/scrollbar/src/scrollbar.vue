@@ -59,7 +59,7 @@ import {
   removeResizeListener,
   debugWarn,
   isNumber
-} from './util.js'
+} from './util.ts'
 
 export default defineComponent({
   components: { Bar },
@@ -210,5 +210,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "../css/scrollbar";
+@use "../css/scrollbar" as *;
 </style>

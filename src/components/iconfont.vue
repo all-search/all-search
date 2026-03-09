@@ -59,8 +59,5 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: 'iconfont'
-}
+<script setup lang="ts">
 </script>

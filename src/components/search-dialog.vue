@@ -1,3 +1,50 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import asDialog from './dialog.vue'
+import icon from './icon.vue'
+import favicon from './favicon.vue'
+import useSites from './useSites'
+import scrollbar from './scrollbar/src/scrollbar.vue'
+import { Site } from '../types/site'
+
+const props = withDefaults(defineProps<{
+  visible?: boolean
+  keyword?: string | number
+}>(), {
+  visible: false,
+  keyword: ''
+})
+
+const emit = defineEmits<{
+  (e: 'update:visible', value: boolean): void
+}>()
+
+const localVisible = computed({
+  get: () => !!props.visible,
+  set: value => {
+    emit('update:visible', value)
+  }
+})
+
+watch(() => props.visible, val => {
+  inputValue.value = val ? String(props.keyword) : ''
+})
+
+const inputValue = ref('')
+
+const { sites } = useSites('tm')
+
+const handleClick = (item: Site, newWin: boolean) => {
+  const keyword = inputValue.value
+  const url = (item.url as string).replace('%s', keyword)
+  if (newWin) {
+    window.open(url)
+  } else {
+    window.location.href = url
+  }
+}
+</script>
+
 <template>
   <as-dialog
     v-model:visible="localVisible">
@@ -36,12 +83,12 @@
                 :key="`${item.name}_${i}`"
                 class="cate-item">
               <a href="javascript:void 0"
-                 @click.exact="handleClick(child)"
+                 @click.exact="handleClick(child, false)"
                  @click.ctrl.exact="handleClick(child, true)"
                  @click.middle.exact="handleClick(child, true)">
                 <favicon
                   class="as-url-icon"
-                  :url="child.url"
+                  :url="(child.url as string)"
                   :icon="child.icon"
                 />
                 <p class="as-subMenu-text"
@@ -55,68 +102,6 @@
     </scrollbar>
   </as-dialog>
 </template>
-
-<script>
-import { computed, ref, watch } from 'vue'
-import asDialog from './dialog'
-import icon from './icon'
-import favicon from './favicon'
-import useSites from './useSites'
-import scrollbar from './scrollbar/src/scrollbar'
-
-export default {
-  name: 'search-dialog',
-  components: {
-    asDialog,
-    icon,
-    favicon,
-    scrollbar
-  },
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    keyword: {
-      type: [String, Number],
-      default: ''
-    }
-  },
-  emits: ['update:visible'],
-  setup (props, ctx) {
-    const localVisible = computed({
-      get: () => props.visible,
-      set: value => {
-        ctx.emit('update:visible', value)
-      }
-    })
-
-    watch(() => props.visible, val => {
-      inputValue.value = val ? props.keyword : ''
-    })
-
-    const inputValue = ref('')
-
-    const { sites } = useSites('tm')
-
-    const handleClick = (item, newWin) => {
-      const keyword = inputValue.value
-      if (newWin) {
-        window.open(item.url.replace('%s', keyword))
-      } else {
-        window.location.href = item.url.replace('%s', keyword)
-      }
-    }
-
-    return {
-      localVisible,
-      sites,
-      inputValue,
-      handleClick
-    }
-  }
-}
-</script>
 
 <style lang="scss">
 $bg: rgba(242, 242, 242, .9);

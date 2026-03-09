@@ -1,3 +1,3 @@
-import { ref } from 'vue'
+// Deprecated: replaced by selection.ts
+export { selection } from './selection.ts'
 
-export const selection = ref('')

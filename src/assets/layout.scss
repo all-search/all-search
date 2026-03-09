@@ -1,0 +1,102 @@
+@use "./common" as *;
+
+.as-container {
+  opacity: 1 !important;
+  position: fixed;
+  display: flex;
+  background-color: var(--as-bg-color);
+  z-index: $mainZIndex;
+}
+
+.as-horizontal {
+  height: $height;
+  width: 100%;
+  flex-direction: row;
+  transition: transform 0.1s;
+  &.as-show {
+    transform: translateY(0);
+  }
+}
+
+.as-top {
+  top: 0;
+  border-bottom: 1px var(--as-border-color) solid;
+  &.as-hide {
+    transform: translateY(-100%);
+  }
+}
+
+.as-bottom {
+  bottom: 0;
+  border-top: 1px var(--as-border-color) solid;
+  &.as-hide {
+    transform: translateY(100%);
+  }
+}
+
+.as-vertical {
+  height: 100%;
+  width: $verticalWidth;
+  top: 0;
+  flex-direction: column;
+  transition: transform 0.1s;
+
+  &.as-show {
+    transform: translateX(0);
+  }
+}
+
+.as-left {
+  left: 0;
+  border-right: 1px var(--as-border-color) solid;
+  &.as-hide {
+    transform: translateX(-100%);
+  }
+}
+
+.as-right {
+  right: 0;
+  border-left: 1px var(--as-border-color) solid;
+  &.as-hide {
+    transform: translateX(100%);
+  }
+}
+
+// 对应 as-host-xxx 类的样式（即同步到根节点的模拟样式）
+:host(.as-host-horizontal) {
+  display: block !important;
+
+  html {
+    height: $height;
+    width: 100%;
+  }
+}
+
+:host(.as-host-horizontal.as-host-hide) {
+  html {
+    height: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+.as-host-horizontal {
+  display: block !important;
+  height: $height;
+  width: 100% !important;
+
+  &.as-host-hide {
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+:host(.as-host-vertical), .as-host-vertical {
+  height: 100%;
+  width: $verticalWidth;
+  position: fixed;
+  z-index: 99990;
+  &.as-host-hide {
+    width: 0;
+  }
+}

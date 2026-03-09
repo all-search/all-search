@@ -1,0 +1,12 @@
+export const GM_getValue = () => {}
+export const GM_setValue = () => {}
+export const GM_deleteValue = () => {}
+export const GM_xmlhttpRequest = () => {}
+export const GM_registerMenuCommand = () => {}
+export const GM_unregisterMenuCommand = () => {}
+export const GM_addStyle = () => {}
+export const GM_openInTab = () => {}
+export const GM_setClipboard = () => {}
+export const GM_notification = () => {}
+export const GM_download = () => {}
+export const GM_getResourceText = () => {}

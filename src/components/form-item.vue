@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = withDefaults(defineProps<{
+  labelWidth?: string | number
+  label?: string | number
+}>(), {
+  labelWidth: 80,
+  label: ''
+})
+
+const labelStyle = computed(() => ({
+  width: `${props.labelWidth}px`
+}))
+const contentStyle = computed(() => ({
+  marginLeft: `${props.labelWidth}px`
+}))
+</script>
+
 <template>
   <div>
     <label
@@ -10,37 +29,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  name: 'form-item',
-  props: {
-    labelWidth: {
-      type: [String, Number],
-      default: 80
-    },
-    label: {
-      type: [String, Number],
-      default: ''
-    }
-  },
-  setup (props) {
-    const labelStyle = computed(() => ({
-      width: `${props.labelWidth}px`
-    }))
-    const contentStyle = computed(() => ({
-      marginLeft: `${props.labelWidth}px`
-    }))
-
-    return {
-      labelStyle,
-      contentStyle
-    }
-  }
-}
-</script>
 
 <style lang="scss">
   .as-label {

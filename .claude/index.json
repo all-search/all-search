@@ -1,0 +1,376 @@
+{
+  "version": "1.0",
+  "timestamp": "2025-12-30T15:38:20+08:00",
+  "project": {
+    "name": "all-search",
+    "version": "1.5.10",
+    "description": "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.",
+    "type": "monorepo",
+    "architecture": "pnpm-workspace"
+  },
+  "scan_metadata": {
+    "strategy": "模块优先扫描（中等强度）",
+    "coverage": {
+      "total_files_estimated": 450,
+      "scanned_files": 85,
+      "coverage_percentage": 18.9,
+      "modules_identified": 5,
+      "modules_documented": 5
+    },
+    "ignored_patterns": [
+      "node_modules/**",
+      ".git/**",
+      ".github/**",
+      "dist/**",
+      "build/**",
+      ".next/**",
+      "__pycache__/**",
+      "*.lock",
+      "*.log",
+      "*.bin",
+      "*.pdf",
+      "*.png",
+      "*.jpg",
+      "*.jpeg",
+      "*.gif",
+      "*.mp4",
+      "*.zip",
+      "*.tar",
+      "*.gz",
+      ".wxt/**",
+      ".output/**"
+    ],
+    "truncated": false
+  },
+  "modules": [
+    {
+      "path": ".",
+      "name": "root",
+      "type": "monorepo-root",
+      "language": "JavaScript",
+      "description": "项目根目录，管理 monorepo 工作空间和全局配置",
+      "entry_points": [],
+      "package_json": "package.json",
+      "scripts": {
+        "dev:script": "开发 Tampermonkey 脚本",
+        "build:script": "构建 Tampermonkey 脚本",
+        "dev:plugin": "开发浏览器插件（Chrome）",
+        "build:plugin": "构建并打包插件",
+        "dev:options": "开发配置页面",
+        "build:options": "构建配置页面",
+        "lint": "ESLint 代码检查",
+        "prepare": "安装 Git hooks"
+      },
+      "config_files": [
+        "package.json",
+        "pnpm-workspace.yaml",
+        "vite.config.js",
+        ".eslintrc.js",
+        "babel.config.js",
+        "commitlint.config.js",
+        "lint-staged.config.js",
+        "postcss.config.js"
+      ],
+      "documentation": "CLAUDE.md",
+      "dependencies": {
+        "vue": "^3.3.4",
+        "element-plus": "^2.2.22",
+        "vue-router": "^4.0.5",
+        "@floating-ui/vue": "^1.1.5",
+        "resize-observer-polyfill": "^1.5.1"
+      },
+      "dev_dependencies": {
+        "vite": "^5.2.7",
+        "wxt": "^0.19.12",
+        "vite-plugin-monkey": "^5.0.4",
+        "eslint": "^8.57.0",
+        "husky": "^8.0.1"
+      }
+    },
+    {
+      "path": "packages/script",
+      "name": "script",
+      "type": "tampermonkey-script",
+      "language": "JavaScript",
+      "description": "Tampermonkey 用户脚本，通过 GM API 注入核心组件到网页",
+      "entry_points": [
+        "index.js"
+      ],
+      "build_tool": "vite + vite-plugin-monkey",
+      "config_files": [
+        "package.json",
+        "vite.config.mjs",
+        "src/script-config.js"
+      ],
+      "scripts": {
+        "dev": "Vite watch 模式，生成开发版本",
+        "build": "构建生产版本到 dist/index.user.js"
+      },
+      "outputs": [
+        "dist/index.user.js",
+        "index.dev.js"
+      ],
+      "apis_used": [
+        "GM_getValue",
+        "GM_setValue",
+        "GM_deleteValue",
+        "GM_addStyle"
+      ],
+      "documentation": "packages/script/CLAUDE.md",
+      "shared_code": [
+        "../../src"
+      ]
+    },
+    {
+      "path": "packages/plugin",
+      "name": "plugin",
+      "type": "browser-extension",
+      "language": "JavaScript",
+      "description": "基于 WXT 的浏览器插件，支持 Chrome/Firefox，符合 Manifest V3",
+      "entry_points": [
+        "entries/content.js",
+        "entries/options/main.js"
+      ],
+      "build_tool": "wxt",
+      "config_files": [
+        "package.json",
+        "wxt.config.js"
+      ],
+      "scripts": {
+        "dev": "WXT 开发模式（Chrome）",
+        "dev:firefox": "WXT 开发模式（Firefox）",
+        "build": "构建插件",
+        "zip": "打包为 ZIP（Chrome）",
+        "zip:firefox": "打包为 ZIP（Firefox）"
+      },
+      "outputs": [
+        ".output/chrome-mv3/",
+        ".output/firefox-mv3/",
+        "all-search-{version}-chrome.zip",
+        "all-search-{version}-firefox.zip"
+      ],
+      "apis_used": [
+        "chrome.storage.local",
+        "wxt/storage",
+        "wxt/client"
+      ],
+      "manifest": {
+        "version": 3,
+        "permissions": [
+          "storage"
+        ]
+      },
+      "documentation": "packages/plugin/CLAUDE.md",
+      "shared_code": [
+        "../../src",
+        "../options/route",
+        "../options/views"
+      ]
+    },
+    {
+      "path": "packages/options",
+      "name": "options",
+      "type": "vue-app",
+      "language": "JavaScript",
+      "description": "独立配置页面应用，提供搜索引擎和工具栏管理界面",
+      "entry_points": [
+        "main.js"
+      ],
+      "build_tool": "vite",
+      "config_files": [
+        "package.json",
+        "vite.config.mjs"
+      ],
+      "scripts": {
+        "dev": "Vite 开发服务器",
+        "build": "构建静态文件到 dist/"
+      },
+      "routes": [
+        "/config/sites",
+        "/config/edit",
+        "/config/toolbar"
+      ],
+      "views": [
+        "views/config.vue",
+        "views/sites.vue",
+        "views/edit.vue",
+        "views/toolbar.vue",
+        "views/index.vue"
+      ],
+      "outputs": [
+        "dist/"
+      ],
+      "dependencies": {
+        "element-plus": "UI 组件库",
+        "vue-draggable-next": "拖拽排序",
+        "jsoneditor": "JSON 编辑器"
+      },
+      "documentation": "packages/options/CLAUDE.md",
+      "shared_code": [
+        "../../src"
+      ]
+    },
+    {
+      "path": "src",
+      "name": "src",
+      "type": "shared-library",
+      "language": "JavaScript (Vue 3)",
+      "description": "核心共享代码库，包含所有 Vue 组件、配置和工具函数",
+      "entry_points": [
+        "index.vue"
+      ],
+      "components": [
+        "components/menu.vue",
+        "components/menuItem.vue",
+        "components/logo.vue",
+        "components/side-bar.vue",
+        "components/hover-btn.vue",
+        "components/selection-bar.vue",
+        "components/search-dialog.vue",
+        "components/popper.vue",
+        "components/button.vue",
+        "components/dialog.vue",
+        "components/favicon.vue",
+        "components/icon.vue",
+        "components/radio.vue",
+        "components/color.vue",
+        "components/overlay.vue",
+        "components/scrollbar/",
+        "components/form-item.vue",
+        "components/jsonEditor.vue",
+        "components/version-alert.vue",
+        "components/iconfont.vue"
+      ],
+      "composables": [
+        "components/useConfig.js",
+        "components/useSites.js",
+        "components/useToolbar.js",
+        "components/useMode.js",
+        "components/useSwitchShow.js",
+        "components/useAlign.js",
+        "components/useColor.js",
+        "components/useFavicon.js"
+      ],
+      "config": [
+        "config/sites/index.js",
+        "config/sites/search.js",
+        "config/sites/translate.js",
+        "config/sites/video.js",
+        "config/sites/shopping.js",
+        "config/sites/music.js",
+        "config/sites/developer.js",
+        "config/sites/news.js",
+        "config/sites/social.js",
+        "config/sites/knowledge.js",
+        "config/sites/image.js",
+        "config/sites/disk.js",
+        "config/sites/scholar.js",
+        "config/loadList.js",
+        "config/siteInfo.js",
+        "config/toolbar.js"
+      ],
+      "utils": [
+        "util/index.js",
+        "util/storage.js",
+        "util/hook.js",
+        "util/store.js",
+        "util/initStyle.js",
+        "util/addSpecialStyle.js",
+        "util/injectStyle.js",
+        "util/getKeyword.js",
+        "util/fullScreen.js",
+        "util/clipboard.js",
+        "util/onClickOutside.js",
+        "util/tap.js",
+        "util/routerChange.js",
+        "util/addScript.js",
+        "util/sites.js",
+        "util/debounce.js",
+        "util/raf.js",
+        "util/useTimeout.js",
+        "util/useScroll.js",
+        "util/parseUrl.js"
+      ],
+      "styles": [
+        "assets/normalize.css",
+        "assets/common.scss",
+        "components/scrollbar/css/scrollbar.scss"
+      ],
+      "documentation": "src/CLAUDE.md",
+      "key_features": {
+        "search_engines": "12 个分类，100+ 搜索引擎",
+        "site_compatibility": "214+ 网站适配",
+        "layout_modes": "水平/垂直，顶部/底部/左侧/右侧",
+        "storage_abstraction": "自动适配 GM API 和 chrome.storage"
+      }
+    }
+  ],
+  "coverage_details": {
+    "documented_modules": [
+      "root",
+      "packages/script",
+      "packages/plugin",
+      "packages/options",
+      "src"
+    ],
+    "documented_files": [
+      "CLAUDE.md",
+      "packages/script/CLAUDE.md",
+      "packages/plugin/CLAUDE.md",
+      "packages/options/CLAUDE.md",
+      "src/CLAUDE.md"
+    ],
+    "key_files_scanned": [
+      "package.json",
+      "pnpm-workspace.yaml",
+      "vite.config.js",
+      ".eslintrc.js",
+      "packages/script/package.json",
+      "packages/script/vite.config.mjs",
+      "packages/script/index.js",
+      "packages/plugin/package.json",
+      "packages/plugin/wxt.config.js",
+      "packages/plugin/entries/content.js",
+      "packages/options/package.json",
+      "packages/options/vite.config.mjs",
+      "packages/options/main.js",
+      "packages/options/route/index.js",
+      "src/index.vue",
+      "src/util/storage.js",
+      "src/util/index.js",
+      "src/config/sites/index.js"
+    ]
+  },
+  "gaps_identified": {
+    "missing_tests": "无单元测试或 E2E 测试",
+    "missing_types": "无 TypeScript 类型定义（仅 WXT 自动生成）",
+    "missing_docs": "部分工具函数缺少 JSDoc 注释",
+    "missing_i18n": "无国际化支持"
+  },
+  "next_steps": [
+    "建议添加单元测试：使用 Vitest 测试 Composables 和工具函数",
+    "建议添加组件测试：使用 @vue/test-utils",
+    "建议添加 TypeScript：逐步迁移以提高类型安全",
+    "建议完善文档：为每个函数添加 JSDoc",
+    "建议优化性能：虚拟滚动、懒加载、代码分割",
+    "建议添加 i18n：支持多语言"
+  ],
+  "build_artifacts": {
+    "script": [
+      "dist/index.user.js"
+    ],
+    "plugin": [
+      ".output/chrome-mv3/",
+      "all-search-{version}-chrome.zip",
+      "all-search-{version}-firefox.zip"
+    ],
+    "options": [
+      "packages/options/dist/"
+    ]
+  },
+  "deployment_targets": {
+    "script": "GreasyFork, GitHub Release",
+    "plugin": "Chrome Web Store, Firefox Add-ons",
+    "options": "GitHub Pages"
+  }
+}

@@ -1,3 +1,36 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = defineProps<{
+  visible?: boolean
+  title?: string
+  width?: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:visible', value: boolean): void
+}>()
+
+const style = computed(() => {
+  const obj: Record<string, string> = {}
+  if (props.width) {
+    obj.width = props.width
+  }
+  return obj
+})
+
+const localVisible = computed({
+  get: () => !!props.visible,
+  set: value => {
+    emit('update:visible', value)
+  }
+})
+
+const handleClose = () => {
+  localVisible.value = false
+}
+</script>
+
 <template>
   <div class="as-dialog"
        v-show="localVisible">
@@ -9,61 +42,11 @@
       <div class="as-dialog__body">
         <slot></slot>
       </div>
-      <!--      <div class="as-dialog__footer"></div>-->
     </div>
     <div class="as-dialog__mask"
          @click="handleClose"/>
   </div>
 </template>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  name: 'as-dialog',
-  model: {
-    prop: 'visible',
-    event: 'change'
-  },
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    width: {
-      type: String,
-      default: ''
-    }
-  },
-  setup (props, ctx) {
-    const style = computed(() => {
-      const obj = {}
-      if (props.width) {
-        obj.width = props.width
-      }
-      return obj
-    })
-    const localVisible = computed({
-      get: () => props.visible,
-      set: value => {
-        ctx.emit('update:visible', value)
-      }
-    })
-    const handleClose = () => {
-      localVisible.value = false
-    }
-    return {
-      style,
-      handleClose,
-      localVisible
-    }
-  }
-}
-</script>
 
 <style lang="scss">
 .as-dialog {

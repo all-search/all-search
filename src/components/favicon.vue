@@ -1,8 +1,97 @@
+<script lang="ts">
+import { computed, ref } from 'vue'
+import { getStorage, setStorage } from '../util/storage'
+import { debounce } from '../util'
+
+const iconCache = ref<Record<string, string>>({})
+const isLoaded = ref(false)
+getStorage('iconCache').then(iconData => {
+  iconCache.value = (iconData as Record<string, string>) || {}
+}).finally(() => {
+  isLoaded.value = true
+})
+
+const setStorageDebounce = debounce(() => {
+  setStorage('iconCache', iconCache.value)
+}, 1000)
+</script>
+
+<script setup lang="ts">
+import parseUrl from '../util/parseUrl'
+import useFavicon from './useFavicon'
+
+const props = defineProps<{
+  url?: string
+  icon?: string
+}>()
+
+const isError = ref(false)
+
+const { hostname, origin } = parseUrl(props.url || '')
+const img = computed(() => {
+  if (!isLoaded.value) {
+    return ''
+  }
+  if (iconCache.value[hostname]) {
+    return iconCache.value[hostname]
+  } else if (!isError.value) {
+    return faviconApi.value
+  } else {
+    return `${origin}/favicon.ico`
+  }
+})
+
+const index = ref(0)
+
+const faviconApis = computed(() => [
+  props.icon,
+  `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`,
+  `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname)}`,
+  `${origin}/favicon.ico`
+].filter((j): j is string => !!j))
+
+const faviconApi = computed(() => faviconApis.value[index.value])
+
+const { favicon } = useFavicon()
+
+function getBase64Image (image: HTMLImageElement) {
+  const canvas = document.createElement('canvas')
+  canvas.width = image.width
+  canvas.height = image.height
+  const context = canvas.getContext('2d')
+  if (!context) return ''
+  context.drawImage(image, 0, 0, image.width, image.height)
+  // 得到图片的base64编码数据
+  return canvas.toDataURL('image/png', 1)
+}
+
+function handleLoad (e: Event) {
+  if (!isError.value && !img.value.startsWith('data:image')) {
+    const base64 = getBase64Image(e.target as HTMLImageElement)
+    if (base64) {
+      iconCache.value[hostname] = base64
+      setStorageDebounce()
+    }
+  }
+}
+
+function handleError (e: Event) {
+  const target = e.currentTarget as HTMLImageElement
+  if (target.src === faviconApi.value) {
+    if (index.value === faviconApis.value.length - 1) {
+      isError.value = true
+    }
+    index.value++
+  }
+}
+</script>
+
 <template>
   <div
     v-if="favicon === 1"
     class="as-img-icon">
     <img
+      v-if="isLoaded"
       :class="{error: isError}"
       :src="img"
       crossOrigin=""
@@ -10,97 +99,6 @@
       @load="handleLoad">
   </div>
 </template>
-
-<script>
-import { computed, reactive, ref } from 'vue'
-import parseUrl from '../util/parseUrl'
-import useFavicon from './useFavicon'
-import { getStorage, setStorage } from '../util/storage'
-
-let iconCache = reactive({})
-getStorage('iconCache').then(iconData => {
-  iconCache = iconData
-})
-
-export default {
-  name: 'favicon',
-  props: {
-    url: {
-      type: String,
-      default: ''
-    },
-    icon: {
-      type: String,
-      default: ''
-    }
-  },
-  setup (props) {
-    const isError = ref(false)
-
-    const { hostname, origin } = parseUrl(props.url)
-    const img = computed(() => {
-      if (iconCache[hostname]) {
-        return iconCache[hostname]
-      } else if (!isError.value) {
-        return faviconApi.value
-      } else {
-        return ''
-      }
-    })
-
-    const i = ref(0)
-
-    const faviconApis = ref([
-      props.icon,
-      `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`,
-      `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname)}`,
-      `${origin}/favicon.ico`
-    ])
-
-    const faviconApi = computed(() => faviconApis.value.filter(j => j)[i.value])
-
-    const { favicon } = useFavicon()
-
-    function getBase64Image (image) {
-      const canvas = document.createElement('canvas')
-      canvas.width = image.width
-      canvas.height = image.height
-      let context = canvas.getContext('2d')
-      context.drawImage(image, 0, 0, image.width, image.height)
-      // 得到图片的base64编码数据
-      return canvas.toDataURL('image/png', 1)
-    }
-
-    function handleLoad (e) {
-      if (!isError.value && !img.value.startsWith('data:image')) {
-        const base64 = getBase64Image(e.target)
-        if (base64) {
-          iconCache[hostname] = base64
-          setStorage('iconCache', iconCache)
-        }
-      }
-    }
-
-    function handleError (e) {
-      const src = e.currentTarget.src
-      if (src === faviconApi.value) {
-        if (i.value === faviconApis.value.length - 1) {
-          isError.value = true
-        }
-        i.value++
-      }
-    }
-
-    return {
-      img,
-      favicon,
-      handleLoad,
-      handleError,
-      isError
-    }
-  }
-}
-</script>
 
 <style lang="scss">
 .as-img-icon {

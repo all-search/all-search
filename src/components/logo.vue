@@ -1,38 +1,28 @@
+<script setup lang="ts">
+import { isMobile } from '../util'
+
+defineProps<{
+  direction?: 'horizontal' | 'vertical'
+}>()
+
+const mobile = isMobile()
+</script>
+
 <template>
   <a
-    v-if="!isMobile"
+    v-if="!mobile"
     class="as-title"
     href="https://github.com/all-search/all-search"
     target="_blank"
-    :class="`as-title-${mode}`">
+    :class="`as-title-${direction}`">
     <p class="as-title-inner">
       All Search
     </p>
   </a>
 </template>
 
-<script>
-import { isMobile } from '../util/index'
-
-export default {
-  name: 'logo',
-  props: {
-    mode: {
-      type: String,
-      default: 'horizontal',
-      validator: val => ['horizontal', 'vertical'].indexOf(val) > -1
-    }
-  },
-  setup () {
-    return {
-      isMobile: isMobile()
-    }
-  }
-}
-</script>
-
 <style lang="scss">
-@import "../assets/common";
+@use "../assets/common" as *;
 
 @media screen and (max-width: 750px) {
   .as-title-horizontal {

@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import scrollbar from './scrollbar/src/scrollbar.vue'
+import menuItem from './menu-item.vue'
+import useAlign from './useAlign'
+import useSites from './useSites'
+
+const props = withDefaults(defineProps<{
+  direction?: 'horizontal' | 'vertical'
+  mode?: string
+}>(), {
+  direction: 'horizontal',
+  mode: 'top'
+})
+
+const { sites } = useSites('tm')
+const { value: align } = useAlign()
+
+const menuClass = computed(() => ({
+  'as-horizontal': props.mode === 'horizontal',
+  'as-vertical': props.mode === 'vertical'
+}))
+</script>
+
 <template>
   <scrollbar
     class="as-menu-container"
@@ -10,58 +34,15 @@
         v-for="item in sites"
         :key="item.name"
         :item="item"
+        :direction="direction"
         :mode="mode">
       </menu-item>
     </ul>
   </scrollbar>
 </template>
 
-<script>
-import { computed, reactive } from 'vue'
-import scrollbar from './scrollbar/src/scrollbar'
-import menuItem from './menuItem'
-import useAlign from './useAlign'
-import useSites from './useSites'
-
-export default {
-  name: 'as-menu',
-  components: {
-    scrollbar,
-    menuItem
-  },
-  props: {
-    mode: {
-      type: String,
-      default: 'horizontal',
-      validator: val => ['horizontal', 'vertical'].indexOf(val) > -1
-    }
-  },
-  setup (props) {
-    const { sites } = useSites('tm')
-    const { value: align } = useAlign()
-
-    const data = reactive({
-      showTimeout: 50,
-      hideTimeout: 200
-    })
-
-    const menuClass = computed(() => ({
-      'as-horizontal': props.mode === 'horizontal',
-      'as-vertical': props.mode === 'vertical'
-    }))
-
-    return {
-      sites,
-      data,
-      align,
-      menuClass
-    }
-  }
-}
-</script>
-
 <style lang="scss">
-@import "../assets/common";
+@use "../assets/common" as *;
 
 .as-menu-container {
   flex: 1;
@@ -76,9 +57,10 @@ export default {
   box-shadow: none;
   background-color: var(--as-bg-color);
   display: flex;
+  list-style: none;
 }
 
-.as-horizontal{
+.as-horizontal {
   .as-menu {
     flex-direction: row;
   }
@@ -91,6 +73,7 @@ export default {
 
   .as-scrollbar__wrap {
     height: auto;
+    width: 100%;
   }
 }
 </style>

@@ -1,0 +1,60 @@
+@use "./common" as *;
+
+/**
+ * 宿主页面全局样式
+ *
+ * 作用：当搜索引擎菜单显示时，推开宿主页面的 body，避免遮挡
+ * 注入位置：宿主页面的 <head>（不是 Shadow DOM 内部）
+ *
+ * 设计理念：
+ * - 最小化侵入：不直接修改 body 的 margin（避免全局影响）
+ * - 精准控制：通过 data-* 属性标记需要偏移的特定元素
+ * - 兼容性：支持 margin/transform/border 多种偏移方式
+ *
+ * 配合使用：
+ * 1. 在 loadList.js 中为特定网站配置 selectors
+ * 2. 目标元素会被自动添加 data-as-margin-top 等属性
+ * 3. 本样式表通过属性选择器控制偏移
+ */
+
+// 适配插件版 (WXT) 和 脚本版 (Tampermonkey) 的宿主元素
+$host-selectors: "all-search-ui, #all-search";
+
+#{$host-selectors} {
+  &.as-host-hide + body {
+    margin: 0 !important;
+    [data-as-margin-top] {
+      margin-top: 0 !important;
+    }
+    [data-as-transform] {
+      transform: none !important;
+    }
+  }
+
+  &.as-host-top.as-host-show + body {
+    // 注意：这里不直接推开整个 body (margin-top)，而是通过特定属性精准控制
+    // 原因：避免对宿主页面造成全局影响，减少样式冲突
+    // 使用方式：在 loadList.js 中为特定网站的元素添加 data-as-margin-top 属性
+    //margin-top: $height !important;
+
+    // 适配某些特殊站点的内联偏移属性
+    [data-as-margin-top] {
+      margin-top: $height !important;
+    }
+    [data-as-transform] {
+      transform: translateY($height);
+    }
+  }
+
+  &.as-host-bottom.as-host-show + body {
+    margin-bottom: $height !important;
+  }
+
+  &.as-host-left.as-host-show + body {
+    margin-left: $verticalWidth !important;
+  }
+
+  &.as-host-right.as-host-show + body {
+    margin-right: $verticalWidth !important;
+  }
+}

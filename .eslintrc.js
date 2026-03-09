@@ -1,9 +1,19 @@
 // https://eslint.org/docs/user-guide/configuring
 module.exports = {
   root: true,
-  ignorePatterns: ["lib/", "dist/"],
+  ignorePatterns: [
+    'lib/',
+    'dist/',
+    '.wxt/',
+    '.output/'
+  ],
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: '@babel/eslint-parser'
+    ecmaVersion: 2021,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true
+    }
   },
   env: {
     node: true,
@@ -11,8 +21,9 @@ module.exports = {
     es2021: true
   },
   extends: [
+    'eslint:recommended',
     'plugin:vue/vue3-essential',
-    'eslint:recommended'
+    '@vue/eslint-config-typescript'
   ],
   // required to lint *.vue files
   plugins: [
@@ -24,6 +35,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'spaced-comment': 'off'
+    'spaced-comment': 'off',
+    'vue/multi-word-component-names': 'off'
   }
 }

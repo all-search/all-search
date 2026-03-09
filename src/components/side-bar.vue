@@ -1,7 +1,55 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import useMode from './useMode'
+import useAlign from './useAlign'
+import useSwitchShow, { SHOW_STATUS } from './useSwitchShow'
+import useColor from './useColor'
+import useFavicon from './useFavicon'
+import useToolbar from './useToolbar'
+import useSites from './useSites'
+import overlay from './overlay.vue'
+import asRadio from './radio.vue'
+import formItem from './form-item.vue'
+import color from './color.vue'
+import asButton from './button.vue'
+
+const visible = ref(false)
+const open = () => {
+  visible.value = true
+}
+const onMaskClick = () => {
+  visible.value = false
+}
+
+const { value: mode, direction } = useMode()
+const { list: alignList, value: align } = useAlign()
+const { primaryColor, primaryTextColor } = useColor()
+const { show, options, scrollHide } = useSwitchShow()
+const { favicon, clearIconCache } = useFavicon()
+const { visible: toolbarVisible } = useToolbar()
+const { resetSites } = useSites('tm')
+
+import { getAsMountAnchor } from '@src/util'
+
+const teleportTarget = getAsMountAnchor()
+
+const hide = () => {
+  show.value = SHOW_STATUS.COLLAPSED
+}
+
+function changeScrollHide (e: any) {
+  if (e.target.value === 'none') {
+    show.value = SHOW_STATUS.VISIBLE
+  } else {
+    show.value = SHOW_STATUS.COLLAPSED
+  }
+}
+</script>
+
 <template>
   <div
     class="as-setting"
-    :class="mode">
+    :class="direction">
     <div
       class="as-setting-btn"
       @click="hide">
@@ -13,7 +61,7 @@
       设置
     </div>
   </div>
-  <teleport to="#all-search">
+  <teleport v-if="teleportTarget" :to="teleportTarget">
     <transition name="overlay" appear>
       <overlay
         v-show="visible"
@@ -29,81 +77,89 @@
               全搜 all-search
             </header>
             <section>
-              <form-item
+              <formItem
                 label-width="84"
                 label="划词工具栏">
-                <as-radio
+                <asRadio
                   :label="1"
                   v-model="toolbarVisible">显示
-                </as-radio>
-                <as-radio
+                </asRadio>
+                <asRadio
                   :label="2"
                   v-model="toolbarVisible">隐藏
-                </as-radio>
-              </form-item>
-              <form-item label="方向">
-                <as-radio
-                  label="horizontal"
-                  v-model="mode">横向
-                </as-radio>
-                <as-radio
-                  label="vertical"
-                  v-model="mode">竖向
-                </as-radio>
-              </form-item>
-              <form-item label="对齐">
-                <as-radio
+                </asRadio>
+              </formItem>
+              <formItem label="方向">
+                <asRadio
+                  label="top"
+                  v-model="mode">居顶
+                </asRadio>
+                <asRadio
+                  label="bottom"
+                  v-model="mode">居底
+                </asRadio>
+                <asRadio
+                  label="left"
+                  v-model="mode">居左
+                </asRadio>
+                <asRadio
+                  label="right"
+                  v-model="mode">居右
+                </asRadio>
+              </formItem>
+              <formItem label="对齐">
+                <asRadio
                   v-for="[key, value] in alignList"
                   :key="key"
                   :label="key"
                   v-model="align">
                   {{ value }}
-                </as-radio>
-              </form-item>
-              <form-item label="滚动隐藏">
-                <as-radio
+                </asRadio>
+              </formItem>
+              <formItem label="滚动隐藏">
+                <asRadio
                   v-for="[key, value] in options"
                   :key="key"
                   :label="key"
                   v-model="scrollHide"
                   @change="changeScrollHide">
                   {{ value }}
-                </as-radio>
-              </form-item>
-              <form-item label="图标">
-                <as-radio
+                </asRadio>
+              </formItem>
+              <formItem label="图标">
+                <asRadio
                   :label="1"
                   v-model="favicon">显示
-                </as-radio>
-                <as-radio
+                </asRadio>
+                <asRadio
                   :label="2"
                   v-model="favicon">隐藏
-                </as-radio>
-              </form-item>
-              <form-item label="主题色">
+                </asRadio>
+              </formItem>
+              <formItem label="主题色">
                 <color
                   name="primaryColor"
                   v-model="primaryColor"/>
-              </form-item>
-              <form-item label="文字色">
+              </formItem>
+              <formItem label="文字色">
                 <color
                   name="primaryTextColor"
                   v-model="primaryTextColor"/>
-              </form-item>
-              <form-item label="图标缓存">
-                <as-button
+              </formItem>
+              <formItem label="图标缓存">
+                <asButton
                   type="text"
                   @click="clearIconCache">
                   清除
-                </as-button>
-              </form-item>
-              <form-item label="重置网址">
-                <as-button
+                </asButton>
+              </formItem>
+              <formItem label="重置网址">
+                <asButton
                   type="text"
                   @click="resetSites">
                   重置
-                </as-button>
-              </form-item>
+                </asButton>
+              </formItem>
             </section>
             <footer>
               <a class="link"
@@ -132,85 +188,8 @@
   </teleport>
 </template>
 
-<script>
-import { ref } from 'vue'
-import useMode from '../components/useMode'
-import useAlign from './useAlign'
-import useSwitchShow from '../components/useSwitchShow'
-import useColor from './useColor'
-import useFavicon from './useFavicon'
-import useToolbar from './useToolbar'
-import useSites from './useSites'
-import overlay from '../components/overlay'
-import radio from '../components/radio'
-import formItem from '../components/form-item'
-import color from '../components/color'
-import button from '../components/button'
-
-export default {
-  name: 'side-bar',
-  components: {
-    overlay,
-    asRadio: radio,
-    formItem,
-    color,
-    asButton: button
-  },
-  setup () {
-    const visible = ref(false)
-    const open = () => {
-      visible.value = true
-    }
-    const onMaskClick = () => {
-      visible.value = false
-    }
-
-    const { value: mode } = useMode()
-    const { list: alignList, value: align } = useAlign()
-    const { primaryColor, primaryTextColor } = useColor()
-    const { show, options, scrollHide } = useSwitchShow()
-    const { favicon, clearIconCache } = useFavicon()
-    const { visible: toolbarVisible } = useToolbar()
-    const { resetSites } = useSites('tm')
-
-    const hide = () => {
-      show.value = 2
-    }
-
-    function changeScrollHide (e) {
-      if (e.target.value === 'none') {
-        show.value = 1
-      } else {
-        show.value = 2
-      }
-    }
-
-    return {
-      mode,
-      visible,
-      open,
-      onMaskClick,
-      alignList,
-      align,
-      favicon,
-      toolbarVisible,
-      primaryColor,
-      primaryTextColor,
-      show,
-      options,
-      scrollHide,
-      clearIconCache,
-      resetSites,
-      hide,
-      changeScrollHide
-    }
-  }
-}
-
-</script>
-
 <style lang="scss">
-@import "../assets/common.scss";
+@use "../assets/common" as *;
 
 .as-setting {
   position: relative;
@@ -317,3 +296,4 @@ export default {
 }
 
 </style>
+
