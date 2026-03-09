@@ -34,7 +34,8 @@
     "dev:plugin": "pnpm run -C packages/plugin dev",
     "build:plugin": "pnpm run -C packages/plugin zip",
     "dev:options": "pnpm run -C packages/options dev",
-    "build:options": "pnpm run -C packages/options build"
+    "build:options": "pnpm run -C packages/options build",
+    "test:acceptance": "pnpm test && pnpm type-check && pnpm exec eslint --ext .js,.ts,.vue src packages && pnpm build:script && pnpm build:plugin && pnpm build:options"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",

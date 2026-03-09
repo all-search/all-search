@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import sharedConfig from '../../vite.config.shared.mjs'
+import sharedConfig from '../../vite.config.shared.ts'
 
 export default defineConfig(({ mode }) => {
   return {
