@@ -18,21 +18,30 @@ export default defineConfig({
           vue: ['Vue', () => `https://registry.npmmirror.com/vue/3.4.15/files/dist/vue.global.prod.js`]
         },
         cssSideEffects: (css) => {
+          // 一次构建里可能产生多个 CSS chunk（组件样式 + internal.scss），
+          // 若共用固定 id，后一个会覆盖前一个（曾导致组件样式全部丢失）。
+          // 这里用内容哈希生成独立 id，每个 chunk 一个 style 节点。
+          let hash = 5381;
+          for (let i = 0; i < css.length; i++) {
+            hash = ((hash << 5) + hash) ^ css.charCodeAt(i);
+          }
+          const styleId = 'as-style-' + (hash >>> 0).toString(36);
+
           const inject = () => {
-            const hostId = 'all-search';
-            const styleId = 'as-style-common';
-            const host = document.getElementById(hostId);
-            const shadowRoot = host?.shadowRoot;
+            const host = document.getElementById('all-search');
+            const shadowRoot = host && host.shadowRoot;
+            // 宿主 / 影子根尚未创建时先不注入，等 as-inject-style 事件
+            // （避免把 UI 样式泄漏到宿主页面的 head 里）
+            const container: any = shadowRoot && (shadowRoot.querySelector('head') || shadowRoot);
+            if (!container) {
+              return;
+            }
 
-            // 寻找注入容器：优先寻找内部的 head，然后是 shadowRoot，最后是文档 head
-            const container: any = shadowRoot?.querySelector('head') || shadowRoot || document.head || document.documentElement;
-
-            let style = container?.querySelector('#' + styleId);
-
+            let style = container.querySelector('#' + styleId);
             if (!style) {
               style = document.createElement('style');
               style.id = styleId;
-              container?.append(style);
+              container.append(style);
             }
             style.textContent = css;
           };
