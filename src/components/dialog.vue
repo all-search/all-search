@@ -57,6 +57,10 @@ const handleClose = () => {
   left: 0;
   margin: 0;
   z-index: 99999;
+  // 用 flex 居中代替 translate(-40%)：分数位移会让文字和图标落在半像素上，看起来发虚（issue #65）
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &__mask {
     position: fixed;
@@ -70,17 +74,17 @@ const handleClose = () => {
 
   &-container {
     position: relative;
-    background: rgba(243, 243, 243, .85);
+    background: rgba(243, 243, 243, .94);
     border-radius: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
     box-sizing: border-box;
     min-width: 50%;
     max-width: 80%;
+    max-height: 86vh;
+    display: flex;
+    flex-direction: column;
     z-index: 99;
-    margin: 40vh auto 50px;
-    transform: translateY(-40%);
     overflow: hidden;
-    backdrop-filter: saturate(3) blur(20px);
   }
 
   &__header {
@@ -91,6 +95,7 @@ const handleClose = () => {
     color: #666;
     font-size: 14px;
     word-break: break-all;
+    overflow: auto;
   }
 
   &__footer {

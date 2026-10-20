@@ -64,8 +64,9 @@ function changeVisible(val: boolean) {
     const selectionRect = getSelectionRect()
     if (selectionRect) {
       const { x, right, left, top } = selectionRect
-      styleObj.top = scrollTop() + top - height
-      styleObj.left = scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2)
+      // 取整：半像素定位会让工具栏整体发虚（issue #65）
+      styleObj.top = Math.round(scrollTop() + top - height)
+      styleObj.left = Math.round(scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2))
     }
   })
 }
