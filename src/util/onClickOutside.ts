@@ -48,7 +48,7 @@ export function onClickOutside (
   window.addEventListener('pointerdown', listener, { passive: true })
 
   return () => {
-    window.removeEventListener('click', listener)
+    window.removeEventListener('click', listener, { capture })
     window.removeEventListener('pointerdown', listener)
   }
 }
