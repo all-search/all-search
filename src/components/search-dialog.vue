@@ -6,6 +6,8 @@ import favicon from './favicon.vue'
 import useSites from './useSites'
 import scrollbar from './scrollbar/src/scrollbar.vue'
 import { Site } from '../types/site'
+import { openUrl, otherOpenMode, type OpenMode } from '../util/openUrl'
+import { selectionOpenMode } from './useOpenMode'
 
 const props = withDefaults(defineProps<{
   visible?: boolean
@@ -34,14 +36,17 @@ const inputValue = ref('')
 
 const { sites } = useSites('tm')
 
-const handleClick = (item: Site, newWin: boolean) => {
+/** Ctrl / 中键固定走“另一侧”的打开方式 */
+const altMode = computed(() => otherOpenMode(selectionOpenMode.value))
+
+/**
+ * 点击约定与划词工具栏（selection-bar.vue）共用同一个开关（selectionOpenMode），
+ * 默认左键新标签页，保证“划词”这条链路的交互一致。
+ */
+const handleClick = (item: Site, mode?: OpenMode) => {
   const keyword = inputValue.value
   const url = (item.url as string).replace('%s', keyword)
-  if (newWin) {
-    window.open(url)
-  } else {
-    window.location.href = url
-  }
+  openUrl(url, mode || selectionOpenMode.value)
 }
 </script>
 
@@ -83,9 +88,9 @@ const handleClick = (item: Site, newWin: boolean) => {
                 :key="`${item.name}_${i}`"
                 class="cate-item">
               <a href="javascript:void 0"
-                 @click.exact="handleClick(child, false)"
-                 @click.ctrl.exact="handleClick(child, true)"
-                 @click.middle.exact="handleClick(child, true)">
+                 @click.exact="handleClick(child)"
+                 @click.ctrl.exact="handleClick(child, altMode)"
+                 @click.middle.exact="handleClick(child, altMode)">
                 <favicon
                   class="as-url-icon"
                   :url="(child.url as string)"

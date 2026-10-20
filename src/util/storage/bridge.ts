@@ -1,4 +1,5 @@
 import { getName, version, parseJson } from '../common'
+import store from '../store'
 import { TmAdapter } from './tm'
 import { StorageAdapter } from './types'
 
@@ -43,6 +44,10 @@ export class WebBridgeAdapter implements StorageAdapter {
         const customEvent = event as CustomEvent<BridgeMethods>
         clearTimeout(timeout)
         this.methods = customEvent.detail
+        // 记录油猴脚本版本，供配置页判断“是否已安装/是否需要升级”
+        if (this.methods && this.methods.version) {
+          store.tmVersion = this.methods.version
+        }
         this.cleanup()
         resolve()
       }

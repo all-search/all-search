@@ -2,12 +2,14 @@
 import { ref } from 'vue'
 import useMode from './useMode'
 import useAlign from './useAlign'
+import useOpenMode from './useOpenMode'
 import useSwitchShow, { SHOW_STATUS } from './useSwitchShow'
 import useColor from './useColor'
 import useFavicon from './useFavicon'
 import useToolbar from './useToolbar'
 import useSites from './useSites'
 import overlay from './overlay.vue'
+import openModeTip from './open-mode-tip.vue'
 import asRadio from './radio.vue'
 import formItem from './form-item.vue'
 import color from './color.vue'
@@ -22,6 +24,7 @@ const onMaskClick = () => {
 }
 
 const { value: mode, direction } = useMode()
+const { menuOpenMode, selectionOpenMode } = useOpenMode()
 const { list: alignList, value: align } = useAlign()
 const { primaryColor, primaryTextColor } = useColor()
 const { show, options, scrollHide } = useSwitchShow()
@@ -30,8 +33,30 @@ const { visible: toolbarVisible } = useToolbar()
 const { resetSites } = useSites('tm')
 
 import { getAsMountAnchor } from '@src/util'
+import { isPlugin } from '@src/env'
 
 const teleportTarget = getAsMountAnchor()
+
+/**
+ * 设置页地址：
+ * - 浏览器插件：请求后台打开扩展自己的 options 页（hash 路由，刷新不会 404）
+ * - 油猴/网页版：仍指向在线配置站
+ */
+function settingsUrl (route: string): string {
+  return `https://all-search.github.io/all-search${route}`
+}
+
+function openSettingsPage (event: MouseEvent, route: string): void {
+  if (!isPlugin) return
+  const runtime = (globalThis as any).chrome?.runtime
+  if (!runtime || typeof runtime.sendMessage !== 'function') return
+  // 网页直接跳 chrome-extension:// 会被浏览器拦截，交给后台 tabs.create
+  event.preventDefault()
+  runtime.sendMessage({ type: 'all-search:open-options', route })
+}
+
+const menuSettingsUrl = settingsUrl('/config/sites')
+const toolbarSettingsUrl = settingsUrl('/config/toolbar')
 
 const hide = () => {
   show.value = SHOW_STATUS.COLLAPSED
@@ -107,6 +132,28 @@ function changeScrollHide (e: any) {
                   v-model="mode">居右
                 </asRadio>
               </formItem>
+              <p class="as-group-title">点击打开方式</p>
+              <formItem label="主菜单" label-width="64">
+                <asRadio
+                  label="same"
+                  v-model="menuOpenMode">当前页
+                </asRadio>
+                <asRadio
+                  label="new"
+                  v-model="menuOpenMode">新标签页
+                </asRadio>
+              </formItem>
+              <formItem label="划词" label-width="64">
+                <asRadio
+                  label="same"
+                  v-model="selectionOpenMode">当前页
+                </asRadio>
+                <asRadio
+                  label="new"
+                  v-model="selectionOpenMode">新标签页
+                </asRadio>
+              </formItem>
+              <openModeTip/>
               <formItem label="对齐">
                 <asRadio
                   v-for="[key, value] in alignList"
@@ -164,14 +211,16 @@ function changeScrollHide (e: any) {
             <footer>
               <a class="link"
                  title="菜单设置页"
-                 href="https://all-search.github.io/all-search/config/sites"
-                 target="_blank">
+                 :href="menuSettingsUrl"
+                 target="_blank"
+                 @click="openSettingsPage($event, '/config/sites')">
                 菜单设置
               </a>
               <a class="link"
                  title="划词工具栏设置页"
-                 href="https://all-search.github.io/all-search/config/toolbar"
-                 target="_blank">
+                 :href="toolbarSettingsUrl"
+                 target="_blank"
+                 @click="openSettingsPage($event, '/config/toolbar')">
                 划词工具栏设置
               </a>
               <a class="link"
@@ -216,6 +265,16 @@ function changeScrollHide (e: any) {
     color: var(--as-primary-color);
     background-color: rgba(0, 0, 0, .04);
   }
+}
+
+/* 交互说明文案（主菜单 / 划词 打开方式） */
+.as-group-title {
+  margin: 8px 0 2px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  color: var(--as-primary-text-color);
+  opacity: .6;
 }
 
 .as-side-bar {

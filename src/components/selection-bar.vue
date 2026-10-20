@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { reactive, ref, unref, computed, nextTick } from 'vue'
 import { getAsRoot } from '../util'
+import { openUrl, otherOpenMode, type OpenMode } from '../util/openUrl'
 import { selection } from './selection'
+import { selectionOpenMode } from './useOpenMode'
 import useToolbar from './useToolbar'
 import favicon from './favicon.vue'
 import icon from './icon.vue'
@@ -31,14 +33,6 @@ function getSelectionText() {
   return window.getSelection()?.toString().trim() || ''
 }
 
-function getSelectionRect() {
-  const selection = window.getSelection()
-  if (selection && selection.rangeCount) {
-    return selection.getRangeAt(0).getBoundingClientRect()
-  }
-  return null
-}
-
 /**
  * 输入框（<input>/<textarea>）里的选区不归 window.getSelection() 管，
  * 单独取一下，顺带解决「搜索框里选词不出工具栏」（issue #88）
@@ -59,6 +53,14 @@ function getInputSelection(): { text: string; rect: DOMRect | null } {
     return { text: '', rect: null }
   }
   return { text, rect: el.getBoundingClientRect() }
+}
+
+function getSelectionRect() {
+  const selection = window.getSelection()
+  if (selection && selection.rangeCount) {
+    return selection.getRangeAt(0).getBoundingClientRect()
+  }
+  return null
 }
 
 /** 当前要展示的选区：页面划词优先，其次输入框内选区 */
@@ -95,25 +97,36 @@ function changeVisible(val: boolean) {
     const height = toolbarClientRect.bottom - toolbarClientRect.top
     if (lastRect) {
       const { x, right, left, top } = lastRect
-      // 取整：半像素定位会让工具栏整体发虚（issue #65）
+      // 取整：半像素定位会让工具栏整体发虚
       styleObj.top = Math.round(scrollTop() + top - height)
       styleObj.left = Math.round(scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2))
     }
   })
 }
 
-function isToolbarContains(el: Node) {
-  const toolbarEleValue = unref(toolbarEle)
-  if (toolbarEleValue) {
-    return toolbarEleValue.contains(el)
-  } else {
-    return false
-  }
+/**
+ * 影子 DOM 内的事件冒泡到 window 时，e.target 会被重定向成宿主元素（<all-search-ui>），
+ * 用它做 contains 判断会把“点在工具栏上”误判成“点在外面”。
+ * 这里统一改用 composedPath() 判断真实路径。
+ */
+function eventPath (e: Event): EventTarget[] {
+  return typeof e.composedPath === 'function' ? e.composedPath() : []
+}
+
+function isInApp (e: Event): boolean {
+  const root = getAsRoot()
+  if (!root) return false
+  if (eventPath(e).includes(root)) return true
+  return e.target instanceof Node && root.contains(e.target)
+}
+
+function isInToolbar (e: Event): boolean {
+  const el = unref(toolbarEle)
+  return !!el && eventPath(e).includes(el)
 }
 
 window.addEventListener('mousedown', function (e) {
-  const include = e.target && getAsRoot()?.contains(e.target as Node)
-  if (!include) {
+  if (!isInApp(e)) {
     changeVisible(false)
   }
   // 输入框里双击 / 拖选时，部分浏览器不会派发 selectstart，这里补上
@@ -124,8 +137,8 @@ window.addEventListener('mousedown', function (e) {
 }, true)
 
 window.addEventListener('mouseup', function (e) {
-  const include = e.target && getAsRoot()?.contains(e.target as Node)
-  const isToolbar = e.target && isToolbarContains(e.target as Node)
+  const include = isInApp(e)
+  const isToolbar = isInToolbar(e)
   if (!include) {
     const { text, rect } = readSelection()
     selection.value = text
@@ -143,14 +156,13 @@ document.addEventListener('selectstart', function () {
   selectStart = true
 }, false)
 
-function handleClick(item: Site, newWin: boolean) {
+/** Ctrl / 中键固定走“另一侧”的打开方式 */
+const altMode = computed(() => otherOpenMode(selectionOpenMode.value))
+
+function handleClick (item: Site, mode?: OpenMode) {
   const keyword = selection.value
   const url = (item.url as string).replace('%s', keyword)
-  if (newWin) {
-    window.open(url)
-  } else {
-    window.location.href = url
-  }
+  openUrl(url, mode || selectionOpenMode.value)
 }
 
 function openMainDialog() {
@@ -171,9 +183,9 @@ function openMainDialog() {
       :key="i"
       :url="(item.url as string)"
       :title="item.nameZh"
-      @click.exact="handleClick(item, true)"
-      @click.ctrl.exact="handleClick(item, false)"
-      @click.middle.exact="handleClick(item, false)"/>
+      @click.exact="handleClick(item)"
+      @click.ctrl.exact="handleClick(item, altMode)"
+      @click.middle.exact="handleClick(item, altMode)"/>
     <div
       class="tool-bar-item"
       @click="openMainDialog">

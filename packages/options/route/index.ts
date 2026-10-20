@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { isPlugin } from '@src/env'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -32,6 +33,14 @@ const routes: RouteRecordRaw[] = [
         meta: {
           nameZh: '工具栏配置'
         }
+      },
+      {
+        path: 'interaction',
+        name: 'interaction',
+        component: () => import('../views/interaction.vue'),
+        meta: {
+          nameZh: '交互'
+        }
       }
     ]
   },
@@ -41,7 +50,9 @@ const routes: RouteRecordRaw[] = [
   }
 ]
 
+// 扩展的 options 页运行在 chrome-extension:// 下，history 模式的路径刷新会 404，
+// 因此插件内改用 hash 路由；独立部署的配置页继续用带 base 的 history 路由。
 export default createRouter({
-  history: createWebHistory('/all-search/'),
+  history: isPlugin ? createWebHashHistory() : createWebHistory('/all-search/'),
   routes
 })

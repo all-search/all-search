@@ -30,6 +30,10 @@
             index="/config/toolbar">
             划词工具栏
           </el-menu-item>
+          <el-menu-item
+            index="/config/interaction">
+            交互
+          </el-menu-item>
         </el-menu>
       </div>
       <a class="gh-btn"

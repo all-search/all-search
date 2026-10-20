@@ -6,7 +6,9 @@ import { resolveKeyword } from '../util/getKeyword'
 import icon from './icon.vue'
 import favicon from './favicon.vue'
 import { onTap } from '../util/tap'
+import { openUrl, otherOpenMode, type OpenMode } from '../util/openUrl'
 import { selection } from './selection'
+import { menuOpenMode } from './useOpenMode'
 import { Site, SiteCategory } from '../types/site'
 
 const props = withDefaults(defineProps<{
@@ -45,19 +47,18 @@ const defaultKeyword = () => {
   return keyword ? encodeURIComponent(keyword) : ''
 }
 
-const handleClick = (item: Site, newWin?: boolean) => {
+/** Ctrl / 中键固定走“另一侧”的打开方式 */
+const altMode = computed(() => otherOpenMode(menuOpenMode.value))
+
+const handleClick = (item: Site, mode?: OpenMode) => {
   const keyword = defaultKeyword()
   const url = (item.url as string).replace('%s', keyword)
-  if (newWin) {
-    window.open(url)
-  } else {
-    window.location.href = url
-  }
+  openUrl(url, mode || menuOpenMode.value)
   return false
 }
 
 let isTap = false
-const handleCateClick = (cate: SiteCategory, newWin: boolean) => {
+const handleCateClick = (cate: SiteCategory, mode?: OpenMode) => {
   if (isTap) {
     return
   }
@@ -65,7 +66,7 @@ const handleCateClick = (cate: SiteCategory, newWin: boolean) => {
     .filter(item => item.data?.visible)
     .find(item => (item.url as string).indexOf(window.location.hostname) === -1)
   if (urlItem) {
-    return handleClick(urlItem, newWin)
+    return handleClick(urlItem, mode)
   }
 }
 
@@ -85,9 +86,9 @@ onTap(categoryRef, () => {
          @mouseenter="show()"
          @mouseleave="hide"
          href="javascript:void 0"
-         @click.exact="handleCateClick(item, false)"
-         @click.ctrl.exact="handleCateClick(item, true)"
-         @click.middle.exact="handleCateClick(item, true)">
+         @click.exact="handleCateClick(item)"
+         @click.ctrl.exact="handleCateClick(item, altMode)"
+         @click.middle.exact="handleCateClick(item, altMode)">
         <icon :name="item.name"/>
         <span
           class="as-menu-item-title"
@@ -105,8 +106,8 @@ onTap(categoryRef, () => {
             v-show="child.data?.visible">
             <a href="javascript:void 0"
                @click.exact="handleClick(child)"
-               @click.ctrl.exact="handleClick(child, true)"
-               @click.middle.exact="handleClick(child, true)">
+               @click.ctrl.exact="handleClick(child, altMode)"
+               @click.middle.exact="handleClick(child, altMode)">
               <favicon
                 class="as-url-icon"
                 :url="(child.url as string)"

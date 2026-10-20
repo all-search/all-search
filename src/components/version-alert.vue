@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import store from '../util/store'
+import { isPlugin } from '@src/env'
 
 const data = reactive({
   notInstall: false,
@@ -8,6 +9,10 @@ const data = reactive({
 })
 
 setTimeout(() => {
+  // 扩展自身带有 options 页，数据直接走 chrome.storage，不依赖油猴脚本
+  if (isPlugin) {
+    return
+  }
   if (!store.tmVersion) {
     data.notInstall = true
   }
