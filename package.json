@@ -26,6 +26,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "e2e": "node e2e/run.mjs",
     "lint": "eslint --ext .js,.ts,.vue src packages --fix",
     "type-check": "vue-tsc --noEmit",
     "prepare": "husky install",
@@ -33,6 +34,10 @@
     "build:script": "pnpm run -C packages/script build",
     "dev:plugin": "pnpm run -C packages/plugin dev",
     "build:plugin": "pnpm run -C packages/plugin zip",
+    "dev:firefox": "pnpm run -C packages/plugin dev:firefox",
+    "build:firefox": "pnpm run -C packages/plugin build:firefox",
+    "zip": "pnpm run -C packages/plugin zip",
+    "zip:firefox": "pnpm run -C packages/plugin zip:firefox",
     "dev:options": "pnpm run -C packages/options dev",
     "build:options": "pnpm run -C packages/options build"
   },
@@ -69,6 +74,7 @@
     "jsdom": "^27.4.0",
     "lint-staged": "^13.1.0",
     "minimist": "^1.2.7",
+    "playwright-core": "^1.64.1",
     "postcss": "^8.4.13",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
