@@ -12,7 +12,32 @@ export interface CurrentSite {
   disabled: boolean;
   style: any;
   selectors: string | null;
-  query: string | null;
+  query: string | string[] | null;
+}
+
+/**
+ * 从搜索引擎的 URL 模板里反推关键词参数名
+ * 例如 `https://www.baidu.com/s?wd=%s&ie=utf-8` → `wd`
+ */
+export function extractKeywordParam (url?: string | RegExp | null): string | null {
+  if (typeof url !== 'string' || url.indexOf('%s') < 0) {
+    return null
+  }
+  const queryStart = url.indexOf('?')
+  if (queryStart < 0) {
+    // 形如 /search/%s 的模板，参数在路径里，只能靠 DOM 兜底
+    return null
+  }
+  const queryString = url.slice(queryStart + 1).split('#')[0]
+  const pairs = queryString.split('&')
+  for (const pair of pairs) {
+    const [key, value = ''] = pair.split('=')
+    // 占位符本身就是 %s，不能先 decodeURIComponent（会抛 URI malformed）
+    if (key && value === '%s') {
+      return key
+    }
+  }
+  return null
 }
 
 function getMenuItem (): Site | null {
@@ -73,7 +98,8 @@ function getSite (): CurrentSite {
       disabled: !!target.disabled,
       style: target.style || {},
       selectors: target.selectors || null,
-      query: target.query || null
+      // loadList 只声明匹配规则时，借用菜单里该引擎的 URL 模板反推参数名
+      query: target.query || extractKeywordParam(menuItem?.url)
     }
   } else if (menuItem) {
     const item = menuItem as Site
@@ -83,7 +109,8 @@ function getSite (): CurrentSite {
       disabled: false,
       style: item.style || {},
       selectors: item.selectors || null,
-      query: item.query || null
+      // 没显式配置参数名时，从该引擎的 URL 模板里反推（如百度的 wd、谷歌的 q）
+      query: item.query || extractKeywordParam(item.url)
     }
   }
 

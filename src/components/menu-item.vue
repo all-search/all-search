@@ -2,8 +2,7 @@
 import { computed, ref } from 'vue'
 import popperComp from './popper.vue'
 import { site } from '../config/siteInfo'
-import { getQueryString } from '../util'
-import { getKeyword } from '../util/getKeyword'
+import { resolveKeyword } from '../util/getKeyword'
 import icon from './icon.vue'
 import favicon from './favicon.vue'
 import { onTap } from '../util/tap'
@@ -38,23 +37,12 @@ const defaultKeyword = () => {
   if (selection && selection.value) {
     return selection.value
   }
-  let keyword = getKeyword()
-  const selectors = currentSite.selectors
-  const query = currentSite.query
-  if (keyword === undefined) {
-    if (selectors) {
-      const el = document.querySelector(selectors) as HTMLInputElement
-      keyword = el ? el.value : ''
-    } else if (query) {
-      const queryList = Array.isArray(query) ? query : [query]
-      queryList.some(name => {
-        const word = getQueryString(name)
-        keyword = word
-        return !!word
-      })
-    }
-  }
-  return keyword || ''
+  // 站点选择器 → 站点参数 → 常见参数 → 页面输入框，逐级降级（issue #95）
+  const keyword = resolveKeyword({
+    selectors: currentSite.selectors,
+    query: currentSite.query
+  })
+  return keyword ? encodeURIComponent(keyword) : ''
 }
 
 const handleClick = (item: Site, newWin?: boolean) => {
