@@ -39,6 +39,37 @@ function getSelectionRect() {
   return null
 }
 
+/**
+ * 输入框（<input>/<textarea>）里的选区不归 window.getSelection() 管，
+ * 单独取一下，顺带解决「搜索框里选词不出工具栏」（issue #88）
+ */
+function getInputSelection(): { text: string; rect: DOMRect | null } {
+  const el = document.activeElement
+  const isField = el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement
+  if (!el || !isField) {
+    return { text: '', rect: null }
+  }
+  const start = el.selectionStart
+  const end = el.selectionEnd
+  if (typeof start !== 'number' || typeof end !== 'number' || start === end) {
+    return { text: '', rect: null }
+  }
+  const text = el.value.slice(Math.min(start, end), Math.max(start, end)).trim()
+  if (!text) {
+    return { text: '', rect: null }
+  }
+  return { text, rect: el.getBoundingClientRect() }
+}
+
+/** 当前要展示的选区：页面划词优先，其次输入框内选区 */
+function readSelection(): { text: string; rect: DOMRect | null } {
+  const text = getSelectionText()
+  if (text) {
+    return { text, rect: getSelectionRect() }
+  }
+  return getInputSelection()
+}
+
 function scrollTop() {
   return document.documentElement.scrollTop || document.body.scrollTop
 }
@@ -48,6 +79,7 @@ function scrollLeft() {
 }
 
 let selectStart = false
+let lastRect: DOMRect | null = null
 
 function changeVisible(val: boolean) {
   visible.value = val
@@ -61,9 +93,8 @@ function changeVisible(val: boolean) {
     }
     const toolbarClientRect = toolbarEleValue.getBoundingClientRect()
     const height = toolbarClientRect.bottom - toolbarClientRect.top
-    const selectionRect = getSelectionRect()
-    if (selectionRect) {
-      const { x, right, left, top } = selectionRect
+    if (lastRect) {
+      const { x, right, left, top } = lastRect
       // 取整：半像素定位会让工具栏整体发虚（issue #65）
       styleObj.top = Math.round(scrollTop() + top - height)
       styleObj.left = Math.round(scrollLeft() + x + ((right - left) / 2) - (toolbarClientRect.width / 2))
@@ -85,13 +116,20 @@ window.addEventListener('mousedown', function (e) {
   if (!include) {
     changeVisible(false)
   }
+  // 输入框里双击 / 拖选时，部分浏览器不会派发 selectstart，这里补上
+  const target = e.target
+  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+    selectStart = true
+  }
 }, true)
 
 window.addEventListener('mouseup', function (e) {
   const include = e.target && getAsRoot()?.contains(e.target as Node)
   const isToolbar = e.target && isToolbarContains(e.target as Node)
   if (!include) {
-    selection.value = getSelectionText()
+    const { text, rect } = readSelection()
+    selection.value = text
+    lastRect = rect
     changeVisible(!!selection.value && selectStart)
   } else if (!isToolbar) {
     selection.value = ''
