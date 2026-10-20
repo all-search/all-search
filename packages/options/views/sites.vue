@@ -8,7 +8,7 @@
         v-for="(cate, index) in localSites"
         :key="`${cate.name}-${index}`"
         :label="cate.name">
-        {{ cate.nameZhBackup }}
+        {{ cate.nameZh }}
       </el-radio-button>
     </el-radio-group>
     <div
@@ -255,8 +255,7 @@ export default {
 
     function init (val) {
       localSites.value = (val || []).map(item => ({
-        ...item,
-        nameZhBackup: item.nameZh
+        ...item
       }))
       if (localSites.value[0]) {
         tabName.value = localSites.value[0].name
@@ -268,17 +267,17 @@ export default {
     }
 
     function addCategory () {
-      const i = personalCategory.value.length
+      // 用时间戳避免删除后重新添加时和已有分类重名（同一 name 会让单选框串台）
+      const name = `personal-${Date.now()}`
       localSites.value.push({
         nameZh: '新分类',
-        nameZhBackup: '新分类',
-        name: `personal-${i + 1}`,
+        name,
         list: [],
         data: {
           visible: true
         }
       })
-      tabName.value = `personal-${i + 1}`
+      tabName.value = name
     }
 
     function addToPersonal (cate, item) {
@@ -436,11 +435,23 @@ export default {
       })
     }
 
+    /**
+     * 保存时只保留「扩展名之外」的字段会被丢掉（selectors / query / style），
+     * 这里改成保留原对象上的所有自定义字段，只覆盖需要规范化的部分。
+     */
+    function pickSite (item) {
+      const copy = { ...item }
+      delete copy.nameZhBackup
+      return copy
+    }
+
     function formatSites () {
       return localSites.value.map(item => ({
+        ...pickSite(item),
         nameZh: item.nameZh,
         name: item.name,
         list: item.list.map(child => ({
+          ...pickSite(child),
           nameZh: child.nameZh,
           url: child.url,
           icon: child.icon || '',
