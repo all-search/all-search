@@ -75,6 +75,14 @@ export async function run ({ headless, report }) {
       await page.waitForTimeout(250)
     }
 
+    // 2.1 退出循环时是「居右」：不再有顶部偏移，被下移的 fixed 元素必须还原
+    await page.waitForTimeout(800)
+    const restoredTop = await page.evaluate(() => {
+      const el = document.querySelector('header.site')
+      return el ? Math.round(el.getBoundingClientRect().top) : -1
+    })
+    report.check('离开顶部布局后 fixed 头部恢复原位', restoredTop === 0, `header.top=${restoredTop}`)
+
     // 3. 设置入口打开扩展自带 options 页
     await page.locator('.as-setting-btn').filter({ hasText: '设置' }).click()
     await page.waitForTimeout(400)
