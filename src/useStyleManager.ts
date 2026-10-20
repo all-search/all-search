@@ -1,5 +1,5 @@
-import { watch, watchEffect, toValue, Ref, ComputedRef, WritableComputedRef } from 'vue'
-import { initSpecialStyle } from './util/addSpecialStyle'
+import { onUnmounted, watch, watchEffect, toValue, Ref, ComputedRef, WritableComputedRef } from 'vue'
+import { initSpecialStyle, disconnectSpecialStyle } from './util/addSpecialStyle'
 import { addCustomStyle, syncHostLayout } from './util/initStyle'
 import { site } from './config/siteInfo'
 import { Direction, Mode } from './components/useMode'
@@ -44,6 +44,11 @@ export function useStyleManager(
   // 模式变化时重新应用自定义样式
   watch(mode, (newMode) => {
     addCustomStyle(newMode, site as any)
+  })
+
+  // 应用卸载（SPA 重新挂载 / 扩展重载）时回收监听并还原被调整过的元素
+  onUnmounted(() => {
+    disconnectSpecialStyle()
   })
 
   return {
