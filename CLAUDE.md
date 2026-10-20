@@ -2,6 +2,13 @@
 
 ## 变更记录 (Changelog)
 
+### 2026-10-20 - 双模式收尾（插件可用化 + 文档对齐）
+- 插件补齐图标、后台 worker、自带设置页（hash 路由），侧边栏设置入口改为打开扩展自身 options 页
+- 修复用户脚本多段 CSS 互相覆盖导致界面无样式的问题
+- 移除 TS 迁移遗留的重复文件（`options/main.js`、`route/index.js`、`vite.config.mjs`），恢复 `build:options`
+- 新增插件打包 workflow，三个 workflow 统一 pnpm 10（仓库锁文件为 v9）
+- 同步 README / AGENT / 本文档中的入口路径、存储实现与测试现状
+
 ### 2025-12-30 15:38:20 - AI 上下文二次增强
 - 完成全仓扫描：识别 5 个模块，85 个关键文件
 - 生成 `.claude/index.json` 扫描索引（包含覆盖率和缺口分析）
@@ -24,12 +31,13 @@
 ## 🏗️ 项目架构
 
 ### 技术栈
-- **Vue 3.3.4** - 前端框架（Composition API）
-- **Vite 5.2.7** - 构建工具
-- **Element Plus 2.2.22** - UI组件库
-- **Vue Router 4.0.5** - 路由管理
-- **Sass** - CSS预处理器
-- **WXT 0.19.12** - 浏览器扩展开发框架
+- **Vue 3.5** - 前端框架（Composition API + TypeScript）
+- **Vite 7** - 构建工具（`vite.config.shared.ts` 为共享配置）
+- **Element Plus 2.9** - 配置页 UI 组件库
+- **Vue Router 4** - 路由管理
+- **Sass** - CSS 预处理器
+- **WXT 0.20.13** - 浏览器扩展开发框架
+- **Vitest + jsdom** - 单元测试
 - **Rollup (via Vite)** - 模块打包
 
 ### 核心依赖
@@ -76,9 +84,9 @@ graph TD
 
 | 模块路径 | 语言 | 职责描述 | 入口文件 | 相关脚本 |
 |---------|------|---------|---------|---------|
-| `packages/script` | JavaScript | Tampermonkey 用户脚本，通过 GM API 注入核心组件到网页 | `index.js` | `dev:script`, `build:script` |
-| `packages/plugin` | JavaScript | 基于 WXT 的浏览器插件，支持 Chrome/Firefox 等 | `entries/content.js` | `dev:plugin`, `build:plugin` |
-| `packages/options` | Vue 3 | 独立配置页面应用，提供搜索引擎和工具栏管理界面 | `main.js` | `dev:options`, `build:options` |
+| `packages/script` | TypeScript | Tampermonkey 用户脚本，通过 GM API 注入核心组件到网页 | `index.ts` | `dev:script`, `build:script` |
+| `packages/plugin` | TypeScript | 基于 WXT 的浏览器插件，支持 Chrome/Firefox 等 | `entries/content.ts`、`entries/background.ts` | `dev:plugin`, `build:plugin` |
+| `packages/options` | Vue 3 + TS | 独立配置页面应用，提供搜索引擎和工具栏管理界面 | `main.ts` | `dev:options`, `build:options` |
 | `src` | Vue 3 | 核心共享代码库，包含所有组件、配置和工具函数 | `index.vue` | - |
 | `lib` | JavaScript | 外部库文件（popper-lite.min.js） | - | - |
 
@@ -121,20 +129,24 @@ graph TD
   - `disk.js` - 网盘搜索
 
 #### 工具函数 (`src/util/`)
-- **核心工具**: `index.js`, `storage.js`, `hook.js`, `store.js`
-- **样式处理**: `initStyle.js`, `addSpecialStyle.js`, `injectStyle.js`
-- **交互功能**: `getKeyword.js`, `fullScreen.js`, `clipboard.js`, `onClickOutside.js`, `tap.js`
-- **兼容性**: `routerChange.js`, `addScript.js`, `sites.js`
-- **性能优化**: `debounce.js`, `raf.js`, `useTimeout.js`, `useScroll.js`
-- **URL 处理**: `parseUrl.js`
+> 源码已全量迁移到 TypeScript，下列文件均为 `.ts`。
+
+- **核心工具**: `index.ts`, `storage/`（`index.ts` + `tm.ts` / `extension.ts` / `bridge.ts` / `types.ts`）, `hook.ts`, `store.ts`
+- **挂载/布局**: `mount.ts`（`setupApp`）, `layoutService.ts`, `dom.ts`
+- **样式处理**: `initStyle.ts`, `addSpecialStyle.ts`, `injectStyle.ts`
+- **交互功能**: `getKeyword.ts`, `fullScreen.ts`, `clipboard.ts`, `onClickOutside.ts`, `tap.ts`
+- **兼容性**: `routerChange.ts`, `addScript.ts`, `sites.ts`
+- **性能优化**: `debounce.ts`, `raf.ts`, `useTimeout.ts`, `useScroll.ts`
+- **URL 处理**: `parseUrl.ts`
 
 ### 子包结构
 
 #### 1. 用户脚本包 (`packages/script/`)
 - 开发: `pnpm run dev:script`
 - 构建: `pnpm run build:script`
-- 入口: `packages/script/index.js`
+- 入口: `packages/script/index.ts`
 - 配置: `packages/script/src/script-config.js` - Tampermonkey 元数据
+- 构建配置: `packages/script/vite.config.ts`（含 CSS 按 chunk 注入影子根的逻辑）
 
 **特点**：
 - 使用 Vite + vite-plugin-monkey 构建
@@ -144,24 +156,27 @@ graph TD
 
 #### 2. 浏览器插件包 (`packages/plugin/`)
 - 开发: `pnpm run dev:plugin`
-- 构建: `pnpm run build:plugin`
+- 构建: `pnpm run build:plugin`（产出 zip）/ `pnpm run zip:firefox`
 - 配置: `packages/plugin/wxt.config.js`
 - 入口:
-  - Content Script: `entries/content.js`
+  - Content Script: `entries/content.ts`
+  - Background: `entries/background.ts`（响应“打开设置页”消息）
   - Options Page: `entries/options/main.js`
+- 图标: `packages/plugin/public/icon/{16,32,48,96,128}.png`（WXT 自动写入 manifest）
 
 **特点**：
 - 使用 WXT 框架开发
 - 支持 Chrome、Firefox 多浏览器
 - 自动生成 manifest.json
-- 使用 `wxt/storage` API 管理存储
+- 通过 `src/util/storage/extension.ts` 使用 `@wxt-dev/storage`（底层 `chrome.storage.local`）
+- 设置页在扩展内走 hash 路由（`options.html#/config/sites`），刷新不会 404
 - 支持热重载
 
 #### 3. 配置页面包 (`packages/options/`)
 - 开发: `pnpm run dev:options`
 - 构建: `pnpm run build:options`
-- 入口: `packages/options/main.js`
-- 路由: `packages/options/route/index.js`
+- 入口: `packages/options/main.ts`
+- 路由: `packages/options/route/index.ts`（插件内 hash 路由 / 独立站点 history 路由）
 - 页面组件: `packages/options/views/`
   - `config.vue` - 配置主页面
   - `sites.vue` - 搜索引擎配置
@@ -335,8 +350,13 @@ pnpm run build:options
 - 底层使用 `chrome.storage.local`
 
 **存储 Key 格式**：
-- `all-search-{name}` - 统一前缀
-- 例：`all-search-sites`, `all-search-config`
+- `__allSearch__{name}` - 统一前缀（由 `src/util/common.ts` 的 `getName()` 生成）
+- 例：`__allSearch__sites`、`__allSearch__mode`
+
+**适配器**（`src/util/storage/`）：
+- `TmAdapter`（`tm.ts`）：GM_getValue / GM_setValue / GM_deleteValue
+- `ExtensionAdapter`（`extension.ts`）：`@wxt-dev/storage`，底层 `chrome.storage.local`
+- `WebBridgeAdapter`（`bridge.ts`）：在线配置页 ↔ 油猴脚本的跨上下文桥接，5 秒无响应降级到 localStorage
 
 ### 配置项
 - **搜索引擎列表** (`sites`): 分类和 URL 配置
@@ -465,15 +485,15 @@ chore: 构建/工具变更
 
 ### 项目特点提示
 1. **Monorepo 架构**：修改代码时注意区分共享代码（`src/`）和模块代码（`packages/*/`）
-2. **多目标构建**：同一份核心代码构建为用户脚本和浏览器插件两种形式
-3. **存储抽象**：`src/util/storage.js` 提供了统一的存储接口，根据环境自动选择 GM API 或 chrome.storage
-4. **样式隔离**：所有样式必须使用 `#all-search` 命名空间，避免污染宿主页面
+2. **多目标构建**：同一份核心代码构建为用户脚本和浏览器插件两种形式，环境差异由 `src/env.ts` 的 `VITE_TARGET` 决定
+3. **存储抽象**：`src/util/storage/` 提供统一接口（TmAdapter / ExtensionAdapter / WebBridgeAdapter），**不要**在业务代码里直接调用 GM_* 或 chrome.storage
+4. **样式隔离**：UI 渲染在 Shadow DOM 内，所有样式使用 `as-` 前缀；宿主页面只保留 `as-host-*` 类名
 
 ### 常见任务
-- **添加新搜索引擎**：修改 `src/config/sites/{category}.js`
-- **修改布局样式**：修改 `src/index.vue` 和 `src/assets/common.scss`
-- **添加新功能组件**：在 `src/components/` 中创建，并在 `src/index.vue` 中引用
-- **适配新网站**：在 `src/config/loadList.js` 中添加匹配规则和特殊样式
+- **添加新搜索引擎**：修改 `src/config/sites/{category}.ts`
+- **修改布局样式**：修改 `src/assets/layout.scss`、`src/components/layout-manager.vue` 和 `src/useStyleManager.ts`
+- **添加新功能组件**：在 `src/components/` 中创建，并在 `src/components/layout-manager.vue` 或 `src/index.vue` 中引用
+- **适配新网站**：在 `src/config/loadList.ts` 中添加匹配规则和特殊样式
 
 ### 调试建议
 1. 使用 `dev:script` 模式开发核心功能（更快）
@@ -487,48 +507,26 @@ chore: 构建/工具变更
 - 核心代码文档：`src/CLAUDE.md`
 - 扫描索引：`.claude/index.json`
 
-## 📊 扫描覆盖率与缺口分析
+## 📊 现状与缺口
 
-### 当前覆盖率
-- 估算总文件数：约 450 个
-- 已扫描关键文件：85 个
-- 覆盖率：18.9%
-- 已记录模块：5 个（全部文档化）
+### 已具备
+- **类型**：`src/` 与 `packages/*` 源码全部 TypeScript（`tsconfig.json` 开 `strict`，`vue-tsc` 仍有少量历史报错）
+- **测试**：vitest + jsdom，3 个 spec / 14 个用例（布局服务、核心 hooks、WebBridge 降级），`pnpm test`
+- **CI**：脚本发布、GitHub Pages、插件打包（Chrome/Firefox zip + Release）三条 workflow
+- **双端实测**：插件与用户脚本都在真实浏览器里跑通过（菜单、四向布局、浮层、设置页）
 
-### 已识别缺口
-1. **测试覆盖**：
-   - 无单元测试（Vitest）
-   - 无组件测试（@vue/test-utils）
-   - 无 E2E 测试（Playwright/Cypress）
-
-2. **类型安全**：
-   - 无 TypeScript 类型定义（除 WXT 自动生成）
-   - 建议逐步迁移到 TypeScript
-
-3. **文档完善**：
-   - 部分工具函数缺少 JSDoc 注释
-   - 建议为每个公共 API 添加文档
-
-4. **国际化**：
-   - 无 i18n 支持
-   - 仅支持中文界面
+### 仍然缺的
+1. **Firefox MV3**：现在打的是 MV2，切 MV3 需要回归权限与 content script 行为
+2. **E2E 未接入 CI**：`pnpm e2e` 已入库（plugin / userscript 两个场景），CI 上还需要 Playwright 的 Chromium——Chrome 137+ 已不支持命令行装扩展
+3. **国际化**：无 i18n，界面只有中文
+4. **无障碍**：键盘导航与屏幕阅读器支持未做
+5. **Element Plus**：配置页全量引入，包体偏大，可改按需加载
+6. **`addSpecialStyle`**：fixed 元素偏移仍只处理 `top`，性能回收方案见 `src/util/addSpecialStyle_todo.md`
 
 ### 下一步建议
-1. **优先级 1（质量）**：
-   - 添加单元测试（Vitest + @vue/test-utils）
-   - 为核心工具函数添加 JSDoc
-
-2. **优先级 2（类型安全）**：
-   - 逐步迁移到 TypeScript
-   - 添加类型定义文件
-
-3. **优先级 3（功能）**：
-   - 添加国际化支持（vue-i18n）
-   - 优化性能（虚拟滚动、懒加载）
-
-4. **优先级 4（基础设施）**：
-   - CI/CD 自动化（GitHub Actions）
-   - 自动化发布流程
+1. 存储/配置的边界用例补测（adapter 选择、bridge 超时、路由 base）
+2. 把 `pnpm e2e` 接进 CI
+3. 版本号与标签管理：发版前统一改 `package.json` 再打 `v*` tag
 
 ## 📄 许可证
 

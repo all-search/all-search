@@ -1,82 +1,109 @@
 ![all-search](https://socialify.git.ci/all-search/all-search/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern=Plus&stargazers=1&theme=Light)
 
 [English](./README.md) | [简体中文](./README.zh-CN.md)
+
 ## all-search, a search engine jump menu
 
-A top fixed menu that allows you to easily jump between search engines, based on vue3 and built using rollup.
+A fixed menu that lets you jump between search engines. One codebase, two delivery forms:
 
-Thanks to searchEngineJump for the idea and URL source.
-Similar tools recommended.
-[searchJumper Most powerful, Swiss army knife](https://greasyfork.org/zh-CN/scripts/445274-searchjumper)
-[searchEngineJump Search engine quick jump Most users](https://greasyfork.org/zh-CN/scripts/2739-search-enginejump)
+- **Browser extension** — Chrome / Edge / Firefox, built with [WXT](https://wxt.dev) (Manifest V3)
+- **Userscript** — Tampermonkey / ScriptCat, built with `vite-plugin-monkey`
 
-#### Any needs, suggestions, question directly to Issues.<br>Doing this script is purely a personal interest, using love to generate electricity.<br>It's not easy to open source, so please encourage me, if you think it's good, go to GitHub and give it a ⭐ Star, or share it with people around you.
+Both share the same Vue 3 UI, isolated from the host page with Shadow DOM.
 
-## Script URL
-The difference between Tampermonkey's and ScriptCat's scripts has been smoothed out
-* [GitHub URL](https://raw.github.com/all-search/all-search/release/index.user.js)
-* [iQDNS/iQZone URL](https://raw.iqiq.io/all-search/all-search/release/index.user.js)
-* [KGitHub URL](https://raw.kgithub.com/all-search/all-search/release/index.user.js)
+## Install
 
-### greasyFork
-* [greasyfork URL](https://greasyfork.org/zh-CN/scripts/397993-all-search)
+### Browser extension
 
-### ScriptCat
-* [ScriptCat ScriptCat URL](https://scriptcat.org/script-show-page/477)
+1. Download `all-search-<version>-chrome.zip` (or `-firefox.zip`) from [Releases](https://github.com/all-search/all-search/releases)
+2. Unzip it, open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and pick the unzipped folder
+3. Firefox: open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on** and pick `manifest.json` inside the unzipped folder
 
-## Set page
-* [code cloud](https://endday.gitee.io/all-search/)
-* [github](https://all-search.github.io/script/)
+### Userscript
+
+- [GreasyFork](https://greasyfork.org/zh-CN/scripts/397993-all-search)
+- [ScriptCat](https://scriptcat.org/script-show-page/477)
+- [GitHub raw](https://raw.github.com/all-search/all-search/release/index.user.js)
+
+## Settings
+
+- **Extension**: click “菜单设置” in the menu bar, or open `chrome://extensions` → All-Search → Details → Extension options. The options page runs locally and stores data in `chrome.storage.local`.
+- **Userscript**: the same link opens the [online config page](https://all-search.github.io/all-search/config/sites), which talks to the userscript through the page bridge.
 
 ## Features
-* [GUI Add URL](https://all-search.github.io/script/)
-* Drag to change category sorting
-* Support vertical and horizontal layout
-* Click on a category to use the first URL of the category to open it
-* Middle mouse button click on the URL to open a new window (you can also use ctrl+right click)
-* Provide mobile support
-  * Scrolling is possible if the page width is insufficient
-  * Mobile for click-triggered menu
-* Auto-hide function, triggered by button, can also be changed to scroll up or down to trigger hide
-* Auto-loading support for newly added URLs (i.e., those added by the user, can be displayed automatically)
-* Adaptive style, no additional adaptations required
-* Text selection toolbar
-* Global pop-up search
 
-## Todo list
-* English support
-* Shortcut open global pop-up search (TBD)
-* Google Pluginization (TBD)
+- GUI to add / edit sites, drag to reorder categories
+- Horizontal (top / bottom) and vertical (left / right) layouts
+- Click a category to open its first site; Ctrl / middle-click always uses the *other* open mode
+- Configurable click behavior per area: main menu vs. selection toolbar (current tab / new tab)
+- Auto-hide on scroll, collapsible bar, text-selection toolbar, global search dialog
+- Works on 200+ sites with per-site tweaks (`src/config/loadList.ts`)
 
-## Compatibility and Performance
-* For Baidu style issues, instead of using performance-depleting timers, use hijacked Node.prototype.removeChild to achieve
-* Listening for route switching for youtube's spf.js
-* no compatibility issues with AC-baidu and other mainstream Tampermonkey scripts
+## Development
 
-## Contribute
-
-#### Local development
-Setup page
-```
-npm run serve
+```bash
+pnpm install
+pnpm dev:plugin    # WXT dev server, opens a browser with the extension loaded
+pnpm dev:script    # userscript watch build (packages/script/dist)
+pnpm dev:options   # standalone config site (http://localhost:3000/all-search/)
 ```
 
-script
-```
-npm run tmDev
-```
-After running, copy the index.dev.js from the build directory to Tampermonkey or another script manager.
+## Build
 
-tmDev uses watch and will automatically rebuild every time it is modified. There is no code inside the index.dev.js file, but rather require references the local file index.user.js, so remember to enable Tampermonkey's file access rights
-
-#### build scripts
-The version number of the script references the version number in package.json, remember to modify
+```bash
+pnpm build:script   # packages/script/dist/index.user.js  (GreasyFork)
+pnpm build:plugin   # packages/plugin/.output/*-chrome.zip (Chrome Web Store)
+pnpm zip:firefox    # packages/plugin/.output/*-firefox.zip (AMO)
+pnpm build:options  # packages/options/dist (GitHub Pages)
 ```
-npm run tmBuild
+
+> **Windows note**: if the build fails with `[vite:esbuild-transpile] remove ...: Access is denied`, point `TEMP` at the repo before building:
+>
+> ```powershell
+> New-Item -ItemType Directory -Force .tmp\build | Out-Null
+> $env:TEMP="$PWD\.tmp\build"; $env:TMP=$env:TEMP
+> ```
+
+## Test
+
+```bash
+pnpm test          # vitest + jsdom — unit tests
+pnpm e2e           # browser regression (Playwright + local Edge/Chrome)
+pnpm type-check    # vue-tsc (still a few pre-existing errors)
+pnpm lint
 ```
-will package out the index.user.js used by Tampermonkey
 
-#### Feedback and communication
-[Tencent Channel](https://pd.qq.com/s/2bmefcl98)
+`pnpm e2e` builds both bundles first, then:
 
-Channel No. pd15449687
+- **plugin** — loads the unpacked extension and checks the menu bar, the dropdown direction in all four layouts, and that “菜单设置” opens the bundled options page
+- **userscript** — simulates Tampermonkey (Vue global + `GM_*` shims) and injects `dist/index.user.js`
+- **selection** — text-selection toolbar: the “更多” dialog keeps the selected keyword and opens the target in a new tab
+
+Options: `--no-build` (reuse artifacts), `--headed` (show the browser), `--only=plugin|userscript`.
+Screenshots land in `e2e/artifacts/` (gitignored). Override the browser with `E2E_CHANNEL` or `E2E_EXECUTABLE`.
+
+## Project layout
+
+| Path | Role |
+| --- | --- |
+| `src/` | Shared Vue components, config, storage adapters, mount/layout logic |
+| `packages/script/` | Userscript entry + userscript metadata |
+| `packages/plugin/` | WXT extension: content script, background, options page, icons |
+| `packages/options/` | Standalone config site (Element Plus + Vue Router) |
+
+## Thanks
+
+Thanks to searchEngineJump for the idea and URL source. Similar tools:
+[搜索酱](https://greasyfork.org/zh-CN/scripts/445274-searchjumper) ·
+[searchEngineJump](https://greasyfork.org/zh-CN/scripts/2739-search-enginejump)
+
+If this helps you, a ⭐ on GitHub is appreciated.
+
+## Feedback
+
+- [GitHub Issues](https://github.com/all-search/all-search/issues)
+- Tencent Channel: pd15449687
+
+## License
+
+[GPL-3.0](./LICENSE)

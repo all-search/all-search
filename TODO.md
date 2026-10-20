@@ -41,6 +41,14 @@
 - [ ] **根级快捷入口**：允许在分类同级添加网站（无分组模式），扩展 script/options 的数据结构与 UI。
 - [ ] **移动端悬浮球模式**：新增浮球布局模式，支持拖拽、透明度、点击呼出菜单，面向移动端的轻量交互。
 
+### 阶段 5：双模式收尾 (DONE 2026-10-20)
+- [x] **插件可用化**：图标（`packages/plugin/public/icon`）、后台 worker、扩展自带设置页 + hash 路由
+- [x] **设置入口**：条上的「菜单设置」在插件内打开扩展 options 页（不再跳外网配置站）
+- [x] **用户脚本修复**：CSS 按 chunk 注入影子根，修复多段样式互相覆盖导致的裸 HTML
+- [x] **构建清理**：删除 TS 迁移遗留的 `main.js` / `route/index.js` / `vite.config.mjs`，恢复 `build:options`
+- [x] **发布链路**：新增 `plugin-release.yml`；三个 workflow 统一 pnpm 10（锁文件 v9）
+- [x] **测试**：`pnpm test` 14 个用例通过，已接入插件发布流程
+
 ---
 
 ## ?? 进度统计
