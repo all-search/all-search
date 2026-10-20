@@ -7,7 +7,15 @@ const sites: Partial<Site>[] = [
   },
   {
     nameZh: '推特',
-    url: 'https://twitter.com/search/%s'
+    url: 'https://x.com/search?q=%s&src=typed_query'
+  },
+  {
+    nameZh: '小红书',
+    url: 'https://www.xiaohongshu.com/search_result?keyword=%s&source=web_search_result_notes'
+  },
+  {
+    nameZh: '抖音',
+    url: 'https://www.douyin.com/search/%s?type=general'
   },
   {
     nameZh: '豆瓣',

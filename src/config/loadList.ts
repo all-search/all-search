@@ -20,6 +20,10 @@ export const list: SiteAdapter[] = [
     }
   },
   {
+    // 推特（X）搜索结果页是 SPA，不在这里声明会被 siteInfo 判定为 disabled，整块 UI 不渲染（issue #68）
+    url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
+  },
+  {
     url: /\/\/[^.]*\.bing\.com\/search/
   },
   {
