@@ -7,6 +7,9 @@ const iconCache = ref<Record<string, string>>({})
 const isLoaded = ref(false)
 getStorage('iconCache').then(iconData => {
   iconCache.value = (iconData as Record<string, string>) || {}
+}).catch(() => {
+  // 无 GM 环境（插件/单测）时不上报未捕获异常
+  iconCache.value = {}
 }).finally(() => {
   isLoaded.value = true
 })

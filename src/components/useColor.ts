@@ -1,10 +1,12 @@
 import useConfig from './useConfig'
 import { watchEffect, WritableComputedRef } from 'vue'
+import { getAsRoot } from '../util/dom'
 
 const reg = /^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/
 
 function setCssValue (name: string, value: string, defaultVal: string): void {
-  const el = document.getElementById('all-search')
+  // 插件版的宿主是 <all-search-ui>，没有 id，必须走统一的 DOM 入口
+  const el = getAsRoot()
   if (!el) return
   const formatVal = reg.test(value) ? value : defaultVal
   el.style.setProperty(`--as-${name}`, formatVal)
