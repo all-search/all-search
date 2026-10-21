@@ -92,6 +92,11 @@ pnpm lint:check    # eslint without writing files (what CI runs)
 
 ## Release
 
+Release notes are generated from commit messages (`scripts/changelog.mjs`): commits follow
+[Conventional Commits](https://www.conventionalcommits.org/), so `feat:` / `fix:` / `refactor:`
+land in their own sections and `!:` shows up as a breaking change. Preview locally with
+`pnpm changelog`, or write `CHANGELOG.md` with `pnpm changelog:write`.
+
 Pushing a `v*` tag builds both extension packages and creates a GitHub Release
 (`.github/workflows/plugin-release.yml`). The tag must match `package.json`'s version,
 and the workflow fails fast if it does not.

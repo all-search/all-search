@@ -27,6 +27,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "verify": "pnpm lint:check && pnpm type-check && pnpm test",
+    "changelog": "node scripts/changelog.mjs",
+    "changelog:write": "node scripts/changelog.mjs --write",
     "e2e": "node e2e/run.mjs",
     "style:scan": "node scripts/scan-special-style.mjs",
     "lint": "eslint --ext .js,.mjs,.ts,.vue src packages scripts --fix",

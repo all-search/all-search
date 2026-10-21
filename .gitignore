@@ -42,3 +42,4 @@ src/components.d.ts
 e2e/artifacts/
 
 dist-artifacts/
+release-notes.md

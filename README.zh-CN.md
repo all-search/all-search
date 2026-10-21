@@ -90,6 +90,26 @@ pnpm lint:check    # eslint 只检查不写文件（CI 用这个）
 可选参数：`--no-build`（复用产物）、`--headed`（显示浏览器窗口）、`--only=plugin|userscript`。
 截图输出到 `e2e/artifacts/`（已 gitignore）。可用 `E2E_CHANNEL` 或 `E2E_EXECUTABLE` 指定浏览器。
 
+## 发布
+
+Release 正文由提交信息生成（`scripts/changelog.mjs`）：提交遵循
+[Conventional Commits](https://www.conventionalcommits.org/)，`feat:` / `fix:` / `refactor:`
+各自成节，带 `!:` 的归到「破坏性变更」。本地预览用 `pnpm changelog`，
+写 `CHANGELOG.md` 用 `pnpm changelog:write`。
+
+推送 `v*` tag 会构建两个插件包 + 油猴脚本并创建 GitHub Release
+（`.github/workflows/plugin-release.yml`）。tag 必须与 `package.json` 的版本一致，
+不一致会直接失败。
+
+```bash
+pnpm release:patch          # 2.0.1 -> 2.0.2：升版本、提交、打 tag（不推送）
+pnpm release:patch --push   # 同上，并推送触发 Release
+```
+
+推送 `master` 还会顺带部署：
+- 配置站到 GitHub Pages（`gh-page.yml`）
+- 油猴脚本到 `release` 分支（`script-release.yml`）
+
 ## 目录结构
 
 | 路径 | 作用 |

@@ -23,7 +23,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      # 生成 changelog 要读完整历史和 tag，默认的 shallow clone 拿不到
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
@@ -119,6 +122,12 @@ jobs:
           path: dist-artifacts/*
           if-no-files-found: error
 
+      # 用仓库自己的 Conventional Commits 生成正文，替代 GitHub 的 auto notes
+      # （我们直接推 master、不开 PR，auto notes 只会产出一条 compare 链接）
+      - name: Generate release notes
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: node scripts/changelog.mjs --version "${GITHUB_REF_NAME}" --out release-notes.md
+
       - name: Publish GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
@@ -129,4 +138,4 @@ jobs:
             dist-artifacts/all-search-*.zip
             dist-artifacts/index.user.js
             dist-artifacts/all-search-*.user.js
-          generate_release_notes: true
+          body_path: release-notes.md
