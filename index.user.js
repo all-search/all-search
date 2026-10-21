@@ -1,449 +1,2078 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      1.5.10
+// @version      2.0.0
 // @author       endday
-// @description  2025-1-22更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2026-10-21更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
-// @homepage     https://github.com/all-search/all-search
 // @homepageURL  https://github.com/all-search/all-search
 // @downloadURL  https://raw.github.com/all-search/all-search/release/index.user.js
 // @updateURL    https://raw.github.com/all-search/all-search/release/index.user.js
 // @match        *://*/*
 // @require      https://registry.npmmirror.com/vue/3.4.15/files/dist/vue.global.prod.js
-// @require      https://registry.npmmirror.com/@popperjs/core/2.11.8/files/dist/umd/popper-lite.min.js
+// @grant        GM_addStyle
 // @grant        GM_deleteValue
 // @grant        GM_getValue
+// @grant        GM_listValues
 // @grant        GM_setValue
 // @run-at       document-idle
 // @noframes
 // ==/UserScript==
 
-(e=>{if(typeof window.GM_addStyle=="function"){window.GM_addStyle(e);return}const a=document.querySelector("#as-style-common");if(a)a.styleSheet.cssText+=e;else{const o=document.createElement("style");o.classList.add("as-style"),o.id="as-style-common",o.textContent=e,document.head.append(o)}})(' @charset "UTF-8";@media screen and (max-width: 750px){.as-title-horizontal{display:none}}.as-title-horizontal{min-width:90px;margin:0 10px}.as-title-vertical{width:100%}.as-title{text-decoration:none!important;padding:0;margin:0;color:var(--as-primary-color)}.as-title-inner{padding:0;font-size:17px;height:30px;line-height:30px;font-weight:600;color:var(--as-primary-color);margin:0 auto;text-align:center;cursor:pointer}:root{--as-text-color-secondary: #909399}.as-scrollbar{--as-scrollbar-opacity: .3;--as-scrollbar-background-color: var(--as-text-color-secondary);--as-scrollbar-hover-opacity: .5;--as-scrollbar-hover-background-color: var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}.as-popover-content{--background-color: white;--border-color: lightgray;display:none;pointer-events:none;opacity:0;z-index:99999;position:relative}.as-popover-content .arrow,.as-popover-content .arrow:before{width:0;height:0;border-style:solid}.as-popover-content .arrow:before{content:"";position:absolute}.as-popover-content[data-show=true]{opacity:1;pointer-events:initial}.as-popover-content[data-initialized=true]{display:block}.slide-fade-enter-active{transition:all .3s ease-out}.slide-fade-leave-active{transition:all .8s cubic-bezier(1,.5,.8,1)}.slide-fade-enter-from,.slide-fade-leave-to{transform:translate(20px);opacity:0}.as-icon{font-size:20px;width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden;margin:.25px 4px 0 0;display:inline-block}.as-img-icon{border:none;position:relative;font-size:0}.as-img-icon img{width:100%;height:100%;border:none;vertical-align:top}.as-img-icon img.error{display:inline-block;transform:scale(1);content:"";color:transparent}.as-img-icon img.error:before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#f5f5f5 no-repeat center/50% 50%}.as-img-icon img.error:after{content:attr(alt);position:absolute;left:0;bottom:0;width:100%;line-height:2;background-color:#00000080;color:#fff;font-size:12px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.as-menu-item.horizontal{position:relative;padding:0 16px}.as-menu-item.horizontal:after{content:"";transform:scaleX(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;right:0;left:0;bottom:0;border-bottom:2px solid var(--as-primary-color)}.as-menu-item.horizontal:hover:after{transform:scaleX(1);opacity:1}@media screen and (max-width: 750px){.as-menu-item.horizontal{padding:0 10px}}.as-menu-item.vertical{margin:5px 0;position:relative}.as-menu-item.vertical:after{content:"";transform:scaleY(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;top:0;bottom:0;right:0;border-right:2.5px solid var(--as-primary-color)}.as-menu-item.vertical:hover:after{transform:scaleY(1);opacity:1}.as-menu-item.vertical .as-menu-item-title{margin-right:6px}.as-menu-item.no-underline{text-decoration:none}.as-menu-item:visited{color:var(--as-primary-text-color)}a.as-menu-item{height:30px;line-height:30px;list-style:none;position:relative;color:var(--as-primary-text-color);transition:color .3s cubic-bezier(.645,.045,.355,1),border-color .3s cubic-bezier(.645,.045,.355,1),background .3s cubic-bezier(.645,.045,.355,1);box-sizing:border-box;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}a.as-menu-item:hover{border-color:var(--as-primary-color)}a.as-menu-item:hover .as-menu-item-icon,a.as-menu-item:hover .as-menu-item-title{color:var(--as-primary-color)}.as-menu-item-icon{color:var(--as-primary-text-color)}.as-url-icon{width:16px;height:16px;margin-right:10px}.as-subMenu-container{background:var(--as-bg-color);border:1px solid #e4e7ed;box-shadow:0 0 12px #0000001f;border-radius:4px}.as-subMenu{list-style:none;padding:0;min-width:90px;box-sizing:border-box;margin:4px 0}.as-subMenu li{overflow:hidden;box-sizing:border-box}.as-subMenu li a{display:flex;align-items:center;height:34px;padding:0 16px;text-decoration:none}.as-subMenu li:hover{background-color:var(--as-secondary-background-color);color:var(--as-primary-color)}.as-subMenu .as-subMenu-text{flex:1;font-size:14px;text-overflow:ellipsis;color:var(--as-primary-text-color);white-space:nowrap;margin:0;line-height:34px;font-weight:400;text-align:left}.as-menu-container{flex:1;display:flex}.as-menu{padding:0;margin:0;white-space:nowrap;border:0;box-shadow:none;background-color:var(--as-bg-color);display:flex}.as-horizontal .as-menu{flex-direction:row}.as-vertical .as-menu{flex-direction:column}.as-vertical .as-scrollbar__wrap{height:auto}.as-overlay{position:fixed;top:0;right:0;bottom:0;left:0;z-index:999991;height:100%;background-color:#0000004d;overflow:auto}label.as-radio{color:var(--as-primary-text-color);font-weight:500;line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;font-size:14px;-webkit-user-select:none;-moz-user-select:none;user-select:none}label.as-radio+label.as-radio{margin-left:14px}label.as-radio input{position:absolute;opacity:0;visibility:hidden}label.as-radio .as-radio-icon{display:inline-block;position:relative;width:12px;height:12px;background:var(--as-bg-color);border:1px solid #979797;border-radius:50%;vertical-align:-2px}label.as-radio input:checked+.as-radio-icon:after{position:absolute;content:"";width:6px;height:6px;background-color:var(--as-bg-color);border-radius:50%;top:3px;left:3px}label.as-radio input:checked+.as-radio-icon{background:var(--as-primary-color);border:1px solid var(--as-primary-color)}label.as-radio input:disabled+.as-radio-icon{background-color:#e8e8e8;border:solid 1px #979797}label.as-radio input:disabled:checked+.as-radio-icon:after{background-color:#c1c1c1}label.as-radio.as-radio-animate .as-radio-icon{transition:background-color ease-out .3s}label.as-radio .as-radio-label{margin-left:6px;font-size:14px}.as-label{vertical-align:middle;float:left;font-size:14px;color:var(--as-primary-text-color);line-height:40px;padding:0 12px 0 0;box-sizing:border-box}.as-content{line-height:40px;position:relative;font-size:14px}.as-button{display:inline-block;line-height:1;white-space:nowrap;cursor:pointer;background:#fff;border:1px solid #dcdfe6;color:var(--as-primary-text-color);text-align:center;box-sizing:border-box;outline:none;margin:0;transition:.1s;font-weight:500;-webkit-user-select:none;-moz-user-select:none;user-select:none;padding:12px 20px;font-size:14px;border-radius:4px}.as-button.as-button__text{border-color:transparent;color:var(--as-primary-color);background:transparent;padding-left:0;padding-right:0}.as-button.as-button__primary{color:#fff;background-color:var(--as-primary-color);border-color:var(--as-primary-color)}.as-color-set .as-color-label{line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;vertical-align:middle}.as-color-set .input\u2014color{width:30px;height:30px;padding:4px;border:1px solid #e6e6e6;border-radius:4px;background-color:var(--as-secondary-background-color);box-sizing:border-box}.as-color-set .input\u2014color::-webkit-color-swatch{border:0}.as-color-set .input\u2014color::-webkit-color-swatch-wrapper{padding:0}.as-color-set .reset-btn{margin-left:20px}.as-setting{position:relative}.as-setting.horizontal{box-shadow:-4px 0 10px #0000001f;display:flex}.as-setting-btn{line-height:30px;padding:0 14px;position:relative;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;color:var(--as-primary-text-color);text-align:center}.as-setting-btn:hover{color:var(--as-primary-color);background-color:#0000000a}.as-side-bar{width:20vw;min-width:300px;right:0;height:100%;top:0;bottom:0;position:absolute;box-sizing:border-box;background:var(--as-bg-color) radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed;display:flex;flex-direction:column;box-shadow:0 8px 10px -5px #0003,0 16px 24px 2px #00000024,0 6px 30px 5px #0000001f;overflow:hidden}.as-side-bar>header{font-size:16px;align-items:center;color:var(--as-primary-text-color);display:flex;padding:32px 24px}.as-side-bar>section{padding:10px 24px;margin:0 12px;height:100%;flex:1;border-radius:4px;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.67)}.as-side-bar>footer{padding:10px 24px 30px}.as-side-bar>footer .link{font-size:14px;text-decoration:none}.as-side-bar>footer .link:visited{color:var(--as-primary-text-color)}.as-side-bar>footer .link+.link{margin-left:20px}.overlay-enter-active,.overlay-leave-active{transition:opacity .3s}.overlay-enter-from,.overlay-leave-to{opacity:0}.overlay-enter-active .as-side-bar{animation:rtl-drawer-animation .3s linear reverse}.overlay-leave-active .as-side-bar{animation:rtl-drawer-animation .3s linear}@keyframes rtl-drawer-animation{0%{transform:translate(0)}to{transform:translate(100%)}}.as-hover-btn[data-v-7c1bb101]{position:fixed;z-index:99999;font-weight:600;font-size:17px;color:var(--as-primary-color);background:#fff;box-shadow:0 1px 4px #00152914;border:1px var(--as-border-color) solid;opacity:.6;cursor:pointer}.as-hover-btn-horizontal[data-v-7c1bb101]{top:0;left:50%;transform:translateY(0) translate(-50%);padding:0 16px;height:28px;line-height:28px}.as-hover-btn-vertical[data-v-7c1bb101]{left:0;top:50%;transform:translateY(-200%) translate(0) rotate(90deg);transform-origin:0 100%;padding:0 16px;height:28px;line-height:28px}.hover-btn.as-hide[data-v-7c1bb101]{transition:transform .2s;transform:translateY(-100%) translate(-50%)}.bar-container[data-v-7c91e3b8]{display:flex;padding:2px;max-width:300px;position:absolute;z-index:99999;background-color:#fff;color:#444;box-shadow:0 0 0 1px #0000000d,0 2px 3px #0000001a;border-radius:2px;cursor:pointer;white-space:nowrap}.tool-bar-item[data-v-7c91e3b8]{margin:0;padding:2px;width:20px;height:20px;border:1px solid #FFF;cursor:pointer;box-sizing:content-box}.tool-bar-item[data-v-7c91e3b8]:hover{border-color:var(--as-border-color)}.as-more-icon[data-v-7c91e3b8]{display:block;font-size:20px}.as-dialog{position:fixed;top:0;right:0;bottom:0;left:0;margin:0;z-index:99999}.as-dialog__mask{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}.as-dialog-container{position:relative;background:rgba(243,243,243,.85);border-radius:10px;box-shadow:0 1px 3px #0000004d;box-sizing:border-box;min-width:50%;max-width:80%;z-index:99;margin:40vh auto 50px;transform:translateY(-40%);overflow:hidden;-webkit-backdrop-filter:saturate(3) blur(20px);backdrop-filter:saturate(3) blur(20px)}.as-dialog__header{position:relative}.as-dialog__body{color:#666;font-size:14px;word-break:break-all}.as-dialog__footer{padding:10px 20px 20px;text-align:right;box-sizing:border-box}.as-dialog__close{display:inline-block;position:absolute;top:16px;right:24px;padding:0;background:transparent;cursor:pointer;font-size:16px;color:#909399}.as-dialog__close:before{content:"\u2716"}.se-header{padding:15px 20px;box-shadow:0 1px 6px #20212447;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed}.se-input-box{border:1px solid #ccc;background-color:#ffffffab;overflow:hidden;display:flex;border-radius:6px;height:40px;align-items:center;transition:.2s;color:#222}.se-input-box:hover{border-color:#fff;box-shadow:0 1px 6px #20212447}.se-input-box:active{border-color:#fff}.se-input-box .se-input{color:var(--as-primary-text-color);background-color:transparent;font-size:16px;height:100%;width:100%;line-height:20px;margin:0 20px;outline:none;border:none}.se-scrollbar-container{height:50vh;padding:0 20px 20px;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3 100%) no-repeat fixed}.se-container{margin-top:10px;display:flex;border-radius:6px;flex-wrap:wrap}.cate-container{flex:0 0 150px;margin:0 10px 10px 0;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.67);padding:6px}.cate-name{padding:0 10px;height:36px;line-height:36px;font-size:16px;display:flex;align-items:center}.cate-list{list-style:none;min-width:110px;box-sizing:border-box;padding:0}.cate-list .cate-item{box-sizing:border-box;padding:0 10px}.cate-list .cate-item .as-subMenu-text{margin:0}.cate-list .cate-item a{display:flex;align-items:center;height:34px;text-decoration:none;color:var(--as-primary-text-color)}.cate-list .cate-item:hover{background-color:#fff;color:var(--as-primary-color)}#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}#all-search p,.all-search-config p{margin:0}.body-horizontal{height:30px;width:100%}.body-horizontal+body [data-as-margin-top]{margin-top:30px!important}.body-horizontal+body [data-as-transform]{transform:translateY(30px)}.body-horizontal+body [data-as-border-top]{border-top:rgba(0,0,0,0) 30px solid;box-sizing:content-box}.body-horizontal+body [data-as-has-set]{transition-duration:0s}.body-vertical{height:100%;width:90px;position:fixed;z-index:999999}.body-vertical+body{margin-left:90px!important}body,#all-search{--as-horizontal-height: $height;--as-primary-color: #1890ff;--as-bg-color: #ffffff;--as-primary-text-color: #606266;--as-secondary-background-color: #f5f7fa;--as-border-color: #e8e8e8}#all-search{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"}.as-horizontal{height:30px;width:100%;top:0;border-bottom:1px var(--as-border-color) solid;flex-direction:row;transition:transform .1s}.as-horizontal.as-hide{transform:translateY(-100%)}.as-horizontal.as-show{transform:translateY(0)}.as-vertical{height:100%;width:90px;top:0;left:0;border-right:1px var(--as-border-color) solid;flex-direction:column;transition:transform .1s}.as-vertical.as-hide{transform:translate(-100%)}.as-vertical.as-show{transform:translate(0)}.as-container{opacity:1!important;position:fixed;display:flex;background-color:var(--as-bg-color);z-index:999990} ');
-
-(function (vue, core) {
+(function (vue) {
   'use strict';
 
-  var _GM_deleteValue = /* @__PURE__ */ (() => typeof GM_deleteValue != "undefined" ? GM_deleteValue : void 0)();
-  var _GM_getValue = /* @__PURE__ */ (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
-  var _GM_setValue = /* @__PURE__ */ (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
-  const name = "all-search";
-  const version$1 = "1.5.10";
-  const keywords = [
-    "tamperMonkey",
-    "user-script",
-    "tool",
-    "web",
-    "javascript",
-    "vue3"
-  ];
-  const description = "A top fixed menu that allows you to jump between various search engines, build based on Vue, and use rollup.";
-  const author = "endday";
-  const homepage = "https://github.com/all-search/all-search";
-  const license = "GPL-3.0-only";
-  const repository = {
-    type: "git",
-    url: "git@github.com:all-search/all-search.git"
+  const c=new Set;const importCSS = async o=>{c.has(o)||(c.add(o),(d=>{let n=5381;for(let e=0;e<d.length;e++)n=(n<<5)+n^d.charCodeAt(e);const s="as-style-"+(n>>>0).toString(36),a=()=>{const e=document.getElementById("all-search"),l=e&&e.shadowRoot,r=l&&(l.querySelector("head")||l);if(!r)return;let t=r.querySelector("#"+s);t||(t=document.createElement("style"),t.id=s,r.append(t)),t.textContent=d;};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",a):a(),window.addEventListener("as-inject-style",a);})(o));};
+
+  importCSS(' @charset "UTF-8";@media screen and (max-width:750px){.as-title-horizontal{display:none}}.as-title-horizontal{min-width:90px;margin:0 10px}.as-title-vertical{width:100%}.as-title{text-decoration:none!important;padding:0;margin:0;color:var(--as-primary-color)}.as-title-inner{padding:0;font-size:17px;height:30px;line-height:30px;font-weight:600;color:var(--as-primary-color);margin:0 auto;text-align:center;cursor:pointer}:root{--as-text-color-secondary: #909399}.as-scrollbar{--as-scrollbar-opacity: .3;--as-scrollbar-background-color: var(--as-text-color-secondary);--as-scrollbar-hover-opacity: .5;--as-scrollbar-hover-background-color: var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}.as-popover-content{z-index:999991;position:relative;will-change:transform,opacity;backface-visibility:hidden;-webkit-font-smoothing:antialiased}.as-popover-content .arrow,.as-popover-content .arrow:before{width:0;height:0;border-style:solid}.as-popover-content .arrow:before{content:"";position:absolute}.slide-fade-enter-active{transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1)}.slide-fade-leave-active{transition:transform .1s cubic-bezier(.645,.045,.355,1),opacity .1s cubic-bezier(.645,.045,.355,1)}.slide-fade-enter-from,.slide-fade-leave-to{opacity:0}.slide-fade-enter-from[data-placement=bottom-start],.slide-fade-leave-to[data-placement=bottom-start]{transform:translateY(-100%);transform-origin:top center}.slide-fade-enter-from[data-placement=top-start],.slide-fade-leave-to[data-placement=top-start]{transform:translateY(100%);transform-origin:bottom center}.slide-fade-enter-from[data-placement=left-start],.slide-fade-leave-to[data-placement=left-start]{transform:translate(100%);transform-origin:center right}.slide-fade-enter-from[data-placement=right-start],.slide-fade-leave-to[data-placement=right-start]{transform:translate(-100%);transform-origin:center left}.as-icon{font-size:20px;width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden;margin:.25px 4px 0 0;display:inline-block}.as-img-icon{border:none;position:relative;font-size:0}.as-img-icon img{width:100%;height:100%;border:none;vertical-align:top}.as-img-icon img.error{display:inline-block;transform:scale(1);content:"";color:transparent}.as-img-icon img.error:before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#f5f5f5 no-repeat center/50% 50%}.as-img-icon img.error:after{content:attr(alt);position:absolute;left:0;bottom:0;width:100%;line-height:2;background-color:#00000080;color:#fff;font-size:12px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.as-menu-item.horizontal{position:relative;padding:0 16px}.as-menu-item.horizontal:after{content:"";transform:scaleX(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;right:0;left:0;bottom:0;border-bottom:2px solid var(--as-primary-color)}.as-menu-item.horizontal:hover:after{transform:scaleX(1);opacity:1}@media screen and (max-width:750px){.as-menu-item.horizontal{padding:0 10px}}.as-menu-item.vertical{margin:5px 0;position:relative}.as-menu-item.vertical:after{content:"";transform:scaleY(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;top:0;bottom:0;right:0;border-right:2.5px solid var(--as-primary-color)}.as-menu-item.vertical:hover:after{transform:scaleY(1);opacity:1}.as-menu-item.vertical .as-menu-item-title{margin-right:6px}.as-menu-item.no-underline{text-decoration:none}.as-menu-item:visited{color:var(--as-primary-text-color)}a.as-menu-item{height:30px;line-height:30px;list-style:none;position:relative;color:var(--as-primary-text-color);transition:color .3s cubic-bezier(.645,.045,.355,1),border-color .3s cubic-bezier(.645,.045,.355,1),background .3s cubic-bezier(.645,.045,.355,1);box-sizing:border-box;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}a.as-menu-item:hover{border-color:var(--as-primary-color)}a.as-menu-item:hover .as-menu-item-icon,a.as-menu-item:hover .as-menu-item-title{color:var(--as-primary-color)}.as-menu-item-icon{color:var(--as-primary-text-color)}.as-url-icon{width:16px;height:16px;margin-right:10px}.as-subMenu-container{background:var(--as-bg-color);border:1px solid #e4e7ed;box-shadow:0 0 12px #0000001f;border-radius:4px}.as-subMenu{list-style:none;padding:0;min-width:90px;box-sizing:border-box;margin:4px 0}.as-subMenu li{overflow:hidden;box-sizing:border-box}.as-subMenu li a{display:flex;align-items:center;height:34px;padding:0 16px;text-decoration:none}.as-subMenu li:hover{background-color:var(--as-secondary-background-color);color:var(--as-primary-color)}.as-subMenu .as-subMenu-text{flex:1;font-size:14px;text-overflow:ellipsis;color:var(--as-primary-text-color);white-space:nowrap;margin:0;line-height:34px;font-weight:400;text-align:left}.as-menu-container{flex:1;display:flex}.as-menu{padding:0;margin:0;white-space:nowrap;border:0;box-shadow:none;background-color:var(--as-bg-color);display:flex;list-style:none}.as-horizontal .as-menu{flex-direction:row}.as-vertical .as-menu{flex-direction:column}.as-vertical .as-scrollbar__wrap{height:auto;width:100%}.as-overlay{position:fixed;inset:0;z-index:999991;height:100%;background-color:#0000004d;overflow:auto}.as-open-mode-tip{margin:8px 0 16px;padding:8px 10px;font-size:12px;line-height:1.65;color:var(--as-primary-text-color, #606266);background:#00000009;border-radius:4px;opacity:.85}.as-open-mode-tip strong{font-weight:600;color:var(--as-primary-color, #1890ff)}label.as-radio{color:var(--as-primary-text-color);font-weight:500;line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;font-size:14px;-webkit-user-select:none;-moz-user-select:none;user-select:none}label.as-radio+label.as-radio{margin-left:14px}label.as-radio input{position:absolute;opacity:0;visibility:hidden}label.as-radio .as-radio-icon{display:inline-block;position:relative;width:12px;height:12px;background:var(--as-bg-color);border:1px solid #979797;border-radius:50%;vertical-align:-2px}label.as-radio input:checked+.as-radio-icon:after{position:absolute;content:"";width:6px;height:6px;background-color:var(--as-bg-color);border-radius:50%;top:3px;left:3px}label.as-radio input:checked+.as-radio-icon{background:var(--as-primary-color);border:1px solid var(--as-primary-color)}label.as-radio input:disabled+.as-radio-icon{background-color:#e8e8e8;border:solid 1px #979797}label.as-radio input:disabled:checked+.as-radio-icon:after{background-color:#c1c1c1}label.as-radio.as-radio-animate .as-radio-icon{transition:background-color ease-out .3s}label.as-radio .as-radio-label{margin-left:6px;font-size:14px}.as-label{vertical-align:middle;float:left;font-size:14px;color:var(--as-primary-text-color);line-height:40px;padding:0 12px 0 0;box-sizing:border-box}.as-content{line-height:40px;position:relative;font-size:14px}.as-button{display:inline-block;line-height:1;white-space:nowrap;cursor:pointer;background:#fff;border:1px solid #dcdfe6;color:var(--as-primary-text-color);text-align:center;box-sizing:border-box;outline:none;margin:0;transition:.1s;font-weight:500;-webkit-user-select:none;-moz-user-select:none;user-select:none;padding:12px 20px;font-size:14px;border-radius:4px}.as-button.as-button__text{border-color:transparent;color:var(--as-primary-color);background:transparent;padding-left:0;padding-right:0}.as-button.as-button__primary{color:#fff;background-color:var(--as-primary-color);border-color:var(--as-primary-color)}.as-color-set .as-color-label{line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;vertical-align:middle}.as-color-set .input\u2014color{width:30px;height:30px;padding:4px;border:1px solid #e6e6e6;border-radius:4px;background-color:var(--as-secondary-background-color);box-sizing:border-box}.as-color-set .input\u2014color::-webkit-color-swatch{border:0}.as-color-set .input\u2014color::-webkit-color-swatch-wrapper{padding:0}.as-color-set .reset-btn{margin-left:20px}#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}.as-setting{position:relative}.as-setting.horizontal{box-shadow:-4px 0 10px #0000001f;display:flex}.as-setting-btn{line-height:30px;padding:0 14px;position:relative;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;color:var(--as-primary-text-color);text-align:center}.as-setting-btn:hover{color:var(--as-primary-color);background-color:#0000000a}.as-group-title{margin:8px 0 2px;font-size:12px;font-weight:600;letter-spacing:.3px;color:var(--as-primary-text-color);opacity:.6}.as-side-bar{width:20vw;min-width:300px;right:0;height:100%;top:0;bottom:0;position:absolute;box-sizing:border-box;background:var(--as-bg-color) radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed;display:flex;flex-direction:column;box-shadow:0 8px 10px -5px #0003,0 16px 24px 2px #00000024,0 6px 30px 5px #0000001f;overflow:hidden}.as-side-bar>header{font-size:16px;align-items:center;color:var(--as-primary-text-color);display:flex;padding:32px 24px}.as-side-bar>section{padding:10px 24px;margin:0 12px;height:100%;flex:1;border-radius:4px;border:1px solid rgba(0,0,0,.1);background:#ffffffab}.as-side-bar>footer{padding:10px 24px 30px}.as-side-bar>footer .link{font-size:14px;text-decoration:none}.as-side-bar>footer .link:visited{color:var(--as-primary-text-color)}.as-side-bar>footer .link+.link{margin-left:20px}.overlay-enter-active,.overlay-leave-active{transition:opacity .3s}.overlay-enter-from,.overlay-leave-to{opacity:0}.overlay-enter-active .as-side-bar{animation:rtl-drawer-animation .3s linear reverse}.overlay-leave-active .as-side-bar{animation:rtl-drawer-animation .3s linear}@keyframes rtl-drawer-animation{0%{transform:translate(0)}to{transform:translate(100%)}}.as-hover-btn[data-v-8eec6b97]{position:fixed;z-index:99999;font-weight:600;font-size:17px;color:var(--as-primary-color);background:#fff;box-shadow:0 1px 4px #00152914;border:1px var(--as-border-color) solid;opacity:.6;cursor:pointer}.as-hover-btn-horizontal[data-v-8eec6b97]{left:50%;transform:translateY(0) translate(-50%);padding:0 16px;height:28px;line-height:28px}.as-hover-btn-top[data-v-8eec6b97]{top:0}.as-hover-btn-bottom[data-v-8eec6b97]{bottom:0}.as-hover-btn-vertical[data-v-8eec6b97]{top:50%;padding:0 16px;height:28px;line-height:28px}.as-hover-btn-left[data-v-8eec6b97]{left:0;right:unset;transform:translateY(-200%) translate(0) rotate(90deg);transform-origin:0 100%}.as-hover-btn-right[data-v-8eec6b97]{right:0;left:unset;transform-origin:top right;transform:translateY(0) translate(0) rotate(90deg)}.hover-btn.as-hide[data-v-8eec6b97]{transition:transform .2s;transform:translateY(-100%) translate(-50%)}.bar-container[data-v-b687b5a5]{display:flex;padding:2px;max-width:300px;position:absolute;z-index:99999;background-color:#fff;color:#444;box-shadow:0 0 0 1px #0000000d,0 2px 3px #0000001a;border-radius:2px;cursor:pointer;white-space:nowrap}.tool-bar-item[data-v-b687b5a5]{margin:0;padding:2px;width:20px;height:20px;border:1px solid #FFF;cursor:pointer;box-sizing:content-box}.tool-bar-item[data-v-b687b5a5]:hover{border-color:var(--as-border-color)}.as-more-icon[data-v-b687b5a5]{display:block;font-size:20px}.as-dialog{position:fixed;inset:0;margin:0;z-index:99999;display:flex;align-items:center;justify-content:center}.as-dialog__mask{position:fixed;left:0;top:0;width:100%;height:100%;background:#00000080;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}.as-dialog-container{position:relative;background:#f3f3f3f0;border-radius:10px;box-shadow:0 1px 3px #0000004d;box-sizing:border-box;min-width:50%;max-width:80%;max-height:86vh;display:flex;flex-direction:column;z-index:99;overflow:hidden}.as-dialog__header{position:relative}.as-dialog__body{color:#666;font-size:14px;word-break:break-all;overflow:auto}.as-dialog__footer{padding:10px 20px 20px;text-align:right;box-sizing:border-box}.as-dialog__close{display:inline-block;position:absolute;top:16px;right:24px;padding:0;background:transparent;cursor:pointer;font-size:16px;color:#909399}.as-dialog__close:before{content:"\u2716"}.se-header{padding:15px 20px;box-shadow:0 1px 6px #20212447;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed}.se-input-box{border:1px solid #ccc;background-color:#ffffffab;overflow:hidden;display:flex;border-radius:6px;height:40px;align-items:center;transition:.2s;color:#222}.se-input-box:hover{border-color:#fff;box-shadow:0 1px 6px #20212447}.se-input-box:active{border-color:#fff}.se-input-box .se-input{color:var(--as-primary-text-color);background-color:transparent;font-size:16px;height:100%;width:100%;line-height:20px;margin:0 20px;outline:none;border:none}.se-scrollbar-container{height:50vh;padding:0 20px 20px;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed}.se-container{margin-top:10px;display:flex;border-radius:6px;flex-wrap:wrap}.cate-container{flex:0 0 150px;margin:0 10px 10px 0;border:1px solid rgba(0,0,0,.1);background:#ffffffab;padding:6px}.cate-name{padding:0 10px;height:36px;line-height:36px;font-size:16px;display:flex;align-items:center}.cate-list{list-style:none;min-width:110px;box-sizing:border-box;padding:0}.cate-list .cate-item{box-sizing:border-box;padding:0 10px}.cate-list .cate-item .as-subMenu-text{margin:0}.cate-list .cate-item a{display:flex;align-items:center;height:34px;text-decoration:none;color:var(--as-primary-text-color)}.cate-list .cate-item:hover{background-color:#fff;color:var(--as-primary-color)} ');
+
+  var __defProp$1 = Object.defineProperty;
+  var __defProps$1 = Object.defineProperties;
+  var __getOwnPropDescs$1 = Object.getOwnPropertyDescriptors;
+  var __getOwnPropSymbols$1 = Object.getOwnPropertySymbols;
+  var __hasOwnProp$1 = Object.prototype.hasOwnProperty;
+  var __propIsEnum$1 = Object.prototype.propertyIsEnumerable;
+  var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __spreadValues$1 = (a, b) => {
+    for (var prop in b || (b = {}))
+      if (__hasOwnProp$1.call(b, prop))
+        __defNormalProp$1(a, prop, b[prop]);
+    if (__getOwnPropSymbols$1)
+      for (var prop of __getOwnPropSymbols$1(b)) {
+        if (__propIsEnum$1.call(b, prop))
+          __defNormalProp$1(a, prop, b[prop]);
+      }
+    return a;
   };
-  const files = [
-    "dist",
-    "lib"
-  ];
-  const unpkg = "dist/index.user.js";
-  const jsdelivr = "dist/index.user.js";
-  const packageManager = "pnpm@8.15.1";
-  const scripts = {
-    lint: "vue-cli-service lint",
-    prepare: "husky install",
-    "dev:script": "vite --mode script",
-    "build:script": "vite build --mode script",
-    "dev:site": "vite dev --mode site",
-    "build:site": "vite build --mode site"
+  var __spreadProps$1 = (a, b) => __defProps$1(a, __getOwnPropDescs$1(b));
+  var __objRest = (source, exclude) => {
+    var target = {};
+    for (var prop in source)
+      if (__hasOwnProp$1.call(source, prop) && exclude.indexOf(prop) < 0)
+        target[prop] = source[prop];
+    if (source != null && __getOwnPropSymbols$1)
+      for (var prop of __getOwnPropSymbols$1(source)) {
+        if (exclude.indexOf(prop) < 0 && __propIsEnum$1.call(source, prop))
+          target[prop] = source[prop];
+      }
+    return target;
   };
-  const dependencies = {
-    "@element-plus/icons-vue": "^2.0.4",
-    "@popperjs/core": "^2.9.2",
-    "core-js": "^3.9.1",
-    "element-plus": "^2.2.22",
-    jsoneditor: "^9.9.0",
-    "resize-observer-polyfill": "^1.5.1",
-    vue: "^3.3.4",
-    "vue-draggable-next": "^2.0.1",
-    "vue-router": "^4.0.5"
-  };
-  const devDependencies = {
-    "@babel/eslint-parser": "^7.19.1",
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
-    "@vitejs/plugin-vue": "^4.3.4",
-    "@vue/compiler-sfc": "^3.0.7",
-    autoprefixer: "^10.4.7",
-    "babel-plugin-import": "^1.13.3",
-    "cross-env": "^7.0.3",
-    eslint: "^7.32.0",
-    "eslint-plugin-vue": "^7.7.0",
-    husky: "^8.0.1",
-    "lint-staged": "^13.1.0",
-    minimist: "^1.2.7",
-    postcss: "^8.4.13",
-    "rollup-plugin-external-globals": "^0.6.1",
-    sass: "^1.32.8",
-    "sass-loader": "^10.1.1",
-    vite: "^4.4.9",
-    "vite-plugin-crx-mv3": "^0.1.5",
-    "vite-plugin-monkey": "^3.5.0"
-  };
-  const pkg = {
-    name,
-    version: version$1,
-    keywords,
-    description,
-    author,
-    homepage,
-    license,
-    repository,
-    files,
-    unpkg,
-    jsdelivr,
-    packageManager,
-    scripts,
-    dependencies,
-    devDependencies
-  };
-  const version = pkg.version;
-  function getQueryString(name2, url) {
-    url = url || window.location.href;
-    const r = new RegExp("(\\?|#|&)" + name2 + "=([^&#]*)(&|#|$)");
-    const m = url.match(r);
-    return decodeURIComponent(!m ? "" : m[2]);
-  }
-  function checkBody() {
-    let time = 0;
+  var __async$1 = (__this, __arguments, generator) => {
     return new Promise((resolve, reject) => {
-      if (document && document.body) {
-        resolve();
+      var fulfilled = (value) => {
+        try {
+          step(generator.next(value));
+        } catch (e) {
+          reject(e);
+        }
+      };
+      var rejected = (value) => {
+        try {
+          step(generator.throw(value));
+        } catch (e) {
+          reject(e);
+        }
+      };
+      var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+      step((generator = generator.apply(__this, __arguments)).next());
+    });
+  };
+  var _a, _b;
+  ((_b = (_a = globalThis.browser) == null ? void 0 : _a.runtime) == null ? void 0 : _b.id) ? globalThis.browser : globalThis.chrome;
+  var MapShim = (function() {
+    if (typeof Map !== "undefined") {
+      return Map;
+    }
+    function getIndex(arr, key) {
+      var result = -1;
+      arr.some(function(entry, index2) {
+        if (entry[0] === key) {
+          result = index2;
+          return true;
+        }
+        return false;
+      });
+      return result;
+    }
+    return (
+(function() {
+        function class_1() {
+          this.__entries__ = [];
+        }
+        Object.defineProperty(class_1.prototype, "size", {
+get: function() {
+            return this.__entries__.length;
+          },
+          enumerable: true,
+          configurable: true
+        });
+        class_1.prototype.get = function(key) {
+          var index2 = getIndex(this.__entries__, key);
+          var entry = this.__entries__[index2];
+          return entry && entry[1];
+        };
+        class_1.prototype.set = function(key, value) {
+          var index2 = getIndex(this.__entries__, key);
+          if (~index2) {
+            this.__entries__[index2][1] = value;
+          } else {
+            this.__entries__.push([key, value]);
+          }
+        };
+        class_1.prototype.delete = function(key) {
+          var entries = this.__entries__;
+          var index2 = getIndex(entries, key);
+          if (~index2) {
+            entries.splice(index2, 1);
+          }
+        };
+        class_1.prototype.has = function(key) {
+          return !!~getIndex(this.__entries__, key);
+        };
+        class_1.prototype.clear = function() {
+          this.__entries__.splice(0);
+        };
+        class_1.prototype.forEach = function(callback, ctx) {
+          if (ctx === void 0) {
+            ctx = null;
+          }
+          for (var _i = 0, _a2 = this.__entries__; _i < _a2.length; _i++) {
+            var entry = _a2[_i];
+            callback.call(ctx, entry[1], entry[0]);
+          }
+        };
+        return class_1;
+      })()
+    );
+  })();
+  var isBrowser = typeof window !== "undefined" && typeof document !== "undefined" && window.document === document;
+  var global$1 = (function() {
+    if (typeof global !== "undefined" && global.Math === Math) {
+      return global;
+    }
+    if (typeof self !== "undefined" && self.Math === Math) {
+      return self;
+    }
+    if (typeof window !== "undefined" && window.Math === Math) {
+      return window;
+    }
+    return Function("return this")();
+  })();
+  var requestAnimationFrame$1 = (function() {
+    if (typeof requestAnimationFrame === "function") {
+      return requestAnimationFrame.bind(global$1);
+    }
+    return function(callback) {
+      return setTimeout(function() {
+        return callback(Date.now());
+      }, 1e3 / 60);
+    };
+  })();
+  var trailingTimeout = 2;
+  function throttle$1(callback, delay) {
+    var leadingCall = false, trailingCall = false, lastCallTime = 0;
+    function resolvePending() {
+      if (leadingCall) {
+        leadingCall = false;
+        callback();
+      }
+      if (trailingCall) {
+        proxy();
+      }
+    }
+    function timeoutCallback() {
+      requestAnimationFrame$1(resolvePending);
+    }
+    function proxy() {
+      var timeStamp = Date.now();
+      if (leadingCall) {
+        if (timeStamp - lastCallTime < trailingTimeout) {
+          return;
+        }
+        trailingCall = true;
       } else {
-        const id = setInterval(function() {
-          time += 1;
-          if (document && document.body) {
-            clearInterval(id);
-            resolve();
-          }
-          if (time === 50) {
-            clearInterval(id);
-            reject(new Error("timeOut"));
-          }
-        }, 200);
-        if (["complete", "loaded", "interactive"].includes(document.readyState)) {
-          if (document && document.body) {
-            clearInterval(id);
-            resolve();
-          }
+        leadingCall = true;
+        trailingCall = false;
+        setTimeout(timeoutCallback, delay);
+      }
+      lastCallTime = timeStamp;
+    }
+    return proxy;
+  }
+  var REFRESH_DELAY = 20;
+  var transitionKeys = ["top", "right", "bottom", "left", "width", "height", "size", "weight"];
+  var mutationObserverSupported = typeof MutationObserver !== "undefined";
+  var ResizeObserverController = (
+(function() {
+      function ResizeObserverController2() {
+        this.connected_ = false;
+        this.mutationEventsAdded_ = false;
+        this.mutationsObserver_ = null;
+        this.observers_ = [];
+        this.onTransitionEnd_ = this.onTransitionEnd_.bind(this);
+        this.refresh = throttle$1(this.refresh.bind(this), REFRESH_DELAY);
+      }
+      ResizeObserverController2.prototype.addObserver = function(observer) {
+        if (!~this.observers_.indexOf(observer)) {
+          this.observers_.push(observer);
+        }
+        if (!this.connected_) {
+          this.connect_();
+        }
+      };
+      ResizeObserverController2.prototype.removeObserver = function(observer) {
+        var observers2 = this.observers_;
+        var index2 = observers2.indexOf(observer);
+        if (~index2) {
+          observers2.splice(index2, 1);
+        }
+        if (!observers2.length && this.connected_) {
+          this.disconnect_();
+        }
+      };
+      ResizeObserverController2.prototype.refresh = function() {
+        var changesDetected = this.updateObservers_();
+        if (changesDetected) {
+          this.refresh();
+        }
+      };
+      ResizeObserverController2.prototype.updateObservers_ = function() {
+        var activeObservers = this.observers_.filter(function(observer) {
+          return observer.gatherActive(), observer.hasActive();
+        });
+        activeObservers.forEach(function(observer) {
+          return observer.broadcastActive();
+        });
+        return activeObservers.length > 0;
+      };
+      ResizeObserverController2.prototype.connect_ = function() {
+        if (!isBrowser || this.connected_) {
+          return;
+        }
+        document.addEventListener("transitionend", this.onTransitionEnd_);
+        window.addEventListener("resize", this.refresh);
+        if (mutationObserverSupported) {
+          this.mutationsObserver_ = new MutationObserver(this.refresh);
+          this.mutationsObserver_.observe(document, {
+            attributes: true,
+            childList: true,
+            characterData: true,
+            subtree: true
+          });
         } else {
-          document.addEventListener("DOMContentLoaded", function() {
-            if (document && document.body) {
-              clearInterval(id);
-              resolve();
+          document.addEventListener("DOMSubtreeModified", this.refresh);
+          this.mutationEventsAdded_ = true;
+        }
+        this.connected_ = true;
+      };
+      ResizeObserverController2.prototype.disconnect_ = function() {
+        if (!isBrowser || !this.connected_) {
+          return;
+        }
+        document.removeEventListener("transitionend", this.onTransitionEnd_);
+        window.removeEventListener("resize", this.refresh);
+        if (this.mutationsObserver_) {
+          this.mutationsObserver_.disconnect();
+        }
+        if (this.mutationEventsAdded_) {
+          document.removeEventListener("DOMSubtreeModified", this.refresh);
+        }
+        this.mutationsObserver_ = null;
+        this.mutationEventsAdded_ = false;
+        this.connected_ = false;
+      };
+      ResizeObserverController2.prototype.onTransitionEnd_ = function(_a2) {
+        var _b2 = _a2.propertyName, propertyName = _b2 === void 0 ? "" : _b2;
+        var isReflowProperty = transitionKeys.some(function(key) {
+          return !!~propertyName.indexOf(key);
+        });
+        if (isReflowProperty) {
+          this.refresh();
+        }
+      };
+      ResizeObserverController2.getInstance = function() {
+        if (!this.instance_) {
+          this.instance_ = new ResizeObserverController2();
+        }
+        return this.instance_;
+      };
+      ResizeObserverController2.instance_ = null;
+      return ResizeObserverController2;
+    })()
+  );
+  var defineConfigurable = (function(target, props) {
+    for (var _i = 0, _a2 = Object.keys(props); _i < _a2.length; _i++) {
+      var key = _a2[_i];
+      Object.defineProperty(target, key, {
+        value: props[key],
+        enumerable: false,
+        writable: false,
+        configurable: true
+      });
+    }
+    return target;
+  });
+  var getWindowOf = (function(target) {
+    var ownerGlobal = target && target.ownerDocument && target.ownerDocument.defaultView;
+    return ownerGlobal || global$1;
+  });
+  var emptyRect = createRectInit(0, 0, 0, 0);
+  function toFloat(value) {
+    return parseFloat(value) || 0;
+  }
+  function getBordersSize(styles) {
+    var positions = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+      positions[_i - 1] = arguments[_i];
+    }
+    return positions.reduce(function(size, position) {
+      var value = styles["border-" + position + "-width"];
+      return size + toFloat(value);
+    }, 0);
+  }
+  function getPaddings(styles) {
+    var positions = ["top", "right", "bottom", "left"];
+    var paddings = {};
+    for (var _i = 0, positions_1 = positions; _i < positions_1.length; _i++) {
+      var position = positions_1[_i];
+      var value = styles["padding-" + position];
+      paddings[position] = toFloat(value);
+    }
+    return paddings;
+  }
+  function getSVGContentRect(target) {
+    var bbox = target.getBBox();
+    return createRectInit(0, 0, bbox.width, bbox.height);
+  }
+  function getHTMLElementContentRect(target) {
+    var clientWidth = target.clientWidth, clientHeight = target.clientHeight;
+    if (!clientWidth && !clientHeight) {
+      return emptyRect;
+    }
+    var styles = getWindowOf(target).getComputedStyle(target);
+    var paddings = getPaddings(styles);
+    var horizPad = paddings.left + paddings.right;
+    var vertPad = paddings.top + paddings.bottom;
+    var width = toFloat(styles.width), height = toFloat(styles.height);
+    if (styles.boxSizing === "border-box") {
+      if (Math.round(width + horizPad) !== clientWidth) {
+        width -= getBordersSize(styles, "left", "right") + horizPad;
+      }
+      if (Math.round(height + vertPad) !== clientHeight) {
+        height -= getBordersSize(styles, "top", "bottom") + vertPad;
+      }
+    }
+    if (!isDocumentElement(target)) {
+      var vertScrollbar = Math.round(width + horizPad) - clientWidth;
+      var horizScrollbar = Math.round(height + vertPad) - clientHeight;
+      if (Math.abs(vertScrollbar) !== 1) {
+        width -= vertScrollbar;
+      }
+      if (Math.abs(horizScrollbar) !== 1) {
+        height -= horizScrollbar;
+      }
+    }
+    return createRectInit(paddings.left, paddings.top, width, height);
+  }
+  var isSVGGraphicsElement = (function() {
+    if (typeof SVGGraphicsElement !== "undefined") {
+      return function(target) {
+        return target instanceof getWindowOf(target).SVGGraphicsElement;
+      };
+    }
+    return function(target) {
+      return target instanceof getWindowOf(target).SVGElement && typeof target.getBBox === "function";
+    };
+  })();
+  function isDocumentElement(target) {
+    return target === getWindowOf(target).document.documentElement;
+  }
+  function getContentRect(target) {
+    if (!isBrowser) {
+      return emptyRect;
+    }
+    if (isSVGGraphicsElement(target)) {
+      return getSVGContentRect(target);
+    }
+    return getHTMLElementContentRect(target);
+  }
+  function createReadOnlyRect(_a2) {
+    var x = _a2.x, y = _a2.y, width = _a2.width, height = _a2.height;
+    var Constr = typeof DOMRectReadOnly !== "undefined" ? DOMRectReadOnly : Object;
+    var rect = Object.create(Constr.prototype);
+    defineConfigurable(rect, {
+      x,
+      y,
+      width,
+      height,
+      top: y,
+      right: x + width,
+      bottom: height + y,
+      left: x
+    });
+    return rect;
+  }
+  function createRectInit(x, y, width, height) {
+    return { x, y, width, height };
+  }
+  var ResizeObservation = (
+(function() {
+      function ResizeObservation2(target) {
+        this.broadcastWidth = 0;
+        this.broadcastHeight = 0;
+        this.contentRect_ = createRectInit(0, 0, 0, 0);
+        this.target = target;
+      }
+      ResizeObservation2.prototype.isActive = function() {
+        var rect = getContentRect(this.target);
+        this.contentRect_ = rect;
+        return rect.width !== this.broadcastWidth || rect.height !== this.broadcastHeight;
+      };
+      ResizeObservation2.prototype.broadcastRect = function() {
+        var rect = this.contentRect_;
+        this.broadcastWidth = rect.width;
+        this.broadcastHeight = rect.height;
+        return rect;
+      };
+      return ResizeObservation2;
+    })()
+  );
+  var ResizeObserverEntry = (
+
+(function() {
+      function ResizeObserverEntry2(target, rectInit) {
+        var contentRect = createReadOnlyRect(rectInit);
+        defineConfigurable(this, { target, contentRect });
+      }
+      return ResizeObserverEntry2;
+    })()
+  );
+  var ResizeObserverSPI = (
+(function() {
+      function ResizeObserverSPI2(callback, controller, callbackCtx) {
+        this.activeObservations_ = [];
+        this.observations_ = new MapShim();
+        if (typeof callback !== "function") {
+          throw new TypeError("The callback provided as parameter 1 is not a function.");
+        }
+        this.callback_ = callback;
+        this.controller_ = controller;
+        this.callbackCtx_ = callbackCtx;
+      }
+      ResizeObserverSPI2.prototype.observe = function(target) {
+        if (!arguments.length) {
+          throw new TypeError("1 argument required, but only 0 present.");
+        }
+        if (typeof Element === "undefined" || !(Element instanceof Object)) {
+          return;
+        }
+        if (!(target instanceof getWindowOf(target).Element)) {
+          throw new TypeError('parameter 1 is not of type "Element".');
+        }
+        var observations = this.observations_;
+        if (observations.has(target)) {
+          return;
+        }
+        observations.set(target, new ResizeObservation(target));
+        this.controller_.addObserver(this);
+        this.controller_.refresh();
+      };
+      ResizeObserverSPI2.prototype.unobserve = function(target) {
+        if (!arguments.length) {
+          throw new TypeError("1 argument required, but only 0 present.");
+        }
+        if (typeof Element === "undefined" || !(Element instanceof Object)) {
+          return;
+        }
+        if (!(target instanceof getWindowOf(target).Element)) {
+          throw new TypeError('parameter 1 is not of type "Element".');
+        }
+        var observations = this.observations_;
+        if (!observations.has(target)) {
+          return;
+        }
+        observations.delete(target);
+        if (!observations.size) {
+          this.controller_.removeObserver(this);
+        }
+      };
+      ResizeObserverSPI2.prototype.disconnect = function() {
+        this.clearActive();
+        this.observations_.clear();
+        this.controller_.removeObserver(this);
+      };
+      ResizeObserverSPI2.prototype.gatherActive = function() {
+        var _this = this;
+        this.clearActive();
+        this.observations_.forEach(function(observation) {
+          if (observation.isActive()) {
+            _this.activeObservations_.push(observation);
+          }
+        });
+      };
+      ResizeObserverSPI2.prototype.broadcastActive = function() {
+        if (!this.hasActive()) {
+          return;
+        }
+        var ctx = this.callbackCtx_;
+        var entries = this.activeObservations_.map(function(observation) {
+          return new ResizeObserverEntry(observation.target, observation.broadcastRect());
+        });
+        this.callback_.call(ctx, entries, ctx);
+        this.clearActive();
+      };
+      ResizeObserverSPI2.prototype.clearActive = function() {
+        this.activeObservations_.splice(0);
+      };
+      ResizeObserverSPI2.prototype.hasActive = function() {
+        return this.activeObservations_.length > 0;
+      };
+      return ResizeObserverSPI2;
+    })()
+  );
+  var observers = typeof WeakMap !== "undefined" ? new WeakMap() : new MapShim();
+  var ResizeObserver$1 = (
+
+(function() {
+      function ResizeObserver2(callback) {
+        if (!(this instanceof ResizeObserver2)) {
+          throw new TypeError("Cannot call a class as a function.");
+        }
+        if (!arguments.length) {
+          throw new TypeError("1 argument required, but only 0 present.");
+        }
+        var controller = ResizeObserverController.getInstance();
+        var observer = new ResizeObserverSPI(callback, controller, this);
+        observers.set(this, observer);
+      }
+      return ResizeObserver2;
+    })()
+  );
+  [
+    "observe",
+    "unobserve",
+    "disconnect"
+  ].forEach(function(method) {
+    ResizeObserver$1.prototype[method] = function() {
+      var _a2;
+      return (_a2 = observers.get(this))[method].apply(_a2, arguments);
+    };
+  });
+  var index = (function() {
+    if (typeof global$1.ResizeObserver !== "undefined") {
+      return global$1.ResizeObserver;
+    }
+    return ResizeObserver$1;
+  })();
+  const min = Math.min;
+  const max = Math.max;
+  const round = Math.round;
+  const floor = Math.floor;
+  const createCoords = (v) => ({
+    x: v,
+    y: v
+  });
+  const oppositeSideMap = {
+    left: "right",
+    right: "left",
+    bottom: "top",
+    top: "bottom"
+  };
+  const oppositeAlignmentMap = {
+    start: "end",
+    end: "start"
+  };
+  function clamp(start, value, end) {
+    return max(start, min(value, end));
+  }
+  function evaluate(value, param) {
+    return typeof value === "function" ? value(param) : value;
+  }
+  function getSide(placement) {
+    return placement.split("-")[0];
+  }
+  function getAlignment(placement) {
+    return placement.split("-")[1];
+  }
+  function getOppositeAxis(axis) {
+    return axis === "x" ? "y" : "x";
+  }
+  function getAxisLength(axis) {
+    return axis === "y" ? "height" : "width";
+  }
+  function getSideAxis(placement) {
+    return ["top", "bottom"].includes(getSide(placement)) ? "y" : "x";
+  }
+  function getAlignmentAxis(placement) {
+    return getOppositeAxis(getSideAxis(placement));
+  }
+  function getAlignmentSides(placement, rects, rtl) {
+    if (rtl === void 0) {
+      rtl = false;
+    }
+    const alignment = getAlignment(placement);
+    const alignmentAxis = getAlignmentAxis(placement);
+    const length = getAxisLength(alignmentAxis);
+    let mainAlignmentSide = alignmentAxis === "x" ? alignment === (rtl ? "end" : "start") ? "right" : "left" : alignment === "start" ? "bottom" : "top";
+    if (rects.reference[length] > rects.floating[length]) {
+      mainAlignmentSide = getOppositePlacement(mainAlignmentSide);
+    }
+    return [mainAlignmentSide, getOppositePlacement(mainAlignmentSide)];
+  }
+  function getExpandedPlacements(placement) {
+    const oppositePlacement = getOppositePlacement(placement);
+    return [getOppositeAlignmentPlacement(placement), oppositePlacement, getOppositeAlignmentPlacement(oppositePlacement)];
+  }
+  function getOppositeAlignmentPlacement(placement) {
+    return placement.replace(/start|end/g, (alignment) => oppositeAlignmentMap[alignment]);
+  }
+  function getSideList(side, isStart, rtl) {
+    const lr = ["left", "right"];
+    const rl = ["right", "left"];
+    const tb = ["top", "bottom"];
+    const bt = ["bottom", "top"];
+    switch (side) {
+      case "top":
+      case "bottom":
+        if (rtl) return isStart ? rl : lr;
+        return isStart ? lr : rl;
+      case "left":
+      case "right":
+        return isStart ? tb : bt;
+      default:
+        return [];
+    }
+  }
+  function getOppositeAxisPlacements(placement, flipAlignment, direction, rtl) {
+    const alignment = getAlignment(placement);
+    let list = getSideList(getSide(placement), direction === "start", rtl);
+    if (alignment) {
+      list = list.map((side) => side + "-" + alignment);
+      if (flipAlignment) {
+        list = list.concat(list.map(getOppositeAlignmentPlacement));
+      }
+    }
+    return list;
+  }
+  function getOppositePlacement(placement) {
+    return placement.replace(/left|right|bottom|top/g, (side) => oppositeSideMap[side]);
+  }
+  function expandPaddingObject(padding) {
+    return __spreadValues$1({
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    }, padding);
+  }
+  function getPaddingObject(padding) {
+    return typeof padding !== "number" ? expandPaddingObject(padding) : {
+      top: padding,
+      right: padding,
+      bottom: padding,
+      left: padding
+    };
+  }
+  function rectToClientRect(rect) {
+    const {
+      x,
+      y,
+      width,
+      height
+    } = rect;
+    return {
+      width,
+      height,
+      top: y,
+      left: x,
+      right: x + width,
+      bottom: y + height,
+      x,
+      y
+    };
+  }
+  function computeCoordsFromPlacement(_ref, placement, rtl) {
+    let {
+      reference,
+      floating
+    } = _ref;
+    const sideAxis = getSideAxis(placement);
+    const alignmentAxis = getAlignmentAxis(placement);
+    const alignLength = getAxisLength(alignmentAxis);
+    const side = getSide(placement);
+    const isVertical = sideAxis === "y";
+    const commonX = reference.x + reference.width / 2 - floating.width / 2;
+    const commonY = reference.y + reference.height / 2 - floating.height / 2;
+    const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
+    let coords;
+    switch (side) {
+      case "top":
+        coords = {
+          x: commonX,
+          y: reference.y - floating.height
+        };
+        break;
+      case "bottom":
+        coords = {
+          x: commonX,
+          y: reference.y + reference.height
+        };
+        break;
+      case "right":
+        coords = {
+          x: reference.x + reference.width,
+          y: commonY
+        };
+        break;
+      case "left":
+        coords = {
+          x: reference.x - floating.width,
+          y: commonY
+        };
+        break;
+      default:
+        coords = {
+          x: reference.x,
+          y: reference.y
+        };
+    }
+    switch (getAlignment(placement)) {
+      case "start":
+        coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
+        break;
+      case "end":
+        coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
+        break;
+    }
+    return coords;
+  }
+  const computePosition$1 = (reference, floating, config) => __async$1(null, null, function* () {
+    const {
+      placement = "bottom",
+      strategy = "absolute",
+      middleware = [],
+      platform: platform2
+    } = config;
+    const validMiddleware = middleware.filter(Boolean);
+    const rtl = yield platform2.isRTL == null ? void 0 : platform2.isRTL(floating);
+    let rects = yield platform2.getElementRects({
+      reference,
+      floating,
+      strategy
+    });
+    let {
+      x,
+      y
+    } = computeCoordsFromPlacement(rects, placement, rtl);
+    let statefulPlacement = placement;
+    let middlewareData = {};
+    let resetCount = 0;
+    for (let i = 0; i < validMiddleware.length; i++) {
+      const {
+        name,
+        fn
+      } = validMiddleware[i];
+      const {
+        x: nextX,
+        y: nextY,
+        data,
+        reset
+      } = yield fn({
+        x,
+        y,
+        initialPlacement: placement,
+        placement: statefulPlacement,
+        strategy,
+        middlewareData,
+        rects,
+        platform: platform2,
+        elements: {
+          reference,
+          floating
+        }
+      });
+      x = nextX != null ? nextX : x;
+      y = nextY != null ? nextY : y;
+      middlewareData = __spreadProps$1(__spreadValues$1({}, middlewareData), {
+        [name]: __spreadValues$1(__spreadValues$1({}, middlewareData[name]), data)
+      });
+      if (reset && resetCount <= 50) {
+        resetCount++;
+        if (typeof reset === "object") {
+          if (reset.placement) {
+            statefulPlacement = reset.placement;
+          }
+          if (reset.rects) {
+            rects = reset.rects === true ? yield platform2.getElementRects({
+              reference,
+              floating,
+              strategy
+            }) : reset.rects;
+          }
+          ({
+            x,
+            y
+          } = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
+        }
+        i = -1;
+      }
+    }
+    return {
+      x,
+      y,
+      placement: statefulPlacement,
+      strategy,
+      middlewareData
+    };
+  });
+  function detectOverflow(state, options) {
+    return __async$1(this, null, function* () {
+      var _await$platform$isEle;
+      if (options === void 0) {
+        options = {};
+      }
+      const {
+        x,
+        y,
+        platform: platform2,
+        rects,
+        elements,
+        strategy
+      } = state;
+      const {
+        boundary = "clippingAncestors",
+        rootBoundary = "viewport",
+        elementContext = "floating",
+        altBoundary = false,
+        padding = 0
+      } = evaluate(options, state);
+      const paddingObject = getPaddingObject(padding);
+      const altContext = elementContext === "floating" ? "reference" : "floating";
+      const element = elements[altBoundary ? altContext : elementContext];
+      const clippingClientRect = rectToClientRect(yield platform2.getClippingRect({
+        element: ((_await$platform$isEle = yield platform2.isElement == null ? void 0 : platform2.isElement(element)) != null ? _await$platform$isEle : true) ? element : element.contextElement || (yield platform2.getDocumentElement == null ? void 0 : platform2.getDocumentElement(elements.floating)),
+        boundary,
+        rootBoundary,
+        strategy
+      }));
+      const rect = elementContext === "floating" ? {
+        x,
+        y,
+        width: rects.floating.width,
+        height: rects.floating.height
+      } : rects.reference;
+      const offsetParent = yield platform2.getOffsetParent == null ? void 0 : platform2.getOffsetParent(elements.floating);
+      const offsetScale = (yield platform2.isElement == null ? void 0 : platform2.isElement(offsetParent)) ? (yield platform2.getScale == null ? void 0 : platform2.getScale(offsetParent)) || {
+        x: 1,
+        y: 1
+      } : {
+        x: 1,
+        y: 1
+      };
+      const elementClientRect = rectToClientRect(platform2.convertOffsetParentRelativeRectToViewportRelativeRect ? yield platform2.convertOffsetParentRelativeRectToViewportRelativeRect({
+        elements,
+        rect,
+        offsetParent,
+        strategy
+      }) : rect);
+      return {
+        top: (clippingClientRect.top - elementClientRect.top + paddingObject.top) / offsetScale.y,
+        bottom: (elementClientRect.bottom - clippingClientRect.bottom + paddingObject.bottom) / offsetScale.y,
+        left: (clippingClientRect.left - elementClientRect.left + paddingObject.left) / offsetScale.x,
+        right: (elementClientRect.right - clippingClientRect.right + paddingObject.right) / offsetScale.x
+      };
+    });
+  }
+  const flip$1 = function(options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      name: "flip",
+      options,
+      fn(state) {
+        return __async$1(this, null, function* () {
+          var _middlewareData$arrow, _middlewareData$flip;
+          const {
+            placement,
+            middlewareData,
+            rects,
+            initialPlacement,
+            platform: platform2,
+            elements
+          } = state;
+          const _a3 = evaluate(options, state), {
+            mainAxis: checkMainAxis = true,
+            crossAxis: checkCrossAxis = true,
+            fallbackPlacements: specifiedFallbackPlacements,
+            fallbackStrategy = "bestFit",
+            fallbackAxisSideDirection = "none",
+            flipAlignment = true
+          } = _a3, detectOverflowOptions = __objRest(_a3, [
+            "mainAxis",
+            "crossAxis",
+            "fallbackPlacements",
+            "fallbackStrategy",
+            "fallbackAxisSideDirection",
+            "flipAlignment"
+          ]);
+          if ((_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+            return {};
+          }
+          const side = getSide(placement);
+          const initialSideAxis = getSideAxis(initialPlacement);
+          const isBasePlacement = getSide(initialPlacement) === initialPlacement;
+          const rtl = yield platform2.isRTL == null ? void 0 : platform2.isRTL(elements.floating);
+          const fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipAlignment ? [getOppositePlacement(initialPlacement)] : getExpandedPlacements(initialPlacement));
+          const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== "none";
+          if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) {
+            fallbackPlacements.push(...getOppositeAxisPlacements(initialPlacement, flipAlignment, fallbackAxisSideDirection, rtl));
+          }
+          const placements = [initialPlacement, ...fallbackPlacements];
+          const overflow = yield detectOverflow(state, detectOverflowOptions);
+          const overflows = [];
+          let overflowsData = ((_middlewareData$flip = middlewareData.flip) == null ? void 0 : _middlewareData$flip.overflows) || [];
+          if (checkMainAxis) {
+            overflows.push(overflow[side]);
+          }
+          if (checkCrossAxis) {
+            const sides = getAlignmentSides(placement, rects, rtl);
+            overflows.push(overflow[sides[0]], overflow[sides[1]]);
+          }
+          overflowsData = [...overflowsData, {
+            placement,
+            overflows
+          }];
+          if (!overflows.every((side2) => side2 <= 0)) {
+            var _middlewareData$flip2, _overflowsData$filter;
+            const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
+            const nextPlacement = placements[nextIndex];
+            if (nextPlacement) {
+              return {
+                data: {
+                  index: nextIndex,
+                  overflows: overflowsData
+                },
+                reset: {
+                  placement: nextPlacement
+                }
+              };
+            }
+            let resetPlacement = (_overflowsData$filter = overflowsData.filter((d) => d.overflows[0] <= 0).sort((a, b) => a.overflows[1] - b.overflows[1])[0]) == null ? void 0 : _overflowsData$filter.placement;
+            if (!resetPlacement) {
+              switch (fallbackStrategy) {
+                case "bestFit": {
+                  var _overflowsData$filter2;
+                  const placement2 = (_overflowsData$filter2 = overflowsData.filter((d) => {
+                    if (hasFallbackAxisSideDirection) {
+                      const currentSideAxis = getSideAxis(d.placement);
+                      return currentSideAxis === initialSideAxis ||
+
+currentSideAxis === "y";
+                    }
+                    return true;
+                  }).map((d) => [d.placement, d.overflows.filter((overflow2) => overflow2 > 0).reduce((acc, overflow2) => acc + overflow2, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$filter2[0];
+                  if (placement2) {
+                    resetPlacement = placement2;
+                  }
+                  break;
+                }
+                case "initialPlacement":
+                  resetPlacement = initialPlacement;
+                  break;
+              }
+            }
+            if (placement !== resetPlacement) {
+              return {
+                reset: {
+                  placement: resetPlacement
+                }
+              };
+            }
+          }
+          return {};
+        });
+      }
+    };
+  };
+  function convertValueToCoords(state, options) {
+    return __async$1(this, null, function* () {
+      const {
+        placement,
+        platform: platform2,
+        elements
+      } = state;
+      const rtl = yield platform2.isRTL == null ? void 0 : platform2.isRTL(elements.floating);
+      const side = getSide(placement);
+      const alignment = getAlignment(placement);
+      const isVertical = getSideAxis(placement) === "y";
+      const mainAxisMulti = ["left", "top"].includes(side) ? -1 : 1;
+      const crossAxisMulti = rtl && isVertical ? -1 : 1;
+      const rawValue = evaluate(options, state);
+      let {
+        mainAxis,
+        crossAxis,
+        alignmentAxis
+      } = typeof rawValue === "number" ? {
+        mainAxis: rawValue,
+        crossAxis: 0,
+        alignmentAxis: null
+      } : {
+        mainAxis: rawValue.mainAxis || 0,
+        crossAxis: rawValue.crossAxis || 0,
+        alignmentAxis: rawValue.alignmentAxis
+      };
+      if (alignment && typeof alignmentAxis === "number") {
+        crossAxis = alignment === "end" ? alignmentAxis * -1 : alignmentAxis;
+      }
+      return isVertical ? {
+        x: crossAxis * crossAxisMulti,
+        y: mainAxis * mainAxisMulti
+      } : {
+        x: mainAxis * mainAxisMulti,
+        y: crossAxis * crossAxisMulti
+      };
+    });
+  }
+  const offset$1 = function(options) {
+    if (options === void 0) {
+      options = 0;
+    }
+    return {
+      name: "offset",
+      options,
+      fn(state) {
+        return __async$1(this, null, function* () {
+          var _middlewareData$offse, _middlewareData$arrow;
+          const {
+            x,
+            y,
+            placement,
+            middlewareData
+          } = state;
+          const diffCoords = yield convertValueToCoords(state, options);
+          if (placement === ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse.placement) && (_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+            return {};
+          }
+          return {
+            x: x + diffCoords.x,
+            y: y + diffCoords.y,
+            data: __spreadProps$1(__spreadValues$1({}, diffCoords), {
+              placement
+            })
+          };
+        });
+      }
+    };
+  };
+  const shift$1 = function(options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      name: "shift",
+      options,
+      fn(state) {
+        return __async$1(this, null, function* () {
+          const {
+            x,
+            y,
+            placement
+          } = state;
+          const _a3 = evaluate(options, state), {
+            mainAxis: checkMainAxis = true,
+            crossAxis: checkCrossAxis = false,
+            limiter = {
+              fn: (_ref) => {
+                let {
+                  x: x2,
+                  y: y2
+                } = _ref;
+                return {
+                  x: x2,
+                  y: y2
+                };
+              }
+            }
+          } = _a3, detectOverflowOptions = __objRest(_a3, [
+            "mainAxis",
+            "crossAxis",
+            "limiter"
+          ]);
+          const coords = {
+            x,
+            y
+          };
+          const overflow = yield detectOverflow(state, detectOverflowOptions);
+          const crossAxis = getSideAxis(getSide(placement));
+          const mainAxis = getOppositeAxis(crossAxis);
+          let mainAxisCoord = coords[mainAxis];
+          let crossAxisCoord = coords[crossAxis];
+          if (checkMainAxis) {
+            const minSide = mainAxis === "y" ? "top" : "left";
+            const maxSide = mainAxis === "y" ? "bottom" : "right";
+            const min2 = mainAxisCoord + overflow[minSide];
+            const max2 = mainAxisCoord - overflow[maxSide];
+            mainAxisCoord = clamp(min2, mainAxisCoord, max2);
+          }
+          if (checkCrossAxis) {
+            const minSide = crossAxis === "y" ? "top" : "left";
+            const maxSide = crossAxis === "y" ? "bottom" : "right";
+            const min2 = crossAxisCoord + overflow[minSide];
+            const max2 = crossAxisCoord - overflow[maxSide];
+            crossAxisCoord = clamp(min2, crossAxisCoord, max2);
+          }
+          const limitedCoords = limiter.fn(__spreadProps$1(__spreadValues$1({}, state), {
+            [mainAxis]: mainAxisCoord,
+            [crossAxis]: crossAxisCoord
+          }));
+          return __spreadProps$1(__spreadValues$1({}, limitedCoords), {
+            data: {
+              x: limitedCoords.x - x,
+              y: limitedCoords.y - y,
+              enabled: {
+                [mainAxis]: checkMainAxis,
+                [crossAxis]: checkCrossAxis
+              }
             }
           });
-        }
+        });
+      }
+    };
+  };
+  function hasWindow() {
+    return typeof window !== "undefined";
+  }
+  function getNodeName(node) {
+    if (isNode(node)) {
+      return (node.nodeName || "").toLowerCase();
+    }
+    return "#document";
+  }
+  function getWindow(node) {
+    var _node$ownerDocument;
+    return (node == null || (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
+  }
+  function getDocumentElement(node) {
+    var _ref;
+    return (_ref = (isNode(node) ? node.ownerDocument : node.document) || window.document) == null ? void 0 : _ref.documentElement;
+  }
+  function isNode(value) {
+    if (!hasWindow()) {
+      return false;
+    }
+    return value instanceof Node || value instanceof getWindow(value).Node;
+  }
+  function isElement(value) {
+    if (!hasWindow()) {
+      return false;
+    }
+    return value instanceof Element || value instanceof getWindow(value).Element;
+  }
+  function isHTMLElement(value) {
+    if (!hasWindow()) {
+      return false;
+    }
+    return value instanceof HTMLElement || value instanceof getWindow(value).HTMLElement;
+  }
+  function isShadowRoot(value) {
+    if (!hasWindow() || typeof ShadowRoot === "undefined") {
+      return false;
+    }
+    return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
+  }
+  function isOverflowElement(element) {
+    const {
+      overflow,
+      overflowX,
+      overflowY,
+      display
+    } = getComputedStyle$1(element);
+    return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !["inline", "contents"].includes(display);
+  }
+  function isTableElement(element) {
+    return ["table", "td", "th"].includes(getNodeName(element));
+  }
+  function isTopLayer(element) {
+    return [":popover-open", ":modal"].some((selector) => {
+      try {
+        return element.matches(selector);
+      } catch (e) {
+        return false;
       }
     });
   }
-  function getName(name2) {
-    if (name2) {
-      return `__allSearch__${name2}`;
+  function isContainingBlock(elementOrCss) {
+    const webkit = isWebKit();
+    const css = isElement(elementOrCss) ? getComputedStyle$1(elementOrCss) : elementOrCss;
+    return css.transform !== "none" || css.perspective !== "none" || (css.containerType ? css.containerType !== "normal" : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== "none" : false) || !webkit && (css.filter ? css.filter !== "none" : false) || ["transform", "perspective", "filter"].some((value) => (css.willChange || "").includes(value)) || ["paint", "layout", "strict", "content"].some((value) => (css.contain || "").includes(value));
+  }
+  function getContainingBlock(element) {
+    let currentNode = getParentNode(element);
+    while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+      if (isContainingBlock(currentNode)) {
+        return currentNode;
+      } else if (isTopLayer(currentNode)) {
+        return null;
+      }
+      currentNode = getParentNode(currentNode);
     }
     return null;
   }
-  function isJson(str) {
-    if (typeof str !== "string") {
-      return false;
-    }
-    const char = str.charAt(0);
-    if (char !== "[" && char !== "{") {
-      return false;
-    }
-    try {
-      return typeof JSON.parse(str) === "object";
-    } catch (e) {
-      return false;
-    }
+  function isWebKit() {
+    if (typeof CSS === "undefined" || !CSS.supports) return false;
+    return CSS.supports("-webkit-backdrop-filter", "none");
   }
-  function parseJson(val) {
-    if (isJson(val)) {
-      try {
-        return JSON.parse(val);
-      } catch (e) {
-        return val;
+  function isLastTraversableNode(node) {
+    return ["html", "body", "#document"].includes(getNodeName(node));
+  }
+  function getComputedStyle$1(element) {
+    return getWindow(element).getComputedStyle(element);
+  }
+  function getNodeScroll(element) {
+    if (isElement(element)) {
+      return {
+        scrollLeft: element.scrollLeft,
+        scrollTop: element.scrollTop
+      };
+    }
+    return {
+      scrollLeft: element.scrollX,
+      scrollTop: element.scrollY
+    };
+  }
+  function getParentNode(node) {
+    if (getNodeName(node) === "html") {
+      return node;
+    }
+    const result = (
+node.assignedSlot ||
+node.parentNode ||
+isShadowRoot(node) && node.host ||
+getDocumentElement(node)
+    );
+    return isShadowRoot(result) ? result.host : result;
+  }
+  function getNearestOverflowAncestor(node) {
+    const parentNode = getParentNode(node);
+    if (isLastTraversableNode(parentNode)) {
+      return node.ownerDocument ? node.ownerDocument.body : node.body;
+    }
+    if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
+      return parentNode;
+    }
+    return getNearestOverflowAncestor(parentNode);
+  }
+  function getOverflowAncestors(node, list, traverseIframes) {
+    var _node$ownerDocument2;
+    if (list === void 0) {
+      list = [];
+    }
+    if (traverseIframes === void 0) {
+      traverseIframes = true;
+    }
+    const scrollableAncestor = getNearestOverflowAncestor(node);
+    const isBody = scrollableAncestor === ((_node$ownerDocument2 = node.ownerDocument) == null ? void 0 : _node$ownerDocument2.body);
+    const win = getWindow(scrollableAncestor);
+    if (isBody) {
+      const frameElement = getFrameElement(win);
+      return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : [], frameElement && traverseIframes ? getOverflowAncestors(frameElement) : []);
+    }
+    return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor, [], traverseIframes));
+  }
+  function getFrameElement(win) {
+    return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
+  }
+  function getCssDimensions(element) {
+    const css = getComputedStyle$1(element);
+    let width = parseFloat(css.width) || 0;
+    let height = parseFloat(css.height) || 0;
+    const hasOffset = isHTMLElement(element);
+    const offsetWidth = hasOffset ? element.offsetWidth : width;
+    const offsetHeight = hasOffset ? element.offsetHeight : height;
+    const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
+    if (shouldFallback) {
+      width = offsetWidth;
+      height = offsetHeight;
+    }
+    return {
+      width,
+      height,
+      $: shouldFallback
+    };
+  }
+  function unwrapElement$1(element) {
+    return !isElement(element) ? element.contextElement : element;
+  }
+  function getScale(element) {
+    const domElement = unwrapElement$1(element);
+    if (!isHTMLElement(domElement)) {
+      return createCoords(1);
+    }
+    const rect = domElement.getBoundingClientRect();
+    const {
+      width,
+      height,
+      $
+    } = getCssDimensions(domElement);
+    let x = ($ ? round(rect.width) : rect.width) / width;
+    let y = ($ ? round(rect.height) : rect.height) / height;
+    if (!x || !Number.isFinite(x)) {
+      x = 1;
+    }
+    if (!y || !Number.isFinite(y)) {
+      y = 1;
+    }
+    return {
+      x,
+      y
+    };
+  }
+  const noOffsets = createCoords(0);
+  function getVisualOffsets(element) {
+    const win = getWindow(element);
+    if (!isWebKit() || !win.visualViewport) {
+      return noOffsets;
+    }
+    return {
+      x: win.visualViewport.offsetLeft,
+      y: win.visualViewport.offsetTop
+    };
+  }
+  function shouldAddVisualOffsets(element, isFixed, floatingOffsetParent) {
+    if (isFixed === void 0) {
+      isFixed = false;
+    }
+    if (!floatingOffsetParent || isFixed && floatingOffsetParent !== getWindow(element)) {
+      return false;
+    }
+    return isFixed;
+  }
+  function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetParent) {
+    if (includeScale === void 0) {
+      includeScale = false;
+    }
+    if (isFixedStrategy === void 0) {
+      isFixedStrategy = false;
+    }
+    const clientRect = element.getBoundingClientRect();
+    const domElement = unwrapElement$1(element);
+    let scale = createCoords(1);
+    if (includeScale) {
+      if (offsetParent) {
+        if (isElement(offsetParent)) {
+          scale = getScale(offsetParent);
+        }
+      } else {
+        scale = getScale(element);
       }
     }
-    return val;
+    const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
+    let x = (clientRect.left + visualOffsets.x) / scale.x;
+    let y = (clientRect.top + visualOffsets.y) / scale.y;
+    let width = clientRect.width / scale.x;
+    let height = clientRect.height / scale.y;
+    if (domElement) {
+      const win = getWindow(domElement);
+      const offsetWin = offsetParent && isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
+      let currentWin = win;
+      let currentIFrame = getFrameElement(currentWin);
+      while (currentIFrame && offsetParent && offsetWin !== currentWin) {
+        const iframeScale = getScale(currentIFrame);
+        const iframeRect = currentIFrame.getBoundingClientRect();
+        const css = getComputedStyle$1(currentIFrame);
+        const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) * iframeScale.x;
+        const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
+        x *= iframeScale.x;
+        y *= iframeScale.y;
+        width *= iframeScale.x;
+        height *= iframeScale.y;
+        x += left;
+        y += top;
+        currentWin = getWindow(currentIFrame);
+        currentIFrame = getFrameElement(currentWin);
+      }
+    }
+    return rectToClientRect({
+      width,
+      height,
+      x,
+      y
+    });
   }
-  function RAFInterval(callback, period, runNow) {
-    const needCount = period / 1e3 * 60;
-    let times = 0;
-    if (runNow === true) {
-      const shouldFinish = callback();
-      if (shouldFinish) {
+  function getWindowScrollBarX(element, rect) {
+    const leftScroll = getNodeScroll(element).scrollLeft;
+    if (!rect) {
+      return getBoundingClientRect(getDocumentElement(element)).left + leftScroll;
+    }
+    return rect.left + leftScroll;
+  }
+  function getHTMLOffset(documentElement, scroll, ignoreScrollbarX) {
+    if (ignoreScrollbarX === void 0) {
+      ignoreScrollbarX = false;
+    }
+    const htmlRect = documentElement.getBoundingClientRect();
+    const x = htmlRect.left + scroll.scrollLeft - (ignoreScrollbarX ? 0 : (
+getWindowScrollBarX(documentElement, htmlRect)
+    ));
+    const y = htmlRect.top + scroll.scrollTop;
+    return {
+      x,
+      y
+    };
+  }
+  function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
+    let {
+      elements,
+      rect,
+      offsetParent,
+      strategy
+    } = _ref;
+    const isFixed = strategy === "fixed";
+    const documentElement = getDocumentElement(offsetParent);
+    const topLayer = elements ? isTopLayer(elements.floating) : false;
+    if (offsetParent === documentElement || topLayer && isFixed) {
+      return rect;
+    }
+    let scroll = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    let scale = createCoords(1);
+    const offsets = createCoords(0);
+    const isOffsetParentAnElement = isHTMLElement(offsetParent);
+    if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+      if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
+        scroll = getNodeScroll(offsetParent);
+      }
+      if (isHTMLElement(offsetParent)) {
+        const offsetRect = getBoundingClientRect(offsetParent);
+        scale = getScale(offsetParent);
+        offsets.x = offsetRect.x + offsetParent.clientLeft;
+        offsets.y = offsetRect.y + offsetParent.clientTop;
+      }
+    }
+    const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll, true) : createCoords(0);
+    return {
+      width: rect.width * scale.x,
+      height: rect.height * scale.y,
+      x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
+      y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y
+    };
+  }
+  function getClientRects(element) {
+    return Array.from(element.getClientRects());
+  }
+  function getDocumentRect(element) {
+    const html = getDocumentElement(element);
+    const scroll = getNodeScroll(element);
+    const body = element.ownerDocument.body;
+    const width = max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
+    const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
+    let x = -scroll.scrollLeft + getWindowScrollBarX(element);
+    const y = -scroll.scrollTop;
+    if (getComputedStyle$1(body).direction === "rtl") {
+      x += max(html.clientWidth, body.clientWidth) - width;
+    }
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+  function getViewportRect(element, strategy) {
+    const win = getWindow(element);
+    const html = getDocumentElement(element);
+    const visualViewport = win.visualViewport;
+    let width = html.clientWidth;
+    let height = html.clientHeight;
+    let x = 0;
+    let y = 0;
+    if (visualViewport) {
+      width = visualViewport.width;
+      height = visualViewport.height;
+      const visualViewportBased = isWebKit();
+      if (!visualViewportBased || visualViewportBased && strategy === "fixed") {
+        x = visualViewport.offsetLeft;
+        y = visualViewport.offsetTop;
+      }
+    }
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+  function getInnerBoundingClientRect(element, strategy) {
+    const clientRect = getBoundingClientRect(element, true, strategy === "fixed");
+    const top = clientRect.top + element.clientTop;
+    const left = clientRect.left + element.clientLeft;
+    const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
+    const width = element.clientWidth * scale.x;
+    const height = element.clientHeight * scale.y;
+    const x = left * scale.x;
+    const y = top * scale.y;
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+  function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
+    let rect;
+    if (clippingAncestor === "viewport") {
+      rect = getViewportRect(element, strategy);
+    } else if (clippingAncestor === "document") {
+      rect = getDocumentRect(getDocumentElement(element));
+    } else if (isElement(clippingAncestor)) {
+      rect = getInnerBoundingClientRect(clippingAncestor, strategy);
+    } else {
+      const visualOffsets = getVisualOffsets(element);
+      rect = {
+        x: clippingAncestor.x - visualOffsets.x,
+        y: clippingAncestor.y - visualOffsets.y,
+        width: clippingAncestor.width,
+        height: clippingAncestor.height
+      };
+    }
+    return rectToClientRect(rect);
+  }
+  function hasFixedPositionAncestor(element, stopNode) {
+    const parentNode = getParentNode(element);
+    if (parentNode === stopNode || !isElement(parentNode) || isLastTraversableNode(parentNode)) {
+      return false;
+    }
+    return getComputedStyle$1(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
+  }
+  function getClippingElementAncestors(element, cache) {
+    const cachedResult = cache.get(element);
+    if (cachedResult) {
+      return cachedResult;
+    }
+    let result = getOverflowAncestors(element, [], false).filter((el) => isElement(el) && getNodeName(el) !== "body");
+    let currentContainingBlockComputedStyle = null;
+    const elementIsFixed = getComputedStyle$1(element).position === "fixed";
+    let currentNode = elementIsFixed ? getParentNode(element) : element;
+    while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
+      const computedStyle = getComputedStyle$1(currentNode);
+      const currentNodeIsContaining = isContainingBlock(currentNode);
+      if (!currentNodeIsContaining && computedStyle.position === "fixed") {
+        currentContainingBlockComputedStyle = null;
+      }
+      const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && ["absolute", "fixed"].includes(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+      if (shouldDropCurrentNode) {
+        result = result.filter((ancestor) => ancestor !== currentNode);
+      } else {
+        currentContainingBlockComputedStyle = computedStyle;
+      }
+      currentNode = getParentNode(currentNode);
+    }
+    cache.set(element, result);
+    return result;
+  }
+  function getClippingRect(_ref) {
+    let {
+      element,
+      boundary,
+      rootBoundary,
+      strategy
+    } = _ref;
+    const elementClippingAncestors = boundary === "clippingAncestors" ? isTopLayer(element) ? [] : getClippingElementAncestors(element, this._c) : [].concat(boundary);
+    const clippingAncestors = [...elementClippingAncestors, rootBoundary];
+    const firstClippingAncestor = clippingAncestors[0];
+    const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
+      const rect = getClientRectFromClippingAncestor(element, clippingAncestor, strategy);
+      accRect.top = max(rect.top, accRect.top);
+      accRect.right = min(rect.right, accRect.right);
+      accRect.bottom = min(rect.bottom, accRect.bottom);
+      accRect.left = max(rect.left, accRect.left);
+      return accRect;
+    }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
+    return {
+      width: clippingRect.right - clippingRect.left,
+      height: clippingRect.bottom - clippingRect.top,
+      x: clippingRect.left,
+      y: clippingRect.top
+    };
+  }
+  function getDimensions(element) {
+    const {
+      width,
+      height
+    } = getCssDimensions(element);
+    return {
+      width,
+      height
+    };
+  }
+  function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
+    const isOffsetParentAnElement = isHTMLElement(offsetParent);
+    const documentElement = getDocumentElement(offsetParent);
+    const isFixed = strategy === "fixed";
+    const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
+    let scroll = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    const offsets = createCoords(0);
+    if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+      if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
+        scroll = getNodeScroll(offsetParent);
+      }
+      if (isOffsetParentAnElement) {
+        const offsetRect = getBoundingClientRect(offsetParent, true, isFixed, offsetParent);
+        offsets.x = offsetRect.x + offsetParent.clientLeft;
+        offsets.y = offsetRect.y + offsetParent.clientTop;
+      } else if (documentElement) {
+        offsets.x = getWindowScrollBarX(documentElement);
+      }
+    }
+    const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
+    const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
+    const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
+    return {
+      x,
+      y,
+      width: rect.width,
+      height: rect.height
+    };
+  }
+  function isStaticPositioned(element) {
+    return getComputedStyle$1(element).position === "static";
+  }
+  function getTrueOffsetParent(element, polyfill) {
+    if (!isHTMLElement(element) || getComputedStyle$1(element).position === "fixed") {
+      return null;
+    }
+    if (polyfill) {
+      return polyfill(element);
+    }
+    let rawOffsetParent = element.offsetParent;
+    if (getDocumentElement(element) === rawOffsetParent) {
+      rawOffsetParent = rawOffsetParent.ownerDocument.body;
+    }
+    return rawOffsetParent;
+  }
+  function getOffsetParent(element, polyfill) {
+    const win = getWindow(element);
+    if (isTopLayer(element)) {
+      return win;
+    }
+    if (!isHTMLElement(element)) {
+      let svgOffsetParent = getParentNode(element);
+      while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
+        if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
+          return svgOffsetParent;
+        }
+        svgOffsetParent = getParentNode(svgOffsetParent);
+      }
+      return win;
+    }
+    let offsetParent = getTrueOffsetParent(element, polyfill);
+    while (offsetParent && isTableElement(offsetParent) && isStaticPositioned(offsetParent)) {
+      offsetParent = getTrueOffsetParent(offsetParent, polyfill);
+    }
+    if (offsetParent && isLastTraversableNode(offsetParent) && isStaticPositioned(offsetParent) && !isContainingBlock(offsetParent)) {
+      return win;
+    }
+    return offsetParent || getContainingBlock(element) || win;
+  }
+  const getElementRects = function(data) {
+    return __async$1(this, null, function* () {
+      const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
+      const getDimensionsFn = this.getDimensions;
+      const floatingDimensions = yield getDimensionsFn(data.floating);
+      return {
+        reference: getRectRelativeToOffsetParent(data.reference, yield getOffsetParentFn(data.floating), data.strategy),
+        floating: {
+          x: 0,
+          y: 0,
+          width: floatingDimensions.width,
+          height: floatingDimensions.height
+        }
+      };
+    });
+  };
+  function isRTL(element) {
+    return getComputedStyle$1(element).direction === "rtl";
+  }
+  const platform = {
+    convertOffsetParentRelativeRectToViewportRelativeRect,
+    getDocumentElement,
+    getClippingRect,
+    getOffsetParent,
+    getElementRects,
+    getClientRects,
+    getDimensions,
+    getScale,
+    isElement,
+    isRTL
+  };
+  function observeMove(element, onMove) {
+    let io = null;
+    let timeoutId;
+    const root = getDocumentElement(element);
+    function cleanup() {
+      var _io;
+      clearTimeout(timeoutId);
+      (_io = io) == null || _io.disconnect();
+      io = null;
+    }
+    function refresh(skip, threshold) {
+      if (skip === void 0) {
+        skip = false;
+      }
+      if (threshold === void 0) {
+        threshold = 1;
+      }
+      cleanup();
+      const {
+        left,
+        top,
+        width,
+        height
+      } = element.getBoundingClientRect();
+      if (!skip) {
+        onMove();
+      }
+      if (!width || !height) {
         return;
       }
-    }
-    function step() {
-      if (times < needCount) {
-        times++;
-        requestAnimationFrame(step);
-      } else {
-        const shouldFinish = callback() || false;
-        if (!shouldFinish) {
-          times = 0;
-          requestAnimationFrame(step);
-        }
-      }
-    }
-    requestAnimationFrame(step);
-  }
-  function removeNode(cssSelectorOrFunction) {
-    try {
-      if (typeof cssSelectorOrFunction === "string") {
-        let removeNodes = document.querySelectorAll(cssSelectorOrFunction);
-        for (let i = 0; i < removeNodes.length; i++) {
-          removeNodes[i].remove();
-        }
-      } else if (typeof cssSelectorOrFunction === "function") {
-        cssSelectorOrFunction();
-      } else {
-        console.log("未知命令：" + cssSelectorOrFunction);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  function addStyleContent(css, className, addToTarget, isReload = false) {
-    RAFInterval(function() {
-      let addTo = document.querySelector(addToTarget);
-      if (typeof addToTarget === "undefined") {
-        addTo = document.body || document.head || document.documentElement || document;
-      }
-      if (typeof addToTarget === "undefined" || typeof addToTarget !== "undefined" && document.querySelector(addToTarget) !== null) {
-        if (isReload) {
-          removeNode("." + className);
-        } else if (!isReload && document.querySelector("." + className) !== null) {
-          return true;
-        }
-        let cssNode = document.createElement("style");
-        if (className) {
-          cssNode.className = className;
-        }
-        cssNode.setAttribute("type", "text/css");
-        cssNode.innerHTML = css;
-        try {
-          addTo.appendChild(cssNode);
-        } catch (e) {
-          console.log(e.message);
-        }
-        return true;
-      }
-    }, 20, true);
-  }
-  function getAsRoot() {
-    return document.getElementById("all-search");
-  }
-  function createAsRoot() {
-    const el2 = document.createElement("div");
-    el2.id = "all-search";
-    return el2;
-  }
-  const isMobile = function() {
-    return /mobile|android|webos|iphone|ipod|blackberry|iphone os|ipad/i.test(navigator.userAgent);
-  };
-  function delAsDataSet(item) {
-    if (item.dataset) {
-      delete item.dataset.asMarginTop;
-      delete item.dataset.asTransform;
-      delete item.dataset.asBorderTop;
-    }
-  }
-  function getParent(el2) {
-    let current = el2;
-    let go = true;
-    while (go && current.offsetParent) {
-      if (current.offsetParent.tagName === "BODY") {
-        go = false;
-      } else {
-        current = current.offsetParent;
-      }
-    }
-    const style = window.getComputedStyle(current);
-    if (style.position !== "fixed") {
-      return null;
-    }
-    return current;
-  }
-  function getRealFixedNode(item) {
-    if (!item || !isElement(item)) {
-      return null;
-    }
-    const style = window.getComputedStyle(item);
-    if (style.display === "none") {
-      return null;
-    } else if (style.position === "fixed") {
-      return item;
-    } else if (style.position === "absolute") {
-      return getParent(item);
-    } else {
-      return null;
-    }
-  }
-  function isElement(obj) {
-    return obj && obj instanceof Element && obj.nodeType === 1 && obj.tagName !== void 0;
-  }
-  function changeStyle(item) {
-    if (!item || !isElement(item)) {
-      return;
-    }
-    const style = window.getComputedStyle(item);
-    const styleMap = item.computedStyleMap && item.computedStyleMap();
-    const top = styleMap ? styleMap.get("top").value : null;
-    if (top === "auto") {
-      return;
-    } else if (style.top === "0px") {
-      item.style.top = "0px";
-    }
-    if (item.dataset.asMarginTop || item.dataset.asTransform || item.dataset.asBorderTop) {
-      return;
-    }
-    const marginTop = style.marginTop;
-    const transform = style.transform;
-    const transition = style.transition;
-    if (marginTop === "0px" && !transition.includes("margin")) {
-      item.dataset.asHasSet = "asMarginTop";
-      item.dataset.asMarginTop = "1";
-    } else if (transform === "none") {
-      item.dataset.asHasSet = "asTransform";
-      item.dataset.asTransform = "1";
-    } else {
-      item.dataset.asHasSet = "asBorderTop";
-      item.dataset.asBorderTop = "1";
-    }
-  }
-  function getFixedNodeList(list2, deep = false) {
-    const weakSet = /* @__PURE__ */ new WeakSet();
-    const newList = [];
-    const nodes = list2.filter((item) => item).map((item) => {
-      delAsDataSet(item);
-      if (deep) {
-        Array.from(item.querySelectorAll("*")).map((item2) => {
-          delAsDataSet(item2);
-          return getRealFixedNode(item2);
-        }).filter((item2) => item2).forEach((item2) => {
-          if (!weakSet.has(item2)) {
-            newList.push(item2);
-            weakSet.add(item2);
+      const insetTop = floor(top);
+      const insetRight = floor(root.clientWidth - (left + width));
+      const insetBottom = floor(root.clientHeight - (top + height));
+      const insetLeft = floor(left);
+      const rootMargin = -insetTop + "px " + -insetRight + "px " + -insetBottom + "px " + -insetLeft + "px";
+      const options = {
+        rootMargin,
+        threshold: max(0, min(1, threshold)) || 1
+      };
+      let isFirstUpdate = true;
+      function handleObserve(entries) {
+        const ratio = entries[0].intersectionRatio;
+        if (ratio !== threshold) {
+          if (!isFirstUpdate) {
+            return refresh();
           }
+          if (!ratio) {
+            timeoutId = setTimeout(() => {
+              refresh(false, 1e-7);
+            }, 1e3);
+          } else {
+            refresh(false, ratio);
+          }
+        }
+        isFirstUpdate = false;
+      }
+      try {
+        io = new IntersectionObserver(handleObserve, __spreadProps$1(__spreadValues$1({}, options), {
+root: root.ownerDocument
+        }));
+      } catch (e) {
+        io = new IntersectionObserver(handleObserve, options);
+      }
+      io.observe(element);
+    }
+    refresh(true);
+    return cleanup;
+  }
+  function autoUpdate(reference, floating, update, options) {
+    if (options === void 0) {
+      options = {};
+    }
+    const {
+      ancestorScroll = true,
+      ancestorResize = true,
+      elementResize = typeof ResizeObserver === "function",
+      layoutShift = typeof IntersectionObserver === "function",
+      animationFrame = false
+    } = options;
+    const referenceEl = unwrapElement$1(reference);
+    const ancestors = ancestorScroll || ancestorResize ? [...referenceEl ? getOverflowAncestors(referenceEl) : [], ...getOverflowAncestors(floating)] : [];
+    ancestors.forEach((ancestor) => {
+      ancestorScroll && ancestor.addEventListener("scroll", update, {
+        passive: true
+      });
+      ancestorResize && ancestor.addEventListener("resize", update);
+    });
+    const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update) : null;
+    let reobserveFrame = -1;
+    let resizeObserver = null;
+    if (elementResize) {
+      resizeObserver = new ResizeObserver((_ref) => {
+        let [firstEntry] = _ref;
+        if (firstEntry && firstEntry.target === referenceEl && resizeObserver) {
+          resizeObserver.unobserve(floating);
+          cancelAnimationFrame(reobserveFrame);
+          reobserveFrame = requestAnimationFrame(() => {
+            var _resizeObserver;
+            (_resizeObserver = resizeObserver) == null || _resizeObserver.observe(floating);
+          });
+        }
+        update();
+      });
+      if (referenceEl && !animationFrame) {
+        resizeObserver.observe(referenceEl);
+      }
+      resizeObserver.observe(floating);
+    }
+    let frameId;
+    let prevRefRect = animationFrame ? getBoundingClientRect(reference) : null;
+    if (animationFrame) {
+      frameLoop();
+    }
+    function frameLoop() {
+      const nextRefRect = getBoundingClientRect(reference);
+      if (prevRefRect && (nextRefRect.x !== prevRefRect.x || nextRefRect.y !== prevRefRect.y || nextRefRect.width !== prevRefRect.width || nextRefRect.height !== prevRefRect.height)) {
+        update();
+      }
+      prevRefRect = nextRefRect;
+      frameId = requestAnimationFrame(frameLoop);
+    }
+    update();
+    return () => {
+      var _resizeObserver2;
+      ancestors.forEach((ancestor) => {
+        ancestorScroll && ancestor.removeEventListener("scroll", update);
+        ancestorResize && ancestor.removeEventListener("resize", update);
+      });
+      cleanupIo == null || cleanupIo();
+      (_resizeObserver2 = resizeObserver) == null || _resizeObserver2.disconnect();
+      resizeObserver = null;
+      if (animationFrame) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }
+  const offset = offset$1;
+  const shift = shift$1;
+  const flip = flip$1;
+  const computePosition = (reference, floating, options) => {
+    const cache = new Map();
+    const mergedOptions = __spreadValues$1({
+      platform
+    }, options);
+    const platformWithCache = __spreadProps$1(__spreadValues$1({}, mergedOptions.platform), {
+      _c: cache
+    });
+    return computePosition$1(reference, floating, __spreadProps$1(__spreadValues$1({}, mergedOptions), {
+      platform: platformWithCache
+    }));
+  };
+  function isComponentPublicInstance(target) {
+    return target != null && typeof target === "object" && "$el" in target;
+  }
+  function unwrapElement(target) {
+    if (isComponentPublicInstance(target)) {
+      const element = target.$el;
+      return isNode(element) && getNodeName(element) === "#comment" ? null : element;
+    }
+    return target;
+  }
+  function toValue(source) {
+    return typeof source === "function" ? source() : vue.unref(source);
+  }
+  function getDPR(element) {
+    if (typeof window === "undefined") {
+      return 1;
+    }
+    const win = element.ownerDocument.defaultView || window;
+    return win.devicePixelRatio || 1;
+  }
+  function roundByDPR(element, value) {
+    const dpr = getDPR(element);
+    return Math.round(value * dpr) / dpr;
+  }
+  function useFloating(reference, floating, options) {
+    if (options === void 0) {
+      options = {};
+    }
+    const whileElementsMountedOption = options.whileElementsMounted;
+    const openOption = vue.computed(() => {
+      var _toValue;
+      return (_toValue = toValue(options.open)) != null ? _toValue : true;
+    });
+    const middlewareOption = vue.computed(() => toValue(options.middleware));
+    const placementOption = vue.computed(() => {
+      var _toValue2;
+      return (_toValue2 = toValue(options.placement)) != null ? _toValue2 : "bottom";
+    });
+    const strategyOption = vue.computed(() => {
+      var _toValue3;
+      return (_toValue3 = toValue(options.strategy)) != null ? _toValue3 : "absolute";
+    });
+    const transformOption = vue.computed(() => {
+      var _toValue4;
+      return (_toValue4 = toValue(options.transform)) != null ? _toValue4 : true;
+    });
+    const referenceElement = vue.computed(() => unwrapElement(reference.value));
+    const floatingElement = vue.computed(() => unwrapElement(floating.value));
+    const x = vue.ref(0);
+    const y = vue.ref(0);
+    const strategy = vue.ref(strategyOption.value);
+    const placement = vue.ref(placementOption.value);
+    const middlewareData = vue.shallowRef({});
+    const isPositioned = vue.ref(false);
+    const floatingStyles = vue.computed(() => {
+      const initialStyles = {
+        position: strategy.value,
+        left: "0",
+        top: "0"
+      };
+      if (!floatingElement.value) {
+        return initialStyles;
+      }
+      const xVal = roundByDPR(floatingElement.value, x.value);
+      const yVal = roundByDPR(floatingElement.value, y.value);
+      if (transformOption.value) {
+        return __spreadValues$1(__spreadProps$1(__spreadValues$1({}, initialStyles), {
+          transform: "translate(" + xVal + "px, " + yVal + "px)"
+        }), getDPR(floatingElement.value) >= 1.5 && {
+          willChange: "transform"
         });
       }
-      return getRealFixedNode(item);
-    }).filter((item) => item);
-    nodes.forEach((item) => {
-      if (!weakSet.has(item)) {
-        newList.push(item);
-        weakSet.add(item);
-      }
+      return {
+        position: strategy.value,
+        left: xVal + "px",
+        top: yVal + "px"
+      };
     });
-    return newList;
-  }
-  function fixedDomPosition() {
-    checkBody().then(() => {
-      const nodes = Array.from(document.body.querySelectorAll("*")).filter((item) => item.tagName !== "STYLE");
-      getFixedNodeList(nodes).forEach((item) => {
-        changeStyle(item);
-      });
-    });
-  }
-  function mutationObserver() {
-    const targetNode = document.body;
-    const config = {
-      attributes: true,
-      childList: true,
-      subtree: true,
-      attributeFilter: ["style", "class"]
-    };
-    const callback = function(mutationsList) {
-      const root = getAsRoot();
-      const filterNodes = mutationsList.filter((mutation) => {
-        if (["BODY", "STYLE"].includes(mutation.target.tagName) || root.contains(mutation.target)) {
-          return false;
-        } else if (mutation.type === "attributes") {
-          return ["style", "class", "id"].includes(mutation.attributeName);
-        } else if (mutation.type === "childList") {
-          return mutation.addedNodes.length > 0;
-        }
-        return false;
-      }).map((mutation) => mutation.target);
-      getFixedNodeList(filterNodes, true).forEach((item) => {
-        changeStyle(item);
-      });
-    };
-    const observer = new MutationObserver(callback);
-    observer.observe(targetNode, config);
-  }
-  function initSpecialStyle() {
-    fixedDomPosition();
-    mutationObserver();
-  }
-  function withHookBefore(originalFn, hookFn) {
-    return function() {
-      if (hookFn.apply(this, arguments) === false) {
+    let whileElementsMountedCleanup;
+    function update() {
+      if (referenceElement.value == null || floatingElement.value == null) {
         return;
       }
-      return originalFn.apply(this, arguments);
-    };
-  }
-  function withHookAfter(originalFn, hookFn) {
-    return function() {
-      const output = originalFn.apply(this, arguments);
-      hookFn.apply(this, arguments);
-      return output;
-    };
-  }
-  const addCustomStyle = (mode, currentSite, remove) => {
-    removeNode(".as-custom-style");
-    if (currentSite.invisible || remove) {
-      return;
+      const open = openOption.value;
+      computePosition(referenceElement.value, floatingElement.value, {
+        middleware: middlewareOption.value,
+        placement: placementOption.value,
+        strategy: strategyOption.value
+      }).then((position) => {
+        x.value = position.x;
+        y.value = position.y;
+        strategy.value = position.strategy;
+        placement.value = position.placement;
+        middlewareData.value = position.middlewareData;
+        isPositioned.value = open !== false;
+      });
     }
-    if (currentSite.style) {
-      let styleContent = "";
-      if (currentSite.style[1] && mode === "horizontal") {
-        styleContent = currentSite.style[1];
-      } else if (currentSite.style[2] && mode === "vertical") {
-        styleContent = currentSite.style[2];
-      }
-      if (styleContent) {
-        addStyleContent(styleContent, "as-custom-style");
+    function cleanup() {
+      if (typeof whileElementsMountedCleanup === "function") {
+        whileElementsMountedCleanup();
+        whileElementsMountedCleanup = void 0;
       }
     }
-  };
-  const protectStyle = function() {
-    if (Node.prototype.__as_hooks__) {
-      return;
-    }
-    Node.prototype.removeChild = withHookBefore(Node.prototype.removeChild, (e) => {
-      if (e && e.tagName === "STYLE") {
-        return !(e.classList.contains("as-icon") || e.classList.contains("as-style") || e.classList.contains("elPopover") || e.classList.contains("elScrollbar"));
+    function attach() {
+      cleanup();
+      if (whileElementsMountedOption === void 0) {
+        update();
+        return;
       }
-      return true;
+      if (referenceElement.value != null && floatingElement.value != null) {
+        whileElementsMountedCleanup = whileElementsMountedOption(referenceElement.value, floatingElement.value, update);
+        return;
+      }
+    }
+    function reset() {
+      if (!openOption.value) {
+        isPositioned.value = false;
+      }
+    }
+    vue.watch([middlewareOption, placementOption, strategyOption, openOption], update, {
+      flush: "sync"
     });
-    Node.prototype.__as_hooks__ = true;
-  };
-  const changeBodyStyle = function(mode, remove = true) {
-    const el2 = getAsRoot();
-    el2.classList.remove("body-vertical", "body-horizontal");
-    if (!remove) {
-      el2.classList.add(`body-${mode}`);
+    vue.watch([referenceElement, floatingElement], attach, {
+      flush: "sync"
+    });
+    vue.watch(openOption, reset, {
+      flush: "sync"
+    });
+    if (vue.getCurrentScope()) {
+      vue.onScopeDispose(cleanup);
     }
+    return {
+      x: vue.shallowReadonly(x),
+      y: vue.shallowReadonly(y),
+      strategy: vue.shallowReadonly(strategy),
+      placement: vue.shallowReadonly(placement),
+      middlewareData: vue.shallowReadonly(middlewareData),
+      isPositioned: vue.shallowReadonly(isPositioned),
+      floatingStyles,
+      update
+    };
+  }
+
+  var __defProp = Object.defineProperty;
+  var __defProps = Object.defineProperties;
+  var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __pow = Math.pow;
+  var __defNormalProp = (obj2, key, value2) => key in obj2 ? __defProp(obj2, key, { enumerable: true, configurable: true, writable: true, value: value2 }) : obj2[key] = value2;
+  var __spreadValues = (a, b) => {
+    for (var prop in b || (b = {}))
+      if (__hasOwnProp.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    if (__getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(b)) {
+        if (__propIsEnum.call(b, prop))
+          __defNormalProp(a, prop, b[prop]);
+      }
+    return a;
   };
-  const search = [
+  var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+  var __publicField = (obj2, key, value2) => __defNormalProp(obj2, typeof key !== "symbol" ? key + "" : key, value2);
+  var __async = (__this, __arguments, generator) => {
+    return new Promise((resolve, reject) => {
+      var fulfilled = (value2) => {
+        try {
+          step(generator.next(value2));
+        } catch (e) {
+          reject(e);
+        }
+      };
+      var rejected = (value2) => {
+        try {
+          step(generator.throw(value2));
+        } catch (e) {
+          reject(e);
+        }
+      };
+      var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+      step((generator = generator.apply(__this, __arguments)).next());
+    });
+  };
+  const sites$e = [
+    {
+      nameZh: "ChatGPT",
+      url: "https://chatgpt.com/?q=%s&hints=search"
+    },
+    {
+      nameZh: "Perplexity",
+      url: "https://www.perplexity.ai/search?q=%s"
+    },
+    {
+      nameZh: "秘塔AI",
+      url: "https://metaso.cn/?q=%s"
+    },
+    {
+      nameZh: "Devv",
+      url: "https://devv.ai/search?q=%s"
+    },
+    {
+      nameZh: "Claude",
+      url: "https://claude.ai/new?q=%s"
+    },
+    {
+      nameZh: "DDG AI",
+      url: "https://duckduckgo.com/?q=%s&ia=chat"
+    }
+  ];
+  const sites$d = [
     {
       nameZh: "百度",
       url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
@@ -477,7 +2106,7 @@
       url: "https://yandex.com/search/?text=%s"
     }
   ];
-  const translate = [
+  const sites$c = [
     {
       nameZh: "百度翻译",
       url: "http://fanyi.baidu.com/#auto/zh/%s"
@@ -505,7 +2134,7 @@
       url: "http://cn.bing.com/dict/search?q=%s"
     }
   ];
-  const developer = [
+  const sites$b = [
     {
       nameZh: "开发者搜索",
       url: "https://kaifa.baidu.com/searchPage?wd=%s&module=SEARCH"
@@ -541,7 +2170,7 @@
       icon: "https://greasyfork.org/packs/media/images/blacklogo96-b2384000fca45aa17e45eb417cbcbb59.png"
     }
   ];
-  const video = [
+  const sites$a = [
     {
       nameZh: "bilibili",
       url: "http://search.bilibili.com/all?keyword=%s"
@@ -577,7 +2206,7 @@
       url: "http://www.nicovideo.jp/search/%s"
     }
   ];
-  const music = [
+  const sites$9 = [
     {
       nameZh: "网易音乐",
       url: "http://music.163.com/#/search/m/?s=%s",
@@ -604,7 +2233,7 @@
       url: "http://search.5sing.kugou.com/?keyword=%s"
     }
   ];
-  const news = [
+  const sites$8 = [
     {
       nameZh: "谷歌中文",
       url: "https://news.google.com/search?q=%s&hl=zh-CN&gl=CN&ceid=CN:zh-Hans",
@@ -640,14 +2269,22 @@
       url: "https://www.toutiao.com/search/?keyword=%s"
     }
   ];
-  const social = [
+  const sites$7 = [
     {
       nameZh: "知乎",
       url: "https://www.zhihu.com/search?q=%s&type=content"
     },
     {
       nameZh: "推特",
-      url: "https://twitter.com/search/%s"
+      url: "https://x.com/search?q=%s&src=typed_query"
+    },
+    {
+      nameZh: "小红书",
+      url: "https://www.xiaohongshu.com/search_result?keyword=%s&source=web_search_result_notes"
+    },
+    {
+      nameZh: "抖音",
+      url: "https://www.douyin.com/search/%s?type=general"
     },
     {
       nameZh: "豆瓣",
@@ -670,7 +2307,7 @@
       url: "http://weixin.sogou.com/weixin?ie=utf8&type=2&query=%s"
     }
   ];
-  const knowledge = [
+  const sites$6 = [
     {
       nameZh: "维基",
       url: "http://zh.wikipedia.org/wiki/%s"
@@ -705,7 +2342,7 @@
       url: "https://www.quora.com/search?q=%s"
     }
   ];
-  const image = [
+  const sites$5 = [
     {
       nameZh: "谷歌图片",
       url: "https://www.google.com/search?q=%s&tbm=isch"
@@ -752,7 +2389,7 @@
       url: "https://unsplash.com/s/photos/%s"
     }
   ];
-  const shopping = [
+  const sites$4 = [
     {
       nameZh: "淘宝",
       url: "http://s.taobao.com/search?q=%s",
@@ -789,7 +2426,7 @@
       url: "https://s.1688.com/selloffer/offer_search.htm?keywords=%s"
     }
   ];
-  const disk = [
+  const sites$3 = [
     {
       nameZh: "百度网盘",
       url: "https://pan.baidu.com/disk/main#/index?category=all&search=%s"
@@ -815,7 +2452,7 @@
       url: "https://www.56wangpan.com/search/kw%s"
     }
   ];
-  const scholar = [
+  const sites$2 = [
     {
       nameZh: "谷歌学术",
       url: "https://scholar.google.com/scholar?hl=zh-CN&q=%s",
@@ -842,144 +2479,303 @@
       url: "http://find.nlc.cn/search/doSearch?query=%s&secQuery=&actualQuery=%s&searchType=2&docType=%E5%85%A8%E9%83%A8&isGroup=isGroup&targetFieldLog=%E5%85%A8%E9%83%A8%E5%AD%97%E6%AE%B5&orderBy=RELATIVE"
     }
   ];
-  const list$2 = [
+  const siteGroups = [
+    {
+      nameZh: "AI",
+      name: "ai",
+      list: sites$e
+    },
     {
       nameZh: "搜索",
       name: "search",
-      list: search
+      list: sites$d
     },
     {
       nameZh: "翻译",
       name: "translate",
-      list: translate
+      list: sites$c
     },
     {
       nameZh: "视频",
       name: "video",
-      list: video
+      list: sites$a
     },
     {
       nameZh: "购物",
       name: "shopping",
-      list: shopping
+      list: sites$4
     },
     {
       nameZh: "音乐",
       name: "music",
-      list: music
+      list: sites$9
     },
     {
       nameZh: "开发",
       name: "developer",
-      list: developer
+      list: sites$b
     },
     {
       nameZh: "新闻",
       name: "news",
-      list: news
+      list: sites$8
     },
     {
       nameZh: "社交",
       name: "social",
-      list: social
+      list: sites$7
     },
     {
       nameZh: "百科",
       name: "knowledge",
-      list: knowledge
+      list: sites$6
     },
     {
       nameZh: "图片",
       name: "image",
-      list: image
+      list: sites$5
     },
     {
       nameZh: "网盘",
       name: "disk",
-      list: disk
+      list: sites$3
     },
     {
       nameZh: "学术",
       name: "scholar",
-      list: scholar
+      list: sites$2
     },
     {
       nameZh: "常用",
       name: "personal",
       list: []
     }
-  ].map((item) => ({
-    ...item,
+  ];
+  const list$2 = siteGroups.map((item) => __spreadProps(__spreadValues({}, item), {
     data: {
       visible: true
     },
-    list: item.list.map((child) => ({
-      ...child,
+    list: item.list.map((child) => __spreadProps(__spreadValues({}, child), {
       data: {
         visible: true
       }
     }))
   }));
-  vue.reactive({
+  var _GM_deleteValue = (() => typeof GM_deleteValue != "undefined" ? GM_deleteValue : void 0)();
+  var _GM_getValue = (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
+  var _GM_setValue = (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
+  const version$1 = "2.0.0";
+  const pkg = {
+    version: version$1
+  };
+  function debounce(fn, delay = 500) {
+    let timeout = null;
+    return function(...args) {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        fn.apply(this, args);
+      }, delay);
+    };
+  }
+  function throttle(fn, delay = 500) {
+    let canRun = true;
+    return function(...args) {
+      if (!canRun) return;
+      canRun = false;
+      setTimeout(() => {
+        fn.apply(this, args);
+        canRun = true;
+      }, delay);
+    };
+  }
+  const version = pkg.version;
+  function getName(name) {
+    if (name) {
+      return `__allSearch__${name}`;
+    }
+    return null;
+  }
+  function isJson(str) {
+    if (typeof str !== "string") {
+      return false;
+    }
+    const char = str.charAt(0);
+    if (char !== "[" && char !== "{") {
+      return false;
+    }
+    try {
+      return typeof JSON.parse(str) === "object";
+    } catch (e) {
+      return false;
+    }
+  }
+  function parseJson(val) {
+    if (isJson(val)) {
+      try {
+        return JSON.parse(val);
+      } catch (e) {
+        return val;
+      }
+    }
+    return val;
+  }
+  const isMobile = function() {
+    return /mobile|android|webos|iphone|ipod|blackberry|iphone os|ipad/i.test(navigator.userAgent);
+  };
+  class TmAdapter {
+    get(name) {
+      return __async(this, null, function* () {
+        if (!_GM_getValue) throw new Error("GM_getValue not found");
+        const key = getName(name);
+        if (!key) return null;
+        return parseJson(_GM_getValue(key));
+      });
+    }
+    set(name, value2) {
+      return __async(this, null, function* () {
+        if (!_GM_setValue) throw new Error("GM_setValue not found");
+        const key = getName(name);
+        if (!key) throw new Error("Invalid storage key");
+        const val = vue.toValue(value2);
+        _GM_setValue(key, val);
+        return val;
+      });
+    }
+    remove(name) {
+      return __async(this, null, function* () {
+        if (!_GM_deleteValue) throw new Error("GM_deleteValue not found");
+        const key = getName(name);
+        if (!key) return false;
+        _GM_deleteValue(key);
+        return true;
+      });
+    }
+  }
+  const store = vue.reactive({
     tmVersion: ""
   });
-  function getStorageFn(name2) {
-    const formatName = getName(name2);
-    return new Promise((resolve, reject) => {
-      if (!_GM_getValue) {
-        return reject(Error("没有找到GM_getValue"));
+  class WebBridgeAdapter {
+    constructor() {
+      __publicField(this, "methods", null);
+      __publicField(this, "ready");
+      __publicField(this, "onScriptLoadedHandler", null);
+      this.ready = this.initConnection();
+    }
+    initConnection() {
+      return new Promise((resolve) => {
+        const scriptLoaded = getName("script-loaded");
+        const pageLoaded = getName("page-loaded");
+        if (!scriptLoaded || !pageLoaded) {
+          this.enableFallback();
+          resolve();
+          return;
+        }
+        const timeout = setTimeout(() => {
+          if (!this.methods) {
+            console.warn("WebBridgeAdapter: connection timeout, falling back to localStorage");
+            this.cleanup();
+            this.enableFallback();
+            resolve();
+          }
+        }, 5e3);
+        this.onScriptLoadedHandler = (event) => {
+          const customEvent = event;
+          clearTimeout(timeout);
+          this.methods = customEvent.detail;
+          if (this.methods && this.methods.version) {
+            store.tmVersion = this.methods.version;
+          }
+          this.cleanup();
+          resolve();
+        };
+        document.addEventListener(scriptLoaded, this.onScriptLoadedHandler);
+        document.dispatchEvent(new Event(pageLoaded));
+      });
+    }
+    cleanup() {
+      if (this.onScriptLoadedHandler) {
+        const scriptLoaded = getName("script-loaded");
+        if (scriptLoaded) {
+          document.removeEventListener(scriptLoaded, this.onScriptLoadedHandler);
+        }
+        this.onScriptLoadedHandler = null;
       }
-      const item = _GM_getValue(formatName);
-      if (item === void 0) {
-        return reject(`GM_getValue没有获取到key:${name2}的变量`);
-      }
-      return resolve(parseJson(item));
-    });
+    }
+    enableFallback() {
+      this.methods = {
+        version: "fallback",
+        getStorage: (n) => __async(this, null, function* () {
+          const key = getName(n);
+          if (!key) return null;
+          const val = localStorage.getItem(key);
+          return parseJson(val);
+        }),
+        setStorage: (n, v) => __async(this, null, function* () {
+          const key = getName(n);
+          if (key) {
+            localStorage.setItem(key, typeof v === "string" ? v : JSON.stringify(v));
+          }
+          return v;
+        }),
+        delStorage: (n) => __async(this, null, function* () {
+          const key = getName(n);
+          if (key) {
+            localStorage.removeItem(key);
+          }
+          return true;
+        })
+      };
+    }
+    get(name) {
+      return __async(this, null, function* () {
+        yield this.ready;
+        return this.methods.getStorage(name);
+      });
+    }
+    set(name, value2) {
+      return __async(this, null, function* () {
+        yield this.ready;
+        return this.methods.setStorage(name, value2);
+      });
+    }
+    remove(name) {
+      return __async(this, null, function* () {
+        yield this.ready;
+        return this.methods.delStorage(name);
+      });
+    }
+destroy() {
+      this.cleanup();
+    }
   }
-  function setStorageFn(name2, value2) {
-    const formatName = getName(name2);
-    return new Promise((resolve, reject) => {
-      if (value2 === void 0) {
-        reject(Error("setStorage"));
-      } else if (!_GM_setValue) {
-        reject(Error("没有找到GM_setValue"));
-      } else {
-        _GM_setValue(formatName, value2);
-        resolve(value2);
-      }
-    });
-  }
-  function delStorageFn(name2) {
-    const formatName = getName(name2);
-    return new Promise((resolve, reject) => {
-      if (!_GM_deleteValue) {
-        return reject(Error("没有找到GM_deleteValue"));
-      }
-      _GM_deleteValue(formatName);
-      return resolve(true);
-    });
-  }
-  let getStorage = getStorageFn;
-  let setStorage = setStorageFn;
-  let delStorage = delStorageFn;
-  const scriptLoaded = getName("script-loaded");
-  const pageLoaded = getName("page-loaded");
   function initTmMethods() {
+    const tm = new TmAdapter();
+    const scriptLoaded = getName("script-loaded");
+    const pageLoaded = getName("page-loaded");
+    if (!scriptLoaded || !pageLoaded) return;
     const emit = function() {
       document.dispatchEvent(new CustomEvent(scriptLoaded, {
         detail: {
           version,
-          getStorage: getStorageFn,
-          setStorage: setStorageFn,
-          delStorage: delStorageFn
+          getStorage: (n) => tm.get(n),
+          setStorage: (n, v) => tm.set(n, v),
+          delStorage: (n) => tm.remove(n)
         }
       }));
     };
     document.addEventListener(pageLoaded, emit);
     emit();
   }
+  let activeAdapter = new TmAdapter();
+  const isOptionsPage = typeof window !== "undefined" && (window.location.pathname.includes("options") || window.location.hostname.includes("github.io") || window.location.hostname.includes("gitee.io"));
+  if (isOptionsPage) {
+    activeAdapter = new WebBridgeAdapter();
+  }
+  const getStorage = (name) => activeAdapter.get(name);
+  const setStorage = (name, value2) => activeAdapter.set(name, value2);
+  const delStorage = (name) => activeAdapter.remove(name);
   const sitesData = vue.ref([]);
-  function getSites(val) {
+  function getSites$1(val) {
     if (Array.isArray(val) && val.length > 0) {
       return val;
     } else {
@@ -987,16 +2783,14 @@
     }
   }
   function initSites(sites2, type) {
-    if (type === "tm") {
-      return sites2.filter((item) => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible).map((item) => ({
-        ...item,
+    {
+      return sites2.filter((item) => Array.isArray(item.list) && item.list.length > 0 && item.data && item.data.visible).map((item) => __spreadProps(__spreadValues({}, item), {
         show: false
       }));
     }
-    return sites2;
   }
   getStorage("sites").then((val) => {
-    sitesData.value = getSites(val);
+    sitesData.value = getSites$1(val);
   }).catch(() => {
     sitesData.value = list$2;
   });
@@ -1007,20 +2801,21 @@
   }
   function useSites(type) {
     return {
-      sites: vue.computed(() => initSites(sitesData.value, type)),
+      sites: vue.computed(() => initSites(sitesData.value)),
       resetSites
     };
   }
-  const width = 100;
   const list$1 = [
     {
-      url: /\/\/www\.google\.com(.hk)?\/search/
+      url: /\/\/www\.google\.com(.hk)?\/search/,
+      probe: "https://www.google.com/search?q=%s"
     },
     {
       url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
-      style: {
-        1: ".selected-search-box { transform: translateY(-30px);}"
-      }
+      probe: "https://www.baidu.com/s?wd=%s"
+    },
+    {
+url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
     },
     {
       url: /\/\/[^.]*\.bing\.com\/search/
@@ -1057,7 +2852,8 @@
       url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
     },
     {
-      url: /\/\/www\.zhihu\.com\/search\?/
+      url: /\/\/www\.zhihu\.com\/search\?/,
+      probe: "https://www.zhihu.com/search?type=content&q=%s"
     },
     {
       url: /\/\/www\.so\.com\/s/
@@ -1076,22 +2872,17 @@
       selectors: "#upquery"
     },
     {
-      url: /\/\/weixin\.sogou\.com\/weixin\?/,
-      style: {
-        2: `.headsearch#scroll-header { left:unset; }`
-      }
+      url: /\/\/weixin\.sogou\.com\/weixin\?/
     },
     {
       url: /\/\/www\.quora\.com\/search\?/
     },
     {
-      url: /\/\/stackoverflow\.com\/search\?/,
-      style: {
-        2: `.top-bar._fixed { right: ${width}px }`
-      }
+      url: /\/\/stackoverflow\.com\/search\?/
     },
     {
       url: /\/\/search\.bilibili\.com\/all/,
+      probe: "https://search.bilibili.com/all?keyword=%s",
       selectors: ".search-input-el"
     },
     {
@@ -1099,10 +2890,7 @@
       selectors: ".search-text--standalone"
     },
     {
-      url: /\/\/www\.youtube\.com\/results/,
-      style: {
-        2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
-      }
+      url: /\/\/www\.youtube\.com\/results/
     },
     {
       url: /\/\/www\.nicovideo\.jp\/search\//
@@ -1198,19 +2986,18 @@
       url: /\/\/(movie|music|book)\.douban\.com\/subject_search?/
     },
     {
-      url: /\/\/www\.douban\.com\/search/
+      url: /\/\/www\.douban\.com\/search/,
+      probe: "https://www.douban.com/search?q=%s"
     },
     {
-      url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
-      style: {
-        2: `#left_menu_content { left: ${width}px !important;}`
-      }
+      url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/
     },
     {
       url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
     },
     {
-      url: /\/\/github\.com\/search/
+      url: /\/\/github\.com\/search/,
+      probe: "https://github.com/search?q=%s"
     },
     {
       url: /\/\/www\.startpage\.com\/sp\/search/
@@ -1224,85 +3011,289 @@
       invisible: true
     }
   ];
-  const routerChange = (cb) => {
-    history.pushState = withHookAfter(history.pushState, cb);
-    history.replaceState = withHookAfter(history.replaceState, cb);
-    window.addEventListener("popstate", cb);
-    window.addEventListener("yt-navigate-finish", cb);
-    window.addEventListener("hashchange", cb);
-  };
-  const { sites: sites$1 } = useSites("tm");
-  function getMenuItem() {
-    let targetItem = null;
-    let urlObj = null;
-    const curItem = new URL(window.location.href);
-    sites$1.value.some((category) => {
-      category.list.find((item) => {
-        const menuItem2 = new URL(item.url);
-        if (menuItem2.hostname === curItem.hostname && menuItem2.pathname === curItem.pathname) {
-          targetItem = item;
-          urlObj = menuItem2;
-          return true;
-        }
-        return false;
-      });
-    });
-    if (urlObj) {
-      for (const key of urlObj.searchParams.keys()) {
-        if (!curItem.searchParams.has(key)) {
-          targetItem = null;
+  const generatedStyle = [
+    {
+      pattern: "\\/\\/[^.]*\\.bing\\.com\\/search",
+      flags: "",
+      probe: "https://cn.bing.com/search?q=all-search",
+      top: [
+        "#b_header { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/baike\\.baidu\\.com\\/search",
+      flags: "",
+      probe: "http://baike.baidu.com/search/word?pic=1&sug=1&word=all-search",
+      top: [
+        "div.headerWrap_W4DP5 { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/www\\.so\\.com\\/s",
+      flags: "",
+      probe: "https://www.so.com/s?ie=utf-8&q=all-search",
+      top: [
+        "#header { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/stackoverflow\\.com\\/search\\?",
+      flags: "",
+      probe: "https://stackoverflow.com/search?q=all-search",
+      top: [
+        "header.s-topbar.ps-fixed.t0.l0.js-top-bar { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/www\\.acfun\\.cn\\/search",
+      flags: "",
+      probe: "https://www.acfun.cn/search?keyword=all-search",
+      top: [
+        "#header { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/www\\.youtube\\.com\\/results",
+      flags: "",
+      probe: "https://www.youtube.com/results?search_query=all-search",
+      top: [
+        "#masthead-container { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/www\\.nicovideo\\.jp\\/search\\/",
+      flags: "",
+      probe: "http://www.nicovideo.jp/search/all-search",
+      top: [
+        "div.max-w_\\[calc\\(100vw_-_var\\(--scrollbar-width\\)\\)\\].left_0.bg-c_monotone\\.L15.min-h_commonHeader\\.height.pointer-events_auto { top: 30px !important; }",
+        "#CommonHeader { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/so\\.iqiyi\\.com\\/so\\/q",
+      flags: "",
+      probe: "http://so.iqiyi.com/so/q_all-search",
+      top: [
+        "#topbar { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/v\\.qq\\.com\\/x\\/search",
+      flags: "",
+      probe: "https://v.qq.com/x/search/?q=all-search",
+      top: [
+        "div.top-nav-wrap.head_inner { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/image\\.baidu\\.com\\/search",
+      flags: "",
+      probe: "http://image.baidu.com/search/index?tn=baiduimage&ie=utf-8&word=all-search",
+      top: [
+        "#image-search-header { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/.*\\.bing\\.com\\/images\\/search",
+      flags: "",
+      probe: "https://www.bing.com/images/search?q=all-search",
+      top: [
+        "#miniheader { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/www\\.flickr\\.com\\/search\\/",
+      flags: "",
+      probe: "http://www.flickr.com/search/?q=all-search",
+      top: [
+        "div.nav-ad-container { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/www\\.pinterest\\.com\\/search\\/",
+      flags: "",
+      probe: "https://www.pinterest.com/search/pins/?q=all-search&rs=typed&term_meta",
+      top: [
+        "div:nth-of-type(1) > div:nth-of-type(1) > header.box_k > div:nth-of-type(1) { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/dict\\.youdao\\.com\\/search",
+      flags: "",
+      probe: "http://dict.youdao.com/search?q=all-search",
+      top: [
+        "div.c-topbar-wrapper.setTop { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/s\\.taobao\\.com\\/search",
+      flags: "",
+      probe: "http://s.taobao.com/search?q=all-search",
+      top: [
+        "div.tbpc-layout.pageContentCoverSkeleton { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/list\\.tmall\\.com\\/search_product\\.htm",
+      flags: "",
+      probe: "http://list.tmall.com/search_product.htm?q=all-search",
+      top: [
+        "div.tbpc-layout.pageContentCoverSkeleton { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/search\\.jd\\.com\\/search",
+      flags: "",
+      probe: "http://search.jd.com/search?keyword=all-search&enc=utf-8",
+      top: [
+        "#header_wrap { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/search\\.suning\\.com",
+      flags: "",
+      probe: "https://search.suning.com/all-search/",
+      top: [
+        "div.fix-banner { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/github\\.com\\/search",
+      flags: "",
+      probe: "https://github.com/search?q=all-search",
+      top: [
+        "div.prc-PageLayout-PaneWrapper-pHPop { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/www\\.sogou\\.com\\/(?:web|s)",
+      flags: "",
+      probe: "https://www.sogou.com/sogou?site=news.qq.com&query=all-search",
+      top: [
+        "div.header { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/www\\.zhihu\\.com\\/search\\?",
+      flags: "",
+      probe: "https://www.zhihu.com/search?type=content&q=all-search",
+      top: [
+        "#root > div:nth-of-type(1) > div:nth-of-type(3) { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/weixin\\.sogou\\.com\\/weixin\\?",
+      flags: "",
+      probe: "http://weixin.sogou.com/weixin?ie=utf8&type=2&query=all-search",
+      top: [
+        "#scroll-header { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/search\\.smzdm\\.com\\/\\?",
+      flags: "",
+      probe: "http://search.smzdm.com/?c=home&s=all-search",
+      top: [
+        "#global-nav { top: 30px !important; }"
+      ].join("\n")
+    },
+    {
+      pattern: "\\/\\/translate\\.google(?:\\.\\D{1,4}){1,2}",
+      flags: "",
+      probe: "https://translate.google.com/?q=all-search",
+      top: [
+        "#gb { top: 30px !important; }"
+      ].join("\n")
+    }
+  ];
+  function addStyle(styleContent) {
+    const style = document.createElement("style");
+    style.innerHTML = styleContent;
+    style.className = "all-search-style";
+    const head = document.getElementsByTagName("head")[0];
+    if (head) {
+      head.appendChild(style);
+    }
+  }
+  function removeNode(cssSelectorOrFunction) {
+    try {
+      if (typeof cssSelectorOrFunction === "string") {
+        const removeNodes = document.querySelectorAll(cssSelectorOrFunction);
+        removeNodes.forEach((node) => node.remove());
+      }
+    } catch (e) {
+    }
+  }
+  function RAFInterval(callback, period, runNow) {
+    const needCount = period / 1e3 * 60;
+    let times = 0;
+    {
+      const shouldFinish = callback();
+      if (shouldFinish) {
+        return;
+      }
+    }
+    function step() {
+      if (times < needCount) {
+        times++;
+        requestAnimationFrame(step);
+      } else {
+        const shouldFinish = callback() || false;
+        if (!shouldFinish) {
+          times = 0;
+          requestAnimationFrame(step);
         }
       }
     }
-    return targetItem;
+    requestAnimationFrame(step);
   }
-  function getSite() {
-    const target = list$1.find((item) => item.url.test(window.location.href.toLowerCase()));
-    const menuItem2 = getMenuItem();
-    if (target) {
-      return {
-        url: target.url,
-        invisible: !!target.invisible,
-        disabled: !!target.disabled,
-        style: target.style,
-        selectors: target.selectors,
-        query: target.query
-      };
-    } else if (menuItem2) {
-      return {
-        url: menuItem2.url,
-        invisible: false,
-        disabled: false,
-        style: menuItem2.style,
-        selectors: menuItem2.selectors,
-        query: menuItem2.query
-      };
-    }
-    return {
-      url: "",
-      invisible: true,
-      disabled: true,
-      style: {},
-      selectors: null,
-      query: null
-    };
+  function getAsRoot() {
+    return document.querySelector("all-search-ui") || document.getElementById("all-search");
   }
-  vue.watch(sites$1, () => {
-    updateCurrentSite();
-  });
-  function updateCurrentSite() {
-    const newSite = getSite();
-    Object.keys(site).forEach((key) => {
-      site[key] = newSite[key] || "";
-    });
+  function getAsShadowRoot() {
+    var _a;
+    return ((_a = getAsRoot()) == null ? void 0 : _a.shadowRoot) || null;
   }
-  routerChange(() => {
-    updateCurrentSite();
-  });
-  let site = vue.reactive(getSite());
+  function getAsMountAnchor() {
+    const shadow = getAsShadowRoot();
+    if (!shadow) return null;
+    const anchor = shadow.getElementById("as-mount-anchor");
+    if (anchor) return anchor;
+    return shadow.querySelector("body") || shadow.firstElementChild;
+  }
+  function addStyleContent(css, className, addToTarget, isReload = false) {
+    RAFInterval(() => {
+      var _a;
+      let addTo = null;
+      {
+        addTo = document.querySelector(addToTarget);
+      }
+      if (document.querySelector(addToTarget) !== null) {
+        if (isReload && className) {
+          removeNode("." + className);
+        } else if (!isReload && className && ((_a = addTo.querySelector) == null ? void 0 : _a.call(addTo, "." + className))) {
+          return true;
+        }
+        const cssNode = document.createElement("style");
+        {
+          cssNode.className = className;
+        }
+        cssNode.setAttribute("type", "text/css");
+        cssNode.innerHTML = css;
+        try {
+          if (addTo) {
+            addTo.appendChild(cssNode);
+          }
+        } catch (e) {
+        }
+        return true;
+      }
+    }, 20);
+  }
   const isFullScreenRef = vue.ref(false);
   function isFullScreen() {
-    return document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
+    const doc = document;
+    return doc.fullscreen || doc.webkitIsFullScreen || doc.mozFullScreen || doc.msFullscreenElement;
   }
   function onFullScreenChange(handler) {
     const handleResize = function() {
@@ -1334,65 +3325,341 @@
       isFullScreen: isFullScreenRef
     };
   }
-  const isDef = (val) => val !== void 0 && val !== null;
-  async function init(name2, defaultVal, reg2 = "") {
+  const COMMON_QUERY_KEYS = [
+    "q",
+    "wd",
+    "word",
+    "keyword",
+    "query",
+    "text",
+    "kw",
+    "qw",
+    "search_query",
+    "key"
+  ];
+  const IGNORED_QUERY_KEYS = new Set([
+    "ie",
+    "f",
+    "rsv_bp",
+    "rn",
+    "pn",
+    "tn",
+    "oq",
+    "rsv_spt",
+    "rsv_idx",
+    "rsv_pq"
+  ]);
+  function isInputElement(el2) {
+    return el2.nodeName === "INPUT" || el2.nodeName === "TEXTAREA";
+  }
+  const NON_TEXT_TYPES = new Set([
+    "hidden",
+    "button",
+    "checkbox",
+    "color",
+    "file",
+    "image",
+    "radio",
+    "range",
+    "reset",
+    "submit",
+    "password",
+    "date",
+    "time",
+    "datetime-local",
+    "month",
+    "week",
+    "number",
+    "email",
+    "tel",
+    "url"
+  ]);
+  function isTextInput(el2) {
+    if (!isInputElement(el2)) return false;
+    const type = (el2.getAttribute("type") || "text").toLowerCase();
+    return !NON_TEXT_TYPES.has(type);
+  }
+  function isVisible(el2) {
+    if (!el2.isConnected) return false;
+    const style = getComputedStyle(el2);
+    return style.display !== "none" && style.visibility !== "hidden" && style.width !== "0px" && style.height !== "0px" && style.opacity !== "0";
+  }
+  function isInApp(el2) {
+    const root = getAsRoot();
+    return !!root && root.contains(el2);
+  }
+  function isUsableInput(el2) {
+    return isTextInput(el2) && isVisible(el2) && !isInApp(el2);
+  }
+  function getKeywordFromQuery(keys) {
+    const list2 = (Array.isArray(keys) ? keys : [keys]).filter((key) => typeof key === "string" && !!key);
+    const candidates = list2.length ? list2 : COMMON_QUERY_KEYS;
+    const params = new URLSearchParams(window.location.search);
+    for (const key of candidates) {
+      if (IGNORED_QUERY_KEYS.has(key)) continue;
+      const value2 = params.get(key);
+      if (value2 && value2.trim()) {
+        return value2.trim();
+      }
+    }
+    return void 0;
+  }
+  function getKeywordFromSelector(selectors) {
+    if (!selectors) return void 0;
+    let el2 = null;
     try {
-      const session = await getStorage(name2);
-      if (reg2 && reg2.test(session)) {
-        return session;
-      } else if (isDef(session)) {
-        return session;
-      } else {
-        return defaultVal;
-      }
+      el2 = document.querySelector(selectors);
     } catch (e) {
-      return defaultVal;
+      return void 0;
+    }
+    if (!el2) return void 0;
+    const value2 = isInputElement(el2) ? el2.value : el2.textContent;
+    return value2 && value2.trim() ? value2.trim() : void 0;
+  }
+  function collectCandidateInputs() {
+    const queries = [
+      "input[type=search]",
+      "input[name=q],input[name=wd],input[name=query],input[name=word],input[name=keyword]",
+      "input[type=text][autocomplete=off]",
+      "input[autocomplete=off]:not([type])",
+      "input[id*=search i],input[class*=search i]",
+      "input[placeholder*=search i],input[placeholder*=搜索]",
+      "input:not([type]),input[type=text]"
+    ];
+    const result = [];
+    const seen = new Set();
+    for (const query of queries) {
+      let list2;
+      try {
+        list2 = document.querySelectorAll(query);
+      } catch (e) {
+        continue;
+      }
+      for (const el2 of Array.from(list2)) {
+        if (seen.has(el2) || !isUsableInput(el2)) continue;
+        seen.add(el2);
+        result.push(el2);
+      }
+    }
+    return result;
+  }
+  function getKeywordFromDom() {
+    var _a, _b;
+    const inputs = collectCandidateInputs();
+    if (!inputs.length) {
+      const textarea = Array.from(document.querySelectorAll("textarea")).find((el2) => isVisible(el2) && !isInApp(el2));
+      const value2 = textarea == null ? void 0 : textarea.value;
+      return value2 && value2.trim() ? value2.trim() : void 0;
+    }
+    const withValue = inputs.find((el2) => !!el2.value && !!el2.value.trim());
+    return ((_b = (_a = withValue || inputs[0]) == null ? void 0 : _a.value) == null ? void 0 : _b.trim()) || void 0;
+  }
+  function resolveKeyword(options2 = {}) {
+    return getKeywordFromSelector(options2.selectors) || getKeywordFromQuery(options2.query) || getKeywordFromDom();
+  }
+  function onClickOutside(target, handler, options2 = {}) {
+    const { ignore, capture = true } = options2;
+    if (typeof window === "undefined") return;
+    const shouldListen = vue.ref(true);
+    const listener = (event) => {
+      const el2 = target;
+      const composedPath = event.composedPath();
+      if (!el2 || el2 === event.target || composedPath.includes(el2) || !shouldListen.value) {
+        return;
+      }
+      if (ignore && ignore.length > 0) {
+        if (ignore.some((targetEl) => {
+          return targetEl && (event.target === targetEl || composedPath.includes(targetEl));
+        })) {
+          return;
+        }
+      }
+      handler(event);
+    };
+    window.addEventListener("click", listener, { passive: true, capture });
+    window.addEventListener("pointerdown", listener, { passive: true });
+    return () => {
+      window.removeEventListener("click", listener, { capture });
+      window.removeEventListener("pointerdown", listener);
+    };
+  }
+  const el = document.createElement("a");
+  const replaceUrl = function(val) {
+    const lowerCaseVal = val.toLowerCase();
+    const list2 = ["http://", "https://", "ftp://", "files://"];
+    for (let i = 0; i < list2.length; i++) {
+      if (lowerCaseVal.indexOf(list2[i]) === 0) {
+        return val.replace(/.*\/\//, "//");
+      }
+    }
+    return val;
+  };
+  function parseUrl(url) {
+    let val = url;
+    if (val.indexOf("//") < 0) {
+      val = `//${val}`;
+    } else if (val.indexOf("//") > -1) {
+      val = replaceUrl(val);
+    }
+    el.href = val;
+    return {
+      href: el.href,
+      origin: el.origin,
+      protocol: el.protocol,
+      host: el.host,
+      hostname: el.hostname,
+      port: el.port,
+      pathname: el.pathname,
+      search: el.search,
+      hash: el.hash
+    };
+  }
+  function openUrl(url, mode) {
+    if (mode === "new") {
+      window.open(url, "_blank");
+    } else {
+      window.location.href = url;
     }
   }
-  function useConfig(params) {
-    const { name: name2, initVal, defaultVal, reg: reg2 } = params;
-    let val = "";
-    if (isDef(initVal)) {
-      val = initVal;
-    } else if (isDef(defaultVal)) {
-      val = defaultVal;
-    }
-    const valRef = vue.ref(val);
-    init(name2, defaultVal, reg2).then((val2) => {
-      valRef.value = val2;
-    });
-    return vue.computed({
-      get: () => valRef.value,
-      set: (val2) => {
-        valRef.value = val2;
-        setStorage(name2, isDef(val2) ? val2 : defaultVal);
+  function otherOpenMode(mode) {
+    return mode === "new" ? "same" : "new";
+  }
+  const listeners = new Set();
+  let prevHref = window.location.href;
+  let rafId = null;
+  let eventsBound = false;
+  function notifyListeners() {
+    const current = window.location.href;
+    if (current === prevHref) return;
+    prevHref = current;
+    listeners.forEach((listener) => {
+      try {
+        listener();
+      } catch (error) {
+        console.error("[routerChange] listener error", error);
       }
     });
   }
-  const value$1 = useConfig({
-    name: "mode",
-    defaultVal: "horizontal",
-    reg: /[vertical|horizontal]/
+  function tick() {
+    notifyListeners();
+    rafId = window.requestAnimationFrame(tick);
+  }
+  function ensurePolling() {
+    if (rafId !== null) return;
+    rafId = window.requestAnimationFrame(tick);
+  }
+  function stopPolling() {
+    if (rafId === null) return;
+    window.cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+  function ensureEvents() {
+    if (eventsBound) return;
+    eventsBound = true;
+    baseEvents.forEach(([event, handler]) => window.addEventListener(event, handler));
+  }
+  function cleanupEvents() {
+    if (!eventsBound) return;
+    baseEvents.forEach(([event, handler]) => window.removeEventListener(event, handler));
+    eventsBound = false;
+  }
+  const baseEvents = [
+    ["popstate", notifyListeners],
+    ["hashchange", notifyListeners],
+    ["yt-navigate-finish", notifyListeners],
+    ["wxt:locationchange", notifyListeners]
+  ];
+  function routerChange(callback) {
+    listeners.add(callback);
+    ensurePolling();
+    ensureEvents();
+    return () => {
+      listeners.delete(callback);
+      if (listeners.size === 0) {
+        stopPolling();
+        cleanupEvents();
+      }
+    };
+  }
+  const toolbar = [
+    {
+      nameZh: "百度",
+      url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
+    },
+    {
+      nameZh: "百度翻译",
+      url: "https://fanyi.baidu.com/#auto/zh/%s"
+    }
+  ].map((item) => __spreadProps(__spreadValues({}, item), {
+    data: {
+      visible: true
+    }
+  }));
+  function getSites(val) {
+    if (Array.isArray(val) && val.length > 0) {
+      return val;
+    } else {
+      return list$2;
+    }
+  }
+  getStorage("sites").then((val) => {
+    getSites(val || []);
+  }).catch(() => {
   });
-  function useMode() {
-    return {
-      value: value$1
-    };
-  }
-  function throttle$1(fn, delay = 500) {
-    let canRun = true;
-    return function() {
-      if (!canRun)
-        return;
-      canRun = false;
-      setTimeout(() => {
-        fn.apply(this, arguments);
-        canRun = true;
-      }, delay);
-    };
-  }
+  getStorage("toolbar").then((val) => {
+  }).catch(() => {
+  });
+  const onTap = (target, callback) => {
+    let tapStartTime = 0;
+    let tapEndTime = 0;
+    const tapTime = 200;
+    let tapStartClientX = 0;
+    let tapStartClientY = 0;
+    let tapEndClientX = 0;
+    let tapEndClientY = 0;
+    const tapLimit = 15;
+    let cancelClick = false;
+    let hasListener = false;
+    function handleTouchStart(event) {
+      tapStartTime = event.timeStamp;
+      const touch = event.changedTouches[0];
+      tapStartClientX = touch.clientX;
+      tapStartClientY = touch.clientY;
+      cancelClick = false;
+    }
+    function handleTouchMove(event) {
+      const touch = event.changedTouches[0];
+      tapEndClientX = touch.clientX;
+      tapEndClientY = touch.clientY;
+      if (Math.abs(tapEndClientX - tapStartClientX) > tapLimit || Math.abs(tapEndClientY - tapStartClientY) > tapLimit) {
+        cancelClick = true;
+      }
+    }
+    function handleTouchEnd(event) {
+      tapEndTime = event.timeStamp;
+      if (!cancelClick && tapEndTime - tapStartTime <= tapTime) {
+        callback(event);
+      }
+    }
+    vue.watch(() => vue.unref(target), (el2) => {
+      if (el2 && !hasListener) {
+        el2.addEventListener("touchstart", handleTouchStart);
+        el2.addEventListener("touchmove", handleTouchMove);
+        el2.addEventListener("touchend", handleTouchEnd);
+        hasListener = true;
+      }
+    }, { immediate: true });
+    vue.onUnmounted(() => {
+      const el2 = vue.unref(target);
+      if (el2) {
+        el2.removeEventListener("touchstart", handleTouchStart);
+        el2.removeEventListener("touchmove", handleTouchMove);
+        el2.removeEventListener("touchend", handleTouchEnd);
+      }
+    });
+  };
   const y = vue.ref(0);
-  const direction$1 = vue.ref("");
+  const direction = vue.ref("");
   function getDirection(newVal, oldVal, limit) {
     if (newVal < oldVal - limit) {
       return "top";
@@ -1403,29 +3670,647 @@
     }
   }
   function useScroll(triggerLimit = 0) {
-    const scrollHandler = throttle$1(function(e) {
+    const scrollHandler = throttle(function(e) {
       const eventTarget = e.target === document ? e.target.documentElement : e.target;
-      const scrollTop2 = eventTarget.scrollTop;
-      const distance = getDirection(scrollTop2, y.value, triggerLimit);
+      const scrollTop = eventTarget.scrollTop;
+      const distance = getDirection(scrollTop, y.value, triggerLimit);
       vue.nextTick().then(() => {
-        direction$1.value = distance;
+        direction.value = distance;
       });
-      y.value = scrollTop2;
+      y.value = scrollTop;
     }, 200);
-    if (window) {
+    if (typeof window !== "undefined") {
       window.addEventListener("scroll", scrollHandler);
     }
     vue.onBeforeUnmount(() => {
-      if (window) {
+      if (typeof window !== "undefined") {
         window.removeEventListener("scroll", scrollHandler);
       }
     });
     return {
       y,
-      direction: direction$1
+      direction
     };
   }
-  const options = vue.reactive(/* @__PURE__ */ new Map([
+  function useTimeout() {
+    let timeoutHandle;
+    const registerTimeout = (fn, delay) => {
+      cancelTimeout();
+      timeoutHandle = window.setTimeout(fn, delay);
+    };
+    const cancelTimeout = () => window.clearTimeout(timeoutHandle);
+    return {
+      registerTimeout,
+      cancelTimeout
+    };
+  }
+  const addCustomStyle = (mode, currentSite, remove) => {
+    var _a, _b;
+    removeNode(".as-custom-style");
+    if (currentSite.invisible || remove) {
+      return;
+    }
+    const isHorizontal = mode === "top" || mode === "bottom";
+    const parts = [];
+    const custom = isHorizontal ? (_a = currentSite.style) == null ? void 0 : _a[1] : (_b = currentSite.style) == null ? void 0 : _b[2];
+    if (custom) {
+      parts.push(custom);
+    }
+    if (mode === "top" && currentSite.generatedStyle) {
+      parts.push(currentSite.generatedStyle);
+    }
+    if (parts.length) {
+      addStyleContent(parts.join("\n"), "as-custom-style", "head");
+    }
+  };
+  const syncHostLayout = function(mode, direction2, isVisible2) {
+    const el2 = getAsRoot();
+    if (!el2 || !el2.classList) return;
+    el2.classList.toggle("as-host-show", isVisible2);
+    el2.classList.toggle("as-host-hide", !isVisible2);
+    const positionClasses = ["as-host-top", "as-host-bottom", "as-host-left", "as-host-right"];
+    el2.classList.remove(...positionClasses);
+    el2.classList.add(`as-host-${mode}`);
+    el2.classList.remove("as-host-horizontal", "as-host-vertical");
+    el2.classList.add(`as-host-${direction2}`);
+  };
+  const INLINE_UNSET_SENTINEL = "__AS_INLINE_UNSET__";
+  const DATASET_MARKER = "asAdjusted";
+  const ADJUSTED_SELECTOR = "[data-as-adjusted]";
+  const adjustedElements = new WeakMap();
+  const SAMPLE_X_COUNT = 15;
+  const SAMPLE_Y_RATIOS = [0.25, 0.5, 0.75];
+  const SAMPLE_STACK_LIMIT = 4;
+  const SAMPLE_ANCESTOR_DEPTH = 8;
+  const SAMPLE_CANDIDATE_LIMIT = 200;
+  const SAMPLE_MIN_INTERVAL = 120;
+  const SAMPLE_SETTLE_DELAY = 320;
+  let currentTopOffset = 0;
+  let isRestoring = false;
+  function computeTopOffset() {
+    const host = getAsRoot();
+    if (!host) {
+      return 0;
+    }
+    const classList = host.classList;
+    if (!classList.contains("as-host-top") || !classList.contains("as-host-show") || classList.contains("as-host-hide")) {
+      return 0;
+    }
+    const rect = host.getBoundingClientRect();
+    return Number((rect.height || 0).toFixed(2));
+  }
+  function refreshTopOffset() {
+    currentTopOffset = computeTopOffset();
+    return currentTopOffset;
+  }
+  function restoreOriginalTop(item) {
+    if (!item.dataset[DATASET_MARKER]) return;
+    const data = adjustedElements.get(item);
+    if (!data) {
+      delete item.dataset[DATASET_MARKER];
+      return;
+    }
+    if (data.originalInlineTop === INLINE_UNSET_SENTINEL) {
+      item.style.removeProperty("top");
+    } else {
+      item.style.setProperty("top", data.originalInlineTop, data.originalPriority);
+    }
+    delete item.dataset[DATASET_MARKER];
+    adjustedElements.delete(item);
+  }
+  function restoreAllAdjustedNodes() {
+    if (isRestoring) return;
+    if (!document.body) return;
+    isRestoring = true;
+    try {
+      document.querySelectorAll(ADJUSTED_SELECTOR).forEach((el2) => {
+        if (el2 instanceof HTMLElement) {
+          restoreOriginalTop(el2);
+        }
+      });
+    } finally {
+      isRestoring = false;
+    }
+  }
+  function isAvoidableGeometry(el2, position) {
+    const rect = el2.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return false;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    if (position === "fixed" && rect.width >= viewportWidth * 0.9 && rect.height >= viewportHeight * 0.9) {
+      return false;
+    }
+    if (position === "fixed" && rect.width < viewportWidth * 0.5 && rect.height > viewportHeight * 0.6) {
+      return false;
+    }
+    if (rect.right <= 1 || rect.left >= viewportWidth - 1) return false;
+    return true;
+  }
+  function isAdjustableElement(el2, root) {
+    if (el2.style.display === "none") return false;
+    if (root.contains(el2)) return false;
+    const inlinePosition = el2.style.position;
+    const inlineTop = el2.style.top;
+    const useInline = (inlinePosition === "fixed" || inlinePosition === "sticky") && !!inlineTop && inlineTop !== "auto";
+    const computed2 = useInline ? null : window.getComputedStyle(el2);
+    const position = useInline ? inlinePosition : computed2.position;
+    if (position !== "fixed" && position !== "sticky") return false;
+    const top = useInline ? inlineTop : computed2.top;
+    if (!top || top === "auto") return false;
+    if (!isAvoidableGeometry(el2, position)) return false;
+    return isOffsetAllowed(position, top);
+  }
+  function isOffsetAllowed(position, top) {
+    if (position === "fixed") return true;
+    return parseFloat(top) === 0;
+  }
+  function updateNodeOffset(item) {
+    if (!item) return;
+    if (currentTopOffset <= 0) {
+      restoreOriginalTop(item);
+      return;
+    }
+    if (item.dataset[DATASET_MARKER]) {
+      const data = adjustedElements.get(item);
+      if (data) {
+        const numericTop2 = parseFloat(data.originalTop);
+        if (!Number.isNaN(numericTop2)) {
+          item.style.setProperty("top", `${numericTop2 + currentTopOffset}px`, "important");
+        }
+      }
+      return;
+    }
+    const style = window.getComputedStyle(item);
+    if (style.position !== "fixed" && style.position !== "sticky") {
+      return;
+    }
+    const topValue = style.top;
+    if (topValue === "auto") {
+      return;
+    }
+    if (!isOffsetAllowed(style.position, topValue)) {
+      return;
+    }
+    const numericTop = parseFloat(topValue);
+    if (Number.isNaN(numericTop)) {
+      return;
+    }
+    adjustedElements.set(item, {
+      originalTop: topValue,
+      originalInlineTop: item.style.getPropertyValue("top") || INLINE_UNSET_SENTINEL,
+      originalPriority: item.style.getPropertyPriority("top") || ""
+    });
+    item.style.setProperty("top", `${numericTop + currentTopOffset}px`, "important");
+    item.dataset[DATASET_MARKER] = "1";
+  }
+  function collectCandidates(root, rect) {
+    const seen = new Set();
+    const result = [];
+    for (const yRatio of SAMPLE_Y_RATIOS) {
+      const y2 = Math.round(rect.top + rect.height * yRatio);
+      for (let i = 0; i < SAMPLE_X_COUNT; i++) {
+        const x = Math.round(rect.left + rect.width * ((i + 0.5) / SAMPLE_X_COUNT));
+        const stack = document.elementsFromPoint(x, y2);
+        let taken = 0;
+        for (const el2 of stack) {
+          if (!(el2 instanceof HTMLElement)) continue;
+          if (el2 === root || root.contains(el2)) continue;
+          if (el2 === document.body || el2 === document.documentElement) continue;
+          if (seen.has(el2)) continue;
+          let node = el2;
+          for (let depth = 0; node && depth < SAMPLE_ANCESTOR_DEPTH; depth += 1) {
+            if (node === document.body || node === document.documentElement) break;
+            if (node === root || root.contains(node)) break;
+            if (!seen.has(node)) {
+              seen.add(node);
+              result.push(node);
+              if (result.length >= SAMPLE_CANDIDATE_LIMIT) return result;
+            }
+            const position = window.getComputedStyle(node).position;
+            if (position === "fixed" || position === "sticky") break;
+            node = node.parentElement;
+          }
+          taken += 1;
+          if (taken >= SAMPLE_STACK_LIMIT) break;
+        }
+      }
+    }
+    return result;
+  }
+  function getBarRect(root) {
+    var _a;
+    const container = (_a = getAsShadowRoot()) == null ? void 0 : _a.querySelector(".as-container");
+    return (container || root).getBoundingClientRect();
+  }
+  function sampleBarArea() {
+    const root = getAsRoot();
+    if (!root) return;
+    if (refreshTopOffset() <= 0) {
+      restoreAllAdjustedNodes();
+      return;
+    }
+    const rect = getBarRect(root);
+    if (rect.height <= 0) return;
+    collectCandidates(root, rect).forEach((el2) => {
+      if (!el2.dataset[DATASET_MARKER] && !isAdjustableElement(el2, root)) return;
+      updateNodeOffset(el2);
+    });
+  }
+  let sampleTimer = null;
+  let settleTimer = null;
+  let lastSampleAt = 0;
+  function scheduleSample() {
+    if (sampleTimer !== null) return;
+    const delay = Math.max(0, SAMPLE_MIN_INTERVAL - (performance.now() - lastSampleAt));
+    sampleTimer = window.setTimeout(() => {
+      sampleTimer = null;
+      lastSampleAt = performance.now();
+      sampleBarArea();
+      if (settleTimer === null) {
+        settleTimer = window.setTimeout(() => {
+          settleTimer = null;
+          sampleBarArea();
+        }, SAMPLE_SETTLE_DELAY);
+      }
+    }, delay);
+  }
+  function reapplyAdjustedNodes() {
+    document.querySelectorAll(ADJUSTED_SELECTOR).forEach((el2) => {
+      if (el2 instanceof HTMLElement) {
+        updateNodeOffset(el2);
+      }
+    });
+  }
+  let hostClassObserver = null;
+  let hostResizeObserver = null;
+  let domObserver = null;
+  function handleHostChange() {
+    if (refreshTopOffset() <= 0) {
+      restoreAllAdjustedNodes();
+      return;
+    }
+    reapplyAdjustedNodes();
+    scheduleSample();
+  }
+  function observeHostLayoutChange() {
+    const host = getAsRoot();
+    if (!host) return;
+    if (hostClassObserver) {
+      hostClassObserver.disconnect();
+      hostClassObserver = null;
+    }
+    hostClassObserver = new MutationObserver(handleHostChange);
+    hostClassObserver.observe(host, { attributes: true, attributeFilter: ["class"] });
+    if (hostResizeObserver) {
+      hostResizeObserver.disconnect();
+      hostResizeObserver = null;
+    }
+    if (typeof ResizeObserver !== "undefined") {
+      hostResizeObserver = new ResizeObserver(handleHostChange);
+      hostResizeObserver.observe(host);
+    }
+  }
+  function observeDomChange() {
+    if (!document.body) return;
+    if (domObserver) {
+      domObserver.disconnect();
+      domObserver = null;
+    }
+    domObserver = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+        if (mutation.addedNodes.length > 0) {
+          scheduleSample();
+          return;
+        }
+      }
+    });
+    domObserver.observe(document.body, { childList: true, subtree: true });
+  }
+  const viewportHandler = () => {
+    scheduleSample();
+  };
+  function observeViewportChange() {
+    window.addEventListener("scroll", viewportHandler, { passive: true, capture: true });
+    window.addEventListener("resize", viewportHandler, { passive: true });
+  }
+  function removeViewportListener() {
+    window.removeEventListener("scroll", viewportHandler, { capture: true });
+    window.removeEventListener("resize", viewportHandler);
+  }
+  function initSpecialStyle() {
+    disconnectSpecialStyle();
+    scheduleSample();
+    observeHostLayoutChange();
+    observeDomChange();
+    observeViewportChange();
+  }
+  function disconnectSpecialStyle() {
+    if (sampleTimer !== null) {
+      clearTimeout(sampleTimer);
+      sampleTimer = null;
+    }
+    if (settleTimer !== null) {
+      clearTimeout(settleTimer);
+      settleTimer = null;
+    }
+    lastSampleAt = 0;
+    removeViewportListener();
+    restoreAllAdjustedNodes();
+    if (domObserver) {
+      domObserver.disconnect();
+      domObserver = null;
+    }
+    if (hostClassObserver) {
+      hostClassObserver.disconnect();
+      hostClassObserver = null;
+    }
+    if (hostResizeObserver) {
+      hostResizeObserver.disconnect();
+      hostResizeObserver = null;
+    }
+  }
+  const { sites: sites$1 } = useSites();
+  function findGeneratedStyle(href) {
+    const rule = generatedStyle.find((item) => {
+      try {
+        return new RegExp(item.pattern, item.flags).test(href);
+      } catch (e) {
+        return false;
+      }
+    });
+    return (rule == null ? void 0 : rule.top) || "";
+  }
+  function extractKeywordParam(url) {
+    if (typeof url !== "string" || url.indexOf("%s") < 0) {
+      return null;
+    }
+    const queryStart = url.indexOf("?");
+    if (queryStart < 0) {
+      return null;
+    }
+    const queryString = url.slice(queryStart + 1).split("#")[0];
+    const pairs = queryString.split("&");
+    for (const pair of pairs) {
+      const [key, value2 = ""] = pair.split("=");
+      if (key && value2 === "%s") {
+        return key;
+      }
+    }
+    return null;
+  }
+  function getMenuItem() {
+    let targetItem = null;
+    let urlObj = null;
+    const curItem = new URL(window.location.href);
+    sites$1.value.some((category) => {
+      const found = category.list.find((item) => {
+        if (typeof item.url !== "string" || !item.url.includes("//")) {
+          return false;
+        }
+        try {
+          const processedUrl = item.url.replace("%s", "placeholder");
+          const menuItem = new URL(processedUrl);
+          if (menuItem.hostname === curItem.hostname && menuItem.pathname === curItem.pathname) {
+            urlObj = menuItem;
+            return true;
+          }
+        } catch (e) {
+        }
+        return false;
+      });
+      if (found) {
+        targetItem = found;
+        return true;
+      }
+      return false;
+    });
+    if (urlObj && targetItem) {
+      const obj2 = urlObj;
+      for (const key of obj2.searchParams.keys()) {
+        if (!curItem.searchParams.has(key)) {
+          targetItem = null;
+        }
+      }
+    }
+    return targetItem;
+  }
+  function getSite() {
+    const href = window.location.href.toLowerCase();
+    const target = list$1.find((item) => item.url.test(href));
+    const menuItem = getMenuItem();
+    const generated = findGeneratedStyle(href);
+    if (target) {
+      return {
+        url: target.url,
+        invisible: !!target.invisible,
+        disabled: !!target.disabled,
+        style: target.style || {},
+        generatedStyle: generated,
+        selectors: target.selectors || null,
+query: target.query || extractKeywordParam(menuItem == null ? void 0 : menuItem.url)
+      };
+    } else if (menuItem) {
+      const item = menuItem;
+      return {
+        url: item.url,
+        invisible: false,
+        disabled: false,
+        style: item.style || {},
+        generatedStyle: generated,
+        selectors: item.selectors || null,
+query: item.query || extractKeywordParam(item.url)
+      };
+    }
+    return {
+      url: "",
+      invisible: true,
+      disabled: true,
+      style: {},
+      generatedStyle: "",
+      selectors: null,
+      query: null
+    };
+  }
+  function updateCurrentSite() {
+    const newSite = getSite();
+    Object.keys(newSite).forEach((key) => {
+      site[key] = newSite[key];
+    });
+  }
+  vue.watch(sites$1, () => {
+    updateCurrentSite();
+  });
+  routerChange(() => {
+    updateCurrentSite();
+  });
+  const site = vue.reactive(getSite());
+  const isDef = (val) => val !== void 0 && val !== null;
+  function init$1(name, defaultVal, reg2) {
+    return __async(this, null, function* () {
+      try {
+        const session = yield getStorage(name);
+        if (isDef(session) && reg2 && reg2.test(String(session))) {
+          return session;
+        } else {
+          return isDef(session) && !reg2 ? session : defaultVal;
+        }
+      } catch (e) {
+        return defaultVal;
+      }
+    });
+  }
+  function useConfig(params) {
+    const { name, initVal, defaultVal, reg: reg2 } = params;
+    const val = isDef(initVal) ? initVal : defaultVal;
+    const valRef = vue.ref(val);
+    init$1(name, defaultVal, reg2).then((val2) => {
+      valRef.value = val2;
+    }).catch(() => {
+      if (isDef(defaultVal)) {
+        valRef.value = defaultVal;
+      }
+    });
+    return vue.computed({
+      get: () => params.get ? params.get(valRef.value) : valRef.value,
+      set: (v) => {
+        const next = (options2) => {
+          if ((options2 == null ? void 0 : options2.rollback) === true) {
+            const oldVal = valRef.value;
+            valRef.value = void 0;
+            vue.nextTick(() => {
+              valRef.value = oldVal;
+            });
+            return;
+          }
+          const finalVal = options2 && "value" in options2 ? options2.value : v;
+          valRef.value = finalVal;
+          setStorage(name, isDef(finalVal) ? finalVal : defaultVal);
+        };
+        if (params.set) {
+          params.set(v, next);
+        } else {
+          next();
+        }
+      }
+    });
+  }
+  function setupApp(options2) {
+    return __async(this, null, function* () {
+      const { rootComponent, hostId, hostTag } = options2;
+      const mode = yield getMountMode();
+      const host = ensureHost({ id: hostId, tag: hostTag });
+      LayoutService.refresh(mode, host);
+      const { shadowRoot, container } = initShadow(host);
+      window.dispatchEvent(new CustomEvent("as-inject-style"));
+      const app = vue.createApp(rootComponent);
+      app.mount(container);
+      host.__vue_app__ = app;
+      return { app, host, shadowRoot, container };
+    });
+  }
+  function getMountMode() {
+    return __async(this, null, function* () {
+      return (yield getStorage("mode")) || "top";
+    });
+  }
+  function ensureHost(options2) {
+    const { id, tag } = options2;
+    let host = document.querySelector(tag) || document.getElementById(id);
+    if (!host) {
+      host = document.createElement(tag);
+      host.id = id;
+    }
+    return host;
+  }
+  function mountToPage(host, mode) {
+    const root = document.documentElement;
+    const body = document.body || root.firstElementChild;
+    if (mode === "bottom") {
+      if (root.lastElementChild !== host) {
+        root.appendChild(host);
+      }
+    } else {
+      if (body && body.previousElementSibling !== host) {
+        root.insertBefore(host, body);
+      } else if (!body && !root.contains(host)) {
+        root.appendChild(host);
+      }
+    }
+  }
+  function initShadow(host) {
+    const shadowRoot = host.shadowRoot || host.attachShadow({ mode: "open" });
+    let mockHtml = shadowRoot.querySelector("html");
+    if (!mockHtml) {
+      mockHtml = document.createElement("html");
+      mockHtml.style.display = "block";
+      const mockHead = document.createElement("head");
+      mockHead.style.display = "none";
+      const mockBody = document.createElement("body");
+      mockBody.id = "as-mount-anchor";
+      mockBody.style.display = "block";
+      mockBody.style.height = "100%";
+      mockBody.style.width = "100%";
+      mockHtml.appendChild(mockHead);
+      mockHtml.appendChild(mockBody);
+      shadowRoot.appendChild(mockHtml);
+    }
+    const container = shadowRoot.getElementById("as-mount-anchor");
+    return { shadowRoot, container };
+  }
+  const LayoutService = {
+refresh(mode, targetHost) {
+      const host = targetHost || getAsRoot();
+      if (host) {
+        mountToPage(host, mode);
+        const direction2 = mode === "left" || mode === "right" ? "vertical" : "horizontal";
+        host.classList.remove(
+          "as-host-top",
+          "as-host-bottom",
+          "as-host-left",
+          "as-host-right",
+          "as-host-horizontal",
+          "as-host-vertical"
+        );
+        host.classList.add(`as-host-${mode}`);
+        host.classList.add(`as-host-${direction2}`);
+      }
+    },
+setMode(mode) {
+      return __async(this, null, function* () {
+        this.refresh(mode);
+        yield setStorage("mode", mode);
+        window.dispatchEvent(new CustomEvent("as-layout-change", {
+          detail: { mode }
+        }));
+      });
+    }
+  };
+  const value$1 = useConfig({
+    name: "mode",
+    defaultVal: "top",
+    reg: /^(top|bottom|right|left)$/,
+    set: (newMode, next) => {
+      LayoutService.refresh(newMode);
+      next();
+    }
+  });
+  const obj = {
+    "top": "horizontal",
+    "bottom": "horizontal",
+    "left": "vertical",
+    "right": "vertical"
+  };
+  function useMode() {
+    return {
+      value: value$1,
+      direction: vue.computed(() => obj[value$1.value] || "horizontal")
+    };
+  }
+  const SHOW_STATUS = {
+    VISIBLE: 1,
+    COLLAPSED: 2
+  };
+  const options = vue.reactive( new Map([
     ["none", "关闭"],
     ["top", "向上"],
     ["bottom", "向下"],
@@ -1433,20 +4318,14 @@
   ]));
   const show = useConfig({
     name: "switchShow",
-    defaultVal: 1,
-    initVal: 2,
-    reg: /[1|2]/
+    defaultVal: SHOW_STATUS.VISIBLE,
+    initVal: SHOW_STATUS.COLLAPSED,
+    reg: /^[12]$/
   });
   const scrollHide = useConfig({
     name: "scrollHide",
     defaultVal: "none",
-    reg: /[none|top|bottom|all]/
-  });
-  const { direction } = useScroll(100);
-  vue.watch([direction, scrollHide], ([newDirection, newScrollHide]) => {
-    if (show.value && newScrollHide !== "none" && (newDirection === newScrollHide || newScrollHide === "all")) {
-      show.value = 2;
-    }
+    reg: /^(none|top|bottom|all)$/
   });
   function useSwitchShow() {
     return {
@@ -1455,541 +4334,212 @@
       options
     };
   }
-  const _export_sfc = (sfc, props) => {
-    const target = sfc.__vccOpts || sfc;
-    for (const [key, val] of props) {
-      target[key] = val;
-    }
-    return target;
-  };
-  const _sfc_main$j = {
-    name: "logo",
-    props: {
-      mode: {
-        type: String,
-        default: "horizontal",
-        validator: (val) => ["horizontal", "vertical"].indexOf(val) > -1
+  function useAutoHide() {
+    const { direction: direction2 } = useScroll(100);
+    const { show: show2, scrollHide: scrollHide2 } = useSwitchShow();
+    const stop = vue.watch([direction2, scrollHide2], ([newDirection, newScrollHide]) => {
+      if (show2.value === SHOW_STATUS.VISIBLE && newScrollHide !== "none" && (newDirection === newScrollHide || newScrollHide === "all")) {
+        show2.value = SHOW_STATUS.COLLAPSED;
       }
-    },
-    setup() {
-      return {
-        isMobile: isMobile()
-      };
-    }
-  };
-  const _hoisted_1$d = /* @__PURE__ */ vue.createElementVNode("p", { class: "as-title-inner" }, " All Search ", -1);
-  const _hoisted_2$9 = [
-    _hoisted_1$d
-  ];
-  function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
-    return !$setup.isMobile ? (vue.openBlock(), vue.createElementBlock("a", {
-      key: 0,
-      class: vue.normalizeClass(["as-title", `as-title-${$props.mode}`]),
-      href: "https://github.com/all-search/all-search",
-      target: "_blank"
-    }, _hoisted_2$9, 2)) : vue.createCommentVNode("", true);
-  }
-  const logo = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$j]]);
-  var MapShim = function() {
-    if (typeof Map !== "undefined") {
-      return Map;
-    }
-    function getIndex(arr, key) {
-      var result = -1;
-      arr.some(function(entry, index2) {
-        if (entry[0] === key) {
-          result = index2;
-          return true;
-        }
-        return false;
-      });
-      return result;
-    }
-    return (
-      /** @class */
-      function() {
-        function class_1() {
-          this.__entries__ = [];
-        }
-        Object.defineProperty(class_1.prototype, "size", {
-          /**
-           * @returns {boolean}
-           */
-          get: function() {
-            return this.__entries__.length;
-          },
-          enumerable: true,
-          configurable: true
-        });
-        class_1.prototype.get = function(key) {
-          var index2 = getIndex(this.__entries__, key);
-          var entry = this.__entries__[index2];
-          return entry && entry[1];
-        };
-        class_1.prototype.set = function(key, value2) {
-          var index2 = getIndex(this.__entries__, key);
-          if (~index2) {
-            this.__entries__[index2][1] = value2;
-          } else {
-            this.__entries__.push([key, value2]);
-          }
-        };
-        class_1.prototype.delete = function(key) {
-          var entries = this.__entries__;
-          var index2 = getIndex(entries, key);
-          if (~index2) {
-            entries.splice(index2, 1);
-          }
-        };
-        class_1.prototype.has = function(key) {
-          return !!~getIndex(this.__entries__, key);
-        };
-        class_1.prototype.clear = function() {
-          this.__entries__.splice(0);
-        };
-        class_1.prototype.forEach = function(callback, ctx) {
-          if (ctx === void 0) {
-            ctx = null;
-          }
-          for (var _i = 0, _a = this.__entries__; _i < _a.length; _i++) {
-            var entry = _a[_i];
-            callback.call(ctx, entry[1], entry[0]);
-          }
-        };
-        return class_1;
-      }()
-    );
-  }();
-  var isBrowser = typeof window !== "undefined" && typeof document !== "undefined" && window.document === document;
-  var global$1 = function() {
-    if (typeof global !== "undefined" && global.Math === Math) {
-      return global;
-    }
-    if (typeof self !== "undefined" && self.Math === Math) {
-      return self;
-    }
-    if (typeof window !== "undefined" && window.Math === Math) {
-      return window;
-    }
-    return Function("return this")();
-  }();
-  var requestAnimationFrame$1 = function() {
-    if (typeof requestAnimationFrame === "function") {
-      return requestAnimationFrame.bind(global$1);
-    }
-    return function(callback) {
-      return setTimeout(function() {
-        return callback(Date.now());
-      }, 1e3 / 60);
-    };
-  }();
-  var trailingTimeout = 2;
-  function throttle(callback, delay) {
-    var leadingCall = false, trailingCall = false, lastCallTime = 0;
-    function resolvePending() {
-      if (leadingCall) {
-        leadingCall = false;
-        callback();
-      }
-      if (trailingCall) {
-        proxy();
-      }
-    }
-    function timeoutCallback() {
-      requestAnimationFrame$1(resolvePending);
-    }
-    function proxy() {
-      var timeStamp = Date.now();
-      if (leadingCall) {
-        if (timeStamp - lastCallTime < trailingTimeout) {
-          return;
-        }
-        trailingCall = true;
-      } else {
-        leadingCall = true;
-        trailingCall = false;
-        setTimeout(timeoutCallback, delay);
-      }
-      lastCallTime = timeStamp;
-    }
-    return proxy;
-  }
-  var REFRESH_DELAY = 20;
-  var transitionKeys = ["top", "right", "bottom", "left", "width", "height", "size", "weight"];
-  var mutationObserverSupported = typeof MutationObserver !== "undefined";
-  var ResizeObserverController = (
-    /** @class */
-    function() {
-      function ResizeObserverController2() {
-        this.connected_ = false;
-        this.mutationEventsAdded_ = false;
-        this.mutationsObserver_ = null;
-        this.observers_ = [];
-        this.onTransitionEnd_ = this.onTransitionEnd_.bind(this);
-        this.refresh = throttle(this.refresh.bind(this), REFRESH_DELAY);
-      }
-      ResizeObserverController2.prototype.addObserver = function(observer) {
-        if (!~this.observers_.indexOf(observer)) {
-          this.observers_.push(observer);
-        }
-        if (!this.connected_) {
-          this.connect_();
-        }
-      };
-      ResizeObserverController2.prototype.removeObserver = function(observer) {
-        var observers2 = this.observers_;
-        var index2 = observers2.indexOf(observer);
-        if (~index2) {
-          observers2.splice(index2, 1);
-        }
-        if (!observers2.length && this.connected_) {
-          this.disconnect_();
-        }
-      };
-      ResizeObserverController2.prototype.refresh = function() {
-        var changesDetected = this.updateObservers_();
-        if (changesDetected) {
-          this.refresh();
-        }
-      };
-      ResizeObserverController2.prototype.updateObservers_ = function() {
-        var activeObservers = this.observers_.filter(function(observer) {
-          return observer.gatherActive(), observer.hasActive();
-        });
-        activeObservers.forEach(function(observer) {
-          return observer.broadcastActive();
-        });
-        return activeObservers.length > 0;
-      };
-      ResizeObserverController2.prototype.connect_ = function() {
-        if (!isBrowser || this.connected_) {
-          return;
-        }
-        document.addEventListener("transitionend", this.onTransitionEnd_);
-        window.addEventListener("resize", this.refresh);
-        if (mutationObserverSupported) {
-          this.mutationsObserver_ = new MutationObserver(this.refresh);
-          this.mutationsObserver_.observe(document, {
-            attributes: true,
-            childList: true,
-            characterData: true,
-            subtree: true
-          });
-        } else {
-          document.addEventListener("DOMSubtreeModified", this.refresh);
-          this.mutationEventsAdded_ = true;
-        }
-        this.connected_ = true;
-      };
-      ResizeObserverController2.prototype.disconnect_ = function() {
-        if (!isBrowser || !this.connected_) {
-          return;
-        }
-        document.removeEventListener("transitionend", this.onTransitionEnd_);
-        window.removeEventListener("resize", this.refresh);
-        if (this.mutationsObserver_) {
-          this.mutationsObserver_.disconnect();
-        }
-        if (this.mutationEventsAdded_) {
-          document.removeEventListener("DOMSubtreeModified", this.refresh);
-        }
-        this.mutationsObserver_ = null;
-        this.mutationEventsAdded_ = false;
-        this.connected_ = false;
-      };
-      ResizeObserverController2.prototype.onTransitionEnd_ = function(_a) {
-        var _b = _a.propertyName, propertyName = _b === void 0 ? "" : _b;
-        var isReflowProperty = transitionKeys.some(function(key) {
-          return !!~propertyName.indexOf(key);
-        });
-        if (isReflowProperty) {
-          this.refresh();
-        }
-      };
-      ResizeObserverController2.getInstance = function() {
-        if (!this.instance_) {
-          this.instance_ = new ResizeObserverController2();
-        }
-        return this.instance_;
-      };
-      ResizeObserverController2.instance_ = null;
-      return ResizeObserverController2;
-    }()
-  );
-  var defineConfigurable = function(target, props) {
-    for (var _i = 0, _a = Object.keys(props); _i < _a.length; _i++) {
-      var key = _a[_i];
-      Object.defineProperty(target, key, {
-        value: props[key],
-        enumerable: false,
-        writable: false,
-        configurable: true
-      });
-    }
-    return target;
-  };
-  var getWindowOf = function(target) {
-    var ownerGlobal = target && target.ownerDocument && target.ownerDocument.defaultView;
-    return ownerGlobal || global$1;
-  };
-  var emptyRect = createRectInit(0, 0, 0, 0);
-  function toFloat(value2) {
-    return parseFloat(value2) || 0;
-  }
-  function getBordersSize(styles) {
-    var positions = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-      positions[_i - 1] = arguments[_i];
-    }
-    return positions.reduce(function(size, position) {
-      var value2 = styles["border-" + position + "-width"];
-      return size + toFloat(value2);
-    }, 0);
-  }
-  function getPaddings(styles) {
-    var positions = ["top", "right", "bottom", "left"];
-    var paddings = {};
-    for (var _i = 0, positions_1 = positions; _i < positions_1.length; _i++) {
-      var position = positions_1[_i];
-      var value2 = styles["padding-" + position];
-      paddings[position] = toFloat(value2);
-    }
-    return paddings;
-  }
-  function getSVGContentRect(target) {
-    var bbox = target.getBBox();
-    return createRectInit(0, 0, bbox.width, bbox.height);
-  }
-  function getHTMLElementContentRect(target) {
-    var clientWidth = target.clientWidth, clientHeight = target.clientHeight;
-    if (!clientWidth && !clientHeight) {
-      return emptyRect;
-    }
-    var styles = getWindowOf(target).getComputedStyle(target);
-    var paddings = getPaddings(styles);
-    var horizPad = paddings.left + paddings.right;
-    var vertPad = paddings.top + paddings.bottom;
-    var width2 = toFloat(styles.width), height = toFloat(styles.height);
-    if (styles.boxSizing === "border-box") {
-      if (Math.round(width2 + horizPad) !== clientWidth) {
-        width2 -= getBordersSize(styles, "left", "right") + horizPad;
-      }
-      if (Math.round(height + vertPad) !== clientHeight) {
-        height -= getBordersSize(styles, "top", "bottom") + vertPad;
-      }
-    }
-    if (!isDocumentElement(target)) {
-      var vertScrollbar = Math.round(width2 + horizPad) - clientWidth;
-      var horizScrollbar = Math.round(height + vertPad) - clientHeight;
-      if (Math.abs(vertScrollbar) !== 1) {
-        width2 -= vertScrollbar;
-      }
-      if (Math.abs(horizScrollbar) !== 1) {
-        height -= horizScrollbar;
-      }
-    }
-    return createRectInit(paddings.left, paddings.top, width2, height);
-  }
-  var isSVGGraphicsElement = function() {
-    if (typeof SVGGraphicsElement !== "undefined") {
-      return function(target) {
-        return target instanceof getWindowOf(target).SVGGraphicsElement;
-      };
-    }
-    return function(target) {
-      return target instanceof getWindowOf(target).SVGElement && typeof target.getBBox === "function";
-    };
-  }();
-  function isDocumentElement(target) {
-    return target === getWindowOf(target).document.documentElement;
-  }
-  function getContentRect(target) {
-    if (!isBrowser) {
-      return emptyRect;
-    }
-    if (isSVGGraphicsElement(target)) {
-      return getSVGContentRect(target);
-    }
-    return getHTMLElementContentRect(target);
-  }
-  function createReadOnlyRect(_a) {
-    var x = _a.x, y2 = _a.y, width2 = _a.width, height = _a.height;
-    var Constr = typeof DOMRectReadOnly !== "undefined" ? DOMRectReadOnly : Object;
-    var rect = Object.create(Constr.prototype);
-    defineConfigurable(rect, {
-      x,
-      y: y2,
-      width: width2,
-      height,
-      top: y2,
-      right: x + width2,
-      bottom: height + y2,
-      left: x
     });
-    return rect;
-  }
-  function createRectInit(x, y2, width2, height) {
-    return { x, y: y2, width: width2, height };
-  }
-  var ResizeObservation = (
-    /** @class */
-    function() {
-      function ResizeObservation2(target) {
-        this.broadcastWidth = 0;
-        this.broadcastHeight = 0;
-        this.contentRect_ = createRectInit(0, 0, 0, 0);
-        this.target = target;
-      }
-      ResizeObservation2.prototype.isActive = function() {
-        var rect = getContentRect(this.target);
-        this.contentRect_ = rect;
-        return rect.width !== this.broadcastWidth || rect.height !== this.broadcastHeight;
-      };
-      ResizeObservation2.prototype.broadcastRect = function() {
-        var rect = this.contentRect_;
-        this.broadcastWidth = rect.width;
-        this.broadcastHeight = rect.height;
-        return rect;
-      };
-      return ResizeObservation2;
-    }()
-  );
-  var ResizeObserverEntry = (
-    /** @class */
-    function() {
-      function ResizeObserverEntry2(target, rectInit) {
-        var contentRect = createReadOnlyRect(rectInit);
-        defineConfigurable(this, { target, contentRect });
-      }
-      return ResizeObserverEntry2;
-    }()
-  );
-  var ResizeObserverSPI = (
-    /** @class */
-    function() {
-      function ResizeObserverSPI2(callback, controller, callbackCtx) {
-        this.activeObservations_ = [];
-        this.observations_ = new MapShim();
-        if (typeof callback !== "function") {
-          throw new TypeError("The callback provided as parameter 1 is not a function.");
-        }
-        this.callback_ = callback;
-        this.controller_ = controller;
-        this.callbackCtx_ = callbackCtx;
-      }
-      ResizeObserverSPI2.prototype.observe = function(target) {
-        if (!arguments.length) {
-          throw new TypeError("1 argument required, but only 0 present.");
-        }
-        if (typeof Element === "undefined" || !(Element instanceof Object)) {
-          return;
-        }
-        if (!(target instanceof getWindowOf(target).Element)) {
-          throw new TypeError('parameter 1 is not of type "Element".');
-        }
-        var observations = this.observations_;
-        if (observations.has(target)) {
-          return;
-        }
-        observations.set(target, new ResizeObservation(target));
-        this.controller_.addObserver(this);
-        this.controller_.refresh();
-      };
-      ResizeObserverSPI2.prototype.unobserve = function(target) {
-        if (!arguments.length) {
-          throw new TypeError("1 argument required, but only 0 present.");
-        }
-        if (typeof Element === "undefined" || !(Element instanceof Object)) {
-          return;
-        }
-        if (!(target instanceof getWindowOf(target).Element)) {
-          throw new TypeError('parameter 1 is not of type "Element".');
-        }
-        var observations = this.observations_;
-        if (!observations.has(target)) {
-          return;
-        }
-        observations.delete(target);
-        if (!observations.size) {
-          this.controller_.removeObserver(this);
-        }
-      };
-      ResizeObserverSPI2.prototype.disconnect = function() {
-        this.clearActive();
-        this.observations_.clear();
-        this.controller_.removeObserver(this);
-      };
-      ResizeObserverSPI2.prototype.gatherActive = function() {
-        var _this = this;
-        this.clearActive();
-        this.observations_.forEach(function(observation) {
-          if (observation.isActive()) {
-            _this.activeObservations_.push(observation);
-          }
-        });
-      };
-      ResizeObserverSPI2.prototype.broadcastActive = function() {
-        if (!this.hasActive()) {
-          return;
-        }
-        var ctx = this.callbackCtx_;
-        var entries = this.activeObservations_.map(function(observation) {
-          return new ResizeObserverEntry(observation.target, observation.broadcastRect());
-        });
-        this.callback_.call(ctx, entries, ctx);
-        this.clearActive();
-      };
-      ResizeObserverSPI2.prototype.clearActive = function() {
-        this.activeObservations_.splice(0);
-      };
-      ResizeObserverSPI2.prototype.hasActive = function() {
-        return this.activeObservations_.length > 0;
-      };
-      return ResizeObserverSPI2;
-    }()
-  );
-  var observers = typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : new MapShim();
-  var ResizeObserver = (
-    /** @class */
-    function() {
-      function ResizeObserver2(callback) {
-        if (!(this instanceof ResizeObserver2)) {
-          throw new TypeError("Cannot call a class as a function.");
-        }
-        if (!arguments.length) {
-          throw new TypeError("1 argument required, but only 0 present.");
-        }
-        var controller = ResizeObserverController.getInstance();
-        var observer = new ResizeObserverSPI(callback, controller, this);
-        observers.set(this, observer);
-      }
-      return ResizeObserver2;
-    }()
-  );
-  [
-    "observe",
-    "unobserve",
-    "disconnect"
-  ].forEach(function(method) {
-    ResizeObserver.prototype[method] = function() {
-      var _a;
-      return (_a = observers.get(this))[method].apply(_a, arguments);
+    return () => {
+      stop();
     };
-  });
-  var index$1 = function() {
-    if (typeof global$1.ResizeObserver !== "undefined") {
-      return global$1.ResizeObserver;
+  }
+  const sites = vue.ref([]);
+  function getList(val) {
+    if (Array.isArray(val) && val.length > 0) {
+      return val;
+    } else {
+      return toolbar;
     }
-    return ResizeObserver;
-  }();
+  }
+  getStorage("toolbar").then((val) => {
+    sites.value = getList(val);
+  }).catch(() => {
+    sites.value = toolbar;
+  });
+  function initToolBar(list2, type) {
+    if (type === "tm") {
+      return list2.filter((item) => item.data && item.data.visible).map((item) => ({
+        nameZh: item.nameZh,
+        url: item.url
+      }));
+    }
+    return list2;
+  }
+  const visible = useConfig({
+    name: "showToolbar",
+    defaultVal: 1,
+    reg: /^[12]$/
+  });
+  function useToolbar(type) {
+    return {
+      visible,
+      list: vue.computed(() => initToolBar(sites.value, type))
+    };
+  }
+  function useStyleManager(mode, direction2, show2) {
+    const { isFullScreen: isFullScreen2 } = useFullScreen();
+    let samplingActive = false;
+    const syncSampling = (shouldSample) => {
+      if (shouldSample && !samplingActive) {
+        initSpecialStyle();
+        samplingActive = true;
+      } else if (!shouldSample && samplingActive) {
+        disconnectSpecialStyle();
+        samplingActive = false;
+      }
+    };
+    vue.watchEffect(() => {
+      const currentSite = site;
+      const currentMode = vue.toValue(mode);
+      const isLayoutVisible = !currentSite.invisible && !currentSite.disabled && !vue.toValue(isFullScreen2) && vue.toValue(show2) === SHOW_STATUS.VISIBLE;
+      syncHostLayout(currentMode, vue.toValue(direction2), isLayoutVisible);
+      addCustomStyle(currentMode, currentSite, !isLayoutVisible || currentSite.disabled);
+      syncSampling(isLayoutVisible && !currentSite.generatedStyle);
+    });
+    vue.onUnmounted(() => {
+      disconnectSpecialStyle();
+      samplingActive = false;
+    });
+    return {
+      reApplyCustomStyle: () => addCustomStyle(vue.toValue(mode), site)
+    };
+  }
+  function useApp() {
+    const { isFullScreen: isFullScreen2 } = useFullScreen();
+    const { value: mode, direction: direction2 } = useMode();
+    const { show: show2 } = useSwitchShow();
+    const { visible: toolbarVisible } = useToolbar("tm");
+    useAutoHide();
+    useStyleManager(mode, direction2, show2);
+    const visible2 = vue.computed(() => {
+      return !site.invisible && !vue.unref(isFullScreen2);
+    });
+    const dialogVisible = vue.ref(false);
+    const keyword = vue.ref("");
+    function openDialog(text) {
+      keyword.value = text;
+      dialogVisible.value = true;
+    }
+    const disabled = vue.computed(() => site.disabled);
+    return {
+      disabled,
+      mode,
+      show: show2,
+      visible: visible2,
+      dialogVisible,
+      openDialog,
+      keyword,
+      toolbarVisible,
+      direction: direction2
+    };
+  }
+  const THEME_STORAGE_KEY = "theme";
+  const DARK_QUERY = "(prefers-color-scheme: dark)";
+  function normalizeTheme(value2) {
+    return value2 === "light" || value2 === "dark" ? value2 : "auto";
+  }
+  function loadTheme() {
+    return __async(this, null, function* () {
+      try {
+        return normalizeTheme(yield getStorage(THEME_STORAGE_KEY));
+      } catch (e) {
+        return "auto";
+      }
+    });
+  }
+  function saveTheme(preference) {
+    return __async(this, null, function* () {
+      yield setStorage(THEME_STORAGE_KEY, preference);
+    });
+  }
+  function getMediaQuery() {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return null;
+    }
+    return window.matchMedia(DARK_QUERY);
+  }
+  function systemPrefersDark() {
+    var _a, _b;
+    return (_b = (_a = getMediaQuery()) == null ? void 0 : _a.matches) != null ? _b : false;
+  }
+  function resolveTheme(preference) {
+    if (preference === "light" || preference === "dark") {
+      return preference;
+    }
+    return systemPrefersDark() ? "dark" : "light";
+  }
+  function onSystemThemeChange(callback) {
+    const query = getMediaQuery();
+    if (!query) {
+      return () => {
+      };
+    }
+    const handler = (event) => callback(event.matches);
+    if (typeof query.addEventListener === "function") {
+      query.addEventListener("change", handler);
+      return () => query.removeEventListener("change", handler);
+    }
+    query.addListener(handler);
+    return () => query.removeListener(handler);
+  }
+  function useTheme() {
+    const preference = vue.ref("auto");
+    const isDark = vue.ref(false);
+    let ready = false;
+    let dispose = () => {
+    };
+    const apply = () => {
+      isDark.value = resolveTheme(preference.value) === "dark";
+    };
+    vue.onMounted(() => __async(null, null, function* () {
+      preference.value = yield loadTheme();
+      apply();
+      ready = true;
+      dispose = onSystemThemeChange(() => {
+        if (preference.value === "auto") {
+          apply();
+        }
+      });
+    }));
+    vue.watch(preference, (value2) => __async(null, null, function* () {
+      apply();
+      if (ready) {
+        yield saveTheme(value2);
+      }
+    }));
+    vue.onUnmounted(() => dispose());
+    return { preference, isDark };
+  }
+  const _sfc_main$l = vue.defineComponent({
+    __name: "logo",
+    props: {
+      direction: {}
+    },
+    setup(__props) {
+      const mobile = isMobile();
+      return (_ctx, _cache) => {
+        return !vue.unref(mobile) ? (vue.openBlock(), vue.createElementBlock("a", {
+          key: 0,
+          class: vue.normalizeClass(["as-title", `as-title-${_ctx.direction}`]),
+          href: "https://github.com/all-search/all-search",
+          target: "_blank"
+        }, _cache[0] || (_cache[0] = [
+          vue.createElementVNode("p", { class: "as-title-inner" }, " All Search ", -1)
+        ]), 2)) : vue.createCommentVNode("", true);
+      };
+    }
+  });
   const isArray = Array.isArray;
   const isString = (val) => typeof val === "string";
   const toObject = (arr) => {
-    let obj = {};
-    arr.map((item) => {
-      obj[item.key] = item.value;
+    const obj2 = {};
+    arr.forEach((item) => {
+      obj2[item.key] = item.value;
     });
-    return obj;
+    return obj2;
   };
   const SCOPE = "MElScrollbar";
   const isNumber = (val) => {
@@ -2000,9 +4550,10 @@
   };
   const resizeHandler = (entries) => {
     for (const entry of entries) {
-      const listeners = entry.target.__resizeListeners__ || [];
-      if (listeners.length) {
-        listeners.forEach((fn) => {
+      const target = entry.target;
+      const listeners2 = target.__resizeListeners__ || [];
+      if (listeners2.length) {
+        listeners2.forEach((fn) => {
           fn();
         });
       }
@@ -2011,16 +4562,15 @@
   const addResizeListener = (element, fn) => {
     if (!element.__resizeListeners__) {
       element.__resizeListeners__ = [];
-      element.__ro__ = new index$1(resizeHandler);
+      element.__ro__ = new index(resizeHandler);
       element.__ro__.observe(element);
     }
     element.__resizeListeners__.push(fn);
   };
   const removeResizeListener = (element, fn) => {
-    if (!element || !element.__resizeListeners__)
-      return;
+    if (!element || !element.__resizeListeners__) return;
     element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
-    if (!element.__resizeListeners__.length) {
+    if (!element.__resizeListeners__.length && element.__ro__) {
       element.__ro__.disconnect();
     }
   };
@@ -2067,14 +4617,21 @@
   };
   const renderThumbStyle = ({ move, size, bar }) => {
     const style = {};
-    const translate2 = `translate${bar.axis}(${move}%)`;
+    const translate = `translate${bar.axis}(${move}%)`;
     style[bar.size] = size;
-    style.transform = translate2;
-    style.msTransform = translate2;
-    style.webkitTransform = translate2;
+    style.transform = translate;
+    style.msTransform = translate;
+    style.webkitTransform = translate;
     return style;
   };
-  const _sfc_main$i = vue.defineComponent({
+  const _export_sfc = (sfc, props) => {
+    const target = sfc.__vccOpts || sfc;
+    for (const [key, val] of props) {
+      target[key] = val;
+    }
+    return target;
+  };
+  const _sfc_main$k = vue.defineComponent({
     props: {
       vertical: Boolean,
       size: {
@@ -2105,7 +4662,7 @@
         return BAR_MAP[props.vertical ? "vertical" : "horizontal"];
       });
       const offsetRatio = vue.computed(() => {
-        return instance.value[bar.value.offset] ** 2 / scrollbar2.wrap[bar.value.scrollSize] / props.ratio / thumb.value[bar.value.offset];
+        return __pow(instance.value[bar.value.offset], 2) / scrollbar2.wrap[bar.value.scrollSize] / props.ratio / thumb.value[bar.value.offset];
       });
       const thumbStyle = vue.computed(() => {
         return renderThumbStyle({
@@ -2115,14 +4672,12 @@
         });
       });
       const mouseMoveDocumentHandler = (e) => {
-        if (cursorDown === false)
-          return;
+        if (cursorDown === false) return;
         const prevPage = barStore[bar.value.axis];
-        if (!prevPage)
-          return;
-        const offset = (instance.value.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]) * -1;
+        if (!prevPage) return;
+        const offset2 = (instance.value.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]) * -1;
         const thumbClickPosition = thumb.value[bar.value.offset] - prevPage;
-        const thumbPositionPercentage = (offset - thumbClickPosition) * 100 * offsetRatio.value / instance.value[bar.value.offset];
+        const thumbPositionPercentage = (offset2 - thumbClickPosition) * 100 * offsetRatio.value / instance.value[bar.value.offset];
         scrollbar2.wrap[bar.value.scroll] = thumbPositionPercentage * scrollbar2.wrap[bar.value.scrollSize] / 100;
       };
       const mouseUpDocumentHandler = () => {
@@ -2153,11 +4708,11 @@
         barStore[bar.value.axis] = e.currentTarget[bar.value.offset] - (e[bar.value.client] - e.currentTarget.getBoundingClientRect()[bar.value.direction]);
       };
       const clickTrackHandler = (e) => {
-        const offset = Math.abs(
+        const offset2 = Math.abs(
           e.target.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]
         );
         const thumbHalf = thumb[bar.value.offset] / 2;
-        const thumbPositionPercentage = (offset - thumbHalf) * 100 * offsetRatio.value / instance[bar.value.offset];
+        const thumbPositionPercentage = (offset2 - thumbHalf) * 100 * offsetRatio.value / instance[bar.value.offset];
         scrollbar2.wrap[bar.value.scroll] = thumbPositionPercentage * scrollbar2.wrap[bar.value.scrollSize] / 100;
       };
       const mouseMoveScrollbarHandler = () => {
@@ -2190,7 +4745,7 @@
       };
     }
   });
-  function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createBlock(vue.Transition, { name: "as-scrollbar-fade" }, {
       default: vue.withCtx(() => [
         vue.withDirectives(vue.createElementVNode("div", {
@@ -2211,8 +4766,8 @@
       _: 1
     });
   }
-  const Bar = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$i]]);
-  const _sfc_main$h = vue.defineComponent({
+  const Bar = _export_sfc(_sfc_main$k, [["render", _sfc_render$3]]);
+  const _sfc_main$j = vue.defineComponent({
     components: { Bar },
     props: {
       height: { type: [String, Number], default: "" },
@@ -2226,8 +4781,7 @@
       viewClass: { type: [String, Array], default: "" },
       viewStyle: { type: [String, Array], default: "" },
       noresize: Boolean,
-      // 如果 container 尺寸不会发生变化，最好设置它可以优化性能
-      tag: { type: String, default: "div" },
+tag: { type: String, default: "div" },
       always: { type: Boolean, default: false },
       minSize: { type: Number, default: 20 }
     },
@@ -2257,18 +4811,17 @@
         return style;
       });
       const update = () => {
-        if (!wrap.value)
-          return;
+        if (!wrap.value) return;
         const offsetHeight = wrap.value.offsetHeight - GAP;
         const offsetWidth = wrap.value.offsetWidth - GAP;
-        const originalHeight = offsetHeight ** 2 / wrap.value.scrollHeight;
-        const originalWidth = offsetWidth ** 2 / wrap.value.scrollWidth;
+        const originalHeight = __pow(offsetHeight, 2) / wrap.value.scrollHeight;
+        const originalWidth = __pow(offsetWidth, 2) / wrap.value.scrollWidth;
         const height = Math.max(originalHeight, props.minSize);
-        const width2 = Math.max(originalWidth, props.minSize);
+        const width = Math.max(originalWidth, props.minSize);
         ratioY.value = originalHeight / (offsetHeight - originalHeight) / (height / (offsetHeight - height));
-        ratioX.value = originalWidth / (offsetWidth - originalWidth) / (width2 / (offsetWidth - width2));
+        ratioX.value = originalWidth / (offsetWidth - originalWidth) / (width / (offsetWidth - width));
         sizeHeight.value = height + GAP < offsetHeight ? height + "px" : "";
-        sizeWidth.value = width2 + GAP < offsetWidth ? width2 + "px" : "";
+        sizeWidth.value = width + GAP < offsetWidth ? width + "px" : "";
       };
       const handleScroll = () => {
         if (wrap.value) {
@@ -2331,13 +4884,13 @@
       };
     }
   });
-  const _hoisted_1$c = {
+  const _hoisted_1$d = {
     ref: "scrollbar",
     class: "as-scrollbar"
   };
-  function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_bar = vue.resolveComponent("bar");
-    return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$c, [
+    return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$d, [
       vue.createElementVNode("div", {
         ref: "wrap",
         class: vue.normalizeClass([
@@ -2376,292 +4929,122 @@
       ], 64)) : vue.createCommentVNode("", true)
     ], 512);
   }
-  const scrollbar = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$h]]);
-  function useTimeout() {
-    let timeoutHandle;
-    const registerTimeout = (fn, delay) => {
-      cancelTimeout();
-      timeoutHandle = window.setTimeout(fn, delay);
-    };
-    const cancelTimeout = () => window.clearTimeout(timeoutHandle);
-    return {
-      registerTimeout,
-      cancelTimeout
-    };
-  }
-  function onClickOutside(target, handler, options2) {
-    const { ignore, capture = true } = options2;
-    if (!window)
-      return;
-    const shouldListen = vue.ref(true);
-    let fallback;
-    const listener = (event) => {
-      window.clearTimeout(fallback);
-      const el2 = target;
-      const composedPath = event.composedPath();
-      if (!el2 || el2 === event.target || composedPath.includes(el2) || !shouldListen.value)
-        return;
-      if (ignore && ignore.length > 0) {
-        if (ignore.some((target2) => {
-          const el3 = target2;
-          return el3 && (event.target === el3 || composedPath.includes(el3));
-        }))
-          return;
-      }
-      handler(event);
-    };
-    window.addEventListener("click", listener, {
-      passive: true,
-      capture
-    });
-    window.addEventListener("pointerdown", listener, { passive: true });
-    return () => {
-      window.removeEventListener("click", listener);
-      window.removeEventListener("pointerdown", listener);
-    };
-  }
-  const _sfc_main$g = {
+  const scrollbar = _export_sfc(_sfc_main$j, [["render", _sfc_render$2]]);
+  const _hoisted_1$c = ["data-placement"];
+  const _sfc_main$i = vue.defineComponent({
+    __name: "popper",
     props: {
-      placement: {
-        type: String,
-        default: "auto"
-      },
-      strategy: {
-        type: String,
-        default: "fixed"
-      },
-      popperClass: {
-        type: String,
-        default: ""
-      }
+      tag: { default: "div" },
+      placement: { default: "auto" },
+      strategy: { default: "fixed" },
+      popperClass: { default: "" }
     },
-    setup(props) {
+    setup(__props) {
+      const props = __props;
       const visible2 = vue.ref(false);
       const loaded = vue.ref(false);
-      const trigger = vue.ref(null);
-      const popover = vue.ref(null);
-      const popperInstance = vue.ref(null);
+      const triggerRef = vue.ref(null);
+      const popoverRef = vue.ref(null);
       const { registerTimeout, cancelTimeout } = useTimeout();
-      function createPopover(target) {
-        if (popperInstance.value) {
-          visible2.value = true;
-          return;
-        }
-        popperInstance.value = core.createPopper(
-          target,
-          popover.value,
-          {
-            strategy: props.strategy,
-            placement: props.placement
-          }
-        );
-      }
-      function destroyPopover() {
-        if (popperInstance.value) {
-          popperInstance.value.destroy();
-          popperInstance.value = null;
-        }
-      }
-      let stopFn;
-      function handleClickOutside(target) {
-        if (!stopFn) {
-          stopFn = onClickOutside(target, hide, {
-            ignore: [
-              popover.value
-            ]
-          });
-        }
-      }
-      vue.onUnmounted(() => {
-        stopFn && stopFn();
-      });
-      function show2(target) {
+      const placementRef = vue.toRef(props, "placement");
+      function show2() {
         loaded.value = true;
-        visible2.value = true;
-        createPopover(target);
         cancelTimeout();
-        handleClickOutside(target);
+        if (triggerRef.value) {
+          handleClickOutside(triggerRef.value);
+        }
+        visible2.value = true;
       }
       function hide() {
         registerTimeout(() => {
           visible2.value = false;
-          destroyPopover();
         }, 50);
       }
-      return {
-        visible: visible2,
-        loaded,
-        trigger,
-        popover,
-        popperInstance,
-        show: show2,
-        hide
+      let stopFn;
+      function handleClickOutside(target) {
+        if (stopFn) {
+          stopFn();
+        }
+        stopFn = onClickOutside(target, hide, {
+          ignore: [
+            popoverRef.value
+          ]
+        });
+      }
+      const {
+        placement,
+        isPositioned,
+        floatingStyles
+      } = useFloating(triggerRef, popoverRef, {
+        transform: false,
+        placement: placementRef,
+        strategy: props.strategy,
+        whileElementsMounted: autoUpdate,
+        middleware: [
+          offset(5),
+          flip(),
+          shift({ padding: 5 })
+        ]
+      });
+      vue.onUnmounted(() => {
+        stopFn && stopFn();
+      });
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+          (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.tag), {
+            ref_key: "triggerRef",
+            ref: triggerRef
+          }, {
+            default: vue.withCtx(() => [
+              vue.renderSlot(_ctx.$slots, "trigger", vue.normalizeProps(vue.guardReactiveProps({ show: show2, hide })))
+            ]),
+            _: 3
+          }, 512)),
+          vue.createVNode(vue.Transition, { name: "slide-fade" }, {
+            default: vue.withCtx(() => [
+              visible2.value ? (vue.openBlock(), vue.createElementBlock("div", {
+                key: 0,
+                class: vue.normalizeClass([_ctx.popperClass, "as-popover-content"]),
+                ref_key: "popoverRef",
+                ref: popoverRef,
+                style: vue.normalizeStyle(vue.unref(floatingStyles)),
+                "data-placement": vue.unref(placement),
+                onMouseenter: show2,
+                onMouseleave: hide
+              }, [
+                loaded.value ? vue.renderSlot(_ctx.$slots, "default", vue.normalizeProps(vue.mergeProps({ key: 0 }, { isPositioned: vue.unref(isPositioned) }))) : vue.createCommentVNode("", true)
+              ], 46, _hoisted_1$c)) : vue.createCommentVNode("", true)
+            ]),
+            _: 3
+          })
+        ], 64);
       };
     }
-  };
-  const _hoisted_1$b = ["data-show", "data-initialized"];
-  function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
-      vue.renderSlot(_ctx.$slots, "trigger", vue.mergeProps({ ref: "trigger" }, { show: $setup.show, hide: $setup.hide })),
-      vue.createVNode(vue.Transition, { name: "slide-fade" }, {
-        default: vue.withCtx(() => [
-          (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "#all-search" }, [
-            vue.withDirectives(vue.createElementVNode("div", {
-              class: vue.normalizeClass([$props.popperClass, "as-popover-content"]),
-              ref: "popover",
-              "data-show": $setup.visible,
-              "data-initialized": $setup.popperInstance !== null,
-              style: { "display": "none" },
-              onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.show && $setup.show(...args)),
-              onMouseleave: _cache[1] || (_cache[1] = (...args) => $setup.hide && $setup.hide(...args))
-            }, [
-              $setup.loaded ? vue.renderSlot(_ctx.$slots, "default", { key: 0 }) : vue.createCommentVNode("", true)
-            ], 42, _hoisted_1$b), [
-              [vue.vShow, $setup.visible]
-            ])
-          ]))
-        ]),
-        _: 3
-      })
-    ], 64);
-  }
-  const popperComp = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$g]]);
-  function findInNodeList(list2) {
-    return [].find.call(list2, (item) => isValidate(item));
-  }
-  function isValidate(el2) {
-    return isInput(el2) && isVisible(el2);
-  }
-  function isInput(el2) {
-    if (["input", "textarea"].includes(el2.nodeName.toLowerCase())) {
-      return ["text", "search", "textarea"].includes(el2.type);
-    }
-    return true;
-  }
-  function isVisible(el2) {
-    const style = getComputedStyle(el2);
-    return !!el2.getClientRects().length && style.visibility !== "hidden" && style.width !== 0 && style.height !== 0 && style.opacity !== 0;
-  }
-  function getSearchDom() {
-    const el2 = document.querySelector("input[type=search],input[type=text][autocomplete=off],input[autocomplete=off]:not([type])") || document.querySelector("input[type=text][name][value],input[name][value]:not([type])");
-    if (el2 && isValidate(el2)) {
-      return el2;
-    }
-    const autofocusOrSearch = document.querySelector("input[autofocus],input[type=search]");
-    if (autofocusOrSearch && isValidate(autofocusOrSearch)) {
-      return autofocusOrSearch;
-    }
-    const idOrClassContainSearch = document.querySelectorAll("input[id*=search],input[class*=search]");
-    if (idOrClassContainSearch.length) {
-      const el3 = findInNodeList(idOrClassContainSearch);
-      if (el3 && isValidate(el3)) {
-        return el3;
-      }
-    }
-    const placeholderContainSearch = document.querySelectorAll("input[placeholder*=search],input[placeholder*=搜索]");
-    if (placeholderContainSearch.length) {
-      const el3 = findInNodeList(placeholderContainSearch);
-      if (el3 && isValidate(el3)) {
-        return el3;
-      }
-    }
-    const textInputTypes = ["hidden", "button", "checkbox", "color", "file", "image", "radio", "range", "reset", "submit"];
-    const selector = textInputTypes.map((t) => `[type=${t}]`).join(",");
-    const firstInput = document.querySelector(`input:not(${selector}), textarea`);
-    if (firstInput && isValidate(firstInput)) {
-      return firstInput;
-    }
-    const inputSearch = document.getElementsByTagName("input");
-    const sameKeywordInput = [].find.call(inputSearch, (item) => {
-      if (item.value && decodeURI(window.location.pathname + window.location.search).includes(item.value)) {
-        return item;
-      }
-    });
-    if (sameKeywordInput) {
-      return sameKeywordInput;
-    }
-  }
-  function getKeyword() {
-    const el2 = getSearchDom();
-    if (el2) {
-      let val = "";
-      if (["INPUT", "TEXTAREA"].includes(el2.nodeName)) {
-        val = el2.value;
-      } else {
-        val = el2.textContent;
-      }
-      return encodeURIComponent(val);
-    }
-    console.log("没有找到搜索关键字");
-  }
-  const _sfc_main$f = {
-    name: "icon",
-    props: {
-      name: {
-        type: String,
-        default: ""
-      }
-    }
-  };
-  const _hoisted_1$a = {
+  });
+  const _hoisted_1$b = {
     class: "as-icon as-menu-item-icon",
     "aria-hidden": "true"
   };
-  const _hoisted_2$8 = ["xlink:href"];
-  function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("svg", _hoisted_1$a, [
-      vue.createElementVNode("use", {
-        "xlink:href": `#icon-${$props.name}`
-      }, null, 8, _hoisted_2$8)
-    ]);
-  }
-  const icon = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$f]]);
-  let el$1 = document.createElement("a");
-  const replaceUrl = function(val) {
-    const lowerCaseVal = val.toLowerCase();
-    const list2 = ["http://", "https://", "ftp://", "files://"];
-    for (let i = 0; i < list2.length; i++) {
-      if (lowerCaseVal.indexOf(list2[i]) === 0) {
-        return val.replace(/.*\/\//, "//");
-      }
+  const _hoisted_2$7 = ["xlink:href"];
+  const _sfc_main$h = vue.defineComponent({
+    __name: "icon",
+    props: {
+      name: {}
+    },
+    setup(__props) {
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("svg", _hoisted_1$b, [
+          vue.createElementVNode("use", {
+            "xlink:href": `#icon-${_ctx.name}`
+          }, null, 8, _hoisted_2$7)
+        ]);
+      };
     }
-    return val;
-  };
-  function parseUrl(url) {
-    let val = url;
-    if (val.indexOf("//") < 0) {
-      val = `//${val}`;
-    } else if (val.indexOf("//") > -1) {
-      val = replaceUrl(val);
-    } else {
-      return el$1;
-    }
-    el$1.href = val;
-    return {
-      href: el$1.href,
-      // '包含完整的url'
-      origin: el$1.origin,
-      // '包含协议到pathname之前的内容'
-      protocol: el$1.protocol,
-      //  'url使用的协议，包含末尾的:'
-      host: el$1.host,
-      //  '完整主机名，包含:和端口'
-      hostname: el$1.hostname,
-      //  '主机名，不包含端口'
-      port: el$1.port,
-      //  '端口号'
-      pathname: el$1.pathname,
-      //  '服务器上访问资源的路径/开头'
-      search: el$1.search,
-      //  'query string，?开头'
-      hash: el$1.hash
-      //  '#开头的fragment identifier'
-    };
-  }
-  const favicon$1 = useConfig({
+  });
+  const favicon = useConfig({
     name: "favicon",
     defaultVal: 1,
-    reg: /[1|2]/
+    reg: /^[12]$/
   });
   function clearIconCache() {
     if (window.confirm("确认要清除图标的缓存吗")) {
@@ -2672,303 +5055,250 @@
   }
   function useFavicon() {
     return {
-      favicon: favicon$1,
+      favicon,
       clearIconCache
     };
   }
-  let iconCache = vue.reactive({});
+  const _hoisted_1$a = {
+    key: 0,
+    class: "as-img-icon"
+  };
+  const _hoisted_2$6 = ["src"];
+  const iconCache = vue.ref({});
+  const isLoaded = vue.ref(false);
   getStorage("iconCache").then((iconData) => {
-    iconCache = iconData;
+    iconCache.value = iconData || {};
+  }).catch(() => {
+    iconCache.value = {};
+  }).finally(() => {
+    isLoaded.value = true;
   });
-  const _sfc_main$e = {
-    name: "favicon",
+  const setStorageDebounce = debounce(() => {
+    setStorage("iconCache", iconCache.value);
+  }, 1e3);
+  const _sfc_main$g = vue.defineComponent({
+    __name: "favicon",
     props: {
-      url: {
-        type: String,
-        default: ""
-      },
-      icon: {
-        type: String,
-        default: ""
-      }
+      url: {},
+      icon: {}
     },
-    setup(props) {
+    setup(__props) {
+      const props = __props;
       const isError = vue.ref(false);
-      const { hostname, origin } = parseUrl(props.url);
+      const { hostname, origin } = parseUrl(props.url || "");
       const img = vue.computed(() => {
-        if (iconCache[hostname]) {
-          return iconCache[hostname];
+        if (!isLoaded.value) {
+          return "";
+        }
+        if (iconCache.value[hostname]) {
+          return iconCache.value[hostname];
         } else if (!isError.value) {
           return faviconApi.value;
         } else {
-          return "";
+          return `${origin}/favicon.ico`;
         }
       });
-      const i = vue.ref(0);
-      const faviconApis = vue.ref([
+      const index2 = vue.ref(0);
+      const faviconApis = vue.computed(() => [
         props.icon,
         `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`,
         `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname)}`,
         `${origin}/favicon.ico`
-      ]);
-      const faviconApi = vue.computed(() => faviconApis.value.filter((j) => j)[i.value]);
+      ].filter((j) => !!j));
+      const faviconApi = vue.computed(() => faviconApis.value[index2.value]);
       const { favicon: favicon2 } = useFavicon();
-      function getBase64Image(image2) {
+      function getBase64Image(image) {
         const canvas = document.createElement("canvas");
-        canvas.width = image2.width;
-        canvas.height = image2.height;
-        let context = canvas.getContext("2d");
-        context.drawImage(image2, 0, 0, image2.width, image2.height);
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const context = canvas.getContext("2d");
+        if (!context) return "";
+        context.drawImage(image, 0, 0, image.width, image.height);
         return canvas.toDataURL("image/png", 1);
       }
       function handleLoad(e) {
         if (!isError.value && !img.value.startsWith("data:image")) {
           const base64 = getBase64Image(e.target);
           if (base64) {
-            iconCache[hostname] = base64;
-            setStorage("iconCache", iconCache);
+            iconCache.value[hostname] = base64;
+            setStorageDebounce();
           }
         }
       }
       function handleError(e) {
-        const src = e.currentTarget.src;
-        if (src === faviconApi.value) {
-          if (i.value === faviconApis.value.length - 1) {
+        const target = e.currentTarget;
+        if (target.src === faviconApi.value) {
+          if (index2.value === faviconApis.value.length - 1) {
             isError.value = true;
           }
-          i.value++;
+          index2.value++;
         }
       }
-      return {
-        img,
-        favicon: favicon2,
-        handleLoad,
-        handleError,
-        isError
+      return (_ctx, _cache) => {
+        return vue.unref(favicon2) === 1 ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1$a, [
+          isLoaded.value ? (vue.openBlock(), vue.createElementBlock("img", {
+            key: 0,
+            class: vue.normalizeClass({ error: isError.value }),
+            src: img.value,
+            crossOrigin: "",
+            onError: handleError,
+            onLoad: handleLoad
+          }, null, 42, _hoisted_2$6)) : vue.createCommentVNode("", true)
+        ])) : vue.createCommentVNode("", true);
       };
     }
-  };
-  const _hoisted_1$9 = {
-    key: 0,
-    class: "as-img-icon"
-  };
-  const _hoisted_2$7 = ["src"];
-  function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
-    return $setup.favicon === 1 ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1$9, [
-      vue.createElementVNode("img", {
-        class: vue.normalizeClass({ error: $setup.isError }),
-        src: $setup.img,
-        crossOrigin: "",
-        onError: _cache[0] || (_cache[0] = (...args) => $setup.handleError && $setup.handleError(...args)),
-        onLoad: _cache[1] || (_cache[1] = (...args) => $setup.handleLoad && $setup.handleLoad(...args))
-      }, null, 42, _hoisted_2$7)
-    ])) : vue.createCommentVNode("", true);
-  }
-  const favicon = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$e]]);
-  const onTap = (target, callback) => {
-    let tapStartTime = 0;
-    let tapEndTime = 0;
-    const tapTime = 200;
-    let tapStartClientX = 0;
-    let tapStartClientY = 0;
-    let tapEndClientX = 0;
-    let tapEndClientY = 0;
-    const tapLimit = 15;
-    let cancelClick = false;
-    let hasListener = false;
-    function handleTouchStart(event) {
-      tapStartTime = event.timeStamp;
-      const touch = event.changedTouches[0];
-      tapStartClientX = touch.clientX;
-      tapStartClientY = touch.clientY;
-      cancelClick = false;
-    }
-    function handleTouchMove(event) {
-      const touch = event.changedTouches[0];
-      tapEndClientX = touch.clientX;
-      tapEndClientY = touch.clientY;
-      if (Math.abs(tapEndClientX - tapStartClientX) > tapLimit || Math.abs(tapEndClientY - tapStartClientY) > tapLimit) {
-        cancelClick = true;
-      }
-    }
-    function handleTouchEnd(event) {
-      tapEndTime = event.timeStamp;
-      if (!cancelClick && tapEndTime - tapStartTime <= tapTime) {
-        callback(event);
-      }
-    }
-    vue.watch(target, (el2) => {
-      if (el2 && !hasListener) {
-        el2.addEventListener("touchstart", handleTouchStart);
-        el2.addEventListener("touchmove", handleTouchMove);
-        el2.addEventListener("touchend", handleTouchEnd);
-        hasListener = true;
-      }
-    });
-    vue.onUnmounted(() => {
-      const el2 = vue.unref(target);
-      if (el2) {
-        el2.removeEventListener("touchstart", handleTouchStart);
-        el2.removeEventListener("touchmove", handleTouchMove);
-        el2.removeEventListener("touchend", handleTouchEnd);
-      }
-    });
-  };
+  });
   const selection = vue.ref("");
-  let isTap = false;
-  const _sfc_main$d = {
-    name: "menuItem",
-    components: {
-      popperComp,
-      icon,
-      favicon
-    },
+  const menuOpenMode = useConfig({
+    name: "openModeMenu",
+    defaultVal: "same",
+    reg: /^(same|new)$/
+  });
+  const selectionOpenMode = useConfig({
+    name: "openModeSelection",
+    defaultVal: "new",
+    reg: /^(same|new)$/
+  });
+  function useOpenMode() {
+    return { menuOpenMode, selectionOpenMode };
+  }
+  const _hoisted_1$9 = ["onMouseenter", "onMouseleave"];
+  const _hoisted_2$5 = ["textContent"];
+  const _hoisted_3$3 = { class: "as-subMenu-container" };
+  const _hoisted_4$1 = {
+    key: 0,
+    class: "as-subMenu"
+  };
+  const _hoisted_5$1 = ["onClick", "onMouseup"];
+  const _hoisted_6$1 = ["textContent"];
+  const _sfc_main$f = vue.defineComponent({
+    __name: "menu-item",
     props: {
-      item: {
-        type: Object
-      },
-      mode: {
-        type: String,
-        default: "horizontal"
-      }
+      item: {},
+      direction: { default: "horizontal" },
+      mode: { default: "top" }
     },
-    setup(props) {
+    setup(__props) {
+      const props = __props;
       const categoryRef = vue.ref(null);
       const currentSite = site;
       const classList = vue.computed(
-        () => props.mode === "horizontal" ? "horizontal" : "vertical"
+        () => props.direction === "horizontal" ? "horizontal" : "vertical"
       );
-      const placement = vue.computed(
-        () => props.mode === "horizontal" ? "bottom-start" : "right-start"
-      );
-      const handleMenuShow = (value2, item) => {
-        item.show = value2;
+      const placementMap = {
+        top: "bottom-start",
+        bottom: "top-start",
+        left: "right-start",
+        right: "left-start"
       };
+      const placement = vue.computed(() => {
+        return placementMap[props.mode || ""] || "bottom-start";
+      });
       const defaultKeyword = () => {
         if (selection && selection.value) {
           return selection.value;
         }
-        let keyword = getKeyword();
-        const selectors = currentSite.selectors;
-        const query = currentSite.query;
-        if (keyword === void 0) {
-          if (selectors) {
-            const el2 = document.querySelector(selectors);
-            keyword = el2 ? el2.value : "";
-          } else if (query) {
-            query.some((name2) => {
-              const word = getQueryString(name2);
-              keyword = word;
-              return !!word;
-            });
-          }
-        }
-        return keyword;
+        const keyword = resolveKeyword({
+          selectors: currentSite.selectors,
+          query: currentSite.query
+        });
+        return keyword ? encodeURIComponent(keyword) : "";
       };
-      const handleCateClick = (cate, newWin) => {
+      const altMode = vue.computed(() => otherOpenMode(menuOpenMode.value));
+      const handleClick = (item, mode) => {
+        const keyword = defaultKeyword();
+        const url = item.url.replace("%s", keyword);
+        openUrl(url, mode || menuOpenMode.value);
+        return false;
+      };
+      let isTap = false;
+      const handleCateClick = (cate, mode) => {
         if (isTap) {
           return;
         }
-        const urlItem = cate.list.filter((item) => item.data.visible).find((item) => item.url.indexOf(window.location.hostname) === -1);
-        return handleClick(urlItem, newWin);
-      };
-      const handleClick = (item, newWin) => {
-        const keyword = defaultKeyword();
-        if (newWin) {
-          window.open(item.url.replace("%s", keyword));
-        } else {
-          window.location.href = item.url.replace("%s", keyword);
+        const urlItem = cate.list.filter((item) => {
+          var _a;
+          return (_a = item.data) == null ? void 0 : _a.visible;
+        }).find((item) => item.url.indexOf(window.location.hostname) === -1);
+        if (urlItem) {
+          return handleClick(urlItem, mode);
         }
-        return false;
       };
       onTap(categoryRef, () => {
         isTap = true;
       });
-      return {
-        placement,
-        classList,
-        handleMenuShow,
-        handleClick,
-        handleCateClick,
-        categoryRef
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createBlock(_sfc_main$i, {
+          tag: "li",
+          placement: placement.value
+        }, {
+          trigger: vue.withCtx(({ show: show2, hide }) => [
+            vue.createElementVNode("a", {
+              class: vue.normalizeClass(["as-menu-item no-underline", classList.value]),
+              ref_key: "categoryRef",
+              ref: categoryRef,
+              onMouseenter: ($event) => show2(),
+              onMouseleave: hide,
+              href: "javascript:void 0",
+              onClick: [
+                _cache[0] || (_cache[0] = vue.withModifiers(($event) => handleCateClick(_ctx.item), ["exact"])),
+                _cache[1] || (_cache[1] = vue.withModifiers(($event) => handleCateClick(_ctx.item, altMode.value), ["ctrl", "exact"]))
+              ],
+              onMouseup: _cache[2] || (_cache[2] = vue.withModifiers(($event) => handleCateClick(_ctx.item, altMode.value), ["middle", "exact"]))
+            }, [
+              vue.createVNode(_sfc_main$h, {
+                name: _ctx.item.name
+              }, null, 8, ["name"]),
+              vue.createElementVNode("span", {
+                class: "as-menu-item-title",
+                textContent: vue.toDisplayString(_ctx.item.nameZh)
+              }, null, 8, _hoisted_2$5)
+            ], 42, _hoisted_1$9)
+          ]),
+          default: vue.withCtx(({}) => [
+            vue.createElementVNode("div", _hoisted_3$3, [
+              _ctx.item.list && _ctx.item.list.length ? (vue.openBlock(), vue.createElementBlock("ul", _hoisted_4$1, [
+                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(_ctx.item.list, (child, i) => {
+                  var _a;
+                  return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                    key: `${_ctx.item.name}_${i}`
+                  }, [
+                    vue.createElementVNode("a", {
+                      href: "javascript:void 0",
+                      onClick: [
+                        vue.withModifiers(($event) => handleClick(child), ["exact"]),
+                        vue.withModifiers(($event) => handleClick(child, altMode.value), ["ctrl", "exact"])
+                      ],
+                      onMouseup: vue.withModifiers(($event) => handleClick(child, altMode.value), ["middle", "exact"])
+                    }, [
+                      vue.createVNode(_sfc_main$g, {
+                        class: "as-url-icon",
+                        url: child.url,
+                        icon: child.icon
+                      }, null, 8, ["url", "icon"]),
+                      vue.createElementVNode("p", {
+                        class: "as-subMenu-text",
+                        textContent: vue.toDisplayString(child.nameZh)
+                      }, null, 8, _hoisted_6$1)
+                    ], 40, _hoisted_5$1)
+                  ])), [
+                    [vue.vShow, (_a = child.data) == null ? void 0 : _a.visible]
+                  ]);
+                }), 128))
+              ])) : vue.createCommentVNode("", true)
+            ])
+          ]),
+          _: 1
+        }, 8, ["placement"]);
       };
     }
-  };
-  const _hoisted_1$8 = ["onMouseenter", "onMouseleave"];
-  const _hoisted_2$6 = ["textContent"];
-  const _hoisted_3$3 = { class: "as-subMenu" };
-  const _hoisted_4$2 = ["onClick", "onMouseup"];
-  const _hoisted_5$1 = ["textContent"];
-  function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_icon = vue.resolveComponent("icon");
-    const _component_favicon = vue.resolveComponent("favicon");
-    const _component_popper_comp = vue.resolveComponent("popper-comp");
-    return vue.openBlock(), vue.createBlock(_component_popper_comp, {
-      placement: $setup.placement,
-      "popper-class": "as-subMenu-container"
-    }, {
-      trigger: vue.withCtx(({ show: show2, hide }) => [
-        vue.createElementVNode("a", {
-          class: vue.normalizeClass(["as-menu-item no-underline", $setup.classList]),
-          ref: "categoryRef",
-          onMouseenter: ($event) => show2($event.target),
-          onMouseleave: hide,
-          href: "javascript:void 0",
-          onClick: [
-            _cache[0] || (_cache[0] = vue.withModifiers(($event) => $setup.handleCateClick($props.item, false), ["exact"])),
-            _cache[1] || (_cache[1] = vue.withModifiers(($event) => $setup.handleCateClick($props.item, true), ["ctrl", "exact"]))
-          ],
-          onMouseup: _cache[2] || (_cache[2] = vue.withModifiers(($event) => $setup.handleCateClick($props.item, true), ["middle", "exact"]))
-        }, [
-          vue.createVNode(_component_icon, {
-            name: $props.item.name
-          }, null, 8, ["name"]),
-          vue.createElementVNode("span", {
-            class: "as-menu-item-title",
-            textContent: vue.toDisplayString($props.item.nameZh)
-          }, null, 8, _hoisted_2$6)
-        ], 42, _hoisted_1$8)
-      ]),
-      default: vue.withCtx(() => [
-        vue.createElementVNode("ul", _hoisted_3$3, [
-          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.item.list, (child, i) => {
-            return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
-              key: `${$props.item.name}_${i}`
-            }, [
-              vue.createElementVNode("a", {
-                href: "javascript:void 0",
-                onClick: [
-                  vue.withModifiers(($event) => $setup.handleClick(child), ["exact"]),
-                  vue.withModifiers(($event) => $setup.handleClick(child, true), ["ctrl", "exact"])
-                ],
-                onMouseup: vue.withModifiers(($event) => $setup.handleClick(child, true), ["middle", "exact"])
-              }, [
-                vue.createVNode(_component_favicon, {
-                  class: "as-url-icon",
-                  url: child.url,
-                  icon: child.icon
-                }, null, 8, ["url", "icon"]),
-                vue.createElementVNode("p", {
-                  class: "as-subMenu-text",
-                  textContent: vue.toDisplayString(child.nameZh)
-                }, null, 8, _hoisted_5$1)
-              ], 40, _hoisted_4$2)
-            ])), [
-              [vue.vShow, child.data.visible]
-            ]);
-          }), 128))
-        ])
-      ]),
-      _: 1
-    }, 8, ["placement"]);
-  }
-  const menuItem = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$d]]);
+  });
   const value = useConfig({
     name: "align",
     defaultVal: "flex-start",
-    reg: /[flex\-start|center|flex\-end]/
+    reg: /^(flex-start|center|flex-end)$/
   });
-  const list = /* @__PURE__ */ new Map([
+  const list = new Map([
     ["flex-start", "开始"],
     ["center", "居中"],
     ["flex-end", "末尾"]
@@ -2979,67 +5309,50 @@
       value
     };
   }
-  const _sfc_main$c = {
-    name: "as-menu",
-    components: {
-      scrollbar,
-      menuItem
-    },
+  const _hoisted_1$8 = { class: "as-menu" };
+  const _sfc_main$e = vue.defineComponent({
+    __name: "menu",
     props: {
-      mode: {
-        type: String,
-        default: "horizontal",
-        validator: (val) => ["horizontal", "vertical"].indexOf(val) > -1
-      }
+      direction: { default: "horizontal" },
+      mode: { default: "top" }
     },
-    setup(props) {
-      const { sites: sites2 } = useSites("tm");
+    setup(__props) {
+      const props = __props;
+      const { sites: sites2 } = useSites();
       const { value: align } = useAlign();
-      const data = vue.reactive({
-        showTimeout: 50,
-        hideTimeout: 200
-      });
       const menuClass = vue.computed(() => ({
         "as-horizontal": props.mode === "horizontal",
         "as-vertical": props.mode === "vertical"
       }));
-      return {
-        sites: sites2,
-        data,
-        align,
-        menuClass
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createBlock(scrollbar, {
+          class: vue.normalizeClass(["as-menu-container", menuClass.value]),
+          style: vue.normalizeStyle({ justifyContent: vue.unref(align) }),
+          noresize: ""
+        }, {
+          default: vue.withCtx(() => [
+            vue.createElementVNode("ul", _hoisted_1$8, [
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(sites2), (item) => {
+                return vue.openBlock(), vue.createBlock(_sfc_main$f, {
+                  key: item.name,
+                  item,
+                  direction: _ctx.direction,
+                  mode: _ctx.mode
+                }, null, 8, ["item", "direction", "mode"]);
+              }), 128))
+            ])
+          ]),
+          _: 1
+        }, 8, ["class", "style"]);
       };
     }
-  };
-  const _hoisted_1$7 = { class: "as-menu" };
-  function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_menu_item = vue.resolveComponent("menu-item");
-    const _component_scrollbar = vue.resolveComponent("scrollbar");
-    return vue.openBlock(), vue.createBlock(_component_scrollbar, {
-      class: vue.normalizeClass(["as-menu-container", $setup.menuClass]),
-      style: vue.normalizeStyle({ justifyContent: $setup.align }),
-      noresize: ""
-    }, {
-      default: vue.withCtx(() => [
-        vue.createElementVNode("ul", _hoisted_1$7, [
-          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($setup.sites, (item) => {
-            return vue.openBlock(), vue.createBlock(_component_menu_item, {
-              key: item.name,
-              item,
-              mode: $props.mode
-            }, null, 8, ["item", "mode"]);
-          }), 128))
-        ])
-      ]),
-      _: 1
-    }, 8, ["class", "style"]);
-  }
-  const asMenu = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$c]]);
+  });
   const reg = /^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/;
-  function setCssValue(name2, value2, defaultVal) {
-    const el2 = document.getElementById("all-search");
+  function setCssValue(name, value2, defaultVal) {
+    const el2 = getAsRoot();
+    if (!el2) return;
     const formatVal = reg.test(value2) ? value2 : defaultVal;
-    el2.style.setProperty(`--as-${name2}`, formatVal);
+    el2.style.setProperty(`--as-${name}`, formatVal);
   }
   const primaryColor = useConfig({
     name: "primaryColor",
@@ -3072,57 +5385,11 @@
       primaryTextColor
     };
   }
-  const toolbar = [
-    {
-      nameZh: "百度",
-      url: "https://www.baidu.com/s?wd=%s&ie=utf-8"
-    },
-    {
-      nameZh: "百度翻译",
-      url: "https://fanyi.baidu.com/#auto/zh/%s"
-    }
-  ].map((item) => ({
-    ...item,
-    data: {
-      visible: true
-    }
-  }));
-  const sites = vue.ref([]);
-  function getList(val) {
-    if (Array.isArray(val) && val.length > 0) {
-      return val;
-    } else {
-      return toolbar;
-    }
-  }
-  getStorage("toolbar").then((val) => {
-    sites.value = getList(val);
-  }).catch(() => {
-    sites.value = toolbar;
-  });
-  function initToolBar(list2, type) {
-    if (type === "tm") {
-      return list2.filter((item) => item.data && item.data.visible).map((item) => ({
-        nameZh: item.nameZh,
-        url: item.url
-      }));
-    }
-    return list2;
-  }
-  const visible = useConfig({
-    name: "showToolbar",
-    defaultVal: 1,
-    reg: /[1|2]/
-  });
-  function useToolbar(type) {
-    return {
-      visible,
-      list: vue.computed(() => initToolBar(sites.value, type))
-    };
-  }
-  const _sfc_main$b = {
-    name: "overlay",
-    setup(props, { emit }) {
+  const _sfc_main$d = vue.defineComponent({
+    __name: "overlay",
+    emits: ["click"],
+    setup(__props, { emit: __emit }) {
+      const emit = __emit;
       let mouseDownTarget = false;
       let mouseUpTarget = false;
       const onMaskClick = (e) => {
@@ -3137,193 +5404,167 @@
       const onMouseUp = (e) => {
         mouseUpTarget = e.target === e.currentTarget;
       };
-      return {
-        onMouseDown,
-        onMouseUp,
-        onMaskClick
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("div", {
+          class: "as-overlay",
+          onMousedown: onMouseDown,
+          onMouseup: onMouseUp,
+          onClick: onMaskClick
+        }, [
+          vue.renderSlot(_ctx.$slots, "default")
+        ], 32);
       };
     }
-  };
-  function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("div", {
-      class: "as-overlay",
-      onMousedown: _cache[0] || (_cache[0] = (...args) => $setup.onMouseDown && $setup.onMouseDown(...args)),
-      onMouseup: _cache[1] || (_cache[1] = (...args) => $setup.onMouseUp && $setup.onMouseUp(...args)),
-      onClick: _cache[2] || (_cache[2] = (...args) => $setup.onMaskClick && $setup.onMaskClick(...args))
-    }, [
-      vue.renderSlot(_ctx.$slots, "default")
-    ], 32);
+  });
+  const _sfc_main$c = {};
+  const _hoisted_1$7 = { class: "as-open-mode-tip" };
+  function _sfc_render$1(_ctx, _cache) {
+    return vue.openBlock(), vue.createElementBlock("p", _hoisted_1$7, _cache[0] || (_cache[0] = [
+      vue.createTextVNode(" 「主菜单」= 顶部菜单里的分类和网址；「划词」= 选中文字后的工具栏与「更多」弹窗。"),
+      vue.createElementVNode("br", null, null, -1),
+      vue.createTextVNode(" 按住 Ctrl 或用鼠标中键点击，会以上面所选的"),
+      vue.createElementVNode("strong", null, "另一种", -1),
+      vue.createTextVNode("方式打开。 ")
+    ]));
   }
-  const overlay = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$b]]);
-  const _sfc_main$a = {
-    name: "as-radio",
+  const openModeTip = _export_sfc(_sfc_main$c, [["render", _sfc_render$1]]);
+  const _hoisted_1$6 = { class: "as-radio as-radio-animate" };
+  const _hoisted_2$4 = ["value"];
+  const _hoisted_3$2 = { class: "as-radio-label" };
+  const _sfc_main$b = vue.defineComponent({
+    __name: "radio",
     props: {
-      modelValue: {
-        type: [String, Number, Boolean]
-      },
-      label: {
-        type: [String, Number, Boolean],
-        default: ""
-      }
+      modelValue: { type: [String, Number, Boolean] },
+      label: { type: [String, Number, Boolean] }
     },
-    setup(props, ctx) {
+    emits: ["update:modelValue"],
+    setup(__props, { emit: __emit }) {
+      const props = __props;
+      const emit = __emit;
       const model = vue.computed({
         get() {
           return props.modelValue;
         },
         set(value2) {
-          ctx.emit("update:modelValue", value2);
+          emit("update:modelValue", value2);
         }
       });
-      return {
-        model
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("label", _hoisted_1$6, [
+          vue.withDirectives(vue.createElementVNode("input", {
+            type: "radio",
+            value: _ctx.label,
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event)
+          }, null, 8, _hoisted_2$4), [
+            [vue.vModelRadio, model.value]
+          ]),
+          _cache[1] || (_cache[1] = vue.createElementVNode("i", { class: "as-radio-icon" }, null, -1)),
+          vue.createElementVNode("span", _hoisted_3$2, [
+            vue.renderSlot(_ctx.$slots, "default")
+          ])
+        ]);
       };
     }
-  };
-  const _hoisted_1$6 = { class: "as-radio as-radio-animate" };
-  const _hoisted_2$5 = ["value"];
-  const _hoisted_3$2 = /* @__PURE__ */ vue.createElementVNode("i", { class: "as-radio-icon" }, null, -1);
-  const _hoisted_4$1 = { class: "as-radio-label" };
-  function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("label", _hoisted_1$6, [
-      vue.withDirectives(vue.createElementVNode("input", {
-        type: "radio",
-        value: $props.label,
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $setup.model = $event)
-      }, null, 8, _hoisted_2$5), [
-        [vue.vModelRadio, $setup.model]
-      ]),
-      _hoisted_3$2,
-      vue.createElementVNode("span", _hoisted_4$1, [
-        vue.renderSlot(_ctx.$slots, "default")
-      ])
-    ]);
-  }
-  const radio = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$a]]);
-  const _sfc_main$9 = {
-    name: "form-item",
+  });
+  const _hoisted_1$5 = ["textContent"];
+  const _sfc_main$a = vue.defineComponent({
+    __name: "form-item",
     props: {
-      labelWidth: {
-        type: [String, Number],
-        default: 80
-      },
-      label: {
-        type: [String, Number],
-        default: ""
-      }
+      labelWidth: { default: 80 },
+      label: { default: "" }
     },
-    setup(props) {
+    setup(__props) {
+      const props = __props;
       const labelStyle = vue.computed(() => ({
         width: `${props.labelWidth}px`
       }));
       const contentStyle = vue.computed(() => ({
         marginLeft: `${props.labelWidth}px`
       }));
-      return {
-        labelStyle,
-        contentStyle
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("div", null, [
+          vue.createElementVNode("label", {
+            class: "as-label",
+            style: vue.normalizeStyle(labelStyle.value),
+            textContent: vue.toDisplayString(_ctx.label)
+          }, null, 12, _hoisted_1$5),
+          vue.createElementVNode("div", {
+            class: "as-content",
+            style: vue.normalizeStyle(contentStyle.value)
+          }, [
+            vue.renderSlot(_ctx.$slots, "default")
+          ], 4)
+        ]);
       };
     }
-  };
-  const _hoisted_1$5 = ["textContent"];
-  function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("div", null, [
-      vue.createElementVNode("label", {
-        class: "as-label",
-        style: vue.normalizeStyle($setup.labelStyle),
-        textContent: vue.toDisplayString($props.label)
-      }, null, 12, _hoisted_1$5),
-      vue.createElementVNode("div", {
-        class: "as-content",
-        style: vue.normalizeStyle($setup.contentStyle)
-      }, [
-        vue.renderSlot(_ctx.$slots, "default")
-      ], 4)
-    ]);
-  }
-  const formItem = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$9]]);
-  const _sfc_main$8 = {
-    name: "xButton",
+  });
+  const _sfc_main$9 = vue.defineComponent({
+    __name: "button",
     props: {
-      type: {
-        type: String,
-        default: "primary"
-      }
+      type: {}
+    },
+    setup(__props) {
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("button", {
+          class: vue.normalizeClass(["as-button", _ctx.type ? `as-button__${_ctx.type}` : ""])
+        }, [
+          vue.renderSlot(_ctx.$slots, "default")
+        ], 2);
+      };
     }
-  };
-  function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("button", {
-      class: vue.normalizeClass(["as-button", `as-button__${$props.type}`])
-    }, [
-      vue.renderSlot(_ctx.$slots, "default")
-    ], 2);
-  }
-  const button = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$8]]);
-  const _sfc_main$7 = {
-    name: "color",
-    components: {
-      asButton: button
-    },
+  });
+  const _hoisted_1$4 = { class: "as-color-set" };
+  const _hoisted_2$3 = { class: "as-color-label" };
+  const _sfc_main$8 = vue.defineComponent({
+    __name: "color",
     props: {
-      modelValue: {
-        type: [String, Number]
-      }
+      modelValue: {}
     },
-    setup(props, ctx) {
+    emits: ["update:modelValue"],
+    setup(__props, { emit: __emit }) {
+      const props = __props;
+      const emit = __emit;
       const model = vue.computed({
         get() {
-          return props.modelValue;
+          return props.modelValue || "";
         },
         set(value2) {
-          ctx.emit("update:modelValue", value2);
+          emit("update:modelValue", value2);
         }
       });
       const reset = () => {
         model.value = "";
       };
-      return {
-        model,
-        reset
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$4, [
+          vue.createElementVNode("label", _hoisted_2$3, [
+            vue.withDirectives(vue.createElementVNode("input", {
+              class: "input—color",
+              type: "color",
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event)
+            }, null, 512), [
+              [vue.vModelText, model.value]
+            ])
+          ]),
+          vue.createVNode(_sfc_main$9, {
+            class: "reset-btn",
+            type: "text",
+            onClick: reset
+          }, {
+            default: vue.withCtx(() => _cache[1] || (_cache[1] = [
+              vue.createTextVNode(" 重置 ")
+            ])),
+            _: 1
+          })
+        ]);
       };
     }
-  };
-  const _hoisted_1$4 = { class: "as-color-set" };
-  const _hoisted_2$4 = { class: "as-color-label" };
-  function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_asButton = vue.resolveComponent("asButton");
-    return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$4, [
-      vue.createElementVNode("label", _hoisted_2$4, [
-        vue.withDirectives(vue.createElementVNode("input", {
-          class: "input—color",
-          type: "color",
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $setup.model = $event)
-        }, null, 512), [
-          [vue.vModelText, $setup.model]
-        ])
-      ]),
-      vue.createVNode(_component_asButton, {
-        class: "reset-btn",
-        type: "text",
-        onClick: $setup.reset
-      }, {
-        default: vue.withCtx(() => [
-          vue.createTextVNode(" 重置 ")
-        ]),
-        _: 1
-      }, 8, ["onClick"])
-    ]);
-  }
-  const color = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$7]]);
-  const _sfc_main$6 = {
-    name: "side-bar",
-    components: {
-      overlay,
-      asRadio: radio,
-      formItem,
-      color,
-      asButton: button
-    },
-    setup() {
+  });
+  const _hoisted_1$3 = ["href"];
+  const _hoisted_2$2 = ["href"];
+  const _sfc_main$7 = vue.defineComponent({
+    __name: "side-bar",
+    setup(__props) {
       const visible2 = vue.ref(false);
       const open = () => {
         visible2.value = true;
@@ -3331,359 +5572,438 @@
       const onMaskClick = () => {
         visible2.value = false;
       };
-      const { value: mode } = useMode();
+      const { value: mode, direction: direction2 } = useMode();
+      const { menuOpenMode: menuOpenMode2, selectionOpenMode: selectionOpenMode2 } = useOpenMode();
       const { list: alignList, value: align } = useAlign();
       const { primaryColor: primaryColor2, primaryTextColor: primaryTextColor2 } = useColor();
       const { show: show2, options: options2, scrollHide: scrollHide2 } = useSwitchShow();
       const { favicon: favicon2, clearIconCache: clearIconCache2 } = useFavicon();
       const { visible: toolbarVisible } = useToolbar();
-      const { resetSites: resetSites2 } = useSites("tm");
+      const { resetSites: resetSites2 } = useSites();
+      const teleportTarget = getAsMountAnchor();
+      function settingsUrl(route) {
+        return `https://all-search.github.io/all-search${route}`;
+      }
+      function openSettingsPage(event, route) {
+        return;
+      }
+      const menuSettingsUrl = settingsUrl("/config/sites");
+      const toolbarSettingsUrl = settingsUrl("/config/toolbar");
       const hide = () => {
-        show2.value = 2;
+        show2.value = SHOW_STATUS.COLLAPSED;
       };
       function changeScrollHide(e) {
         if (e.target.value === "none") {
-          show2.value = 1;
+          show2.value = SHOW_STATUS.VISIBLE;
         } else {
-          show2.value = 2;
+          show2.value = SHOW_STATUS.COLLAPSED;
         }
       }
-      return {
-        mode,
-        visible: visible2,
-        open,
-        onMaskClick,
-        alignList,
-        align,
-        favicon: favicon2,
-        toolbarVisible,
-        primaryColor: primaryColor2,
-        primaryTextColor: primaryTextColor2,
-        show: show2,
-        options: options2,
-        scrollHide: scrollHide2,
-        clearIconCache: clearIconCache2,
-        resetSites: resetSites2,
-        hide,
-        changeScrollHide
-      };
-    }
-  };
-  const _hoisted_1$3 = /* @__PURE__ */ vue.createElementVNode("header", { class: "header" }, " 全搜 all-search ", -1);
-  const _hoisted_2$3 = /* @__PURE__ */ vue.createElementVNode("footer", null, [
-    /* @__PURE__ */ vue.createElementVNode("a", {
-      class: "link",
-      title: "菜单设置页",
-      href: "https://all-search.github.io/all-search/config/sites",
-      target: "_blank"
-    }, " 菜单设置 "),
-    /* @__PURE__ */ vue.createElementVNode("a", {
-      class: "link",
-      title: "划词工具栏设置页",
-      href: "https://all-search.github.io/all-search/config/toolbar",
-      target: "_blank"
-    }, " 划词工具栏设置 "),
-    /* @__PURE__ */ vue.createElementVNode("a", {
-      class: "link",
-      title: "github",
-      href: "https://github.com/all-search/all-search/issues",
-      target: "_blank"
-    }, " 反馈 ")
-  ], -1);
-  function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_as_radio = vue.resolveComponent("as-radio");
-    const _component_form_item = vue.resolveComponent("form-item");
-    const _component_color = vue.resolveComponent("color");
-    const _component_as_button = vue.resolveComponent("as-button");
-    const _component_overlay = vue.resolveComponent("overlay");
-    return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
-      vue.createElementVNode("div", {
-        class: vue.normalizeClass(["as-setting", $setup.mode])
-      }, [
-        vue.createElementVNode("div", {
-          class: "as-setting-btn",
-          onClick: _cache[0] || (_cache[0] = (...args) => $setup.hide && $setup.hide(...args))
-        }, " 收起 "),
-        vue.createElementVNode("div", {
-          class: "as-setting-btn",
-          onClick: _cache[1] || (_cache[1] = (...args) => $setup.open && $setup.open(...args))
-        }, " 设置 ")
-      ], 2),
-      (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "#all-search" }, [
-        vue.createVNode(vue.Transition, {
-          name: "overlay",
-          appear: ""
-        }, {
-          default: vue.withCtx(() => [
-            vue.withDirectives(vue.createVNode(_component_overlay, { onClick: $setup.onMaskClick }, {
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+          vue.createElementVNode("div", {
+            class: vue.normalizeClass(["as-setting", vue.unref(direction2)])
+          }, [
+            vue.createElementVNode("div", {
+              class: "as-setting-btn",
+              onClick: hide
+            }, " 收起 "),
+            vue.createElementVNode("div", {
+              class: "as-setting-btn",
+              onClick: open
+            }, " 设置 ")
+          ], 2),
+          vue.unref(teleportTarget) ? (vue.openBlock(), vue.createBlock(vue.Teleport, {
+            key: 0,
+            to: vue.unref(teleportTarget)
+          }, [
+            vue.createVNode(vue.Transition, {
+              name: "overlay",
+              appear: ""
+            }, {
               default: vue.withCtx(() => [
-                vue.createVNode(vue.Transition, {
-                  name: "drawer",
-                  appear: ""
-                }, {
+                vue.withDirectives(vue.createVNode(_sfc_main$d, { onClick: onMaskClick }, {
                   default: vue.withCtx(() => [
-                    vue.withDirectives(vue.createElementVNode("div", {
-                      "aria-modal": "true",
-                      role: "dialog",
-                      class: "as-side-bar",
-                      onClick: _cache[12] || (_cache[12] = vue.withModifiers(() => {
-                      }, ["stop"]))
-                    }, [
-                      _hoisted_1$3,
-                      vue.createElementVNode("section", null, [
-                        vue.createVNode(_component_form_item, {
-                          "label-width": "84",
-                          label: "划词工具栏"
-                        }, {
-                          default: vue.withCtx(() => [
-                            vue.createVNode(_component_as_radio, {
-                              label: 1,
-                              modelValue: $setup.toolbarVisible,
-                              "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.toolbarVisible = $event)
+                    vue.createVNode(vue.Transition, {
+                      name: "drawer",
+                      appear: ""
+                    }, {
+                      default: vue.withCtx(() => [
+                        vue.withDirectives(vue.createElementVNode("div", {
+                          "aria-modal": "true",
+                          role: "dialog",
+                          class: "as-side-bar",
+                          onClick: _cache[18] || (_cache[18] = vue.withModifiers(() => {
+                          }, ["stop"]))
+                        }, [
+                          _cache[35] || (_cache[35] = vue.createElementVNode("header", { class: "header" }, " 全搜 all-search ", -1)),
+                          vue.createElementVNode("section", null, [
+                            vue.createVNode(_sfc_main$a, {
+                              "label-width": "84",
+                              label: "划词工具栏"
                             }, {
                               default: vue.withCtx(() => [
-                                vue.createTextVNode("显示 ")
+                                vue.createVNode(_sfc_main$b, {
+                                  label: 1,
+                                  modelValue: vue.unref(toolbarVisible),
+                                  "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => vue.isRef(toolbarVisible) ? toolbarVisible.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[19] || (_cache[19] = [
+                                    vue.createTextVNode("显示 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: 2,
+                                  modelValue: vue.unref(toolbarVisible),
+                                  "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => vue.isRef(toolbarVisible) ? toolbarVisible.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[20] || (_cache[20] = [
+                                    vue.createTextVNode("隐藏 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"])
                               ]),
                               _: 1
-                            }, 8, ["modelValue"]),
-                            vue.createVNode(_component_as_radio, {
-                              label: 2,
-                              modelValue: $setup.toolbarVisible,
-                              "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $setup.toolbarVisible = $event)
+                            }),
+                            vue.createVNode(_sfc_main$a, { label: "方向" }, {
+                              default: vue.withCtx(() => [
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "top",
+                                  modelValue: vue.unref(mode),
+                                  "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[21] || (_cache[21] = [
+                                    vue.createTextVNode("居顶 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "bottom",
+                                  modelValue: vue.unref(mode),
+                                  "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[22] || (_cache[22] = [
+                                    vue.createTextVNode("居底 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "left",
+                                  modelValue: vue.unref(mode),
+                                  "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[23] || (_cache[23] = [
+                                    vue.createTextVNode("居左 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "right",
+                                  modelValue: vue.unref(mode),
+                                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[24] || (_cache[24] = [
+                                    vue.createTextVNode("居右 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            }),
+                            _cache[33] || (_cache[33] = vue.createElementVNode("p", { class: "as-group-title" }, "点击打开方式", -1)),
+                            vue.createVNode(_sfc_main$a, {
+                              label: "主菜单",
+                              "label-width": "64"
                             }, {
                               default: vue.withCtx(() => [
-                                vue.createTextVNode("隐藏 ")
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "same",
+                                  modelValue: vue.unref(menuOpenMode2),
+                                  "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => vue.isRef(menuOpenMode2) ? menuOpenMode2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[25] || (_cache[25] = [
+                                    vue.createTextVNode("当前页 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "new",
+                                  modelValue: vue.unref(menuOpenMode2),
+                                  "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => vue.isRef(menuOpenMode2) ? menuOpenMode2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[26] || (_cache[26] = [
+                                    vue.createTextVNode("新标签页 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"])
                               ]),
                               _: 1
-                            }, 8, ["modelValue"])
-                          ]),
-                          _: 1
-                        }),
-                        vue.createVNode(_component_form_item, { label: "方向" }, {
-                          default: vue.withCtx(() => [
-                            vue.createVNode(_component_as_radio, {
-                              label: "horizontal",
-                              modelValue: $setup.mode,
-                              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $setup.mode = $event)
+                            }),
+                            vue.createVNode(_sfc_main$a, {
+                              label: "划词",
+                              "label-width": "64"
                             }, {
                               default: vue.withCtx(() => [
-                                vue.createTextVNode("横向 ")
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "same",
+                                  modelValue: vue.unref(selectionOpenMode2),
+                                  "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => vue.isRef(selectionOpenMode2) ? selectionOpenMode2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[27] || (_cache[27] = [
+                                    vue.createTextVNode("当前页 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "new",
+                                  modelValue: vue.unref(selectionOpenMode2),
+                                  "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => vue.isRef(selectionOpenMode2) ? selectionOpenMode2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[28] || (_cache[28] = [
+                                    vue.createTextVNode("新标签页 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"])
                               ]),
                               _: 1
-                            }, 8, ["modelValue"]),
-                            vue.createVNode(_component_as_radio, {
-                              label: "vertical",
-                              modelValue: $setup.mode,
-                              "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $setup.mode = $event)
-                            }, {
+                            }),
+                            vue.createVNode(openModeTip),
+                            vue.createVNode(_sfc_main$a, { label: "对齐" }, {
                               default: vue.withCtx(() => [
-                                vue.createTextVNode("竖向 ")
+                                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(alignList), ([key, value2]) => {
+                                  return vue.openBlock(), vue.createBlock(_sfc_main$b, {
+                                    key,
+                                    label: key,
+                                    modelValue: vue.unref(align),
+                                    "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => vue.isRef(align) ? align.value = $event : null)
+                                  }, {
+                                    default: vue.withCtx(() => [
+                                      vue.createTextVNode(vue.toDisplayString(value2), 1)
+                                    ]),
+                                    _: 2
+                                  }, 1032, ["label", "modelValue"]);
+                                }), 128))
                               ]),
                               _: 1
-                            }, 8, ["modelValue"])
-                          ]),
-                          _: 1
-                        }),
-                        vue.createVNode(_component_form_item, { label: "对齐" }, {
-                          default: vue.withCtx(() => [
-                            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($setup.alignList, ([key, value2]) => {
-                              return vue.openBlock(), vue.createBlock(_component_as_radio, {
-                                key,
-                                label: key,
-                                modelValue: $setup.align,
-                                "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $setup.align = $event)
-                              }, {
-                                default: vue.withCtx(() => [
-                                  vue.createTextVNode(vue.toDisplayString(value2), 1)
-                                ]),
-                                _: 2
-                              }, 1032, ["label", "modelValue"]);
-                            }), 128))
-                          ]),
-                          _: 1
-                        }),
-                        vue.createVNode(_component_form_item, { label: "滚动隐藏" }, {
-                          default: vue.withCtx(() => [
-                            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($setup.options, ([key, value2]) => {
-                              return vue.openBlock(), vue.createBlock(_component_as_radio, {
-                                key,
-                                label: key,
-                                modelValue: $setup.scrollHide,
-                                "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $setup.scrollHide = $event),
-                                onChange: $setup.changeScrollHide
-                              }, {
-                                default: vue.withCtx(() => [
-                                  vue.createTextVNode(vue.toDisplayString(value2), 1)
-                                ]),
-                                _: 2
-                              }, 1032, ["label", "modelValue", "onChange"]);
-                            }), 128))
-                          ]),
-                          _: 1
-                        }),
-                        vue.createVNode(_component_form_item, { label: "图标" }, {
-                          default: vue.withCtx(() => [
-                            vue.createVNode(_component_as_radio, {
-                              label: 1,
-                              modelValue: $setup.favicon,
-                              "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $setup.favicon = $event)
-                            }, {
+                            }),
+                            vue.createVNode(_sfc_main$a, { label: "滚动隐藏" }, {
                               default: vue.withCtx(() => [
-                                vue.createTextVNode("显示 ")
+                                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(options2), ([key, value2]) => {
+                                  return vue.openBlock(), vue.createBlock(_sfc_main$b, {
+                                    key,
+                                    label: key,
+                                    modelValue: vue.unref(scrollHide2),
+                                    "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => vue.isRef(scrollHide2) ? scrollHide2.value = $event : null),
+                                    onChange: changeScrollHide
+                                  }, {
+                                    default: vue.withCtx(() => [
+                                      vue.createTextVNode(vue.toDisplayString(value2), 1)
+                                    ]),
+                                    _: 2
+                                  }, 1032, ["label", "modelValue"]);
+                                }), 128))
                               ]),
                               _: 1
-                            }, 8, ["modelValue"]),
-                            vue.createVNode(_component_as_radio, {
-                              label: 2,
-                              modelValue: $setup.favicon,
-                              "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $setup.favicon = $event)
-                            }, {
+                            }),
+                            vue.createVNode(_sfc_main$a, { label: "图标" }, {
                               default: vue.withCtx(() => [
-                                vue.createTextVNode("隐藏 ")
+                                vue.createVNode(_sfc_main$b, {
+                                  label: 1,
+                                  modelValue: vue.unref(favicon2),
+                                  "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[29] || (_cache[29] = [
+                                    vue.createTextVNode("显示 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: 2,
+                                  modelValue: vue.unref(favicon2),
+                                  "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => _cache[30] || (_cache[30] = [
+                                    vue.createTextVNode("隐藏 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["modelValue"])
                               ]),
                               _: 1
-                            }, 8, ["modelValue"])
-                          ]),
-                          _: 1
-                        }),
-                        vue.createVNode(_component_form_item, { label: "主题色" }, {
-                          default: vue.withCtx(() => [
-                            vue.createVNode(_component_color, {
-                              name: "primaryColor",
-                              modelValue: $setup.primaryColor,
-                              "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $setup.primaryColor = $event)
-                            }, null, 8, ["modelValue"])
-                          ]),
-                          _: 1
-                        }),
-                        vue.createVNode(_component_form_item, { label: "文字色" }, {
-                          default: vue.withCtx(() => [
-                            vue.createVNode(_component_color, {
-                              name: "primaryTextColor",
-                              modelValue: $setup.primaryTextColor,
-                              "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $setup.primaryTextColor = $event)
-                            }, null, 8, ["modelValue"])
-                          ]),
-                          _: 1
-                        }),
-                        vue.createVNode(_component_form_item, { label: "图标缓存" }, {
-                          default: vue.withCtx(() => [
-                            vue.createVNode(_component_as_button, {
-                              type: "text",
-                              onClick: $setup.clearIconCache
-                            }, {
+                            }),
+                            vue.createVNode(_sfc_main$a, { label: "主题色" }, {
                               default: vue.withCtx(() => [
-                                vue.createTextVNode(" 清除 ")
+                                vue.createVNode(_sfc_main$8, {
+                                  name: "primaryColor",
+                                  modelValue: vue.unref(primaryColor2),
+                                  "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => vue.isRef(primaryColor2) ? primaryColor2.value = $event : null)
+                                }, null, 8, ["modelValue"])
                               ]),
                               _: 1
-                            }, 8, ["onClick"])
-                          ]),
-                          _: 1
-                        }),
-                        vue.createVNode(_component_form_item, { label: "重置网址" }, {
-                          default: vue.withCtx(() => [
-                            vue.createVNode(_component_as_button, {
-                              type: "text",
-                              onClick: $setup.resetSites
-                            }, {
+                            }),
+                            vue.createVNode(_sfc_main$a, { label: "文字色" }, {
                               default: vue.withCtx(() => [
-                                vue.createTextVNode(" 重置 ")
+                                vue.createVNode(_sfc_main$8, {
+                                  name: "primaryTextColor",
+                                  modelValue: vue.unref(primaryTextColor2),
+                                  "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => vue.isRef(primaryTextColor2) ? primaryTextColor2.value = $event : null)
+                                }, null, 8, ["modelValue"])
                               ]),
                               _: 1
-                            }, 8, ["onClick"])
+                            }),
+                            vue.createVNode(_sfc_main$a, { label: "图标缓存" }, {
+                              default: vue.withCtx(() => [
+                                vue.createVNode(_sfc_main$9, {
+                                  type: "text",
+                                  onClick: vue.unref(clearIconCache2)
+                                }, {
+                                  default: vue.withCtx(() => _cache[31] || (_cache[31] = [
+                                    vue.createTextVNode(" 清除 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["onClick"])
+                              ]),
+                              _: 1
+                            }),
+                            vue.createVNode(_sfc_main$a, { label: "重置网址" }, {
+                              default: vue.withCtx(() => [
+                                vue.createVNode(_sfc_main$9, {
+                                  type: "text",
+                                  onClick: vue.unref(resetSites2)
+                                }, {
+                                  default: vue.withCtx(() => _cache[32] || (_cache[32] = [
+                                    vue.createTextVNode(" 重置 ")
+                                  ])),
+                                  _: 1
+                                }, 8, ["onClick"])
+                              ]),
+                              _: 1
+                            })
                           ]),
-                          _: 1
-                        })
+                          vue.createElementVNode("footer", null, [
+                            vue.createElementVNode("a", {
+                              class: "link",
+                              title: "菜单设置页",
+                              href: vue.unref(menuSettingsUrl),
+                              target: "_blank",
+                              onClick: _cache[16] || (_cache[16] = ($event) => openSettingsPage())
+                            }, " 菜单设置 ", 8, _hoisted_1$3),
+                            vue.createElementVNode("a", {
+                              class: "link",
+                              title: "划词工具栏设置页",
+                              href: vue.unref(toolbarSettingsUrl),
+                              target: "_blank",
+                              onClick: _cache[17] || (_cache[17] = ($event) => openSettingsPage())
+                            }, " 划词工具栏设置 ", 8, _hoisted_2$2),
+                            _cache[34] || (_cache[34] = vue.createElementVNode("a", {
+                              class: "link",
+                              title: "github",
+                              href: "https://github.com/all-search/all-search/issues",
+                              target: "_blank"
+                            }, " 反馈 ", -1))
+                          ])
+                        ], 512), [
+                          [vue.vShow, visible2.value]
+                        ])
                       ]),
-                      _hoisted_2$3
-                    ], 512), [
-                      [vue.vShow, $setup.visible]
-                    ])
+                      _: 1
+                    })
                   ]),
                   _: 1
-                })
+                }, 512), [
+                  [vue.vShow, visible2.value]
+                ])
               ]),
               _: 1
-            }, 8, ["onClick"]), [
-              [vue.vShow, $setup.visible]
-            ])
-          ]),
-          _: 1
-        })
-      ]))
-    ], 64);
-  }
-  const sideBar = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$6]]);
-  const _sfc_main$5 = {
-    name: "hover-btn",
-    setup() {
+            })
+          ], 8, ["to"])) : vue.createCommentVNode("", true)
+        ], 64);
+      };
+    }
+  });
+  const _sfc_main$6 = vue.defineComponent({
+    __name: "hover-btn",
+    setup(__props) {
       const { show: show2 } = useSwitchShow();
       const isMobileVal = isMobile();
       const handleMouseEnter = () => {
         if (!isMobileVal) {
-          show2.value = 1;
+          show2.value = SHOW_STATUS.VISIBLE;
         }
       };
       const handleClick = () => {
         if (isMobileVal) {
-          show2.value = 1;
+          show2.value = SHOW_STATUS.VISIBLE;
         }
       };
-      const { value: mode } = useMode();
-      const className = vue.computed(() => ({
-        "as-hide": show2.value === 2,
-        [`as-hover-btn-${vue.toValue(mode)}`]: true
-      }));
-      return {
-        handleMouseEnter,
-        handleClick,
-        className
+      const { value: mode, direction: direction2 } = useMode();
+      const className = vue.computed(() => {
+        return {
+          "as-hide": show2.value === SHOW_STATUS.COLLAPSED,
+          [`as-hover-btn-${vue.toValue(mode)}`]: true,
+          [`as-hover-btn-${vue.toValue(direction2)}`]: true
+        };
+      });
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("div", {
+          class: vue.normalizeClass(["as-hover-btn", className.value]),
+          onMouseenter: handleMouseEnter,
+          onClick: handleClick
+        }, " All Search ", 34);
       };
     }
-  };
-  function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("div", {
-      class: vue.normalizeClass(["as-hover-btn", $setup.className]),
-      onMouseenter: _cache[0] || (_cache[0] = (...args) => $setup.handleMouseEnter && $setup.handleMouseEnter(...args)),
-      onClick: _cache[1] || (_cache[1] = (...args) => $setup.handleClick && $setup.handleClick(...args))
-    }, " All Search ", 34);
-  }
-  const hoverBtn = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$5], ["__scopeId", "data-v-7c1bb101"]]);
-  const _sfc_main$4 = {
-    name: "iconfont"
-  };
-  const _hoisted_1$2 = { style: { "display": "none" } };
-  const _hoisted_2$2 = /* @__PURE__ */ vue.createStaticVNode('<symbol id="icon-disk" viewBox="0 0 1024 1024"><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z"></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024"><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z"></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024"><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z"></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024"><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z"></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024"><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z"></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024"><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z"></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024"><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z"></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024"><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z"></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024"><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z"></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024"><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z"></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024"><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z"></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024"><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z"></path></symbol><symbol id="icon-more" viewBox="0 0 1024 1024"><path d="M437.333333 224C437.333333 183.466667 471.466667 149.333333 512 149.333333s74.666667 34.133333 74.666667 74.666667S552.533333 298.666667 512 298.666667s-74.666667-34.133333-74.666667-74.666667zM439.466667 512c0-40.533333 34.133333-74.666667 74.666666-74.666667s74.666667 34.133333 74.666667 74.666667-34.133333 74.666667-74.666667 74.666667-74.666667-34.133333-74.666666-74.666667zM437.333333 800c0-40.533333 34.133333-74.666667 74.666667-74.666667s74.666667 34.133333 74.666667 74.666667S552.533333 874.666667 512 874.666667s-74.666667-34.133333-74.666667-74.666667z"></path></symbol><symbol id="icon-scholar" viewBox="0 0 1024 1024"><path d="M306.28571469 698.19428562l205.71428531 102.85714313 205.71428531-102.85714312v-194.97142875l68.57142938-32.61714282v227.58857157a68.57142844 68.57142844 0 0 1-37.89714281 61.32571406l-205.71428625 102.85714312a68.57142844 68.57142844 0 0 1-61.34857125 0l-205.71428626-102.85714312A68.57142844 68.57142844 0 0 1 237.71428531 698.19428562v-225.64571437l64.45714313 30.62857125-147.47428594-70.08a68.57142844 68.57142844 0 0 1-2.35428563-122.6971425L478.17142812 139.95428562a68.57142844 68.57142844 0 0 1 63.56571469 0l325.80571406 170.44571438A68.57142844 68.57142844 0 0 1 900.57142812 393.41714281L900.57142812 626.28571437h-68.57142843v-177.43999968l-292.6171425 139.15428562a68.57142844 68.57142844 0 0 1-58.90285688 0L306.28571469 505.14285687 306.28571469 698.19428562z m203.65714218-497.46285749L184.11428563 371.15428531l325.78285687 154.90285781 325.805715-154.90285781-325.805715-170.42285719z"></path></symbol>', 14);
-  const _hoisted_16 = [
-    _hoisted_2$2
-  ];
-  function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("svg", _hoisted_1$2, _hoisted_16);
-  }
-  const iconfont = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$4]]);
-  function getSelection() {
-    return window.getSelection().toString().trim();
-  }
-  function getSelectionRect() {
-    const selection2 = window.getSelection();
-    if (selection2.rangeCount) {
-      return selection2.getRangeAt(0).getBoundingClientRect();
-    }
-    return null;
-  }
-  function scrollTop() {
-    return document.documentElement.scrollTop || document.body.scrollTop;
-  }
-  function scrollLeft() {
-    return document.documentElement.scrollLeft || document.body.scrollLeft;
-  }
-  const _sfc_main$3 = {
-    name: "selection-bar",
-    components: {
-      favicon,
-      icon
+  });
+  const hoverBtn = _export_sfc(_sfc_main$6, [["__scopeId", "data-v-8eec6b97"]]);
+  const _sfc_main$5 = vue.defineComponent({
+    __name: "layout-manager",
+    props: {
+      mode: {},
+      direction: {},
+      show: { type: Boolean },
+      visible: { type: Boolean }
     },
-    setup(props, ctx) {
+    setup(__props) {
+      const props = __props;
+      const isExpanded = vue.computed(() => props.show === true || props.show === SHOW_STATUS.VISIBLE);
+      const classList = vue.computed(() => [
+        `as-${props.direction}`,
+        `as-${props.mode}`,
+        isExpanded.value ? "as-show" : "as-hide"
+      ]);
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+          vue.withDirectives(vue.createElementVNode("div", {
+            class: vue.normalizeClass(["as-container", classList.value])
+          }, [
+            vue.createVNode(_sfc_main$l, { direction: _ctx.direction }, null, 8, ["direction"]),
+            vue.createVNode(_sfc_main$e, {
+              direction: _ctx.direction,
+              mode: _ctx.mode
+            }, null, 8, ["direction", "mode"]),
+            vue.createVNode(_sfc_main$7)
+          ], 2), [
+            [vue.vShow, _ctx.visible]
+          ]),
+          vue.withDirectives(vue.createVNode(hoverBtn, null, null, 512), [
+            [vue.vShow, _ctx.visible]
+          ])
+        ], 64);
+      };
+    }
+  });
+  const _sfc_main$4 = {};
+  const _hoisted_1$2 = { style: { "display": "none" } };
+  function _sfc_render(_ctx, _cache) {
+    return vue.openBlock(), vue.createElementBlock("svg", _hoisted_1$2, _cache[0] || (_cache[0] = [
+      vue.createStaticVNode('<symbol id="icon-disk" viewBox="0 0 1024 1024"><path d="M722.858667 234.666667a64 64 0 0 1 56.533333 33.984L874.666667 448v256a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V448l95.274667-179.349333A64 64 0 0 1 301.141333 234.666667h421.717334zM810.666667 501.333333H213.333333V704h597.333334v-202.666667zM618.666667 576v64H384v-64h234.666667z m128 0v64h-64v-64h64z m-23.808-277.333333H301.141333l-73.685333 138.666666h569.066667L722.858667 298.666667z"></path></symbol><symbol id="icon-personal" viewBox="0 0 1024 1024"><path d="M490.261333 173.44a49.066667 49.066667 0 0 1 64.064 19.178667l1.664 3.093333 87.850667 177.813333 196.352 28.501334a49.066667 49.066667 0 0 1 29.717333 81.066666l-2.538666 2.645334L725.333333 624l33.536 195.349333a49.066667 49.066667 0 0 1-68.010666 53.269334l-3.157334-1.514667L512 778.858667l-175.701333 92.266666a49.066667 49.066667 0 0 1-71.637334-48.426666l0.469334-3.328L298.666667 624.021333 156.629333 485.76a49.066667 49.066667 0 0 1 23.893334-83.114667l3.285333-0.597333 196.352-28.501333 87.850667-177.813334a49.066667 49.066667 0 0 1 22.250666-22.272z m-67.626666 258.581333l-199.658667 28.992 144.469333 140.650667-34.133333 198.741333L512 706.56l178.688 93.845333-34.133333-198.741333 144.469333-140.650667-199.658667-28.992L512 251.157333l-89.386667 180.864z"></path></symbol><symbol id="icon-shopping" viewBox="0 0 1024 1024"><path d="M330.667 768a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667z m384 0a53.333 53.333 0 1 1 0 106.667 53.333 53.333 0 0 1 0-106.667zM94.763 160h54.741a96 96 0 0 1 92.907 71.787l1.024 4.394 13.205 62.486h0.213L299.733 504l32.491 157.333h402.219l61.653-298.666H313.813l-13.376-64h495.68a64 64 0 0 1 62.678 76.949L797.14 674.283a64 64 0 0 1-62.698 51.05H332.224a64 64 0 0 1-62.677-51.05L208.96 380.864l-0.405 0.085-27.734-131.562a32 32 0 0 0-28.309-25.238l-2.987-0.149H94.741v-64h54.742z"></path></symbol><symbol id="icon-developer" viewBox="0 0 1024 1024"><path d="M541.141333 268.864l61.717334 16.938667-132.394667 482.474666-61.717333-16.938666 132.394666-482.474667zM329.002667 298.666667l44.885333 45.610666-175.36 172.586667 175.04 167.573333-44.266667 46.229334L106.666667 517.504 329.002667 298.666667z m355.882666 0l222.336 218.837333L684.586667 730.666667l-44.266667-46.229334 175.018667-167.573333L640 344.277333 684.885333 298.666667z"></path></symbol><symbol id="icon-image" viewBox="0 0 1024 1024"><path d="M817.365333 213.333333a64 64 0 0 1 64 64v469.333334a64 64 0 0 1-64 64h-597.333333a64 64 0 0 1-64-64V277.333333a64 64 0 0 1 64-64h597.333333z m0 64h-597.333333v469.333334h597.333333V277.333333zM746.666667 371.114667v63.957333c-100.608-1.450667-163.306667 30.293333-193.493334 94.229333l-2.304 5.12-2.858666 6.357334c-44.010667 95.146667-129.088 142.464-249.322667 140.842666v-64c96.234667 1.6 157.930667-32.384 190.933333-103.04l2.538667-5.632 2.624-5.845333c41.664-89.664 127.488-133.333333 251.882667-131.989333z m-397.696-17.237334a42.666667 42.666667 0 1 1 0 85.333334 42.666667 42.666667 0 0 1 0-85.333334z"></path></symbol><symbol id="icon-social" viewBox="0 0 1024 1024"><path d="M617.216 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 72.533333-37.333333 136.32-93.802666 173.269333l168.746666 196.885334A64 64 0 0 1 850.432 853.333333l-101.888 0.021334c11.221333-19.413333 14.293333-42.496 8.746667-64L850.432 789.333333 634.24 537.109333l60.992-39.872a142.869333 142.869333 0 0 0-75.584-262.549333 251.264 251.264 0 0 0-55.424-57.173333A206.976 206.976 0 0 1 617.216 170.666667z m-61.162667 412.757333l140.8 164.266667A64 64 0 0 1 648.213333 853.333333H181.824a64 64 0 0 1-48.597333-105.642666l140.8-164.266667c18.026667 12.373333 37.76 22.442667 58.773333 29.781333L181.824 789.333333h466.410667l-150.997334-176.128c21.034667-7.338667 40.768-17.386667 58.816-29.781333zM415.04 170.666667c114.24 0 206.869333 92.608 206.869333 206.869333 0 114.24-92.629333 206.869333-206.869333 206.869333-114.261333 0-206.869333-92.629333-206.869333-206.869333C208.170667 263.274667 300.778667 170.666667 415.04 170.666667z m0 64a142.869333 142.869333 0 1 0 0 285.738666 142.869333 142.869333 0 0 0 0-285.738666z"></path></symbol><symbol id="icon-news" viewBox="0 0 1024 1024"><path d="M640 170.666667a64 64 0 0 1 64 64v490.666666h-64V234.666667H213.333333v554.666666h597.333334V362.666667h-64v-64h64a64 64 0 0 1 64 64v426.666666a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V234.666667a64 64 0 0 1 64-64h426.666667z m-192 320v64h-170.666667v-64h170.666667z m128-128v64H277.333333v-64h298.666667z"></path></symbol><symbol id="icon-knowledge" viewBox="0 0 1024 1024"><path d="M168.106667 621.44l120.746666 57.962667 223.274667 108.138666 215.317333-104.32 128.768-61.674666a64 64 0 0 1-29.952 84.970666l-286.229333 138.624a64 64 0 0 1-55.808 0L197.994667 706.517333A64 64 0 0 1 168.106667 621.44z m687.829333-133.930667a64 64 0 0 1-29.674667 85.546667L540.010667 711.68a64 64 0 0 1-55.808 0L197.994667 573.056A64 64 0 0 1 166.826667 490.88l317.013333 149.525333 28.288 13.696 286.229333-138.624-0.149333-0.064 57.728-27.882666zM540.032 185.792l286.208 138.602667a64 64 0 0 1 0 115.2l-286.208 138.624a64 64 0 0 1-55.808 0L197.994667 439.594667a64 64 0 0 1 0-115.2L484.224 185.813333a64 64 0 0 1 55.808 0z m-27.904 57.6l-286.229333 138.602667 286.229333 138.624 286.229333-138.624-286.229333-138.602667z"></path></symbol><symbol id="icon-music" viewBox="0 0 1024 1024"><path d="M515.562667 232.91733299c159.061333 0 288 128.938667 288 288v22.250667A85.354667 85.354667 0 0 1 874.666667 627.30666699v93.994666a85.333333 85.333333 0 0 1-85.333334 85.333334h-116.138666V541.97333299h66.346666v-21.056c0-121.685333-97.002667-220.693333-217.92-223.914666l-6.058666-0.085334h-7.125334c-123.712 0-224 100.288-224 224v21.056h66.368v264.661334H234.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-93.994666a85.354667 85.354667 0 0 1 71.104-84.138667v-22.250667c0-159.061333 128.938667-288 288-288z m27.52 313.813334v256h-62.165334v-256h62.165334z m103.616 42.666666v192H584.533333v-192h62.165334z m-207.232 0v192h-62.165334v-192H439.466667z m-152.661334 16.576H234.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v93.994666a21.333333 21.333333 0 0 0 21.333334 21.333334h52.138666v-136.661334z m502.528 0h-52.138666v136.661334H789.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-93.994666a21.333333 21.333333 0 0 0-21.333334-21.333334z"></path></symbol><symbol id="icon-translate" viewBox="0 0 1024 1024"><path d="M874.666667 192.00000033v64h-42.666667v426.666666c0 35.349333-30.72 64-68.565333 64h-149.354667l113.749333 128h-85.632l-113.770666-128h-11.562667l-113.749333 128h-85.610667l113.728-128h-170.666667C222.72 746.66666633 192 718.01600033 192 682.66666633V256.00000033H149.333333V192.00000033h725.333334z m-106.666667 64H256v426.666666h512V256.00000033zM405.333333 490.66666633v64h-64v-64h64z m277.333334 0v64H448v-64h234.666667z m0-106.666666v64H448v-64h234.666667z m-277.333334 0v64h-64v-64h64z"></path></symbol><symbol id="icon-video" viewBox="0 0 1024 1024"><path d="M658.069333 234.66666667a64 64 0 0 1 64 64l-0.021333 33.664 49.28-38.4A64 64 0 0 1 874.666667 344.44799967v338.368a64 64 0 0 1-103.338667 50.474667l-49.28-38.4v26.496a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V298.66666667a64 64 0 0 1 64-64h444.736z m0 64H213.333333v422.698667h444.736l-0.128-157.589334L810.666667 682.79466667V344.42666667l-152.704 118.933333 0.106666-164.693333zM384 375.97866667a42.666667 42.666667 0 0 1 22.741333 6.570667l133.866667 84.330666a42.666667 42.666667 0 0 1 0.32 72l-133.866667 86.016A42.666667 42.666667 0 0 1 341.333333 588.99199967v-170.346666a42.666667 42.666667 0 0 1 42.666667-42.666667z m21.333333 81.322667v92.629333l72.789334-46.762667L405.333333 457.30133367z"></path></symbol><symbol id="icon-search" viewBox="0 0 1024 1024"><path d="M469.333 192c153.174 0 277.334 124.16 277.334 277.333 0 68.054-24.534 130.411-65.216 178.688L846.336 818.24l-48.341 49.877L630.4 695.125a276.053 276.053 0 0 1-161.067 51.542C316.16 746.667 192 622.507 192 469.333S316.16 192 469.333 192z m0 64C351.51 256 256 351.51 256 469.333s95.51 213.334 213.333 213.334 213.334-95.51 213.334-213.334S587.157 256 469.333 256z"></path></symbol><symbol id="icon-more" viewBox="0 0 1024 1024"><path d="M437.333333 224C437.333333 183.466667 471.466667 149.333333 512 149.333333s74.666667 34.133333 74.666667 74.666667S552.533333 298.666667 512 298.666667s-74.666667-34.133333-74.666667-74.666667zM439.466667 512c0-40.533333 34.133333-74.666667 74.666666-74.666667s74.666667 34.133333 74.666667 74.666667-34.133333 74.666667-74.666667 74.666667-74.666667-34.133333-74.666666-74.666667zM437.333333 800c0-40.533333 34.133333-74.666667 74.666667-74.666667s74.666667 34.133333 74.666667 74.666667S552.533333 874.666667 512 874.666667s-74.666667-34.133333-74.666667-74.666667z"></path></symbol><symbol id="icon-scholar" viewBox="0 0 1024 1024"><path d="M306.28571469 698.19428562l205.71428531 102.85714313 205.71428531-102.85714312v-194.97142875l68.57142938-32.61714282v227.58857157a68.57142844 68.57142844 0 0 1-37.89714281 61.32571406l-205.71428625 102.85714312a68.57142844 68.57142844 0 0 1-61.34857125 0l-205.71428626-102.85714312A68.57142844 68.57142844 0 0 1 237.71428531 698.19428562v-225.64571437l64.45714313 30.62857125-147.47428594-70.08a68.57142844 68.57142844 0 0 1-2.35428563-122.6971425L478.17142812 139.95428562a68.57142844 68.57142844 0 0 1 63.56571469 0l325.80571406 170.44571438A68.57142844 68.57142844 0 0 1 900.57142812 393.41714281L900.57142812 626.28571437h-68.57142843v-177.43999968l-292.6171425 139.15428562a68.57142844 68.57142844 0 0 1-58.90285688 0L306.28571469 505.14285687 306.28571469 698.19428562z m203.65714218-497.46285749L184.11428563 371.15428531l325.78285687 154.90285781 325.805715-154.90285781-325.805715-170.42285719z"></path></symbol>', 14)
+    ]));
+  }
+  const iconfont = _export_sfc(_sfc_main$4, [["render", _sfc_render]]);
+  const _sfc_main$3 = vue.defineComponent({
+    __name: "selection-bar",
+    emits: ["open-dialog"],
+    setup(__props, { emit: __emit }) {
+      const emit = __emit;
       const {
         visible: toolbarVisible,
         list: list2
@@ -3698,52 +6018,97 @@
         top: `${styleObj.top - 20}px`,
         left: `${styleObj.left}px`
       }));
-      const selectionShort = vue.computed(() => {
-        if (selection.value.length > 12) {
-          return `${selection.value.substr(0, 12)}...`;
-        } else {
-          return selection.value;
+      function getSelectionText() {
+        var _a;
+        return ((_a = window.getSelection()) == null ? void 0 : _a.toString().trim()) || "";
+      }
+      function getInputSelection() {
+        const el2 = document.activeElement;
+        const isField = el2 instanceof HTMLInputElement || el2 instanceof HTMLTextAreaElement;
+        if (!el2 || !isField) {
+          return { text: "", rect: null };
         }
-      });
+        const start = el2.selectionStart;
+        const end = el2.selectionEnd;
+        if (typeof start !== "number" || typeof end !== "number" || start === end) {
+          return { text: "", rect: null };
+        }
+        const text = el2.value.slice(Math.min(start, end), Math.max(start, end)).trim();
+        if (!text) {
+          return { text: "", rect: null };
+        }
+        return { text, rect: el2.getBoundingClientRect() };
+      }
+      function getSelectionRect() {
+        const selection2 = window.getSelection();
+        if (selection2 && selection2.rangeCount) {
+          return selection2.getRangeAt(0).getBoundingClientRect();
+        }
+        return null;
+      }
+      function readSelection() {
+        const text = getSelectionText();
+        if (text) {
+          return { text, rect: getSelectionRect() };
+        }
+        return getInputSelection();
+      }
+      function scrollTop() {
+        return document.documentElement.scrollTop || document.body.scrollTop;
+      }
+      function scrollLeft() {
+        return document.documentElement.scrollLeft || document.body.scrollLeft;
+      }
       let selectStart = false;
+      let lastRect = null;
       function changeVisible(val) {
-        visible2.value = Boolean(val);
+        visible2.value = val;
         vue.nextTick(() => {
           if (!val) {
             return;
           }
-          if (!vue.unref(toolbarEle)) {
+          const toolbarEleValue = vue.unref(toolbarEle);
+          if (!toolbarEleValue) {
             return;
           }
-          const toolbarClientRect = vue.unref(toolbarEle).getBoundingClientRect();
+          const toolbarClientRect = toolbarEleValue.getBoundingClientRect();
           const height = toolbarClientRect.bottom - toolbarClientRect.top;
-          const selectionRect = getSelectionRect();
-          if (selectionRect) {
-            const { x, right, left, top } = selectionRect;
-            styleObj.top = scrollTop() + top - height;
-            styleObj.left = scrollLeft() + x + (right - left) / 2 - toolbarClientRect.width / 2;
+          if (lastRect) {
+            const { x, right, left, top } = lastRect;
+            styleObj.top = Math.round(scrollTop() + top - height);
+            styleObj.left = Math.round(scrollLeft() + x + (right - left) / 2 - toolbarClientRect.width / 2);
           }
         });
       }
-      function isToolbarContains(el2) {
-        const toolbarEleValue = vue.unref(toolbarEle);
-        if (toolbarEleValue) {
-          return toolbarEleValue.contains(el2);
-        } else {
-          return false;
-        }
+      function eventPath(e) {
+        return typeof e.composedPath === "function" ? e.composedPath() : [];
+      }
+      function isInApp2(e) {
+        const root = getAsRoot();
+        if (!root) return false;
+        if (eventPath(e).includes(root)) return true;
+        return e.target instanceof Node && root.contains(e.target);
+      }
+      function isInToolbar(e) {
+        const el2 = vue.unref(toolbarEle);
+        return !!el2 && eventPath(e).includes(el2);
       }
       window.addEventListener("mousedown", function(e) {
-        const include = e.target && getAsRoot().contains(e.target);
-        if (!include) {
+        if (!isInApp2(e)) {
           changeVisible(false);
+        }
+        const target = e.target;
+        if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+          selectStart = true;
         }
       }, true);
       window.addEventListener("mouseup", function(e) {
-        const include = e.target && getAsRoot().contains(e.target);
-        const isToolbar = e.target && isToolbarContains(e.target);
+        const include = isInApp2(e);
+        const isToolbar = isInToolbar(e);
         if (!include) {
-          selection.value = getSelection();
+          const { text, rect } = readSelection();
+          selection.value = text;
+          lastRect = rect;
           changeVisible(!!selection.value && selectStart);
         } else if (!isToolbar) {
           selection.value = "";
@@ -3752,186 +6117,108 @@
         }
         selectStart = false;
       }, true);
-      document.addEventListener("selectionchange", function() {
-      }, true);
       document.addEventListener("selectstart", function() {
         selectStart = true;
       }, false);
-      function handleClick(item, newWin) {
+      const altMode = vue.computed(() => otherOpenMode(selectionOpenMode.value));
+      function handleClick(item, mode) {
         const keyword = selection.value;
-        if (newWin) {
-          window.open(item.url.replace("%s", keyword));
-        } else {
-          window.location.href = item.url.replace("%s", keyword);
-        }
+        const url = item.url.replace("%s", keyword);
+        openUrl(url, mode || selectionOpenMode.value);
       }
       function openMainDialog() {
-        ctx.emit("open-dialog", selection.value);
+        emit("open-dialog", selection.value);
       }
-      return {
-        toolbarVisible,
-        list: list2,
-        visible: visible2,
-        toolbarEle,
-        style,
-        selectionShort,
-        handleClick,
-        openMainDialog
+      return (_ctx, _cache) => {
+        return vue.unref(toolbarVisible) === 1 ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", {
+          key: 0,
+          class: "bar-container",
+          ref_key: "toolbarEle",
+          ref: toolbarEle,
+          style: vue.normalizeStyle(style.value)
+        }, [
+          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(list2), (item, i) => {
+            return vue.openBlock(), vue.createBlock(_sfc_main$g, {
+              class: "tool-bar-item",
+              key: i,
+              url: item.url,
+              title: item.nameZh,
+              onClick: [
+                vue.withModifiers(($event) => handleClick(item), ["exact"]),
+                vue.withModifiers(($event) => handleClick(item, altMode.value), ["ctrl", "exact"])
+              ],
+              onMouseup: vue.withModifiers(($event) => handleClick(item, altMode.value), ["middle", "exact"])
+            }, null, 8, ["url", "title", "onClick", "onMouseup"]);
+          }), 128)),
+          vue.createElementVNode("div", {
+            class: "tool-bar-item",
+            onClick: openMainDialog
+          }, [
+            vue.createVNode(_sfc_main$h, {
+              class: "as-more-icon",
+              name: "more"
+            })
+          ])
+        ], 4)), [
+          [vue.vShow, visible2.value]
+        ]) : vue.createCommentVNode("", true);
       };
     }
-  };
-  function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_favicon = vue.resolveComponent("favicon");
-    const _component_icon = vue.resolveComponent("icon");
-    return $setup.toolbarVisible === 1 ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", {
-      key: 0,
-      class: "bar-container",
-      ref: "toolbarEle",
-      style: vue.normalizeStyle($setup.style)
-    }, [
-      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($setup.list, (item, i) => {
-        return vue.openBlock(), vue.createBlock(_component_favicon, {
-          class: "tool-bar-item",
-          key: i,
-          url: item.url,
-          title: item.nameZh,
-          onClick: [
-            vue.withModifiers(($event) => $setup.handleClick(item, true), ["exact"]),
-            vue.withModifiers(($event) => $setup.handleClick(item, false), ["ctrl", "exact"])
-          ],
-          onMouseup: vue.withModifiers(($event) => $setup.handleClick(item, false), ["middle", "exact"])
-        }, null, 8, ["url", "title", "onClick", "onMouseup"]);
-      }), 128)),
-      vue.createElementVNode("div", {
-        class: "tool-bar-item",
-        onClick: _cache[0] || (_cache[0] = (...args) => $setup.openMainDialog && $setup.openMainDialog(...args))
-      }, [
-        vue.createVNode(_component_icon, {
-          class: "as-more-icon",
-          name: "more"
-        })
-      ])
-    ], 4)), [
-      [vue.vShow, $setup.visible]
-    ]) : vue.createCommentVNode("", true);
-  }
-  const selectionBar = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$3], ["__scopeId", "data-v-7c91e3b8"]]);
-  const _sfc_main$2 = {
-    name: "as-dialog",
-    model: {
-      prop: "visible",
-      event: "change"
-    },
+  });
+  const selectionBar = _export_sfc(_sfc_main$3, [["__scopeId", "data-v-b687b5a5"]]);
+  const _hoisted_1$1 = { class: "as-dialog" };
+  const _hoisted_2$1 = { class: "as-dialog__header" };
+  const _hoisted_3$1 = { class: "as-dialog__body" };
+  const _sfc_main$2 = vue.defineComponent({
+    __name: "dialog",
     props: {
-      visible: {
-        type: Boolean,
-        default: false
-      },
-      title: {
-        type: String,
-        default: ""
-      },
-      width: {
-        type: String,
-        default: ""
-      }
+      visible: { type: Boolean },
+      title: {},
+      width: {}
     },
-    setup(props, ctx) {
+    emits: ["update:visible"],
+    setup(__props, { emit: __emit }) {
+      const props = __props;
+      const emit = __emit;
       const style = vue.computed(() => {
-        const obj = {};
+        const obj2 = {};
         if (props.width) {
-          obj.width = props.width;
+          obj2.width = props.width;
         }
-        return obj;
+        return obj2;
       });
       const localVisible = vue.computed({
-        get: () => props.visible,
+        get: () => !!props.visible,
         set: (value2) => {
-          ctx.emit("update:visible", value2);
+          emit("update:visible", value2);
         }
       });
       const handleClose = () => {
         localVisible.value = false;
       };
-      return {
-        style,
-        handleClose,
-        localVisible
+      return (_ctx, _cache) => {
+        return vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", _hoisted_1$1, [
+          vue.createElementVNode("div", {
+            class: "as-dialog-container",
+            style: vue.normalizeStyle(style.value)
+          }, [
+            vue.createElementVNode("div", _hoisted_2$1, [
+              vue.renderSlot(_ctx.$slots, "header")
+            ]),
+            vue.createElementVNode("div", _hoisted_3$1, [
+              vue.renderSlot(_ctx.$slots, "default")
+            ])
+          ], 4),
+          vue.createElementVNode("div", {
+            class: "as-dialog__mask",
+            onClick: handleClose
+          })
+        ], 512)), [
+          [vue.vShow, localVisible.value]
+        ]);
       };
     }
-  };
-  const _hoisted_1$1 = { class: "as-dialog" };
-  const _hoisted_2$1 = { class: "as-dialog__header" };
-  const _hoisted_3$1 = { class: "as-dialog__body" };
-  function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", _hoisted_1$1, [
-      vue.createElementVNode("div", {
-        class: "as-dialog-container",
-        style: vue.normalizeStyle($setup.style)
-      }, [
-        vue.createElementVNode("div", _hoisted_2$1, [
-          vue.renderSlot(_ctx.$slots, "header")
-        ]),
-        vue.createElementVNode("div", _hoisted_3$1, [
-          vue.renderSlot(_ctx.$slots, "default")
-        ])
-      ], 4),
-      vue.createElementVNode("div", {
-        class: "as-dialog__mask",
-        onClick: _cache[0] || (_cache[0] = (...args) => $setup.handleClose && $setup.handleClose(...args))
-      })
-    ], 512)), [
-      [vue.vShow, $setup.localVisible]
-    ]);
-  }
-  const asDialog = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2]]);
-  const _sfc_main$1 = {
-    name: "search-dialog",
-    components: {
-      asDialog,
-      icon,
-      favicon,
-      scrollbar
-    },
-    props: {
-      visible: {
-        type: Boolean,
-        default: false
-      },
-      keyword: {
-        type: [String, Number],
-        default: ""
-      }
-    },
-    emits: ["update:visible"],
-    setup(props, ctx) {
-      const localVisible = vue.computed({
-        get: () => props.visible,
-        set: (value2) => {
-          ctx.emit("update:visible", value2);
-        }
-      });
-      vue.watch(() => props.visible, (val) => {
-        inputValue.value = val ? props.keyword : "";
-      });
-      const inputValue = vue.ref("");
-      const { sites: sites2 } = useSites("tm");
-      const handleClick = (item, newWin) => {
-        const keyword = inputValue.value;
-        if (newWin) {
-          window.open(item.url.replace("%s", keyword));
-        } else {
-          window.location.href = item.url.replace("%s", keyword);
-        }
-      };
-      return {
-        localVisible,
-        sites: sites2,
-        inputValue,
-        handleClick
-      };
-    }
-  };
+  });
   const _hoisted_1 = { class: "se-header" };
   const _hoisted_2 = { class: "se-input-box" };
   const _hoisted_3 = { class: "se-container" };
@@ -3940,194 +6227,170 @@
   const _hoisted_6 = { class: "cate-list" };
   const _hoisted_7 = ["onClick", "onMouseup"];
   const _hoisted_8 = ["textContent"];
-  function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_icon = vue.resolveComponent("icon");
-    const _component_favicon = vue.resolveComponent("favicon");
-    const _component_scrollbar = vue.resolveComponent("scrollbar");
-    const _component_as_dialog = vue.resolveComponent("as-dialog");
-    return vue.openBlock(), vue.createBlock(_component_as_dialog, {
-      visible: $setup.localVisible,
-      "onUpdate:visible": _cache[1] || (_cache[1] = ($event) => $setup.localVisible = $event)
-    }, {
-      header: vue.withCtx(() => [
-        vue.createElementVNode("div", _hoisted_1, [
-          vue.createElementVNode("div", _hoisted_2, [
-            $setup.localVisible ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("input", {
-              key: 0,
-              autofocus: "",
-              autocomplete: "off",
-              class: "se-input",
-              placeholder: "输入并搜索",
-              type: "text",
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $setup.inputValue = $event)
-            }, null, 512)), [
-              [vue.vModelText, $setup.inputValue]
-            ]) : vue.createCommentVNode("", true)
-          ])
-        ])
-      ]),
-      default: vue.withCtx(() => [
-        vue.createVNode(_component_scrollbar, {
-          class: "se-scrollbar-container",
-          noresize: ""
+  const _sfc_main$1 = vue.defineComponent({
+    __name: "search-dialog",
+    props: {
+      visible: { type: Boolean, default: false },
+      keyword: { default: "" }
+    },
+    emits: ["update:visible"],
+    setup(__props, { emit: __emit }) {
+      const props = __props;
+      const emit = __emit;
+      const localVisible = vue.computed({
+        get: () => !!props.visible,
+        set: (value2) => {
+          emit("update:visible", value2);
+        }
+      });
+      vue.watch(() => props.visible, (val) => {
+        inputValue.value = val ? String(props.keyword) : "";
+      });
+      const inputValue = vue.ref("");
+      const { sites: sites2 } = useSites();
+      const altMode = vue.computed(() => otherOpenMode(selectionOpenMode.value));
+      const handleClick = (item, mode) => {
+        const keyword = inputValue.value;
+        const url = item.url.replace("%s", keyword);
+        openUrl(url, mode || selectionOpenMode.value);
+      };
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createBlock(_sfc_main$2, {
+          visible: localVisible.value,
+          "onUpdate:visible": _cache[1] || (_cache[1] = ($event) => localVisible.value = $event)
         }, {
-          default: vue.withCtx(() => [
-            vue.createElementVNode("div", _hoisted_3, [
-              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($setup.sites, (item) => {
-                return vue.openBlock(), vue.createElementBlock("div", {
-                  key: item.name,
-                  class: "cate-container"
-                }, [
-                  vue.createElementVNode("p", _hoisted_4, [
-                    vue.createVNode(_component_icon, {
-                      name: item.name
-                    }, null, 8, ["name"]),
-                    vue.createElementVNode("span", {
-                      textContent: vue.toDisplayString(item.nameZh)
-                    }, null, 8, _hoisted_5)
-                  ]),
-                  vue.createElementVNode("ul", _hoisted_6, [
-                    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(item.list, (child, i) => {
-                      return vue.openBlock(), vue.createElementBlock("li", {
-                        key: `${item.name}_${i}`,
-                        class: "cate-item"
-                      }, [
-                        vue.createElementVNode("a", {
-                          href: "javascript:void 0",
-                          onClick: [
-                            vue.withModifiers(($event) => $setup.handleClick(child), ["exact"]),
-                            vue.withModifiers(($event) => $setup.handleClick(child, true), ["ctrl", "exact"])
-                          ],
-                          onMouseup: vue.withModifiers(($event) => $setup.handleClick(child, true), ["middle", "exact"])
-                        }, [
-                          vue.createVNode(_component_favicon, {
-                            class: "as-url-icon",
-                            url: child.url,
-                            icon: child.icon
-                          }, null, 8, ["url", "icon"]),
-                          vue.createElementVNode("p", {
-                            class: "as-subMenu-text",
-                            textContent: vue.toDisplayString(child.nameZh)
-                          }, null, 8, _hoisted_8)
-                        ], 40, _hoisted_7)
-                      ]);
-                    }), 128))
-                  ])
-                ]);
-              }), 128))
+          header: vue.withCtx(() => [
+            vue.createElementVNode("div", _hoisted_1, [
+              vue.createElementVNode("div", _hoisted_2, [
+                localVisible.value ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("input", {
+                  key: 0,
+                  autofocus: "",
+                  autocomplete: "off",
+                  class: "se-input",
+                  placeholder: "输入并搜索",
+                  type: "text",
+                  "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => inputValue.value = $event)
+                }, null, 512)), [
+                  [vue.vModelText, inputValue.value]
+                ]) : vue.createCommentVNode("", true)
+              ])
             ])
           ]),
+          default: vue.withCtx(() => [
+            vue.createVNode(scrollbar, {
+              class: "se-scrollbar-container",
+              noresize: ""
+            }, {
+              default: vue.withCtx(() => [
+                vue.createElementVNode("div", _hoisted_3, [
+                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(sites2), (item) => {
+                    return vue.openBlock(), vue.createElementBlock("div", {
+                      key: item.name,
+                      class: "cate-container"
+                    }, [
+                      vue.createElementVNode("p", _hoisted_4, [
+                        vue.createVNode(_sfc_main$h, {
+                          name: item.name
+                        }, null, 8, ["name"]),
+                        vue.createElementVNode("span", {
+                          textContent: vue.toDisplayString(item.nameZh)
+                        }, null, 8, _hoisted_5)
+                      ]),
+                      vue.createElementVNode("ul", _hoisted_6, [
+                        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(item.list, (child, i) => {
+                          return vue.openBlock(), vue.createElementBlock("li", {
+                            key: `${item.name}_${i}`,
+                            class: "cate-item"
+                          }, [
+                            vue.createElementVNode("a", {
+                              href: "javascript:void 0",
+                              onClick: [
+                                vue.withModifiers(($event) => handleClick(child), ["exact"]),
+                                vue.withModifiers(($event) => handleClick(child, altMode.value), ["ctrl", "exact"])
+                              ],
+                              onMouseup: vue.withModifiers(($event) => handleClick(child, altMode.value), ["middle", "exact"])
+                            }, [
+                              vue.createVNode(_sfc_main$g, {
+                                class: "as-url-icon",
+                                url: child.url,
+                                icon: child.icon
+                              }, null, 8, ["url", "icon"]),
+                              vue.createElementVNode("p", {
+                                class: "as-subMenu-text",
+                                textContent: vue.toDisplayString(child.nameZh)
+                              }, null, 8, _hoisted_8)
+                            ], 40, _hoisted_7)
+                          ]);
+                        }), 128))
+                      ])
+                    ]);
+                  }), 128))
+                ])
+              ]),
+              _: 1
+            })
+          ]),
           _: 1
-        })
-      ]),
-      _: 1
-    }, 8, ["visible"]);
-  }
-  const searchDialog = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
-  const _sfc_main = {
-    name: "all-search",
-    components: {
-      logo,
-      asMenu,
-      sideBar,
-      hoverBtn,
-      iconfont,
-      selectionBar,
-      searchDialog
-    },
-    setup() {
-      const { isFullScreen: isFullScreen2 } = useFullScreen();
-      const { value: mode } = useMode();
-      const { show: show2 } = useSwitchShow();
-      const { visible: toolbarVisible } = useToolbar("tm");
-      const classList = vue.computed(() => [
-        `as-${vue.toValue(mode)}`,
-        vue.toValue(show2) === 1 ? "as-show" : "as-hide"
-      ]);
-      const visible2 = vue.computed(() => {
-        return !site.invisible && !vue.unref(isFullScreen2);
-      });
-      vue.watchEffect(() => {
-        const remove = site.invisible || site.disabled || vue.toValue(show2) === 2;
-        changeBodyStyle(vue.toValue(mode), remove);
-      });
-      let isInit = false;
-      function init2(site2) {
-        if (isInit || site2.disabled) {
-          return;
-        }
-        protectStyle();
-        initSpecialStyle();
-        addCustomStyle(vue.toValue(mode), site2);
-        isInit = true;
-      }
-      vue.watch(site, (newSite) => {
-        init2(newSite);
-      }, {
-        immediate: true
-      });
-      const dialogVisible = vue.ref(false);
-      const keyword = vue.ref("");
-      function openDialog(text) {
-        keyword.value = text;
-        dialogVisible.value = true;
-      }
-      const { disabled } = vue.toRefs(site);
-      return {
+        }, 8, ["visible"]);
+      };
+    }
+  });
+  const _sfc_main = vue.defineComponent({
+    __name: "index",
+    setup(__props) {
+      const {
         disabled,
         mode,
-        classList,
+        show: show2,
         visible: visible2,
         dialogVisible,
         openDialog,
         keyword,
-        toolbarVisible
+        toolbarVisible,
+        direction: direction2
+      } = useApp();
+      const { isDark } = useTheme();
+      const applyTheme = () => {
+        var _a;
+        (_a = getAsMountAnchor()) == null ? void 0 : _a.classList.toggle("as-theme-dark", isDark.value);
+      };
+      vue.watch(isDark, applyTheme, { immediate: true, flush: "post" });
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+          !vue.unref(disabled) && vue.unref(mode) ? (vue.openBlock(), vue.createBlock(_sfc_main$5, {
+            key: 0,
+            mode: vue.unref(mode),
+            direction: vue.unref(direction2),
+            show: vue.unref(show2),
+            visible: vue.unref(visible2)
+          }, null, 8, ["mode", "direction", "show", "visible"])) : vue.createCommentVNode("", true),
+          vue.unref(toolbarVisible) === 1 ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
+            vue.createVNode(selectionBar, { onOpenDialog: vue.unref(openDialog) }, null, 8, ["onOpenDialog"]),
+            vue.createVNode(_sfc_main$1, {
+              keyword: vue.unref(keyword),
+              visible: vue.unref(dialogVisible),
+              "onUpdate:visible": _cache[0] || (_cache[0] = ($event) => vue.isRef(dialogVisible) ? dialogVisible.value = $event : null)
+            }, null, 8, ["keyword", "visible"])
+          ], 64)) : vue.createCommentVNode("", true),
+          !vue.unref(disabled) || vue.unref(toolbarVisible) === 1 ? (vue.openBlock(), vue.createBlock(iconfont, { key: 2 })) : vue.createCommentVNode("", true)
+        ], 64);
       };
     }
-  };
-  function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_logo = vue.resolveComponent("logo");
-    const _component_as_menu = vue.resolveComponent("as-menu");
-    const _component_side_bar = vue.resolveComponent("side-bar");
-    const _component_hoverBtn = vue.resolveComponent("hoverBtn");
-    const _component_selection_bar = vue.resolveComponent("selection-bar");
-    const _component_search_dialog = vue.resolveComponent("search-dialog");
-    const _component_iconfont = vue.resolveComponent("iconfont");
-    return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
-      !$setup.disabled ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
-        vue.withDirectives(vue.createElementVNode("div", {
-          style: { "opacity": "0" },
-          class: vue.normalizeClass(["as-container", $setup.classList])
-        }, [
-          vue.createVNode(_component_logo, { mode: $setup.mode }, null, 8, ["mode"]),
-          vue.createVNode(_component_as_menu, { mode: $setup.mode }, null, 8, ["mode"]),
-          vue.createVNode(_component_side_bar)
-        ], 2), [
-          [vue.vShow, $setup.visible]
-        ]),
-        vue.withDirectives(vue.createVNode(_component_hoverBtn, null, null, 512), [
-          [vue.vShow, $setup.visible]
-        ])
-      ], 64)) : vue.createCommentVNode("", true),
-      $setup.toolbarVisible === 1 ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
-        vue.createVNode(_component_selection_bar, { onOpenDialog: $setup.openDialog }, null, 8, ["onOpenDialog"]),
-        vue.createVNode(_component_search_dialog, {
-          keyword: $setup.keyword,
-          visible: $setup.dialogVisible,
-          "onUpdate:visible": _cache[0] || (_cache[0] = ($event) => $setup.dialogVisible = $event)
-        }, null, 8, ["keyword", "visible"])
-      ], 64)) : vue.createCommentVNode("", true),
-      !$setup.disabled || $setup.toolbarVisible === 1 ? (vue.openBlock(), vue.createBlock(_component_iconfont, { key: 2 })) : vue.createCommentVNode("", true)
-    ], 64);
+  });
+  const globalCss = '@charset "UTF-8";#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}all-search-ui.as-host-hide+body,#all-search.as-host-hide+body{margin:0!important}all-search-ui.as-host-hide+body [data-as-margin-top],#all-search.as-host-hide+body [data-as-margin-top]{margin-top:0!important}all-search-ui.as-host-hide+body [data-as-transform],#all-search.as-host-hide+body [data-as-transform]{transform:none!important}all-search-ui.as-host-top.as-host-show+body [data-as-margin-top],#all-search.as-host-top.as-host-show+body [data-as-margin-top]{margin-top:30px!important}all-search-ui.as-host-top.as-host-show+body [data-as-transform],#all-search.as-host-top.as-host-show+body [data-as-transform]{transform:translateY(30px)}all-search-ui.as-host-bottom.as-host-show+body,#all-search.as-host-bottom.as-host-show+body{margin-bottom:30px!important}all-search-ui.as-host-left.as-host-show+body,#all-search.as-host-left.as-host-show+body{margin-left:90px!important}all-search-ui.as-host-right.as-host-show+body,#all-search.as-host-right.as-host-show+body{margin-right:90px!important}';
+  const internalScss = '#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}.as-container{opacity:1!important;position:fixed;display:flex;background-color:var(--as-bg-color);z-index:999990}.as-horizontal{height:30px;width:100%;flex-direction:row;transition:transform .1s}.as-horizontal.as-show{transform:translateY(0)}.as-top{top:0;border-bottom:1px var(--as-border-color) solid}.as-top.as-hide{transform:translateY(-100%)}.as-bottom{bottom:0;border-top:1px var(--as-border-color) solid}.as-bottom.as-hide{transform:translateY(100%)}.as-vertical{height:100%;width:90px;top:0;flex-direction:column;transition:transform .1s}.as-vertical.as-show{transform:translate(0)}.as-left{left:0;border-right:1px var(--as-border-color) solid}.as-left.as-hide{transform:translate(-100%)}.as-right{right:0;border-left:1px var(--as-border-color) solid}.as-right.as-hide{transform:translate(100%)}:host(.as-host-horizontal){display:block!important}:host(.as-host-horizontal) html{height:30px;width:100%}:host(.as-host-horizontal.as-host-hide) html{height:0;min-height:0;overflow:hidden}.as-host-horizontal{display:block!important;height:30px;width:100%!important}.as-host-horizontal.as-host-hide{height:0!important;overflow:hidden!important}:host(.as-host-vertical),.as-host-vertical{height:100%;width:90px;position:fixed;z-index:99990}:host(.as-host-vertical).as-host-hide,.as-host-vertical.as-host-hide{width:0}:host,#all-search{--as-horizontal-height: 30px;--as-primary-color: #1890ff;--as-bg-color: #ffffff;--as-primary-text-color: #606266;--as-secondary-background-color: #f5f7fa;--as-border-color: #e8e8e8}.as-theme-dark{--as-primary-color: #4f9bff;--as-bg-color: #1c1c1e;--as-primary-text-color: #e5e5e7;--as-secondary-background-color: #2c2c2e;--as-border-color: #3a3a3c}:host,#all-search{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";position:relative}:host{display:block}:host html,:host body{width:100%;margin:0;padding:0;overflow:visible}:host.as-host-vertical html,:host.as-host-vertical body{height:100%}';
+  importCSS(internalScss);
+  function init() {
+    return __async(this, null, function* () {
+      initTmMethods();
+      addStyle(globalCss);
+      yield setupApp({
+        rootComponent: _sfc_main,
+        hostId: "all-search",
+        hostTag: "all-search-ui"
+      });
+    });
   }
-  const index = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-  initTmMethods();
-  const el = getAsRoot();
-  if (!el) {
-    const app = vue.createApp(index);
-    const el2 = createAsRoot();
-    const mountEL = document.documentElement.insertBefore(el2, document.body);
-    app.mount(mountEL);
-  }
+  init();
 
-})(Vue, Popper);
+})(Vue);
