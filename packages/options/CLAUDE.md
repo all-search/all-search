@@ -65,4 +65,5 @@ packages/plugin/entries/options/main.js
 
 - Element Plus 全量引入（`app.use(ElementPlus)` + 全量图标），包体偏大，可改按需引入
 - 没有 i18n，界面只有中文
+- 深色模式已支持（跟随系统 / 浅色 / 深色）：`src/components/useTheme.ts` 解析偏好，页面靠 `html.dark` + Element Plus dark css-vars，菜单条靠挂载锚点的 `as-theme-dark` 类切换 CSS 变量。注意插件设置页是独立入口 `packages/plugin/entries/options/main.js`，新增全局样式时两处都要引
 - 配置站与插件设置页共用视图，但没有自动化测试覆盖

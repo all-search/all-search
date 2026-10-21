@@ -67,7 +67,7 @@ key 前缀由 `util/common.ts` 的 `getName()` 生成：`__allSearch__${name}`�
 
 ## 配置数据
 
-- `config/sites/`：12 个分类（search / translate / video / shopping / music / developer / news / social / knowledge / image / disk / scholar），`index.ts` 汇总
+- `config/sites/`：13 个分类（ai / search / translate / video / shopping / music / developer / news / social / knowledge / image / disk / scholar），`index.ts` 汇总；`ai.ts` 只收 URL 带 `%s` 能直达结果页的引擎
 - `config/loadList.ts`：200+ 站点的 URL 匹配规则、特殊样式、关键词选择器；配了 `probe` 的条目会被 `pnpm style:scan` 扫描
 - `config/generatedStyle.ts`：**自动生成**，`pnpm style:scan` 的产物（构建期扫描 → 静态避让 CSS），不要手改
 - `config/siteInfo.ts`：按当前 URL 计算 `site`（`invisible` / `disabled` / `style` / `generatedStyle` / `selectors`）；**不在 `loadList` 也不匹配任意搜索引擎 URL 的页面会被 disabled，整块 UI 不渲染**（这是“某些网站看不到菜单”的原因，不是 bug）
