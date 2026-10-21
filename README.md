@@ -23,7 +23,13 @@ Both share the same Vue 3 UI, isolated from the host page with Shadow DOM.
 
 - [GreasyFork](https://greasyfork.org/zh-CN/scripts/397993-all-search)
 - [ScriptCat](https://scriptcat.org/script-show-page/477)
-- [GitHub raw](https://raw.github.com/all-search/all-search/release/index.user.js)
+- [GitHub Releases](https://github.com/all-search/all-search/releases/latest/download/index.user.js) — always the latest version
+- [release branch raw](https://raw.githubusercontent.com/all-search/all-search/release/index.user.js) — same file, same guarantee
+
+> The userscript file is **always** named `index.user.js`. Tampermonkey upgrades by polling
+> `@updateURL` and comparing `@version`, so that URL must never change — only the version
+> inside the file does. Versioned copies (`all-search-<version>.user.js`) are attached to each
+> GitHub Release for archiving, but they are not install sources.
 
 ## Settings
 

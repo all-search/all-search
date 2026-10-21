@@ -23,7 +23,12 @@
 
 - [GreasyFork](https://greasyfork.org/zh-CN/scripts/397993-all-search)
 - [脚本猫](https://scriptcat.org/script-show-page/477)
-- [GitHub 地址](https://raw.github.com/all-search/all-search/release/index.user.js)
+- [GitHub Releases](https://github.com/all-search/all-search/releases/latest/download/index.user.js) —— 始终指向最新版
+- [release 分支](https://raw.githubusercontent.com/all-search/all-search/release/index.user.js) —— 同一个文件
+
+> 脚本文件名**永远是** `index.user.js`。油猴升级的方式是定期回拉 `@updateURL` 比对
+> `@version`，所以这个地址不能变，变的只能是文件里的版本号。每个 Release 会另存一份
+> `all-search-<version>.user.js` 用于归档，但**不要**用它安装（地址会随版本失效）。
 
 ## 设置
 

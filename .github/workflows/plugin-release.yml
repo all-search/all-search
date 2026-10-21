@@ -78,13 +78,37 @@ jobs:
       - name: Build Firefox package
         run: pnpm zip:firefox
 
+      - name: Build userscript
+        run: pnpm build:script
+
+      # 油猴的升级靠 @updateURL 定期回拉：地址必须永久稳定，版本号只写在文件内。
+      # 这里先确认构建产物没把地址或版本写错，再进入打包流程。
+      - name: Verify userscript metadata
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          meta="$(sed -n 's|^// @version *||p' packages/script/dist/index.user.js | head -1 | tr -d '[:space:]')"
+          if [ "$meta" != "$version" ]; then
+            echo "::error::userscript @version=${meta} 与 package.json=${version} 不一致"
+            exit 1
+          fi
+          url="https://raw.githubusercontent.com/all-search/all-search/release/index.user.js"
+          if ! grep -q "@updateURL *$url" packages/script/dist/index.user.js; then
+            echo "::error::@updateURL 不是稳定地址，会导致老用户收不到更新"
+            exit 1
+          fi
+          echo "userscript OK：v${version}，更新地址 ${url}"
+
       # 产物默认落在 packages/plugin/.output（隐藏目录），而 upload-artifact@v4 的
       # include-hidden-files 默认为 false，会直接报 "No files were found"，
       # 所以先拷到普通目录再上传。
       - name: Collect packages
         run: |
+          version="$(node -p "require('./package.json').version")"
           mkdir -p dist-artifacts
           cp packages/plugin/.output/all-search-*.zip dist-artifacts/
+          # index.user.js 用于 releases/latest/download 的稳定地址，另存一份带版本号的归档
+          cp packages/script/dist/index.user.js dist-artifacts/index.user.js
+          cp packages/script/dist/index.user.js "dist-artifacts/all-search-${version}.user.js"
           ls -lh dist-artifacts
 
       # 顺带保留 AMO 的 sources 包（all-searchplugin-*-sources.zip），方便提审时下载
@@ -92,14 +116,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: all-search-plugin
-          path: dist-artifacts/*.zip
+          path: dist-artifacts/*
           if-no-files-found: error
 
       - name: Publish GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          # 只挂真正给用户的两个包，sources.zip 是给 AMO 审核用的，不放进 Release
+          # 插件只挂两个包（sources.zip 给 AMO 审核用，不放进 Release）；
+          # 用户脚本挂固定名 + 版本号归档两份
           files: |
             dist-artifacts/all-search-*.zip
+            dist-artifacts/index.user.js
+            dist-artifacts/all-search-*.user.js
           generate_release_notes: true
