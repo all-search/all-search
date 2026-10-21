@@ -1,40 +1,42 @@
 <template>
-  <div ref="jsoneditor" style="height: calc(100vh - 130px);"></div>
-  <div class="fixed-footer">
-    <div class="btn-container">
-      <el-button
-        size="small"
-        type="primary"
-        @click="exportToClipboard">
-        导出到剪贴板
-      </el-button>
-      <el-button
-        size="small"
-        type="primary"
-        @click="importFormClipboard">
-        从剪贴板导入
-      </el-button>
-      <el-button
-        size="small"
-        type="primary"
-        @click="reset">
-        重置
-      </el-button>
-      <el-button
-        size="small"
-        type="success"
-        @click="save">
-        保存
-      </el-button>
-    </div>
+  <div class="editor-toolbar">
+    <el-button
+      size="small"
+      @click="format">
+      格式化
+    </el-button>
+    <el-button
+      size="small"
+      @click="exportToClipboard">
+      复制配置
+    </el-button>
+    <el-button
+      size="small"
+      @click="importFormClipboard">
+      从剪贴板导入
+    </el-button>
+    <el-button
+      size="small"
+      type="danger"
+      plain
+      @click="reset">
+      恢复默认
+    </el-button>
+    <el-button
+      size="small"
+      type="success"
+      @click="save">
+      保存
+    </el-button>
   </div>
+  <div ref="jsoneditor" class="editor-body"></div>
 </template>
 
 <script>
 import { onMounted, ref, watch } from 'vue'
 import JSONEditor from 'jsoneditor'
 import 'jsoneditor/dist/jsoneditor.css'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import clipboard from '../util/clipboard'
 
 export default {
@@ -117,7 +119,29 @@ export default {
     })
 
     function reset () {
-      ctx.emit('reset')
+      ElMessageBox.confirm(
+        '会丢弃当前编辑的所有内容并恢复为默认搜索引擎列表，确定继续吗？',
+        '恢复默认',
+        { type: 'warning', confirmButtonText: '恢复默认', cancelButtonText: '取消' }
+      ).then(() => {
+        ctx.emit('reset')
+      }).catch(() => {})
+    }
+
+    /** 把当前内容按 2 空格缩进重排；内容非法时给出具体报错 */
+    function format () {
+      let parsed
+      try {
+        parsed = instance.get()
+      } catch (err) {
+        ElMessage.error(`格式化失败：${err.message}`)
+        return
+      }
+      instance.setText(JSON.stringify(parsed, null, 2))
+      if (instance.getMode && instance.getMode() === 'tree') {
+        instance.setMode('code')
+      }
+      ElMessage.success('已格式化')
     }
 
     function formatSites (data) {
@@ -183,13 +207,22 @@ export default {
     }
 
     function exportToClipboard () {
-      clipboard(JSON.stringify(props.value))
-      ElMessage.success('成功导出到剪贴板')
+      // 复制编辑器里的当前内容，而不是外部传入的 props（可能已经改过还没保存）
+      let text
+      try {
+        text = JSON.stringify(instance.get(), null, 2)
+      } catch (e) {
+        ElMessage.error('当前内容不是合法 JSON，无法复制')
+        return
+      }
+      clipboard(text)
+      ElMessage.success('已复制当前配置到剪贴板')
     }
 
     return {
       jsoneditor,
       reset,
+      format,
       save,
       exportToClipboard,
       importFormClipboard
@@ -199,20 +232,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fixed-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: right;
-  width: 100%;
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0 12px;
+}
 
-  .btn-container {
-    box-shadow: 0 -2px 8px #f0f1f2;
-    margin: 0 20px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 3px 3px 0 0;
-  }
+.editor-body {
+  height: calc(100vh - 190px);
+  min-height: 360px;
 }
 </style>
