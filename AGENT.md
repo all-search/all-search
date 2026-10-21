@@ -45,7 +45,7 @@ UI 全部渲染在 Shadow DOM 内，宿主页面只保留一个 `<all-search-ui>
 | 测试 | `pnpm test` | vitest + jsdom，14 个用例 |
 | 浏览器回归 | `pnpm e2e` | Playwright 驱动本机 Edge/Chrome，跑插件 / 油猴 / 划词三个场景 |
 
-> Windows 下构建若报 esbuild `Access is denied`，先 `$env:TEMP="$PWD\.tmp\build"`（目录需存在）。
+> Windows 下构建若报 esbuild `Access is denied`：`build:*` / `zip*` 脚本已通过 `scripts/run-with-temp.mjs` 自动把临时目录指到 `.tmp/build`；只有手动调 `vite` / `wxt` 时才需要自己设 `$env:TEMP`。
 
 ## 当前状态（2026-10-20）
 

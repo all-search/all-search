@@ -60,7 +60,7 @@ pnpm zip:firefox    # packages/plugin/.output/*-firefox.zip (AMO)
 pnpm build:options  # packages/options/dist (GitHub Pages)
 ```
 
-> **Windows note**: if the build fails with `[vite:esbuild-transpile] remove ...: Access is denied`, point `TEMP` at the repo before building:
+> **Windows note**: esbuild writes transpile output to `%TEMP%`; antivirus / indexer sometimes still holds the file handle and the build dies with `[vite:esbuild-transpile] remove ...: Access is denied`. `build:*` and `zip*` scripts already route temp files into `.tmp/build` (via `scripts/run-with-temp.mjs`), so the documented commands work as-is. If you call `vite` / `wxt` directly, set it yourself:
 >
 > ```powershell
 > New-Item -ItemType Directory -Force .tmp\build | Out-Null
