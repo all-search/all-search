@@ -30,7 +30,9 @@ export const addCustomStyle = (mode: string, currentSite: Site, remove?: boolean
   }
 
   if (parts.length) {
-    addStyleContent(parts.join('\n'), 'as-custom-style')
+    // 必须注入宿主页面的 head：影子根里的样式只作用于影子树，
+    // 管不到站点自己的 fixed 头部（历史上的手写样式也是栽在这里）
+    addStyleContent(parts.join('\n'), 'as-custom-style', 'head')
   }
 }
 
