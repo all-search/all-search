@@ -5,6 +5,21 @@
 - **[固定元素避让：code review 跟进](docs/style-avoidance-todo.md)** — P0 站点自管 `top` 被覆盖、静态规则失效兜底；P1 选择器稳定性与扫描器质量；P2 采样成本、dom observer；P3 测试补齐
 - **[可借鉴特性评估：searchEngineJump-Enhance-DIY](docs/borrow-from-searchEngineJump.md)** — AI 搜索分类、按名排序、深色模式、配置编辑器增强等的取舍与实施建议
 
+### 依赖升级：WXT 0.21（暂缓）
+
+已升到 `0.20.27`（0.20 线最后的补丁版，无破坏性变更，构建与 e2e 已验证）。
+`0.21.4`（最新）暂时不动，原因是这些前置条件必须先满足：
+
+- [ ] **Node ≥ 22**：0.21 把 engines 提到 `>=22`，本地（当前 20.19.5）与三条 workflow 的 `node-version: 20` 都要改
+- [ ] **`web-ext` 变成 peerDependency**（`>=9.2.0`），需要显式装到 devDependencies
+- [ ] **zip 模板语义变化**：新增 `{{modeSuffix}}`，`{{version}}` / `{{versionName}}` 行为调整；我们用的 `artifactTemplate` 需复核产物名
+- [ ] **`includeSources`/`excludeSources` 改为白名单语义**：影响 AMO 的 `sources.zip`
+- [ ] **content script 返回值**：需要返回值的场景（如 `scripting.executeScript`）要加 `globalName: true`（当前项目未用到）
+- [ ] **tsconfig 默认值更新**（要求 TS ≥5.4，且 `.wxt/tsconfig.json` 由 CLI 重新生成）
+- [ ] `@webext-core/isolated-element` v1 → v3：`createShadowRootUi` 的宿主结构需回归（深色模式依赖挂载锚点）
+
+升级时按「升依赖 → 重新生成 .wxt → build:plugin + zip:firefox → e2e 36 项 → 手工装一次扩展」的顺序验证。
+
 ## ?? 执行路线图
 
 ### 阶段 0：Critical 问题修复 (DONE ?)
