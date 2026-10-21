@@ -1,5 +1,10 @@
 # 项目重构与优化 TODO
 
+## 📌 专项清单
+
+- **[固定元素避让：code review 跟进](docs/style-avoidance-todo.md)** — P0 站点自管 `top` 被覆盖、静态规则失效兜底；P1 选择器稳定性与扫描器质量；P2 采样成本、dom observer；P3 测试补齐
+- **[可借鉴特性评估：searchEngineJump-Enhance-DIY](docs/borrow-from-searchEngineJump.md)** — AI 搜索分类、按名排序、深色模式、配置编辑器增强等的取舍与实施建议
+
 ## ?? 执行路线图
 
 ### 阶段 0：Critical 问题修复 (DONE ?)
