@@ -117,6 +117,33 @@ function restoreAllAdjustedNodes(): void {
 }
 
 /**
+ * 几何过滤：排除「看起来也压在条上、但其实不是头部」的元素
+ *
+ * 与构建期扫描器（scripts/scan-special-style.mjs）保持同一套判据，
+ * 否则同一个站点在两条路径下会得到不同结果。
+ */
+function isAvoidableGeometry(el: HTMLElement, position: string): boolean {
+  const rect = el.getBoundingClientRect()
+  if (rect.width <= 0 || rect.height <= 0) return false
+
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+
+  // 覆盖整屏的固定层是遮罩/弹窗（如百度的安全验证框），推它会挪走整块弹窗
+  if (position === 'fixed' && rect.width >= viewportWidth * 0.9 && rect.height >= viewportHeight * 0.9) {
+    return false
+  }
+  // 整高的窄面板是侧边抽屉（如 DuckDuckGo 的滑出菜单）
+  if (position === 'fixed' && rect.width < viewportWidth * 0.5 && rect.height > viewportHeight * 0.6) {
+    return false
+  }
+  // 完全在视口外的元素不用管
+  if (rect.right <= 1 || rect.left >= viewportWidth - 1) return false
+
+  return true
+}
+
+/**
  * 判断元素是否需要避让
  *
  * - fixed：只要 top 是具体数值就避让
@@ -128,19 +155,17 @@ function isAdjustableElement(el: HTMLElement, root: Element): boolean {
 
   const inlinePosition = el.style.position
   const inlineTop = el.style.top
-  if (
-    (inlinePosition === 'fixed' || inlinePosition === 'sticky') &&
-    inlineTop && inlineTop !== 'auto'
-  ) {
-    return isOffsetAllowed(inlinePosition, inlineTop)
-  }
+  const useInline = (inlinePosition === 'fixed' || inlinePosition === 'sticky') &&
+    !!inlineTop && inlineTop !== 'auto'
 
-  const computed = window.getComputedStyle(el)
-  const position = computed.position
+  const computed = useInline ? null : window.getComputedStyle(el)
+  const position = useInline ? inlinePosition : computed!.position
   if (position !== 'fixed' && position !== 'sticky') return false
 
-  const top = computed.top
+  const top = useInline ? inlineTop : computed!.top
   if (!top || top === 'auto') return false
+  if (!isAvoidableGeometry(el, position)) return false
+
   return isOffsetAllowed(position, top)
 }
 

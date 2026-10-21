@@ -1,4 +1,4 @@
-import { onUnmounted, watch, watchEffect, toValue, Ref, ComputedRef, WritableComputedRef } from 'vue'
+import { onUnmounted, watchEffect, toValue, Ref, ComputedRef, WritableComputedRef } from 'vue'
 import { initSpecialStyle, disconnectSpecialStyle } from './util/addSpecialStyle'
 import { addCustomStyle, syncHostLayout } from './util/initStyle'
 import { site } from './config/siteInfo'
@@ -11,48 +11,50 @@ export function useStyleManager(
   direction: ComputedRef<Direction>,
   show: Ref<ShowStatus>
 ) {
-  let isInit = false
   const { isFullScreen } = useFullScreen()
+  /** 运行时采样是否已启动，和站点/可见性一起变化，避免重复 init 或残留 */
+  let samplingActive = false
 
-  /**
-   * 初始化样式适配
-   */
-  const init = (currentSite: typeof site) => {
-    if (isInit || currentSite.disabled) {
-      return
-    }
-    // 有构建时扫描规则就不跑运行时采样：静态 CSS 已经处理了压在条上的固定元素，
-    // 两者同时生效会把同一元素推两次（CSS 与内联样式都会命中）。
-    if (!currentSite.generatedStyle) {
+  const syncSampling = (shouldSample: boolean) => {
+    if (shouldSample && !samplingActive) {
       initSpecialStyle()
+      samplingActive = true
+    } else if (!shouldSample && samplingActive) {
+      disconnectSpecialStyle()
+      samplingActive = false
     }
-    addCustomStyle(toValue(mode), currentSite as any)
-    isInit = true
   }
 
-  // 监听站点变化进行初始化
-  watch(site, newSite => {
-    init(newSite)
-  }, { immediate: true })
-
-  // 监听各种状态，合成最终的宿主布局可见性
+  /**
+   * 统一的状态同步入口。
+   *
+   * 这里刻意不用 `isInit` 之类的「只跑一次」开关：宿主是 SPA，路由切换后
+   * `site` 会变成 disabled，注入过的样式必须跟着撤掉，否则会残留在新页面上。
+   */
   watchEffect(() => {
+    const currentSite = site
+    const currentMode = toValue(mode)
+
     // 只有在：非隐身、非禁用、非全屏 且 用户设置为显示(1) 时，才物理占据页面空间
-    const isLayoutVisible = !site.invisible &&
-      !site.disabled &&
+    const isLayoutVisible = !currentSite.invisible &&
+      !currentSite.disabled &&
       !toValue(isFullScreen) &&
       toValue(show) === SHOW_STATUS.VISIBLE
-    syncHostLayout(toValue(mode), toValue(direction), isLayoutVisible)
-  })
 
-  // 模式变化时重新应用自定义样式
-  watch(mode, (newMode) => {
-    addCustomStyle(newMode, site as any)
+    syncHostLayout(currentMode, toValue(direction), isLayoutVisible)
+
+    // 条不可见时站点头部不该再让位：撤掉静态规则与已做的内联调整
+    addCustomStyle(currentMode, currentSite as any, !isLayoutVisible || currentSite.disabled)
+
+    // 有构建时扫描规则就不跑运行时采样：静态 CSS 已经处理了压在条上的固定元素，
+    // 两者同时生效会把同一元素推两次（CSS 与内联样式都会命中）。
+    syncSampling(isLayoutVisible && !currentSite.generatedStyle)
   })
 
   // 应用卸载（SPA 重新挂载 / 扩展重载）时回收监听并还原被调整过的元素
   onUnmounted(() => {
     disconnectSpecialStyle()
+    samplingActive = false
   })
 
   return {
