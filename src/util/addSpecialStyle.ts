@@ -35,10 +35,22 @@ const SAMPLE_X_COUNT = 15
 const SAMPLE_Y_RATIOS = [0.25, 0.5, 0.75]
 /** 每个采样点最多取几个候选元素（按绘制顺序从前往后） */
 const SAMPLE_STACK_LIMIT = 4
+/**
+ * 每个候选元素向上追溯几层祖先。
+ * 命中点经常落在固定头的子元素上（输入框、按钮、图标），真正需要避让的是
+ * 它们的 fixed/sticky 祖先：只取栈顶几个元素会漏掉外层容器。
+ */
+const SAMPLE_ANCESTOR_DEPTH = 8
 /** 单轮采样的候选元素上限，防止极端页面失控 */
 const SAMPLE_CANDIDATE_LIMIT = 200
 /** 两次采样的最小间隔（ms），滚动时用于节流 */
 const SAMPLE_MIN_INTERVAL = 120
+/**
+ * 稳定后补采样的延迟（ms）。
+ * 不少站点滚动后才用过渡动画把头部吸附到顶部（例如 Google 的搜索头），
+ * 立即采样会赶上动画中间态而漏判，因此每轮采样后再补一次。
+ */
+const SAMPLE_SETTLE_DELAY = 320
 
 let currentTopOffset = 0
 let isRestoring = false
@@ -213,11 +225,24 @@ function collectCandidates(root: HTMLElement, rect: DOMRect): HTMLElement[] {
         if (el === document.body || el === document.documentElement) continue
         if (seen.has(el)) continue
 
-        seen.add(el)
-        result.push(el)
+        // 沿祖先链补一层：命中点落在固定头的子元素上时，靠这一层才能找到真正的 fixed/sticky 容器。
+        // 一旦遇到 fixed/sticky 祖先就停下——再往外通常是页面级容器，不该被推动。
+        let node: HTMLElement | null = el
+        for (let depth = 0; node && depth < SAMPLE_ANCESTOR_DEPTH; depth += 1) {
+          if (node === document.body || node === document.documentElement) break
+          if (node === root || root.contains(node)) break
+          if (!seen.has(node)) {
+            seen.add(node)
+            result.push(node)
+            if (result.length >= SAMPLE_CANDIDATE_LIMIT) return result
+          }
+          const position = window.getComputedStyle(node).position
+          if (position === 'fixed' || position === 'sticky') break
+          node = node.parentElement
+        }
+
         taken += 1
         if (taken >= SAMPLE_STACK_LIMIT) break
-        if (result.length >= SAMPLE_CANDIDATE_LIMIT) return result
       }
     }
   }
@@ -254,6 +279,7 @@ function sampleBarArea(): void {
 }
 
 let sampleTimer: number | null = null
+let settleTimer: number | null = null
 let lastSampleAt = 0
 
 /** 节流调度一轮采样（滚动 / resize / DOM 变化都走这里） */
@@ -264,6 +290,13 @@ function scheduleSample(): void {
     sampleTimer = null
     lastSampleAt = performance.now()
     sampleBarArea()
+    // 补一轮稳定后的采样：吸附动画结束、布局定型之后再判断一次
+    if (settleTimer === null) {
+      settleTimer = window.setTimeout(() => {
+        settleTimer = null
+        sampleBarArea()
+      }, SAMPLE_SETTLE_DELAY)
+    }
   }, delay)
 }
 
@@ -375,6 +408,10 @@ export function disconnectSpecialStyle(): void {
   if (sampleTimer !== null) {
     clearTimeout(sampleTimer)
     sampleTimer = null
+  }
+  if (settleTimer !== null) {
+    clearTimeout(settleTimer)
+    settleTimer = null
   }
   lastSampleAt = 0
 
