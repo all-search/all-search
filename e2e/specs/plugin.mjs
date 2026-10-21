@@ -23,6 +23,17 @@ export async function run ({ headless, report }) {
     report.check('菜单条贴在顶部', !!initial.bar && initial.bar.y === 0 && initial.bar.h > 20, JSON.stringify(initial.bar))
     await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-bar.png') })
 
+    // 1.0 命中测试只应碰到压在条上的元素，页面其它 fixed 元素不动
+    const adjusted = await page.evaluate(() => {
+      return [...document.querySelectorAll('[data-as-adjusted]')]
+        .map(el => (el.className || el.tagName).toString())
+    })
+    report.check(
+      '只避让压在条上的 fixed 元素',
+      !adjusted.some(c => c.includes('fixed-center') || c.includes('fixed-lower')),
+      `adjusted=${JSON.stringify(adjusted)}`
+    )
+
     // 1.1 滚动后，贴顶的 sticky 元素应停在菜单条下方，而不是被压住（issue #83）
     await page.evaluate(() => window.scrollTo(0, 400))
     await page.waitForTimeout(300)

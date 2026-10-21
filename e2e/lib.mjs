@@ -20,9 +20,14 @@ export const FIXTURE_HTML = `<!doctype html><html lang="zh-CN"><head><meta chars
   #kw{margin-left:20px;width:420px;height:36px;padding:0 10px;border:1px solid #c4c7ce}
   main{padding:140px 40px 1200px}
   p{max-width:900px;color:#222}
+  /* 不在菜单条覆盖区的 fixed 元素：不应被避让逻辑改动 */
+  .fixed-center{position:fixed;top:50%;left:20px;width:120px;height:40px;background:rgba(0,0,0,.08);border:1px solid #ccc;z-index:50}
+  .fixed-lower{position:fixed;top:200px;right:20px;width:120px;height:40px;background:rgba(0,0,0,.08);border:1px solid #ccc;z-index:50}
 </style></head>
 <body><header class="site"><b style="color:#2932e1">百度</b><input id="kw" value="all-search">
 <input type="hidden" name="ie" value="utf-8"><input type="hidden" name="tn" value="1"></header>
+<div class="fixed-center" aria-hidden="true"></div>
+<div class="fixed-lower" aria-hidden="true"></div>
 <main><h1>all-search e2e fixture</h1><p>${'搜索引擎跳转菜单回归测试文本。'.repeat(120)}</p></main></body></html>`
 
 /**
