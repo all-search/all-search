@@ -2,11 +2,20 @@ name: Release plugin
 
 # 浏览器插件发布：打 tag（v*）时构建 Chrome / Firefox 包并上传到 Release，
 # 手动触发时只产出 artifacts，方便本地验证。
+#
+# 发布流程：
+#   pnpm release:patch        # 升版本 + 打 tag + push（见 package.json）
+# 或者手动：
+#   git tag v1.5.11 && git push origin v1.5.11
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
+
+concurrency:
+  group: release-plugin-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -27,8 +36,35 @@ jobs:
           version: 10
           run_install: false
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # tag 和 package.json 版本对不上时，产出的 zip 名字与实际版本不一致，
+      # 与其发布一个错版本，不如早点失败
+      - name: Verify tag matches package.json
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          expected="v$(node -p "require('./package.json').version")"
+          if [ "$expected" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} 与 package.json 里的 ${expected} 不一致"
+            exit 1
+          fi
+          echo "版本一致：${expected}"
+
+      - name: Type check
+        run: pnpm type-check
 
       - name: Unit tests
         run: pnpm test
@@ -39,6 +75,7 @@ jobs:
       - name: Build Firefox package
         run: pnpm zip:firefox
 
+      # 顺带保留 AMO 的 sources 包（all-searchplugin-*-sources.zip），方便提审时下载
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
@@ -50,5 +87,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: packages/plugin/.output/*.zip
+          # 只挂真正给用户的两个包，sources.zip 是给 AMO 审核用的，不放进 Release
+          files: |
+            packages/plugin/.output/all-search-*.zip
           generate_release_notes: true

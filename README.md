@@ -81,6 +81,22 @@ pnpm lint
 - **plugin** — loads the unpacked extension and checks the menu bar, the dropdown direction in all four layouts, and that “菜单设置” opens the bundled options page
 - **userscript** — simulates Tampermonkey (Vue global + `GM_*` shims) and injects `dist/index.user.js`
 
+## Release
+
+Pushing a `v*` tag builds both extension packages and creates a GitHub Release
+(`.github/workflows/plugin-release.yml`). The tag must match `package.json`'s version,
+and the workflow fails fast if it does not.
+
+```bash
+pnpm release:patch          # 1.5.10 -> 1.5.11: bump, commit, tag (no push)
+pnpm release:patch --push   # same, then push the commit and the tag
+pnpm release -- 1.6.0       # explicit version
+```
+
+Pushing to `master` additionally deploys:
+- the options site to GitHub Pages (`gh-page.yml`)
+- the userscript to the `release` branch (`script-release.yml`)
+
 ## Site style scan
 
 Some sites pin a header to the top of the viewport, which would end up underneath the 30px menu bar. Those offsets are **generated at build time** instead of being computed on every page:
