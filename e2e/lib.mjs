@@ -31,6 +31,21 @@ export const FIXTURE_HTML = `<!doctype html><html lang="zh-CN"><head><meta chars
 <main><h1>all-search e2e fixture</h1><p>${'搜索引擎跳转菜单回归测试文本。'.repeat(120)}</p></main></body></html>`
 
 /**
+ * 命中 generatedStyle 静态规则的站点仿真页（cn.bing.com/search）。
+ * `#b_header` 必须带 top:30px —— 由静态 CSS 注入，不走运行时采样。
+ */
+export const STATIC_FIXTURE_HTML = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>bing fixture</title>
+<style>
+  body{margin:0;font:16px/1.8 system-ui,sans-serif}
+  #b_header{position:fixed;top:0;left:0;right:0;height:60px;background:#fff;border-bottom:1px solid #eee;z-index:100}
+  main{padding:120px 40px 1200px}
+  p{max-width:900px;color:#222}
+</style></head>
+<body><div id="b_header"><b>bing</b></div>
+<main><h1>静态规则 fixture</h1><p>${'固定头部避让静态规则回归文本。'.repeat(120)}</p></main></body></html>`
+
+/**
  * 拦截页面请求：百度域返回 fixture，谷歌只回一个空壳（用于验证跳转 URL），
  * 扩展自身资源放行，其余外链（图标等）直接 abort。
  */
@@ -39,6 +54,9 @@ export async function installFixture (page) {
     const url = route.request().url()
     if (url.startsWith('chrome-extension://') || url.startsWith('data:') || url.startsWith('blob:')) {
       return route.continue()
+    }
+    if (url.startsWith('https://cn.bing.com/')) {
+      return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: STATIC_FIXTURE_HTML })
     }
     if (url.startsWith('https://www.baidu.com/')) {
       return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: FIXTURE_HTML })

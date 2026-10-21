@@ -50,6 +50,42 @@ export async function run ({ headless, report }) {
     await page.evaluate(() => window.scrollTo(0, 0))
     await page.waitForTimeout(200)
 
+    // 1.15 命中 generatedStyle 的站点：只注入静态 CSS，不跑运行时采样
+    await page.goto('https://cn.bing.com/search?q=all-search', { waitUntil: 'domcontentloaded' })
+    await waitForMenu(page)
+    await page.waitForTimeout(600)
+
+    const staticState = await page.evaluate(() => {
+      const style = document.querySelector('head style.as-custom-style')
+      const header = document.querySelector('#b_header')
+      return {
+        injected: !!style,
+        css: style ? (style.textContent || '').trim().slice(0, 60) : '',
+        top: header ? getComputedStyle(header).top : '-',
+        sampled: document.querySelectorAll('[data-as-adjusted]').length
+      }
+    })
+    report.check('静态规则注入到页面 head', staticState.injected, staticState.css)
+    report.check('静态规则生效：头部让位 30px', staticState.top === '30px', `top=${staticState.top}`)
+    report.check('有静态规则时不跑运行时采样', staticState.sampled === 0, `sampled=${staticState.sampled}`)
+
+    // 同一页内路由切到不匹配的路径：静态样式必须撤掉，否则会残留在新页面
+    await page.evaluate(() => history.pushState({}, '', '/other-page'))
+    await page.waitForTimeout(1200)
+    const afterRoute = await page.evaluate(() => ({
+      injected: !!document.querySelector('head style.as-custom-style'),
+      top: document.querySelector('#b_header') ? getComputedStyle(document.querySelector('#b_header')).top : '-'
+    }))
+    report.check(
+      '路由离开站点后撤掉静态样式',
+      !afterRoute.injected && afterRoute.top === '0px',
+      `injected=${afterRoute.injected} top=${afterRoute.top}`
+    )
+
+    await page.goto(FIXTURE_URL, { waitUntil: 'domcontentloaded' })
+    await waitForMenu(page)
+    await page.waitForTimeout(400)
+
     // 1.2 关键词应取自 URL 参数，不能被百度页面的 ie=utf-8 / tn=1 隐藏域污染（issue #95）
     //     主菜单默认「当前页」打开，所以这里等的是当前页跳转
     await hoverFirstCategory(page)
