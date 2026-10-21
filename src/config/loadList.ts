@@ -5,16 +5,24 @@ export interface SiteAdapter {
   invisible?: boolean;
   disabled?: boolean;
   query?: string;
+  /**
+   * 构建时扫描用的页面地址，`%s` 会替换成探测关键词。
+   * 配上之后 `pnpm style:scan` 会打开该页面，把压在菜单条上的固定元素
+   * 转成静态样式写进 `config/generatedStyle.ts`，运行时不再动态采样。
+   */
+  probe?: string;
 }
 
 const width = 100
 
 export const list: SiteAdapter[] = [
   {
-    url: /\/\/www\.google\.com(.hk)?\/search/
+    url: /\/\/www\.google\.com(.hk)?\/search/,
+    probe: 'https://www.google.com/search?q=%s'
   },
   {
     url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
+    probe: 'https://www.baidu.com/s?wd=%s',
     style: {
       1: '.selected-search-box { transform: translateY(-30px);}'
     }
@@ -58,7 +66,8 @@ export const list: SiteAdapter[] = [
     url: /\/\/\D{2,5}\.wikipedia\.org\/wiki/
   },
   {
-    url: /\/\/www\.zhihu\.com\/search\?/
+    url: /\/\/www\.zhihu\.com\/search\?/,
+    probe: 'https://www.zhihu.com/search?type=content&q=%s'
   },
   {
     url: /\/\/www\.so\.com\/s/
@@ -93,6 +102,7 @@ export const list: SiteAdapter[] = [
   },
   {
     url: /\/\/search\.bilibili\.com\/all/,
+    probe: 'https://search.bilibili.com/all?keyword=%s',
     selectors: '.search-input-el'
   },
   {
@@ -199,7 +209,8 @@ export const list: SiteAdapter[] = [
     url: /\/\/(movie|music|book)\.douban\.com\/subject_search?/
   },
   {
-    url: /\/\/www\.douban\.com\/search/
+    url: /\/\/www\.douban\.com\/search/,
+    probe: 'https://www.douban.com/search?q=%s'
   },
   {
     url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
@@ -211,7 +222,8 @@ export const list: SiteAdapter[] = [
     url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
   },
   {
-    url: /\/\/github\.com\/search/
+    url: /\/\/github\.com\/search/,
+    probe: 'https://github.com/search?q=%s'
   },
   {
     url: /\/\/www\.startpage\.com\/sp\/search/
