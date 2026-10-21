@@ -97,6 +97,10 @@ Release notes are generated from commit messages (`scripts/changelog.mjs`): comm
 land in their own sections and `!:` shows up as a breaking change. Preview locally with
 `pnpm changelog`, or write `CHANGELOG.md` with `pnpm changelog:write`.
 
+Need to add context by hand? `pnpm changelog -- --init 2.0.2` writes a template to
+`changelog/2.0.2.md`; edit it freely and the release uses that file verbatim
+(see [`changelog/README.md`](changelog/README.md)).
+
 Pushing a `v*` tag builds both extension packages and creates a GitHub Release
 (`.github/workflows/plugin-release.yml`). The tag must match `package.json`'s version,
 and the workflow fails fast if it does not.

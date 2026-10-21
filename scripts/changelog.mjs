@@ -137,12 +137,39 @@ const from = previousTag(to)
 const label = toLabel(to)
 const version = option('version') || (to === 'HEAD' ? '未发布' : to)
 const items = collect(from, to)
-const markdown = render(items, { from, to: label, version })
+const generated = render(items, { from, to: label, version })
+
+/**
+ * 手工版本文件：changelog/<version>.md（去掉开头的 v）。
+ * 存在时以它为准，允许在自动生成的基础上补充背景、截图、迁移说明等。
+ * 用 `pnpm changelog -- --init <version>` 生成初始模板。
+ */
+const MANUAL_DIR = path.join(ROOT, 'changelog')
+const manualSlug = String(version).replace(/^v/, '') || 'unreleased'
+const manualFile = path.join(MANUAL_DIR, `${manualSlug}.md`)
+
+const init = option('init')
+if (init) {
+  fs.mkdirSync(MANUAL_DIR, { recursive: true })
+  const initSlug = String(init).replace(/^v/, '')
+  const target = path.join(MANUAL_DIR, `${initSlug}.md`)
+  if (fs.existsSync(target)) {
+    console.error(`${path.relative(ROOT, target)} 已存在，不覆盖`)
+    process.exit(1)
+  }
+  const body = render(items, { from, to: label, version: init })
+  fs.writeFileSync(target, body, 'utf8')
+  console.log(`已生成 ${path.relative(ROOT, target)}（${items.length} 条），可以直接手改；发版时以这个文件为准`)
+  process.exit(0)
+}
+
+const markdown = fs.existsSync(manualFile) ? fs.readFileSync(manualFile, 'utf8') : generated
 
 const outFile = option('out')
 if (outFile) {
   fs.writeFileSync(path.join(ROOT, outFile), markdown, 'utf8')
-  console.log(`已写入 ${outFile}（${items.length} 条，区间 ${from}..${to}）`)
+  const source = fs.existsSync(manualFile) ? `手写 ${path.relative(ROOT, manualFile)}` : `自动生成，${items.length} 条`
+  console.log(`已写入 ${outFile}（${source}，区间 ${from}..${to}）`)
 } else if (write) {
   const existing = fs.existsSync(OUT_DEFAULT) ? fs.readFileSync(OUT_DEFAULT, 'utf8') : ''
   const header = existing.startsWith('# ') ? '' : '# 更新日志\n\n格式来自 [Conventional Commits](https://www.conventionalcommits.org/)，由 `pnpm changelog` 生成。\n\n'
@@ -151,5 +178,6 @@ if (outFile) {
   console.log(`已写入 CHANGELOG.md（${items.length} 条，区间 ${from}..${to}）`)
 } else {
   process.stdout.write(markdown)
-  console.error(`\n（区间 ${from}..${to}，共 ${items.length} 条；加 --write 写入 CHANGELOG.md）`)
+  const source = fs.existsSync(manualFile) ? `来自手写文件 ${path.relative(ROOT, manualFile)}` : `区间 ${from}..${to}，共 ${items.length} 条`
+  console.error(`\n（${source}；--init 生成手写模板，--write 写入 CHANGELOG.md）`)
 }

@@ -97,6 +97,9 @@ Release 正文由提交信息生成（`scripts/changelog.mjs`）：提交遵循
 各自成节，带 `!:` 的归到「破坏性变更」。本地预览用 `pnpm changelog`，
 写 `CHANGELOG.md` 用 `pnpm changelog:write`。
 
+需要手写补充时：`pnpm changelog -- --init 2.0.2` 会在 `changelog/2.0.2.md` 生成模板，
+改完后发版会**以该文件为准**（见 [`changelog/README.md`](changelog/README.md)）。
+
 推送 `v*` tag 会构建两个插件包 + 油猴脚本并创建 GitHub Release
 （`.github/workflows/plugin-release.yml`）。tag 必须与 `package.json` 的版本一致，
 不一致会直接失败。
