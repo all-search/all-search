@@ -13,7 +13,13 @@ export interface SiteAdapter {
   probe?: string;
 }
 
-const width = 100
+/**
+ * 说明：这里不再手写 style 偏移。
+ * 早期 `style` 里的规则（YouTube/StackOverflow/学术 的 margin-left、百度的
+ * translateY(-30px)）是按「宿主浮在页面之上」的旧布局写的，且因为 key 与 mode
+ * 对不上从未生效；现在纵向布局由 global.scss 给 body 加 margin，直接启用会双重偏移。
+ * 需要按站点避让固定头部时，用 `pnpm style:scan` 生成，或临时给某条规则加 style。
+ */
 
 export const list: SiteAdapter[] = [
   {
@@ -22,10 +28,7 @@ export const list: SiteAdapter[] = [
   },
   {
     url: /\/\/www\.baidu\.com\/(s|baidu)\?/,
-    probe: 'https://www.baidu.com/s?wd=%s',
-    style: {
-      1: '.selected-search-box { transform: translateY(-30px);}'
-    }
+    probe: 'https://www.baidu.com/s?wd=%s'
   },
   {
     // 推特（X）搜索结果页是 SPA，不在这里声明会被 siteInfo 判定为 disabled，整块 UI 不渲染（issue #68）
@@ -86,19 +89,13 @@ export const list: SiteAdapter[] = [
     selectors: '#upquery'
   },
   {
-    url: /\/\/weixin\.sogou\.com\/weixin\?/,
-    style: {
-      2: `.headsearch#scroll-header { left:unset; }`
-    }
+    url: /\/\/weixin\.sogou\.com\/weixin\?/
   },
   {
     url: /\/\/www\.quora\.com\/search\?/
   },
   {
-    url: /\/\/stackoverflow\.com\/search\?/,
-    style: {
-      2: `.top-bar._fixed { right: ${width}px }`
-    }
+    url: /\/\/stackoverflow\.com\/search\?/
   },
   {
     url: /\/\/search\.bilibili\.com\/all/,
@@ -110,10 +107,7 @@ export const list: SiteAdapter[] = [
     selectors: '.search-text--standalone'
   },
   {
-    url: /\/\/www\.youtube\.com\/results/,
-    style: {
-      2: `ytd-app {margin-left:${width}px !important;}ytd-mini-guide-renderer.ytd-app, app-drawer{left:${width}px !important;}#masthead-container.ytd-app {width: calc(100% - 100px);}`
-    }
+    url: /\/\/www\.youtube\.com\/results/
   },
   {
     url: /\/\/www\.nicovideo\.jp\/search\//
@@ -213,10 +207,7 @@ export const list: SiteAdapter[] = [
     probe: 'https://www.douban.com/search?q=%s'
   },
   {
-    url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
-    style: {
-      2: `#left_menu_content { left: ${width}px !important;}`
-    }
+    url: /\/\/xueshu\.baidu\.com\/(?:s|baidu)/
   },
   {
     url: /\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/
