@@ -110,9 +110,6 @@ function withDerivedProbes (sites, templates) {
  * 注意这个函数会被序列化送进浏览器，不能引用外部变量。
  */
 function scanCurrentViewport ({ barHeight }) {
-  // 形如 Xx7Mif / E5eFb / CTOaxb：无连字符、字母数字混杂、长度够，多为构建时生成的混淆类名
-  const HASH_LIKE = /^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9]{5,}$/
-
   const isStableClass = (name) => {
     if (!name) return false
     if (name.startsWith('css-') || name.startsWith('sc-')) return false
@@ -224,8 +221,9 @@ function scanCurrentViewport ({ barHeight }) {
         if (overlaps && !hidden && !coversViewport && !panelLike && !offscreen) {
           const { selector, stable } = buildSelector(node)
           // 纯 nth-of-type 链路没有任何锚点（如 span:nth-of-type(1) > div:nth-of-type(1)），
-          // 会命中页面里任意第一个同类结构，宁可不出规则，交给运行时采样兜底
-          const hasAnchor = /[#.][A-Za-z_-]/.test(selector)
+          // 会命中页面里任意第一个同类结构，宁可不出规则，交给运行时采样兜底。
+          // data-* 属性也算锚点，它比混淆类名稳定得多
+          const hasAnchor = /[#.][A-Za-z_-]|\[data-[a-z-]+/i.test(selector)
           if (!hasAnchor) {
             if (!seen.has(`skip:${selector}`)) {
               seen.add(`skip:${selector}`)
@@ -305,6 +303,12 @@ async function main () {
     ? sites.filter(site => filters.some(f => String(site.url).includes(f) || site.probe.includes(f)))
     : sites
 
+  // --fresh 会丢掉没扫到的站点；再叠加 --site/--limit 就等于静默删除其余规则
+  if (fresh && (filters.length || limit)) {
+    console.error('--fresh 会重置整份产物，不能和 --site / --limit 一起用；只改个别站点请用 --prune')
+    process.exit(1)
+  }
+
   if (!selected.length) {
     console.error(filter ? `没有匹配 --site=${filter} 的站点` : 'loadList 里没有配置 probe 的站点')
     process.exit(1)
@@ -369,8 +373,23 @@ async function main () {
       const health = await page.evaluate(() => {
         const text = (document.body && document.body.innerText) || ''
         const blocked = /验证码|安全验证|captcha|unusual traffic|访问受限|人机验证|异常流量|自动程序/i.test(text.slice(0, 500))
-        return { textLength: text.length, blocked, title: document.title }
+        // 用 --cdp 接真实浏览器时，机器上很可能已经装了 All-Search：
+        // 它已经把头推下去了，这时量到的位置是「推过之后」的，会生成 double offset
+        const host = document.querySelector('all-search-ui')
+        return {
+          textLength: text.length,
+          blocked,
+          running: !!(host && host.shadowRoot && host.shadowRoot.querySelector('.as-menu-item')),
+          title: document.title
+        }
       })
+      if (health.running) {
+        const reason = '页面上已有 All-Search 在运行，测到的位置可能已被推动'
+        console.log(`   跳过：${reason}`)
+        failures.push({ url, message: `skip: ${reason}` })
+        await page.close().catch(() => {})
+        continue
+      }
       if (health.blocked || health.textLength < 120) {
         const reason = health.blocked ? '被验证页拦截' : `页面内容过少（${health.textLength} 字）`
         console.log(`   跳过：${reason}`)
