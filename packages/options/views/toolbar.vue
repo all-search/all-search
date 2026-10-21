@@ -189,23 +189,23 @@ export default {
 
 .url-item {
   display: flex;
-  background-color: #fff;
+  background-color: var(--el-bg-color);
   font-size: 14px;
-  color: #303133;
+  color: var(--el-text-color-primary);
   align-items: center;
   padding: 12px 20px 12px 10px;
   transition: background-color .25s ease;
 
   &.invisible {
-    color: #C0C4CC;
+    color: var(--el-text-color-disabled);
   }
 
   &:hover {
-    background-color: #f5f7fa;
+    background-color: var(--el-fill-color-light);
   }
 
   & + & {
-    border-top: 1px solid #ebeef5;
+    border-top: 1px solid var(--el-border-color-lighter);
   }
 
   .move-icon {
@@ -261,10 +261,10 @@ export default {
   width: 100%;
 
   .btn-container {
-    box-shadow: 0 -2px 8px #f0f1f2;
+    box-shadow: 0 -2px 8px var(--el-border-color-lighter);
     margin: 0 20px;
     padding: 10px;
-    background-color: #fff;
+    background-color: var(--el-bg-color);
     border-radius: 3px 3px 0 0;
   }
 }
