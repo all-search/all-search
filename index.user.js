@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      2.0.0
+// @version      2.0.1
 // @author       endday
 // @description  2026-10-21更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
@@ -2564,7 +2564,7 @@ root: root.ownerDocument
   var _GM_deleteValue = (() => typeof GM_deleteValue != "undefined" ? GM_deleteValue : void 0)();
   var _GM_getValue = (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
-  const version$1 = "2.0.0";
+  const version$1 = "2.0.1";
   const pkg = {
     version: version$1
   };
