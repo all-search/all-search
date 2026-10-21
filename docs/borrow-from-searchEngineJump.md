@@ -1,84 +1,112 @@
 # 可借鉴特性评估：searchEngineJump-Enhance-DIY
 
-> 参考项目：[csxo/searchEngineJump-Enhance-DIY](https://github.com/csxo/searchEngineJump-Enhance-DIY)（Fork 自 qxinGitHub/searchEngineJump，V0.1.0 现代增强版）
-> 评估时间：2026-10-21。结论基于其 README 与实际仓库结构，**未逐个功能实测**，落地前需要验证。
+> 参考项目：[csxo/searchEngineJump-Enhance-DIY](https://github.com/csxo/searchEngineJump-Enhance-DIY)（Fork 自 qxinGitHub/searchEngineJump）
+> 评估时间：2026-10-21。**已阅读真实脚本源码**（`searchEngineJump Enhance DIY.user.js`，v0.1.1，6511 行 / 437 KB），不是只读 README。
+> 引用行号均对应上述版本，仅供定位，代码会随上游变化。
 
-## 一、对照结论
+## 0. 先说架构差异（决定了哪些能抄）
 
-| 对方特性 | 我们的现状 | 结论 |
+| 维度 | 对方 | 我们 |
 | --- | --- | --- |
-| AI 搜索独立分类（6 个支持 `?q=%s` 的引擎） | `src/config/sites/` 有 13 个分类，**没有 AI** | ✅ 建议做，纯配置、成本最低 |
-| 分类 / 引擎按首字母排序（数字 → A-Z → 中文拼音） | 只有拖拽排序，无按名排序（仓库里没有 `localeCompare`） | ✅ 建议做 |
-| 深色模式 | 无（全仓没有 `prefers-color-scheme` / `dark`） | ✅ 建议做 |
-| 配置文件编辑器：格式化 / 复制 / 恢复默认 / Esc 关闭 | `json-editor.vue` 只有 `JSON.parse` 校验 | ✅ 建议做，改动小 |
-| 拖拽 0ms 持久化（防抖写存储） | vue-draggable-next，落盘时机未测 | ⚠️ 先测量再决定 |
-| 分类图标跟随「用户首位的引擎」，且不被同站隐藏带偏 | 没有「隐藏当前站点」功能，图标逻辑未核 | ⚠️ 做图标跟随，同站隐藏另议 |
-| 玻璃拟态 UI（`backdrop-filter: blur(20px)`） | 菜单条是扁平纯色 | 🔸 可选，优先级低 |
-| Violentmonkey 兼容（`@match *://*/*`） | 已经是 `*://*/*` | ❌ 不需要 |
-| GBK 搜索页支持 | 我们的 URL 模板统一按 utf-8 | ❌ 不需要 |
-| 设置中心「左导航 + 右侧卡片」布局 | 已有独立 options 页（hash 路由） | ❌ 不需要 |
+| 条的落点 | **逐站手写插入规则**：`rules[].insertIntoDoc = { target: 'css;.xxx' \| '//xpath', keyword, where: 'beforeBegin' }`，把条插进站点自己的容器里（如 `Line 1615` 起的一系列 rule） | 全局固定条（宿主在文档流占 30px，条自身 `fixed`），再用避让算法处理站点固定头 |
+| 站点偏移 | `fixedTop: 75` / `fixedTop: 128` 这种**逐站硬编码** | `generatedStyle` 构建期扫描生成 + 运行时命中测试 |
+| 样式隔离 | `GM_addStyle` 注入页面全局，类名靠 `#sej-*` / `.iqxin-*` 前缀 | Shadow DOM，页面只留 `as-host-*` |
+| 规则维护 | 几百条 rule，站点改版即失效，需要逐条修 | 一条正则 + 自动扫描，站点改版重跑 `style:scan` |
 
-## 二、值得抄的一条方法论
+**结论**：他们用「几百条手写插入点」换取了「不需要避让算法」；我们用「算法」换掉了这些手写规则。这条差异意味着：**他们大多数 rule 的写法对我们没有参考价值**，值得看的是与布局无关的产品功能。
 
-他们每条新增引擎都做「真实浏览器带参实测」，并**明确剔除无法通过 URL 传参触发搜索的 SPA 引擎**（DeepSeek、Gemini、Kimi、Poe）。我们目前只按经验加站点，没有这条约束。
+## 1. 值得直接借鉴（已核对实现）
 
-建议写进贡献规范：
+### 1.1 拼音排序的写法（`Line 2595-2628`）
 
-> 新增搜索引擎前，必须在真实浏览器里用 `<url 模板>` 带上关键词访问一次，确认能直接落到结果页；只能预填输入框、需要再点一次发送的（纯 SPA），不计入 `sites/`，或标注 `requiresEnter: true` 单独处理。
+这是全仓最值得抄的一段，比 README 描述精确：
 
-## 三、逐项实施建议
+```js
+// 首字符定优先级：数字 1 / 字母 2 / 中文 3 / 其他 4
+function getFirstCharInfo(str) { /* 去前缀符号后取首字符 */ }
 
-### 1. AI 搜索分类（P0，半天）
+// 同类内用 ICU 拼音 collation 比较
+cleanA.localeCompare(cleanB, 'zh-Hans-CN-u-co-pinyin', { numeric: true, sensitivity: 'base' })
+```
 
-- 新建 `src/config/sites/ai.ts`，在 `index.ts` 注册，插到分类列表最前
-- 候选引擎（对方已实测可通过 URL 传参，我们落地前仍需复验）：
-  - ChatGPT `https://chatgpt.com/?hints=search&q=%s`
-  - Perplexity `https://www.perplexity.ai/search?q=%s`
-  - 秘塔 `https://metaso.cn/?q=%s`
-  - Devv `https://devv.ai/search?q=%s`
-  - Claude `https://claude.ai/new?q=%s`（预填输入框，需确认是否算「直达」）
-  - DuckDuckGo AI `https://duckduckgo.com/?q=%s&ia=chat`
-- 验收：菜单出现「AI搜索」分类；点击任一引擎能在目标站带上关键词；`loadList` 里补对应 `probe`（若要静态避让）
+要点：`zh-Hans-CN-u-co-pinyin` 是带拼音排序规则的 ICU collation，比 `localeCompare(b, 'zh-CN')` 稳定得多；`numeric: true` 让「2」排在「10」前；首字符分类保证了「数字 → 字母 → 中文 → 符号」的粗粒度顺序。
 
-### 2. 按名排序（P1，一天）
+**落地**：`packages/options/views/sites.vue` 加 A-Z / Z-A 按钮，直接复用这套比较函数（新建 `src/util/sortByPinyin.ts`，可单测）。分类内排序时，**已启用的排在未启用之前**（对方 `sortEngineArrayWithPartition` 的做法，符合直觉）。
 
-- 设置页（`packages/options/views/sites.vue`）给每个分类加 `A-Z` / `Z-A` 按钮，全局再加一个「整理全部分类」
-- 排序规则：`localeCompare(b, 'zh-CN')` 天然支持拼音；数字前缀单独排在字母前
-- 引擎排序时**已启用的排在未启用之前**（对方的分区规则，符合直觉）
-- 验收：排序后刷新页面顺序不变；与手动拖拽的顺序不打架（排序即覆盖为当前顺序）
+### 1.2 「拖拽不卡」的真实原因（`Line 5105-5135`）
 
-### 3. 深色模式（P1，一到两天）
+README 说是「异步防抖持久化」，源码看是这样：
 
-- 配置页：Element Plus 的 dark 主题用 `html.dark` 类 + `dark/css-vars.css`，加「跟随系统 / 浅色 / 深色」三态开关
-- 菜单条：影子根里的 CSS 变量在 `@media (prefers-color-scheme: dark)` 下覆盖（`--as-bg-color`、`--as-primary-text-color` 等，见 `src/assets/internal.scss`）
-- 验收：系统切深色后，菜单条与配置页都不再是刺眼白底；`<all-search-ui>` 的 shadow 内颜色生效
+- 拖拽过程中**直接移动 DOM 节点**，不触发 Vue 重渲染
+- 松手后 `debouncedSave()` 只延迟 **100ms** 写存储
+- 更关键：`saveData()` 是**遍历 DOM 读 `data-*` 反向重建 JSON**，不维护独立的内存模型
 
-### 4. 配置编辑器增强（P2，半天）
+也就是说「0ms」的本质是「不做重渲染 + 保存时读 DOM」，不是异步本身。
 
-- `src/components/json-editor.vue` 加三个按钮：`格式化`（`JSON.stringify(parse(val), null, 2)`）、`复制配置`（`clipboard.ts` 已有能力）、`恢复默认`（二次确认）
-- 支持 Esc 关闭（优先关当前弹层，不影响下层）
-- 验收：格式化后缩进为 2 空格且不丢数据；复制内容等于编辑框当前值
+**落地**：我们的 options 页用 Vue 响应式数组，拖拽必然触发重渲染。如果要优化，方向是「拖拽期间只做 DOM 位移，松手后再同步回数组」，而不是简单加 debounce。**先测量**（100+ 引擎时是否掉帧）再决定值不值得。
 
-### 5. 拖拽性能（P2，先测再定）
+### 1.3 配置编辑器（`Line 4985-5010`）
 
-- 先造 100+ 引擎的配置，测量拖动时是否掉帧
-- 若卡：拖拽过程只改本地数组，松手后 debounce 300ms 写一次存储（对方的核心优化点）
-- 验收：100 个引擎拖动时无长任务超过 50ms
+确认存在，且交互完整：`✨ 格式化`（`JSON.stringify(parse, null, 2)` + 语法错误提示）、`📋 复制配置`、`恢复默认设置`（独立危险按钮）、等宽字体、模态框居中。**README 描述属实**。
 
-### 6. 分类图标跟随首位引擎（P2）
+**落地**：`src/components/json-editor.vue` 加这三个按钮 + Esc 关闭，半天工作量。
 
-- 现状待核：`useFavicon` / `menu.vue` 里分类图标取的是哪一项
-- 目标：始终取该分类「第一个已启用」的引擎 favicon
-- 若将来做「隐藏当前站点」，图标要跟着取「第一个可见引擎」，否则会出现对方描述的图标突变
-- 验收：刷新页面、切换站点后分类图标不变
+### 1.4 AI 搜索列表（`Line 1769-1795`）
 
-### 7. 玻璃拟态（可选）
+真实条目（注释里写「内置 10 个」，实际只有 6 个）：
 
-- 菜单条加 `backdrop-filter: blur(12px)` + 半透明背景
-- 注意：`<all-search-ui>` 在部分站点会与站点自身的 `backdrop-filter` 叠加导致性能问题，需要限制到菜单条容器，不要整个宿主
+| 名称 | URL |
+| --- | --- |
+| ChatGPT | `https://chatgpt.com/?q=%s&hints=search` |
+| Perplexity | `https://www.perplexity.ai/search?q=%s` |
+| 秘塔AI | `https://metaso.cn/?q=%s` |
+| Devv AI | `https://devv.ai/search?q=%s` |
+| Claude | `https://claude.ai/new?q=%s` |
+| DuckDuckGo AI | `https://duckduckgo.com/?q=%s&ia=chat` |
 
-## 四、不建议照搬
+**落地**：新建 `src/config/sites/ai.ts`。注意他们自己把 Claude 归入「预填输入框」类，严格说不算直达检索——我们落地前要在真实浏览器里各点一次确认。
 
-- **设置中心布局**：我们有独立 options 页，回退成页面内模态框是倒退
-- **剔除 SPA 引擎**：我们保留引擎项，只是不提供「带 `%s` 直达」的能力，两者定位不同
-- **GBK 处理**：我们的引擎配置统一按 utf-8 组 URL，不需要兼容上的额外分支
+## 2. 值得做但要改实现
+
+### 2.1 深色模式（`Line 3526-3533`、`Line 6250+`）
+
+他们只判断了 `<meta name="color-scheme">` 的内容，**没有监听 `prefers-color-scheme`**，也没有手动切换开关；换页时不会更新。实现质量一般。
+
+**落地**：我们做的话用 `matchMedia('(prefers-color-scheme: dark)')` + `html.dark` 类（Element Plus 官方 dark 变量），并给用户「跟随系统 / 浅色 / 深色」三态。
+
+### 2.2 分类图标取「第一个未禁用引擎」（`Line 3725-3745`）
+
+源码确实是遍历 `engineList[category]` 取第一个 `!eng.disable` 的引擎，注释说明这是为了避开「同站隐藏导致图标突变」。
+
+**前提**：我们没有 `HideTheSameLink`（隐藏当前站点对应引擎）这个功能，所以碰不到这个 bug。若将来要做同站隐藏，图标必须同步改成「第一个可见引擎」。
+
+### 2.3 图标来源策略（`getIcon` 配置项）
+
+他们有 4 种模式：自动（能连谷歌用谷歌，否则域名 `/favicon.ico`）、域名、谷歌、dnspot 第三方。
+
+我们 `favicon.vue` 已有 faviconkit 兜底，不必照搬，但可以借鉴「按可达性降级」的思路。
+
+## 3. 不建议照搬
+
+- **逐站 `insertIntoDoc` 规则**：与我们的算法路线冲突，且维护成本高（几百条）
+- **`fixedTop: 75/128` 硬编码偏移**：正是我们 `generatedStyle` 要取代的东西
+- **`debouncedSave` 100ms + 读 DOM 保存**：在 Vue 里会让数据源分裂，收益不抵复杂度
+- **夜间模式实现**：只读 meta，不跟系统
+- **GBK / `@require toGBK.js`**：我们统一按 utf-8 组 URL
+- **`@match *://*/*`**：我们已经一致，无需改
+
+## 4. 方法论（仍然成立）
+
+他们的每条搜索引擎都做过真实浏览器带参实测，并明确剔除无法通过 URL 传参触发搜索的 SPA（DeepSeek、Gemini、Kimi、Poe）。建议写进 `AGENTS.md`：
+
+> 新增搜索引擎前，必须在真实浏览器里用 URL 模板带上关键词访问一次，确认能直接落到结果页；只能预填输入框、需要再点一次发送的，不计入 `sites/`。
+
+## 5. 优先级建议
+
+| 顺序 | 事项 | 工作量 | 价值 |
+| --- | --- | --- | --- |
+| 1 | AI 搜索分类（6 条，落地前实测） | 半天 | 高，纯配置 |
+| 2 | 拼音排序（抄 `compareSmart` + ICU collation） | 半天 + 单测 | 高，用户可感知 |
+| 3 | 配置编辑器三按钮 + Esc | 半天 | 中 |
+| 4 | 深色模式（按我们的方式实现） | 1–2 天 | 中 |
+| 5 | 拖拽性能（先量化） | 视测量结果 | 低 |
