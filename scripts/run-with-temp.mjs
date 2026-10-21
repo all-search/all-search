@@ -20,7 +20,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const TMPDIR = path.join(ROOT, '.tmp', 'build')
 
 /** 建目录，顺带清掉上次构建残留的 esbuild-* / vite-* 临时目录 */
-function prepare () {
+function prepare ({ quiet = false } = {}) {
   fs.mkdirSync(TMPDIR, { recursive: true })
 
   let removed = 0
@@ -34,7 +34,9 @@ function prepare () {
     }
   }
 
-  console.log(`临时目录：${path.relative(ROOT, TMPDIR)}${removed ? `（清掉 ${removed} 个残留）` : ''}`)
+  if (!quiet) {
+    console.log(`临时目录：${path.relative(ROOT, TMPDIR)}${removed ? `（清掉 ${removed} 个残留）` : ''}`)
+  }
 }
 
 const args = process.argv.slice(2)
@@ -49,7 +51,8 @@ if (args[0] === 'prepare') {
   process.exit(0)
 }
 
-fs.mkdirSync(TMPDIR, { recursive: true })
+// 正常构建路径也顺手清理一次，脚本里就不必再串一条 build:prepare
+prepare({ quiet: true })
 
 const child = spawn(['pnpm', ...args].join(' '), {
   cwd: ROOT,

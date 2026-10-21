@@ -60,7 +60,7 @@ pnpm zip:firefox    # packages/plugin/.output/*-firefox.zip (AMO)
 pnpm build:options  # packages/options/dist (GitHub Pages)
 ```
 
-> **Windows note**: esbuild writes transpile output to `%TEMP%`; antivirus / indexer sometimes still holds the file handle and the build dies with `[vite:esbuild-transpile] remove ...: Access is denied`. `build:*` and `zip*` scripts call `pnpm build:prepare` then run through `pnpm with-temp` (both from `scripts/run-with-temp.mjs`), so the documented commands work as-is. If you call `vite` / `wxt` directly, set it yourself:
+> **Windows note**: esbuild writes transpile output to `%TEMP%`; antivirus / indexer sometimes still holds the file handle and the build dies with `[vite:esbuild-transpile] remove ...: Access is denied`. `build:*` and `zip*` scripts run through `pnpm with-temp` (`scripts/run-with-temp.mjs`), which also cleans stale `esbuild-*` leftovers on start, so the documented commands work as-is. If you call `vite` / `wxt` directly, set it yourself:
 >
 > ```powershell
 > New-Item -ItemType Directory -Force .tmp\build | Out-Null

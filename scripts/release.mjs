@@ -22,7 +22,8 @@ const PKG = path.join(ROOT, 'package.json')
 
 const args = process.argv.slice(2)
 const push = args.includes('--push')
-const target = args.find(arg => !arg.startsWith('--'))
+// 不带参数时默认 patch，支持 pnpm release 与 pnpm release -- 1.6.0 两种写法
+const target = args.find(arg => !arg.startsWith('--')) || 'patch'
 
 if (!target) {
   console.error('用法: pnpm release <patch|minor|major|x.y.z> [--push]')

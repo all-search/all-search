@@ -36,7 +36,7 @@
 - **Element Plus 2.9** - 配置页 UI 组件库
 - **Vue Router 4** - 路由管理
 - **Sass** - CSS 预处理器
-- **WXT 0.20.13** - 浏览器扩展开发框架
+- **WXT 0.20.27** - 浏览器扩展开发框架
 - **Vitest + jsdom** - 单元测试
 - **Rollup (via Vite)** - 模块打包
 
@@ -260,9 +260,8 @@ pnpm run build:plugin
 
 **分浏览器构建**：
 ```bash
-pnpm run build:firefox  # Firefox 专用
-pnpm run zip            # 打包 Chrome 版本
-pnpm run zip:firefox    # 打包 Firefox 版本
+pnpm run build:plugin   # 打包 Chrome 版本（.output/*-chrome.zip）
+pnpm run zip:firefox    # 打包 Firefox 版本（.output/*-firefox.zip + AMO sources）
 ```
 
 #### 构建配置页面
@@ -275,7 +274,7 @@ pnpm run build:options
 ## 🔧 核心功能模块
 
 ### 1. 搜索引擎管理
-- **分类管理**: 支持 12 种搜索引擎分类
+- **分类管理**: 支持 13 种搜索引擎分类（含 AI）
 - **拖拽排序**: 可调整搜索引擎顺序
 - **自定义添加**: 支持用户添加自定义搜索引擎
 - **自动加载**: 新添加的搜索引擎自动显示

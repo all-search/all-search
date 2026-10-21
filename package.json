@@ -26,6 +26,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "verify": "pnpm type-check && pnpm test",
     "e2e": "node e2e/run.mjs",
     "style:scan": "node scripts/scan-special-style.mjs",
     "lint": "eslint --ext .js,.ts,.vue src packages --fix",
@@ -38,15 +39,13 @@
     "release:patch": "node scripts/release.mjs patch",
     "release:minor": "node scripts/release.mjs minor",
     "release:major": "node scripts/release.mjs major",
-    "build:script": "pnpm build:prepare && pnpm with-temp run -C packages/script build",
+    "build:script": "pnpm with-temp run -C packages/script build",
     "dev:plugin": "pnpm run -C packages/plugin dev",
-    "build:plugin": "pnpm build:prepare && pnpm with-temp run -C packages/plugin zip",
+    "build:plugin": "pnpm with-temp run -C packages/plugin zip",
     "dev:firefox": "pnpm run -C packages/plugin dev:firefox",
-    "build:firefox": "pnpm build:prepare && pnpm with-temp run -C packages/plugin build:firefox",
-    "zip": "pnpm build:prepare && pnpm with-temp run -C packages/plugin zip",
-    "zip:firefox": "pnpm build:prepare && pnpm with-temp run -C packages/plugin zip:firefox",
+    "zip:firefox": "pnpm with-temp run -C packages/plugin zip:firefox",
     "dev:options": "pnpm run -C packages/options dev",
-    "build:options": "pnpm build:prepare && pnpm with-temp run -C packages/options build"
+    "build:options": "pnpm with-temp run -C packages/options build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",
