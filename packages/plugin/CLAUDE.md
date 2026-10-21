@@ -50,7 +50,7 @@ pnpm zip:firefox     # 产出 .output/all-search-<ver>-firefox.zip（MV2 + AMO s
 pnpm -C packages/plugin build   # 只要未打包目录 .output/chrome-mv3
 ```
 
-> Windows 下 esbuild 默认写 `%TEMP%`，被杀毒/索引占用时报 `[vite:esbuild-transpile] remove ...: Access is denied`。`pnpm build:plugin` 等脚本已通过 `scripts/run-with-temp.mjs` 把临时目录指到 `.tmp/build`，直接跑即可；手动调 `wxt` 才需自己设 `$env:TEMP`。
+> Windows 下 esbuild 默认写 `%TEMP%`，被杀毒/索引占用时报 `[vite:esbuild-transpile] remove ...: Access is denied`。`pnpm build:plugin` 等脚本会先跑 `pnpm build:prepare`、再经 `pnpm with-temp` 执行，直接跑即可；手动调 `wxt` 才需自己设 `$env:TEMP`。
 
 ## 产物结构（`.output/chrome-mv3`）
 

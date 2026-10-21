@@ -32,15 +32,17 @@
     "type-check": "vue-tsc --noEmit",
     "prepare": "husky install",
     "dev:script": "pnpm run -C packages/script dev",
-    "build:script": "node scripts/run-with-temp.mjs run -C packages/script build",
+    "with-temp": "node scripts/run-with-temp.mjs",
+    "build:prepare": "node scripts/run-with-temp.mjs prepare",
+    "build:script": "pnpm build:prepare && pnpm with-temp run -C packages/script build",
     "dev:plugin": "pnpm run -C packages/plugin dev",
-    "build:plugin": "node scripts/run-with-temp.mjs run -C packages/plugin zip",
+    "build:plugin": "pnpm build:prepare && pnpm with-temp run -C packages/plugin zip",
     "dev:firefox": "pnpm run -C packages/plugin dev:firefox",
-    "build:firefox": "node scripts/run-with-temp.mjs run -C packages/plugin build:firefox",
-    "zip": "node scripts/run-with-temp.mjs run -C packages/plugin zip",
-    "zip:firefox": "node scripts/run-with-temp.mjs run -C packages/plugin zip:firefox",
+    "build:firefox": "pnpm build:prepare && pnpm with-temp run -C packages/plugin build:firefox",
+    "zip": "pnpm build:prepare && pnpm with-temp run -C packages/plugin zip",
+    "zip:firefox": "pnpm build:prepare && pnpm with-temp run -C packages/plugin zip:firefox",
     "dev:options": "pnpm run -C packages/options dev",
-    "build:options": "node scripts/run-with-temp.mjs run -C packages/options build"
+    "build:options": "pnpm build:prepare && pnpm with-temp run -C packages/options build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",

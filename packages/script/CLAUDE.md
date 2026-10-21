@@ -46,7 +46,7 @@ pnpm build:script  # 产出 packages/script/dist/index.user.js
 1. `pnpm build:script` 后把 `dist/index.user.js` 直接拖进 Tampermonkey 新建脚本，或
 2. `dev:script` 持续构建，每次改完在油猴里重新保存
 
-> Windows 下 esbuild 默写 `%TEMP%`，可能报 `Access is denied`；`pnpm build:script` 已通过 `scripts/run-with-temp.mjs` 规避，手动调 vite 时才需自设 `$env:TEMP`。
+> Windows 下 esbuild 默写 `%TEMP%`，可能报 `Access is denied`；`pnpm build:script` 会先跑 `pnpm build:prepare`、再经 `pnpm with-temp` 执行，手动调 vite 时才需自设 `$env:TEMP`。
 
 ## 与插件的差异
 

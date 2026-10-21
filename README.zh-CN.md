@@ -57,7 +57,7 @@ pnpm zip:firefox    # packages/plugin/.output/*-firefox.zip（AMO）
 pnpm build:options  # packages/options/dist（GitHub Pages）
 ```
 
-> **Windows 提示**：esbuild 默认把转译产物写进 `%TEMP%`，被杀毒或索引服务占着句柄时会报 `[vite:esbuild-transpile] remove ...: Access is denied`。`build:*` 与 `zip*` 脚本已经通过 `scripts/run-with-temp.mjs` 把临时目录指到 `.tmp/build`，按文档直接跑即可；只有手动调用 `vite` / `wxt` 时才需要自己设置：
+> **Windows 提示**：esbuild 默认把转译产物写进 `%TEMP%`，被杀毒或索引服务占着句柄时会报 `[vite:esbuild-transpile] remove ...: Access is denied`。`build:*` 与 `zip*` 脚本会先跑 `pnpm build:prepare`，再通过 `pnpm with-temp` 执行（都是 `scripts/run-with-temp.mjs`），按文档直接跑即可；只有手动调用 `vite` / `wxt` 时才需要自己设置：
 >
 > ```powershell
 > New-Item -ItemType Directory -Force .tmp\build | Out-Null
