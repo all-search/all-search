@@ -125,7 +125,6 @@ jobs:
       # 用仓库自己的 Conventional Commits 生成正文，替代 GitHub 的 auto notes
       # （我们直接推 master、不开 PR，auto notes 只会产出一条 compare 链接）
       - name: Generate release notes
-        if: startsWith(github.ref, 'refs/tags/v')
         run: node scripts/changelog.mjs --version "${GITHUB_REF_NAME}" --out release-notes.md
 
       - name: Publish GitHub Release
