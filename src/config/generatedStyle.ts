@@ -169,5 +169,45 @@ export const generatedStyle: GeneratedStyleRule[] = [
     top: [
       "div.prc-PageLayout-PaneWrapper-pHPop { top: 30px !important; }"
     ].join('\n')
+  },
+  {
+    pattern: "\\/\\/www\\.sogou\\.com\\/(?:web|s)",
+    flags: "",
+    probe: "https://www.sogou.com/sogou?site=news.qq.com&query=all-search",
+    top: [
+      "div.header { top: 30px !important; }"
+    ].join('\n')
+  },
+  {
+    pattern: "\\/\\/www\\.zhihu\\.com\\/search\\?",
+    flags: "",
+    probe: "https://www.zhihu.com/search?type=content&q=all-search",
+    top: [
+      "#root > div:nth-of-type(1) > div:nth-of-type(3) { top: 30px !important; }"
+    ].join('\n')
+  },
+  {
+    pattern: "\\/\\/weixin\\.sogou\\.com\\/weixin\\?",
+    flags: "",
+    probe: "http://weixin.sogou.com/weixin?ie=utf8&type=2&query=all-search",
+    top: [
+      "#scroll-header { top: 30px !important; }"
+    ].join('\n')
+  },
+  {
+    pattern: "\\/\\/search\\.smzdm\\.com\\/\\?",
+    flags: "",
+    probe: "http://search.smzdm.com/?c=home&s=all-search",
+    top: [
+      "#global-nav { top: 30px !important; }"
+    ].join('\n')
+  },
+  {
+    pattern: "\\/\\/translate\\.google(?:\\.\\D{1,4}){1,2}",
+    flags: "",
+    probe: "https://translate.google.com/?q=all-search",
+    top: [
+      "#gb { top: 30px !important; }"
+    ].join('\n')
   }
 ]

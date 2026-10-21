@@ -85,10 +85,28 @@ Some sites pin a header to the top of the viewport, which would end up underneat
 
 ```bash
 pnpm style:scan                 # scan every site in loadList that has a `probe`
-pnpm style:scan --site=github   # only matching sites
+pnpm style:scan --site=github   # only matching sites (comma separated: --site=google,zhihu)
 pnpm style:scan --limit=10      # first N sites
 pnpm style:scan --dry           # print the result, do not write
 pnpm style:scan --fresh         # full rescan instead of merging
+pnpm style:scan --prune         # drop rules for sites this run no longer hits
+```
+
+Some sites (Google, Zhihu, Sogou, …) serve a captcha to a freshly launched automation browser. Scanning through a **real browser** gets past that, because the fingerprint and profile look normal:
+
+```bash
+# start Chrome/Edge with a debug port and a separate profile (Chrome 136+ requires
+# a non-default --user-data-dir), then point the scanner at it
+chrome.exe --user-data-dir=D:\tmp\cdp-profile --remote-debugging-port=9222
+pnpm style:scan --cdp=http://127.0.0.1:9222 --site=google,zhihu,sogou
+```
+
+On Windows the live `Cookies` file is exclusively locked while the browser runs, so copying the profile does not carry the session over. A volume shadow copy does:
+
+```powershell
+$s = (Invoke-CimMethod -ClassName Win32_ShadowCopy -MethodName Create -Arguments @{ Volume='C:\'; Context='ClientAccessible' }).ShadowID
+$dev = (Get-CimInstance Win32_ShadowCopy | Where-Object { $_.InstallDate -gt (Get-Date).AddMinutes(-5) }).DeviceObject
+Copy-Item -LiteralPath "$dev\Users\<user>\AppData\Local\Google\Chrome\User Data\Default\Network\Cookies" -Destination <cdp-profile>\Default\Network\Cookies -Force
 ```
 
 The result is written to `src/config/generatedStyle.ts` and committed. At runtime a site with a generated rule only gets the static CSS (zero JS cost); other sites fall back to the `elementsFromPoint` sampler in `src/util/addSpecialStyle.ts`.

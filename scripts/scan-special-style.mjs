@@ -40,6 +40,12 @@ const dry = args.includes('--dry')
 const fresh = args.includes('--fresh')
 const prune = args.includes('--prune')
 /**
+ * 接到一个已经开着的浏览器上（Chrome/Edge 需以 --remote-debugging-port 启动）。
+ * 对验证码站点很关键：全新 profile 的自动化浏览器常被判定为机器人，
+ * 用真实浏览器（带扩展、带 cookie）走 CDP 就能正常打开。
+ */
+const cdpEndpoint = (args.find(a => a.startsWith('--cdp=')) || '').slice('--cdp='.length) || process.env.AS_CDP || ''
+/**
  * 生成后再复核一遍：站点常在页面加载过程中短暂地把头部设成 fixed，
  * 扫描容易抓到这种瞬时状态，复核时元素已经不是 fixed/sticky 的规则要丢掉。
  * 默认开启，--no-verify 可跳过。
@@ -104,7 +110,8 @@ function withDerivedProbes (sites, templates) {
  * 注意这个函数会被序列化送进浏览器，不能引用外部变量。
  */
 function scanCurrentViewport ({ barHeight }) {
-  const HASH_LIKE = /^(?=.*\d)(?=.*[A-Za-z])[A-Za-z-]{5,}$/
+  // 形如 Xx7Mif / E5eFb / CTOaxb：无连字符、字母数字混杂、长度够，多为构建时生成的混淆类名
+  const HASH_LIKE = /^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9]{5,}$/
 
   const isStableClass = (name) => {
     if (!name) return false
@@ -113,7 +120,8 @@ function scanCurrentViewport ({ barHeight }) {
     // CSS Modules / CSS-in-JS 的构建哈希后缀，如 headerWrapAdaptMod--p4OEz7QI
     if (/--[A-Za-z0-9_-]{5,}$/.test(name)) return false
     if (/_[A-Za-z0-9]{6,}$/.test(name)) return false
-    if (HASH_LIKE.test(name) && !/[-_]/.test(name) && name.length <= 12) return false
+    // 无分隔符且够长，又含数字或大小写混排（Xx7Mif / E5eFb / zLSRge），基本都是混淆名
+    if (!/[-_]/.test(name) && name.length >= 5 && (/[0-9]/.test(name) || /[a-z]/.test(name) && /[A-Z]/.test(name))) return false
     return true
   }
 
@@ -194,8 +202,9 @@ function scanCurrentViewport ({ barHeight }) {
       const positioned = style.position === 'fixed' || style.position === 'sticky'
       const hasOffset = style.top && style.top !== 'auto'
       const pinned = style.position === 'fixed' || parseFloat(style.top) === 0
-      // 负偏移说明它正被藏起来（如 B 站下滑时 top:-34px 的头部），动它没有意义
-      const tuckedAway = parseFloat(style.top) < 0
+      // 负偏移说明它正被藏起来（如 B 站下滑时 top:-34px 的头部），动它没有意义。
+      // 留一点容差：谷歌的头部是 top:-0.05px，属于贴在顶部，不是收起
+      const tuckedAway = parseFloat(style.top) < -1
       if (positioned && hasOffset && pinned && !tuckedAway) {
         const rect = node.getBoundingClientRect()
         const overlaps = rect.height > 0 && rect.bottom > barRect.bottom - barHeight + 1 && rect.top < barRect.bottom - 1
@@ -214,6 +223,17 @@ function scanCurrentViewport ({ barHeight }) {
         const offscreen = rect.right <= 1 || rect.left >= window.innerWidth - 1
         if (overlaps && !hidden && !coversViewport && !panelLike && !offscreen) {
           const { selector, stable } = buildSelector(node)
+          // 纯 nth-of-type 链路没有任何锚点（如 span:nth-of-type(1) > div:nth-of-type(1)），
+          // 会命中页面里任意第一个同类结构，宁可不出规则，交给运行时采样兜底
+          const hasAnchor = /[#.][A-Za-z_-]/.test(selector)
+          if (!hasAnchor) {
+            if (!seen.has(`skip:${selector}`)) {
+              seen.add(`skip:${selector}`)
+              console.log(`   ⚠ 选择器无锚点，跳过：${selector}`)
+            }
+            node = walker.nextNode()
+            continue
+          }
           if (!seen.has(selector)) {
             seen.add(selector)
             const numeric = parseFloat(style.top)
@@ -280,8 +300,9 @@ async function main () {
   const templates = collectMenuUrls()
   const allSites = withDerivedProbes(await loadSites(), templates)
   const sites = allSites.filter(site => site.probe)
-  const selected = filter
-    ? sites.filter(site => String(site.url).includes(filter) || site.probe.includes(filter))
+  const filters = filter ? filter.split(',').map(item => item.trim()).filter(Boolean) : []
+  const selected = filters.length
+    ? sites.filter(site => filters.some(f => String(site.url).includes(f) || site.probe.includes(f)))
     : sites
 
   if (!selected.length) {
@@ -294,18 +315,30 @@ async function main () {
     `显式 probe ${allSites.filter(s => s.probe && !s.derived).length} 个，推导 ${allSites.filter(s => s.derived).length} 个）`
   )
 
-  const browser = await chromium.launch({
-    headless: !headed,
-    channel: process.env.E2E_CHANNEL || (process.platform === 'win32' ? 'msedge' : 'chrome'),
-    args: [
-      '--no-first-run',
-      '--no-default-browser-check',
-      '--disable-gpu',
-      // 需要代理才能访问的站点（如 Google）可用 AS_PROXY 指定
-      ...(process.env.AS_PROXY ? [`--proxy-server=${process.env.AS_PROXY}`] : [])
-    ],
-    ...(process.env.E2E_EXECUTABLE ? { executablePath: process.env.E2E_EXECUTABLE } : {})
-  })
+  let browser
+  let context
+  if (cdpEndpoint) {
+    console.log(`连接已有浏览器：${cdpEndpoint}`)
+    browser = await chromium.connectOverCDP(cdpEndpoint)
+    context = browser.contexts()[0]
+    if (!context) {
+      console.error('CDP 连上了但没有可用的浏览器上下文')
+      process.exit(1)
+    }
+  } else {
+    browser = await chromium.launch({
+      headless: !headed,
+      channel: process.env.E2E_CHANNEL || (process.platform === 'win32' ? 'msedge' : 'chrome'),
+      args: [
+        '--no-first-run',
+        '--no-default-browser-check',
+        '--disable-gpu',
+        // 需要代理才能访问的站点（如 Google）可用 AS_PROXY 指定
+        ...(process.env.AS_PROXY ? [`--proxy-server=${process.env.AS_PROXY}`] : [])
+      ],
+      ...(process.env.E2E_EXECUTABLE ? { executablePath: process.env.E2E_EXECUTABLE } : {})
+    })
+  }
 
   const created = []
   const failures = []
@@ -316,11 +349,14 @@ async function main () {
   for (const site of (limit ? selected.slice(0, limit) : selected)) {
     index += 1
     const url = site.probe.replace('%s', encodeURIComponent(KEYWORD))
-    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+    const page = context
+      ? await context.newPage()
+      : await browser.newPage({ viewport: { width: 1280, height: 800 } })
     console.log(`\n[${index}/${selected.length}] ${url}`)
     try {
       // 谷歌在新 profile 上会先跳同意书页，预置 cookie 直接进结果页
-      if (/(^|\.)google\./.test(new URL(url).hostname)) {
+      // （用 CDP 接的是真实浏览器，不要往里塞 cookie）
+      if (!context && /(^|\.)google\./.test(new URL(url).hostname)) {
         await page.context().addCookies([
           { name: 'CONSENT', value: 'YES+cb', domain: '.google.com', path: '/' },
           { name: 'SOCS', value: 'CAI', domain: '.google.com', path: '/' }
