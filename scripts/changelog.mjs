@@ -122,7 +122,12 @@ const to = head()
 function toLabel (ref) {
   if (ref !== 'HEAD') return ref
   try {
-    return git('describe', '--tags', '--exact-match', 'HEAD')
+    // 没有 tag 时 git describe 会往 stderr 写 fatal，这里静默掉
+    return execFileSync('git', ['describe', '--tags', '--exact-match', 'HEAD'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore']
+    }).trim()
   } catch {
     return 'HEAD'
   }
