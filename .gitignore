@@ -40,3 +40,5 @@ src/components.d.ts
 # 本地临时目录（e2e 脚本、截图、构建临时文件）
 .tmp/
 e2e/artifacts/
+
+dist-artifacts/

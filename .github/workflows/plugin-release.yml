@@ -78,12 +78,21 @@ jobs:
       - name: Build Firefox package
         run: pnpm zip:firefox
 
+      # 产物默认落在 packages/plugin/.output（隐藏目录），而 upload-artifact@v4 的
+      # include-hidden-files 默认为 false，会直接报 "No files were found"，
+      # 所以先拷到普通目录再上传。
+      - name: Collect packages
+        run: |
+          mkdir -p dist-artifacts
+          cp packages/plugin/.output/all-search-*.zip dist-artifacts/
+          ls -lh dist-artifacts
+
       # 顺带保留 AMO 的 sources 包（all-searchplugin-*-sources.zip），方便提审时下载
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
           name: all-search-plugin
-          path: packages/plugin/.output/*.zip
+          path: dist-artifacts/*.zip
           if-no-files-found: error
 
       - name: Publish GitHub Release
@@ -92,5 +101,5 @@ jobs:
         with:
           # 只挂真正给用户的两个包，sources.zip 是给 AMO 审核用的，不放进 Release
           files: |
-            packages/plugin/.output/all-search-*.zip
+            dist-artifacts/all-search-*.zip
           generate_release_notes: true
