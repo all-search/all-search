@@ -1,4 +1,4 @@
-import { checkBody, getAsRoot, debounce } from './index'
+import { getAsRoot, getAsShadowRoot } from './index'
 
 const INLINE_UNSET_SENTINEL = '__AS_INLINE_UNSET__'
 
@@ -11,7 +11,7 @@ const DATASET_MARKER = 'asAdjusted'
 const ADJUSTED_SELECTOR = '[data-as-adjusted]'
 
 /**
- * 已调整元素的数据结构
+ * 已调整元素的原始值
  */
 interface AdjustedElement {
   originalTop: string
@@ -19,14 +19,53 @@ interface AdjustedElement {
   originalPriority: string
 }
 
-/**
- * 存储已调整元素的原始值（使用 WeakMap 自动垃圾回收）
- */
+/** 存储已调整元素的原始值（WeakMap 随元素回收） */
 const adjustedElements = new WeakMap<HTMLElement, AdjustedElement>()
+
+/* ------------------------------------------------------------------ *
+ * 采样配置
+ *
+ * 不再遍历整篇文档：只在菜单条覆盖的区域里取网格点，
+ * 用 elementsFromPoint 找出「压在这条区域上」的元素。
+ * ------------------------------------------------------------------ */
+
+/** 横向采样点数量（均匀分布在菜单条宽度上） */
+const SAMPLE_X_COUNT = 15
+/** 纵向采样位置（占条高度的比例，取 1/4、1/2、3/4 三行） */
+const SAMPLE_Y_RATIOS = [0.25, 0.5, 0.75]
+/** 每个采样点最多取几个候选元素（按绘制顺序从前往后） */
+const SAMPLE_STACK_LIMIT = 4
+/** 单轮采样的候选元素上限，防止极端页面失控 */
+const SAMPLE_CANDIDATE_LIMIT = 200
+/** 两次采样的最小间隔（ms），滚动时用于节流 */
+const SAMPLE_MIN_INTERVAL = 120
+
+let currentTopOffset = 0
+let isRestoring = false
+
+/**
+ * 根据宿主高度获取需要让固定元素避让的像素值
+ */
+function computeTopOffset(): number {
+  const host = getAsRoot()
+  if (!host) {
+    return 0
+  }
+  const classList = host.classList
+  if (!classList.contains('as-host-top') || !classList.contains('as-host-show') || classList.contains('as-host-hide')) {
+    return 0
+  }
+  const rect = host.getBoundingClientRect()
+  return Number((rect.height || 0).toFixed(2))
+}
+
+function refreshTopOffset(): number {
+  currentTopOffset = computeTopOffset()
+  return currentTopOffset
+}
 
 /**
  * 将元素的 top 恢复成我们记录的原始值
- * 使用 dataset 标记判断是否已调整
  */
 function restoreOriginalTop(item: HTMLElement): void {
   if (!item.dataset[DATASET_MARKER]) return
@@ -48,40 +87,30 @@ function restoreOriginalTop(item: HTMLElement): void {
   adjustedElements.delete(item)
 }
 
-/**
- * 全量恢复被我们标记为调整过的 fixed 节点
- * 使用 dataset 选择器遍历
- */
+/** 还原所有被我们调整过的元素 */
 function restoreAllAdjustedNodes(): void {
-  // 防止死循环：如果正在恢复，直接返回
   if (isRestoring) return
   if (!document.body) return
 
   isRestoring = true
-
   try {
-    // 使用 dataset 选择器查找所有已调整的元素（属性名是 kebab-case）
-    const elements = document.querySelectorAll(ADJUSTED_SELECTOR)
-    elements.forEach(el => {
+    document.querySelectorAll(ADJUSTED_SELECTOR).forEach(el => {
       if (el instanceof HTMLElement) {
         restoreOriginalTop(el)
       }
     })
   } finally {
-    // 确保标志位被清除，即使发生异常
     isRestoring = false
   }
 }
 
 /**
- * 判断元素是否是需要避让的「吸顶」元素
+ * 判断元素是否需要避让
  *
- * - fixed：只要 top 是具体数值就避让（原有逻辑）
+ * - fixed：只要 top 是具体数值就避让
  * - sticky：只有 top 为 0 的才避让，否则说明它本来就停在别的偏移上，不该动
- *   （谷歌搜索结果页的顶栏就是 sticky + top:0，见 issue #83）
  */
 function isAdjustableElement(el: HTMLElement, root: Element): boolean {
-  // 不处理隐藏元素和我们自己的元素
   if (el.style.display === 'none') return false
   if (root.contains(el)) return false
 
@@ -109,48 +138,12 @@ function isOffsetAllowed(position: string, top: string): boolean {
   return parseFloat(top) === 0
 }
 
-function isElement(obj: any): obj is Element {
-  return obj
-    && obj instanceof Element
-    && obj.nodeType === 1
-    && obj.tagName !== undefined
-}
-
-let currentTopOffset = 0
-
-// 防止死循环的标志位（类似 Vue 2 的 isRendering）
-let isRestoring = false
-let isUpdating = false
-
 /**
- * 根据宿主高度获取需要让固定元素避让的像素值
- */
-function computeTopOffset(): number {
-  const host = getAsRoot()
-  if (!host) {
-    return 0
-  }
-  const classList = host.classList
-  if (!classList.contains('as-host-top') || !classList.contains('as-host-show') || classList.contains('as-host-hide')) {
-    return 0
-  }
-  const rect = host.getBoundingClientRect()
-  return Number((rect.height || 0).toFixed(2))
-}
-
-function refreshTopOffset(): number {
-  currentTopOffset = computeTopOffset()
-  return currentTopOffset
-}
-
-/**
- * 调整单个 fixed 元素的位置（幂等：多次调用产生相同结果）
- * 使用 dataset 标记防止重复调整和累加
+ * 调整单个元素的位置（幂等：多次调用产生相同结果）
  */
 function updateNodeOffset(item: HTMLElement): void {
-  if (!item || !isElement(item)) {
-    return
-  }
+  if (!item) return
+
   if (currentTopOffset <= 0) {
     restoreOriginalTop(item)
     return
@@ -168,7 +161,7 @@ function updateNodeOffset(item: HTMLElement): void {
     return
   }
 
-  // 首次调整：捕获原始值 → 应用偏移 → 添加标记
+  // 首次调整：捕获原始值
   const style = window.getComputedStyle(item)
   if (style.position !== 'fixed' && style.position !== 'sticky') {
     return
@@ -186,150 +179,133 @@ function updateNodeOffset(item: HTMLElement): void {
     return
   }
 
-  // 保存原始状态
   adjustedElements.set(item, {
     originalTop: topValue,
     originalInlineTop: item.style.getPropertyValue('top') || INLINE_UNSET_SENTINEL,
     originalPriority: item.style.getPropertyPriority('top') || ''
   })
 
-  // 应用偏移
   item.style.setProperty('top', `${numericTop + currentTopOffset}px`, 'important')
-
-  // 添加标记
   item.dataset[DATASET_MARKER] = '1'
 }
 
-function getFixedNodeList(list: (Node | Element | null)[]): HTMLElement[] {
-  const weakSet = new WeakSet()
-  const newList: HTMLElement[] = []
+/* ------------------------------------------------------------------ *
+ * 命中测试采样
+ * ------------------------------------------------------------------ */
+
+/**
+ * 在菜单条覆盖的区域内取网格点，收集「视觉上压在条上」的候选元素。
+ * 每个点只取栈顶的前几个元素：更靠后的元素本来就被前面的挡住了。
+ */
+function collectCandidates(root: HTMLElement, rect: DOMRect): HTMLElement[] {
+  const seen = new Set<HTMLElement>()
+  const result: HTMLElement[] = []
+
+  for (const yRatio of SAMPLE_Y_RATIOS) {
+    const y = Math.round(rect.top + rect.height * yRatio)
+    for (let i = 0; i < SAMPLE_X_COUNT; i++) {
+      const x = Math.round(rect.left + rect.width * ((i + 0.5) / SAMPLE_X_COUNT))
+      const stack = document.elementsFromPoint(x, y)
+      let taken = 0
+      for (const el of stack) {
+        if (!(el instanceof HTMLElement)) continue
+        if (el === root || root.contains(el)) continue
+        if (el === document.body || el === document.documentElement) continue
+        if (seen.has(el)) continue
+
+        seen.add(el)
+        result.push(el)
+        taken += 1
+        if (taken >= SAMPLE_STACK_LIMIT) break
+        if (result.length >= SAMPLE_CANDIDATE_LIMIT) return result
+      }
+    }
+  }
+
+  return result
+}
+
+/**
+ * 取菜单条在视口里的实际位置。
+ * 宿主元素本身在文档流里，页面滚动后会被滚出视口；真正 fixed 的是影子根里的 .as-container。
+ */
+function getBarRect(root: HTMLElement): DOMRect {
+  const container = getAsShadowRoot()?.querySelector('.as-container') as HTMLElement | null
+  return (container || root).getBoundingClientRect()
+}
+
+/** 采样一轮：找出压在条上的元素并调整 */
+function sampleBarArea(): void {
   const root = getAsRoot()
-  if (!root) return newList
-
-  list.forEach(node => {
-    if (!isElement(node)) return
-
-    const item = node as HTMLElement
-    if (isAdjustableElement(item, root) && !weakSet.has(item)) {
-      newList.push(item)
-      weakSet.add(item)
-    }
-  })
-
-  return newList
-}
-
-const FULL_SCAN_BATCH_SIZE = 400
-let cancelFullScan = false
-let fullScanHandle: number | null = null
-
-const scheduleFullScanTask = (task: () => void): number => {
-  const idleCb = (window as any).requestIdleCallback
-  if (typeof idleCb === 'function') {
-    return idleCb(() => task())
-  }
-  return window.setTimeout(task, 16)
-}
-
-const clearFullScanTask = (): void => {
-  if (fullScanHandle !== null) {
-    const cancelIdle = (window as any).cancelIdleCallback
-    if (typeof cancelIdle === 'function') {
-      cancelIdle(fullScanHandle)
-    } else {
-      clearTimeout(fullScanHandle)
-    }
-    fullScanHandle = null
-  }
-}
-
-function startFullScan(root: HTMLElement): void {
-  // 防止死循环：如果正在更新，直接返回
-  if (isUpdating) return
-
-  cancelFullScan = true
-  clearFullScanTask()
-  cancelFullScan = false
+  if (!root) return
 
   if (refreshTopOffset() <= 0) {
     restoreAllAdjustedNodes()
     return
   }
 
-  isUpdating = true
+  const rect = getBarRect(root)
+  if (rect.height <= 0) return
 
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT)
-  let current = walker.currentNode as Element | null
+  collectCandidates(root, rect).forEach(el => {
+    if (!el.dataset[DATASET_MARKER] && !isAdjustableElement(el, root)) return
+    updateNodeOffset(el)
+  })
+}
 
-  const processBatch = () => {
-    if (cancelFullScan) {
-      isUpdating = false
-      return
-    }
-    const batch: Element[] = []
-    let count = 0
-    while (current && count < FULL_SCAN_BATCH_SIZE) {
-      batch.push(current)
-      current = walker.nextNode() as Element | null
-      count++
-    }
-    if (batch.length) {
-      getFixedNodeList(batch).forEach(item => {
-        updateNodeOffset(item)
-      })
-    }
+let sampleTimer: number | null = null
+let lastSampleAt = 0
 
-    if (current && !cancelFullScan) {
-      fullScanHandle = scheduleFullScanTask(processBatch)
-    } else {
-      fullScanHandle = null
-      isUpdating = false
+/** 节流调度一轮采样（滚动 / resize / DOM 变化都走这里） */
+function scheduleSample(): void {
+  if (sampleTimer !== null) return
+  const delay = Math.max(0, SAMPLE_MIN_INTERVAL - (performance.now() - lastSampleAt))
+  sampleTimer = window.setTimeout(() => {
+    sampleTimer = null
+    lastSampleAt = performance.now()
+    sampleBarArea()
+  }, delay)
+}
+
+/** 重新应用当前偏移到所有已调整元素（不做采样） */
+function reapplyAdjustedNodes(): void {
+  document.querySelectorAll(ADJUSTED_SELECTOR).forEach(el => {
+    if (el instanceof HTMLElement) {
+      updateNodeOffset(el)
     }
+  })
+}
+
+/* ------------------------------------------------------------------ *
+ * 监听
+ * ------------------------------------------------------------------ */
+
+let hostClassObserver: MutationObserver | null = null
+let hostResizeObserver: ResizeObserver | null = null
+let domObserver: MutationObserver | null = null
+
+function handleHostChange(): void {
+  if (refreshTopOffset() <= 0) {
+    restoreAllAdjustedNodes()
+    return
   }
-
-  processBatch()
+  // 偏移量变了：先就地更新已知元素，再补一轮采样找新出现的
+  reapplyAdjustedNodes()
+  scheduleSample()
 }
 
 /**
- * 防抖执行全量位置修正
- */
-const debouncedFixedDomPosition = debounce(() => {
-  checkBody().then(() => {
-    if (!document.body) return
-    refreshTopOffset()
-    if (currentTopOffset <= 0) {
-      restoreAllAdjustedNodes()
-      return
-    }
-    startFullScan(document.body)
-  })
-}, 300)
-
-let observer: MutationObserver | null = null
-let hostClassObserver: MutationObserver | null = null
-let hostResizeObserver: ResizeObserver | null = null
-
-/**
- * 监听宿主 class/尺寸变化，随时刷新 offset
+ * 监听宿主 class / 尺寸变化，随时刷新偏移量
  */
 function observeHostLayoutChange(): void {
   const host = getAsRoot()
-  if (!host) {
-    return
-  }
+  if (!host) return
 
   if (hostClassObserver) {
     hostClassObserver.disconnect()
     hostClassObserver = null
   }
-  hostClassObserver = new MutationObserver(() => {
-    refreshTopOffset()
-    if (currentTopOffset <= 0) {
-      restoreAllAdjustedNodes()
-    } else {
-      debouncedFixedDomPosition()
-    }
-  })
+  hostClassObserver = new MutationObserver(handleHostChange)
   hostClassObserver.observe(host, { attributes: true, attributeFilter: ['class'] })
 
   if (hostResizeObserver) {
@@ -337,120 +313,77 @@ function observeHostLayoutChange(): void {
     hostResizeObserver = null
   }
   if (typeof ResizeObserver !== 'undefined') {
-    hostResizeObserver = new ResizeObserver(() => {
-      refreshTopOffset()
-      if (currentTopOffset <= 0) {
-        restoreAllAdjustedNodes()
-      } else {
-        debouncedFixedDomPosition()
-      }
-    })
+    hostResizeObserver = new ResizeObserver(handleHostChange)
     hostResizeObserver.observe(host)
   }
 }
 
-/** 单次 mutation 内联扫描的元素上限，超出则退回防抖全量扫描 */
-const ADDED_NODE_SCAN_LIMIT = 200
-
 /**
- * 扫描新增节点的整棵子树（fixed 元素通常被包在容器里）。
- * 返回 false 表示超出预算，调用方应改为全量扫描。
+ * 监听 DOM 结构变化：只重新采样，不再遍历新增子树
  */
-function scanAddedElement(rootEl: Element): boolean {
-  const batch: Element[] = [rootEl]
-  const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT)
-  let node = walker.nextNode()
-  while (node) {
-    if (batch.length >= ADDED_NODE_SCAN_LIMIT) {
-      return false
-    }
-    batch.push(node as Element)
-    node = walker.nextNode()
+function observeDomChange(): void {
+  if (!document.body) return
+
+  if (domObserver) {
+    domObserver.disconnect()
+    domObserver = null
   }
-  getFixedNodeList(batch).forEach(item => updateNodeOffset(item))
-  return true
+  domObserver = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.addedNodes.length > 0) {
+        scheduleSample()
+        return
+      }
+    }
+  })
+  domObserver.observe(document.body, { childList: true, subtree: true })
 }
 
-function mutationObserver() {
-  const targetNode = document.body
-  const config = {
-    childList: true,
-    subtree: true
-    // 不监听 attributes，减少 90% 的无效触发
-  }
-
-  const callback: MutationCallback = function (mutationsList) {
-    const root = getAsRoot()
-    if (!root) return
-
-    // offset 由宿主观察器维护，这里不再每次 mutation 都读一次布局
-    if (currentTopOffset <= 0) {
-      restoreAllAdjustedNodes()
-      return
-    }
-
-    const changedNodes: Node[] = []
-    let needsFullScan = false
-
-    for (const mutation of mutationsList) {
-      if (mutation.addedNodes.length > 50) {
-        // 如果一次性添加了大量节点（如首屏加载），执行全量扫描（防抖）
-        needsFullScan = true
-        break
-      }
-      mutation.addedNodes.forEach(node => changedNodes.push(node))
-    }
-
-    if (needsFullScan) {
-      debouncedFixedDomPosition()
-      return
-    }
-    if (!changedNodes.length) return
-
-    // 新增节点可能是容器（fixed 元素在更深的层级），需要扫子树
-    let overflow = false
-    for (const node of changedNodes) {
-      if (!isElement(node)) continue
-      if (!scanAddedElement(node as Element)) {
-        overflow = true
-        break
-      }
-    }
-    if (overflow) {
-      debouncedFixedDomPosition()
-    }
-  }
-
-  observer = new MutationObserver(callback)
-  observer.observe(targetNode, config)
+const viewportHandler = (): void => {
+  scheduleSample()
 }
 
 /**
- * 初始化特殊样式适配（处理 fixed 遮挡等问题）
+ * 滚动 / 窗口尺寸变化时重新采样（sticky 元素滚动后才会压到条上）
+ */
+function observeViewportChange(): void {
+  window.addEventListener('scroll', viewportHandler, { passive: true, capture: true })
+  window.addEventListener('resize', viewportHandler, { passive: true })
+}
+
+function removeViewportListener(): void {
+  window.removeEventListener('scroll', viewportHandler, { capture: true })
+  window.removeEventListener('resize', viewportHandler)
+}
+
+/**
+ * 初始化特殊样式适配（处理 fixed / sticky 元素被菜单条遮挡的问题）
  */
 export function initSpecialStyle(): void {
   // 幂等：SPA 重新挂载或 HMR 可能重复初始化，先回收上一轮
   disconnectSpecialStyle()
-  debouncedFixedDomPosition()
-  mutationObserver()
+  scheduleSample()
   observeHostLayoutChange()
+  observeDomChange()
+  observeViewportChange()
 }
 
 /**
  * 停止监听（用于性能回收）
  */
 export function disconnectSpecialStyle(): void {
-  cancelFullScan = true
-  clearFullScanTask()
+  if (sampleTimer !== null) {
+    clearTimeout(sampleTimer)
+    sampleTimer = null
+  }
+  lastSampleAt = 0
+
+  removeViewportListener()
   restoreAllAdjustedNodes()
 
-  // 重置标志位，确保下次调用时状态正确
-  isRestoring = false
-  isUpdating = false
-
-  if (observer) {
-    observer.disconnect()
-    observer = null
+  if (domObserver) {
+    domObserver.disconnect()
+    domObserver = null
   }
   if (hostClassObserver) {
     hostClassObserver.disconnect()
