@@ -22,7 +22,9 @@
 - [x] **类名系统迁移 (内部端)**：将 Shadow DOM 内部的 `body-*` 替换为 `as-` 命名。
 - [x] **清理冗余代码**：清理 `src/util/hook.ts` 等废弃文件内容。
 - [x] **优化图标加载**：`iconfont.vue` 已使用内联 SVG。
-- [ ] **特殊样式性能回收**：`addSpecialStyle.ts` 的 TreeWalker 首次扫描需分批执行并暴露断开/回收策略，避免大型站点卡顿。
+- [x] **特殊样式性能回收**：`addSpecialStyle.ts` 已改为 `elementsFromPoint` 网格采样（滚动/resize/DOM 变化触发、120ms 节流、卸载时 `disconnectSpecialStyle()` 回收）。
+- [x] **固定元素避让的构建期方案**：`pnpm style:scan` 在构建期扫描站点、生成 `src/config/generatedStyle.ts`；命中的站点运行时只注入静态 CSS，不再采样。
+- [ ] **站点覆盖面**：`generatedStyle` 目前只覆盖能稳定访问的站点；Google / 知乎 / 搜狗 / Yandex 会被验证页拦截，仍需人工在有网络的环境补扫。
 
 ### 阶段 3：测试与质量提升 (IN PROGRESS ???)
 - [x] **基础冒烟测试**：搭建 Vitest + jsdom 环境。

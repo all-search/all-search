@@ -510,23 +510,26 @@ chore: 构建/工具变更
 ## 📊 现状与缺口
 
 ### 已具备
-- **类型**：`src/` 与 `packages/*` 源码全部 TypeScript（`tsconfig.json` 开 `strict`，`vue-tsc` 仍有少量历史报错）
-- **测试**：vitest + jsdom，3 个 spec / 14 个用例（布局服务、核心 hooks、WebBridge 降级），`pnpm test`
+- **类型**：`src/` 与 `packages/*` 源码全部 TypeScript（`tsconfig.json` 开 `strict`）
+- **测试**：vitest + jsdom（布局服务、核心 hooks、WebBridge 降级、关键词解析）+ `pnpm e2e` 真浏览器回归
 - **CI**：脚本发布、GitHub Pages、插件打包（Chrome/Firefox zip + Release）三条 workflow
 - **双端实测**：插件与用户脚本都在真实浏览器里跑通过（菜单、四向布局、浮层、设置页）
+- **固定元素避让**：`generatedStyle` 静态规则（`pnpm style:scan` 构建期扫描）+ 命中测试兜底，两条路按站点互斥
 
 ### 仍然缺的
 1. **Firefox MV3**：现在打的是 MV2，切 MV3 需要回归权限与 content script 行为
-2. **E2E 未接入 CI**：`pnpm e2e` 已入库（plugin / userscript 两个场景），CI 上还需要 Playwright 的 Chromium——Chrome 137+ 已不支持命令行装扩展
+2. **E2E 未接入 CI**：`pnpm e2e` 已入库（plugin / userscript / selection 三个场景），CI 上还需要 Playwright 的 Chromium——Chrome 137+ 已不支持命令行装扩展
 3. **国际化**：无 i18n，界面只有中文
 4. **无障碍**：键盘导航与屏幕阅读器支持未做
 5. **Element Plus**：配置页全量引入，包体偏大，可改按需加载
-6. **`addSpecialStyle`**：fixed 元素偏移仍只处理 `top`，性能回收方案见 `src/util/addSpecialStyle_todo.md`
+6. **避让只处理顶部**：`top` 之外的定位（底部条、左右条、`bottom` 定位的元素）未覆盖；Google / 知乎 / 搜狗 / Yandex 等站点会被验证码拦截，暂无静态规则
+7. **`height: 100vh` 几何补偿**：只对全屏 fixed 层加了 `height: calc(100vh - 30px)`，其它铺满视口的元素未处理
 
 ### 下一步建议
 1. 存储/配置的边界用例补测（adapter 选择、bridge 超时、路由 base）
 2. 把 `pnpm e2e` 接进 CI
 3. 版本号与标签管理：发版前统一改 `package.json` 再打 `v*` tag
+4. 在有干净出口的环境补扫被拦截的站点，扩充 `generatedStyle`
 
 ## 📄 许可证
 

@@ -38,6 +38,7 @@ Both share the same Vue 3 UI, isolated from the host page with Shadow DOM.
 - Configurable click behavior per area: main menu vs. selection toolbar (current tab / new tab)
 - Auto-hide on scroll, collapsible bar, text-selection toolbar, global search dialog
 - Works on 200+ sites with per-site tweaks (`src/config/loadList.ts`)
+- Fixed headers never sit under the menu bar: per-site offsets are generated at build time, with runtime hit-testing as a fallback for uncovered sites
 
 ## Development
 
@@ -69,7 +70,7 @@ pnpm build:options  # packages/options/dist (GitHub Pages)
 ```bash
 pnpm test          # vitest + jsdom — unit tests
 pnpm e2e           # browser regression (Playwright + local Edge/Chrome)
-pnpm type-check    # vue-tsc (still a few pre-existing errors)
+pnpm type-check    # vue-tsc
 pnpm lint
 ```
 
@@ -77,6 +78,22 @@ pnpm lint
 
 - **plugin** — loads the unpacked extension and checks the menu bar, the dropdown direction in all four layouts, and that “菜单设置” opens the bundled options page
 - **userscript** — simulates Tampermonkey (Vue global + `GM_*` shims) and injects `dist/index.user.js`
+
+## Site style scan
+
+Some sites pin a header to the top of the viewport, which would end up underneath the 30px menu bar. Those offsets are **generated at build time** instead of being computed on every page:
+
+```bash
+pnpm style:scan                 # scan every site in loadList that has a `probe`
+pnpm style:scan --site=github   # only matching sites
+pnpm style:scan --limit=10      # first N sites
+pnpm style:scan --dry           # print the result, do not write
+pnpm style:scan --fresh         # full rescan instead of merging
+```
+
+The result is written to `src/config/generatedStyle.ts` and committed. At runtime a site with a generated rule only gets the static CSS (zero JS cost); other sites fall back to the `elementsFromPoint` sampler in `src/util/addSpecialStyle.ts`.
+
+Every run re-verifies its own output: rules whose element is no longer `fixed`/`sticky` are dropped, and sites behind a captcha page are skipped and reported.
 - **selection** — text-selection toolbar: the “更多” dialog keeps the selected keyword and opens the target in a new tab
 
 Options: `--no-build` (reuse artifacts), `--headed` (show the browser), `--only=plugin|userscript`.

@@ -68,8 +68,9 @@ key 前缀由 `util/common.ts` 的 `getName()` 生成：`__allSearch__${name}`�
 ## 配置数据
 
 - `config/sites/`：12 个分类（search / translate / video / shopping / music / developer / news / social / knowledge / image / disk / scholar），`index.ts` 汇总
-- `config/loadList.ts`：200+ 站点的 URL 匹配规则、特殊样式、关键词选择器
-- `config/siteInfo.ts`：按当前 URL 计算 `site`（`invisible` / `disabled` / `style` / `selectors`）；**不在 `loadList` 也不匹配任意搜索引擎 URL 的页面会被 disabled，整块 UI 不渲染**（这是“某些网站看不到菜单”的原因，不是 bug）
+- `config/loadList.ts`：200+ 站点的 URL 匹配规则、特殊样式、关键词选择器；配了 `probe` 的条目会被 `pnpm style:scan` 扫描
+- `config/generatedStyle.ts`：**自动生成**，`pnpm style:scan` 的产物（构建期扫描 → 静态避让 CSS），不要手改
+- `config/siteInfo.ts`：按当前 URL 计算 `site`（`invisible` / `disabled` / `style` / `generatedStyle` / `selectors`）；**不在 `loadList` 也不匹配任意搜索引擎 URL 的页面会被 disabled，整块 UI 不渲染**（这是“某些网站看不到菜单”的原因，不是 bug）
 - `config/toolbar.ts`：划词工具栏默认项
 - `types/site.ts`：`Site` / `SiteCategory` 类型
 
@@ -82,7 +83,20 @@ key 前缀由 `util/common.ts` 的 `getName()` 生成：`__allSearch__${name}`�
 
 ## 工具函数（`util/`）
 
-`common`（`getName`/`parseJson`/`isMobile`）、`dom`、`mount`、`layoutService`、`storage/`、`openUrl`（统一的 `same`/`new` 打开方式）、`initStyle`（`syncHostLayout`/`addCustomStyle`）、`addSpecialStyle`（fixed 元素偏移）、`injectStyle`、`getKeyword`、`fullScreen`、`clipboard`、`onClickOutside`、`tap`、`routerChange`、`addScript`、`sites`、`store`、`debounce`、`raf`、`useTimeout`、`useScroll`、`parseUrl`、`hook`
+`common`（`getName`/`parseJson`/`isMobile`）、`dom`、`mount`、`layoutService`、`storage/`、`openUrl`（统一的 `same`/`new` 打开方式）、`initStyle`（`syncHostLayout`/`addCustomStyle`）、`addSpecialStyle`（fixed 元素避让：命中测试采样，仅在没有静态规则的站点启用）、`injectStyle`、`getKeyword`、`fullScreen`、`clipboard`、`onClickOutside`、`tap`、`routerChange`、`addScript`、`sites`、`store`、`debounce`、`raf`、`useTimeout`、`useScroll`、`parseUrl`、`hook`
+
+## 固定元素避让（两套机制，互斥）
+
+页面顶部的 fixed/sticky 头会被 30px 菜单条压住，处理方式分两条路：
+
+| 场景 | 机制 | 代价 |
+| --- | --- | --- |
+| `generatedStyle` 命中当前站点 | 注入构建期生成的静态 CSS（`addCustomStyle`） | 运行时零成本 |
+| 没有生成规则 | `addSpecialStyle` 命中测试采样（`elementsFromPoint` 网格 + 祖先链 + 320ms 补采） | 每轮约 45 个采样点 |
+
+两者**不能同时生效**，否则同一元素会被推两次（CSS 与内联样式都会命中）——`useStyleManager` 里按 `currentSite.generatedStyle` 是否为空二选一。
+
+重新生成：`pnpm style:scan`（可选 `--site=<关键词>`、`--limit=N`、`--headed`、`--dry`、`--fresh`）。
 
 ## 测试
 
