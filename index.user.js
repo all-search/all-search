@@ -6,8 +6,8 @@
 // @description  2026-10-21更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/all-search/all-search
-// @downloadURL  https://raw.github.com/all-search/all-search/release/index.user.js
-// @updateURL    https://raw.github.com/all-search/all-search/release/index.user.js
+// @downloadURL  https://raw.githubusercontent.com/all-search/all-search/release/index.user.js
+// @updateURL    https://raw.githubusercontent.com/all-search/all-search/release/index.user.js
 // @match        *://*/*
 // @require      https://registry.npmmirror.com/vue/3.4.15/files/dist/vue.global.prod.js
 // @grant        GM_addStyle
