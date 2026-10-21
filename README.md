@@ -70,10 +70,13 @@ pnpm build:options  # packages/options/dist (GitHub Pages)
 ## Test
 
 ```bash
+pnpm verify        # lint + type-check + unit tests, the pre-release gate
 pnpm test          # vitest + jsdom — unit tests
 pnpm e2e           # browser regression (Playwright + local Edge/Chrome)
+pnpm e2e --no-build   # reuse existing bundles instead of rebuilding (saves ~30s)
 pnpm type-check    # vue-tsc
-pnpm lint
+pnpm lint          # eslint --fix
+pnpm lint:check    # eslint without writing files (what CI runs)
 ```
 
 `pnpm e2e` builds both bundles first, then:

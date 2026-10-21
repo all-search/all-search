@@ -67,10 +67,13 @@ pnpm build:options  # packages/options/dist（GitHub Pages）
 ## 测试
 
 ```bash
+pnpm verify        # lint + type-check + 单测，发版门槛
 pnpm test          # vitest + jsdom 单元测试
 pnpm e2e           # 浏览器回归（Playwright + 本机 Edge/Chrome）
-pnpm type-check    # vue-tsc（仍有少量历史遗留报错）
-pnpm lint
+pnpm e2e --no-build   # 复用已有产物，省掉约 30 秒构建
+pnpm type-check    # vue-tsc
+pnpm lint          # eslint --fix
+pnpm lint:check    # eslint 只检查不写文件（CI 用这个）
 ```
 
 `pnpm e2e` 会先构建两套产物，然后：

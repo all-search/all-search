@@ -63,6 +63,9 @@ jobs:
           fi
           echo "版本一致：${expected}"
 
+      - name: Lint
+        run: pnpm lint:check
+
       - name: Type check
         run: pnpm type-check
 

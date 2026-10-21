@@ -9,7 +9,8 @@ module.exports = {
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
-    ecmaVersion: 2021,
+    // scripts/ 与 e2e/ 下的 .mjs 用了顶层 await，2022 才支持
+    ecmaVersion: 2022,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true
