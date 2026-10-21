@@ -2,6 +2,25 @@
 
 ## 变更记录 (Changelog)
 
+### 2026-10-21 - v2.0.0
+
+**固定元素避让重做（核心变更）**
+- 弃用「全量 TreeWalker + 一次性推所有 fixed」的老做法，改为命中测试采样：`elementsFromPoint` 15×3 网格 + 祖先链追溯 + 320ms 稳定后补采，只处理真正压在条上的元素
+- 新增构建期扫描：`pnpm style:scan` 打开真实站点生成 `src/config/generatedStyle.ts`，命中站点运行时只注入静态 CSS、不跑采样（两套机制互斥）
+- 修掉两个长期存在的 bug：`addCustomStyle` 的方向判断永远不命中（手写样式从未生效）；样式被注入影子根（管不到站点元素）
+- 扫描器支持 `--cdp` 接真实浏览器，绕过验证页；用卷影副本取出 Chrome 正在锁定的 Cookies
+
+**新功能**
+- AI 搜索分类（ChatGPT / Perplexity / 秘塔 / Devv / Claude / DuckDuckGo AI），分类数 12 → 13
+- 深色模式：跟随系统 / 浅色 / 深色，配置页与菜单条同时生效
+- 配置编辑器：格式化、复制当前内容、恢复默认（二次确认）
+
+**工程化**
+- `pnpm e2e` 入库（plugin / userscript / selection，36 项断言），静态规则与路由切换已覆盖
+- 新增 `pnpm release:*` 一键发版，tag 与 `package.json` 版本不一致时 CI 直接失败
+- 构建脚本自带临时目录（`scripts/run-with-temp.mjs`），规避 Windows 上 esbuild 的 `Access is denied`
+- WXT 0.20.13 → 0.20.27；命令去重与去样板（新增 `verify` / `lint:check`，`lint` 纳入 `scripts/`）
+
 ### 2026-10-20 - 双模式收尾（插件可用化 + 文档对齐）
 - 插件补齐图标、后台 worker、自带设置页（hash 路由），侧边栏设置入口改为打开扩展自身 options 页
 - 修复用户脚本多段 CSS 互相覆盖导致界面无样式的问题
@@ -527,7 +546,7 @@ chore: 构建/工具变更
 ### 下一步建议
 1. 存储/配置的边界用例补测（adapter 选择、bridge 超时、路由 base）
 2. 把 `pnpm e2e` 接进 CI
-3. 版本号与标签管理：发版前统一改 `package.json` 再打 `v*` tag
+3. 发版走 `pnpm release:patch --push`（自动升版本、打 tag、触发 Release workflow）
 4. 在有干净出口的环境补扫被拦截的站点，扩充 `generatedStyle`
 
 ## 📄 许可证

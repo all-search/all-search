@@ -91,7 +91,7 @@ Pushing a `v*` tag builds both extension packages and creates a GitHub Release
 and the workflow fails fast if it does not.
 
 ```bash
-pnpm release:patch          # 1.5.10 -> 1.5.11: bump, commit, tag (no push)
+pnpm release:patch          # 2.0.0 -> 2.0.1: bump, commit, tag (no push)
 pnpm release:patch --push   # same, then push the commit and the tag
 pnpm release -- 1.6.0       # explicit version
 ```
