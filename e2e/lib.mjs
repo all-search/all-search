@@ -158,6 +158,12 @@ export async function hoverFirstCategory (page) {
   await page.waitForTimeout(600)
 }
 
+/** 按分类名悬停（分类顺序会变，测试不要依赖「第一个」） */
+export async function hoverCategory (page, label) {
+  await page.locator('.as-menu-item').filter({ hasText: label }).first().hover()
+  await page.waitForTimeout(600)
+}
+
 export const MODE_META = {
   top: { label: '居顶', placement: 'bottom-start', side: 'bottom' },
   bottom: { label: '居底', placement: 'top-start', side: 'top' },

@@ -2,7 +2,7 @@ import path from 'node:path'
 import {
   ARTIFACTS, PLUGIN_EXT, FIXTURE_URL,
   installFixture, launch, waitForMenu, measure,
-  switchMode, hoverFirstCategory, directionOk, MODE_META
+  switchMode, hoverCategory, hoverFirstCategory, directionOk, MODE_META
 } from '../lib.mjs'
 
 export const name = 'plugin'
@@ -88,7 +88,7 @@ export async function run ({ headless, report }) {
 
     // 1.2 关键词应取自 URL 参数，不能被百度页面的 ie=utf-8 / tn=1 隐藏域污染（issue #95）
     //     主菜单默认「当前页」打开，所以这里等的是当前页跳转
-    await hoverFirstCategory(page)
+    await hoverCategory(page, '搜索')
     await page.locator('.as-subMenu li a').filter({ hasText: '谷歌' }).first().click()
     await page.waitForURL(/google\.com\/search/, { timeout: 15000 }).catch(() => {})
     await page.waitForTimeout(300)

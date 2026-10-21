@@ -1,3 +1,4 @@
+import ai from './ai'
 import search from './search'
 import translate from './translate'
 import developer from './developer'
@@ -13,6 +14,11 @@ import scholar from './scholar'
 import { SiteCategory } from '../../types/site'
 
 const siteGroups = [
+  {
+    nameZh: 'AI',
+    name: 'ai',
+    list: ai
+  },
   {
     nameZh: '搜索',
     name: 'search',
