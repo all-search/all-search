@@ -1,6 +1,7 @@
 import { reactive, watch } from 'vue'
 import useSites from '../components/useSites'
 import { list } from './loadList'
+import { generatedStyle } from './generatedStyle'
 import { routerChange } from '@src/util'
 import { Site } from '../types/site'
 
@@ -11,8 +12,25 @@ export interface CurrentSite {
   invisible: boolean;
   disabled: boolean;
   style: any;
+  /** 构建时扫描生成的样式，仅顶部布局注入 */
+  generatedStyle: string;
   selectors: string | null;
   query: string | string[] | null;
+}
+
+/**
+ * 找出当前页面命中的构建时扫描规则。
+ * generatedStyle 由 `pnpm style:scan` 生成，站点改版后重跑即可更新。
+ */
+function findGeneratedStyle (href: string): string {
+  const rule = generatedStyle.find((item) => {
+    try {
+      return new RegExp(item.pattern, item.flags).test(href)
+    } catch {
+      return false
+    }
+  })
+  return rule?.top || ''
 }
 
 /**
@@ -87,9 +105,10 @@ function getMenuItem (): Site | null {
 }
 
 function getSite (): CurrentSite {
-  const target = list
-    .find(item => item.url.test(window.location.href.toLowerCase()))
+  const href = window.location.href.toLowerCase()
+  const target = list.find(item => item.url.test(href))
   const menuItem = getMenuItem()
+  const generated = findGeneratedStyle(href)
 
   if (target) {
     return {
@@ -97,6 +116,7 @@ function getSite (): CurrentSite {
       invisible: !!target.invisible,
       disabled: !!target.disabled,
       style: target.style || {},
+      generatedStyle: generated,
       selectors: target.selectors || null,
       // loadList 只声明匹配规则时，借用菜单里该引擎的 URL 模板反推参数名
       query: target.query || extractKeywordParam(menuItem?.url)
@@ -108,6 +128,7 @@ function getSite (): CurrentSite {
       invisible: false,
       disabled: false,
       style: item.style || {},
+      generatedStyle: generated,
       selectors: item.selectors || null,
       // 没显式配置参数名时，从该引擎的 URL 模板里反推（如百度的 wd、谷歌的 q）
       query: item.query || extractKeywordParam(item.url)
@@ -119,6 +140,7 @@ function getSite (): CurrentSite {
     invisible: true,
     disabled: true,
     style: {},
+    generatedStyle: '',
     selectors: null,
     query: null
   }

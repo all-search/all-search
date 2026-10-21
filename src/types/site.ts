@@ -11,6 +11,11 @@ export interface Site {
   disabled?: boolean;
   /** 自定义样式 [全屏, 横向, 纵向] */
   style?: Record<number | string, string>;
+  /**
+   * 构建时扫描生成的避让样式（只在菜单条位于顶部时注入）。
+   * 有它的站点，运行时不再跑命中测试采样。
+   */
+  generatedStyle?: string;
   /** 页面元素选择器，用于获取关键字等 */
   selectors?: any;
   /** 搜索参数相关配置 */

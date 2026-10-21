@@ -21,7 +21,11 @@ export function useStyleManager(
     if (isInit || currentSite.disabled) {
       return
     }
-    initSpecialStyle()
+    // 有构建时扫描规则就不跑运行时采样：静态 CSS 已经处理了压在条上的固定元素，
+    // 两者同时生效会把同一元素推两次（CSS 与内联样式都会命中）。
+    if (!currentSite.generatedStyle) {
+      initSpecialStyle()
+    }
     addCustomStyle(toValue(mode), currentSite as any)
     isInit = true
   }
