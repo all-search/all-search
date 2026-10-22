@@ -12,10 +12,15 @@ export { initTmMethods } from './bridge'
 let activeAdapter: StorageAdapter = new TmAdapter()
 
 // 自动根据构建目标选择初始适配器
+const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
 const isOptionsPage = typeof window !== 'undefined' && (
   window.location.pathname.includes('options') ||
-  window.location.hostname.includes('github.io') ||
-  window.location.hostname.includes('gitee.io')
+  hostname.includes('github.io') ||
+  hostname.includes('gitee.io') ||
+  // 本地 dev（pnpm dev:options）也走配置站逻辑，否则会落到 TmAdapter 上报 GM API 不可用
+  hostname === 'localhost' ||
+  hostname === '127.0.0.1' ||
+  hostname === '[::1]'
 )
 
 if (isPlugin) {

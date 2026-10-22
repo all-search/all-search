@@ -3,7 +3,10 @@ import sites from '../config/sites'
 import { getStorage, delStorage } from '../util/storage'
 import { SiteCategory } from '../types/site'
 
-const sitesData = ref<SiteCategory[]>([])
+// 先用内置默认值渲染，等存储返回后再替换。
+// 配置站在没有油猴脚本连接时要等 WebBridge 超时（约 5s）才 reject，
+// 先渲染默认值可以避免「打开就是空列表」；有用户配置时也只是一次很短的替换。
+const sitesData = ref<SiteCategory[]>(sites as SiteCategory[])
 
 function getSites (val: SiteCategory[] | null): SiteCategory[] {
   if (Array.isArray(val) && val.length > 0) {
