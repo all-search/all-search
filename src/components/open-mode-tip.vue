@@ -1,6 +1,17 @@
+<script setup lang="ts">
+withDefaults(defineProps<{
+  /** 只保留「Ctrl / 中键」这一条说明；页面上已有分项说明时用 */
+  compact?: boolean
+}>(), {
+  compact: false
+})
+</script>
+
 <template>
   <p class="as-open-mode-tip">
-    「主菜单」= 顶部菜单里的分类和网址；「划词」= 选中文字后的工具栏与「更多」弹窗。<br>
+    <template v-if="!compact">
+      「主菜单」= 顶部菜单里的分类和网址；「划词」= 选中文字后的工具栏与「更多」弹窗。<br>
+    </template>
     按住 Ctrl 或用鼠标中键点击，会以上面所选的<strong>另一种</strong>方式打开。
   </p>
 </template>

@@ -44,6 +44,22 @@ function resetSites (): void {
   }
 }
 
+/**
+ * 重新从存储读取站点列表。
+ * 用于「恢复默认」：删除存储后需要把内存里的数据也刷回内置默认值，
+ * 否则页面还显示旧数据、下次保存又写回去。
+ */
+export async function reloadSites (): Promise<void> {
+  let value: SiteCategory[] | null = null
+  try {
+    value = await getStorage<SiteCategory[]>('sites')
+  } catch {
+    value = null
+  }
+  // 总是赋新数组，保证 computed 变更、使用方的 watch 能触发
+  sitesData.value = JSON.parse(JSON.stringify(getSites(value)))
+}
+
 export default function useSites (type?: string): {
   sites: ComputedRef<SiteCategory[]>;
   resetSites: () => void;

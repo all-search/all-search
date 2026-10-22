@@ -1,35 +1,38 @@
 <template>
-  <div class="editor-toolbar">
-    <el-button
-      size="small"
-      @click="format">
-      格式化
-    </el-button>
-    <el-button
-      size="small"
-      @click="exportToClipboard">
-      复制配置
-    </el-button>
-    <el-button
-      size="small"
-      @click="importFormClipboard">
-      从剪贴板导入
-    </el-button>
-    <el-button
-      size="small"
-      type="danger"
-      plain
-      @click="reset">
-      恢复默认
-    </el-button>
-    <el-button
-      size="small"
-      type="success"
-      @click="save">
-      保存
-    </el-button>
+  <div class="json-editor">
+    <div class="editor-toolbar">
+      <el-button
+        size="small"
+        @click="format">
+        格式化
+      </el-button>
+      <el-button
+        size="small"
+        @click="exportToClipboard">
+        复制配置
+      </el-button>
+      <el-button
+        size="small"
+        @click="importFormClipboard">
+        从剪贴板导入
+      </el-button>
+      <span class="toolbar-spacer" />
+      <el-button
+        size="small"
+        type="danger"
+        plain
+        @click="reset">
+        恢复默认
+      </el-button>
+      <el-button
+        size="small"
+        type="success"
+        @click="save">
+        保存
+      </el-button>
+    </div>
+    <div ref="jsoneditor" class="editor-body"></div>
   </div>
-  <div ref="jsoneditor" class="editor-body"></div>
 </template>
 
 <script>
@@ -232,15 +235,103 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.json-editor {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 .editor-toolbar {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
-  padding: 8px 0 12px;
+  flex: none;
+  padding: 10px 0;
+
+  .toolbar-spacer {
+    flex: 1;
+  }
 }
 
 .editor-body {
-  height: calc(100vh - 190px);
-  min-height: 360px;
+  flex: 1;
+  min-height: 320px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+</style>
+
+<style lang="scss">
+/* jsoneditor / ace 自带亮色主题，深色模式下单独压一层暗色，避免整块刺眼 */
+html.dark {
+  .ace-jsoneditor.ace_editor {
+    color: #d4d4d4;
+    background-color: #1e1e1e;
+  }
+
+  .ace-jsoneditor .ace_scroller {
+    background-color: #1e1e1e;
+  }
+
+  .ace-jsoneditor .ace_print-margin {
+    background: #2a2a2a;
+  }
+
+  .ace-jsoneditor .ace_gutter {
+    color: #858585;
+    background-color: #252526;
+  }
+
+  .ace-jsoneditor .ace_gutter-active-line {
+    background-color: #2a2d2e;
+  }
+
+  .ace-jsoneditor .ace_marker-layer .ace_active-line {
+    background-color: #2a2d2e;
+  }
+
+  .ace-jsoneditor .ace_marker-layer .ace_selection {
+    background-color: #264f78;
+  }
+
+  .ace-jsoneditor .ace_cursor {
+    color: #d4d4d4;
+  }
+
+  .ace-jsoneditor .ace_variable {
+    color: #9cdcfe;
+  }
+
+  .ace-jsoneditor .ace_string {
+    color: #ce9178;
+  }
+
+  .ace-jsoneditor .ace_constant.ace_numeric {
+    color: #b5cea8;
+  }
+
+  .ace-jsoneditor .ace_keyword {
+    color: #569cd6;
+  }
+
+  .jsoneditor-statusbar {
+    color: #9d9d9d;
+    background-color: #252526;
+    border-top-color: #3c3c3c;
+  }
+
+  /* 只改主工具条，右键菜单是白底，不能被一起压暗 */
+  .jsoneditor > .jsoneditor-menu {
+    background-color: #2d2d30;
+    border-bottom-color: #3c3c3c;
+  }
+
+  .jsoneditor > .jsoneditor-menu .jsoneditor-modes,
+  .jsoneditor > .jsoneditor-menu .jsoneditor-poweredBy {
+    color: #d4d4d4;
+  }
 }
 </style>

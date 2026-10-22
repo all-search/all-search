@@ -21,17 +21,18 @@ setTimeout(() => {
 
 <template>
   <el-alert
-    class="version-alert"
     v-show="data.notInstall"
-    title="错误"
-    description="检测到您 未安装 或者 未启用 全搜 all-search"
-    type="error"
+    class="version-alert"
+    title="未连接油猴脚本"
+    description="当前显示的是内置默认站点，修改会保存在本地。想同步到脚本，请先安装并启用 All-Search 用户脚本。"
+    type="info"
     show-icon
-    :closable="false"/>
+    :closable="false" />
 </template>
 
-<style>
-  .version-alert {
-    margin-bottom: 20px;
-  }
+<style scoped>
+.version-alert {
+  margin: 0 0 16px;
+  border-radius: 10px;
+}
 </style>

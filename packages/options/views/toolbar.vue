@@ -1,286 +1,351 @@
 <template>
-  <div class="sites">
-    <div>
-      <draggable
-        handle=".move-icon"
-        v-model="list">
-        <div
-          v-for="(item, j) in list"
-          :key="j"
-          class="url-item"
-          :class="{invisible: !item.data.visible}">
-          <el-button
-            class="move-icon"
-            text>
-            <el-icon>
-              <DCaret/>
-            </el-icon>
-          </el-button>
-          <div class="bd">
-            <div class="row">
-              <el-input
-                class="input col"
-                v-model="item.nameZh"/>
-              <el-input
-                class="input col"
-                v-model="item.url"/>
-            </div>
-          </div>
-          <div class="ft">
-            <el-tooltip
-              content="展示隐藏"
-              placement="top">
-              <el-button
-                :type="item.data.visible ? 'primary': 'info'"
-                plain
-                @click="changeVisible(item.data)">
-                <el-icon>
-                  <View v-if="item.data.visible"/>
-                  <Hide v-else/>
-                </el-icon>
-              </el-button>
-            </el-tooltip>
-            <el-tooltip
-              content="删除"
-              placement="top">
-              <el-button
-                title="删除"
-                :plain="true"
-                type="danger"
-                @click="deleteUrl(list, j)">
-                <el-icon>
-                  <Delete/>
-                </el-icon>
-              </el-button>
-            </el-tooltip>
-          </div>
+  <div class="toolbar-page">
+    <section class="panel">
+      <header class="panel-head">
+        <div class="head-text">
+          <h2 class="panel-title">
+            划词工具栏
+          </h2>
+          <p class="panel-desc">
+            选中网页文字后弹出的工具栏，顺序即展示顺序；%s 会被替换成选中的文字。
+          </p>
         </div>
-      </draggable>
-      <div
-        class="url-item btn-container">
         <el-button
-          @click="addNewUrl(cate)">
+          type="primary"
+          @click="addItem">
+          <el-icon><Plus /></el-icon>
           添加网址
         </el-button>
+      </header>
+
+      <draggable
+        v-model="list"
+        class="item-list"
+        handle=".item-drag"
+        :animation="150">
+        <div
+          v-for="(item, index) in list"
+          :key="item.__uid"
+          class="item-row"
+          :class="{ 'is-hidden': item.data?.visible === false }">
+          <span
+            class="item-drag"
+            title="拖拽排序"
+            aria-hidden="true">
+            <el-icon><Rank /></el-icon>
+          </span>
+
+          <el-input
+            v-model="item.nameZh"
+            class="item-name"
+            placeholder="名称" />
+          <el-input
+            v-model="item.url"
+            class="item-url"
+            placeholder="网址，%s 代表选中的文字" />
+
+          <el-tooltip
+            :content="item.data?.visible === false ? '显示' : '隐藏'"
+            placement="top">
+            <el-button
+              text
+              class="item-action item-visible"
+              :aria-label="item.data?.visible === false ? '显示' : '隐藏'"
+              @click="toggleVisible(item)">
+              <el-icon>
+                <View v-if="item.data?.visible !== false" />
+                <Hide v-else />
+              </el-icon>
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+            content="删除"
+            placement="top">
+            <el-button
+              text
+              class="item-action item-remove"
+              aria-label="删除"
+              @click="removeItem(index)">
+              <el-icon><Delete /></el-icon>
+            </el-button>
+          </el-tooltip>
+        </div>
+      </draggable>
+
+      <div
+        v-if="!list.length"
+        class="empty-state">
+        <p class="empty-title">
+          还没有工具栏项
+        </p>
+        <el-button
+          text
+          type="primary"
+          @click="addItem">
+          添加第一项
+        </el-button>
       </div>
-    </div>
-  </div>
-  <div class="fixed-footer">
-    <div class="btn-container">
-      <el-button
-        size="small"
-        type="primary"
-        @click="reset">
-        重置
-      </el-button>
-      <el-button
-        size="small"
-        type="success"
-        @click="save">
-        保存
-      </el-button>
-    </div>
+    </section>
+
+    <save-bar
+      :dirty="dirty"
+      reset-text="重置"
+      @save="save"
+      @revert="revert"
+      @reset="reset" />
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Delete, Hide, Plus, Rank, View } from '@element-plus/icons-vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import { setStorage } from '@src/util/storage'
+import { getStorage, setStorage } from '@src/util/storage'
 import { initToolbar } from '@src/util/sites'
+import saveBar from '../components/save-bar.vue'
+import useUnsavedGuard from '../composables/use-unsaved-guard'
 
-export default {
-  name: 'sites',
-  components: {
-    draggable: VueDraggableNext
-  },
-  setup () {
-    const list = ref(initToolbar())
+const draggable = VueDraggableNext
 
-    function changeVisible (data) {
-      data.visible = !data.visible
-    }
+interface ToolbarItem {
+  nameZh: string
+  url: string
+  icon?: string
+  data?: { visible?: boolean }
+  __uid?: string
+}
 
-    function deleteUrl (list, j) {
-      list.splice(j, 1)
-    }
+let uidSeed = 0
 
-    function addNewUrl () {
-      list.value.push({
-        nameZh: '新网址',
-        url: 'https://www.baidu.com/s?wd=%s&ie=utf-8',
-        data: {
-          visible: true
-        }
-      })
-    }
+function withUid (item: ToolbarItem): ToolbarItem {
+  uidSeed += 1
+  return { ...item, data: { ...item.data }, __uid: `t${uidSeed}` }
+}
 
-    function reset () {
-      ElMessageBox.confirm('重置操作将还原所有网址数据，确定要重置吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        list.value = initToolbar({
-          reset: true
-        })
-        ElMessage.success('重置成功')
-      })
-    }
+/** 只保留要存盘的字段，顺序也会体现在结果里 */
+function formatList (source: ToolbarItem[]) {
+  return source.map(item => ({
+    nameZh: item.nameZh,
+    url: item.url,
+    icon: item.icon || '',
+    data: { visible: item.data?.visible !== false }
+  }))
+}
 
-    function formatSites () {
-      return list.value.map(child => ({
-        nameZh: child.nameZh,
-        url: child.url,
-        icon: child.icon || '',
-        data: child.data
-      }))
-    }
+function snapshotOf (source: ToolbarItem[]) {
+  return JSON.stringify(formatList(source))
+}
 
-    function save () {
-      setStorage('toolbar', formatSites())
-      ElMessage.success('保存成功')
-    }
+const list = ref<ToolbarItem[]>(initToolbar().map(withUid))
+const savedSnapshot = ref(snapshotOf(list.value))
 
-    return {
-      list,
-      changeVisible,
-      deleteUrl,
-      addNewUrl,
-      reset,
-      formatSites,
-      save
-    }
+const dirty = computed(() => snapshotOf(list.value) !== savedSnapshot.value)
+
+useUnsavedGuard(dirty)
+
+// 存储是异步的：首屏先用内置默认值渲染，读到用户数据后再替换（避免空白闪一下）
+onMounted(async () => {
+  let stored: ToolbarItem[] | null = null
+  try {
+    stored = await getStorage<ToolbarItem[]>('toolbar')
+  } catch {
+    stored = null
   }
+  if (!Array.isArray(stored) || !stored.length) return
+  list.value = stored.map(withUid)
+  savedSnapshot.value = snapshotOf(list.value)
+})
+
+function toggleVisible (item: ToolbarItem) {
+  item.data = { ...item.data, visible: item.data?.visible === false }
+}
+
+function addItem () {
+  list.value.push(withUid({
+    nameZh: '新网址',
+    url: 'https://www.baidu.com/s?wd=%s&ie=utf-8',
+    data: { visible: true }
+  }))
+}
+
+function removeItem (index: number) {
+  list.value.splice(index, 1)
+}
+
+async function save () {
+  await setStorage('toolbar', formatList(list.value))
+  savedSnapshot.value = snapshotOf(list.value)
+  ElMessage.success('保存成功')
+}
+
+function revert () {
+  list.value = JSON.parse(savedSnapshot.value).map(withUid)
+  ElMessage.info('已撤销未保存的修改')
+}
+
+function reset () {
+  ElMessageBox.confirm('会清空自定义的工具栏项，恢复为内置默认数据。确定继续吗？', '重置', {
+    confirmButtonText: '重置',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    const defaults = initToolbar({ reset: true }).map(withUid)
+    await setStorage('toolbar', formatList(defaults))
+    list.value = defaults
+    savedSnapshot.value = snapshotOf(list.value)
+    ElMessage.success('已恢复默认数据')
+  }).catch(() => {})
 }
 </script>
 
 <style lang="scss">
-.sites {
-  border-radius: 4px;
-  box-shadow: none;
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.tabs-container {
-  margin-bottom: 20px;
-}
-
-.sites-tabs {
-  border: 1px solid #eee;
-  box-shadow: none;
-}
-
-.border-bottom {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.el-button {
-  vertical-align: middle;
-}
-
-.add-cate-btn {
-  position: absolute;
-  right: 6px;
-  top: 6px;
-}
-
-.url-item {
+.toolbar-page {
   display: flex;
-  background-color: var(--el-bg-color);
-  font-size: 14px;
-  color: var(--el-text-color-primary);
-  align-items: center;
-  padding: 12px 20px 12px 10px;
-  transition: background-color .25s ease;
+  flex-direction: column;
+  flex: 1;
 
-  &.invisible {
-    color: var(--el-text-color-disabled);
+  /* 撑开剩余空间，保存条贴住视口底部 */
+  > .panel {
+    flex: none;
+    margin-bottom: 16px;
   }
 
-  &:hover {
-    background-color: var(--el-fill-color-light);
+  > .save-bar {
+    margin-top: auto;
   }
 
-  & + & {
-    border-top: 1px solid var(--el-border-color-lighter);
+  .panel {
+    padding: 16px 20px 20px;
+    border: 1px solid var(--el-border-color-lighter);
+    border-radius: 12px;
+    background: var(--el-bg-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
   }
 
-  .move-icon {
-    padding: 6px 10px;
-    font-size: 18px;
-    color: #999;
-    cursor: move;
+  .panel-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+  }
+
+  .head-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .panel-title {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--el-text-color-primary);
+  }
+
+  .panel-desc {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--el-text-color-secondary);
+  }
+
+  .item-list {
+    min-height: 8px;
+  }
+
+  .item-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 6px 4px;
+    border-radius: 8px;
+    transition: background-color .15s ease;
 
     &:hover {
-      color: #409EFF;
+      background: var(--el-fill-color-light);
+    }
+
+    &.is-hidden {
+      .item-name,
+      .item-url {
+        opacity: .55;
+      }
     }
   }
 
-  .name {
-    width: 100px;
-    margin: 0;
+  .item-drag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    flex: none;
+    color: var(--el-text-color-placeholder);
+    cursor: grab;
+
+    &:hover {
+      color: var(--el-color-primary);
+    }
   }
 
-  .hd {
-    margin-right: 10px;
+  .item-name {
+    width: 160px;
+    flex: none;
   }
 
-  .bd {
+  .item-url {
     flex: 1;
-    margin-right: 10px;
+    min-width: 0;
   }
 
-  .input + .input {
-    margin-left: 10px;
+  .item-action {
+    flex: none;
+    font-size: 15px;
+    color: var(--el-text-color-secondary);
+
+    &:hover {
+      background: var(--el-fill-color);
+      color: var(--el-color-primary);
+    }
   }
 
-  .cate-name {
-    flex: 1;
-    font-size: 16px;
-    margin: 0 0 0 15px;
+  .item-remove:hover {
+    color: var(--el-color-danger);
   }
 
-  .el-button-group {
-    margin-right: 10px;
+  .empty-state {
+    padding: 40px 0;
+    text-align: center;
+
+    .empty-title {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--el-text-color-secondary);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .item-row {
+      flex-wrap: wrap;
+      padding: 8px 4px;
+
+      .item-name,
+      .item-url {
+        order: 2;
+        width: 100%;
+        flex: 1 1 100%;
+      }
+
+      .item-visible {
+        order: 1;
+        margin-left: auto;
+      }
+
+      .item-remove {
+        order: 1;
+      }
+    }
   }
 }
-
-.el-dropdown + .el-button {
-  margin-left: 10px;
-}
-
-.fixed-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: right;
-  width: 100%;
-
-  .btn-container {
-    box-shadow: 0 -2px 8px var(--el-border-color-lighter);
-    margin: 0 20px;
-    padding: 10px;
-    background-color: var(--el-bg-color);
-    border-radius: 3px 3px 0 0;
-  }
-}
-
-.category {
-  display: flex;
-  align-items: center;
-
-  .label {
-    margin: 0;
-    font-size: 16px;
-  }
-}
-
-</style>
-
-<style>
-
 </style>

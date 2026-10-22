@@ -1,26 +1,48 @@
 <template>
   <div class="interaction-page">
     <section class="card">
-      <h3 class="card-title">点击打开方式</h3>
-      <p class="card-desc">控制左键点击链接时，是在当前页跳转还是新标签页打开。两组互不影响。</p>
+      <header class="card-head">
+        <h3 class="card-title">
+          点击打开方式
+        </h3>
+        <p class="card-desc">
+          控制左键点击链接时，是在当前页跳转还是新标签页打开。两组互不影响，改完即时生效。
+        </p>
+      </header>
 
       <div class="row">
-        <span class="row-label">主菜单</span>
+        <div class="row-label">
+          <span class="row-name">主菜单</span>
+          <span class="row-hint">顶部菜单条上的搜索引擎</span>
+        </div>
         <el-radio-group v-model="menuOpenMode">
-          <el-radio value="same">当前页</el-radio>
-          <el-radio value="new">新标签页</el-radio>
+          <el-radio value="same">
+            当前页
+          </el-radio>
+          <el-radio value="new">
+            新标签页
+          </el-radio>
         </el-radio-group>
       </div>
 
       <div class="row">
-        <span class="row-label">划词</span>
+        <div class="row-label">
+          <span class="row-name">划词</span>
+          <span class="row-hint">选中文字后弹出的工具栏</span>
+        </div>
         <el-radio-group v-model="selectionOpenMode">
-          <el-radio value="same">当前页</el-radio>
-          <el-radio value="new">新标签页</el-radio>
+          <el-radio value="same">
+            当前页
+          </el-radio>
+          <el-radio value="new">
+            新标签页
+          </el-radio>
         </el-radio-group>
       </div>
 
-      <openModeTip/>
+      <footer class="card-foot">
+        <openModeTip compact />
+      </footer>
     </section>
   </div>
 </template>
@@ -35,37 +57,71 @@ const { menuOpenMode, selectionOpenMode } = useOpenMode()
 
 <style lang="scss">
 .interaction-page {
-  padding: 20px;
-
   .card {
-    background: #fff;
-    border-radius: 4px;
-    padding: 20px 24px 24px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+    max-width: 760px;
+    padding: 20px 24px 8px;
+    border: 1px solid var(--el-border-color-lighter);
+    border-radius: 12px;
+    background: var(--el-bg-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+  }
+
+  .card-head {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--el-border-color-lighter);
   }
 
   .card-title {
     margin: 0 0 6px;
-    font-size: 16px;
-    color: #303133;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--el-text-color-primary);
   }
 
   .card-desc {
-    margin: 0 0 18px;
+    margin: 0;
     font-size: 13px;
-    color: #909399;
+    line-height: 1.6;
+    color: var(--el-text-color-secondary);
   }
 
   .row {
     display: flex;
     align-items: center;
-    margin-bottom: 14px;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--el-border-color-lighter);
   }
 
   .row-label {
-    width: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .row-name {
     font-size: 14px;
-    color: #606266;
+    color: var(--el-text-color-primary);
+  }
+
+  .row-hint {
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+  }
+
+  .card-foot {
+    padding: 12px 0 8px;
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+  }
+
+  @media (max-width: 767px) {
+    .row {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 10px;
+    }
   }
 }
 </style>
