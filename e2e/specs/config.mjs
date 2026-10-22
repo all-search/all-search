@@ -82,6 +82,24 @@ export async function run ({ headless, report }) {
     report.check('只渲染当前分类的站点', nav.rows > 0 && nav.rows < 15, `${nav.rows} 行`)
     report.check('初始为已保存态', nav.saveStatus === '所有修改已保存', nav.saveStatus)
 
+    // 可点区域：分类按钮至少 40px 高、4px 间距（鼠标/触控都够得着）
+    const navMetrics = await page.evaluate(() => {
+      const items = [...document.querySelectorAll('.site-nav .nav-item')]
+      const a = items[0].getBoundingClientRect()
+      const b = items[1].getBoundingClientRect()
+      return {
+        w: Math.round(a.width),
+        h: Math.round(a.height),
+        gap: Math.round(b.top - a.bottom),
+        font: parseFloat(getComputedStyle(items[0]).fontSize)
+      }
+    })
+    report.check(
+      '分类按钮可点区域够大',
+      navMetrics.h >= 40 && navMetrics.w >= 160 && navMetrics.gap >= 4 && navMetrics.font >= 14,
+      `${navMetrics.w}×${navMetrics.h} gap=${navMetrics.gap} font=${navMetrics.font}`
+    )
+
     // 一级分类拖拽换位（拖动导航第 3 项到最前）
     const navLabels = () => page.evaluate(
       () => [...document.querySelectorAll('.nav-item .nav-label')].map(el => el.textContent.trim())

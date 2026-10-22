@@ -224,7 +224,7 @@ function goHome () {
 .top-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex: 1;
   min-width: 0;
   overflow-x: auto;
@@ -240,23 +240,28 @@ function goHome () {
   align-items: center;
   gap: 6px;
   flex: none;
-  height: 32px;
-  padding: 0 12px;
+  height: 36px;
+  padding: 0 14px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--el-text-color-regular);
   text-decoration: none;
   white-space: nowrap;
   transition: background-color .15s ease, color .15s ease;
 
   .nav-icon {
-    font-size: 15px;
+    font-size: 16px;
     opacity: .75;
   }
 
   &:hover {
     background: var(--el-fill-color-light);
     color: var(--el-text-color-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--el-color-primary);
+    outline-offset: 2px;
   }
 
   &.is-active {
@@ -281,14 +286,14 @@ function goHome () {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   padding: 0;
   border: 0;
   border-radius: 8px;
   background: transparent;
   color: var(--el-text-color-regular);
-  font-size: 16px;
+  font-size: 17px;
   cursor: pointer;
 
   &:hover {

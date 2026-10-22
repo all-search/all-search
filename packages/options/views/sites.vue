@@ -16,6 +16,7 @@
           type="button"
           class="nav-item"
           :class="{ 'is-active': tabName === cate.name, 'is-off': !cate.data.visible }"
+          :aria-current="tabName === cate.name ? 'true' : undefined"
           :title="`${cate.nameZh}：点击切换，拖拽调整顺序`"
           @click="tabName = cate.name">
           <span class="nav-label">{{ cate.nameZh }}</span>
@@ -649,39 +650,49 @@ export default {
 .site-nav {
   position: sticky;
   top: 0;
-  width: 188px;
+  width: 208px;
   flex: none;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px;
+  gap: 4px;
+  padding: 10px;
   border-radius: 10px;
   background: var(--el-bg-color);
   box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+  /* 视口矮于一整列分类时，导航自己滚，不然底部几项点不到（sticky 会一直吸在顶上） */
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 
   .nav-list {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
 
   .nav-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    padding: 7px 10px;
+    gap: 10px;
+    min-height: 40px;
+    padding: 9px 12px;
     border: 0;
-    border-radius: 6px;
+    border-radius: 8px;
     background: transparent;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--el-text-color-regular);
     cursor: pointer;
     text-align: left;
     user-select: none;
+    transition: background-color .15s ease, color .15s ease;
 
     &:hover {
       background: var(--el-fill-color-light);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--el-color-primary);
+      outline-offset: 2px;
     }
 
     &.is-active {
@@ -697,22 +708,27 @@ export default {
   }
 
   .nav-count {
-    font-size: 11px;
+    flex: none;
+    min-width: 22px;
+    padding: 0 7px;
+    border-radius: 9px;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
     color: var(--el-text-color-secondary);
     background: var(--el-fill-color);
-    border-radius: 8px;
-    padding: 0 6px;
-    line-height: 16px;
   }
 
   .nav-add {
-    margin-top: 6px;
+    margin-top: 8px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
-    padding: 7px 10px;
+    min-height: 40px;
+    padding: 9px 12px;
     border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
+    border-radius: 8px;
     background: transparent;
     font-size: 13px;
     color: var(--el-text-color-secondary);
@@ -721,6 +737,11 @@ export default {
     &:hover {
       color: var(--el-color-primary);
       border-color: var(--el-color-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--el-color-primary);
+      outline-offset: 2px;
     }
   }
 }
@@ -846,9 +867,12 @@ export default {
   .site-nav {
     position: static;
     width: 100%;
+    max-height: none;
     flex-direction: row;
+    align-items: center;
     overflow-x: auto;
-    padding: 6px;
+    overflow-y: hidden;
+    padding: 8px;
 
     .nav-list {
       flex-direction: row;
@@ -856,11 +880,13 @@ export default {
 
     .nav-item {
       flex: none;
+      min-height: 36px;
       white-space: nowrap;
     }
 
     .nav-add {
       margin-top: 0;
+      min-height: 36px;
       flex: none;
       white-space: nowrap;
     }

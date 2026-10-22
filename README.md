@@ -85,7 +85,7 @@ pnpm lint          # eslint --fix
 pnpm lint:check    # eslint without writing files (what CI runs)
 ```
 
-`pnpm e2e` builds what it needs first, then runs four scenarios (69 assertions):
+`pnpm e2e` builds what it needs first, then runs four scenarios (70 assertions):
 
 - **plugin** — loads the unpacked extension and checks the menu bar, the dropdown direction in all four layouts, and that “菜单设置” opens the bundled options page
 - **userscript** — simulates Tampermonkey (Vue global + `GM_*` shims) and injects `dist/index.user.js`
