@@ -70,6 +70,7 @@
 
 - 脏状态一律用「当前序列化结果 ≠ 已保存快照」判断，新增字段要同时改 `formatSites` / `formatList`，否则永远不脏。
 - 拖拽排序用 `vue-draggable-next`：站点行（`handle=".engine-drag"`）与一级分类（整块导航项都可拖）各一个实例；列表项需要一个稳定的 `__uid` 做 key，保存时剔除。分类拖完只是改内存顺序，要按 `保存` 才落盘，`撤销修改` 可回退。
+- 拖拽参数统一：`:delay="260" :delay-on-touch-only="true" :touch-start-threshold="6" :force-fallback="true"`——移动端必须长按才进拖拽，否则和分类栏的横滑抢手势；桌面鼠标不受影响（仍即时拖）。`force-fallback` 是必须的：原生 HTML5 拖拽会把 `touchStartThreshold` 强制改成 1，手指抖动就会取消长按。
 - 卡片统一：`border: 1px solid var(--el-border-color-lighter)` + `border-radius: 12px` + 极浅阴影，不要写死 `#fff` / `#303133`。
 - 可点区域按桌面人体工学给：一级分类按钮 ≥ 40px 高、间距 4px、字号 14px（窄屏横排时 36px），顶栏标签 36px、图标按钮 34px；纯图标按钮必须带 `aria-label`，键盘态用 `:focus-visible` 描边。e2e 有一条「分类按钮可点区域够大」盯着尺寸。
 - 页内不再自己加 `padding`（壳层已有 20/24），窄屏由壳层降到 12。
@@ -104,7 +105,7 @@ packages/plugin/entries/options/main.js
 
 ## 测试
 
-`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 34 项断言：顶栏与正文对齐、分类导航计数与可点尺寸、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏无横向滚动。截图落在 `e2e/artifacts/config-*.png`。
+`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 37 项断言：顶栏与正文对齐、分类导航计数与可点尺寸、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏、触屏横滑与长按拖拽。截图落在 `e2e/artifacts/config-*.png`。
 
 ## 已知限制 / 待办
 

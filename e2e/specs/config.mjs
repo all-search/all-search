@@ -129,6 +129,29 @@ export async function run ({ headless, report }) {
     const restored = await navLabels()
     report.check('撤销还原分类顺序', restored[0] === before[0], `${before[0]} / ${restored[0]}`)
 
+    // 桌面（鼠标）不延迟、触屏长按才拖：改动这类手势参数时别把桌面拖拽一起拖慢
+    const dragOptions = await page.evaluate(() => {
+      const read = (selector) => {
+        const el = document.querySelector(selector)
+        const sortable = el?.__draggable_component__?._sortable
+        return sortable
+          ? {
+              delay: sortable.options.delay,
+              touchOnly: sortable.options.delayOnTouchOnly,
+              threshold: sortable.options.touchStartThreshold,
+              fallback: sortable.options.forceFallback
+            }
+          : null
+      }
+      return { nav: read('.nav-list'), rows: read('.engine-list') }
+    })
+    report.check(
+      '分类/站点拖拽在触屏上长按才触发',
+      !!dragOptions.nav && dragOptions.nav.delay >= 200 && dragOptions.nav.touchOnly === true &&
+        !!dragOptions.rows && dragOptions.rows.delay >= 200 && dragOptions.rows.touchOnly === true,
+      `nav=${JSON.stringify(dragOptions.nav)}`
+    )
+
     // 点击仍然切换分类
     await page.locator('.site-nav .nav-item').filter({ hasText: '翻译' }).first().click()
     await page.waitForTimeout(300)
@@ -314,6 +337,65 @@ export async function run ({ headless, report }) {
     report.check('窄屏隐藏导航文字', mobile.navText.every(d => d === 'none'), mobile.navText.join(','))
     report.check('窄屏分类导航横排', mobile.navDirection === 'row', mobile.navDirection)
     await shot('config-mobile.png')
+
+    /* ---------- 触屏：横滑排序不抢手势 ---------- */
+    const touchCtx = await browser.newContext({ viewport: { width: 420, height: 800 }, hasTouch: true })
+    const touchPage = await touchCtx.newPage()
+    try {
+      await touchPage.goto(`${site.origin}/all-search/config/sites`, { waitUntil: 'networkidle' })
+      await touchPage.waitForSelector('.site-nav')
+      await touchPage.waitForTimeout(600)
+
+      const touchLabels = () => touchPage.evaluate(
+        () => [...document.querySelectorAll('.nav-item .nav-label')].map(el => el.textContent.trim())
+      )
+      const cdp = await touchCtx.newCDPSession(touchPage)
+      const touch = (type, points) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: points })
+
+      const beforeTouch = await touchLabels()
+      const chip = await touchPage.locator('.nav-item').nth(1).boundingBox()
+      const midY = chip.y + chip.height / 2
+      // 快速横滑（每步 25px，总计 200px，远小于 260ms 长按）
+      await touch('touchStart', [{ x: chip.x + chip.width / 2, y: midY }])
+      for (let i = 1; i <= 8; i++) {
+        await touch('touchMove', [{ x: chip.x + chip.width / 2 - i * 25, y: midY }])
+        await touchPage.waitForTimeout(16)
+      }
+      await touch('touchEnd', [])
+      await touchPage.waitForTimeout(500)
+      const afterSwipe = await touchLabels()
+      const scrollLeft = await touchPage.evaluate(() => document.querySelector('.site-nav').scrollLeft)
+      report.check(
+        '触屏横滑只滚动、不换位',
+        scrollLeft > 50 && afterSwipe.join() === beforeTouch.join(),
+        `scrollLeft=${Math.round(scrollLeft)} 顺序不变=${afterSwipe.join() === beforeTouch.join()}`
+      )
+
+      // 长按 420ms 再拖：这才换位
+      await touchPage.evaluate(() => { document.querySelector('.site-nav').scrollLeft = 0 })
+      await touchPage.waitForTimeout(200)
+      const src = await touchPage.locator('.nav-item').nth(2).boundingBox()
+      const dst = await touchPage.locator('.nav-item').nth(0).boundingBox()
+      await touch('touchStart', [{ x: src.x + src.width / 2, y: src.y + src.height / 2 }])
+      await touchPage.waitForTimeout(420)
+      for (let i = 1; i <= 10; i++) {
+        await touch('touchMove', [{
+          x: src.x + src.width / 2 - ((src.x - dst.x) * i) / 10,
+          y: src.y + src.height / 2 - ((src.y - dst.y) * i) / 10
+        }])
+        await touchPage.waitForTimeout(20)
+      }
+      await touch('touchEnd', [])
+      await touchPage.waitForTimeout(600)
+      const afterHold = await touchLabels()
+      report.check(
+        '触屏长按后可拖动换位',
+        afterHold[0] === beforeTouch[2],
+        `${beforeTouch[2]} → ${afterHold[0]}`
+      )
+    } finally {
+      await touchCtx.close()
+    }
 
     report.check('配置页无运行时错误', problems.length === 0, problems.slice(0, 2).join(' | '))
   } finally {

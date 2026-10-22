@@ -9,7 +9,11 @@
         v-model="localSites"
         class="nav-list"
         :animation="150"
-        :disabled="renaming">
+        :disabled="renaming"
+        :force-fallback="true"
+        :delay="DRAG_DELAY"
+        :delay-on-touch-only="true"
+        :touch-start-threshold="TOUCH_THRESHOLD">
         <button
           v-for="cate in localSites"
           :key="cate.name"
@@ -17,7 +21,7 @@
           class="nav-item"
           :class="{ 'is-active': tabName === cate.name, 'is-off': !cate.data.visible }"
           :aria-current="tabName === cate.name ? 'true' : undefined"
-          :title="`${cate.nameZh}：点击切换，拖拽调整顺序`"
+          :title="`${cate.nameZh}：点击切换，拖动排序（触屏需长按）`"
           @click="tabName = cate.name">
           <span class="nav-label">{{ cate.nameZh }}</span>
           <span class="nav-count">{{ cate.list.length }}</span>
@@ -133,7 +137,11 @@
         class="engine-list"
         handle=".engine-drag"
         :animation="150"
-        :disabled="sortingDisabled">
+        :disabled="sortingDisabled"
+        :force-fallback="true"
+        :delay="DRAG_DELAY"
+        :delay-on-touch-only="true"
+        :touch-start-threshold="TOUCH_THRESHOLD">
         <site-engine-row
           v-for="(item, index) in displayedList"
           :key="item.__uid"
@@ -268,6 +276,15 @@ const ensureUid = (item) => {
     item.__uid = `s${uidSeed}`
   }
 }
+
+/**
+ * 触屏上长按多久才开始拖拽。
+ * 移动端分类是横向滚动的，手指一按就进入拖拽会和横滑抢手势；
+ * 桌面（鼠标）不受影响 —— delayOnTouchOnly 只在 touch 事件上生效。
+ */
+const DRAG_DELAY = 260
+/** 按下后移动超过这个距离就判定为滚动/点按，取消拖拽 */
+const TOUCH_THRESHOLD = 6
 
 export default {
   name: 'sites',
@@ -622,7 +639,9 @@ export default {
       save,
       revert,
       reset,
-      formatSites
+      formatSites,
+      DRAG_DELAY,
+      TOUCH_THRESHOLD
     }
   }
 }
@@ -688,6 +707,11 @@ export default {
 
     &:hover {
       background: var(--el-fill-color-light);
+    }
+
+    /* 触屏长按时的按下反馈，让用户知道「按住」已经生效 */
+    &:active {
+      background: var(--el-fill-color);
     }
 
     &:focus-visible {
