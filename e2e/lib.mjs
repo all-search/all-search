@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import http from 'node:http'
 import path from 'node:path'
 import { chromium } from 'playwright-core'
 
@@ -6,6 +7,7 @@ export const ROOT = path.resolve(import.meta.dirname, '..')
 export const ARTIFACTS = path.join(ROOT, 'e2e', 'artifacts')
 export const PLUGIN_EXT = path.join(ROOT, 'packages', 'plugin', '.output', 'chrome-mv3')
 export const USER_SCRIPT = path.join(ROOT, 'packages', 'script', 'dist', 'index.user.js')
+export const OPTIONS_DIST = path.join(ROOT, 'packages', 'options', 'dist')
 export const VUE_GLOBAL = path.join(ROOT, 'node_modules', 'vue', 'dist', 'vue.global.prod.js')
 
 export const FIXTURE_URL = 'https://www.baidu.com/s?wd=all-search-e2e'
@@ -183,9 +185,59 @@ export function directionOk (mode, bar, popper) {
   }
 }
 
+const MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.ico': 'image/x-icon',
+  '.json': 'application/json',
+  '.woff2': 'font/woff2'
+}
+
+/**
+ * 起一个只读静态服务器托管配置页产物（history 路由的深链回落到 index.html）。
+ * 返回 `{ origin, close }`，端口由系统分配，不会撞上别的服务。
+ */
+export async function serveOptions () {
+  const server = http.createServer((req, res) => {
+    const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
+    if (!urlPath.startsWith('/all-search')) {
+      res.writeHead(404).end('not found')
+      return
+    }
+    const relative = urlPath.slice('/all-search'.length) || '/'
+    let file = path.join(OPTIONS_DIST, relative)
+    if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+      file = path.join(OPTIONS_DIST, 'index.html')
+    }
+    res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream' })
+    fs.createReadStream(file).pipe(res)
+  })
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  const { port } = server.address()
+  return {
+    origin: `http://127.0.0.1:${port}`,
+    close: () => new Promise(resolve => server.close(resolve))
+  }
+}
+
+/** 普通浏览器窗口（不加载扩展），用于配置页这类纯网页场景 */
+export async function launchBrowser ({ headless = true } = {}) {
+  const options = { headless }
+  if (process.env.E2E_EXECUTABLE) {
+    options.executablePath = process.env.E2E_EXECUTABLE
+  } else {
+    options.channel = process.env.E2E_CHANNEL || (process.platform === 'win32' ? 'msedge' : 'chrome')
+  }
+  return chromium.launch(options)
+}
+
 /** 收集断言结果 */
-export function createReport (scenario) {
-  const results = []
+export function createReport (scenario) {  const results = []
   return {
     check (name, passed, detail = '') {
       results.push({ scenario, name, passed: !!passed, detail })

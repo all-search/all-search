@@ -2,9 +2,11 @@
 /**
  * All-Search 浏览器回归（pnpm e2e）
  *
- * 覆盖两个场景：
+ * 覆盖四个场景：
  *   - plugin     ：加载未打包扩展，验证菜单渲染、四向布局下的浮层方向、设置入口
  *   - userscript ：模拟油猴环境（Vue 全局 + GM_* 打桩）注入 dist/index.user.js
+ *   - selection  ：划词工具栏与搜索弹窗、左键打开方式
+ *   - config     ：配置页（站点/划词工具栏/交互/JSON 编辑/深色/窄屏）交互回归
  *
  * 用法：
  *   pnpm e2e                  # 先构建再跑全部场景
@@ -29,7 +31,7 @@ const getArg = (name, fallback) => {
 
 const headless = !hasFlag('headed')
 const shouldBuild = !hasFlag('no-build')
-const allSpecs = ['plugin', 'userscript', 'selection']
+const allSpecs = ['plugin', 'userscript', 'selection', 'config']
 const selected = getArg('only', allSpecs.join(',')).split(',').map(s => s.trim()).filter(Boolean)
 const unknown = selected.filter(s => !allSpecs.includes(s))
 if (unknown.length) {
@@ -59,6 +61,9 @@ function runCommand (label, command, args) {
 if (shouldBuild) {
   runCommand('构建插件（未打包目录）', 'pnpm', ['-C', 'packages/plugin', 'build'])
   runCommand('构建用户脚本', 'pnpm', ['build:script'])
+  if (selected.includes('config')) {
+    runCommand('构建配置页', 'pnpm', ['build:options'])
+  }
 }
 
 const channel = process.env.E2E_EXECUTABLE || process.env.E2E_CHANNEL || (process.platform === 'win32' ? 'msedge' : 'chrome')
