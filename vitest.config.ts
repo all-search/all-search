@@ -9,7 +9,7 @@ export default defineConfig({
     globals: true,
     alias: {
       '@src': path.resolve(__dirname, './src'),
-      'vite-plugin-monkey/dist/client': path.resolve(__dirname, './packages/plugin/mock-gm.ts'),
+      'vite-plugin-monkey/dist/client': path.resolve(__dirname, './src/util/mock-gm.ts'),
     },
   },
 })
