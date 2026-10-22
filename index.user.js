@@ -2767,14 +2767,16 @@ destroy() {
     emit();
   }
   let activeAdapter = new TmAdapter();
-  const isOptionsPage = typeof window !== "undefined" && (window.location.pathname.includes("options") || window.location.hostname.includes("github.io") || window.location.hostname.includes("gitee.io"));
+  const hostname = typeof window !== "undefined" ? window.location.hostname : "";
+  const isOptionsPage = typeof window !== "undefined" && (window.location.pathname.includes("options") || hostname.includes("github.io") || hostname.includes("gitee.io") ||
+hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]");
   if (isOptionsPage) {
     activeAdapter = new WebBridgeAdapter();
   }
   const getStorage = (name) => activeAdapter.get(name);
   const setStorage = (name, value2) => activeAdapter.set(name, value2);
   const delStorage = (name) => activeAdapter.remove(name);
-  const sitesData = vue.ref([]);
+  const sitesData = vue.ref(list$2);
   function getSites$1(val) {
     if (Array.isArray(val) && val.length > 0) {
       return val;
@@ -5085,13 +5087,13 @@ tag: { type: String, default: "div" },
     setup(__props) {
       const props = __props;
       const isError = vue.ref(false);
-      const { hostname, origin } = parseUrl(props.url || "");
+      const { hostname: hostname2, origin } = parseUrl(props.url || "");
       const img = vue.computed(() => {
         if (!isLoaded.value) {
           return "";
         }
-        if (iconCache.value[hostname]) {
-          return iconCache.value[hostname];
+        if (iconCache.value[hostname2]) {
+          return iconCache.value[hostname2];
         } else if (!isError.value) {
           return faviconApi.value;
         } else {
@@ -5101,8 +5103,8 @@ tag: { type: String, default: "div" },
       const index2 = vue.ref(0);
       const faviconApis = vue.computed(() => [
         props.icon,
-        `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`,
-        `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname)}`,
+        `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname2)}?size=32`,
+        `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname2)}`,
         `${origin}/favicon.ico`
       ].filter((j) => !!j));
       const faviconApi = vue.computed(() => faviconApis.value[index2.value]);
@@ -5120,7 +5122,7 @@ tag: { type: String, default: "div" },
         if (!isError.value && !img.value.startsWith("data:image")) {
           const base64 = getBase64Image(e.target);
           if (base64) {
-            iconCache.value[hostname] = base64;
+            iconCache.value[hostname2] = base64;
             setStorageDebounce();
           }
         }
