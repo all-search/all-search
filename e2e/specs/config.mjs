@@ -36,11 +36,20 @@ export async function run ({ headless, report }) {
 
     const shell = await page.evaluate(() => {
       const bar = document.querySelector('.top-bar')
+      const inner = document.querySelector('.top-bar-inner')
+      const content = document.querySelector('.page-inner')
+      const rect = el => (el ? el.getBoundingClientRect() : null)
       return {
         tabs: [...document.querySelectorAll('.nav-tab')].map(t => t.textContent.trim()),
         active: document.querySelector('.nav-tab.is-active')?.textContent?.trim(),
-        barHeight: Math.round(bar?.getBoundingClientRect().height || 0),
-        contentWidth: Math.round(document.querySelector('.page-inner')?.getBoundingClientRect().width || 0),
+        barHeight: Math.round(rect(bar)?.height || 0),
+        barWidth: Math.round(rect(bar)?.width || 0),
+        innerLeft: Math.round(rect(inner)?.left || 0),
+        innerRight: Math.round(rect(inner)?.right || 0),
+        contentLeft: Math.round(rect(content)?.left || 0),
+        contentRight: Math.round(rect(content)?.right || 0),
+        contentWidth: Math.round(rect(content)?.width || 0),
+        viewportWidth: window.innerWidth,
         overflowX: document.documentElement.scrollWidth > window.innerWidth + 2
       }
     })
@@ -48,6 +57,14 @@ export async function run ({ headless, report }) {
     report.check('当前页标签高亮', (shell.active || '').includes('站点'), shell.active)
     report.check('顶栏高度固定 56', shell.barHeight === 56, `${shell.barHeight}px`)
     report.check('内容区限宽且不溢出', shell.contentWidth <= 1200 && !shell.overflowX, `${shell.contentWidth}px`)
+    // 顶栏底色拉满整宽，但里面的品牌 / 标签 / 按钮要和正文同一个 1200 栏
+    report.check(
+      '顶栏内容与正文左右对齐',
+      shell.barWidth === shell.viewportWidth &&
+        Math.abs(shell.innerLeft - shell.contentLeft) <= 1 &&
+        Math.abs(shell.innerRight - shell.contentRight) <= 1,
+      `bar=${shell.innerLeft}..${shell.innerRight} content=${shell.contentLeft}..${shell.contentRight}`
+    )
 
     /* ---------- 站点页 ---------- */
     const nav = await page.evaluate(() => ({

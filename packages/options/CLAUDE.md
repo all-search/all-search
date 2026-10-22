@@ -41,7 +41,8 @@
 
 ```
 .config-shell (flex column, height 100vh)
-├─ .top-bar     56px：品牌 / 四个 .nav-tab / 主题切换 / GitHub
+├─ .top-bar     56px：底色/分隔线拉满整宽
+│  └─ .top-bar-inner (max-width 1200, 居中)：品牌 / 四个 .nav-tab / 主题切换 / GitHub
 └─ .page-scroll (el-scrollbar, flex: 1)
    └─ .page-main (height: 100%, padding 20/24)
       └─ .page-inner (max-width 1200, flex column)
@@ -49,6 +50,7 @@
          └─ <router-view>
 ```
 
+- 顶栏与正文共用「24px 安全边距 + 1200 栏」这套算法（`.top-bar` 只留 `padding: 0 24px`，`.top-bar-inner` 负责限宽居中），所以品牌和内容卡片的左右边始终对齐；改宽度时两处要一起改，e2e 有断言盯着。
 - `.el-scrollbar__view { height: 100% }` 是为了让子页面的 `flex: 1` 与 sticky 底栏有确定高度；去掉它会出现“保存条漂在页面中间”。
 - 主题切换写 `html.dark`（Element Plus 的 dark css-vars），图标随当前偏好变（Monitor / Sunny / Moon）。
 
@@ -101,7 +103,7 @@ packages/plugin/entries/options/main.js
 
 ## 测试
 
-`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 32 项断言：顶栏与限宽、分类导航计数、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏无横向滚动。截图落在 `e2e/artifacts/config-*.png`。
+`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 33 项断言：顶栏与正文对齐、分类导航计数、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏无横向滚动。截图落在 `e2e/artifacts/config-*.png`。
 
 ## 已知限制 / 待办
 

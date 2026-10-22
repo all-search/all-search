@@ -1,76 +1,78 @@
 <template>
   <div class="config-shell">
     <header class="top-bar">
-      <a
-        class="brand"
-        href="#"
-        @click.prevent="goHome">
-        <span
-          class="brand-mark"
-          aria-hidden="true">搜</span>
-        <span class="brand-name">
-          全搜
-          <span class="brand-en">All-Search</span>
-        </span>
-      </a>
-
-      <nav
-        class="top-nav"
-        aria-label="配置分类">
-        <router-link
-          v-for="tab in tabs"
-          :key="tab.path"
-          :to="tab.path"
-          class="nav-tab"
-          :class="{ 'is-active': isActive(tab.path) }">
-          <el-icon class="nav-icon">
-            <component :is="tab.icon" />
-          </el-icon>
-          <span class="nav-text">{{ tab.label }}</span>
-        </router-link>
-      </nav>
-
-      <div class="top-actions">
-        <el-dropdown
-          trigger="click"
-          @command="onThemeChange">
-          <button
-            type="button"
-            class="icon-btn"
-            :title="`主题：${themeLabel}`"
-            :aria-label="`主题：${themeLabel}`">
-            <el-icon><component :is="themeIcon" /></el-icon>
-          </button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item
-                v-for="opt in THEME_OPTIONS"
-                :key="opt.value"
-                :command="opt.value">
-                <span class="theme-option">
-                  <el-icon><component :is="opt.icon" /></el-icon>
-                  <span>{{ opt.label }}</span>
-                  <el-icon
-                    v-if="preference === opt.value"
-                    class="theme-check"
-                  >
-                    <Check />
-                  </el-icon>
-                </span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-
+      <div class="top-bar-inner">
         <a
-          class="icon-btn gh-btn"
-          href="https://github.com/all-search/all-search"
-          target="_blank"
-          rel="noreferrer"
-          title="GitHub"
-          aria-label="GitHub">
-          <span class="gh-icon" />
+          class="brand"
+          href="#"
+          @click.prevent="goHome">
+          <span
+            class="brand-mark"
+            aria-hidden="true">搜</span>
+          <span class="brand-name">
+            全搜
+            <span class="brand-en">All-Search</span>
+          </span>
         </a>
+
+        <nav
+          class="top-nav"
+          aria-label="配置分类">
+          <router-link
+            v-for="tab in tabs"
+            :key="tab.path"
+            :to="tab.path"
+            class="nav-tab"
+            :class="{ 'is-active': isActive(tab.path) }">
+            <el-icon class="nav-icon">
+              <component :is="tab.icon" />
+            </el-icon>
+            <span class="nav-text">{{ tab.label }}</span>
+          </router-link>
+        </nav>
+
+        <div class="top-actions">
+          <el-dropdown
+            trigger="click"
+            @command="onThemeChange">
+            <button
+              type="button"
+              class="icon-btn"
+              :title="`主题：${themeLabel}`"
+              :aria-label="`主题：${themeLabel}`">
+              <el-icon><component :is="themeIcon" /></el-icon>
+            </button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="opt in THEME_OPTIONS"
+                  :key="opt.value"
+                  :command="opt.value">
+                  <span class="theme-option">
+                    <el-icon><component :is="opt.icon" /></el-icon>
+                    <span>{{ opt.label }}</span>
+                    <el-icon
+                      v-if="preference === opt.value"
+                      class="theme-check"
+                    >
+                      <Check />
+                    </el-icon>
+                  </span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+
+          <a
+            class="icon-btn gh-btn"
+            href="https://github.com/all-search/all-search"
+            target="_blank"
+            rel="noreferrer"
+            title="GitHub"
+            aria-label="GitHub">
+            <span class="gh-icon" />
+          </a>
+        </div>
       </div>
     </header>
 
@@ -160,13 +162,11 @@ function goHome () {
 
 /* ---------- 顶栏 ---------- */
 
+/* 底色和分隔线拉满整宽，内容跟正文对齐到同一个 1200 栏 */
 .top-bar {
   flex: none;
-  display: flex;
-  align-items: center;
-  gap: 20px;
   height: 56px;
-  padding: 0 20px;
+  padding: 0 24px;
   background: #fff;
   border-bottom: 1px solid var(--el-border-color-lighter);
 
@@ -174,6 +174,16 @@ function goHome () {
     background: #1d1e1f;
     border-bottom-color: #2b2b2e;
   }
+}
+
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
 }
 
 .brand {
@@ -347,8 +357,11 @@ function goHome () {
 
 @media (max-width: 767px) {
   .top-bar {
-    gap: 12px;
     padding: 0 12px;
+  }
+
+  .top-bar-inner {
+    gap: 12px;
   }
 
   .brand .brand-en {
