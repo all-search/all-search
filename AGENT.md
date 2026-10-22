@@ -29,7 +29,7 @@ UI 全部渲染在 Shadow DOM 内，宿主页面只保留一个 `<all-search-ui>
 - **DOM 访问只走统一入口**：`src/util/dom.ts` 的 `getAsRoot()` / `getAsShadowRoot()` / `getAsMountAnchor()`。不要假设宿主是 `#all-search` 还是 `<all-search-ui>`。
 - **挂载与布局**：`src/util/mount.ts` 的 `setupApp()`（用户脚本）和 `LayoutService.refresh()`（两种模式共用）。宿主类名 `as-host-{top|bottom|left|right}`、`as-host-{horizontal|vertical}`、`as-host-{show|hide}`。
 - **样式**：宿主页用 `src/assets/global.scss`，影子根用 `internal.scss` + `layout.scss` + 各组件的 `<style>`。禁止在组件里注入宿主页面样式。
-- **存储**：只经 `src/util/storage/` 读写。`TmAdapter`（GM_*）/ `ExtensionAdapter`（`@wxt-dev/storage`）/ `WebBridgeAdapter`（在线配置页与油猴脚本通信）。存储 key 前缀是 `__allSearch__`，从 2020 年起没变过，**不需要迁移**。插件构建里 GM API 被替换成抛错实现（`packages/plugin/mock-gm.ts`），误用会立刻报错而不是静默丢数据。
+- **存储**：只经 `src/util/storage/` 读写。`TmAdapter`（GM_*）/ `ExtensionAdapter`（`@wxt-dev/storage`）/ `WebBridgeAdapter`（在线配置页与油猴脚本通信）。存储 key 前缀是 `__allSearch__`，从 2020 年起没变过，**不需要迁移**。插件构建里 GM API 被替换成抛错实现（`src/util/mock-gm.ts`），误用会立刻报错而不是静默丢数据。
 - **环境判定**：`src/env.ts` 的 `isPlugin` / `isScript` 来自构建期的 `VITE_TARGET`（`packages/*/.env`），不要在运行时猜。
 - **Teleport**：目标只能是 `getAsMountAnchor()`，不要指向 `body`。
 
@@ -42,8 +42,8 @@ UI 全部渲染在 Shadow DOM 内，宿主页面只保留一个 `<all-search-ui>
 | 用户脚本开发 | `pnpm dev:script` | watch 构建 |
 | 配置站开发 | `pnpm dev:options` | — |
 | 构建 | `pnpm build:script` / `build:plugin` / `zip:firefox` / `build:options` | 产物见各包 `dist/`、`.output/` |
-| 测试 | `pnpm test` | vitest + jsdom，14 个用例 |
-| 浏览器回归 | `pnpm e2e` | Playwright 驱动本机 Edge/Chrome，跑插件 / 油猴 / 划词三个场景 |
+| 测试 | `pnpm test` | vitest + jsdom，21 个用例 |
+| 浏览器回归 | `pnpm e2e` | Playwright 驱动本机 Edge/Chrome，跑插件 / 油猴 / 划词 / 配置页四个场景 |
 
 > Windows 下构建若报 esbuild `Access is denied`：`build:*` / `zip*` 脚本会先跑 `pnpm build:prepare`、再经 `pnpm with-temp` 执行；只有手动调 `vite` / `wxt` 时才需要自己设 `$env:TEMP`。
 

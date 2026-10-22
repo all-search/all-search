@@ -2,6 +2,29 @@
 
 ## 变更记录 (Changelog)
 
+### 2026-10-22 - 配置页改版（交互 + 视觉 + e2e）
+
+**页面骨架**
+- `views/config.vue` 重写为 `<script setup lang="ts">`：56px 顶栏（品牌 / 四个胶囊标签 / 主题按钮 / GitHub）+ `el-scrollbar` 内容区 + `max-width: 1200` 居中
+- 修掉三处壳层问题：logo 写死 `/all-search`（插件里 404，改走路由）、内容区高度用 `calc(100vh - 43px)` 硬编码、`box-sizing` 默认 content-box 导致「定宽 + 内边距」的卡片全部超宽
+- `.el-scrollbar__view { height: 100% }` 打通 flex 高度链，保存条不再漂在页面中间
+
+**站点配置**
+- 拆出 `components/site-engine-row.vue`（阅读态 / 编辑态两态 + ⋯ 菜单），编辑改用本地草稿，点「完成」才回传，不再直接改 props（`vue/no-mutating-props`）
+- 抽取 `components/save-bar.vue` 与 `composables/use-unsaved-guard.ts`，站点页与划词工具栏页共用
+- **修复**：`恢复默认` 原先跟 `dirty` 绑定，保存过自定义数据后再也点不动——它是唯一能把数据还原成内置默认的入口，现已常开
+- 取消编辑会还原快照，新建站点取消即丢弃；离开页面（关标签 / 切路由）统一提示未保存
+
+**其他页面**
+- 划词工具栏：卡片化 + 读写脏状态 + 撤销 / 重置，异步存储读到用户数据后再替换首屏默认值
+- 交互页：两组单选加行内说明，`open-mode-tip` 支持 `compact`，避免文案重复
+- JSON 编辑：面板高度改为 flex 自适应，补 `html.dark` 下的 ace / jsoneditor / 状态栏配色（右键菜单保持白底）
+- 删除从未被路由引用的 `views/index.vue`（旧的搜索框 demo，还调用了不存在的 `this.$fetch`）
+
+**测试**
+- `pnpm e2e` 新增 `config` 场景（29 项断言，静态托管 `packages/options/dist` + 本机 Edge），总计 65 项
+- 顺带修掉 `vitest.config.ts` 里 `mock-gm.ts` 的旧路径（文件已移到 `src/util/mock-gm.ts`，单测此前会整批失败）
+
 ### 2026-10-21 - v2.0.0
 
 **固定元素避让重做（核心变更）**
@@ -197,10 +220,12 @@ graph TD
 - 入口: `packages/options/main.ts`
 - 路由: `packages/options/route/index.ts`（插件内 hash 路由 / 独立站点 history 路由）
 - 页面组件: `packages/options/views/`
-  - `config.vue` - 配置主页面
-  - `sites.vue` - 搜索引擎配置
-  - `edit.vue` - 编辑页面
-  - `toolbar.vue` - 工具栏配置
+  - `config.vue` - 页面骨架（顶栏 / 滚动区 / 限宽内容），四个标签共用
+  - `sites.vue` - 站点配置（分类导航 + 面板 + 保存条）
+  - `edit.vue` - JSON 编辑
+  - `toolbar.vue` - 划词工具栏配置
+  - `interaction.vue` - 左键打开方式
+- 复用件: `components/site-engine-row.vue`、`components/save-bar.vue`、`composables/use-unsaved-guard.ts`
 
 **特点**：
 - 独立的 Vue 3 + Vue Router 应用
@@ -536,7 +561,7 @@ chore: 构建/工具变更
 
 ### 仍然缺的
 1. **Firefox MV3**：现在打的是 MV2，切 MV3 需要回归权限与 content script 行为
-2. **E2E 未接入 CI**：`pnpm e2e` 已入库（plugin / userscript / selection 三个场景），CI 上还需要 Playwright 的 Chromium——Chrome 137+ 已不支持命令行装扩展
+2. **E2E 未接入 CI**：`pnpm e2e` 已入库（plugin / userscript / selection / config 四个场景，65 项断言），CI 上还需要 Playwright 的 Chromium——Chrome 137+ 已不支持命令行装扩展
 3. **国际化**：无 i18n，界面只有中文
 4. **无障碍**：键盘导航与屏幕阅读器支持未做
 5. **Element Plus**：配置页全量引入，包体偏大，可改按需加载

@@ -85,10 +85,12 @@ pnpm lint          # eslint --fix
 pnpm lint:check    # eslint without writing files (what CI runs)
 ```
 
-`pnpm e2e` builds both bundles first, then:
+`pnpm e2e` builds what it needs first, then runs four scenarios (65 assertions):
 
 - **plugin** — loads the unpacked extension and checks the menu bar, the dropdown direction in all four layouts, and that “菜单设置” opens the bundled options page
 - **userscript** — simulates Tampermonkey (Vue global + `GM_*` shims) and injects `dist/index.user.js`
+- **selection** — selection toolbar and search dialog keep the highlighted keyword
+- **config** — options page: shell and width cap, category nav, search, inline edit/cancel, dirty state, save/revert/reset, toolbar page, interaction page, JSON editor, dark mode, narrow viewport
 
 ## Release
 
