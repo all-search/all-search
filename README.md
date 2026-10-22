@@ -85,12 +85,15 @@ pnpm lint          # eslint --fix
 pnpm lint:check    # eslint without writing files (what CI runs)
 ```
 
-`pnpm e2e` builds what it needs first, then runs four scenarios (73 assertions):
+`pnpm e2e` builds what it needs first, then runs four scenarios (83 assertions):
 
 - **plugin** — loads the unpacked extension and checks the menu bar, the dropdown direction in all four layouts, and that “菜单设置” opens the bundled options page
 - **userscript** — simulates Tampermonkey (Vue global + `GM_*` shims) and injects `dist/index.user.js`
 - **selection** — selection toolbar and search dialog keep the highlighted keyword
-- **config** — options page: shell and width cap, category nav, search, inline edit/cancel, dirty state, save/revert/reset, toolbar page, interaction page, JSON editor, dark mode, narrow viewport
+- **config** — options page: shell and width cap, category nav, search, inline edit/cancel, dirty state, save/revert/reset, toolbar page, interaction page, JSON editor, dark mode, narrow viewport, touch swipe vs long-press drag
+
+Options: `--no-build` (reuse artifacts), `--headed` (show the browser), `--only=plugin|userscript|selection|config`.
+Screenshots land in `e2e/artifacts/` (gitignored). Override the browser with `E2E_CHANNEL` or `E2E_EXECUTABLE`.
 
 ## Release
 
@@ -150,10 +153,7 @@ Copy-Item -LiteralPath "$dev\Users\<user>\AppData\Local\Google\Chrome\User Data\
 The result is written to `src/config/generatedStyle.ts` and committed. At runtime a site with a generated rule only gets the static CSS (zero JS cost); other sites fall back to the `elementsFromPoint` sampler in `src/util/addSpecialStyle.ts`.
 
 Every run re-verifies its own output: rules whose element is no longer `fixed`/`sticky` are dropped, and sites behind a captcha page are skipped and reported.
-- **selection** — text-selection toolbar: the “更多” dialog keeps the selected keyword and opens the target in a new tab
 
-Options: `--no-build` (reuse artifacts), `--headed` (show the browser), `--only=plugin|userscript`.
-Screenshots land in `e2e/artifacts/` (gitignored). Override the browser with `E2E_CHANNEL` or `E2E_EXECUTABLE`.
 
 ## Project layout
 

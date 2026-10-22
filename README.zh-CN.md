@@ -81,12 +81,12 @@ pnpm lint          # eslint --fix
 pnpm lint:check    # eslint 只检查不写文件（CI 用这个）
 ```
 
-`pnpm e2e` 会先构建所需产物，然后跑四个场景（共 73 项断言）：
+`pnpm e2e` 会先构建所需产物，然后跑四个场景（共 83 项断言）：
 
 - **plugin**：加载未打包扩展，验证菜单条、四种布局下的浮层方向、「菜单设置」是否打开扩展自带的 options 页
 - **userscript**：模拟油猴环境（Vue 全局 + `GM_*` 打桩）并注入 `dist/index.user.js`
 - **selection**：划词工具栏——「更多」弹窗保留选中关键字，并在新标签页打开目标
-- **config**：配置页交互——顶栏与限宽、分类导航、搜索、行内编辑/取消还原、脏状态、保存/撤销/恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏
+- **config**：配置页交互——顶栏与限宽、分类导航、搜索、行内编辑/取消还原、脏状态、保存/撤销/恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏、触屏横滑与长按拖拽
 
 可选参数：`--no-build`（复用产物）、`--headed`（显示浏览器窗口）、`--only=plugin|userscript|selection|config`。
 截图输出到 `e2e/artifacts/`（已 gitignore）。可用 `E2E_CHANNEL` 或 `E2E_EXECUTABLE` 指定浏览器。

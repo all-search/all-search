@@ -16,18 +16,45 @@ export async function run ({ headless, report }) {
 
   const site = await serveOptions()
   const browser = await launchBrowser({ headless })
-  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } })
-  const problems = []
-  page.on('pageerror', e => problems.push(String(e).slice(0, 120)))
-  page.on('response', (r) => {
-    if (r.status() >= 400) problems.push(`${r.status()} ${r.url().slice(0, 90)}`)
+  // 读剪贴板是为了校验 JSON 编辑器里的「当前内容」，ace 只渲染可见行，读 DOM 读不全
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 900 },
+    permissions: ['clipboard-read', 'clipboard-write']
   })
+  const page = await context.newPage()
+  const problems = []
+  const watchPage = (target, tag = '') => {
+    target.on('pageerror', e => problems.push(`${tag}pageerror: ${String(e).slice(0, 120)}`))
+    target.on('console', (m) => {
+      if (m.type() === 'error') problems.push(`${tag}console: ${m.text().slice(0, 120)}`)
+    })
+    target.on('response', (r) => {
+      if (r.status() >= 400) problems.push(`${tag}${r.status()} ${r.url().slice(0, 90)}`)
+    })
+  }
+  watchPage(page)
 
   const go = async (route) => {
     await page.goto(`${site.origin}/all-search${route}`, { waitUntil: 'networkidle', timeout: 30000 })
     await page.waitForTimeout(600)
   }
   const shot = file => page.screenshot({ path: path.join(ARTIFACTS, file) })
+  /**
+   * 横向溢出要量真正会滚的那个容器。
+   * body 是 position:fixed + overflow:hidden，documentElement.scrollWidth 永远是视口宽，
+   * 拿它判断等于永远通过。
+   */
+  const measureOverflow = target => target.evaluate(() => {
+    const wrap = document.querySelector('.el-scrollbar__wrap')
+    const inner = document.querySelector('.page-inner')
+    const right = inner ? Math.round(inner.getBoundingClientRect().right) : 0
+    return {
+      wrapOverflow: !!wrap && wrap.scrollWidth > wrap.clientWidth + 2,
+      rightOverflow: right > window.innerWidth + 2,
+      wrapWidth: wrap ? Math.round(wrap.scrollWidth) : 0,
+      clientWidth: wrap ? Math.round(wrap.clientWidth) : 0
+    }
+  })
 
   try {
     /* ---------- 顶栏 ---------- */
@@ -49,14 +76,18 @@ export async function run ({ headless, report }) {
         contentLeft: Math.round(rect(content)?.left || 0),
         contentRight: Math.round(rect(content)?.right || 0),
         contentWidth: Math.round(rect(content)?.width || 0),
-        viewportWidth: window.innerWidth,
-        overflowX: document.documentElement.scrollWidth > window.innerWidth + 2
+        viewportWidth: window.innerWidth
       }
     })
+    const shellOverflow = await measureOverflow(page)
     report.check('顶栏四个标签', shell.tabs.length === 4, shell.tabs.join(' / '))
     report.check('当前页标签高亮', (shell.active || '').includes('站点'), shell.active)
     report.check('顶栏高度固定 56', shell.barHeight === 56, `${shell.barHeight}px`)
-    report.check('内容区限宽且不溢出', shell.contentWidth <= 1200 && !shell.overflowX, `${shell.contentWidth}px`)
+    report.check(
+      '内容区限宽且不溢出',
+      shell.contentWidth <= 1200 && !shellOverflow.wrapOverflow && !shellOverflow.rightOverflow,
+      `${shell.contentWidth}px wrap=${shellOverflow.wrapWidth}/${shellOverflow.clientWidth}`
+    )
     // 顶栏底色拉满整宽，但里面的品牌 / 标签 / 按钮要和正文同一个 1200 栏
     report.check(
       '顶栏内容与正文左右对齐',
@@ -76,8 +107,8 @@ export async function run ({ headless, report }) {
     }))
     report.check(
       '分类导航带计数',
-      nav.items.length === 14 && nav.firstLabel === 'AI' && /^\d+$/.test(nav.firstCount || ''),
-      `${nav.items.length} 项：${nav.firstLabel}=${nav.firstCount}`
+      nav.items.length === 14 && nav.firstLabel === 'AI' && nav.firstCount === String(nav.rows),
+      `${nav.items.length} 项：${nav.firstLabel}=${nav.firstCount}，面板 ${nav.rows} 行`
     )
     report.check('只渲染当前分类的站点', nav.rows > 0 && nav.rows < 15, `${nav.rows} 行`)
     report.check('初始为已保存态', nav.saveStatus === '所有修改已保存', nav.saveStatus)
@@ -109,10 +140,14 @@ export async function run ({ headless, report }) {
     const to = await page.locator('.nav-item').nth(0).boundingBox()
     await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2)
     await page.mouse.down()
-    await page.mouse.move(to.x + to.width / 2, to.y + 2, { steps: 20 })
+    await page.mouse.move(to.x + to.width / 2, to.y + to.height / 2, { steps: 20 })
     await page.waitForTimeout(200)
     await page.mouse.up()
-    await page.waitForTimeout(500)
+    await page.waitForFunction(
+      expected => [...document.querySelectorAll('.nav-item .nav-label')][0]?.textContent.trim() === expected,
+      before[2],
+      { timeout: 5000 }
+    ).catch(() => {})
     const afterDrag = await navLabels()
     const draggedDirty = await page.evaluate(
       () => document.querySelector('.save-status')?.classList.contains('is-dirty')
@@ -125,7 +160,11 @@ export async function run ({ headless, report }) {
 
     // 撤销回到原顺序
     await page.locator('.save-bar .el-button').filter({ hasText: '撤销' }).click()
-    await page.waitForTimeout(500)
+    await page.waitForFunction(
+      () => !document.querySelector('.save-status')?.classList.contains('is-dirty'),
+      null,
+      { timeout: 5000 }
+    ).catch(() => {})
     const restored = await navLabels()
     report.check('撤销还原分类顺序', restored[0] === before[0], `${before[0]} / ${restored[0]}`)
 
@@ -157,6 +196,18 @@ export async function run ({ headless, report }) {
     await page.waitForTimeout(300)
     const clickedTitle = await page.evaluate(() => document.querySelector('.panel-title')?.textContent?.trim())
     report.check('点击分类切换面板', clickedTitle === '翻译', clickedTitle)
+
+    // 手抖 1px 也应该算点击（fallback-tolerance 不足时会被吞掉）
+    await page.locator('.site-nav .nav-item').filter({ hasText: 'AI' }).first().click()
+    await page.waitForTimeout(300)
+    const aiChip = await page.locator('.site-nav .nav-item').filter({ hasText: '视频' }).first().boundingBox()
+    await page.mouse.move(aiChip.x + aiChip.width / 2, aiChip.y + aiChip.height / 2)
+    await page.mouse.down()
+    await page.mouse.move(aiChip.x + aiChip.width / 2 + 1, aiChip.y + aiChip.height / 2)
+    await page.mouse.up()
+    await page.waitForTimeout(300)
+    const movedTitle = await page.evaluate(() => document.querySelector('.panel-title')?.textContent?.trim())
+    report.check('指针移动 1px 仍算点击', movedTitle === '视频', movedTitle)
     await page.locator('.site-nav .nav-item').filter({ hasText: 'AI' }).first().click()
     await page.waitForTimeout(300)
 
@@ -175,6 +226,7 @@ export async function run ({ headless, report }) {
     await page.locator('.site-nav .nav-item').filter({ hasText: '搜索' }).first().click()
     await page.waitForTimeout(300)
     const originalName = await page.evaluate(() => document.querySelector('.engine-name')?.textContent?.trim())
+    const rowCount = await page.evaluate(() => document.querySelectorAll('.engine-row').length)
     await page.locator('.engine-main').first().click()
     await page.waitForTimeout(300)
     const editing = await page.evaluate(() => ({
@@ -183,10 +235,16 @@ export async function run ({ headless, report }) {
     }))
     report.check('点行进入编辑态', editing.editor === 1 && editing.inputs === 2, `inputs=${editing.inputs}`)
 
+    // 只打字不点「完成」也算未保存（草稿在子组件里，父组件要靠事件知道）
     await page.locator('.engine-editor .editor-name input').first().fill('百度测试')
-    await page.waitForTimeout(350)
+    await page.waitForTimeout(400)
+    const draftDirty = await page.evaluate(() => ({
+      dirty: document.querySelector('.save-status')?.classList.contains('is-dirty'),
+      saveDisabled: document.querySelector('.save-bar .el-button--primary')?.disabled
+    }))
+    report.check('只编辑未提交也算未保存', draftDirty.dirty && draftDirty.saveDisabled === false)
 
-    // 取消应还原：编辑中的草稿不算未保存改动，点「完成」才落进列表
+    // 取消：退出编辑态、数据不变、脏状态清掉
     await page.locator('.engine-editor button').filter({ hasText: '取消' }).click()
     await page.waitForTimeout(400)
     const cancelled = await page.evaluate(() => ({
@@ -195,10 +253,45 @@ export async function run ({ headless, report }) {
       saveDisabled: document.querySelector('.save-bar .el-button--primary')?.disabled
     }))
     report.check(
-      '取消编辑还原名称并回到已保存态',
+      '取消编辑后回到已保存态',
       cancelled.editors === 0 && cancelled.name === originalName && cancelled.saveDisabled === true,
-      `${originalName} → ${cancelled.name}`
+      `${cancelled.name} / 保存禁用=${cancelled.saveDisabled}`
     )
+
+    // 新增一行再取消：应该直接丢弃，不留半成品
+    await page.locator('.panel-toolbar .el-button').filter({ hasText: '添加站点' }).click()
+    await page.waitForTimeout(300)
+    await page.locator('.engine-editor .editor-name input').first().fill('临时站点')
+    await page.locator('.engine-editor button').filter({ hasText: '取消' }).click()
+    await page.waitForTimeout(400)
+    const afterNewCancel = await page.evaluate(() => ({
+      rows: document.querySelectorAll('.engine-row').length,
+      names: [...document.querySelectorAll('.engine-name')].map(el => el.textContent.trim())
+    }))
+    report.check(
+      '取消新增站点不入库',
+      afterNewCancel.rows === rowCount && !afterNewCancel.names.includes('临时站点'),
+      `${afterNewCancel.rows} 行`
+    )
+
+    // 搜索状态下新增站点：应该先清掉筛选，否则新行看不见
+    await page.fill('.toolbar-search input', '百度')
+    await page.waitForTimeout(300)
+    await page.locator('.panel-toolbar .el-button').filter({ hasText: '添加站点' }).click()
+    await page.waitForTimeout(400)
+    const addWhileFiltered = await page.evaluate(() => ({
+      search: document.querySelector('.toolbar-search input')?.value,
+      rows: document.querySelectorAll('.engine-row').length,
+      editors: document.querySelectorAll('.engine-editor').length
+    }))
+    report.check(
+      '搜索状态下新增站点会清掉筛选',
+      addWhileFiltered.search === '' && addWhileFiltered.editors === 1 &&
+        addWhileFiltered.rows === rowCount + 1,
+      `search="${addWhileFiltered.search}" rows=${addWhileFiltered.rows}`
+    )
+    await page.locator('.engine-editor button').filter({ hasText: '取消' }).click()
+    await page.waitForTimeout(300)
 
     // 完成 + 进入未保存态 + 保存
     await page.locator('.engine-main').first().click()
@@ -213,13 +306,57 @@ export async function run ({ headless, report }) {
     report.check('完成编辑后进入未保存态', dirty.isDirty && dirty.saveDisabled === false)
 
     await page.locator('.save-bar .el-button').filter({ hasText: '保存' }).click()
-    await page.waitForTimeout(600)
+    // 保存是异步的（要等存储适配器就绪），等状态真的变成已保存
+    await page.waitForFunction(
+      () => !document.querySelector('.save-status')?.classList.contains('is-dirty'),
+      null,
+      { timeout: 15000 }
+    ).catch(() => {})
     const saved = await page.evaluate(() => ({
       name: document.querySelector('.engine-name')?.textContent?.trim(),
       status: document.querySelector('.save-status')?.textContent?.trim(),
       disabled: document.querySelector('.save-bar .el-button--primary')?.disabled
     }))
-    report.check('保存后写入列表并回到已保存态', saved.name === '百度测试' && saved.status === '所有修改已保存' && saved.disabled === true, saved.status)
+    report.check(
+      '保存后写入列表并回到已保存态',
+      saved.name === '百度测试' && saved.status === '所有修改已保存' && saved.disabled === true,
+      `${saved.name} / ${saved.status}`
+    )
+
+    // 保存要同步到共享数据：同一次会话里切到「编辑」页，编辑器里的内容得是新名字。
+    // 只 reload 是测不出来的（reload 会重新读存储）。
+    await page.locator('.nav-tab').filter({ hasText: '编辑' }).click()
+    await page.waitForSelector('.editor-body .jsoneditor', { timeout: 15000 })
+    await page.waitForTimeout(800)
+    await page.locator('.editor-toolbar .el-button').filter({ hasText: '复制配置' }).click()
+    await page.waitForTimeout(400)
+    const editorConfig = await page.evaluate(() => navigator.clipboard.readText().catch(() => ''))
+    report.check(
+      '保存后同会话切到编辑页看到新数据',
+      editorConfig.includes('百度测试'),
+      `${editorConfig.length} 字符`
+    )
+
+    // 再切回站点（此时是 SPA 路由）
+    await page.locator('.nav-tab').filter({ hasText: '站点' }).click()
+    await page.waitForSelector('.site-nav')
+    await page.waitForTimeout(500)
+
+    // 真持久化：整页重载 + 等存储读回来（线下页面有 5s 的桥接超时）
+    await page.reload({ waitUntil: 'networkidle' })
+    await page.waitForSelector('.site-nav')
+    await page.locator('.site-nav .nav-item').filter({ hasText: '搜索' }).first().click()
+    const persisted = await page.waitForFunction(
+      () => {
+        const name = document.querySelector('.engine-name')?.textContent?.trim()
+        const status = document.querySelector('.save-status')?.textContent?.trim()
+        return name === '百度测试' && status === '所有修改已保存'
+      },
+      null,
+      { timeout: 15000 }
+    ).then(() => true).catch(() => false)
+    const persistedName = await page.evaluate(() => document.querySelector('.engine-name')?.textContent?.trim())
+    report.check('刷新后数据仍在（真的落盘）', persisted, persistedName)
 
     // 撤销
     await page.locator('.engine-main').first().click()
@@ -242,7 +379,11 @@ export async function run ({ headless, report }) {
     await page.locator('.save-bar .el-button').filter({ hasText: '恢复默认' }).click()
     await page.waitForTimeout(300)
     await page.locator('.el-message-box__btns .el-button--primary').click()
-    await page.waitForTimeout(1200)
+    await page.waitForFunction(
+      () => ![...document.querySelectorAll('.engine-name')].some(el => el.textContent.trim() === '百度测试'),
+      null,
+      { timeout: 15000 }
+    ).catch(() => {})
     const afterReset = await page.evaluate(() => ({
       status: document.querySelector('.save-status')?.textContent?.trim(),
       names: [...document.querySelectorAll('.engine-name')].map(el => el.textContent.trim())
@@ -266,6 +407,7 @@ export async function run ({ headless, report }) {
     report.check('工具栏页渲染', toolbar.rows >= 2 && toolbar.status === '所有修改已保存', `${toolbar.rows} 行 / ${toolbar.status}`)
 
     const firstName = page.locator('.item-row .item-name input').first()
+    const originalToolbarName = await firstName.inputValue()
     await firstName.fill('百度改名')
     await page.waitForTimeout(300)
     const toolbarDirty = await page.evaluate(() => document.querySelector('.save-status')?.classList.contains('is-dirty'))
@@ -273,7 +415,7 @@ export async function run ({ headless, report }) {
     await page.locator('.save-bar .el-button').filter({ hasText: '撤销' }).click()
     await page.waitForTimeout(400)
     const toolbarReverted = await page.locator('.item-row .item-name input').first().inputValue()
-    report.check('撤销还原工具栏项', toolbarReverted !== '百度改名', toolbarReverted)
+    report.check('撤销还原工具栏项', toolbarReverted === originalToolbarName, `${originalToolbarName} / ${toolbarReverted}`)
 
     await page.locator('.item-row .item-action').first().click()
     await page.waitForTimeout(300)
@@ -292,7 +434,12 @@ export async function run ({ headless, report }) {
       cardWidth: Math.round(document.querySelector('.card')?.getBoundingClientRect().width || 0)
     }))
     report.check('交互页两组单选', interaction.radios === 4, `${interaction.radios} 个`)
-    report.check('说明文案不重复', !(interaction.tip || '').includes('「主菜单」='), (interaction.tip || '').slice(0, 30))
+    report.check(
+      '说明文案包含 Ctrl 且不重复',
+      !!interaction.tip && interaction.tip.length > 0 &&
+        interaction.tip.includes('Ctrl') && !interaction.tip.includes('「主菜单」='),
+      (interaction.tip || '(缺失)').slice(0, 40)
+    )
     report.check('交互卡片限宽', interaction.cardWidth <= 760, `${interaction.cardWidth}px`)
     await shot('config-interaction.png')
 
@@ -328,19 +475,50 @@ export async function run ({ headless, report }) {
     /* ---------- 窄屏 ---------- */
     await page.setViewportSize({ width: 420, height: 900 })
     await page.waitForTimeout(500)
+    const mobileOverflow = await measureOverflow(page)
     const mobile = await page.evaluate(() => ({
-      overflowX: document.documentElement.scrollWidth > window.innerWidth + 2,
       navText: [...document.querySelectorAll('.nav-tab .nav-text')].map(el => getComputedStyle(el).display),
       navDirection: getComputedStyle(document.querySelector('.site-nav')).flexDirection
     }))
-    report.check('窄屏无横向滚动', !mobile.overflowX)
+    report.check(
+      '窄屏无横向滚动',
+      !mobileOverflow.wrapOverflow && !mobileOverflow.rightOverflow,
+      `wrap=${mobileOverflow.wrapWidth}/${mobileOverflow.clientWidth}`
+    )
     report.check('窄屏隐藏导航文字', mobile.navText.every(d => d === 'none'), mobile.navText.join(','))
     report.check('窄屏分类导航横排', mobile.navDirection === 'row', mobile.navDirection)
     await shot('config-mobile.png')
 
+    /* ---------- 站点行拖拽（走手柄，鼠标） ---------- */
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.waitForTimeout(400)
+    await page.locator('.site-nav .nav-item').filter({ hasText: '搜索' }).first().click()
+    await page.waitForTimeout(300)
+    const rowNames = () => page.evaluate(
+      () => [...document.querySelectorAll('.engine-name')].map(el => el.textContent.trim())
+    )
+    const rowsBefore = await rowNames()
+    const rowHandle = await page.locator('.engine-row .engine-drag').first().boundingBox()
+    const rowTarget = await page.locator('.engine-row').nth(2).boundingBox()
+    await page.mouse.move(rowHandle.x + rowHandle.width / 2, rowHandle.y + rowHandle.height / 2)
+    await page.mouse.down()
+    await page.mouse.move(rowTarget.x + rowTarget.width / 2, rowTarget.y + rowTarget.height - 4, { steps: 20 })
+    await page.waitForTimeout(200)
+    await page.mouse.up()
+    await page.waitForFunction(
+      name => [...document.querySelectorAll('.engine-name')][0]?.textContent.trim() !== name,
+      rowsBefore[0],
+      { timeout: 5000 }
+    ).catch(() => {})
+    const rowsAfter = await rowNames()
+    report.check('拖拽站点行换位', rowsAfter[0] !== rowsBefore[0], `${rowsBefore[0]} → ${rowsAfter[0]}`)
+    await page.locator('.save-bar .el-button').filter({ hasText: '撤销' }).click()
+    await page.waitForTimeout(400)
+
     /* ---------- 触屏：横滑排序不抢手势 ---------- */
     const touchCtx = await browser.newContext({ viewport: { width: 420, height: 800 }, hasTouch: true })
     const touchPage = await touchCtx.newPage()
+    watchPage(touchPage, 'touch ')
     try {
       await touchPage.goto(`${site.origin}/all-search/config/sites`, { waitUntil: 'networkidle' })
       await touchPage.waitForSelector('.site-nav')
@@ -353,51 +531,129 @@ export async function run ({ headless, report }) {
       const touch = (type, points) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: points })
 
       const beforeTouch = await touchLabels()
-      const chip = await touchPage.locator('.nav-item').nth(1).boundingBox()
+      const chip = await touchPage.locator('.nav-item').nth(2).boundingBox()
+      const startX = chip.x + chip.width - 8
       const midY = chip.y + chip.height / 2
-      // 快速横滑（每步 25px，总计 200px，远小于 260ms 长按）
-      await touch('touchStart', [{ x: chip.x + chip.width / 2, y: midY }])
-      for (let i = 1; i <= 8; i++) {
-        await touch('touchMove', [{ x: chip.x + chip.width / 2 - i * 25, y: midY }])
-        await touchPage.waitForTimeout(16)
+      // 快速横滑：3 段共 120px，全程要明显快于 260ms 的长按阈值
+      const swipeStart = Date.now()
+      await touch('touchStart', [{ x: startX, y: midY }])
+      for (let i = 1; i <= 3; i++) {
+        await touch('touchMove', [{ x: startX - i * 40, y: midY }])
       }
+      const swipeElapsed = Date.now() - swipeStart
       await touch('touchEnd', [])
-      await touchPage.waitForTimeout(500)
+      await touchPage.waitForTimeout(600)
       const afterSwipe = await touchLabels()
       const scrollLeft = await touchPage.evaluate(() => document.querySelector('.site-nav').scrollLeft)
       report.check(
         '触屏横滑只滚动、不换位',
-        scrollLeft > 50 && afterSwipe.join() === beforeTouch.join(),
-        `scrollLeft=${Math.round(scrollLeft)} 顺序不变=${afterSwipe.join() === beforeTouch.join()}`
+        swipeElapsed < 200 && scrollLeft > 40 && afterSwipe.join() === beforeTouch.join(),
+        `耗时 ${swipeElapsed}ms scrollLeft=${Math.round(scrollLeft)} 顺序不变=${afterSwipe.join() === beforeTouch.join()}`
       )
 
-      // 长按 420ms 再拖：这才换位
+      // 长按：先等 Sortable 进入武装态（.sortable-chosen），再挪一点点让它真正开拖，
+      // 别用固定 420ms 去赌主线程不卡
       await touchPage.evaluate(() => { document.querySelector('.site-nav').scrollLeft = 0 })
-      await touchPage.waitForTimeout(200)
+      await touchPage.waitForFunction(() => {
+        const nav = document.querySelector('.site-nav')
+        return !!nav && nav.scrollLeft === 0
+      }, null, { timeout: 5000 }).catch(() => {})
       const src = await touchPage.locator('.nav-item').nth(2).boundingBox()
       const dst = await touchPage.locator('.nav-item').nth(0).boundingBox()
-      await touch('touchStart', [{ x: src.x + src.width / 2, y: src.y + src.height / 2 }])
-      await touchPage.waitForTimeout(420)
-      for (let i = 1; i <= 10; i++) {
-        await touch('touchMove', [{
-          x: src.x + src.width / 2 - ((src.x - dst.x) * i) / 10,
-          y: src.y + src.height / 2 - ((src.y - dst.y) * i) / 10
-        }])
-        await touchPage.waitForTimeout(20)
+      const srcX = src.x + src.width / 2
+      const srcY = src.y + src.height / 2
+      await touch('touchStart', [{ x: srcX, y: srcY }])
+      const armed = await touchPage.waitForFunction(
+        () => !!document.querySelector('.sortable-chosen'),
+        null,
+        { timeout: 4000 }
+      ).then(() => true).catch(() => false)
+      let dragStarted = false
+      if (armed) {
+        await touch('touchMove', [{ x: srcX, y: srcY - 6 }])
+        dragStarted = await touchPage.waitForFunction(
+          () => !!document.querySelector('.sortable-fallback'),
+          null,
+          { timeout: 3000 }
+        ).then(() => true).catch(() => false)
       }
-      await touch('touchEnd', [])
-      await touchPage.waitForTimeout(600)
-      const afterHold = await touchLabels()
-      report.check(
-        '触屏长按后可拖动换位',
-        afterHold[0] === beforeTouch[2],
-        `${beforeTouch[2]} → ${afterHold[0]}`
-      )
+      report.check('长按后进入拖拽态', armed && dragStarted, `armed=${armed} ghost=${dragStarted}`)
+      if (dragStarted) {
+        for (let i = 1; i <= 10; i++) {
+          await touch('touchMove', [{
+            x: srcX - ((srcX - dst.x - dst.width / 2) * i) / 10,
+            y: srcY - ((srcY - dst.y - dst.height / 2) * i) / 10
+          }])
+        }
+        await touch('touchEnd', [])
+        await touchPage.waitForTimeout(600)
+        const afterHold = await touchLabels()
+        report.check(
+          '触屏长按后可拖动换位',
+          afterHold[0] === beforeTouch[2],
+          `${beforeTouch[2]} → ${afterHold[0]}`
+        )
+      } else {
+        await touch('touchEnd', [])
+      }
     } finally {
       await touchCtx.close()
     }
 
-    report.check('配置页无运行时错误', problems.length === 0, problems.slice(0, 2).join(' | '))
+    /* ---------- 脏数据 / 空数据 ---------- */
+    // 旧数据或手写 JSON 可能缺 data；缺了不能让整块界面崩掉
+    await page.evaluate(() => {
+      localStorage.setItem('__allSearch__sites', JSON.stringify([
+        {
+          name: 'ai',
+          nameZh: 'AI',
+          data: { visible: true },
+          list: [{ nameZh: '没有 data 的站点', url: 'https://example.test/?q=%s' }]
+        }
+      ]))
+    })
+    await page.reload({ waitUntil: 'networkidle' })
+    // 线下页面要等 WebBridge 超时（5s）才读回存储，别用固定 sleep
+    const legacyLoaded = await page.waitForFunction(
+      () => document.querySelectorAll('.site-nav .nav-item').length === 1,
+      null,
+      { timeout: 15000 }
+    ).then(() => true).catch(() => false)
+    const legacy = await page.evaluate(() => ({
+      nav: document.querySelectorAll('.site-nav .nav-item').length,
+      rows: document.querySelectorAll('.engine-row').length,
+      firstName: document.querySelector('.engine-name')?.textContent?.trim(),
+      hasSaveBar: !!document.querySelector('.save-bar')
+    }))
+    report.check(
+      '缺 data 的旧数据不崩',
+      legacyLoaded && legacy.nav === 1 && legacy.rows === 1 && legacy.hasSaveBar,
+      `nav=${legacy.nav} rows=${legacy.rows} bar=${legacy.hasSaveBar}`
+    )
+
+    // 空数组是合法的：用户可以把分类删光，不能又回落到内置默认
+    await page.evaluate(() => localStorage.setItem('__allSearch__sites', '[]'))
+    await page.reload({ waitUntil: 'networkidle' })
+    const emptyLoaded = await page.waitForFunction(
+      () => document.querySelectorAll('.site-nav .nav-item').length === 0 &&
+        !!document.querySelector('.empty-state'),
+      null,
+      { timeout: 15000 }
+    ).then(() => true).catch(() => false)
+    const empty = await page.evaluate(() => ({
+      nav: document.querySelectorAll('.site-nav .nav-item').length,
+      emptyText: document.querySelector('.empty-state .empty-title')?.textContent?.trim() || ''
+    }))
+    report.check(
+      '清空所有分类后保持为空',
+      emptyLoaded && empty.nav === 0 && empty.emptyText.includes('还没有分类'),
+      `nav=${empty.nav} "${empty.emptyText}"`
+    )
+
+    // 收尾：把种子数据清掉，别影响下次运行
+    await page.evaluate(() => localStorage.removeItem('__allSearch__sites'))
+
+    report.check('配置页无运行时错误', problems.length === 0, problems.slice(0, 3).join(' | '))
   } finally {
     await browser.close()
     await site.close()

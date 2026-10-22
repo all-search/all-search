@@ -22,7 +22,7 @@
 - 删除从未被路由引用的 `views/index.vue`（旧的搜索框 demo，还调用了不存在的 `this.$fetch`）
 
 **测试**
-- `pnpm e2e` 新增 `config` 场景（37 项断言，静态托管 `packages/options/dist` + 本机 Edge），总计 73 项
+- `pnpm e2e` 新增 `config` 场景（47 项断言，静态托管 `packages/options/dist` + 本机 Edge），总计 83 项
 - 顺带修掉 `vitest.config.ts` 里 `mock-gm.ts` 的旧路径（文件已移到 `src/util/mock-gm.ts`，单测此前会整批失败）
 
 ### 2026-10-21 - v2.0.0
@@ -561,7 +561,7 @@ chore: 构建/工具变更
 
 ### 仍然缺的
 1. **Firefox MV3**：现在打的是 MV2，切 MV3 需要回归权限与 content script 行为
-2. **E2E 未接入 CI**：`pnpm e2e` 已入库（plugin / userscript / selection / config 四个场景，73 项断言），CI 上还需要 Playwright 的 Chromium——Chrome 137+ 已不支持命令行装扩展
+2. **E2E 未接入 CI**：`pnpm e2e` 已入库（plugin / userscript / selection / config 四个场景，83 项断言）。`playwright-core` 不下载浏览器，Linux 上要装系统 Chrome/Chromium 并用 `E2E_EXECUTABLE` 指过去；另外 Chrome 137+ 已移除 `--load-extension`，`plugin` / `selection` 只能在 Windows + Edge 跑，`userscript` / `config` 可以进 CI
 3. **国际化**：无 i18n，界面只有中文
 4. **无障碍**：键盘导航与屏幕阅读器支持未做
 5. **Element Plus**：配置页全量引入，包体偏大，可改按需加载

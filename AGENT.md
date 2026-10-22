@@ -52,12 +52,12 @@ UI 全部渲染在 Shadow DOM 内，宿主页面只保留一个 `<all-search-ui>
 - 双模式已跑通并实测：插件（Chrome 商店格式 zip）、用户脚本、在线配置站均可构建。
 - 插件：图标齐全、后台 worker 负责打开自带设置页（hash 路由）、侧边栏设置入口已接入。
 - 用户脚本：CSS 按 chunk 注入影子根（修复了多段 CSS 互相覆盖的问题）。
-- 测试：3 个 spec / 14 个用例，CI 已接入插件打包流程。
+- 测试：4 个 spec / 21 个用例，CI 已接入插件打包流程。
 
 ## 下一步
 
 1. Firefox 从 MV2 切 MV3 的回归。
-2. 把 `pnpm e2e` 接进 CI（Linux runner 需要 Playwright 的 Chromium，Chrome 137+ 已不支持命令行装扩展）。
+2. 把 `pnpm e2e` 接进 CI。两点注意：`playwright-core` 不下载浏览器，Linux 上要装系统 Chrome/Chromium 并用 `E2E_EXECUTABLE` 指过去；Chrome 137+ 已移除 `--load-extension`，`plugin` / `selection` 只能在 Windows + Edge 上跑，`userscript` / `config` 可以跑在 CI。
 3. `addSpecialStyle` 的 fixed 元素偏移只处理了 `top`，性能回收方案见 `src/util/addSpecialStyle_todo.md`。
 
 ## 文档入口

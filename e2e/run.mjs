@@ -58,11 +58,26 @@ function runCommand (label, command, args) {
   if (result.status !== 0) throw new Error(`${label} 失败（exit ${result.status}）`)
 }
 
+/** 每个场景只构建它真正用到的产物，避免 --only=config 白等两次构建 */
+const BUILDS = {
+  plugin: ['构建插件（未打包目录）', ['-C', 'packages/plugin', 'build']],
+  selection: ['构建插件（未打包目录）', ['-C', 'packages/plugin', 'build']],
+  userscript: ['构建用户脚本', ['build:script']],
+  config: ['构建配置页', ['build:options']]
+}
+
 if (shouldBuild) {
-  runCommand('构建插件（未打包目录）', 'pnpm', ['-C', 'packages/plugin', 'build'])
-  runCommand('构建用户脚本', 'pnpm', ['build:script'])
-  if (selected.includes('config')) {
-    runCommand('构建配置页', 'pnpm', ['build:options'])
+  const done = new Set()
+  for (const spec of selected) {
+    const build = BUILDS[spec]
+    if (!build || done.has(build[0])) continue
+    done.add(build[0])
+    try {
+      runCommand(build[0], 'pnpm', build[1])
+    } catch (err) {
+      console.error(`\n✘ ${err.message}`)
+      process.exit(1)
+    }
   }
 }
 
@@ -70,13 +85,24 @@ const channel = process.env.E2E_EXECUTABLE || process.env.E2E_CHANNEL || (proces
 console.log(`\n浏览器：${channel}（headless=${headless}）`)
 console.log(`产物目录：${ARTIFACTS}`)
 
+/** 单个场景的超时：卡住时给一句人话，不要一直挂着 */
+const SCENARIO_TIMEOUT = Number(process.env.E2E_SCENARIO_TIMEOUT || 5 * 60 * 1000)
+
+function withTimeout (promise, ms, label) {
+  let timer
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} 超过 ${Math.round(ms / 1000)}s 未结束`)), ms)
+  })
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
+}
+
 const results = []
 for (const spec of selected) {
   console.log(`\n=== ${spec} ===`)
   const report = createReport(spec)
   try {
     const mod = await import(`./specs/${spec}.mjs`)
-    await mod.run({ headless, report })
+    await withTimeout(mod.run({ headless, report }), SCENARIO_TIMEOUT, spec)
   } catch (err) {
     report.check('场景执行', false, err && err.message ? err.message.split('\n')[0] : String(err))
   }

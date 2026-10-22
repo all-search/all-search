@@ -100,11 +100,12 @@ key 前缀由 `util/common.ts` 的 `getName()` 生成：`__allSearch__${name}`�
 
 ## 测试
 
-`tests/`（vitest + jsdom，`pnpm test`，共 14 个用例）：
+`tests/`（vitest + jsdom，`pnpm test`，共 21 个用例）：
 
 - `smoke.spec.ts`：`LayoutService` 四向类名与挂载位置、`WebBridgeAdapter` 超时降级
 - `hooks.spec.ts`：`useConfig` / `useSites` / `useToolbar` / `useSwitchShow` / `useAutoHide`
 - `component.spec.ts`：`layout-manager.vue` 的 show/hide 与方向类名
+- `keyword.spec.ts`：关键词提取（地址栏参数、输入框选中、编码）
 
 ## 约定
 

@@ -75,18 +75,13 @@ function browserOptions ({ extensionPath, headless }) {
   if (extensionPath) {
     args.push(`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`)
   }
-  const options = {
+  // Chrome 137+ 已移除命令行 --load-extension，Windows 上默认用 Edge
+  return {
     headless,
     args,
-    viewport: { width: 1280, height: 800 }
+    viewport: { width: 1280, height: 800 },
+    ...resolveBrowserTarget()
   }
-  if (process.env.E2E_EXECUTABLE) {
-    options.executablePath = process.env.E2E_EXECUTABLE
-  } else {
-    // Chrome 137+ 已移除命令行 --load-extension，Windows 上默认用 Edge
-    options.channel = process.env.E2E_CHANNEL || (process.platform === 'win32' ? 'msedge' : 'chrome')
-  }
-  return options
 }
 
 /** 启动一个持久化上下文（可用扩展；传 extensionPath 则加载未打包扩展） */
@@ -199,45 +194,92 @@ const MIME = {
 }
 
 /**
- * 起一个只读静态服务器托管配置页产物（history 路由的深链回落到 index.html）。
+ * 起一个只读静态服务器托管配置页产物。
+ * - 只有「无扩展名的路径」才回落到 index.html（history 路由的深链），缺的 js/css 如实 404
+ * - 路径被限制在 dist 目录内，`/all-search/../../x` 这类逃逸请求直接 404
  * 返回 `{ origin, close }`，端口由系统分配，不会撞上别的服务。
  */
 export async function serveOptions () {
+  const root = path.resolve(OPTIONS_DIST)
+  const send = (res, status, body, type = 'text/plain; charset=utf-8') => {
+    res.writeHead(status, { 'Content-Type': type })
+    res.end(body)
+  }
+
   const server = http.createServer((req, res) => {
-    const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
-    if (!urlPath.startsWith('/all-search')) {
-      res.writeHead(404).end('not found')
+    let urlPath
+    try {
+      urlPath = decodeURIComponent((req.url || '/').split('?')[0])
+    } catch {
+      // 畸形 % 转义
+      send(res, 400, 'bad request')
       return
     }
-    const relative = urlPath.slice('/all-search'.length) || '/'
-    let file = path.join(OPTIONS_DIST, relative)
-    if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
-      file = path.join(OPTIONS_DIST, 'index.html')
+
+    if (urlPath !== '/all-search' && !urlPath.startsWith('/all-search/')) {
+      send(res, 404, 'not found')
+      return
     }
+
+    const relative = urlPath.slice('/all-search'.length) || '/'
+    let file = path.resolve(root, `.${relative}`)
+    if (file !== root && !file.startsWith(root + path.sep)) {
+      send(res, 404, 'not found')
+      return
+    }
+
+    let exists = false
+    try {
+      exists = fs.existsSync(file) && !fs.statSync(file).isDirectory()
+    } catch {
+      exists = false
+    }
+    // 资源类请求不回落到 HTML，否则「缺 chunk」会变成 200 + 一段 HTML，很难查
+    if (!exists) {
+      if (path.extname(relative)) {
+        send(res, 404, 'not found')
+        return
+      }
+      file = path.join(root, 'index.html')
+    }
+
     res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream' })
-    fs.createReadStream(file).pipe(res)
+    const stream = fs.createReadStream(file)
+    stream.on('error', () => {
+      if (!res.headersSent) send(res, 500, 'read error')
+      else res.destroy()
+    })
+    stream.pipe(res)
   })
+
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
   const { port } = server.address()
   return {
     origin: `http://127.0.0.1:${port}`,
-    close: () => new Promise(resolve => server.close(resolve))
+    close: () => new Promise((resolve) => {
+      // keep-alive 连接会让 close 一直等，先断开再关
+      server.closeAllConnections?.()
+      server.close(resolve)
+    })
   }
+}
+
+/** 选浏览器：优先 E2E_EXECUTABLE，其次 E2E_CHANNEL，Windows 默认 Edge */
+function resolveBrowserTarget () {
+  if (process.env.E2E_EXECUTABLE) {
+    return { executablePath: process.env.E2E_EXECUTABLE }
+  }
+  return { channel: process.env.E2E_CHANNEL || (process.platform === 'win32' ? 'msedge' : 'chrome') }
 }
 
 /** 普通浏览器窗口（不加载扩展），用于配置页这类纯网页场景 */
 export async function launchBrowser ({ headless = true } = {}) {
-  const options = { headless }
-  if (process.env.E2E_EXECUTABLE) {
-    options.executablePath = process.env.E2E_EXECUTABLE
-  } else {
-    options.channel = process.env.E2E_CHANNEL || (process.platform === 'win32' ? 'msedge' : 'chrome')
-  }
-  return chromium.launch(options)
+  return chromium.launch({ headless, ...resolveBrowserTarget() })
 }
 
 /** 收集断言结果 */
-export function createReport (scenario) {  const results = []
+export function createReport (scenario) {
+  const results = []
   return {
     check (name, passed, detail = '') {
       results.push({ scenario, name, passed: !!passed, detail })
