@@ -8,10 +8,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
     <title>全搜 All-Search</title>
-    <script src="//unpkg.com/vue@3.2.33/dist/vue.global.prod.js"></script>
-    <script src="//unpkg.com/element-plus@2.2.6/dist/index.full.js"></script>
-    <script src="//unpkg.com/@element-plus/icons-vue"></script>
-    <script src="//unpkg.com/jsoneditor@9.9.2/dist/jsoneditor.min.js"></script>
+    <!-- 依赖全部由 Vite 打包，这里不要再引 CDN：
+         否则会加载第二份 Vue/Element Plus，且 unpkg 在国内经常不可用 -->
 </head>
 <body>
 <noscript>

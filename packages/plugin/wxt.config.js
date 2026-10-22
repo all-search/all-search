@@ -27,7 +27,7 @@ export default defineConfig({
       resolve: {
         alias: {
           '@src': path.resolve(__dirname, '../../src'),
-          'vite-plugin-monkey/dist/client': path.resolve(__dirname, './mock-gm.ts')
+          'vite-plugin-monkey/dist/client': path.resolve(__dirname, '../../src/util/mock-gm.ts')
         },
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
       }
