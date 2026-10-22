@@ -65,6 +65,43 @@ export async function run ({ headless, report }) {
     report.check('只渲染当前分类的站点', nav.rows > 0 && nav.rows < 15, `${nav.rows} 行`)
     report.check('初始为已保存态', nav.saveStatus === '所有修改已保存', nav.saveStatus)
 
+    // 一级分类拖拽换位（拖动导航第 3 项到最前）
+    const navLabels = () => page.evaluate(
+      () => [...document.querySelectorAll('.nav-item .nav-label')].map(el => el.textContent.trim())
+    )
+    const before = await navLabels()
+    const from = await page.locator('.nav-item').nth(2).boundingBox()
+    const to = await page.locator('.nav-item').nth(0).boundingBox()
+    await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2)
+    await page.mouse.down()
+    await page.mouse.move(to.x + to.width / 2, to.y + 2, { steps: 20 })
+    await page.waitForTimeout(200)
+    await page.mouse.up()
+    await page.waitForTimeout(500)
+    const afterDrag = await navLabels()
+    const draggedDirty = await page.evaluate(
+      () => document.querySelector('.save-status')?.classList.contains('is-dirty')
+    )
+    report.check(
+      '拖拽分类换位并标记未保存',
+      afterDrag[0] === before[2] && draggedDirty === true,
+      `${before[2]} → 第 1 位`
+    )
+
+    // 撤销回到原顺序
+    await page.locator('.save-bar .el-button').filter({ hasText: '撤销' }).click()
+    await page.waitForTimeout(500)
+    const restored = await navLabels()
+    report.check('撤销还原分类顺序', restored[0] === before[0], `${before[0]} / ${restored[0]}`)
+
+    // 点击仍然切换分类
+    await page.locator('.site-nav .nav-item').filter({ hasText: '翻译' }).first().click()
+    await page.waitForTimeout(300)
+    const clickedTitle = await page.evaluate(() => document.querySelector('.panel-title')?.textContent?.trim())
+    report.check('点击分类切换面板', clickedTitle === '翻译', clickedTitle)
+    await page.locator('.site-nav .nav-item').filter({ hasText: 'AI' }).first().click()
+    await page.waitForTimeout(300)
+
     // 搜索
     await page.fill('.toolbar-search input', 'chatgpt')
     await page.waitForTimeout(300)

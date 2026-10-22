@@ -5,16 +5,23 @@
     <nav
       class="site-nav"
       aria-label="分类">
-      <button
-        v-for="cate in localSites"
-        :key="cate.name"
-        type="button"
-        class="nav-item"
-        :class="{ 'is-active': tabName === cate.name, 'is-off': !cate.data.visible }"
-        @click="tabName = cate.name">
-        <span class="nav-label">{{ cate.nameZh }}</span>
-        <span class="nav-count">{{ cate.list.length }}</span>
-      </button>
+      <draggable
+        v-model="localSites"
+        class="nav-list"
+        :animation="150"
+        :disabled="renaming">
+        <button
+          v-for="cate in localSites"
+          :key="cate.name"
+          type="button"
+          class="nav-item"
+          :class="{ 'is-active': tabName === cate.name, 'is-off': !cate.data.visible }"
+          :title="`${cate.nameZh}：点击切换，拖拽调整顺序`"
+          @click="tabName = cate.name">
+          <span class="nav-label">{{ cate.nameZh }}</span>
+          <span class="nav-count">{{ cate.list.length }}</span>
+        </button>
+      </draggable>
       <button
         type="button"
         class="nav-add"
@@ -652,6 +659,12 @@ export default {
   background: var(--el-bg-color);
   box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
 
+  .nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
   .nav-item {
     display: flex;
     align-items: center;
@@ -665,6 +678,7 @@ export default {
     color: var(--el-text-color-regular);
     cursor: pointer;
     text-align: left;
+    user-select: none;
 
     &:hover {
       background: var(--el-fill-color-light);
@@ -835,6 +849,10 @@ export default {
     flex-direction: row;
     overflow-x: auto;
     padding: 6px;
+
+    .nav-list {
+      flex-direction: row;
+    }
 
     .nav-item {
       flex: none;
