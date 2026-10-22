@@ -13,6 +13,13 @@ export default {
 </script>
 
 <style lang="scss">
+  /* 统一盒模型：配置页到处是「定宽 + 内边距」的卡片与条，content-box 会让实际宽度多出内边距 */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
   body, html {
     margin: 0;
     padding: 0;
@@ -37,5 +44,10 @@ export default {
     overflow: hidden;
     position: fixed;
     width: 100vw;
+    background: #f5f6f8;
+  }
+
+  html.dark body {
+    background: #141414;
   }
 </style>

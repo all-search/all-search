@@ -1,231 +1,370 @@
 <template>
-  <el-container
-    class="container">
-    <el-header
-      class="header">
-      <el-link
-        id="logo"
-        :underline="false"
-        type="primary"
-        href="/all-search">
-        全搜 All-Search
-      </el-link>
-      <div class="header-bd">
-        <el-menu
-          class="menu"
-          mode="horizontal"
-          router
-          :ellipsis="false"
-          :default-active="route.path">
-          <div class="flex-grow"/>
-          <el-menu-item
-            index="/config/sites">
-            配置
-          </el-menu-item>
-          <el-menu-item
-            index="/config/edit">
-            编辑
-          </el-menu-item>
-          <el-menu-item
-            index="/config/toolbar">
-            划词工具栏
-          </el-menu-item>
-          <el-menu-item
-            index="/config/interaction">
-            交互
-          </el-menu-item>
-        </el-menu>
-      </div>
-      <el-dropdown
-        class="theme-switch"
-        trigger="click"
-        @command="onThemeChange">
-        <span class="theme-btn">{{ themeLabel }}</span>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item command="auto">
-              跟随系统
-            </el-dropdown-item>
-            <el-dropdown-item command="light">
-              浅色
-            </el-dropdown-item>
-            <el-dropdown-item command="dark">
-              深色
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-      <a class="gh-btn"
-         href="https://github.com/all-search/all-search">
-        <span class="gh-icon"/>
+  <div class="config-shell">
+    <header class="top-bar">
+      <a
+        class="brand"
+        href="#"
+        @click.prevent="goHome">
+        <span
+          class="brand-mark"
+          aria-hidden="true">搜</span>
+        <span class="brand-name">
+          全搜
+          <span class="brand-en">All-Search</span>
+        </span>
       </a>
-    </el-header>
-    <el-scrollbar class="page-container">
-      <el-container>
-        <el-main class="page-mainer">
-          <version-alert/>
-          <router-view/>
-          <el-footer></el-footer>
-        </el-main>
-      </el-container>
+
+      <nav
+        class="top-nav"
+        aria-label="配置分类">
+        <router-link
+          v-for="tab in tabs"
+          :key="tab.path"
+          :to="tab.path"
+          class="nav-tab"
+          :class="{ 'is-active': isActive(tab.path) }">
+          <el-icon class="nav-icon">
+            <component :is="tab.icon" />
+          </el-icon>
+          <span class="nav-text">{{ tab.label }}</span>
+        </router-link>
+      </nav>
+
+      <div class="top-actions">
+        <el-dropdown
+          trigger="click"
+          @command="onThemeChange">
+          <button
+            type="button"
+            class="icon-btn"
+            :title="`主题：${themeLabel}`"
+            :aria-label="`主题：${themeLabel}`">
+            <el-icon><component :is="themeIcon" /></el-icon>
+          </button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="opt in THEME_OPTIONS"
+                :key="opt.value"
+                :command="opt.value">
+                <span class="theme-option">
+                  <el-icon><component :is="opt.icon" /></el-icon>
+                  <span>{{ opt.label }}</span>
+                  <el-icon
+                    v-if="preference === opt.value"
+                    class="theme-check"
+                  >
+                    <Check />
+                  </el-icon>
+                </span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
+        <a
+          class="icon-btn gh-btn"
+          href="https://github.com/all-search/all-search"
+          target="_blank"
+          rel="noreferrer"
+          title="GitHub"
+          aria-label="GitHub">
+          <span class="gh-icon" />
+        </a>
+      </div>
+    </header>
+
+    <el-scrollbar class="page-scroll">
+      <main class="page-main">
+        <div class="page-inner">
+          <version-alert />
+          <router-view />
+        </div>
+      </main>
     </el-scrollbar>
-  </el-container>
+  </div>
 </template>
 
-<script>
-import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { Menu } from '@element-plus/icons-vue'
+<script setup lang="ts">
+import { computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import {
+  Brush,
+  Check,
+  Document,
+  Grid,
+  Monitor,
+  Moon,
+  Operation,
+  Sunny
+} from '@element-plus/icons-vue'
 import { useTheme } from '@src/components/useTheme'
-import versionAlert from '@src/components/version-alert'
+import versionAlert from '@src/components/version-alert.vue'
+import type { ThemePreference } from '@src/util/theme'
 
-export default {
-  name: 'config',
-  components: {
-    versionAlert
-  },
-  setup () {
-    const drawerVisible = ref(false)
-    const route = useRoute()
+const route = useRoute()
+const router = useRouter()
 
-    // 主题：跟随系统 / 浅色 / 深色，Element Plus 用 html.dark 切换 dark css vars
-    const { preference, isDark } = useTheme()
-    watch(isDark, (dark) => {
-      document.documentElement.classList.toggle('dark', dark)
-    }, { immediate: true })
+const tabs = [
+  { label: '站点', path: '/config/sites', icon: Grid },
+  { label: '编辑', path: '/config/edit', icon: Document },
+  { label: '划词工具栏', path: '/config/toolbar', icon: Brush },
+  { label: '交互', path: '/config/interaction', icon: Operation }
+]
 
-    const THEME_LABELS = { auto: '跟随系统', light: '浅色', dark: '深色' }
-    const themeLabel = computed(() => THEME_LABELS[preference.value] || '跟随系统')
-    const onThemeChange = (value) => {
-      preference.value = value
-    }
+const THEME_OPTIONS: Array<{ value: ThemePreference, label: string, icon: unknown }> = [
+  { value: 'auto', label: '跟随系统', icon: Monitor },
+  { value: 'light', label: '浅色', icon: Sunny },
+  { value: 'dark', label: '深色', icon: Moon }
+]
 
-    return {
-      drawerVisible,
-      Menu,
-      route,
-      themePreference: preference,
-      themeLabel,
-      onThemeChange
-    }
-  }
+const { preference, isDark } = useTheme()
+
+// Element Plus 的 dark css vars 由 html.dark 驱动
+watch(isDark, (dark) => {
+  document.documentElement.classList.toggle('dark', dark)
+}, { immediate: true })
+
+const themeLabel = computed(
+  () => THEME_OPTIONS.find(opt => opt.value === preference.value)?.label || '跟随系统'
+)
+const themeIcon = computed(
+  () => THEME_OPTIONS.find(opt => opt.value === preference.value)?.icon || Monitor
+)
+
+function onThemeChange (value: ThemePreference) {
+  preference.value = value
+}
+
+function isActive (path: string) {
+  return route.path.startsWith(path)
+}
+
+/** 插件里是 chrome-extension://<id>/options.html，写死的 /all-search 会 404，统一走路由 */
+function goHome () {
+  router.push('/config/sites')
 }
 </script>
 
 <style lang="scss">
-@use "@src/assets/common" as *;
+.config-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f5f6f8;
 
-.form-title {
-  font-size: 16px;
-  line-height: 64px;
-  float: left;
-  font-size: 18px;
-  text-decoration: none !important;
-
-  &:visited {
-    color: $primary;
-  }
-}
-
-.container {
-  background: #f7f7f9;
-}
-
-.theme-switch {
-  margin-right: 12px;
-}
-
-.theme-btn {
-  cursor: pointer;
-  font-size: 13px;
-  line-height: 1;
-  padding: 6px 10px;
-  border-radius: 14px;
-  color: var(--el-text-color-regular);
-  border: 1px solid var(--el-border-color);
-
-  &:hover {
-    color: var(--el-color-primary);
-    border-color: var(--el-color-primary);
-  }
-}
-
-// 深色模式：Element Plus 的 dark css vars 由 html.dark 驱动，
-// 这里只需要补我们自己写死的几处底色
-html.dark {
-  .container {
+  html.dark & {
     background: #141414;
   }
-
-  .header {
-    background-color: #1d1e1f;
-    box-shadow: 0 2px 8px #000;
-  }
-
-  .layout,
-  .content {
-    background-color: transparent;
-  }
 }
 
-.header {
+/* ---------- 顶栏 ---------- */
+
+.top-bar {
+  flex: none;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 8px #f0f1f2;
-  background-color: #fff;
-  position: relative;
-  z-index: 10;
-
-  .ant-menu-horizontal {
-    border-bottom: none;
-  }
-
-  .header-bd {
-    flex: 1;
-  }
-
-  .flex-grow {
-    flex-grow: 1;
-  }
-}
-
-.layout {
-  padding-top: 40px;
-  background-color: #fff;
-}
-
-.menu {
-  height: 62px;
-  line-height: 62px;
-  text-align: right;
-}
-
-.content {
-  padding: 0 24px;
-  background: #fff
-}
-
-.page-container {
-  height: calc(100vh - 43px);
-}
-
-.footer {
-  text-align: center;
-  background: #fff;
-}
-
-.gh-btn {
+  gap: 20px;
+  height: 56px;
   padding: 0 20px;
-  margin: 4px;
+  background: #fff;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+
+  html.dark & {
+    background: #1d1e1f;
+    border-bottom-color: #2b2b2e;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--el-text-color-primary);
+  flex: none;
+
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, var(--el-color-primary), #7c5cff);
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .brand-en {
+    margin-left: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--el-text-color-secondary);
+  }
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color .15s ease, color .15s ease;
+
+  .nav-icon {
+    font-size: 15px;
+    opacity: .75;
+  }
+
+  &:hover {
+    background: var(--el-fill-color-light);
+    color: var(--el-text-color-primary);
+  }
+
+  &.is-active {
+    background: var(--el-color-primary-light-9);
+    color: var(--el-color-primary);
+    font-weight: 600;
+
+    .nav-icon {
+      opacity: 1;
+    }
+  }
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--el-text-color-regular);
+  font-size: 16px;
   cursor: pointer;
 
-  .gh-icon {
-    display: block;
-    width: 20px;
-    height: 20px;
-    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPjxwYXRoIGZpbGw9IiMzMzMiIGQ9Ik0zMiAxMy40Yy0xMC41IDAtMTkgOC41LTE5IDE5IDAgOC40IDUuNSAxNS41IDEzIDE4IDEgLjIgMS4zLS40IDEuMy0uOXYtMy4yYy01LjMgMS4xLTYuNC0yLjYtNi40LTIuNi0uOS0yLjEtMi4xLTIuNy0yLjEtMi43LTEuNy0xLjIuMS0xLjEuMS0xLjEgMS45LjEgMi45IDIgMi45IDIgMS43IDIuOSA0LjUgMi4xIDUuNSAxLjYuMi0xLjIuNy0yLjEgMS4yLTIuNi00LjItLjUtOC43LTIuMS04LjctOS40IDAtMi4xLjctMy43IDItNS4xLS4yLS41LS44LTIuNC4yLTUgMCAwIDEuNi0uNSA1LjIgMiAxLjUtLjQgMy4xLS43IDQuOC0uNyAxLjYgMCAzLjMuMiA0LjcuNyAzLjYtMi40IDUuMi0yIDUuMi0yIDEgMi42LjQgNC42LjIgNSAxLjIgMS4zIDIgMyAyIDUuMSAwIDcuMy00LjUgOC45LTguNyA5LjQuNy42IDEuMyAxLjcgMS4zIDMuNXY1LjJjMCAuNS40IDEuMSAxLjMuOSA3LjUtMi42IDEzLTkuNyAxMy0xOC4xIDAtMTAuNS04LjUtMTktMTktMTl6Ii8+PC9zdmc+);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+  &:hover {
+    background: var(--el-fill-color-light);
+    color: var(--el-text-color-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--el-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 96px;
+
+  .theme-check {
+    margin-left: auto;
+    color: var(--el-color-primary);
+  }
+}
+
+.gh-icon {
+  display: block;
+  width: 17px;
+  height: 17px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23606666' d='M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+
+  html.dark & {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c9cacd' d='M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z'/%3E%3C/svg%3E");
+  }
+}
+
+/* ---------- 内容区 ---------- */
+
+.page-scroll {
+  flex: 1;
+  min-height: 0;
+
+  /* el-scrollbar 的 view 默认高度随内容，撑满后页面内的 sticky 底栏才会贴在视口底部 */
+  .el-scrollbar__view {
+    height: 100%;
+  }
+}
+
+.page-main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px 24px 24px;
+}
+
+.page-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .top-bar {
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  .brand .brand-en {
+    display: none;
+  }
+
+  .nav-tab .nav-text {
+    display: none;
+  }
+
+  .nav-tab {
+    padding: 0 10px;
+  }
+
+  .page-main {
+    padding: 12px;
   }
 }
 </style>
