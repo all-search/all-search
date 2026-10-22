@@ -21,24 +21,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import jsonEditor from '@src/components/json-editor.vue'
 import { setStorage } from '@src/util/storage'
 import defaultSites from '@src/config/sites'
 import useSites, { reloadSites } from '@src/components/useSites'
+import useUnsavedGuard from '../composables/use-unsaved-guard'
 
 const localSites = ref<any[]>([])
+const savedSnapshot = ref('[]')
+/** 共享的站点数据：存储异步读回来后会更新，这里跟着走 */
+const { sites } = useSites()
+
+const dirty = computed(() => JSON.stringify(localSites.value) !== savedSnapshot.value)
+
+useUnsavedGuard(dirty)
 
 function clone<T> (value: T): T {
   return JSON.parse(JSON.stringify(value))
 }
 
-function init () {
-  const { sites } = useSites()
-  // 拷一份再编辑，避免未保存的改动影响菜单条正在用的数据
-  localSites.value = clone(sites.value)
+function apply (value: any[]) {
+  localSites.value = clone(value || [])
+  savedSnapshot.value = JSON.stringify(localSites.value)
 }
+
+// 存储是异步的：线下页面要等 WebBridge 超时才读到用户数据。
+// 之前只在 setup 里读一次，于是编辑器里永远是内置默认值，一保存就把用户数据盖掉。
+watch(sites, (value) => {
+  if (dirty.value) return
+  apply(value)
+}, { immediate: true })
 
 function reset () {
   localSites.value = clone(defaultSites)
@@ -50,14 +64,13 @@ async function save (val: any[]) {
   await setStorage('sites', val)
   // 让站点列表页和其它持有者读到新数据
   await reloadSites()
+  savedSnapshot.value = JSON.stringify(val)
   ElMessage.success('保存成功')
 }
 
 function change (val: any[]) {
   localSites.value = val
 }
-
-init()
 </script>
 
 <style lang="scss">

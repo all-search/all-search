@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { onMounted, ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import JSONEditor from 'jsoneditor'
 import 'jsoneditor/dist/jsoneditor.css'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -53,6 +53,7 @@ export default {
   setup (props, ctx) {
     const jsoneditor = ref(null)
     let instance = null
+    let changeTimer = null
     onMounted(() => {
       // create the editor
       const container = jsoneditor.value
@@ -62,6 +63,18 @@ export default {
           'tree',
           'preview'
         ],
+        // 内容一变就回传给父组件，父组件才能算出「有未保存的修改」
+        onChange () {
+          clearTimeout(changeTimer)
+          changeTimer = setTimeout(() => {
+            if (!instance) return
+            try {
+              ctx.emit('change', instance.get())
+            } catch {
+              // 编辑中间态可能不是合法 JSON，忽略即可
+            }
+          }, 200)
+        },
         onValidate (json) {
           const errors = []
           if (!Array.isArray(json)) {
@@ -114,12 +127,20 @@ export default {
       watch(
         () => props.value,
         newVal => {
+          // 父组件是我们自己 onChange 喂回去的，内容一样就别 set 了，
+          // 否则每次输入都会被 set 一次，光标跳到开头
+          try {
+            if (JSON.stringify(instance.get()) === JSON.stringify(newVal)) return
+          } catch {
+            // 内容非法时直接覆盖
+          }
           instance.set(newVal)
         }, {
           deep: true,
           immediate: true
         })
     })
+    onBeforeUnmount(() => clearTimeout(changeTimer))
 
     function reset () {
       ElMessageBox.confirm(

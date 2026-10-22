@@ -2,7 +2,9 @@
   <footer class="save-bar">
     <span
       class="save-status"
-      :class="{ 'is-dirty': dirty }">
+      :class="{ 'is-dirty': dirty }"
+      role="status"
+      aria-live="polite">
       <el-icon
         v-if="dirty"
         class="status-icon">

@@ -85,6 +85,7 @@
       v-else
       class="engine-editor">
       <el-input
+        ref="nameInput"
         v-model="draft.nameZh"
         class="editor-name"
         placeholder="名称"
@@ -113,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { MoreFilled, Picture, Rank } from '@element-plus/icons-vue'
 import parseUrl from '@src/util/parseUrl'
 
@@ -131,6 +132,7 @@ const emit = defineEmits<{
   (e: 'edit'): void
   (e: 'done', value: { nameZh: string, url: string }): void
   (e: 'cancel'): void
+  (e: 'draft-dirty', dirty: boolean): void
   (e: 'icon', value: { nameZh: string, url: string }): void
   (e: 'command', command: string): void
 }>()
@@ -141,11 +143,25 @@ const draft = reactive({
   url: props.item.url || ''
 })
 
+const nameInput = ref()
+
 watch(() => props.editing, (editing) => {
-  if (!editing) return
+  if (!editing) {
+    emit('draft-dirty', false)
+    return
+  }
   draft.nameZh = props.item.nameZh || ''
   draft.url = props.item.url || ''
+  emit('draft-dirty', false)
+  // 进入编辑态时原按钮被卸载，焦点会掉到 body；主动聚焦名称输入框
+  nextTick(() => nameInput.value?.focus?.())
 })
+
+/** 草稿一改就告诉父组件，保存条才有「未保存」提示，切分类时也不会悄悄丢 */
+watch(draft, () => {
+  const dirty = draft.nameZh !== (props.item.nameZh || '') || draft.url !== (props.item.url || '')
+  emit('draft-dirty', dirty)
+}, { deep: true })
 
 function confirm () {
   emit('done', { nameZh: draft.nameZh, url: draft.url })

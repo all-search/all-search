@@ -11,6 +11,7 @@
         :animation="150"
         :disabled="renaming"
         :force-fallback="true"
+        :fallback-tolerance="4"
         :delay="DRAG_DELAY"
         :delay-on-touch-only="true"
         :touch-start-threshold="TOUCH_THRESHOLD">
@@ -115,10 +116,10 @@
         <el-radio-group
           v-model="filter"
           size="small">
-          <el-radio-button label="all">
+          <el-radio-button value="all">
             全部
           </el-radio-button>
-          <el-radio-button label="hidden">
+          <el-radio-button value="hidden">
             已隐藏
           </el-radio-button>
         </el-radio-group>
@@ -143,11 +144,11 @@
         :delay-on-touch-only="true"
         :touch-start-threshold="TOUCH_THRESHOLD">
         <site-engine-row
-          v-for="(item, index) in displayedList"
+          v-for="item in displayedList"
           :key="item.__uid"
           :item="item"
-          :index="index"
-          :last-index="displayedList.length - 1"
+          :index="currentCate.list.indexOf(item)"
+          :last-index="currentCate.list.length - 1"
           :editing="editingUid === item.__uid"
           :icon-cache="iconCache"
           :sorting-disabled="sortingDisabled"
@@ -155,6 +156,7 @@
           @edit="startEdit(item)"
           @done="finishEdit(item, $event)"
           @cancel="cancelEdit"
+          @draft-dirty="editingDirty = $event"
           @icon="addIcon(item, $event)"
           @command="handleRowCommand(item, $event)" />
       </draggable>
@@ -307,11 +309,17 @@ export default {
     const elUpload = ref(null)
     const iconCache = ref({})
     const savedSnapshot = ref('')
+    const savedIconSnapshot = ref('{}')
+    /** 行内编辑中的草稿是否和原值不同（草稿在子组件里，只有它知道） */
+    const editingDirty = ref(false)
+    /** 存储里读回来的数据是否已铺到界面；没铺之前不覆盖用户正在编辑的内容 */
+    let hydrated = false
     let editBackup = null
     let newUid = null
 
     const { sites } = useSites()
-    const personalCategory = computed(() => localSites.value.filter(item => item.name.indexOf('personal') > -1))
+    /** 常用分类固定叫 personal，其它自定义分类是 personal-<时间戳> */
+    const personalCategory = computed(() => localSites.value.filter(item => item.name === 'personal'))
 
     const currentCate = computed(() => localSites.value.find(item => item.name === tabName.value) || null)
 
@@ -331,7 +339,15 @@ export default {
     /** 搜索/筛选时禁用拖拽，避免拖到看不见的位置 */
     const sortingDisabled = computed(() => Boolean(search.value.trim()) || filter.value !== 'all')
 
-    const dirty = computed(() => JSON.stringify(formatSites()) !== savedSnapshot.value)
+    /**
+     * 脏状态 = 站点数据变了 / 图标缓存变了 / 行内还有没提交的草稿。
+     * 三者都要算，否则「只传了图标」或「改了一半没点完成」时保存是禁用的。
+     */
+    const dirty = computed(() =>
+      JSON.stringify(formatSites()) !== savedSnapshot.value ||
+      JSON.stringify(iconCache.value) !== savedIconSnapshot.value ||
+      editingDirty.value
+    )
 
     function clone (value) {
       return JSON.parse(JSON.stringify(value || []))
@@ -364,23 +380,36 @@ export default {
       const next = clone(val)
       next.forEach((cate) => {
         cate.list = Array.isArray(cate.list) ? cate.list : []
-        cate.list.forEach(ensureUid)
+        // 老数据 / 手写 JSON 可能没带 data，缺了会让整块界面渲染崩掉
+        if (!cate.data || typeof cate.data !== 'object') cate.data = { visible: true }
+        cate.list.forEach((child) => {
+          if (!child.data || typeof child.data !== 'object') child.data = { visible: true }
+          ensureUid(child)
+        })
       })
       localSites.value = next
       savedSites.value = clone(next)
       savedSnapshot.value = JSON.stringify(formatSites())
       editingUid.value = null
+      editingDirty.value = false
+      editBackup = null
+      newUid = null
+      hydrated = true
       if (!next.some(item => item.name === tabName.value)) {
         tabName.value = next[0]?.name || ''
       }
     }
 
     watch(sites, (value) => {
+      // 存储在线下页面要等 WebBridge 超时才回来；这期间用户可能已经开始改了，
+      // 不能用「刚读到的默认值」把他改的东西冲掉
+      if (hydrated && dirty.value) return
       init(value)
     }, { immediate: true })
 
     getStorage('iconCache').then((iconData) => {
       iconCache.value = iconData || {}
+      savedIconSnapshot.value = JSON.stringify(iconCache.value)
     }).catch(() => {})
 
     /* ---------- 分类 ---------- */
@@ -397,6 +426,14 @@ export default {
       nextTick(() => renameInput.value?.focus?.())
     }
 
+    /** 换分类时把行内编辑收掉，不然草稿会跟着记住的 uid 跑到别的分类里 */
+    watch(tabName, () => {
+      editingUid.value = null
+      editingDirty.value = false
+      editBackup = null
+      newUid = null
+    })
+
     function moveCategory (delta) {
       const index = localSites.value.findIndex(item => item.name === tabName.value)
       const target = index + delta
@@ -408,7 +445,6 @@ export default {
 
     function handleCateCommand (command) {
       if (!currentCate.value) return
-      if (command === 'rename') return startRename()
       if (command === 'up') return moveCategory(-1)
       if (command === 'down') return moveCategory(1)
       if (command === 'visible') {
@@ -441,6 +477,10 @@ export default {
 
     function addNewUrl () {
       if (!currentCate.value) return
+      // 正在编辑的旧行先收掉，否则会留下一条看不见的半成品
+      if (editingUid.value) cancelEdit()
+      // 搜索/筛选生效时新行看不见，先清掉条件
+      clearFilter()
       const item = {
         nameZh: '新网址',
         url: 'https://www.baidu.com/s?wd=%s&ie=utf-8',
@@ -458,6 +498,7 @@ export default {
       editingUid.value = item.__uid
       editBackup = JSON.parse(JSON.stringify(item))
       newUid = null
+      editingDirty.value = false
     }
 
     function finishEdit (item, value) {
@@ -466,6 +507,7 @@ export default {
         item.url = value.url
       }
       editingUid.value = null
+      editingDirty.value = false
       editBackup = null
       newUid = null
     }
@@ -483,6 +525,7 @@ export default {
         }
       }
       editingUid.value = null
+      editingDirty.value = false
       editBackup = null
       newUid = null
     }
@@ -506,8 +549,7 @@ export default {
           ElMessage.success('已加入常用')
         }
         return
-      }
-      if (command === 'up' || command === 'down') {
+      }      if (command === 'up' || command === 'down') {
         const list = currentCate.value.list
         const current = list.indexOf(item)
         const target = current + (command === 'up' ? -1 : 1)
@@ -527,8 +569,10 @@ export default {
     /* ---------- 图标 ---------- */
 
     function addIcon (item, draft) {
-      const { hostname } = parseUrl(draft?.url || item.url || '')
-      currentItem.value = { ...item, icon: iconCache.value[hostname] || item.icon || '' }
+      const url = draft?.url || item.url || ''
+      const { hostname } = parseUrl(url)
+      // 用草稿里的 URL：改过域名后图标要落在新域名上，否则永远显示不出来
+      currentItem.value = { ...item, url, icon: iconCache.value[hostname] || item.icon || '' }
       dialogVisible.value = true
     }
 
@@ -557,7 +601,10 @@ export default {
 
     function iconConfirm () {
       const { hostname } = parseUrl(currentItem.value.url || '')
-      iconCache.value[hostname] = currentItem.value.icon || ''
+      if (hostname) iconCache.value[hostname] = currentItem.value.icon || ''
+      // 不清理的话 :limit="1" 会让第二次上传的 on-change 不再触发
+      elUpload.value?.clearFiles?.()
+      currentItem.value = null
       dialogVisible.value = false
     }
 
@@ -570,18 +617,39 @@ export default {
     /* ---------- 保存 / 撤销 / 恢复默认 ---------- */
 
     async function save () {
+      // 图标缓存是「读-改-写」：内容脚本在用户浏览时也会往里加图标，
+      // 整份覆盖会把这段时间新缓存的图标丢掉
+      let latestIcons = {}
+      try {
+        latestIcons = (await getStorage('iconCache')) || {}
+      } catch {
+        latestIcons = {}
+      }
+      const mergedIcons = { ...latestIcons, ...iconCache.value }
+
       await setStorage('sites', formatSites())
-      await setStorage('iconCache', iconCache.value)
+      await setStorage('iconCache', mergedIcons)
+      iconCache.value = mergedIcons
+
+      // 让共享的 sites 数据跟着更新，否则切到「编辑」页看到的还是旧数据，
+      // 在那里点保存会把刚存的东西覆盖回去
+      await reloadSites()
+
       savedSites.value = clone(localSites.value)
       savedSites.value.forEach(cate => (cate.list || []).forEach(ensureUid))
       savedSnapshot.value = JSON.stringify(formatSites())
+      savedIconSnapshot.value = JSON.stringify(mergedIcons)
       ElMessage.success('保存成功')
     }
 
     function revert () {
       localSites.value = clone(savedSites.value)
       localSites.value.forEach(cate => (cate.list || []).forEach(ensureUid))
+      iconCache.value = JSON.parse(savedIconSnapshot.value || '{}')
       editingUid.value = null
+      editingDirty.value = false
+      editBackup = null
+      newUid = null
       ElMessage.info('已撤销未保存的修改')
     }
 
@@ -594,6 +662,8 @@ export default {
         await delStorage('sites')
         await delStorage('iconCache')
         iconCache.value = {}
+        savedIconSnapshot.value = '{}'
+        hydrated = false
         await reloadSites()
         ElMessage.success('已恢复默认数据')
       }).catch(() => {})
@@ -616,6 +686,7 @@ export default {
       hiddenCount,
       sortingDisabled,
       dirty,
+      editingDirty,
       personalCategory,
       dialogVisible,
       currentItem,
@@ -797,8 +868,11 @@ export default {
   font-size: 16px;
   font-weight: 600;
   color: var(--el-text-color-primary);
-  cursor: text;
   border-radius: 4px;
+
+  .site-panel & {
+    cursor: text;
+  }
 
   &:hover .title-edit,
   &:focus-visible .title-edit {

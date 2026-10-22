@@ -9,7 +9,8 @@ import { SiteCategory } from '../types/site'
 const sitesData = ref<SiteCategory[]>(sites as SiteCategory[])
 
 function getSites (val: SiteCategory[] | null): SiteCategory[] {
-  if (Array.isArray(val) && val.length > 0) {
+  // 空数组是合法的（用户可能删光了所有分类），只有没存过才回落到内置默认
+  if (Array.isArray(val)) {
     return val
   } else {
     return sites as SiteCategory[]
