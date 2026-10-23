@@ -3,8 +3,8 @@ import { computed, ref } from 'vue'
 import popperComp from './popper.vue'
 import { site } from '../config/siteInfo'
 import { resolveKeyword } from '../util/getKeyword'
-import icon from './icon.vue'
 import favicon from './favicon.vue'
+import categoryIcon from './category-icon.vue'
 import { onTap } from '../util/tap'
 import { openUrl, otherOpenMode, type OpenMode } from '../util/openUrl'
 import { selection } from './selection'
@@ -89,7 +89,7 @@ onTap(categoryRef, () => {
          @click.exact="handleCateClick(item)"
          @click.ctrl.exact="handleCateClick(item, altMode)"
          @click.middle.exact="handleCateClick(item, altMode)">
-        <icon :name="item.name"/>
+        <category-icon :item="item" />
         <span
           class="as-menu-item-title"
           v-text="item.nameZh">

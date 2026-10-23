@@ -30,6 +30,13 @@ const props = defineProps<{
   icon?: string
 }>()
 
+const emit = defineEmits<{
+  /** 图片加载成功（缓存命中也会触发） */
+  (e: 'load'): void
+  /** 所有候选都加载失败，调用方可以据此换兜底图标 */
+  (e: 'error'): void
+}>()
+
 const isError = ref(false)
 
 const { hostname } = parseUrl(props.url || '')
@@ -48,6 +55,7 @@ const img = computed(() => {
 const { favicon } = useFavicon()
 
 function handleLoad (e: Event) {
+  emit('load')
   if (isError.value || !faviconApi.value || faviconApi.value.startsWith('data:image')) return
   if (!corsAllowed.value) return
   // 跨域图（站点自己的 /favicon.ico 等）没有 CORS 头，canvas 会被污染，
@@ -64,6 +72,7 @@ function handleError (e: Event) {
   if (target.src !== faviconApi.value) return
   if (index.value >= faviconApis.value.length - 1) {
     isError.value = true
+    emit('error')
     return
   }
   index.value += 1
