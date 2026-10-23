@@ -340,27 +340,18 @@ export default {
       return JSON.parse(JSON.stringify(value || []))
     }
 
-    function formatSites () {
-      return localSites.value.map(item => ({
-        ...pickSite(item),
-        nameZh: item.nameZh,
-        name: item.name,
-        list: (item.list || []).map(child => ({
-          ...pickSite(child),
-          nameZh: child.nameZh,
-          url: child.url,
-          icon: child.icon || '',
-          data: child.data
-        })),
-        data: item.data
-      }))
+    /** 去掉仅界面用的 __uid，其余字段（包括用户手写的扩展字段）原样保留 */
+    function stripUid (item) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { __uid, ...rest } = item
+      return rest
     }
 
-    function pickSite (item) {
-      const copy = { ...item }
-      delete copy.__uid
-      delete copy.nameZhBackup
-      return copy
+    function formatSites () {
+      return localSites.value.map(cate => ({
+        ...stripUid(cate),
+        list: (cate.list || []).map(child => ({ ...stripUid(child), icon: child.icon || '' }))
+      }))
     }
 
     function init (val) {
@@ -377,10 +368,7 @@ export default {
       localSites.value = next
       savedSites.value = clone(next)
       savedSnapshot.value = JSON.stringify(formatSites())
-      editingUid.value = null
-      editingDirty.value = false
-      editBackup = null
-      newUid = null
+      resetEditing()
       hydrated.value = true
       if (!next.some(item => item.name === tabName.value)) {
         tabName.value = next[0]?.name || ''
@@ -415,19 +403,31 @@ export default {
 
     /** 换分类时把行内编辑收掉，不然草稿会跟着记住的 uid 跑到别的分类里 */
     watch(tabName, () => {
+      resetEditing()
+    })
+
+    /** 收起行内编辑状态（换分类、完成、取消、撤销都要清） */
+    function resetEditing () {
       editingUid.value = null
       editingDirty.value = false
       editBackup = null
       newUid = null
-    })
+    }
+
+    /** 列表内交换两项；越界就什么都不做 */
+    function moveWithin (list, index, delta) {
+      const target = index + delta
+      if (index < 0 || target < 0 || target >= list.length) return false
+      ;[list[index], list[target]] = [list[target], list[index]]
+      return true
+    }
 
     function moveCategory (delta) {
       const index = localSites.value.findIndex(item => item.name === tabName.value)
-      const target = index + delta
-      if (index < 0 || target < 0 || target >= localSites.value.length) return
-      const list = localSites.value
-      ;[list[index], list[target]] = [list[target], list[index]]
-      localSites.value = list
+      if (moveWithin(localSites.value, index, delta)) {
+        // 触发视图更新（数组本身是同一个引用）
+        localSites.value = [...localSites.value]
+      }
     }
 
     function handleCateCommand (command) {
@@ -495,10 +495,7 @@ export default {
         item.nameZh = value.nameZh
         item.url = value.url
       }
-      editingUid.value = null
-      editingDirty.value = false
-      editBackup = null
-      newUid = null
+      resetEditing()
     }
 
     function cancelEdit () {
@@ -513,10 +510,7 @@ export default {
           Object.assign(list[index], editBackup)
         }
       }
-      editingUid.value = null
-      editingDirty.value = false
-      editBackup = null
-      newUid = null
+      resetEditing()
     }
 
     function clearFilter () {
@@ -541,11 +535,7 @@ export default {
         return
       }
       if (command === 'up' || command === 'down') {
-        const list = currentCate.value.list
-        const current = list.indexOf(item)
-        const target = current + (command === 'up' ? -1 : 1)
-        if (target < 0 || target >= list.length) return
-        ;[list[current], list[target]] = [list[target], list[current]]
+        moveWithin(currentCate.value.list, currentCate.value.list.indexOf(item), command === 'up' ? -1 : 1)
         return
       }
       if (command === 'remove') {
@@ -672,10 +662,7 @@ export default {
       localSites.value = clone(savedSites.value)
       localSites.value.forEach(cate => (cate.list || []).forEach(ensureUid))
       iconCache.value = JSON.parse(savedIconSnapshot.value || '{}')
-      editingUid.value = null
-      editingDirty.value = false
-      editBackup = null
-      newUid = null
+      resetEditing()
       ElMessage.info('已撤销未保存的修改')
     }
 
