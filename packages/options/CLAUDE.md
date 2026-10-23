@@ -64,10 +64,12 @@
 | `views/sites.vue` | 左侧分类导航（带计数、隐藏态划线、**拖拽换位**）+ 右侧面板；工具条（搜索 / 全部·已隐藏 / 添加站点）；列表行两态；底部 `save-bar` |
 | `components/site-engine-row.vue` | 单行站点：阅读态（拖拽柄 / 图标 / 名称 / 域名 / 隐藏徽标 / ⋯菜单）与编辑态（名称 / 网址 / 图标 / 完成 / 取消）；编辑用**本地草稿**，点“完成”才 emit 回父组件，不改 props |
 | `components/save-bar.vue` | 统一底部条：脏状态文案 + 撤销修改 + 恢复默认 + 保存；**恢复默认不受 dirty 限制**（它是唯一能把自定义数据还原成内置默认的入口） |
+| `components/site-icon-dialog.vue` | 图标弹窗（上传 / 预览 / 删除）；只管当前图标的形态，确定时把 `{ hostname, icon }` 交回父组件写 `iconCache` |
 | `views/toolbar.vue` | 划词工具栏列表，同样接 `save-bar`；存储是异步的，首屏用默认值渲染后再替换成用户数据 |
 | `views/interaction.vue` | 两组单选 + `open-mode-tip`（`compact` 模式下只保留 Ctrl / 中键那一条） |
 | `views/edit.vue` | JSON 编辑器外壳；初始化与重置都做深拷贝，保存后调用 `reloadSites()` 让其它页面同步 |
 | `composables/use-unsaved-guard.ts` | `beforeunload` + 路由守卫的“未保存提醒”，sites / toolbar 共用 |
+| `composables/confirm-reset.ts` | 危险操作的二次确认；取消时 resolve(false)，不用到处写 `.catch(() => {})` |
 
 约定：
 
@@ -125,7 +127,7 @@ packages/plugin/entries/options/main.js
 
 ## 测试
 
-`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 52 项断言：顶栏与正文对齐、分类导航计数与可点尺寸、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏、触屏横滑与长按拖拽、图标（零外链/抓取/缓存）。截图落在 `e2e/artifacts/config-*.png`。
+`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 53 项断言：顶栏与正文对齐、分类导航计数与可点尺寸、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏、触屏横滑与长按拖拽、图标（零外链/抓取/缓存）。截图落在 `e2e/artifacts/config-*.png`。
 
 ## 已知限制 / 待办
 
