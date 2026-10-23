@@ -98,13 +98,14 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { Delete, Hide, Plus, Rank, View } from '@element-plus/icons-vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { getStorage, setStorage } from '@src/util/storage'
 import { initToolbar } from '@src/util/toolbar'
 import saveBar from '../components/save-bar.vue'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
+import confirmReset from '../composables/confirm-reset'
 
 const draggable = VueDraggableNext
 
@@ -184,18 +185,18 @@ function revert () {
   ElMessage.info('已撤销未保存的修改')
 }
 
-function reset () {
-  ElMessageBox.confirm('会清空自定义的工具栏项，恢复为内置默认数据。确定继续吗？', '重置', {
-    confirmButtonText: '重置',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(async () => {
-    const defaults = initToolbar({ reset: true }).map(withUid)
-    await setStorage('toolbar', formatList(defaults))
-    list.value = defaults
-    savedSnapshot.value = snapshotOf(list.value)
-    ElMessage.success('已恢复默认数据')
-  }).catch(() => {})
+async function reset () {
+  const ok = await confirmReset({
+    title: '重置',
+    message: '会清空自定义的工具栏项，恢复为内置默认数据。确定继续吗？',
+    action: '重置'
+  })
+  if (!ok) return
+  const defaults = initToolbar({ reset: true }).map(withUid)
+  await setStorage('toolbar', formatList(defaults))
+  list.value = defaults
+  savedSnapshot.value = snapshotOf(list.value)
+  ElMessage.success('已恢复默认数据')
 }
 </script>
 

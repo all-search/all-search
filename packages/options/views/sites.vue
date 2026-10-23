@@ -238,7 +238,7 @@
 <script>
 import { computed, nextTick, ref, watch } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { EditPen, MoreFilled, Plus, Search } from '@element-plus/icons-vue'
 import { delStorage, getStorage, setStorage } from '@src/util/storage'
 import useSites, { reloadSites } from '@src/components/useSites'
@@ -248,6 +248,7 @@ import siteEngineRow from '../components/site-engine-row.vue'
 import saveBar from '../components/save-bar.vue'
 import siteIconDialog from '../components/site-icon-dialog.vue'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
+import confirmReset from '../composables/confirm-reset'
 
 let uidSeed = 0
 const ensureUid = (item) => {
@@ -329,12 +330,13 @@ export default {
     /**
      * 脏状态 = 站点数据变了 / 图标缓存变了 / 行内还有没提交的草稿。
      * 三者都要算，否则「只传了图标」或「改了一半没点完成」时保存是禁用的。
+     *
+     * 拆成三个 computed 是为了让 Vue 缓存：行内打字只会翻 editingDirty，
+     * 不会每次都把整棵站点树和图标缓存重新 JSON.stringify（满缓存时 0.3~0.6MB）。
      */
-    const dirty = computed(() =>
-      JSON.stringify(formatSites()) !== savedSnapshot.value ||
-      JSON.stringify(iconCache.value) !== savedIconSnapshot.value ||
-      editingDirty.value
-    )
+    const sitesDirty = computed(() => JSON.stringify(formatSites()) !== savedSnapshot.value)
+    const iconsDirty = computed(() => JSON.stringify(iconCache.value) !== savedIconSnapshot.value)
+    const dirty = computed(() => sitesDirty.value || iconsDirty.value || editingDirty.value)
 
     function clone (value) {
       return JSON.parse(JSON.stringify(value || []))
@@ -448,18 +450,18 @@ export default {
       if (command === 'remove') removeCategory()
     }
 
-    function removeCategory () {
+    async function removeCategory () {
       const target = currentCate.value
       if (!target) return
-      ElMessageBox.confirm(`确定删除分类「${target.nameZh}」及其 ${target.list.length} 个站点吗？`, '删除分类', {
-        confirmButtonText: '删除',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        const index = localSites.value.findIndex(item => item.name === target.name)
-        localSites.value.splice(index, 1)
-        tabName.value = localSites.value[Math.min(index, localSites.value.length - 1)]?.name || ''
-      }).catch(() => {})
+      const ok = await confirmReset({
+        title: '删除分类',
+        message: `确定删除分类「${target.nameZh}」及其 ${target.list.length} 个站点吗？`,
+        action: '删除'
+      })
+      if (!ok) return
+      const index = localSites.value.findIndex(item => item.name === target.name)
+      localSites.value.splice(index, 1)
+      tabName.value = localSites.value[Math.min(index, localSites.value.length - 1)]?.name || ''
     }
 
     /* ---------- 站点 ---------- */
@@ -666,20 +668,20 @@ export default {
       ElMessage.info('已撤销未保存的修改')
     }
 
-    function reset () {
-      ElMessageBox.confirm('会清空所有自定义站点与图标，恢复为内置默认数据。确定继续吗？', '恢复默认', {
-        confirmButtonText: '恢复默认',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async () => {
-        await delStorage('sites')
-        await delStorage('iconCache')
-        iconCache.value = {}
-        savedIconSnapshot.value = '{}'
-        hydrated.value = false
-        await reloadSites()
-        ElMessage.success('已恢复默认数据')
-      }).catch(() => {})
+    async function reset () {
+      const ok = await confirmReset({
+        title: '恢复默认',
+        message: '会清空所有自定义站点与图标，恢复为内置默认数据。确定继续吗？',
+        action: '恢复默认'
+      })
+      if (!ok) return
+      await delStorage('sites')
+      await delStorage('iconCache')
+      iconCache.value = {}
+      savedIconSnapshot.value = '{}'
+      hydrated.value = false
+      await reloadSites()
+      ElMessage.success('已恢复默认数据')
     }
 
     /* ---------- 离开提醒 ---------- */
