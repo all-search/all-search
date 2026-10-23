@@ -22,19 +22,26 @@ export async function run ({ headless, report }) {
     report.check('宿主与菜单渲染', initial.host && initial.items > 0, `items=${initial.items} class=${initial.hostClass}`)
     report.check('菜单条贴在顶部', !!initial.bar && initial.bar.y === 0 && initial.bar.h > 20, JSON.stringify(initial.bar))
 
-    // 1.01 分类图标：优先用分类里第一个站点的 favicon，加载不到再退回 SVG / 首字母
+    // 1.01 分类图标走 iconfont 的 symbol，每个分类（含 AI）都要有对应的 symbol
     const categoryIcons = await page.evaluate(() => {
       const shadow = document.querySelector('all-search-ui')?.shadowRoot
       const items = [...(shadow?.querySelectorAll('.as-menu-item') || [])]
-      return items.map(el => ({
-        name: el.querySelector('.as-menu-item-title')?.textContent?.trim() || '',
-        hasIcon: !!el.querySelector('.as-category-icon img, .as-category-icon svg, .as-category-icon-letter')
-      }))
+      return {
+        items: items.map(el => ({
+          name: el.querySelector('.as-menu-item-title')?.textContent?.trim() || '',
+          href: el.querySelector('svg.as-menu-item-icon use')?.getAttribute('xlink:href') ||
+            el.querySelector('svg.as-menu-item-icon use')?.getAttribute('href') || ''
+        })),
+        hasAiSymbol: !!shadow?.getElementById('icon-ai')
+      }
     })
+    const missingIcon = categoryIcons.items.filter(item => !item.href.startsWith('#icon-'))
     report.check(
-      '每个分类都有图标（含 AI）',
-      categoryIcons.length > 0 && categoryIcons.every(item => item.hasIcon),
-      `${categoryIcons.length} 个分类，缺图标的：${categoryIcons.filter(i => !i.hasIcon).map(i => i.name).join('、') || '无'}`
+      '每个分类都有图标 symbol（含 AI）',
+      categoryIcons.items.length > 0 && missingIcon.length === 0 &&
+        categoryIcons.items.some(item => item.name === 'AI' && item.href === '#icon-ai') &&
+        categoryIcons.hasAiSymbol,
+      `${categoryIcons.items.length} 个分类，缺图标的：${missingIcon.map(i => i.name).join('、') || '无'}`
     )
     await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-bar.png') })
 

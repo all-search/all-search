@@ -28,17 +28,6 @@
           :aria-current="tabName === cate.name ? 'true' : undefined"
           :title="`${cate.nameZh}：点击切换，拖动排序（触屏需长按）`"
           @click="tabName = cate.name">
-          <span class="nav-icon">
-            <img
-              v-if="categoryIcon(cate).src"
-              :src="categoryIcon(cate).src"
-              alt=""
-              @error="categoryIconFailed(cate)">
-            <span
-              v-else
-              class="nav-icon-letter"
-              :style="{ background: categoryIcon(cate).bg, color: categoryIcon(cate).fg }">{{ categoryIcon(cate).letter }}</span>
-          </span>
           <span class="nav-label">{{ cate.nameZh }}</span>
           <span class="nav-count">{{ cate.list.length }}</span>
         </button>
@@ -294,13 +283,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { delStorage, getStorage, setStorage } from '@src/util/storage'
 import useSites, { reloadSites } from '@src/components/useSites'
 import parseUrl from '@src/util/parseUrl'
-import {
-  fetchIconDataUrl,
-  iconLetter,
-  iconPalette,
-  normalizeUploadedIcon,
-  trimIconCache
-} from '@src/util/favicon'
+import { fetchIconDataUrl, normalizeUploadedIcon, trimIconCache } from '@src/util/favicon'
 import siteEngineRow from '../components/site-engine-row.vue'
 import saveBar from '../components/save-bar.vue'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
@@ -345,8 +328,6 @@ export default {
     const fetching = ref(false)
     /** 拖拽过程中不接收迟到的存储数据，否则 v-for 重渲染会把拖拽打断 */
     const dragging = ref(false)
-    /** 分类图标加载失败的名字，失败后回落到首字母 */
-    const failedCateIcons = ref({})
     const iconCache = ref({})
     const savedSnapshot = ref('')
     const savedIconSnapshot = ref('{}')
@@ -613,30 +594,6 @@ export default {
     /* ---------- 图标 ---------- */
 
     /**
-     * 分类图标 = 分类里第一个「启用」站点的图标（用户上传 > 本地缓存）。
-     * 跟菜单条上的分类图标同一套规则，省掉每个分类手绘一个 SVG。
-     */
-    function categoryIcon (cate) {
-      const list = cate.list || []
-      const first = list.find(item => item.data?.visible !== false) || list[0]
-      const host = first ? parseUrl(first.url || '').hostname : ''
-      const palette = iconPalette(cate.name || cate.nameZh || '?')
-      const src = failedCateIcons.value[cate.name]
-        ? ''
-        : (host && iconCache.value[host]) || first?.icon || ''
-      return {
-        src,
-        letter: iconLetter(cate.nameZh || cate.name),
-        bg: palette.bg,
-        fg: palette.fg
-      }
-    }
-
-    function categoryIconFailed (cate) {
-      failedCateIcons.value = { ...failedCateIcons.value, [cate.name]: true }
-    }
-
-    /**
      * 显式抓取一张图标（联网，按需触发）。
      * 配置页默认是「缓存优先 + 首字母兜底」，不主动请求任何外部服务；
      * 抓到的统一压成 32×32 PNG 再进 iconCache，一行 1–2KB。
@@ -834,8 +791,6 @@ export default {
       fetching,
       dragging,
       hydrated,
-      categoryIcon,
-      categoryIconFailed,
       addCategory,
       startRename,
       handleCateCommand,
@@ -906,7 +861,8 @@ export default {
   .nav-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 10px;
     min-height: 40px;
     padding: 9px 12px;
     border: 0;
@@ -919,37 +875,7 @@ export default {
     user-select: none;
     transition: background-color .15s ease, color .15s ease;
 
-    .nav-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 4px;
-      overflow: hidden;
-      background: var(--el-fill-color-light);
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-
-    .nav-icon-letter {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      font-size: 11px;
-      font-weight: 600;
-      line-height: 1;
-    }
-
     .nav-label {
-      flex: 1;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;

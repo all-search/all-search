@@ -78,7 +78,7 @@ key 前缀由 `util/common.ts` 的 `getName()` 生成：`__allSearch__${name}`�
 
 - 布局：`layout-manager.vue`、`logo.vue`、`menu.vue`、`menu-item.vue`、`side-bar.vue`、`hover-btn.vue`
 - 浮层：`popper.vue`（`useFloating` + offset/flip/shift，默认 `strategy: 'fixed'`）、`overlay.vue`、`dialog.vue`、`search-dialog.vue`、`selection-bar.vue`
-- 基础：`button.vue`、`radio.vue`、`color.vue`、`form-item.vue`、`icon.vue`、`iconfont.vue`、`favicon.vue`、`category-icon.vue`（分类图标 = 第一个站点图标）、`json-editor.vue`、`scrollbar/`
+- 基础：`button.vue`、`radio.vue`、`color.vue`、`form-item.vue`、`icon.vue`、`iconfont.vue`、`favicon.vue`、`json-editor.vue`、`scrollbar/`
 - Composables：`useConfig`（读写 + 校验 + 回滚）、`useSites`、`useToolbar`、`useMode`、`useSwitchShow`、`useAutoHide`、`useAlign`、`useColor`、`useFavicon`、`useOpenMode`（按功能区控制左键打开方式：`menuOpenMode` / `selectionOpenMode`，取值 `same` / `new`；Ctrl / 中键固定取反）
 
 ## 工具函数（`util/`）
