@@ -98,7 +98,6 @@ all-search/
 │   ├── plugin/         # 浏览器插件（WXT 框架）
 │   └── options/        # 配置页面（独立 Vue 应用）
 ├── src/                # 核心源码（共享代码库）
-├── lib/                # 外部库文件（popper-lite）
 └── 配置文件
 ```
 
@@ -114,7 +113,6 @@ graph TD
     F --> G["components - Vue 组件"];
     F --> H["config - 配置管理"];
     F --> I["util - 工具函数"];
-    A --> J["lib - 外部库"];
 
     click C "./packages/script/CLAUDE.md" "查看 script 模块文档"
     click D "./packages/plugin/CLAUDE.md" "查看 plugin 模块文档"
@@ -130,7 +128,6 @@ graph TD
 | `packages/plugin` | TypeScript | 基于 WXT 的浏览器插件，支持 Chrome/Firefox 等 | `entries/content.ts`、`entries/background.ts` | `dev:plugin`, `build:plugin` |
 | `packages/options` | Vue 3 + TS | 独立配置页面应用，提供搜索引擎和工具栏管理界面 | `main.ts` | `dev:options`, `build:options` |
 | `src` | Vue 3 | 核心共享代码库，包含所有组件、配置和工具函数 | `index.vue` | - |
-| `lib` | JavaScript | 外部库文件（popper-lite.min.js） | - | - |
 
 ## 📁 目录结构详解
 
@@ -173,11 +170,11 @@ graph TD
 #### 工具函数 (`src/util/`)
 > 源码已全量迁移到 TypeScript，下列文件均为 `.ts`。
 
-- **核心工具**: `index.ts`, `storage/`（`index.ts` + `tm.ts` / `extension.ts` / `bridge.ts` / `types.ts`）, `hook.ts`, `store.ts`
+- **核心工具**: `index.ts`, `storage/`（`index.ts` + `tm.ts` / `extension.ts` / `bridge.ts` / `types.ts`）, `store.ts`
 - **挂载/布局**: `mount.ts`（`setupApp`）, `layoutService.ts`, `dom.ts`
 - **样式处理**: `initStyle.ts`, `addSpecialStyle.ts`, `injectStyle.ts`
 - **交互功能**: `getKeyword.ts`, `fullScreen.ts`, `clipboard.ts`, `onClickOutside.ts`, `tap.ts`
-- **兼容性**: `routerChange.ts`, `addScript.ts`, `sites.ts`
+- **兼容性**: `routerChange.ts`, `addScript.ts`, `toolbar.ts`（配置页的默认工具栏项）
 - **性能优化**: `debounce.ts`, `raf.ts`, `useTimeout.ts`, `useScroll.ts`
 - **URL 处理**: `parseUrl.ts`
 
@@ -564,9 +561,8 @@ chore: 构建/工具变更
 2. **E2E 未接入 CI**：`pnpm e2e` 已入库（plugin / userscript / selection / config 四个场景，89 项断言）。`playwright-core` 不下载浏览器，Linux 上要装系统 Chrome/Chromium 并用 `E2E_EXECUTABLE` 指过去；另外 Chrome 137+ 已移除 `--load-extension`，`plugin` / `selection` 只能在 Windows + Edge 跑，`userscript` / `config` 可以进 CI
 3. **国际化**：无 i18n，界面只有中文
 4. **无障碍**：键盘导航与屏幕阅读器支持未做
-5. **Element Plus**：配置页全量引入，包体偏大，可改按需加载
-6. **避让只处理顶部**：`top` 之外的定位（底部条、左右条、`bottom` 定位的元素）未覆盖；Google / 知乎 / 搜狗 / Yandex 等站点会被验证码拦截，暂无静态规则
-7. **`height: 100vh` 几何补偿**：只对全屏 fixed 层加了 `height: calc(100vh - 30px)`，其它铺满视口的元素未处理
+5. **避让只处理顶部**：`top` 之外的定位（底部条、左右条、`bottom` 定位的元素）未覆盖；Google / 知乎 / 搜狗 / Yandex 等站点会被验证码拦截，暂无静态规则
+6. **`height: 100vh` 几何补偿**：只对全屏 fixed 层加了 `height: calc(100vh - 30px)`，其它铺满视口的元素未处理
 
 ### 下一步建议
 1. 存储/配置的边界用例补测（adapter 选择、bridge 超时、路由 base）

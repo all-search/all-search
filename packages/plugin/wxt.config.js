@@ -2,6 +2,7 @@ import { defineConfig } from 'wxt'
 import pkg from '../../package.json'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { elementPlusComponents } from '../../vite.config.shared'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -18,12 +19,16 @@ export default defineConfig({
   webExt: {
     startUrls: ['https://www.baidu.com']
   },
-  entrypointsDir: "entries",
+  entrypointsDir: 'entries',
   zip: {
     artifactTemplate: `${pkg.name}-${pkg.version}-{{browser}}.zip`
   },
   vite() {
     return {
+      plugins: [
+        // 设置页复用 packages/options，Element Plus 同样走按需引入
+        elementPlusComponents()
+      ],
       resolve: {
         alias: {
           '@src': path.resolve(__dirname, '../../src'),

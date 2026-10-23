@@ -10,9 +10,12 @@
 
 | 文件 | 作用 |
 | --- | --- |
-| `main.ts` | `createApp(App)` + Element Plus + 全部图标 + `normalize.css` / `common.scss` |
+| `main.ts` | 只调 `mountOptionsApp()`，启动逻辑在 `bootstrap.ts` |
+| `bootstrap.ts` | 在线站点与插件设置页共用的启动逻辑：`createApp` + 路由 + 全局样式；**不 `app.use(ElementPlus)`**，组件走 `unplugin-vue-components` 按需引入（见根 `vite.config.shared.ts`） |
 | `App.vue` | 只有 `<router-view>` + 全局样式（含 `box-sizing: border-box` 与 `html.dark body` 底色） |
 | `route/index.ts` | 路由表；**history 模式按环境切换**（见下） |
+
+> Element Plus 按需引入后，模板里的 `el-*` 由插件自动 import；**图标不再是全局组件**——`<script setup>` 里直接 import 即可，Options API（`sites.vue`）要写进 `components`，而 `:prefix-icon="Search"` 这种表达式取值必须从 `setup()` 返回。
 
 路由：
 
@@ -82,7 +85,7 @@ pnpm dev:options    # 本地开发
 pnpm build:options  # 产物 packages/options/dist
 ```
 
-- 使用 `vite.config.ts`，基础配置来自根目录 `vite.config.shared.ts`（`@src` 别名、Vue 插件、manualChunks）
+- 使用 `vite.config.ts`，基础配置来自根目录 `vite.config.shared.ts`（`@src` 别名、Vue 插件、Element Plus 按需引入、manualChunks）
 - production 模式才 `emptyOutDir` + `minify`
 - 部署到 GitHub Pages：`.github/workflows/gh-page.yml` 上传 `packages/options/dist`，base 为 `/all-search/`
 
@@ -126,7 +129,6 @@ packages/plugin/entries/options/main.js
 
 ## 已知限制 / 待办
 
-- Element Plus 全量引入（`app.use(ElementPlus)` + 全量图标），包体偏大，可改按需引入
 - 没有 i18n，界面只有中文
 - `views/sites.vue` 仍是 Options API + 大量内联逻辑，可拆成 `useSitesEditor` 之类的 composable
 - jsoneditor 自带亮色主题，深色模式靠 `json-editor.vue` 里一段 `html.dark` 覆盖（只覆盖了代码模式的 ace 主区域与状态栏）

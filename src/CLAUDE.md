@@ -83,7 +83,7 @@ key 前缀由 `util/common.ts` 的 `getName()` 生成：`__allSearch__${name}`�
 
 ## 工具函数（`util/`）
 
-`common`（`getName`/`parseJson`/`isMobile`）、`dom`、`mount`、`layoutService`、`storage/`、`openUrl`（统一的 `same`/`new` 打开方式）、`initStyle`（`syncHostLayout`/`addCustomStyle`）、`addSpecialStyle`（fixed 元素避让：命中测试采样，仅在没有静态规则的站点启用）、`injectStyle`、`getKeyword`、`fullScreen`、`clipboard`、`onClickOutside`、`tap`、`routerChange`、`addScript`、`sites`、`store`、`debounce`、`raf`、`useTimeout`、`useScroll`、`parseUrl`、`hook`、`favicon`（图标候选顺序 / 首字母色块 / 32×32 压缩 / 缓存裁剪）
+`common`（`getName`/`parseJson`/`isMobile`）、`dom`、`mount`、`layoutService`、`storage/`、`openUrl`（统一的 `same`/`new` 打开方式）、`initStyle`（`syncHostLayout`/`addCustomStyle`）、`addSpecialStyle`（fixed 元素避让：命中测试采样，仅在没有静态规则的站点启用）、`injectStyle`、`getKeyword`、`fullScreen`、`clipboard`、`onClickOutside`、`tap`、`routerChange`、`addScript`、`toolbar`（配置页默认工具栏项）、`store`、`debounce`、`raf`、`useTimeout`、`useScroll`、`parseUrl`、`favicon`（图标候选顺序 / 首字母色块 / 32×32 压缩 / 缓存裁剪）
 
 ## 固定元素避让（两套机制，互斥）
 

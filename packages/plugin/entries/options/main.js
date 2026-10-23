@@ -1,18 +1,4 @@
-import { createApp } from 'vue'
-import ElementPlus from 'element-plus'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import 'element-plus/dist/index.css'
-import 'element-plus/theme-chalk/dark/css-vars.css'
-import '@src/assets/normalize.css'
-import '@src/assets/common.scss'
-import router from '../../../options/route'
-import App from '../../../options/App.vue'
+import { mountOptionsApp } from '../../../options/bootstrap'
 
-const app = createApp(App)
-app.use(router)
-app.use(ElementPlus)
-app.mount('#app')
-
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
+// 扩展设置页和在线配置站共用同一套启动逻辑（Element Plus、路由、全局样式）
+mountOptionsApp()

@@ -280,6 +280,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { EditPen, MoreFilled, Plus, Search } from '@element-plus/icons-vue'
 import { delStorage, getStorage, setStorage } from '@src/util/storage'
 import useSites, { reloadSites } from '@src/components/useSites'
 import parseUrl from '@src/util/parseUrl'
@@ -310,7 +311,12 @@ export default {
   components: {
     draggable: VueDraggableNext,
     siteEngineRow,
-    saveBar
+    saveBar,
+    // Options API 的模板只能看到 components 里注册的东西，
+    // 图标不再全局注册（Element Plus 走按需引入），这里要显式登记
+    EditPen,
+    MoreFilled,
+    Plus
   },
   setup () {
     const localSites = ref([])
@@ -791,6 +797,8 @@ export default {
       fetching,
       dragging,
       hydrated,
+      // 模板里的 :prefix-icon="Search" 是表达式取值，Options API 只能从 setup 返回值里拿到
+      Search,
       addCategory,
       startRename,
       handleCateCommand,
