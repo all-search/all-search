@@ -98,6 +98,49 @@ export async function launch ({ tag, extensionPath, headless }) {
   return chromium.launchPersistentContext(profile, browserOptions({ extensionPath, headless }))
 }
 
+function dirSize (dir) {
+  let total = 0
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name)
+    try {
+      total += entry.isDirectory() ? dirSize(full) : fs.statSync(full).size
+    } catch {
+      // 读不到的算 0，不影响清理
+    }
+  }
+  return total
+}
+
+/**
+ * 清理历史遗留的浏览器 profile 目录。
+ *
+ * launch() 只在成功删掉同名目录时才复用，EBUSY（上次的浏览器没退干净）会改成
+ * `profile-<tag>-<时间戳>`，这些目录不会自己消失——跑久了能堆到上百 MB。
+ * 每次开跑前扫一遍，被占用的下次再清。
+ */
+export function cleanProfiles () {
+  let removed = 0
+  let freed = 0
+  let entries = []
+  try {
+    entries = fs.readdirSync(ARTIFACTS, { withFileTypes: true })
+  } catch {
+    return { removed, freed }
+  }
+  for (const entry of entries) {
+    if (!entry.isDirectory() || !entry.name.startsWith('profile-')) continue
+    const dir = path.join(ARTIFACTS, entry.name)
+    try {
+      freed += dirSize(dir)
+      fs.rmSync(dir, { recursive: true, force: true })
+      removed += 1
+    } catch {
+      // 还开着，留给下次
+    }
+  }
+  return { removed, freed }
+}
+
 /** 等待宿主内出现菜单项 */
 export async function waitForMenu (page, timeout = 20000) {
   await page.waitForFunction(() => {

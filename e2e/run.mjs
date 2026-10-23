@@ -20,7 +20,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
-import { ROOT, ARTIFACTS, createReport } from './lib.mjs'
+import { ROOT, ARTIFACTS, createReport, cleanProfiles } from './lib.mjs'
 
 const argv = process.argv.slice(2)
 const hasFlag = name => argv.includes(`--${name}`)
@@ -84,6 +84,12 @@ if (shouldBuild) {
 const channel = process.env.E2E_EXECUTABLE || process.env.E2E_CHANNEL || (process.platform === 'win32' ? 'msedge' : 'chrome')
 console.log(`\n浏览器：${channel}（headless=${headless}）`)
 console.log(`产物目录：${ARTIFACTS}`)
+
+// 上次被占用的 profile 会换成带时间戳的目录，不清会一直堆着（每个几十 MB）
+const cleaned = cleanProfiles()
+if (cleaned.removed) {
+  console.log(`清理旧浏览器 profile：${cleaned.removed} 个，释放 ${Math.round(cleaned.freed / 1024 / 1024)} MB`)
+}
 
 /** 单个场景的超时：卡住时给一句人话，不要一直挂着 */
 const SCENARIO_TIMEOUT = Number(process.env.E2E_SCENARIO_TIMEOUT || 5 * 60 * 1000)
