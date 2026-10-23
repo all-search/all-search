@@ -81,7 +81,7 @@ pnpm lint          # eslint --fix
 pnpm lint:check    # eslint 只检查不写文件（CI 用这个）
 ```
 
-`pnpm e2e` 会先构建所需产物，然后跑四个场景（共 88 项断言）：
+`pnpm e2e` 会先构建所需产物，然后跑四个场景（共 90 项断言）：
 
 - **plugin**：加载未打包扩展，验证菜单条、四种布局下的浮层方向、「菜单设置」是否打开扩展自带的 options 页
 - **userscript**：模拟油猴环境（Vue 全局 + `GM_*` 打桩）并注入 `dist/index.user.js`

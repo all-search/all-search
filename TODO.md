@@ -18,7 +18,7 @@
 - [ ] **tsconfig 默认值更新**（要求 TS ≥5.4，且 `.wxt/tsconfig.json` 由 CLI 重新生成）
 - [ ] `@webext-core/isolated-element` v1 → v3：`createShadowRootUi` 的宿主结构需回归（深色模式依赖挂载锚点）
 
-升级时按「升依赖 → 重新生成 .wxt → build:plugin + zip:firefox → e2e 88 项 → 手工装一次扩展」的顺序验证。
+升级时按「升依赖 → 重新生成 .wxt → build:plugin + zip:firefox → e2e 90 项 → 手工装一次扩展」的顺序验证。
 
 ## ?? 执行路线图
 

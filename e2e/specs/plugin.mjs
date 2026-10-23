@@ -21,6 +21,21 @@ export async function run ({ headless, report }) {
     const initial = await measure(page)
     report.check('宿主与菜单渲染', initial.host && initial.items > 0, `items=${initial.items} class=${initial.hostClass}`)
     report.check('菜单条贴在顶部', !!initial.bar && initial.bar.y === 0 && initial.bar.h > 20, JSON.stringify(initial.bar))
+
+    // 1.01 分类图标：优先用分类里第一个站点的 favicon，加载不到再退回 SVG / 首字母
+    const categoryIcons = await page.evaluate(() => {
+      const shadow = document.querySelector('all-search-ui')?.shadowRoot
+      const items = [...(shadow?.querySelectorAll('.as-menu-item') || [])]
+      return items.map(el => ({
+        name: el.querySelector('.as-menu-item-title')?.textContent?.trim() || '',
+        hasIcon: !!el.querySelector('.as-category-icon img, .as-category-icon svg, .as-category-icon-letter')
+      }))
+    })
+    report.check(
+      '每个分类都有图标（含 AI）',
+      categoryIcons.length > 0 && categoryIcons.every(item => item.hasIcon),
+      `${categoryIcons.length} 个分类，缺图标的：${categoryIcons.filter(i => !i.hasIcon).map(i => i.name).join('、') || '无'}`
+    )
     await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-bar.png') })
 
     // 1.0 命中测试只应碰到压在条上的元素，页面其它 fixed 元素不动

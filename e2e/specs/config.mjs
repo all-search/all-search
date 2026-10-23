@@ -124,6 +124,21 @@ export async function run ({ headless, report }) {
       nav.items.length === 14 && nav.firstLabel === 'AI' && nav.firstCount === String(nav.rows),
       `${nav.items.length} 项：${nav.firstLabel}=${nav.firstCount}，面板 ${nav.rows} 行`
     )
+
+    // 分类图标 = 分类里第一个站点的图标；没有缓存时用首字母色块
+    const navIcons = await page.evaluate(() => {
+      const items = [...document.querySelectorAll('.site-nav .nav-item')]
+      return {
+        count: items.filter(el => el.querySelector('.nav-icon')).length,
+        first: items[0]?.querySelector('.nav-icon-letter')?.textContent?.trim() || '',
+        images: items.filter(el => el.querySelector('.nav-icon img')).length
+      }
+    })
+    report.check(
+      '分类导航带图标（AI 用首字母兜底）',
+      navIcons.count === 14 && navIcons.first === 'A',
+      `${navIcons.count}/14 个图标，图片 ${navIcons.images}，首个=${navIcons.first}`
+    )
     report.check('只渲染当前分类的站点', nav.rows > 0 && nav.rows < 15, `${nav.rows} 行`)
     report.check('初始为已保存态', nav.saveStatus === '所有修改已保存', nav.saveStatus)
 

@@ -94,9 +94,10 @@ pnpm build:options  # 产物 packages/options/dist
 
 | 位置 | 策略 |
 | --- | --- |
+| 分类导航 | 图标 = 分类里**第一个启用站点**的图标（用户上传 → 本地缓存 → 首字母色块）。新增分类（AI、`personal-*`）不用再手绘 SVG |
 | 配置页列表行 | **缓存优先，绝不主动联网**：`iconCache[host]` → 用户上传的 `item.icon` → 首字母色块（颜色由域名哈希决定）。没有图标不发任何请求 |
 | 配置页抓取 | 显式动作：行内 ⋯「抓取图标」、分类 ⋯「抓取本分类图标」。按 `faviconCandidates` 顺序试（yandex → faviconkit → 站点 `/favicon.ico`），成功才缓存 |
-| 运行时菜单条 | 保留回退链；只有带 CORS 头的候选（yandex）才加 `crossorigin`，否则连图都显示不出来；加载成功后压成 32×32 再进缓存 |
+| 运行时菜单条 | 分类图标用 `components/category-icon.vue`：第一个站点的 favicon（`favicon.vue` 的缓存与回退链），失败退回老的分类 SVG，再退回首字母。只有带 CORS 头的候选（yandex）才加 `crossorigin`，加载成功后压成 32×32 再进缓存 |
 
 几条硬约束：
 
@@ -122,7 +123,7 @@ packages/plugin/entries/options/main.js
 
 ## 测试
 
-`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 52 项断言：顶栏与正文对齐、分类导航计数与可点尺寸、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏、触屏横滑与长按拖拽、图标（零外链/抓取/缓存）。截图落在 `e2e/artifacts/config-*.png`。
+`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 53 项断言：顶栏与正文对齐、分类导航计数/图标/可点尺寸、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏、触屏横滑与长按拖拽、图标（零外链/抓取/缓存）。截图落在 `e2e/artifacts/config-*.png`。
 
 ## 已知限制 / 待办
 
