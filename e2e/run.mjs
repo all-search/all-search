@@ -115,6 +115,9 @@ for (const spec of selected) {
   results.push(...report.results)
 }
 
+// 跑完就把这轮的 profile 收掉：留着每个都是几十 MB，而且下次也未必能复用
+cleanProfiles()
+
 const passed = results.filter(r => r.passed).length
 const failed = results.length - passed
 console.log(`\n──────── 汇总 ────────`)
