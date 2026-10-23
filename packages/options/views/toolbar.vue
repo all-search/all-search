@@ -102,7 +102,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Hide, Plus, Rank, View } from '@element-plus/icons-vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { getStorage, setStorage } from '@src/util/storage'
-import { initToolbar } from '@src/util/sites'
+import { initToolbar } from '@src/util/toolbar'
 import saveBar from '../components/save-bar.vue'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
 

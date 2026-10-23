@@ -4,8 +4,5 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build"
-  },
-  "devDependencies": {
-    "vite-plugin-mkcert": "^1.17.9"
   }
 }
