@@ -1,5 +1,7 @@
 <template>
-  <div class="sites-page">
+  <div
+    class="sites-page"
+    :data-hydrated="hydrated ? '1' : '0'">
     <div class="sites-body">
     <!-- 分类导航 -->
     <nav
@@ -14,7 +16,9 @@
         :fallback-tolerance="4"
         :delay="DRAG_DELAY"
         :delay-on-touch-only="true"
-        :touch-start-threshold="TOUCH_THRESHOLD">
+        :touch-start-threshold="TOUCH_THRESHOLD"
+        @start="dragging = true"
+        @end="dragging = false">
         <button
           v-for="cate in localSites"
           :key="cate.name"
@@ -96,6 +100,16 @@
                 隐藏全部站点
               </el-dropdown-item>
               <el-dropdown-item
+                command="fetch-icons"
+                :disabled="!currentCate.list.length || fetching">
+                抓取本分类图标
+              </el-dropdown-item>
+              <el-dropdown-item
+                command="clear-icons"
+                :disabled="!currentCate.list.length">
+                清除本分类图标缓存
+              </el-dropdown-item>
+              <el-dropdown-item
                 command="remove"
                 divided>
                 删除分类
@@ -142,7 +156,9 @@
         :force-fallback="true"
         :delay="DRAG_DELAY"
         :delay-on-touch-only="true"
-        :touch-start-threshold="TOUCH_THRESHOLD">
+        :touch-start-threshold="TOUCH_THRESHOLD"
+        @start="dragging = true"
+        @end="dragging = false">
         <site-engine-row
           v-for="item in displayedList"
           :key="item.__uid"
@@ -267,6 +283,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { delStorage, getStorage, setStorage } from '@src/util/storage'
 import useSites, { reloadSites } from '@src/components/useSites'
 import parseUrl from '@src/util/parseUrl'
+import { fetchIconDataUrl, normalizeUploadedIcon, trimIconCache } from '@src/util/favicon'
 import siteEngineRow from '../components/site-engine-row.vue'
 import saveBar from '../components/save-bar.vue'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
@@ -307,13 +324,17 @@ export default {
     const dialogVisible = ref(false)
     const currentItem = ref(null)
     const elUpload = ref(null)
+    /** 正在抓图标，避免重复点触发并发请求 */
+    const fetching = ref(false)
+    /** 拖拽过程中不接收迟到的存储数据，否则 v-for 重渲染会把拖拽打断 */
+    const dragging = ref(false)
     const iconCache = ref({})
     const savedSnapshot = ref('')
     const savedIconSnapshot = ref('{}')
     /** 行内编辑中的草稿是否和原值不同（草稿在子组件里，只有它知道） */
     const editingDirty = ref(false)
     /** 存储里读回来的数据是否已铺到界面；没铺之前不覆盖用户正在编辑的内容 */
-    let hydrated = false
+    const hydrated = ref(false)
     let editBackup = null
     let newUid = null
 
@@ -394,16 +415,16 @@ export default {
       editingDirty.value = false
       editBackup = null
       newUid = null
-      hydrated = true
+      hydrated.value = true
       if (!next.some(item => item.name === tabName.value)) {
         tabName.value = next[0]?.name || ''
       }
     }
 
     watch(sites, (value) => {
-      // 存储在线下页面要等 WebBridge 超时才回来；这期间用户可能已经开始改了，
-      // 不能用「刚读到的默认值」把他改的东西冲掉
-      if (hydrated && dirty.value) return
+      // 存储在线下页面要等 WebBridge 超时才回来；这期间用户可能已经在拖拽或编辑了，
+      // 不能用「刚读到的默认值」把他正在做的事冲掉
+      if (hydrated.value && (dirty.value || dragging.value)) return
       init(value)
     }, { immediate: true })
 
@@ -456,6 +477,8 @@ export default {
         currentCate.value.list.forEach((item) => { item.data.visible = visible })
         return
       }
+      if (command === 'fetch-icons') return fetchCategoryIcons()
+      if (command === 'clear-icons') return clearCategoryIcons()
       if (command === 'remove') removeCategory()
     }
 
@@ -538,6 +561,7 @@ export default {
     function handleRowCommand (item, command) {
       if (command === 'edit') return startEdit(item)
       if (command === 'icon') return addIcon(item)
+      if (command === 'fetch-icon') return fetchIconFor(item)
       if (command === 'visible') {
         item.data.visible = !item.data.visible
         return
@@ -549,7 +573,8 @@ export default {
           ElMessage.success('已加入常用')
         }
         return
-      }      if (command === 'up' || command === 'down') {
+      }
+      if (command === 'up' || command === 'down') {
         const list = currentCate.value.list
         const current = list.indexOf(item)
         const target = current + (command === 'up' ? -1 : 1)
@@ -567,6 +592,72 @@ export default {
     }
 
     /* ---------- 图标 ---------- */
+
+    /**
+     * 显式抓取一张图标（联网，按需触发）。
+     * 配置页默认是「缓存优先 + 首字母兜底」，不主动请求任何外部服务；
+     * 抓到的统一压成 32×32 PNG 再进 iconCache，一行 1–2KB。
+     */
+    async function fetchIconFor (item) {
+      const { hostname } = parseUrl(item.url || '')
+      if (!hostname) return ElMessage.warning('这一行没有有效的网址')
+      if (iconCache.value[hostname]) return ElMessage.info('已经有缓存的图标了')
+      fetching.value = true
+      try {
+        const dataUrl = await fetchIconDataUrl(item.url, item.icon)
+        if (!dataUrl) {
+          return ElMessage.warning('没抓到可缓存的图标，可以手动上传一个')
+        }
+        iconCache.value[hostname] = dataUrl
+        ElMessage.success('已抓取，记得保存')
+      } finally {
+        fetching.value = false
+      }
+    }
+
+    /** 批量抓取当前分类里还没有图标的站点；跳过着已经有的，静默忽略失败 */
+    async function fetchCategoryIcons () {
+      const list = currentCate.value?.list || []
+      const targets = list.filter((item) => {
+        const { hostname } = parseUrl(item.url || '')
+        return !!hostname && !iconCache.value[hostname] && !item.icon
+      })
+      if (!targets.length) return ElMessage.info('本分类的图标都已经有了')
+      fetching.value = true
+      ElMessage.info(`正在抓取 ${targets.length} 个图标，稍等…`)
+      let ok = 0
+      try {
+        for (const item of targets) {
+          const { hostname } = parseUrl(item.url || '')
+          const dataUrl = await fetchIconDataUrl(item.url, item.icon)
+          if (dataUrl) {
+            iconCache.value[hostname] = dataUrl
+            ok += 1
+          }
+        }
+      } finally {
+        fetching.value = false
+      }
+      ElMessage({
+        type: ok ? 'success' : 'warning',
+        message: ok ? `抓到 ${ok}/${targets.length} 个图标，记得保存` : '一个也没抓到，可以手动上传'
+      })
+    }
+
+    /** 清掉当前分类的图标缓存（用户上传的 item.icon 不动） */
+    function clearCategoryIcons () {
+      const list = currentCate.value?.list || []
+      let removed = 0
+      list.forEach((item) => {
+        const { hostname } = parseUrl(item.url || '')
+        if (hostname && iconCache.value[hostname]) {
+          delete iconCache.value[hostname]
+          removed += 1
+        }
+      })
+      if (removed) ElMessage.success(`已清除 ${removed} 个图标缓存`)
+      else ElMessage.info('本分类没有缓存过图标')
+    }
 
     function addIcon (item, draft) {
       const url = draft?.url || item.url || ''
@@ -589,8 +680,13 @@ export default {
       if (!/^image\//.test(file.raw.type)) {
         return ElMessage.error(`上传的文件类型为 ${file.raw.type}，请上传图片`)
       }
-      getBase64(file.raw).then((res) => {
-        currentItem.value.icon = res
+      getBase64(file.raw).then(async (res) => {
+        // 统一压成 32×32 PNG，顺手拦掉超大的图（存储是 localStorage / chrome.storage）
+        const normalized = await normalizeUploadedIcon(res)
+        if (!normalized) {
+          return ElMessage.error('图片过大或无法识别，请换一张小图（32×32 左右最佳）')
+        }
+        currentItem.value.icon = normalized
       }).catch(() => ElMessage.error('上传失败'))
     }
 
@@ -625,7 +721,7 @@ export default {
       } catch {
         latestIcons = {}
       }
-      const mergedIcons = { ...latestIcons, ...iconCache.value }
+      const mergedIcons = trimIconCache({ ...latestIcons, ...iconCache.value })
 
       await setStorage('sites', formatSites())
       await setStorage('iconCache', mergedIcons)
@@ -663,7 +759,7 @@ export default {
         await delStorage('iconCache')
         iconCache.value = {}
         savedIconSnapshot.value = '{}'
-        hydrated = false
+        hydrated.value = false
         await reloadSites()
         ElMessage.success('已恢复默认数据')
       }).catch(() => {})
@@ -692,6 +788,9 @@ export default {
       currentItem,
       elUpload,
       iconCache,
+      fetching,
+      dragging,
+      hydrated,
       addCategory,
       startRename,
       handleCateCommand,

@@ -15,12 +15,14 @@ getStorage('iconCache').then(iconData => {
 })
 
 const setStorageDebounce = debounce(() => {
+  iconCache.value = trimIconCache(iconCache.value)
   setStorage('iconCache', iconCache.value)
 }, 1000)
 </script>
 
 <script setup lang="ts">
 import parseUrl from '../util/parseUrl'
+import { faviconCandidates, isCorsFriendly, toIconDataUrl, trimIconCache } from '../util/favicon'
 import useFavicon from './useFavicon'
 
 const props = defineProps<{
@@ -30,62 +32,41 @@ const props = defineProps<{
 
 const isError = ref(false)
 
-const { hostname, origin } = parseUrl(props.url || '')
-const img = computed(() => {
-  if (!isLoaded.value) {
-    return ''
-  }
-  if (iconCache.value[hostname]) {
-    return iconCache.value[hostname]
-  } else if (!isError.value) {
-    return faviconApi.value
-  } else {
-    return `${origin}/favicon.ico`
-  }
-})
-
+const { hostname } = parseUrl(props.url || '')
 const index = ref(0)
 
-const faviconApis = computed(() => [
-  props.icon,
-  `https://favicon.yandex.net/favicon/v2/${encodeURI(hostname)}?size=32`,
-  `https://invisible-scarlet-centipede.faviconkit.com/${encodeURI(hostname)}`,
-  `${origin}/favicon.ico`
-].filter((j): j is string => !!j))
+const faviconApis = computed(() => faviconCandidates(props.url, props.icon))
+const faviconApi = computed(() => faviconApis.value[index.value] || '')
+/** 只有带 CORS 头的服务才加 crossorigin，否则连图都显示不出来 */
+const corsAllowed = computed(() => isCorsFriendly(faviconApi.value))
 
-const faviconApi = computed(() => faviconApis.value[index.value])
+const img = computed(() => {
+  if (!isLoaded.value || isError.value) return ''
+  return iconCache.value[hostname] || faviconApi.value
+})
 
 const { favicon } = useFavicon()
 
-function getBase64Image (image: HTMLImageElement) {
-  const canvas = document.createElement('canvas')
-  canvas.width = image.width
-  canvas.height = image.height
-  const context = canvas.getContext('2d')
-  if (!context) return ''
-  context.drawImage(image, 0, 0, image.width, image.height)
-  // 得到图片的base64编码数据
-  return canvas.toDataURL('image/png', 1)
-}
-
 function handleLoad (e: Event) {
-  if (!isError.value && !img.value.startsWith('data:image')) {
-    const base64 = getBase64Image(e.target as HTMLImageElement)
-    if (base64) {
-      iconCache.value[hostname] = base64
-      setStorageDebounce()
-    }
+  if (isError.value || !faviconApi.value || faviconApi.value.startsWith('data:image')) return
+  if (!corsAllowed.value) return
+  // 跨域图（站点自己的 /favicon.ico 等）没有 CORS 头，canvas 会被污染，
+  // toIconDataUrl 内部已经 try/catch，返回空串就表示「只能看、不缓存」
+  const base64 = toIconDataUrl(e.target as HTMLImageElement)
+  if (base64) {
+    iconCache.value[hostname] = base64
+    setStorageDebounce()
   }
 }
 
 function handleError (e: Event) {
   const target = e.currentTarget as HTMLImageElement
-  if (target.src === faviconApi.value) {
-    if (index.value === faviconApis.value.length - 1) {
-      isError.value = true
-    }
-    index.value++
+  if (target.src !== faviconApi.value) return
+  if (index.value >= faviconApis.value.length - 1) {
+    isError.value = true
+    return
   }
+  index.value += 1
 }
 </script>
 
@@ -94,10 +75,11 @@ function handleError (e: Event) {
     v-if="favicon === 1"
     class="as-img-icon">
     <img
-      v-if="isLoaded"
+      v-if="isLoaded && img"
+      :key="index"
       :class="{error: isError}"
       :src="img"
-      crossOrigin=""
+      :crossorigin="corsAllowed ? 'anonymous' : undefined"
       @error="handleError"
       @load="handleLoad">
   </div>

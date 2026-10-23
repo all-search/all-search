@@ -17,11 +17,13 @@
         :src="iconSrc"
         alt=""
         loading="lazy"
+        decoding="async"
         @error="handleIconError">
       <span
         v-else
-        class="engine-icon engine-icon--empty"
-        aria-hidden="true">{{ (item.nameZh || '?').slice(0, 1) }}</span>
+        class="engine-icon engine-icon--letter"
+        :style="letterStyle"
+        aria-hidden="true">{{ letter }}</span>
 
       <button
         type="button"
@@ -52,6 +54,9 @@
             </el-dropdown-item>
             <el-dropdown-item command="icon">
               更换图标
+            </el-dropdown-item>
+            <el-dropdown-item command="fetch-icon">
+              抓取图标
             </el-dropdown-item>
             <el-dropdown-item
               v-if="canAddPersonal"
@@ -117,6 +122,7 @@
 import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { MoreFilled, Picture, Rank } from '@element-plus/icons-vue'
 import parseUrl from '@src/util/parseUrl'
+import { iconLetter, iconPalette } from '@src/util/favicon'
 
 const props = defineProps<{
   item: any
@@ -169,25 +175,31 @@ function confirm () {
 
 const parsed = computed(() => parseUrl(props.item.url || ''))
 const hostname = computed(() => parsed.value.hostname)
-const origin = computed(() => parsed.value.origin)
 const failed = ref(false)
 
-/** 优先用上传过的图标，其次用接口，最后回落到站点自己的 favicon.ico */
+const letter = computed(() => iconLetter(props.item.nameZh || hostname.value))
+const letterStyle = computed(() => {
+  const palette = iconPalette(hostname.value || props.item.nameZh || '?')
+  return { background: palette.bg, color: palette.fg }
+})
+
+/**
+ * 只认「用户上传的图标」和「已经缓存到本地的图标」。
+ * 配置页默认不请求任何外部服务：本地没有就显示首字母色块，要真实图标用 ⋯ 菜单里的「抓取图标」。
+ */
 const iconSrc = computed(() => {
-  const host = hostname.value
-  const cached = props.iconCache?.[host]
+  if (failed.value) return ''
+  const cached = props.iconCache?.[hostname.value]
   if (cached) return cached
-  if (props.item.icon) return props.item.icon
-  if (failed.value) return host ? `${origin.value}/favicon.ico` : ''
-  return host ? `https://favicon.yandex.net/favicon/v2/${encodeURIComponent(host)}?size=32` : ''
+  return props.item.icon || ''
 })
 
 function handleIconError () {
   failed.value = true
 }
 
-/** 换了域名就重新尝试一次图标接口 */
-watch(hostname, () => {
+/** 换了图标或域名就重新尝试一次 */
+watch([() => props.item.icon, hostname], () => {
   failed.value = false
 })
 
@@ -197,6 +209,7 @@ function handleCommand (command: string) {
   else if (command === 'remove') emit('command', 'remove')
   else if (command === 'visible') emit('command', 'visible')
   else if (command === 'personal') emit('command', 'personal')
+  else if (command === 'fetch-icon') emit('command', 'fetch-icon')
   else if (command === 'icon') emit('icon', { nameZh: props.item.nameZh, url: props.item.url })
   else emit('edit')
 }
@@ -255,12 +268,15 @@ function handleCommand (command: string) {
   background: var(--el-fill-color-light);
 }
 
-.engine-icon--empty {
+/* 没有图标时的首字母色块：不发任何请求，颜色由域名哈希决定 */
+.engine-icon--letter {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  color: var(--el-text-color-secondary);
+  font-weight: 600;
+  line-height: 1;
+  user-select: none;
 }
 
 .engine-main {
