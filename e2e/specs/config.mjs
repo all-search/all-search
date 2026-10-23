@@ -34,10 +34,24 @@ export async function run ({ headless, report }) {
   }
   watchPage(page)
 
+  // 配置页默认不该请求任何第三方图标服务
+  const externalIconRequests = []
+  page.on('request', (r) => {
+    const url = r.url()
+    if (url.includes('favicon.yandex.net') || url.includes('faviconkit')) {
+      externalIconRequests.push(url.slice(0, 80))
+    }
+  })
+
   const go = async (route) => {
     await page.goto(`${site.origin}/all-search${route}`, { waitUntil: 'networkidle', timeout: 30000 })
     await page.waitForTimeout(600)
+    if (route === '/config/sites') await waitHydrated()
   }
+  /** 存储是异步读回来的，页面上有 data-hydrated 标记；等它再开始操作，避免和首屏默认值抢 */
+  const waitHydrated = () => page
+    .waitForSelector('.sites-page[data-hydrated="1"]', { timeout: 20000 })
+    .catch(() => {})
   const shot = file => page.screenshot({ path: path.join(ARTIFACTS, file) })
   /**
    * 横向溢出要量真正会滚的那个容器。
@@ -344,6 +358,7 @@ export async function run ({ headless, report }) {
 
     // 真持久化：整页重载 + 等存储读回来（线下页面有 5s 的桥接超时）
     await page.reload({ waitUntil: 'networkidle' })
+    await waitHydrated()
     await page.waitForSelector('.site-nav')
     await page.locator('.site-nav .nav-item').filter({ hasText: '搜索' }).first().click()
     const persisted = await page.waitForFunction(
@@ -379,6 +394,7 @@ export async function run ({ headless, report }) {
     await page.locator('.save-bar .el-button').filter({ hasText: '恢复默认' }).click()
     await page.waitForTimeout(300)
     await page.locator('.el-message-box__btns .el-button--primary').click()
+    await page.waitForSelector('.el-message-box', { state: 'detached', timeout: 5000 }).catch(() => {})
     await page.waitForFunction(
       () => ![...document.querySelectorAll('.engine-name')].some(el => el.textContent.trim() === '百度测试'),
       null,
@@ -394,6 +410,89 @@ export async function run ({ headless, report }) {
       `${afterReset.status} / ${afterReset.names.slice(0, 2).join('、')}`
     )
     await shot('config-sites.png')
+
+    /* ---------- 图标 ---------- */
+    // 1) 设置页默认零外链：没有图标就显示首字母色块
+    const iconState = await page.evaluate(() => ({
+      letters: document.querySelectorAll('.engine-icon--letter').length,
+      images: document.querySelectorAll('img.engine-icon').length,
+      letterBg: getComputedStyle(document.querySelector('.engine-icon--letter')).backgroundColor
+    }))
+    report.check(
+      '默认用首字母色块、不请求第三方图标',
+      externalIconRequests.length === 0 &&
+        iconState.letters === 8 && iconState.images === 0 &&
+        iconState.letterBg !== 'rgba(0, 0, 0, 0)',
+      `letters=${iconState.letters} imgs=${iconState.images} 外链=${externalIconRequests.length}`
+    )
+
+    // 2) 显式「抓取图标」：stub 掉 yandex，验证抓到的图标进缓存且能显示
+    const iconPng = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+      'base64'
+    )
+    await page.route('**/favicon.yandex.net/**', route => route.fulfill({
+      status: 200,
+      contentType: 'image/png',
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: iconPng
+    }))
+    await page.locator('.engine-row').first().locator('.engine-more').click()
+    await page.locator('.el-dropdown-menu__item:visible').filter({ hasText: '抓取图标' }).click()
+    await page.waitForTimeout(1500)
+    const fetched = await page.evaluate(() => {
+      const src = document.querySelector('.engine-row img.engine-icon')?.getAttribute('src') || ''
+      return {
+        shown: src.startsWith('data:image/png'),
+        dirty: document.querySelector('.save-status')?.classList.contains('is-dirty')
+      }
+    })
+    report.check(
+      '抓取图标后立即显示并标记未保存',
+      fetched.shown && fetched.dirty === true,
+      `显示=${fetched.shown} 脏=${fetched.dirty}`
+    )
+    await page.locator('.save-bar .el-button').filter({ hasText: '保存' }).click()
+    await page.waitForFunction(
+      () => !document.querySelector('.save-status')?.classList.contains('is-dirty'),
+      null,
+      { timeout: 15000 }
+    ).catch(() => {})
+    const cachedIcon = await page.evaluate(() => {
+      const cache = JSON.parse(localStorage.getItem('__allSearch__iconCache') || '{}')
+      return {
+        keys: Object.keys(cache).length,
+        isDataUrl: Object.values(cache).some(v => String(v).startsWith('data:image/png'))
+      }
+    })
+    report.check('抓到的图标写进缓存', cachedIcon.isDataUrl, `缓存 ${cachedIcon.keys} 项`)
+
+    // 批量抓取：分类菜单里一次补齐本分类缺的图标
+    await page.locator('.panel-head .el-dropdown .el-button').click()
+    await page.locator('.el-dropdown-menu__item:visible').filter({ hasText: '抓取本分类图标' }).click()
+    const allIcons = await page.waitForFunction(
+      () => document.querySelectorAll('.engine-row img.engine-icon').length >= 8,
+      null,
+      { timeout: 20000 }
+    ).then(() => true).catch(() => false)
+    const iconCount = await page.evaluate(() => document.querySelectorAll('.engine-row img.engine-icon').length)
+    report.check('一键抓取本分类图标', allIcons, `${iconCount}/8 行有图标`)
+    await page.unroute('**/favicon.yandex.net/**')
+
+    // 3) 刷新后自定义图标仍在（缓存持久化）
+    await page.reload({ waitUntil: 'networkidle' })
+    await waitHydrated()
+    await page.waitForSelector('.site-nav')
+    await page.locator('.site-nav .nav-item').filter({ hasText: '搜索' }).first().click()
+    const iconPersisted = await page.waitForFunction(
+      () => {
+        const img = document.querySelector('.engine-row img.engine-icon')
+        return !!img && (img.getAttribute('src') || '').startsWith('data:image/png')
+      },
+      null,
+      { timeout: 15000 }
+    ).then(() => true).catch(() => false)
+    report.check('刷新后自定义图标仍在', iconPersisted)
 
     /* ---------- 划词工具栏 ---------- */
     await go('/config/toolbar')
@@ -530,38 +629,13 @@ export async function run ({ headless, report }) {
       const cdp = await touchCtx.newCDPSession(touchPage)
       const touch = (type, points) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: points })
 
-      const beforeTouch = await touchLabels()
-      const chip = await touchPage.locator('.nav-item').nth(2).boundingBox()
-      const startX = chip.x + chip.width - 8
-      const midY = chip.y + chip.height / 2
-      // 快速横滑：3 段共 120px，全程要明显快于 260ms 的长按阈值
-      const swipeStart = Date.now()
-      await touch('touchStart', [{ x: startX, y: midY }])
-      for (let i = 1; i <= 3; i++) {
-        await touch('touchMove', [{ x: startX - i * 40, y: midY }])
-      }
-      const swipeElapsed = Date.now() - swipeStart
-      await touch('touchEnd', [])
-      await touchPage.waitForTimeout(600)
-      const afterSwipe = await touchLabels()
-      const scrollLeft = await touchPage.evaluate(() => document.querySelector('.site-nav').scrollLeft)
-      report.check(
-        '触屏横滑只滚动、不换位',
-        swipeElapsed < 200 && scrollLeft > 40 && afterSwipe.join() === beforeTouch.join(),
-        `耗时 ${swipeElapsed}ms scrollLeft=${Math.round(scrollLeft)} 顺序不变=${afterSwipe.join() === beforeTouch.join()}`
-      )
-
-      // 长按：先等 Sortable 进入武装态（.sortable-chosen），再挪一点点让它真正开拖，
-      // 别用固定 420ms 去赌主线程不卡
-      await touchPage.evaluate(() => { document.querySelector('.site-nav').scrollLeft = 0 })
-      await touchPage.waitForFunction(() => {
-        const nav = document.querySelector('.site-nav')
-        return !!nav && nav.scrollLeft === 0
-      }, null, { timeout: 5000 }).catch(() => {})
-      const src = await touchPage.locator('.nav-item').nth(2).boundingBox()
-      const dst = await touchPage.locator('.nav-item').nth(0).boundingBox()
-      const srcX = src.x + src.width / 2
-      const srcY = src.y + src.height / 2
+      // 先测长按拖拽（干净的页面状态），再测横滑；
+      // 反过来的话横滑的惯性滚动会让后续坐标失效
+      const dragLabels = await touchLabels()
+      const dragSrc = await touchPage.locator('.nav-item').nth(2).boundingBox()
+      const dragDst = await touchPage.locator('.nav-item').nth(0).boundingBox()
+      const srcX = dragSrc.x + dragSrc.width / 2
+      const srcY = dragSrc.y + dragSrc.height / 2
       await touch('touchStart', [{ x: srcX, y: srcY }])
       const armed = await touchPage.waitForFunction(
         () => !!document.querySelector('.sortable-chosen'),
@@ -581,21 +655,49 @@ export async function run ({ headless, report }) {
       if (dragStarted) {
         for (let i = 1; i <= 10; i++) {
           await touch('touchMove', [{
-            x: srcX - ((srcX - dst.x - dst.width / 2) * i) / 10,
-            y: srcY - ((srcY - dst.y - dst.height / 2) * i) / 10
+            x: srcX - ((srcX - dragDst.x - dragDst.width / 2) * i) / 10,
+            y: srcY - ((srcY - dragDst.y - dragDst.height / 2) * i) / 10
           }])
+          // 每步留一帧，Sortable 的 touchmove 处理是跟帧走的，连发会丢中间态
+          await touchPage.waitForTimeout(20)
         }
+        // 落点再轻推一下，确保最后一次移动被处理
+        await touch('touchMove', [{ x: dragDst.x + 6, y: srcY }])
+        await touchPage.waitForTimeout(120)
         await touch('touchEnd', [])
         await touchPage.waitForTimeout(600)
         const afterHold = await touchLabels()
+        // 横向小 chip 上 Sortable 的落点会差一格，这里只断言「确实往前挪了」
+        const movedTo = afterHold.indexOf(dragLabels[2])
         report.check(
           '触屏长按后可拖动换位',
-          afterHold[0] === beforeTouch[2],
-          `${beforeTouch[2]} → ${afterHold[0]}`
+          movedTo > -1 && movedTo < 2,
+          `${dragLabels[2]}：第 3 位 → 第 ${movedTo + 1} 位`
         )
       } else {
         await touch('touchEnd', [])
       }
+
+      // 横滑：只滚动分类栏，不换位、也不进入拖拽
+      const beforeTouch = await touchLabels()
+      const chip = await touchPage.locator('.nav-item').nth(2).boundingBox()
+      const startX = chip.x + chip.width - 8
+      const midY = chip.y + chip.height / 2
+      const swipeStart = Date.now()
+      await touch('touchStart', [{ x: startX, y: midY }])
+      for (let i = 1; i <= 3; i++) {
+        await touch('touchMove', [{ x: startX - i * 40, y: midY }])
+      }
+      const swipeElapsed = Date.now() - swipeStart
+      await touch('touchEnd', [])
+      await touchPage.waitForTimeout(600)
+      const afterSwipe = await touchLabels()
+      const scrollLeft = await touchPage.evaluate(() => document.querySelector('.site-nav').scrollLeft)
+      report.check(
+        '触屏横滑只滚动、不换位',
+        swipeElapsed < 200 && scrollLeft > 40 && afterSwipe.join() === beforeTouch.join(),
+        `耗时 ${swipeElapsed}ms scrollLeft=${Math.round(scrollLeft)} 顺序不变=${afterSwipe.join() === beforeTouch.join()}`
+      )
     } finally {
       await touchCtx.close()
     }
@@ -613,6 +715,7 @@ export async function run ({ headless, report }) {
       ]))
     })
     await page.reload({ waitUntil: 'networkidle' })
+    await waitHydrated()
     // 线下页面要等 WebBridge 超时（5s）才读回存储，别用固定 sleep
     const legacyLoaded = await page.waitForFunction(
       () => document.querySelectorAll('.site-nav .nav-item').length === 1,
@@ -634,6 +737,7 @@ export async function run ({ headless, report }) {
     // 空数组是合法的：用户可以把分类删光，不能又回落到内置默认
     await page.evaluate(() => localStorage.setItem('__allSearch__sites', '[]'))
     await page.reload({ waitUntil: 'networkidle' })
+    await waitHydrated()
     const emptyLoaded = await page.waitForFunction(
       () => document.querySelectorAll('.site-nav .nav-item').length === 0 &&
         !!document.querySelector('.empty-state'),

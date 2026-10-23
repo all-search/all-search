@@ -88,6 +88,23 @@ pnpm build:options  # 产物 packages/options/dist
 
 > 历史遗留：`main.js` / `route/index.js` / `vite.config.mjs` 三份 TS 迁移后的重复文件已删除。`vite.config.mjs` 曾在 Vite 的解析顺序里抢先于 `.ts`，导致 `build:options` 直接失败。未被任何路由引用的 `views/index.vue`（旧的搜索框 demo，还用了不存在的 `this.$fetch`）也已删除。
 
+## 图标
+
+统一逻辑在 `src/util/favicon.ts`，运行时的 `favicon.vue` 与配置页共用。
+
+| 位置 | 策略 |
+| --- | --- |
+| 配置页列表行 | **缓存优先，绝不主动联网**：`iconCache[host]` → 用户上传的 `item.icon` → 首字母色块（颜色由域名哈希决定）。没有图标不发任何请求 |
+| 配置页抓取 | 显式动作：行内 ⋯「抓取图标」、分类 ⋯「抓取本分类图标」。按 `faviconCandidates` 顺序试（yandex → faviconkit → 站点 `/favicon.ico`），成功才缓存 |
+| 运行时菜单条 | 保留回退链；只有带 CORS 头的候选（yandex）才加 `crossorigin`，否则连图都显示不出来；加载成功后压成 32×32 再进缓存 |
+
+几条硬约束：
+
+- **只有带 `Access-Control-Allow-Origin` 的图能缓存**：canvas 被跨域图片污染时 `toDataURL` 抛 SecurityError，`toIconDataUrl` 内部已 try/catch，返回空串表示「只能看、不缓存」。
+- 上传和抓取都统一压到 **32×32 PNG**（约 1–2KB），上传超过 20KB 直接拒收。
+- `iconCache` 上限 300 条（`trimIconCache`），超出丢最早的；保存时按「读-改-写」合并，避免覆盖内容脚本期间新缓存的图标。
+- 改这块之后跑 `pnpm e2e --only=config`：里面有「默认不请求第三方图标」「抓取后显示并变脏」「写进缓存」「一键抓取本分类」「刷新后仍在」五条断言。
+
 ## 与插件的复用关系
 
 ```
@@ -105,7 +122,7 @@ packages/plugin/entries/options/main.js
 
 ## 测试
 
-`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 47 项断言：顶栏与正文对齐、分类导航计数与可点尺寸、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏、触屏横滑与长按拖拽。截图落在 `e2e/artifacts/config-*.png`。
+`pnpm e2e --only=config`（或完整 `pnpm e2e`）起一个静态服务器托管 `dist`，用本机 Edge 跑 52 项断言：顶栏与正文对齐、分类导航计数与可点尺寸、**拖拽分类换位与撤销**、只渲染当前分类、搜索过滤、行内编辑与取消还原、脏状态、保存、撤销、恢复默认、划词工具栏、交互页、JSON 编辑器、深色模式、窄屏、触屏横滑与长按拖拽、图标（零外链/抓取/缓存）。截图落在 `e2e/artifacts/config-*.png`。
 
 ## 已知限制 / 待办
 
