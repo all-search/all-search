@@ -228,51 +228,10 @@
       @revert="revert"
       @reset="reset" />
 
-    <el-dialog
+    <site-icon-dialog
       v-model="dialogVisible"
-      title="编辑图标"
-      width="420px">
-      <el-upload
-        ref="elUpload"
-        class="icon-uploader"
-        action="#"
-        :limit="1"
-        :auto-upload="false"
-        :show-file-list="false"
-        accept="image/*"
-        :on-change="handleIconChange">
-        <el-button type="primary">
-          上传
-        </el-button>
-        <template #tip>
-          <div class="el-upload__tip">
-            请尽量上传小于 20kb 的图片，以避免性能问题
-          </div>
-        </template>
-      </el-upload>
-      <template v-if="currentItem && currentItem.icon">
-        <div class="icon-upload-preview">
-          <img
-            :src="currentItem.icon"
-            alt="">
-        </div>
-        <el-button
-          type="danger"
-          @click="handleIconRemove">
-          删除
-        </el-button>
-      </template>
-      <template #footer>
-        <el-button
-          type="primary"
-          @click="iconConfirm">
-          确定
-        </el-button>
-        <el-button @click="iconCancel">
-          取消
-        </el-button>
-      </template>
-    </el-dialog>
+      :site="currentItem"
+      @confirm="handleIconConfirm" />
   </div>
 </template>
 
@@ -284,9 +243,10 @@ import { EditPen, MoreFilled, Plus, Search } from '@element-plus/icons-vue'
 import { delStorage, getStorage, setStorage } from '@src/util/storage'
 import useSites, { reloadSites } from '@src/components/useSites'
 import parseUrl from '@src/util/parseUrl'
-import { fetchIconDataUrl, normalizeUploadedIcon, trimIconCache } from '@src/util/favicon'
+import { fetchIconDataUrl, trimIconCache } from '@src/util/favicon'
 import siteEngineRow from '../components/site-engine-row.vue'
 import saveBar from '../components/save-bar.vue'
+import siteIconDialog from '../components/site-icon-dialog.vue'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
 
 let uidSeed = 0
@@ -312,6 +272,7 @@ export default {
     draggable: VueDraggableNext,
     siteEngineRow,
     saveBar,
+    siteIconDialog,
     // Options API 的模板只能看到 components 里注册的东西，
     // 图标不再全局注册（Element Plus 走按需引入），这里要显式登记
     EditPen,
@@ -329,7 +290,6 @@ export default {
     const renameInput = ref(null)
     const dialogVisible = ref(false)
     const currentItem = ref(null)
-    const elUpload = ref(null)
     /** 正在抓图标，避免重复点触发并发请求 */
     const fetching = ref(false)
     /** 拖拽过程中不接收迟到的存储数据，否则 v-for 重渲染会把拖拽打断 */
@@ -673,47 +633,11 @@ export default {
       dialogVisible.value = true
     }
 
-    function getBase64 (file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onerror = reject
-        reader.onloadend = () => resolve(reader.result)
-      })
-    }
-
-    function handleIconChange (file) {
-      if (!/^image\//.test(file.raw.type)) {
-        return ElMessage.error(`上传的文件类型为 ${file.raw.type}，请上传图片`)
-      }
-      getBase64(file.raw).then(async (res) => {
-        // 统一压成 32×32 PNG，顺手拦掉超大的图（存储是 localStorage / chrome.storage）
-        const normalized = await normalizeUploadedIcon(res)
-        if (!normalized) {
-          return ElMessage.error('图片过大或无法识别，请换一张小图（32×32 左右最佳）')
-        }
-        currentItem.value.icon = normalized
-      }).catch(() => ElMessage.error('上传失败'))
-    }
-
-    function handleIconRemove () {
-      currentItem.value.icon = ''
-      elUpload.value?.clearFiles?.()
-    }
-
-    function iconConfirm () {
-      const { hostname } = parseUrl(currentItem.value.url || '')
-      if (hostname) iconCache.value[hostname] = currentItem.value.icon || ''
-      // 不清理的话 :limit="1" 会让第二次上传的 on-change 不再触发
-      elUpload.value?.clearFiles?.()
+    function handleIconConfirm ({ hostname, icon }) {
+      if (!hostname) return
+      // 确定时写缓存，「保存」再把它落盘；空字符串表示用户删掉了图标
+      iconCache.value[hostname] = icon
       currentItem.value = null
-      dialogVisible.value = false
-    }
-
-    function iconCancel () {
-      currentItem.value = null
-      elUpload.value?.clearFiles?.()
-      dialogVisible.value = false
     }
 
     /* ---------- 保存 / 撤销 / 恢复默认 ---------- */
@@ -792,7 +716,6 @@ export default {
       personalCategory,
       dialogVisible,
       currentItem,
-      elUpload,
       iconCache,
       fetching,
       dragging,
@@ -810,10 +733,7 @@ export default {
       handleRowCommand,
       isPersonal,
       addIcon,
-      handleIconChange,
-      handleIconRemove,
-      iconConfirm,
-      iconCancel,
+      handleIconConfirm,
       save,
       revert,
       reset,
@@ -1045,28 +965,7 @@ export default {
   }
 }
 
-/* ---------- 图标上传 ---------- */
-
-.icon-uploader {
-  margin-bottom: 12px;
-}
-
-.icon-upload-preview {
-  width: 96px;
-  height: 96px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  border: 1px dashed var(--el-border-color);
-  border-radius: 8px;
-  overflow: hidden;
-
-  img {
-    max-width: 100%;
-    max-height: 100%;
-  }
-}
+/* ---------- 图标上传样式已随 site-icon-dialog.vue 移走 ---------- */
 
 /* ---------- 响应式 ---------- */
 

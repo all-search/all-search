@@ -467,6 +467,45 @@ export async function run ({ headless, report }) {
     })
     report.check('抓到的图标写进缓存', cachedIcon.isDataUrl, `缓存 ${cachedIcon.keys} 项`)
 
+    // 3) 图标弹窗：上传 → 预览 → 确定，写到该域名上
+    //    用和上一步不同的小图，否则压完的 data URL 一模一样，脏状态看不出来
+    const uploadPng = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAFUlEQVR4nGNkSPv/nwEJMCFziBMAAJwfAmzIXF53AAAAAElFTkSuQmCC',
+      'base64'
+    )
+    await page.locator('.engine-row').first().locator('.engine-more').click()
+    await page.locator('.el-dropdown-menu__item:visible').filter({ hasText: '更换图标' }).click()
+    const dialogOpened = await page.locator('.el-dialog').first().isVisible()
+    await page.locator('.el-dialog input[type="file"]').setInputFiles({
+      name: 'icon.png',
+      mimeType: 'image/png',
+      buffer: uploadPng
+    })
+    const previewReady = await page.waitForFunction(
+      () => !!document.querySelector('.icon-upload-preview img'),
+      null,
+      { timeout: 5000 }
+    ).then(() => true).catch(() => false)
+    const previewSize = await page.evaluate(() => {
+      const img = document.querySelector('.icon-upload-preview img')
+      return img ? `${img.naturalWidth}×${img.naturalHeight}` : ''
+    })
+    await page.locator('.el-dialog__footer .el-button--primary').click()
+    await page.waitForTimeout(400)
+    const uploaded = await page.evaluate(() => {
+      const src = document.querySelector('.engine-row img.engine-icon')?.getAttribute('src') || ''
+      return {
+        closed: !document.querySelector('.el-dialog'),
+        shown: src.startsWith('data:image/png'),
+        dirty: document.querySelector('.save-status')?.classList.contains('is-dirty')
+      }
+    })
+    report.check(
+      '上传图标后压缩并立即生效',
+      dialogOpened && previewReady && previewSize === '32×32' && uploaded.shown && uploaded.dirty === true,
+      `弹窗=${dialogOpened} 预览=${previewSize} 行内=${uploaded.shown} 脏=${uploaded.dirty}`
+    )
+
     // 批量抓取：分类菜单里一次补齐本分类缺的图标
     await page.locator('.panel-head .el-dropdown .el-button').click()
     await page.locator('.el-dropdown-menu__item:visible').filter({ hasText: '抓取本分类图标' }).click()
