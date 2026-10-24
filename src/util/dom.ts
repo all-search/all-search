@@ -125,13 +125,21 @@ export function getAsShadowHead (): HTMLElement | null {
 export function getAsMountAnchor (): HTMLElement | null {
   const shadow = getAsShadowRoot()
   if (!shadow) return null
-  
+
   // 脚本版：使用我们手动创建的 id
   const anchor = shadow.getElementById('as-mount-anchor')
   if (anchor) return anchor
-  
-  // 插件版 (WXT) 或回退：使用 body 标签
-  return shadow.querySelector('body') as HTMLElement || shadow.firstElementChild as HTMLElement
+
+  // 插件版 (WXT)：影子根里的 body
+  const body = shadow.querySelector('body') as HTMLElement | null
+  if (body) return body
+
+  // 回退：第一个「能当容器」的元素。
+  // WXT 0.21 起影子根的第一个子节点是注入样式的 <style>，
+  // 直接拿 firstElementChild 会把浮层塞进 <style> 里（尺寸为 0、点不到）。
+  const notContainer = new Set(['STYLE', 'LINK', 'SCRIPT', 'META', 'TEMPLATE'])
+  const candidate = Array.from(shadow.children).find(el => !notContainer.has(el.tagName))
+  return (candidate as HTMLElement) || null
 }
 
 /**

@@ -186,7 +186,10 @@ export async function run ({ headless, report }) {
     const dragOptions = await page.evaluate(() => {
       const read = (selector) => {
         const el = document.querySelector(selector)
-        const sortable = el?.__draggable_component__?._sortable
+        // vue-draggable-next 2.3 把实例挂在 setup 返回的 sortableInstance（ref）上，
+        // 2.2 及以前是 _sortable，两种都认一下
+        const component = el?.__draggable_component__
+        const sortable = component?.sortableInstance?.value ?? component?.sortableInstance ?? component?._sortable
         return sortable
           ? {
               delay: sortable.options.delay,

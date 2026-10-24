@@ -67,7 +67,10 @@ function computeTopOffset(): number {
   if (!classList.contains('as-host-top') || !classList.contains('as-host-show') || classList.contains('as-host-hide')) {
     return 0
   }
-  const rect = host.getBoundingClientRect()
+  // 真正的条是影子根里的 .as-container（position: fixed）。宿主元素本身可能没有高度：
+  // WXT 0.21 起会在影子根里注入 `:host{all:initial !important}` 的重置，宿主高度会塌成 0。
+  const container = getAsShadowRoot()?.querySelector('.as-container') as HTMLElement | null
+  const rect = (container || host).getBoundingClientRect()
   return Number((rect.height || 0).toFixed(2))
 }
 
