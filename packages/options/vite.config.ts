@@ -25,7 +25,32 @@ export default defineConfig(({ mode }) => {
     build: {
       ...sharedConfig.build,
       emptyOutDir: mode === 'production',
-      minify: mode === 'production'
+      minify: mode === 'production',
+      rollupOptions: {
+        output: {
+          /**
+           * CJS 互操作 helper 是 Rollup 的虚拟模块（不在 node_modules 里），
+           * 它同时被 jsoneditor 和 dayjs 用到。不单独切出来的话，它会被分进
+           * jsoneditor 那个 chunk，entry 为了拿它把整个 1MB 编辑器一起预加载了。
+           *
+           * 只给配置页用：用户脚本是单文件产物，多切一个 chunk 只会多出个空文件。
+           */
+          manualChunks (id: string) {
+            if (id.includes('commonjsHelpers')) {
+              return 'cjs-helpers'
+            }
+            if (id.includes('node_modules')) {
+              if (id.includes('element-plus')) {
+                return 'element-plus'
+              }
+              if (id.includes('jsoneditor')) {
+                return 'jsoneditor'
+              }
+              return 'vendor'
+            }
+          }
+        }
+      }
     }
   }
 })

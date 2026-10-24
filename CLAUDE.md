@@ -2,6 +2,24 @@
 
 ## 变更记录 (Changelog)
 
+### 2026-10-24 - 依赖升级（Dependabot 清零）
+
+**升级**
+- 直接依赖：vue 3.5.13 → 3.5.44、element-plus 2.9 → 2.14、vite 7.3.0 → 7.3.7、vitest 4.0 → 4.1、wxt 0.20.27 → 0.21.4、jsdom 27 → 29（30 要 Node 22，本地是 20.19）、sass / postcss / autoprefixer / @vitejs/plugin-vue / @vue/test-utils 跟到最新补丁
+- 传递依赖用 `pnpm.overrides` 钉补丁版本（lodash / fast-uri / js-yaml / brace-expansion / minimatch / ajv / flatted / micromatch / picomatch / diff / yaml / postcss-selector-parser），都限制在原大版本内
+- `pnpm audit`：127 个漏洞（2 critical / 81 high）→ **0**
+
+**WXT 0.21 带来的两处运行时回归（已修）**
+- 影子根里新增 `:host{all:initial !important}` 重置，宿主高度塌成 0 → `addSpecialStyle` 的避让偏移算成 0，顶部 sticky 元素不再让位。改为量影子根里真正可见的 `.as-container`
+- 影子根第一个子节点变成注入样式的 `<style>`，`getAsMountAnchor()` 回退到 `firstElementChild` 时会把侧边栏/浮层 Teleport 进 `<style>`（尺寸 0、点不到）。改为跳过 style/link/script 等非容器节点
+
+**构建**
+- `build.target` es2015 → es2020（与 `.browserslistrc` 对齐），用户脚本 250KB → 238KB
+- `manualChunks` 从共享配置挪到配置页自己的 vite.config（用户脚本是单文件产物，多切一个 chunk 只会多出个空文件）
+
+**测试**
+- e2e 跟随 vue-draggable-next 2.3 调整：实例从 `_sortable` 改挂到 `sortableInstance`（ref），断言两种都兼容
+
 ### 2026-10-22 - 配置页改版（交互 + 视觉 + e2e）
 
 **页面骨架**
@@ -75,10 +93,10 @@
 ### 技术栈
 - **Vue 3.5** - 前端框架（Composition API + TypeScript）
 - **Vite 7** - 构建工具（`vite.config.shared.ts` 为共享配置）
-- **Element Plus 2.9** - 配置页 UI 组件库
+- **Element Plus 2.14** - 配置页 UI 组件库（按需引入）
 - **Vue Router 4** - 路由管理
 - **Sass** - CSS 预处理器
-- **WXT 0.20.27** - 浏览器扩展开发框架
+- **WXT 0.21** - 浏览器扩展开发框架
 - **Vitest + jsdom** - 单元测试
 - **Rollup (via Vite)** - 模块打包
 
@@ -242,7 +260,7 @@ pnpm run prepare
 ```
 
 **依赖要求**：
-- Node.js: >= 16
+- Node.js: >= 20.19（jsdom 29 / Vite 7 的要求）
 - pnpm: >= 8
 
 ### 开发模式

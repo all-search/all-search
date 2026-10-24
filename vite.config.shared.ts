@@ -38,28 +38,8 @@ export const sharedConfig: UserConfig = {
     }
   },
   build: {
-    target: 'es2015',
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          // CJS 互操作 helper 是 Rollup 的虚拟模块（不在 node_modules 里），
-          // 它同时被 jsoneditor 和 dayjs 用到。不单独切出来的话，它会被分进
-          // jsoneditor 那个 chunk，entry 为了拿它把整个 1MB 编辑器一起预加载了。
-          if (id.includes('commonjsHelpers')) {
-            return 'cjs-helpers';
-          }
-          if (id.includes('node_modules')) {
-            if (id.includes('element-plus')) {
-              return 'element-plus';
-            }
-            if (id.includes('jsoneditor')) {
-              return 'jsoneditor';
-            }
-            return 'vendor';
-          }
-        }
-      }
-    }
+    // 目标浏览器见 .browserslistrc；es2015 已不必要（会把 ?. 和 async 全部降级）
+    target: 'es2020'
   }
 }
 

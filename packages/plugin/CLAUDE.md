@@ -4,7 +4,7 @@
 
 ## 模块职责
 
-用 WXT 0.20 把 `src/` 共享代码打包成 Chrome / Edge / Firefox 扩展（MV3）。插件自带设置页，数据存 `chrome.storage.local`，不依赖油猴脚本。
+用 WXT 0.21 把 `src/` 共享代码打包成 Chrome / Edge / Firefox 扩展（MV3）。插件自带设置页，数据存 `chrome.storage.local`，不依赖油猴脚本。
 
 ## 入口
 
