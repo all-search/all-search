@@ -6,7 +6,7 @@
 
 A fixed menu that lets you jump between search engines. One codebase, two delivery forms:
 
-- **Browser extension** — Chrome / Edge / Firefox, built with [WXT](https://wxt.dev) (Manifest V3)
+- **Browser extension** — Chrome / Edge / Firefox, built with [WXT](https://wxt.dev) (Chrome/Edge are Manifest V3, the Firefox build is still MV2)
 - **Userscript** — Tampermonkey / ScriptCat, built with `vite-plugin-monkey`
 
 Both share the same Vue 3 UI, isolated from the host page with Shadow DOM.
@@ -45,7 +45,7 @@ Both share the same Vue 3 UI, isolated from the host page with Shadow DOM.
 - Auto-hide on scroll, collapsible bar, text-selection toolbar, global search dialog
 - AI search category (ChatGPT / Perplexity / 秘塔AI / Devv / Claude / DuckDuckGo AI), first in the bar
 - Dark mode: follow system, light or dark — applies to both the options page and the menu bar
-- Works on 200+ sites with per-site tweaks (`src/config/loadList.ts`)
+- Per-site tweaks for 65 matched site groups + 114 built-in engines (`src/config/loadList.ts`)
 - Fixed headers never sit under the menu bar: per-site offsets are generated at build time, with runtime hit-testing as a fallback for uncovered sites
 
 ## Development
@@ -54,7 +54,7 @@ Both share the same Vue 3 UI, isolated from the host page with Shadow DOM.
 pnpm install
 pnpm dev:plugin    # WXT dev server, opens a browser with the extension loaded
 pnpm dev:script    # userscript watch build (packages/script/dist)
-pnpm dev:options   # standalone config site (http://localhost:3000/all-search/)
+pnpm dev:options   # standalone config site (http://localhost:5173/all-search/)
 ```
 
 ## Build

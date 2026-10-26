@@ -37,7 +37,7 @@ UI 全部渲染在 Shadow DOM 内，宿主页面只保留一个 `<all-search-ui>
 
 | 任务 | 命令 | 备注 |
 | --- | --- | --- |
-| 装依赖 | `pnpm install` | Node ≥ 18，pnpm 10（锁文件 v9） |
+| 装依赖 | `pnpm install` | Node ≥ 22（wxt 0.21 的 engines），pnpm 10（锁文件 v9） |
 | 插件开发 | `pnpm dev:plugin` | WXT 自动开浏览器，热更新 |
 | 用户脚本开发 | `pnpm dev:script` | watch 构建 |
 | 配置站开发 | `pnpm dev:options` | — |
@@ -58,7 +58,7 @@ UI 全部渲染在 Shadow DOM 内，宿主页面只保留一个 `<all-search-ui>
 
 1. Firefox 从 MV2 切 MV3 的回归。
 2. 把 `pnpm e2e` 接进 CI。两点注意：`playwright-core` 不下载浏览器，Linux 上要装系统 Chrome/Chromium 并用 `E2E_EXECUTABLE` 指过去；Chrome 137+ 已移除 `--load-extension`，`plugin` / `selection` 只能在 Windows + Edge 上跑，`userscript` / `config` 可以跑在 CI。
-3. `addSpecialStyle` 的 fixed 元素偏移只处理了 `top`，性能回收方案见 `src/util/addSpecialStyle_todo.md`。
+3. `addSpecialStyle` 的 fixed 元素偏移只处理了 `top`；剩余项见 `docs/style-avoidance-todo.md`。
 
 ## 文档入口
 

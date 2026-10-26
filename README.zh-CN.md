@@ -6,7 +6,7 @@
 
 固定在页面上的搜索引擎跳转菜单。**一份核心代码，两种形态**：
 
-- **浏览器插件** —— Chrome / Edge / Firefox，基于 [WXT](https://wxt.dev)（Manifest V3）
+- **浏览器插件** —— Chrome / Edge / Firefox，基于 [WXT](https://wxt.dev)（Chrome/Edge 是 MV3，Firefox 目前仍打 MV2）
 - **用户脚本** —— 油猴 / 脚本猫，基于 `vite-plugin-monkey`
 
 两者共用同一套 Vue 3 界面，通过 Shadow DOM 与宿主页面样式隔离。
@@ -42,7 +42,7 @@
 - 点击分类打开第一个网址；Ctrl / 中键始终走「另一种」打开方式
 - 按功能区设置左键打开方式：主菜单 / 划词搜索（当前页 / 新标签页）
 - 滚动自动隐藏、条可收起、划词工具栏、全局搜索弹窗
-- 200+ 站点适配（`src/config/loadList.ts`）
+- 65 组站点匹配规则 + 114 个内置引擎（`src/config/loadList.ts`）
 
 ## 开发
 
@@ -50,7 +50,7 @@
 pnpm install
 pnpm dev:plugin    # WXT dev，自动打开装有扩展的浏览器（热更新）
 pnpm dev:script    # 用户脚本 watch 构建（packages/script/dist）
-pnpm dev:options   # 独立配置页（http://localhost:3000/all-search/）
+pnpm dev:options   # 独立配置页（http://localhost:5173/all-search/）
 ```
 
 ## 构建
