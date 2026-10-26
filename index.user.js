@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      2.0.1
+// @version      2.1.0
 // @author       endday
-// @description  2026-10-24更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2026-10-26更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/all-search/all-search
 // @downloadURL  https://raw.githubusercontent.com/all-search/all-search/release/index.user.js
@@ -26,9 +26,6 @@
 
   importCSS(' @charset "UTF-8";@media screen and (max-width:750px){.as-title-horizontal{display:none}}.as-title-horizontal{min-width:90px;margin:0 10px}.as-title-vertical{width:100%}.as-title{text-decoration:none!important;padding:0;margin:0;color:var(--as-primary-color)}.as-title-inner{padding:0;font-size:17px;height:30px;line-height:30px;font-weight:600;color:var(--as-primary-color);margin:0 auto;text-align:center;cursor:pointer}:root{--as-text-color-secondary: #909399}.as-scrollbar{--as-scrollbar-opacity: .3;--as-scrollbar-background-color: var(--as-text-color-secondary);--as-scrollbar-hover-opacity: .5;--as-scrollbar-hover-background-color: var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}.as-popover-content{z-index:999991;position:relative;will-change:transform,opacity;backface-visibility:hidden;-webkit-font-smoothing:antialiased}.as-popover-content .arrow,.as-popover-content .arrow:before{width:0;height:0;border-style:solid}.as-popover-content .arrow:before{content:"";position:absolute}.slide-fade-enter-active{transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1)}.slide-fade-leave-active{transition:transform .1s cubic-bezier(.645,.045,.355,1),opacity .1s cubic-bezier(.645,.045,.355,1)}.slide-fade-enter-from,.slide-fade-leave-to{opacity:0}.slide-fade-enter-from[data-placement=bottom-start],.slide-fade-leave-to[data-placement=bottom-start]{transform:translateY(-100%);transform-origin:top center}.slide-fade-enter-from[data-placement=top-start],.slide-fade-leave-to[data-placement=top-start]{transform:translateY(100%);transform-origin:bottom center}.slide-fade-enter-from[data-placement=left-start],.slide-fade-leave-to[data-placement=left-start]{transform:translate(100%);transform-origin:center right}.slide-fade-enter-from[data-placement=right-start],.slide-fade-leave-to[data-placement=right-start]{transform:translate(-100%);transform-origin:center left}.as-icon{font-size:20px;width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden;margin:.25px 4px 0 0;display:inline-block}.as-img-icon{border:none;position:relative;font-size:0}.as-img-icon img{width:100%;height:100%;border:none;vertical-align:top}.as-img-icon img.error{display:inline-block;transform:scale(1);content:"";color:transparent}.as-img-icon img.error:before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#f5f5f5 no-repeat center/50% 50%}.as-img-icon img.error:after{content:attr(alt);position:absolute;left:0;bottom:0;width:100%;line-height:2;background-color:#00000080;color:#fff;font-size:12px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.as-menu-item.horizontal{position:relative;padding:0 16px}.as-menu-item.horizontal:after{content:"";transform:scaleX(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;right:0;left:0;bottom:0;border-bottom:2px solid var(--as-primary-color)}.as-menu-item.horizontal:hover:after{transform:scaleX(1);opacity:1}@media screen and (max-width:750px){.as-menu-item.horizontal{padding:0 10px}}.as-menu-item.vertical{margin:5px 0;position:relative}.as-menu-item.vertical:after{content:"";transform:scaleY(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;top:0;bottom:0;right:0;border-right:2.5px solid var(--as-primary-color)}.as-menu-item.vertical:hover:after{transform:scaleY(1);opacity:1}.as-menu-item.vertical .as-menu-item-title{margin-right:6px}.as-menu-item.no-underline{text-decoration:none}.as-menu-item:visited{color:var(--as-primary-text-color)}a.as-menu-item{height:30px;line-height:30px;list-style:none;position:relative;color:var(--as-primary-text-color);transition:color .3s cubic-bezier(.645,.045,.355,1),border-color .3s cubic-bezier(.645,.045,.355,1),background .3s cubic-bezier(.645,.045,.355,1);box-sizing:border-box;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}a.as-menu-item:hover{border-color:var(--as-primary-color)}a.as-menu-item:hover .as-menu-item-icon,a.as-menu-item:hover .as-menu-item-title{color:var(--as-primary-color)}.as-menu-item-icon{color:var(--as-primary-text-color)}.as-url-icon{width:16px;height:16px;margin-right:10px}.as-subMenu-container{background:var(--as-bg-color);border:1px solid #e4e7ed;box-shadow:0 0 12px #0000001f;border-radius:4px}.as-subMenu{list-style:none;padding:0;min-width:90px;box-sizing:border-box;margin:4px 0}.as-subMenu li{overflow:hidden;box-sizing:border-box}.as-subMenu li a{display:flex;align-items:center;height:34px;padding:0 16px;text-decoration:none}.as-subMenu li:hover{background-color:var(--as-secondary-background-color);color:var(--as-primary-color)}.as-subMenu .as-subMenu-text{flex:1;font-size:14px;text-overflow:ellipsis;color:var(--as-primary-text-color);white-space:nowrap;margin:0;line-height:34px;font-weight:400;text-align:left}.as-menu-container{flex:1;display:flex}.as-menu{padding:0;margin:0;white-space:nowrap;border:0;box-shadow:none;background-color:var(--as-bg-color);display:flex;list-style:none}.as-horizontal .as-menu{flex-direction:row}.as-vertical .as-menu{flex-direction:column}.as-vertical .as-scrollbar__wrap{height:auto;width:100%}.as-overlay{position:fixed;inset:0;z-index:999991;height:100%;background-color:#0000004d;overflow:auto}.as-open-mode-tip{margin:8px 0 16px;padding:8px 10px;font-size:12px;line-height:1.65;color:var(--as-primary-text-color, #606266);background:#00000009;border-radius:4px;opacity:.85}.as-open-mode-tip strong{font-weight:600;color:var(--as-primary-color, #1890ff)}label.as-radio{color:var(--as-primary-text-color);font-weight:500;line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;font-size:14px;-webkit-user-select:none;-moz-user-select:none;user-select:none}label.as-radio+label.as-radio{margin-left:14px}label.as-radio input{position:absolute;opacity:0;visibility:hidden}label.as-radio .as-radio-icon{display:inline-block;position:relative;width:12px;height:12px;background:var(--as-bg-color);border:1px solid #979797;border-radius:50%;vertical-align:-2px}label.as-radio input:checked+.as-radio-icon:after{position:absolute;content:"";width:6px;height:6px;background-color:var(--as-bg-color);border-radius:50%;top:3px;left:3px}label.as-radio input:checked+.as-radio-icon{background:var(--as-primary-color);border:1px solid var(--as-primary-color)}label.as-radio input:disabled+.as-radio-icon{background-color:#e8e8e8;border:solid 1px #979797}label.as-radio input:disabled:checked+.as-radio-icon:after{background-color:#c1c1c1}label.as-radio.as-radio-animate .as-radio-icon{transition:background-color ease-out .3s}label.as-radio .as-radio-label{margin-left:6px;font-size:14px}.as-label{vertical-align:middle;float:left;font-size:14px;color:var(--as-primary-text-color);line-height:40px;padding:0 12px 0 0;box-sizing:border-box}.as-content{line-height:40px;position:relative;font-size:14px}.as-button{display:inline-block;line-height:1;white-space:nowrap;cursor:pointer;background:#fff;border:1px solid #dcdfe6;color:var(--as-primary-text-color);text-align:center;box-sizing:border-box;outline:none;margin:0;transition:.1s;font-weight:500;-webkit-user-select:none;-moz-user-select:none;user-select:none;padding:12px 20px;font-size:14px;border-radius:4px}.as-button.as-button__text{border-color:transparent;color:var(--as-primary-color);background:transparent;padding-left:0;padding-right:0}.as-button.as-button__primary{color:#fff;background-color:var(--as-primary-color);border-color:var(--as-primary-color)}.as-color-set .as-color-label{line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;vertical-align:middle}.as-color-set .input\u2014color{width:30px;height:30px;padding:4px;border:1px solid #e6e6e6;border-radius:4px;background-color:var(--as-secondary-background-color);box-sizing:border-box}.as-color-set .input\u2014color::-webkit-color-swatch{border:0}.as-color-set .input\u2014color::-webkit-color-swatch-wrapper{padding:0}.as-color-set .reset-btn{margin-left:20px}#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}.as-setting{position:relative}.as-setting.horizontal{box-shadow:-4px 0 10px #0000001f;display:flex}.as-setting-btn{line-height:30px;padding:0 14px;position:relative;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;color:var(--as-primary-text-color);text-align:center}.as-setting-btn:hover{color:var(--as-primary-color);background-color:#0000000a}.as-group-title{margin:8px 0 2px;font-size:12px;font-weight:600;letter-spacing:.3px;color:var(--as-primary-text-color);opacity:.6}.as-side-bar{width:20vw;min-width:300px;right:0;height:100%;top:0;bottom:0;position:absolute;box-sizing:border-box;background:var(--as-bg-color) radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed;display:flex;flex-direction:column;box-shadow:0 8px 10px -5px #0003,0 16px 24px 2px #00000024,0 6px 30px 5px #0000001f;overflow:hidden}.as-side-bar>header{font-size:16px;align-items:center;color:var(--as-primary-text-color);display:flex;padding:32px 24px}.as-side-bar>section{padding:10px 24px;margin:0 12px;height:100%;flex:1;border-radius:4px;border:1px solid rgba(0,0,0,.1);background:#ffffffab}.as-side-bar>footer{padding:10px 24px 30px}.as-side-bar>footer .link{font-size:14px;text-decoration:none}.as-side-bar>footer .link:visited{color:var(--as-primary-text-color)}.as-side-bar>footer .link+.link{margin-left:20px}.overlay-enter-active,.overlay-leave-active{transition:opacity .3s}.overlay-enter-from,.overlay-leave-to{opacity:0}.overlay-enter-active .as-side-bar{animation:rtl-drawer-animation .3s linear reverse}.overlay-leave-active .as-side-bar{animation:rtl-drawer-animation .3s linear}@keyframes rtl-drawer-animation{0%{transform:translate(0)}to{transform:translate(100%)}}.as-hover-btn[data-v-8eec6b97]{position:fixed;z-index:99999;font-weight:600;font-size:17px;color:var(--as-primary-color);background:#fff;box-shadow:0 1px 4px #00152914;border:1px var(--as-border-color) solid;opacity:.6;cursor:pointer}.as-hover-btn-horizontal[data-v-8eec6b97]{left:50%;transform:translateY(0) translate(-50%);padding:0 16px;height:28px;line-height:28px}.as-hover-btn-top[data-v-8eec6b97]{top:0}.as-hover-btn-bottom[data-v-8eec6b97]{bottom:0}.as-hover-btn-vertical[data-v-8eec6b97]{top:50%;padding:0 16px;height:28px;line-height:28px}.as-hover-btn-left[data-v-8eec6b97]{left:0;right:unset;transform:translateY(-200%) translate(0) rotate(90deg);transform-origin:0 100%}.as-hover-btn-right[data-v-8eec6b97]{right:0;left:unset;transform-origin:top right;transform:translateY(0) translate(0) rotate(90deg)}.hover-btn.as-hide[data-v-8eec6b97]{transition:transform .2s;transform:translateY(-100%) translate(-50%)}.bar-container[data-v-b687b5a5]{display:flex;padding:2px;max-width:300px;position:absolute;z-index:99999;background-color:#fff;color:#444;box-shadow:0 0 0 1px #0000000d,0 2px 3px #0000001a;border-radius:2px;cursor:pointer;white-space:nowrap}.tool-bar-item[data-v-b687b5a5]{margin:0;padding:2px;width:20px;height:20px;border:1px solid #FFF;cursor:pointer;box-sizing:content-box}.tool-bar-item[data-v-b687b5a5]:hover{border-color:var(--as-border-color)}.as-more-icon[data-v-b687b5a5]{display:block;font-size:20px}.as-dialog{position:fixed;inset:0;margin:0;z-index:99999;display:flex;align-items:center;justify-content:center}.as-dialog__mask{position:fixed;left:0;top:0;width:100%;height:100%;background:#00000080;backdrop-filter:blur(5px)}.as-dialog-container{position:relative;background:#f3f3f3f0;border-radius:10px;box-shadow:0 1px 3px #0000004d;box-sizing:border-box;min-width:50%;max-width:80%;max-height:86vh;display:flex;flex-direction:column;z-index:99;overflow:hidden}.as-dialog__header{position:relative}.as-dialog__body{color:#666;font-size:14px;word-break:break-all;overflow:auto}.as-dialog__footer{padding:10px 20px 20px;text-align:right;box-sizing:border-box}.as-dialog__close{display:inline-block;position:absolute;top:16px;right:24px;padding:0;background:transparent;cursor:pointer;font-size:16px;color:#909399}.as-dialog__close:before{content:"\u2716"}.se-header{padding:15px 20px;box-shadow:0 1px 6px #20212447;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed}.se-input-box{border:1px solid #ccc;background-color:#ffffffab;overflow:hidden;display:flex;border-radius:6px;height:40px;align-items:center;transition:.2s;color:#222}.se-input-box:hover{border-color:#fff;box-shadow:0 1px 6px #20212447}.se-input-box:active{border-color:#fff}.se-input-box .se-input{color:var(--as-primary-text-color);background-color:transparent;font-size:16px;height:100%;width:100%;line-height:20px;margin:0 20px;outline:none;border:none}.se-scrollbar-container{height:50vh;padding:0 20px 20px;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed}.se-container{margin-top:10px;display:flex;border-radius:6px;flex-wrap:wrap}.cate-container{flex:0 0 150px;margin:0 10px 10px 0;border:1px solid rgba(0,0,0,.1);background:#ffffffab;padding:6px}.cate-name{padding:0 10px;height:36px;line-height:36px;font-size:16px;display:flex;align-items:center}.cate-list{list-style:none;min-width:110px;box-sizing:border-box;padding:0}.cate-list .cate-item{box-sizing:border-box;padding:0 10px}.cate-list .cate-item .as-subMenu-text{margin:0}.cate-list .cate-item a{display:flex;align-items:center;height:34px;text-decoration:none;color:var(--as-primary-text-color)}.cate-list .cate-item:hover{background-color:#fff;color:var(--as-primary-color)} ');
 
-  var __defProp = Object.defineProperty;
-  var __defNormalProp = (obj2, key, value2) => key in obj2 ? __defProp(obj2, key, { enumerable: true, configurable: true, writable: true, value: value2 }) : obj2[key] = value2;
-  var __publicField = (obj2, key, value2) => __defNormalProp(obj2, typeof key !== "symbol" ? key + "" : key, value2);
   const sites$e = [
     {
       nameZh: "ChatGPT",
@@ -549,7 +546,7 @@
   var _GM_deleteValue = (() => typeof GM_deleteValue != "undefined" ? GM_deleteValue : void 0)();
   var _GM_getValue = (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
-  const version$1 = "2.0.1";
+  const version$1 = "2.1.0";
   const pkg = {
     version: version$1
   };
@@ -631,97 +628,9 @@
     }
   }
   globalThis.browser?.runtime?.id ? globalThis.browser : globalThis.chrome;
-  const store = vue.reactive({
+  vue.reactive({
     tmVersion: ""
   });
-  class WebBridgeAdapter {
-    constructor() {
-      __publicField(this, "methods", null);
-      __publicField(this, "ready");
-      __publicField(this, "onScriptLoadedHandler", null);
-      this.ready = this.initConnection();
-    }
-    initConnection() {
-      return new Promise((resolve) => {
-        const scriptLoaded = getName("script-loaded");
-        const pageLoaded = getName("page-loaded");
-        if (!scriptLoaded || !pageLoaded) {
-          this.enableFallback();
-          resolve();
-          return;
-        }
-        const timeout = setTimeout(() => {
-          if (!this.methods) {
-            console.warn("WebBridgeAdapter: connection timeout, falling back to localStorage");
-            this.cleanup();
-            this.enableFallback();
-            resolve();
-          }
-        }, 5e3);
-        this.onScriptLoadedHandler = (event) => {
-          const customEvent = event;
-          clearTimeout(timeout);
-          this.methods = customEvent.detail;
-          if (this.methods && this.methods.version) {
-            store.tmVersion = this.methods.version;
-          }
-          this.cleanup();
-          resolve();
-        };
-        document.addEventListener(scriptLoaded, this.onScriptLoadedHandler);
-        document.dispatchEvent(new Event(pageLoaded));
-      });
-    }
-    cleanup() {
-      if (this.onScriptLoadedHandler) {
-        const scriptLoaded = getName("script-loaded");
-        if (scriptLoaded) {
-          document.removeEventListener(scriptLoaded, this.onScriptLoadedHandler);
-        }
-        this.onScriptLoadedHandler = null;
-      }
-    }
-    enableFallback() {
-      this.methods = {
-        version: "fallback",
-        getStorage: async (n) => {
-          const key = getName(n);
-          if (!key) return null;
-          const val = localStorage.getItem(key);
-          return parseJson(val);
-        },
-        setStorage: async (n, v) => {
-          const key = getName(n);
-          if (key) {
-            localStorage.setItem(key, typeof v === "string" ? v : JSON.stringify(v));
-          }
-          return v;
-        },
-        delStorage: async (n) => {
-          const key = getName(n);
-          if (key) {
-            localStorage.removeItem(key);
-          }
-          return true;
-        }
-      };
-    }
-    async get(name) {
-      await this.ready;
-      return this.methods.getStorage(name);
-    }
-    async set(name, value2) {
-      await this.ready;
-      return this.methods.setStorage(name, value2);
-    }
-    async remove(name) {
-      await this.ready;
-      return this.methods.delStorage(name);
-    }
-destroy() {
-      this.cleanup();
-    }
-  }
   function initTmMethods() {
     const tm = new TmAdapter();
     const scriptLoaded = getName("script-loaded");
@@ -740,16 +649,17 @@ destroy() {
     document.addEventListener(pageLoaded, emit);
     emit();
   }
-  let activeAdapter = new TmAdapter();
-  const hostname = typeof window !== "undefined" ? window.location.hostname : "";
-  const isOptionsPage = typeof window !== "undefined" && (window.location.pathname.includes("options") || hostname.includes("github.io") || hostname.includes("gitee.io") ||
-hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]");
-  if (isOptionsPage) {
-    activeAdapter = new WebBridgeAdapter();
+  function createAdapter() {
+    return new TmAdapter();
   }
+  let activeAdapter = createAdapter();
   const getStorage = (name) => activeAdapter.get(name);
   const setStorage = (name, value2) => activeAdapter.set(name, value2);
   const delStorage = (name) => activeAdapter.remove(name);
+  function watchStorage(name, callback) {
+    return activeAdapter.watch ? activeAdapter.watch(name, callback) : () => {
+    };
+  }
   const sitesData = vue.ref(list$2);
   function getSites(val) {
     if (Array.isArray(val)) {
@@ -770,6 +680,9 @@ hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]");
     sitesData.value = getSites(val);
   }).catch(() => {
     sitesData.value = list$2;
+  });
+  watchStorage("sites", (value2) => {
+    sitesData.value = JSON.parse(JSON.stringify(getSites(value2)));
   });
   function resetSites() {
     if (window.confirm("确认要重置所有网址吗")) {
@@ -1492,8 +1405,13 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
       hash: el.hash
     };
   }
+  function openInBackground(urls, active) {
+    globalThis.chrome?.runtime;
+    return false;
+  }
   function openUrl(url, mode) {
     if (mode === "new") {
+      if (openInBackground()) ;
       window.open(url, "_blank");
     } else {
       window.location.href = url;
@@ -1501,6 +1419,12 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
   }
   function otherOpenMode(mode) {
     return mode === "new" ? "same" : "new";
+  }
+  function openUrls(urls) {
+    const list2 = urls.filter((url) => typeof url === "string" && !!url);
+    if (!list2.length) return;
+    if (openInBackground()) ;
+    list2.forEach((url) => window.open(url, "_blank"));
   }
   const listeners = new Set();
   let prevHref = window.location.href;
@@ -1672,6 +1596,29 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
       cancelTimeout
     };
   }
+  function isGeneratedStyleAlive(css) {
+    if (typeof document === "undefined" || !css) return true;
+    const selectors = [];
+    const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const ruleRe = /([^{}]+)\{/g;
+    let match;
+    while ((match = ruleRe.exec(withoutComments)) !== null) {
+      const head = match[1].trim();
+      if (!head || head.startsWith("@")) continue;
+      for (const part of head.split(",")) {
+        const selector = part.trim();
+        if (selector) selectors.push(selector);
+      }
+    }
+    if (!selectors.length) return true;
+    return selectors.some((selector) => {
+      try {
+        return document.querySelector(selector) !== null;
+      } catch {
+        return false;
+      }
+    });
+  }
   const addCustomStyle = (mode, currentSite, remove) => {
     removeNode(".as-custom-style");
     if (currentSite.invisible || remove) {
@@ -1731,6 +1678,22 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
     currentTopOffset = computeTopOffset();
     return currentTopOffset;
   }
+  function isStillOurs(item, data) {
+    return item.style.getPropertyValue("top") === data.appliedTop;
+  }
+  function releaseNode(item) {
+    delete item.dataset[DATASET_MARKER];
+    adjustedElements.delete(item);
+  }
+  function releaseTakenOverNodes() {
+    document.querySelectorAll(ADJUSTED_SELECTOR).forEach((el2) => {
+      if (!(el2 instanceof HTMLElement)) return;
+      const data = adjustedElements.get(el2);
+      if (!data || !isStillOurs(el2, data)) {
+        releaseNode(el2);
+      }
+    });
+  }
   function restoreOriginalTop(item) {
     if (!item.dataset[DATASET_MARKER]) return;
     const data = adjustedElements.get(item);
@@ -1738,13 +1701,16 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
       delete item.dataset[DATASET_MARKER];
       return;
     }
+    if (!isStillOurs(item, data)) {
+      releaseNode(item);
+      return;
+    }
     if (data.originalInlineTop === INLINE_UNSET_SENTINEL) {
       item.style.removeProperty("top");
     } else {
       item.style.setProperty("top", data.originalInlineTop, data.originalPriority);
     }
-    delete item.dataset[DATASET_MARKER];
-    adjustedElements.delete(item);
+    releaseNode(item);
   }
   function restoreAllAdjustedNodes() {
     if (isRestoring) return;
@@ -1801,9 +1767,15 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
     if (item.dataset[DATASET_MARKER]) {
       const data = adjustedElements.get(item);
       if (data) {
+        if (!isStillOurs(item, data)) {
+          releaseNode(item);
+          return;
+        }
         const numericTop2 = parseFloat(data.originalTop);
         if (!Number.isNaN(numericTop2)) {
-          item.style.setProperty("top", `${numericTop2 + currentTopOffset}px`, "important");
+          const appliedTop2 = `${numericTop2 + currentTopOffset}px`;
+          item.style.setProperty("top", appliedTop2, "important");
+          data.appliedTop = appliedTop2;
         }
       }
       return;
@@ -1826,9 +1798,13 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
     adjustedElements.set(item, {
       originalTop: topValue,
       originalInlineTop: item.style.getPropertyValue("top") || INLINE_UNSET_SENTINEL,
-      originalPriority: item.style.getPropertyPriority("top") || ""
+      originalPriority: item.style.getPropertyPriority("top") || "",
+      appliedTop: ""
     });
-    item.style.setProperty("top", `${numericTop + currentTopOffset}px`, "important");
+    const appliedTop = `${numericTop + currentTopOffset}px`;
+    item.style.setProperty("top", appliedTop, "important");
+    const record = adjustedElements.get(item);
+    if (record) record.appliedTop = appliedTop;
     item.dataset[DATASET_MARKER] = "1";
   }
   function collectCandidates(root, rect) {
@@ -1872,6 +1848,7 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
   function sampleBarArea() {
     const root = getAsRoot();
     if (!root) return;
+    releaseTakenOverNodes();
     if (refreshTopOffset() <= 0) {
       restoreAllAdjustedNodes();
       return;
@@ -1945,13 +1922,28 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
     }
     domObserver = new MutationObserver((mutationsList) => {
       for (const mutation of mutationsList) {
+        if (mutation.type === "attributes") {
+          const el2 = mutation.target;
+          if (el2 instanceof HTMLElement && el2.dataset[DATASET_MARKER]) {
+            const data = adjustedElements.get(el2);
+            if (data && !isStillOurs(el2, data)) {
+              releaseNode(el2);
+            }
+          }
+          continue;
+        }
         if (mutation.addedNodes.length > 0) {
           scheduleSample();
           return;
         }
       }
     });
-    domObserver.observe(document.body, { childList: true, subtree: true });
+    domObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["style"]
+    });
   }
   const viewportHandler = () => {
     scheduleSample();
@@ -2318,6 +2310,9 @@ async setMode(mode) {
   }).catch(() => {
     sites.value = toolbar;
   });
+  watchStorage("toolbar", (value2) => {
+    sites.value = JSON.parse(JSON.stringify(getList(value2)));
+  });
   function initToolBar(list2, type) {
     if (type === "tm") {
       return list2.filter((item) => item.data && item.data.visible).map((item) => ({
@@ -2356,7 +2351,8 @@ async setMode(mode) {
       const isLayoutVisible = !currentSite.invisible && !currentSite.disabled && !vue.toValue(isFullScreen2) && vue.toValue(show2) === SHOW_STATUS.VISIBLE;
       syncHostLayout(currentMode, vue.toValue(direction2), isLayoutVisible);
       addCustomStyle(currentMode, currentSite, !isLayoutVisible || currentSite.disabled);
-      syncSampling(isLayoutVisible && !currentSite.generatedStyle);
+      const staticAlive = !currentSite.generatedStyle || isGeneratedStyleAlive(String(currentSite.generatedStyle));
+      syncSampling(isLayoutVisible && (!currentSite.generatedStyle || !staticAlive));
     });
     vue.onUnmounted(() => {
       disconnectSpecialStyle();
@@ -4917,12 +4913,12 @@ root: root.ownerDocument
     }
   });
   function faviconCandidates(url, icon) {
-    const { hostname: hostname2, origin } = parseUrl(url || "");
-    if (!hostname2) return icon ? [icon] : [];
+    const { hostname, origin } = parseUrl(url || "");
+    if (!hostname) return icon ? [icon] : [];
     return [
       icon,
-      `https://favicon.yandex.net/favicon/v2/${encodeURIComponent(hostname2)}?size=32`,
-      `https://invisible-scarlet-centipede.faviconkit.com/${encodeURIComponent(hostname2)}`,
+      `https://favicon.yandex.net/favicon/v2/${encodeURIComponent(hostname)}?size=32`,
+      `https://invisible-scarlet-centipede.faviconkit.com/${encodeURIComponent(hostname)}`,
       `${origin}/favicon.ico`
     ].filter((item) => !!item);
   }
@@ -5007,14 +5003,14 @@ root: root.ownerDocument
     setup(__props) {
       const props = __props;
       const isError = vue.ref(false);
-      const { hostname: hostname2 } = parseUrl(props.url || "");
+      const { hostname } = parseUrl(props.url || "");
       const index2 = vue.ref(0);
       const faviconApis = vue.computed(() => faviconCandidates(props.url, props.icon));
       const faviconApi = vue.computed(() => faviconApis.value[index2.value] || "");
       const corsAllowed = vue.computed(() => isCorsFriendly(faviconApi.value));
       const img = vue.computed(() => {
         if (!isLoaded.value || isError.value) return "";
-        return iconCache.value[hostname2] || faviconApi.value;
+        return iconCache.value[hostname] || faviconApi.value;
       });
       const { favicon: favicon2 } = useFavicon();
       function handleLoad(e) {
@@ -5022,7 +5018,7 @@ root: root.ownerDocument
         if (!corsAllowed.value) return;
         const base64 = toIconDataUrl(e.target);
         if (base64) {
-          iconCache.value[hostname2] = base64;
+          iconCache.value[hostname] = base64;
           setStorageDebounce();
         }
       }
@@ -5049,6 +5045,23 @@ root: root.ownerDocument
       };
     }
   });
+  function pickCategoryTargets(list2, hostname = typeof window === "undefined" ? "" : window.location.hostname) {
+    if (!Array.isArray(list2) || !list2.length) {
+      return [];
+    }
+    return list2.filter((item) => {
+      if (!item || !item.data?.visible) {
+        return false;
+      }
+      if (typeof item.url !== "string") {
+        return false;
+      }
+      if (!hostname) {
+        return true;
+      }
+      return item.url.indexOf(hostname) === -1;
+    });
+  }
   const selection = vue.ref("");
   const menuOpenMode = useConfig({
     name: "openModeMenu",
@@ -5060,8 +5073,14 @@ root: root.ownerDocument
     defaultVal: "new",
     reg: /^(same|new)$/
   });
+  const openAllInCategory = useConfig({
+    name: "openAllInCategory",
+    defaultVal: false,
+    get: (val) => val === true || val === 1 || val === "true" || val === "1",
+    set: (val, next) => next({ value: !!val })
+  });
   function useOpenMode() {
-    return { menuOpenMode, selectionOpenMode };
+    return { menuOpenMode, selectionOpenMode, openAllInCategory };
   }
   const _hoisted_1$9 = ["onMouseenter", "onMouseleave"];
   const _hoisted_2$5 = ["textContent"];
@@ -5106,10 +5125,12 @@ root: root.ownerDocument
         return keyword ? encodeURIComponent(keyword) : "";
       };
       const altMode = vue.computed(() => otherOpenMode(menuOpenMode.value));
-      const handleClick = (item, mode) => {
-        const keyword = defaultKeyword();
+      const openItem = (item, keyword, mode) => {
         const url = item.url.replace("%s", keyword);
         openUrl(url, mode || menuOpenMode.value);
+      };
+      const handleClick = (item, mode) => {
+        openItem(item, defaultKeyword(), mode);
         return false;
       };
       let isTap = false;
@@ -5117,9 +5138,14 @@ root: root.ownerDocument
         if (isTap) {
           return;
         }
-        const urlItem = cate.list.filter((item) => item.data?.visible).find((item) => item.url.indexOf(window.location.hostname) === -1);
-        if (urlItem) {
-          return handleClick(urlItem, mode);
+        const targets = pickCategoryTargets(cate.list);
+        if (!mode && openAllInCategory.value && targets.length) {
+          const keyword = defaultKeyword();
+          openUrls(targets.map((item) => item.url.replace("%s", keyword)));
+          return;
+        }
+        if (targets.length) {
+          return handleClick(targets[0], mode);
         }
       };
       onTap(categoryRef, () => {
@@ -5328,7 +5354,9 @@ root: root.ownerDocument
           ], 64)) : vue.createCommentVNode("", true),
           _cache[2] || (_cache[2] = vue.createTextVNode(" 按住 Ctrl 或用鼠标中键点击，会以上面所选的", -1)),
           _cache[3] || (_cache[3] = vue.createElementVNode("strong", null, "另一种", -1)),
-          _cache[4] || (_cache[4] = vue.createTextVNode("方式打开。 ", -1))
+          _cache[4] || (_cache[4] = vue.createTextVNode("方式打开。", -1)),
+          _cache[5] || (_cache[5] = vue.createElementVNode("br", null, null, -1)),
+          _cache[6] || (_cache[6] = vue.createTextVNode(" 「分类全开」只对普通左键生效，Ctrl / 中键仍只开一个；油猴版一次开多个可能被浏览器拦掉一部分。 ", -1))
         ]);
       };
     }
@@ -5478,7 +5506,7 @@ root: root.ownerDocument
         visible2.value = false;
       };
       const { value: mode, direction: direction2 } = useMode();
-      const { menuOpenMode: menuOpenMode2, selectionOpenMode: selectionOpenMode2 } = useOpenMode();
+      const { menuOpenMode: menuOpenMode2, selectionOpenMode: selectionOpenMode2, openAllInCategory: openAllInCategory2 } = useOpenMode();
       const { list: alignList, value: align } = useAlign();
       const { primaryColor: primaryColor2, primaryTextColor: primaryTextColor2 } = useColor();
       const { show: show2, options: options2, scrollHide: scrollHide2 } = useSwitchShow();
@@ -5540,10 +5568,10 @@ root: root.ownerDocument
                           "aria-modal": "true",
                           role: "dialog",
                           class: "as-side-bar",
-                          onClick: _cache[18] || (_cache[18] = vue.withModifiers(() => {
+                          onClick: _cache[20] || (_cache[20] = vue.withModifiers(() => {
                           }, ["stop"]))
                         }, [
-                          _cache[35] || (_cache[35] = vue.createElementVNode("header", { class: "header" }, " 全搜 all-search ", -1)),
+                          _cache[39] || (_cache[39] = vue.createElementVNode("header", { class: "header" }, " 全搜 all-search ", -1)),
                           vue.createElementVNode("section", null, [
                             vue.createVNode(_sfc_main$a, {
                               "label-width": "84",
@@ -5555,7 +5583,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(toolbarVisible),
                                   "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => vue.isRef(toolbarVisible) ? toolbarVisible.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[19] || (_cache[19] = [
+                                  default: vue.withCtx(() => [..._cache[21] || (_cache[21] = [
                                     vue.createTextVNode("显示 ", -1)
                                   ])]),
                                   _: 1
@@ -5565,7 +5593,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(toolbarVisible),
                                   "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => vue.isRef(toolbarVisible) ? toolbarVisible.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[20] || (_cache[20] = [
+                                  default: vue.withCtx(() => [..._cache[22] || (_cache[22] = [
                                     vue.createTextVNode("隐藏 ", -1)
                                   ])]),
                                   _: 1
@@ -5580,7 +5608,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(mode),
                                   "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[21] || (_cache[21] = [
+                                  default: vue.withCtx(() => [..._cache[23] || (_cache[23] = [
                                     vue.createTextVNode("居顶 ", -1)
                                   ])]),
                                   _: 1
@@ -5590,7 +5618,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(mode),
                                   "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[22] || (_cache[22] = [
+                                  default: vue.withCtx(() => [..._cache[24] || (_cache[24] = [
                                     vue.createTextVNode("居底 ", -1)
                                   ])]),
                                   _: 1
@@ -5600,7 +5628,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(mode),
                                   "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[23] || (_cache[23] = [
+                                  default: vue.withCtx(() => [..._cache[25] || (_cache[25] = [
                                     vue.createTextVNode("居左 ", -1)
                                   ])]),
                                   _: 1
@@ -5610,7 +5638,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(mode),
                                   "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[24] || (_cache[24] = [
+                                  default: vue.withCtx(() => [..._cache[26] || (_cache[26] = [
                                     vue.createTextVNode("居右 ", -1)
                                   ])]),
                                   _: 1
@@ -5618,7 +5646,7 @@ root: root.ownerDocument
                               ]),
                               _: 1
                             }),
-                            _cache[33] || (_cache[33] = vue.createElementVNode("p", { class: "as-group-title" }, "点击打开方式", -1)),
+                            _cache[37] || (_cache[37] = vue.createElementVNode("p", { class: "as-group-title" }, "点击打开方式", -1)),
                             vue.createVNode(_sfc_main$a, {
                               label: "主菜单",
                               "label-width": "64"
@@ -5629,7 +5657,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(menuOpenMode2),
                                   "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => vue.isRef(menuOpenMode2) ? menuOpenMode2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[25] || (_cache[25] = [
+                                  default: vue.withCtx(() => [..._cache[27] || (_cache[27] = [
                                     vue.createTextVNode("当前页 ", -1)
                                   ])]),
                                   _: 1
@@ -5639,7 +5667,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(menuOpenMode2),
                                   "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => vue.isRef(menuOpenMode2) ? menuOpenMode2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[26] || (_cache[26] = [
+                                  default: vue.withCtx(() => [..._cache[28] || (_cache[28] = [
                                     vue.createTextVNode("新标签页 ", -1)
                                   ])]),
                                   _: 1
@@ -5657,7 +5685,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(selectionOpenMode2),
                                   "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => vue.isRef(selectionOpenMode2) ? selectionOpenMode2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[27] || (_cache[27] = [
+                                  default: vue.withCtx(() => [..._cache[29] || (_cache[29] = [
                                     vue.createTextVNode("当前页 ", -1)
                                   ])]),
                                   _: 1
@@ -5667,8 +5695,36 @@ root: root.ownerDocument
                                   modelValue: vue.unref(selectionOpenMode2),
                                   "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => vue.isRef(selectionOpenMode2) ? selectionOpenMode2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[28] || (_cache[28] = [
+                                  default: vue.withCtx(() => [..._cache[30] || (_cache[30] = [
                                     vue.createTextVNode("新标签页 ", -1)
+                                  ])]),
+                                  _: 1
+                                }, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            }),
+                            vue.createVNode(_sfc_main$a, {
+                              label: "分类全开",
+                              "label-width": "64"
+                            }, {
+                              default: vue.withCtx(() => [
+                                vue.createVNode(_sfc_main$b, {
+                                  label: false,
+                                  modelValue: vue.unref(openAllInCategory2),
+                                  "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => vue.isRef(openAllInCategory2) ? openAllInCategory2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => [..._cache[31] || (_cache[31] = [
+                                    vue.createTextVNode("关闭 ", -1)
+                                  ])]),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: true,
+                                  modelValue: vue.unref(openAllInCategory2),
+                                  "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => vue.isRef(openAllInCategory2) ? openAllInCategory2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => [..._cache[32] || (_cache[32] = [
+                                    vue.createTextVNode("开启 ", -1)
                                   ])]),
                                   _: 1
                                 }, 8, ["modelValue"])
@@ -5683,7 +5739,7 @@ root: root.ownerDocument
                                     key,
                                     label: key,
                                     modelValue: vue.unref(align),
-                                    "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => vue.isRef(align) ? align.value = $event : null)
+                                    "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => vue.isRef(align) ? align.value = $event : null)
                                   }, {
                                     default: vue.withCtx(() => [
                                       vue.createTextVNode(vue.toDisplayString(value2), 1)
@@ -5701,7 +5757,7 @@ root: root.ownerDocument
                                     key,
                                     label: key,
                                     modelValue: vue.unref(scrollHide2),
-                                    "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => vue.isRef(scrollHide2) ? scrollHide2.value = $event : null),
+                                    "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => vue.isRef(scrollHide2) ? scrollHide2.value = $event : null),
                                     onChange: changeScrollHide
                                   }, {
                                     default: vue.withCtx(() => [
@@ -5718,9 +5774,9 @@ root: root.ownerDocument
                                 vue.createVNode(_sfc_main$b, {
                                   label: 1,
                                   modelValue: vue.unref(favicon2),
-                                  "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
+                                  "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[29] || (_cache[29] = [
+                                  default: vue.withCtx(() => [..._cache[33] || (_cache[33] = [
                                     vue.createTextVNode("显示 ", -1)
                                   ])]),
                                   _: 1
@@ -5728,9 +5784,9 @@ root: root.ownerDocument
                                 vue.createVNode(_sfc_main$b, {
                                   label: 2,
                                   modelValue: vue.unref(favicon2),
-                                  "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
+                                  "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[30] || (_cache[30] = [
+                                  default: vue.withCtx(() => [..._cache[34] || (_cache[34] = [
                                     vue.createTextVNode("隐藏 ", -1)
                                   ])]),
                                   _: 1
@@ -5743,7 +5799,7 @@ root: root.ownerDocument
                                 vue.createVNode(_sfc_main$8, {
                                   name: "primaryColor",
                                   modelValue: vue.unref(primaryColor2),
-                                  "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => vue.isRef(primaryColor2) ? primaryColor2.value = $event : null)
+                                  "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => vue.isRef(primaryColor2) ? primaryColor2.value = $event : null)
                                 }, null, 8, ["modelValue"])
                               ]),
                               _: 1
@@ -5753,7 +5809,7 @@ root: root.ownerDocument
                                 vue.createVNode(_sfc_main$8, {
                                   name: "primaryTextColor",
                                   modelValue: vue.unref(primaryTextColor2),
-                                  "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => vue.isRef(primaryTextColor2) ? primaryTextColor2.value = $event : null)
+                                  "onUpdate:modelValue": _cache[17] || (_cache[17] = ($event) => vue.isRef(primaryTextColor2) ? primaryTextColor2.value = $event : null)
                                 }, null, 8, ["modelValue"])
                               ]),
                               _: 1
@@ -5764,7 +5820,7 @@ root: root.ownerDocument
                                   type: "text",
                                   onClick: vue.unref(clearIconCache2)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[31] || (_cache[31] = [
+                                  default: vue.withCtx(() => [..._cache[35] || (_cache[35] = [
                                     vue.createTextVNode(" 清除 ", -1)
                                   ])]),
                                   _: 1
@@ -5778,7 +5834,7 @@ root: root.ownerDocument
                                   type: "text",
                                   onClick: vue.unref(resetSites2)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[32] || (_cache[32] = [
+                                  default: vue.withCtx(() => [..._cache[36] || (_cache[36] = [
                                     vue.createTextVNode(" 重置 ", -1)
                                   ])]),
                                   _: 1
@@ -5793,16 +5849,16 @@ root: root.ownerDocument
                               title: "菜单设置页",
                               href: vue.unref(menuSettingsUrl),
                               target: "_blank",
-                              onClick: _cache[16] || (_cache[16] = ($event) => openSettingsPage())
+                              onClick: _cache[18] || (_cache[18] = ($event) => openSettingsPage())
                             }, " 菜单设置 ", 8, _hoisted_1$3),
                             vue.createElementVNode("a", {
                               class: "link",
                               title: "划词工具栏设置页",
                               href: vue.unref(toolbarSettingsUrl),
                               target: "_blank",
-                              onClick: _cache[17] || (_cache[17] = ($event) => openSettingsPage())
+                              onClick: _cache[19] || (_cache[19] = ($event) => openSettingsPage())
                             }, " 划词工具栏设置 ", 8, _hoisted_2$2),
-                            _cache[34] || (_cache[34] = vue.createElementVNode("a", {
+                            _cache[38] || (_cache[38] = vue.createElementVNode("a", {
                               class: "link",
                               title: "github",
                               href: "https://github.com/all-search/all-search/issues",
