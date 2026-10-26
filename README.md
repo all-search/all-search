@@ -45,7 +45,7 @@ Both share the same Vue 3 UI, isolated from the host page with Shadow DOM.
 - Auto-hide on scroll, collapsible bar, text-selection toolbar, global search dialog
 - AI search category (ChatGPT / Perplexity / 秘塔AI / Devv / Claude / DuckDuckGo AI), first in the bar
 - Dark mode: follow system, light or dark — applies to both the options page and the menu bar
-- Per-site tweaks for 65 matched site groups + 114 built-in engines (`src/config/loadList.ts`)
+- Per-site tweaks for 65 matched site groups + 92 built-in engines (`src/config/loadList.ts`, `src/config/sites/`)
 - Fixed headers never sit under the menu bar: per-site offsets are generated at build time, with runtime hit-testing as a fallback for uncovered sites
 
 ## Development

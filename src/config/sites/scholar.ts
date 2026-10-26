@@ -21,10 +21,6 @@ const sites: Partial<Site>[] = [
   {
     nameZh: 'Springer',
     url: 'http://rd.springer.com/search?query=%s'
-  },
-  {
-    nameZh: '国家图书馆',
-    url: 'http://find.nlc.cn/search/doSearch?query=%s&secQuery=&actualQuery=%s&searchType=2&docType=%E5%85%A8%E9%83%A8&isGroup=isGroup&targetFieldLog=%E5%85%A8%E9%83%A8%E5%AD%97%E6%AE%B5&orderBy=RELATIVE'
   }
 ]
 

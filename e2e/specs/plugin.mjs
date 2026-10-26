@@ -242,6 +242,42 @@ export async function run ({ headless, report }) {
       `radios=${interaction.radios}`
     )
     await popup.screenshot({ path: path.join(ARTIFACTS, 'plugin-options-interaction.png') })
+
+    // 5. 移动端抽屉：占满宽度、标签在上、内容可滚动（375px 下不再挤成两列）
+    await page.setViewportSize({ width: 375, height: 667 })
+    await page.goto(FIXTURE_URL, { waitUntil: 'domcontentloaded' })
+    await waitForMenu(page)
+    await page.waitForTimeout(500)
+    await page.locator('.as-setting-btn').filter({ hasText: '设置' }).click()
+    await page.waitForTimeout(600)
+    const mobileDrawer = await page.evaluate(() => {
+      const sr = document.querySelector('all-search-ui').shadowRoot
+      const bar = sr.querySelector('.as-side-bar')
+      const section = bar?.querySelector('section')
+      const label = bar?.querySelector('.as-label')
+      const content = bar?.querySelector('.as-content')
+      const barRect = bar?.getBoundingClientRect()
+      return {
+        width: barRect ? Math.round(barRect.width) : 0,
+        viewport: window.innerWidth,
+        labelDisplay: label ? getComputedStyle(label).display : '',
+        labelWidth: label ? Math.round(label.getBoundingClientRect().width) : 0,
+        contentMargin: content ? getComputedStyle(content).marginLeft : '',
+        contentDisplay: content ? getComputedStyle(content).display : '',
+        scrollable: section ? getComputedStyle(section).overflowY === 'auto' : false
+      }
+    })
+    report.check(
+      '移动端抽屉占满宽度、标签换成上下排列',
+      mobileDrawer.width === mobileDrawer.viewport &&
+        mobileDrawer.labelDisplay === 'block' &&
+        mobileDrawer.labelWidth > 200 &&
+        mobileDrawer.contentMargin === '0px' &&
+        mobileDrawer.contentDisplay === 'flex' &&
+        mobileDrawer.scrollable,
+      `${mobileDrawer.width}/${mobileDrawer.viewport}px label=${mobileDrawer.labelDisplay}/${mobileDrawer.labelWidth}px margin=${mobileDrawer.contentMargin} scroll=${mobileDrawer.scrollable}`
+    )
+    await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-mobile-drawer.png') })
   } finally {
     await ctx.close()
   }

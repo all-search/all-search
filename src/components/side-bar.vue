@@ -364,5 +364,80 @@ function changeScrollHide (e: any) {
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * 移动端：抽屉占满宽度、表单改成「标签在上、控件在下」、内容可滚动
+ *
+ * 原来 300px 宽的抽屉里再套 24px 内边距 + 80px 标签，控件只剩 ~150px：
+ * 「划词工具栏」这种 5 字标签会折行，单选组被挤成 2×2，底部内容还会被裁掉。
+ * ------------------------------------------------------------------ */
+@media (max-width: 480px) {
+  .as-side-bar {
+    width: 100vw;
+    min-width: 0;
+    box-shadow: none;
+
+    > header {
+      padding: 14px 16px 6px;
+      font-size: 15px;
+    }
+
+    > section {
+      height: auto;
+      margin: 0;
+      padding: 4px 16px 16px;
+      border: 0;
+      background: transparent;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    > footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding: 10px 16px 18px;
+      border-top: 1px solid rgba(0, 0, 0, .06);
+
+      .link + .link {
+        margin-left: 0;
+      }
+    }
+  }
+
+  /* form-item 的标签宽度/内容缩进是内联样式，只能 !important 覆盖 */
+  .as-side-bar .as-label {
+    float: none;
+    display: block;
+    width: auto !important;
+    padding: 10px 0 2px;
+    line-height: 1.5;
+    font-size: 13px;
+    opacity: .72;
+  }
+
+  .as-side-bar .as-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 18px;
+    margin-left: 0 !important;
+    line-height: 1.9;
+  }
+
+  /* 单选 / 按钮给够手指可点高度 */
+  .as-side-bar .as-radio {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+  }
+
+  .as-side-bar .as-open-mode-tip {
+    margin: 12px 0 4px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    line-height: 1.7;
+  }
+}
+
 </style>
 

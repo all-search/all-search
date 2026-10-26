@@ -18,10 +18,6 @@ const sites: Partial<Site>[] = [
     url: 'http://www.docin.com/search.do?searchcat=2&searchType_banner=p&nkey=%s'
   },
   {
-    nameZh: '爱问知识',
-    url: 'http://iask.sina.com.cn/search?searchWord=%s'
-  },
-  {
     nameZh: '萌娘百科',
     url: 'https://zh.moegirl.org.cn/index.php?search=%s',
     icon: 'https://zh.moegirl.org.cn/favicon.ico'
