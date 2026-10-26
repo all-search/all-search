@@ -46,15 +46,16 @@ function checkFile (label, file, minBytes) {
   return file
 }
 
-/** 在 .output 里按后缀找最新一个 zip */
+/** 在 .output 里按后缀找**最近生成**的那个 zip（按文件名排序会被 2.9.0 / 2.10.0 这种版本号坑到） */
 function findZip (suffix) {
   const dir = path.join(ROOT, 'packages', 'plugin', '.output')
   if (!fs.existsSync(dir)) return null
-  const hit = fs.readdirSync(dir)
+  const candidates = fs.readdirSync(dir)
     .filter(name => name.endsWith(suffix))
-    .sort()
-    .pop()
-  return hit ? path.join(dir, hit) : null
+    .map(name => path.join(dir, name))
+    .map(file => ({ file, mtime: fs.statSync(file).mtimeMs }))
+    .sort((a, b) => b.mtime - a.mtime)
+  return candidates.length ? candidates[0].file : null
 }
 
 /* ---------- 1. 用户脚本 ---------- */

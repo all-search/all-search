@@ -7,7 +7,8 @@
         </h3>
         <p class="card-desc">
           控制左键点击链接时，是在当前页跳转还是新标签页打开。两组互不影响，改完即时生效。
-        </p>      </header>
+        </p>
+      </header>
 
       <div class="row">
         <div class="row-label">

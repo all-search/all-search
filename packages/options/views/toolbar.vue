@@ -132,6 +132,9 @@
               border>
               {{ item.nameZh }}
               <span class="picker-host">{{ hostOf(item.url) }}</span>
+              <span
+                v-if="item.hidden"
+                class="picker-hidden">菜单里已隐藏</span>
             </el-checkbox>
           </el-checkbox-group>
           <p
@@ -222,6 +225,9 @@ onMounted(async () => {
     stored = null
   }
   if (!Array.isArray(stored) || !stored.length) return
+  // 线下配置站连不上油猴时要等满 WebBridge 的 5 秒才降级；
+  // 这期间用户可能已经点「从菜单选择」加了几项，别用旧数据把它们冲掉
+  if (dirty.value) return
   list.value = stored.map(withUid)
   savedSnapshot.value = snapshotOf(list.value)
 })
@@ -250,6 +256,8 @@ interface PickerItem {
   nameZh?: string
   url: string
   icon?: string
+  /** 在站点配置里被隐藏了（菜单里不显示），加进来时给个角标 */
+  hidden?: boolean
 }
 
 interface PickerCategory {
@@ -268,7 +276,8 @@ const categories = computed<PickerCategory[]>(() =>
       .map(item => ({
         nameZh: item.nameZh,
         url: item.url as string,
-        icon: item.icon
+        icon: item.icon,
+        hidden: item.data?.visible === false
       }))
     if (list.length) {
       acc.push({ name: cate.name, nameZh: cate.nameZh, list })
@@ -277,15 +286,37 @@ const categories = computed<PickerCategory[]>(() =>
   }, [])
 )
 
+/**
+ * 判断两个地址是不是同一个引擎。
+ *
+ * 只做「严格相等」不够：大小写、末尾斜杠、`%s` 之外的参数（`?wd=%s` vs `?wd=%s&ie=utf-8`）
+ * 都会被当成不同条目，同一个引擎能重复加两次。
+ */
+function urlKey (url: string): string {
+  const raw = String(url || '').trim()
+  if (!raw) return ''
+  try {
+    // 占位符先换成一个不会出现在真实 URL 里的串，避免被 URL 解析吞掉
+    const marker = '__QUERY__'
+    const parsed = new URL(raw.replace('%s', marker))
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, '')
+    const path = parsed.pathname.replace(/\/+$/, '')
+    // 查询串里的占位符与参数都归一：同一个 host+path 视为同一个引擎
+    return `${parsed.protocol.toLowerCase()}//${host}${path}`
+  } catch {
+    return raw.toLowerCase().replace(/\/+$/, '')
+  }
+}
+
 const activeCategory = ref('')
 const activeItems = computed(() => categories.value.find(c => c.name === activeCategory.value)?.list || [])
 const allItems = computed(() => categories.value.flatMap(c => c.list))
 const pickerVisible = ref(false)
 const picked = ref<string[]>([])
-const usedUrls = computed(() => new Set(list.value.map(item => item.url)))
+const usedUrls = computed(() => new Set(list.value.map(item => urlKey(item.url))))
 
 function isExisting (url: string): boolean {
-  return usedUrls.value.has(url)
+  return usedUrls.value.has(urlKey(url))
 }
 
 function hostOf (url: string): string {
@@ -303,13 +334,14 @@ function openPicker () {
 }
 
 function addPicked () {
-  const seen = new Set(list.value.map(item => item.url))
+  const seen = new Set(list.value.map(item => urlKey(item.url)))
   let added = 0
   allItems.value
     .filter(item => picked.value.includes(item.url))
     .forEach(item => {
-      if (seen.has(item.url)) return
-      seen.add(item.url)
+      const key = urlKey(item.url)
+      if (seen.has(key)) return
+      seen.add(key)
       list.value.push(withUid({
         nameZh: item.nameZh || '',
         url: item.url,
@@ -594,6 +626,17 @@ async function reset () {
     margin-left: 6px;
     font-size: 12px;
     color: var(--el-text-color-secondary);
+  }
+
+  /* 站点配置里被隐藏的引擎：仍然可以加进工具栏，但要标出来 */
+  .picker-hidden {
+    margin-left: 6px;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--el-text-color-secondary);
+    background: var(--el-fill-color);
   }
 
   .picker-empty {

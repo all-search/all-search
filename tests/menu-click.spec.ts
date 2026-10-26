@@ -37,8 +37,13 @@ describe('pickCategoryTargets', () => {
     expect(pickCategoryTargets(undefined)).toEqual([])
   })
 
-  it('正则形式的 url（纯匹配规则）不丢弃，交给调用方决定', () => {
-    const list = [item(/baidu/)]
-    expect(pickCategoryTargets(list, 'example.org')).toHaveLength(1)
+  it('正则形式的 url（纯匹配规则）不参与：调用方拿它做 .replace 会抛错', () => {
+    const list = [item(/baidu/), item('https://a.com/s?q=%s')]
+    expect(pickCategoryTargets(list, 'example.org').map(i => i.url)).toEqual(['https://a.com/s?q=%s'])
+  })
+
+  it('data 缺失的旧数据不算可见，不会被选中', () => {
+    const list = [{ nameZh: '旧数据', url: 'https://a.com' }] as any
+    expect(pickCategoryTargets(list, 'example.org')).toEqual([])
   })
 })

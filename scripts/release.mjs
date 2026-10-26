@@ -71,8 +71,8 @@ const dirty = execFileSync('git', ['status', '--porcelain'], { cwd: ROOT, encodi
   .split('\n')
   .map(line => line.trim())
   .filter(Boolean)
-  // 发版只允许 package.json 自己还是干净的（下面会改它）
-  .filter(line => !line.endsWith('package.json'))
+  // 只放行根 package.json（下面会改它）；packages/*/package.json 有改动照样拦
+  .filter(line => line.slice(3) !== 'package.json')
   // .claude/ 是本地工具配置，不该挡住发版
   .filter(line => !line.includes('.claude/'))
 if (dirty.length) {

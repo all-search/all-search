@@ -292,7 +292,8 @@ export default {
       document.body.appendChild(link)
       link.click()
       link.remove()
-      URL.revokeObjectURL(url)
+      // 立刻 revoke 会让 Firefox / Safari 偶发取消下载，延后一点再释放
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
       ElMessage.success('已下载配置文件')
     }
 
@@ -307,7 +308,9 @@ export default {
       if (!file) return
       const reader = new FileReader()
       reader.onload = () => {
-        const json = jsonParse(String(reader.result || ''))
+        // Windows 上导出的文件常带 UTF-8 BOM，JSON.parse 会直接报错，先去掉
+        const text = String(reader.result || '').replace(/^\uFEFF/, '')
+        const json = jsonParse(text)
         if (!json) {
           ElMessage.error(`「${file.name}」不是合法 JSON`)
           return

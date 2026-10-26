@@ -12,7 +12,8 @@ withDefaults(defineProps<{
     <template v-if="!compact">
       「主菜单」= 顶部菜单里的分类和网址；「划词」= 选中文字后的工具栏与「更多」弹窗。<br>
     </template>
-    按住 Ctrl 或用鼠标中键点击，会以上面所选的<strong>另一种</strong>方式打开。
+    按住 Ctrl 或用鼠标中键点击，会以上面所选的<strong>另一种</strong>方式打开。<br>
+    「分类全开」只对普通左键生效，Ctrl / 中键仍只开一个；油猴版一次开多个可能被浏览器拦掉一部分。
   </p>
 </template>
 
