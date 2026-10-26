@@ -56,6 +56,42 @@ try {
   // 不存在才继续
 }
 
+/**
+ * 发版前的三道门禁。
+ *
+ * 以前这里只 stage package.json：工作区里未提交的源码改动不会进 tag，
+ * 但版本号照样发出去 —— 用户拿到的包和仓库对不上，排查时极其难受。
+ */
+function fail (message) {
+  console.error(`\n✘ ${message}`)
+  process.exit(1)
+}
+
+const dirty = execFileSync('git', ['status', '--porcelain'], { cwd: ROOT, encoding: 'utf8' })
+  .split('\n')
+  .map(line => line.trim())
+  .filter(Boolean)
+  // 发版只允许 package.json 自己还是干净的（下面会改它）
+  .filter(line => !line.endsWith('package.json'))
+  // .claude/ 是本地工具配置，不该挡住发版
+  .filter(line => !line.includes('.claude/'))
+if (dirty.length) {
+  fail(`工作区有未提交的改动，先提交或 stash 再发版：\n  ${dirty.slice(0, 5).join('\n  ')}`)
+}
+
+console.log('▶ 跑 lint + 类型检查 + 单测（pnpm verify）')
+try {
+  execFileSync('pnpm', ['verify'], { cwd: ROOT, stdio: 'inherit', shell: process.platform === 'win32' })
+} catch {
+  fail('pnpm verify 没过，发版中止（tag 未创建）')
+}
+
+// changelog/<version>.md 存在时，CI 会用它当 Release 正文（见 scripts/changelog.mjs）
+const notes = path.join(ROOT, 'changelog', `${next}.md`)
+console.log(fs.existsSync(notes)
+  ? `▶ 将使用手写更新日志：changelog/${next}.md`
+  : `ℹ 没有 changelog/${next}.md，Release 正文会由提交历史自动生成`)
+
 pkg.version = next
 fs.writeFileSync(PKG, `${JSON.stringify(pkg, null, 2)}\n`, 'utf8')
 console.log(`版本：${current} → ${next}`)
