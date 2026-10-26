@@ -7,8 +7,7 @@
         </h3>
         <p class="card-desc">
           控制左键点击链接时，是在当前页跳转还是新标签页打开。两组互不影响，改完即时生效。
-        </p>
-      </header>
+        </p>      </header>
 
       <div class="row">
         <div class="row-label">
@@ -40,6 +39,19 @@
         </el-radio-group>
       </div>
 
+      <div class="row">
+        <div class="row-label">
+          <span class="row-name">点击分类一次性打开</span>
+          <span class="row-hint">
+            点顶部分类时，把该分类下所有站点各开一个新标签页；Ctrl / 中键仍只开一个
+          </span>
+        </div>
+        <el-switch
+          v-model="openAllInCategory"
+          active-text="开"
+          inactive-text="关" />
+      </div>
+
       <footer class="card-foot">
         <openModeTip compact />
       </footer>
@@ -51,8 +63,9 @@
 import openModeTip from '@src/components/open-mode-tip.vue'
 import useOpenMode from '@src/components/useOpenMode'
 
-// 与条上的设置抽屉共用同一份配置（__allSearch__openModeMenu / openModeSelection），改完即时生效
-const { menuOpenMode, selectionOpenMode } = useOpenMode()
+// 与条上的设置抽屉共用同一份配置（__allSearch__openModeMenu / openModeSelection /
+// openAllInCategory），改完即时生效
+const { menuOpenMode, selectionOpenMode, openAllInCategory } = useOpenMode()
 </script>
 
 <style lang="scss">

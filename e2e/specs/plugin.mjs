@@ -69,8 +69,32 @@ export async function run ({ headless, report }) {
       `header.top=${stickyTop} bar.h=${initial.bar && initial.bar.h}`
     )
     await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-sticky.png') })
-    await page.evaluate(() => window.scrollTo(0, 0))
-    await page.waitForTimeout(200)
+
+    // 1.11 站点自己把 top 改掉（滚动收起头部）时，我们不能再覆盖回去
+    //      B 站 / YouTube 这类站点滚动时会把头部顶到 -60px，被我们改回来就收不起来
+    await page.evaluate(() => {
+      const el = document.querySelector('header.site')
+      el.style.setProperty('top', '-60px', 'important')
+    })
+    await page.waitForTimeout(600)
+    const takenOver = await page.evaluate(() => {
+      const el = document.querySelector('header.site')
+      return {
+        top: getComputedStyle(el).top,
+        adjusted: el.hasAttribute('data-as-adjusted')
+      }
+    })
+    report.check(
+      '站点接管 top 后不再被覆盖',
+      takenOver.top === '-60px' && takenOver.adjusted === false,
+      `top=${takenOver.top} adjusted=${takenOver.adjusted}`
+    )
+
+    await page.evaluate(() => {
+      document.querySelector('header.site').style.removeProperty('top')
+      window.scrollTo(0, 0)
+    })
+    await page.waitForTimeout(400)
 
     // 1.15 命中 generatedStyle 的站点：只注入静态 CSS，不跑运行时采样
     await page.goto('https://cn.bing.com/search?q=all-search', { waitUntil: 'domcontentloaded' })
@@ -118,6 +142,41 @@ export async function run ({ headless, report }) {
       '跳到谷歌时关键词正确',
       page.url().includes('q=all-search-e2e'),
       page.url().slice(0, 90)
+    )
+    await page.goto(FIXTURE_URL, { waitUntil: 'domcontentloaded' })
+    await waitForMenu(page)
+    await page.waitForTimeout(400)
+
+    // 1.3 分类全开（issue #87）：默认关闭，抽屉里开启后点一次分类要开多个标签页
+    const pagesBefore = ctx.pages().length
+    await switchMode(page, '开启')
+    await page.locator('.as-menu-item').filter({ hasText: '搜索' }).first().click()
+    await page.waitForTimeout(2500)
+    const pagesAfter = ctx.pages().length
+    report.check(
+      '分类全开：点分类一次打开多个标签页',
+      pagesAfter - pagesBefore >= 3,
+      `标签页 ${pagesBefore} → ${pagesAfter}`
+    )
+    for (const extra of ctx.pages()) {
+      if (extra !== page) await extra.close().catch(() => {})
+    }
+    await page.bringToFront()
+    // 抽屉里的「分类全开」关掉（getByText 在 label/span 上会命中两个，改用 label 作用域）
+    await page.locator('.as-setting-btn').filter({ hasText: '设置' }).click()
+    await page.waitForTimeout(400)
+    await page.locator('label.as-radio').filter({ hasText: '关闭' }).first().click()
+    await page.waitForTimeout(300)
+    await page.locator('.as-overlay').click({ position: { x: 8, y: 400 } })
+    await page.waitForTimeout(400)
+    const pagesBeforeSingle = ctx.pages().length
+    await page.locator('.as-menu-item').filter({ hasText: '搜索' }).first().click()
+    await page.waitForTimeout(1500)
+    const pagesAfterSingle = ctx.pages().length
+    report.check(
+      '关掉开关后恢复单开',
+      pagesAfterSingle - pagesBeforeSingle <= 1,
+      `标签页 ${pagesBeforeSingle} → ${pagesAfterSingle}`
     )
     await page.goto(FIXTURE_URL, { waitUntil: 'domcontentloaded' })
     await waitForMenu(page)

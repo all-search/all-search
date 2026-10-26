@@ -24,7 +24,7 @@ const onMaskClick = () => {
 }
 
 const { value: mode, direction } = useMode()
-const { menuOpenMode, selectionOpenMode } = useOpenMode()
+const { menuOpenMode, selectionOpenMode, openAllInCategory } = useOpenMode()
 const { list: alignList, value: align } = useAlign()
 const { primaryColor, primaryTextColor } = useColor()
 const { show, options, scrollHide } = useSwitchShow()
@@ -151,6 +151,16 @@ function changeScrollHide (e: any) {
                 <asRadio
                   label="new"
                   v-model="selectionOpenMode">新标签页
+                </asRadio>
+              </formItem>
+              <formItem label="分类全开" label-width="64">
+                <asRadio
+                  :label="false"
+                  v-model="openAllInCategory">关闭
+                </asRadio>
+                <asRadio
+                  :label="true"
+                  v-model="openAllInCategory">开启
                 </asRadio>
               </formItem>
               <openModeTip/>

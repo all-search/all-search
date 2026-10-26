@@ -6,9 +6,10 @@ import { resolveKeyword } from '../util/getKeyword'
 import icon from './icon.vue'
 import favicon from './favicon.vue'
 import { onTap } from '../util/tap'
-import { openUrl, otherOpenMode, type OpenMode } from '../util/openUrl'
+import { openUrl, openUrls, otherOpenMode, type OpenMode } from '../util/openUrl'
+import { pickCategoryTargets } from '../util/menuTargets'
 import { selection } from './selection'
-import { menuOpenMode } from './useOpenMode'
+import { menuOpenMode, openAllInCategory } from './useOpenMode'
 import { Site, SiteCategory } from '../types/site'
 
 const props = withDefaults(defineProps<{
@@ -50,10 +51,14 @@ const defaultKeyword = () => {
 /** Ctrl / 中键固定走“另一侧”的打开方式 */
 const altMode = computed(() => otherOpenMode(menuOpenMode.value))
 
-const handleClick = (item: Site, mode?: OpenMode) => {
-  const keyword = defaultKeyword()
+/** 关键词只取一次，批量打开时不用每个站点都重新扫一遍页面 */
+const openItem = (item: Site, keyword: string, mode?: OpenMode) => {
   const url = (item.url as string).replace('%s', keyword)
   openUrl(url, mode || menuOpenMode.value)
+}
+
+const handleClick = (item: Site, mode?: OpenMode) => {
+  openItem(item, defaultKeyword(), mode)
   return false
 }
 
@@ -62,11 +67,18 @@ const handleCateClick = (cate: SiteCategory, mode?: OpenMode) => {
   if (isTap) {
     return
   }
-  const urlItem = cate.list
-    .filter(item => item.data?.visible)
-    .find(item => (item.url as string).indexOf(window.location.hostname) === -1)
-  if (urlItem) {
-    return handleClick(urlItem, mode)
+  const targets = pickCategoryTargets(cate.list)
+
+  // 「一次性打开本分类全部站点」只对普通左键生效；Ctrl / 中键仍按单站点处理，
+  // 这样两种交互不会互相打架。批量打开固定走新标签页 —— 当前页模式会互相覆盖。
+  if (!mode && openAllInCategory.value && targets.length) {
+    const keyword = defaultKeyword()
+    openUrls(targets.map(item => (item.url as string).replace('%s', keyword)))
+    return
+  }
+
+  if (targets.length) {
+    return handleClick(targets[0], mode)
   }
 }
 

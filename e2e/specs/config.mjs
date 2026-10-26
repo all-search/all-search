@@ -582,6 +582,22 @@ export async function run ({ headless, report }) {
       (interaction.tip || '(缺失)').slice(0, 40)
     )
     report.check('交互卡片限宽', interaction.cardWidth <= 760, `${interaction.cardWidth}px`)
+
+    // 「点击分类一次性打开」开关（issue #87），默认关闭
+    const switchBefore = await page.evaluate(() => ({
+      exists: !!document.querySelector('.interaction-page .el-switch'),
+      checked: document.querySelector('.interaction-page .el-switch')?.classList.contains('is-checked')
+    }))
+    report.check('交互页有「分类全开」开关且默认关闭', switchBefore.exists && switchBefore.checked === false, `checked=${switchBefore.checked}`)
+    await page.locator('.interaction-page .el-switch').click()
+    await page.waitForTimeout(300)
+    const switchAfter = await page.evaluate(() => document.querySelector('.interaction-page .el-switch')?.classList.contains('is-checked'))
+    report.check('点开关后变为开启', switchAfter === true)
+    await page.locator('.interaction-page .el-switch').click()
+    await page.waitForTimeout(300)
+    const switchRestored = await page.evaluate(() => document.querySelector('.interaction-page .el-switch')?.classList.contains('is-checked'))
+    report.check('再点一次回到关闭', switchRestored === false)
+
     await shot('config-interaction.png')
 
     /* ---------- JSON 编辑 ---------- */
