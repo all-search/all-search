@@ -20,7 +20,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  verify:
+    uses: ./.github/workflows/verify.yml
+
   build-and-deploy:
+    needs: verify
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -29,10 +33,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js 20.x # 配置Node环境
-        uses: actions/setup-node@v4 # 配置脚本来自 https://github.com/actions/setup-node
+      - name: Use Node.js 22.x # wxt 0.21 要求 >= 22
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm

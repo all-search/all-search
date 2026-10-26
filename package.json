@@ -47,7 +47,8 @@
     "dev:firefox": "pnpm run -C packages/plugin dev:firefox",
     "zip:firefox": "pnpm with-temp run -C packages/plugin zip:firefox",
     "dev:options": "pnpm run -C packages/options dev",
-    "build:options": "pnpm with-temp run -C packages/options build"
+    "build:options": "pnpm with-temp run -C packages/options build",
+    "check:artifacts": "node scripts/check-artifacts.mjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
@@ -106,5 +107,8 @@
       "yaml@2": "^2.8.3",
       "postcss-selector-parser": "^7.1.6"
     }
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

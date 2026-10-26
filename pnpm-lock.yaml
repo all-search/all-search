@@ -134,7 +134,14 @@ importers:
 
   packages/options: {}
 
-  packages/plugin: {}
+  packages/plugin:
+    devDependencies:
+      '@wxt-dev/module-vue':
+        specifier: ^1.0.3
+        version: 1.0.3(vite@7.3.7(@types/node@20.5.1)(jiti@2.7.0)(sass@1.106.1)(terser@5.37.0)(yaml@2.9.1))(vue@3.5.44(typescript@5.7.2))(wxt@0.21.4(esbuild@0.28.2)(eslint@8.57.1)(rollup@4.65.0)(typescript@5.7.2)(vite@7.3.7(@types/node@20.5.1)(jiti@2.7.0)(sass@1.106.1)(terser@5.37.0)(yaml@2.9.1)))
+      wxt:
+        specifier: ^0.21.4
+        version: 0.21.4(esbuild@0.28.2)(eslint@8.57.1)(rollup@4.65.0)(typescript@5.7.2)(vite@7.3.7(@types/node@20.5.1)(jiti@2.7.0)(sass@1.106.1)(terser@5.37.0)(yaml@2.9.1))
 
   packages/script: {}
 
