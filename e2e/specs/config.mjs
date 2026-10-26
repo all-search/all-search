@@ -592,9 +592,50 @@ export async function run ({ headless, report }) {
       buttons: [...document.querySelectorAll('.editor-toolbar .el-button')].map(b => b.textContent.trim()),
       editorHeight: Math.round(document.querySelector('.editor-body .jsoneditor')?.getBoundingClientRect().height || 0)
     }))
-    report.check('JSON 工具栏五个按钮', editPage.buttons.length === 5, editPage.buttons.join(' / '))
+    report.check('JSON 工具栏七个按钮', editPage.buttons.length === 7, editPage.buttons.join(' / '))
     report.check('编辑器撑满面板', editPage.editorHeight > 400, `${editPage.editorHeight}px`)
     await shot('config-edit.png')
+
+    // 导出/导入：配置文件是用户唯一的资产，必须能带得走、换形态也不丢
+    const importPayload = [
+      {
+        nameZh: '导入分类',
+        name: 'imported',
+        data: { visible: true },
+        list: [
+          { nameZh: '导入站点 A', url: 'https://example.com/a?q=%s', data: { visible: true } },
+          { nameZh: '导入站点 B', url: 'https://example.com/b?q=%s', data: { visible: true } }
+        ]
+      }
+    ]
+    await page.locator('.editor-toolbar input[type="file"]').setInputFiles({
+      name: 'sites.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(importPayload), 'utf8')
+    })
+    await page.waitForTimeout(700)
+    const imported = await page.evaluate(() => ({
+      hasImported: (document.querySelector('.jsoneditor')?.textContent || '').includes('导入站点 A'),
+      toast: [...document.querySelectorAll('.el-message')].map(m => m.textContent.trim()).join(' | ')
+    }))
+    report.check('从文件导入后编辑器内容被替换', imported.hasImported, imported.toast || '无提示')
+
+    // 非法 JSON：必须拒绝，且不改动编辑器里的内容
+    await page.locator('.editor-toolbar input[type="file"]').setInputFiles({
+      name: 'broken.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from('{"not":"an array"}', 'utf8')
+    })
+    await page.waitForTimeout(600)
+    const rejected = await page.evaluate(() => ({
+      stillImported: (document.querySelector('.jsoneditor')?.textContent || '').includes('导入站点 A'),
+      error: [...document.querySelectorAll('.el-message--error')].map(m => m.textContent.trim()).join(' | ')
+    }))
+    report.check(
+      '非法配置被拒绝且不改动编辑器',
+      rejected.stillImported && rejected.error.includes('格式不对'),
+      rejected.error || '没有报错提示'
+    )
 
     /* ---------- 深色模式 ---------- */
     await go('/config/sites')

@@ -12,6 +12,9 @@ const mockDirection = ref('mid')
 vi.mock('@src/util/storage', () => ({
   getStorage: vi.fn().mockResolvedValue(null),
   setStorage: vi.fn().mockResolvedValue(undefined),
+  delStorage: vi.fn().mockResolvedValue(true),
+  // useSites / useToolbar 在模块加载时会订阅变更；这里只需要一个空实现
+  watchStorage: vi.fn(() => () => {})
 }))
 
 vi.mock('@src/util/useScroll', () => ({

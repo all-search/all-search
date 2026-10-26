@@ -13,9 +13,25 @@
       </el-button>
       <el-button
         size="small"
+        @click="exportToFile">
+        下载 JSON
+      </el-button>
+      <el-button
+        size="small"
         @click="importFormClipboard">
         从剪贴板导入
       </el-button>
+      <el-button
+        size="small"
+        @click="pickFile">
+        从文件导入
+      </el-button>
+      <input
+        ref="fileInput"
+        class="file-input"
+        type="file"
+        accept="application/json,.json"
+        @change="importFromFile">
       <span class="toolbar-spacer" />
       <el-button
         size="small"
@@ -41,6 +57,7 @@ import JSONEditor from 'jsoneditor'
 import 'jsoneditor/dist/jsoneditor.css'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import clipboard from '../util/clipboard'
+import { validateSites } from '../util/validateSites'
 
 export default {
   name: 'json-editor',
@@ -52,6 +69,7 @@ export default {
   emits: ['reset', 'save', 'change'],
   setup (props, ctx) {
     const jsoneditor = ref(null)
+    const fileInput = ref(null)
     let instance = null
     let changeTimer = null
     onMounted(() => {
@@ -213,17 +231,41 @@ export default {
       return null
     }
 
+    /** 读编辑器当前内容；非法 JSON 返回 null 并提示 */
+    function currentJson () {
+      try {
+        return instance.get()
+      } catch {
+        ElMessage.error('当前内容不是合法 JSON')
+        return null
+      }
+    }
+
+    /**
+     * 导入前统一校验形状：形状不对就拒绝，别把用户的存储写坏。
+     * 返回 true 表示已 emit change。
+     */
+    function applyImported (json) {
+      const result = validateSites(json)
+      if (!result.ok) {
+        ElMessage.error(`配置格式不对：${result.error}`)
+        return false
+      }
+      ctx.emit('change', json)
+      ElMessage.success(`已导入 ${result.categories} 个分类 / ${result.sites} 个站点，记得保存`)
+      return true
+    }
+
     function importFormClipboard () {
       navigator.clipboard
         .readText()
         .then(value => {
           const json = jsonParse(value)
-          if (json) {
-            ctx.emit('change', json)
-            ElMessage.success('导入成功')
-          } else {
-            ElMessage.error('获取到的网址格式有误')
+          if (!json) {
+            ElMessage.error('剪贴板里不是合法 JSON')
+            return
           }
+          applyImported(json)
         })
         .catch((v) => {
           ElMessage.error('获取剪贴板失败: ', v)
@@ -232,24 +274,61 @@ export default {
 
     function exportToClipboard () {
       // 复制编辑器里的当前内容，而不是外部传入的 props（可能已经改过还没保存）
-      let text
-      try {
-        text = JSON.stringify(instance.get(), null, 2)
-      } catch (e) {
-        ElMessage.error('当前内容不是合法 JSON，无法复制')
-        return
-      }
-      clipboard(text)
+      const json = currentJson()
+      if (!json) return
+      clipboard(JSON.stringify(json, null, 2))
       ElMessage.success('已复制当前配置到剪贴板')
+    }
+
+    /** 导出成 .json 文件，方便备份 / 换设备 / 换形态（油猴 ↔ 插件） */
+    function exportToFile () {
+      const json = currentJson()
+      if (!json) return
+      const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `all-search-sites-${new Date().toISOString().slice(0, 10)}.json`
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(url)
+      ElMessage.success('已下载配置文件')
+    }
+
+    function pickFile () {
+      fileInput.value?.click()
+    }
+
+    function importFromFile (event) {
+      const file = event.target.files && event.target.files[0]
+      // 同一个文件选两次也要能触发 change
+      event.target.value = ''
+      if (!file) return
+      const reader = new FileReader()
+      reader.onload = () => {
+        const json = jsonParse(String(reader.result || ''))
+        if (!json) {
+          ElMessage.error(`「${file.name}」不是合法 JSON`)
+          return
+        }
+        applyImported(json)
+      }
+      reader.onerror = () => ElMessage.error('读取文件失败')
+      reader.readAsText(file)
     }
 
     return {
       jsoneditor,
+      fileInput,
       reset,
       format,
       save,
       exportToClipboard,
-      importFormClipboard
+      exportToFile,
+      importFormClipboard,
+      pickFile,
+      importFromFile
     }
   }
 }
@@ -261,6 +340,11 @@ export default {
   flex-direction: column;
   flex: 1;
   min-height: 0;
+}
+
+/* 隐藏的 file input：由「从文件导入」按钮触发 */
+.file-input {
+  display: none;
 }
 
 .editor-toolbar {

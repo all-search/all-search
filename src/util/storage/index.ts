@@ -38,5 +38,14 @@ export const getStorage = <T = any>(name: string): Promise<T | null> => activeAd
 export const setStorage = <T = any>(name: string, value: T): Promise<T> => activeAdapter.set<T>(name, value)
 export const delStorage = (name: string): Promise<boolean> => activeAdapter.remove(name)
 
+/**
+ * 订阅某个 key 的变化，返回取消订阅函数。
+ * 只有插件版（chrome.storage）实现了真正的跨上下文监听；
+ * 油猴的 GM 存储没有变更事件，配置站走桥接也不订阅，都会退化成 noop。
+ */
+export function watchStorage<T = any>(name: string, callback: (value: T | null) => void): () => void {
+  return activeAdapter.watch ? activeAdapter.watch<T>(name, callback) : () => {}
+}
+
 // 兼容旧代码的空导出
 export function getTmMethods(): void {}

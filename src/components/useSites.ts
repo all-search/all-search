@@ -1,6 +1,6 @@
 import { computed, ref, ComputedRef } from 'vue'
 import sites from '../config/sites'
-import { getStorage, delStorage } from '../util/storage'
+import { getStorage, delStorage, watchStorage } from '../util/storage'
 import { SiteCategory } from '../types/site'
 
 // 先用内置默认值渲染，等存储返回后再替换。
@@ -37,6 +37,12 @@ getStorage<SiteCategory[]>('sites').then(val => {
   sitesData.value = getSites(val)
 }).catch(() => {
   sitesData.value = sites as SiteCategory[]
+})
+
+// 别的上下文（另一个标签页 / 插件设置页）保存后同步过来：
+// 以前只在模块加载时读一次，设置页改完菜单条要等刷新才变。
+watchStorage<SiteCategory[]>('sites', (value) => {
+  sitesData.value = JSON.parse(JSON.stringify(getSites(value)))
 })
 
 function resetSites (): void {

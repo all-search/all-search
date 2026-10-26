@@ -25,4 +25,16 @@ export class ExtensionAdapter implements StorageAdapter {
     await wxtStorage.removeItem(`local:${key}`)
     return true
   }
+
+  /**
+   * 监听 storage 变化：设置页保存后，已经打开的页面里的菜单条能立刻更新，
+   * 不用等用户刷新（以前只有模块加载时读一次，用户会以为没保存）。
+   */
+  watch<T = any>(name: string, callback: (value: T | null) => void): () => void {
+    const key = getName(name)
+    if (!key) return () => {}
+    return wxtStorage.watch(`local:${key}`, (newValue) => {
+      callback(parseJson(newValue) as T | null)
+    })
+  }
 }

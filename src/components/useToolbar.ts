@@ -1,6 +1,6 @@
 import useConfig from './useConfig'
 import { ref, computed, ComputedRef, WritableComputedRef } from 'vue'
-import { getStorage } from '../util/storage'
+import { getStorage, watchStorage } from '../util/storage'
 import toolbar from '../config/toolbar'
 
 const sites = ref<any[]>([])
@@ -17,6 +17,11 @@ getStorage('toolbar').then(val => {
   sites.value = getList(val)
 }).catch(() => {
   sites.value = toolbar
+})
+
+// 与 useSites 同理：别的上下文改了工具栏，已打开的页面跟着更新
+watchStorage('toolbar', (value) => {
+  sites.value = JSON.parse(JSON.stringify(getList(value)))
 })
 
 function initToolBar (list: any[], type?: string): any[] {
