@@ -564,6 +564,36 @@ export async function run ({ headless, report }) {
     report.check('工具栏可切换显示/隐藏', hiddenRows === 1, `${hiddenRows} 行隐藏`)
     await page.locator('.save-bar .el-button').filter({ hasText: '撤销' }).click()
     await page.waitForTimeout(300)
+
+    // 「从菜单选择」：勾选站点配置里的引擎，直接加进工具栏（issue #67）
+    await page.locator('.head-actions .el-button').filter({ hasText: '从菜单选择' }).click()
+    await page.waitForSelector('.picker-dialog .picker-nav-item', { timeout: 10000 })
+    const picker = await page.evaluate(() => ({
+      cats: document.querySelectorAll('.picker-dialog .picker-nav-item').length,
+      items: document.querySelectorAll('.picker-dialog .picker-body .el-checkbox').length,
+      addDisabled: !!document.querySelector('.picker-dialog .el-button--primary')?.disabled
+    }))
+    report.check('从菜单选择：分类与站点都列出来了', picker.cats > 3 && picker.items > 3, `分类 ${picker.cats} / 本站站点 ${picker.items}`)
+    report.check('未勾选时「添加所选」不可点', picker.addDisabled === true)
+
+    await page.locator('.picker-dialog .picker-body .el-checkbox:not(.is-disabled)').first().click()
+    await page.waitForTimeout(200)
+    await page.locator('.picker-dialog .el-button--primary').click()
+    await page.waitForTimeout(400)
+    const afterPicker = await page.evaluate(() => {
+      const dialog = document.querySelector('.picker-dialog')
+      const overlay = dialog ? dialog.closest('.el-overlay') : null
+      return {
+        rows: document.querySelectorAll('.item-row').length,
+        dirty: document.querySelector('.save-status')?.classList.contains('is-dirty'),
+        // Element Plus 的弹窗关闭后仍在 DOM 里，看遮罩层是否 display:none
+        dialogHidden: !dialog || !overlay || getComputedStyle(overlay).display === 'none'
+      }
+    })
+    report.check('从菜单选择后可加入工具栏并进入未保存态', afterPicker.rows === toolbar.rows + 1 && afterPicker.dirty, `行 ${toolbar.rows} → ${afterPicker.rows}`)
+    report.check('加入后弹窗自动关闭', afterPicker.dialogHidden === true)
+    await page.locator('.save-bar .el-button').filter({ hasText: '撤销' }).click()
+    await page.waitForTimeout(300)
     await shot('config-toolbar.png')
 
     /* ---------- 交互页 ---------- */

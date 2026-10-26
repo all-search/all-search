@@ -10,12 +10,18 @@
             选中网页文字后弹出的工具栏，顺序即展示顺序；%s 会被替换成选中的文字。
           </p>
         </div>
-        <el-button
-          type="primary"
-          @click="addItem">
-          <el-icon><Plus /></el-icon>
-          添加网址
-        </el-button>
+        <div class="head-actions">
+          <el-button @click="openPicker">
+            <el-icon><Menu /></el-icon>
+            从菜单选择
+          </el-button>
+          <el-button
+            type="primary"
+            @click="addItem">
+            <el-icon><Plus /></el-icon>
+            添加网址
+          </el-button>
+        </div>
       </header>
 
       <draggable
@@ -78,14 +84,75 @@
         <p class="empty-title">
           还没有工具栏项
         </p>
-        <el-button
-          text
-          type="primary"
-          @click="addItem">
-          添加第一项
-        </el-button>
+        <div class="empty-actions">
+          <el-button
+            text
+            type="primary"
+            @click="openPicker">
+            从菜单选择
+          </el-button>
+          <el-button
+            text
+            type="primary"
+            @click="addItem">
+            手动添加一项
+          </el-button>
+        </div>
       </div>
     </section>
+
+    <el-dialog
+      v-model="pickerVisible"
+      title="从菜单选择"
+      width="720px"
+      append-to-body
+      class="picker-dialog">
+      <div class="picker-body">
+        <nav
+          class="picker-nav"
+          aria-label="分类">
+          <button
+            v-for="cate in categories"
+            :key="cate.name"
+            type="button"
+            class="picker-nav-item"
+            :class="{ 'is-active': cate.name === activeCategory }"
+            @click="activeCategory = cate.name">
+            <span class="picker-nav-name">{{ cate.nameZh }}</span>
+            <span class="picker-nav-count">{{ cate.list.length }}</span>
+          </button>
+        </nav>
+        <div class="picker-list">
+          <el-checkbox-group v-model="picked">
+            <el-checkbox
+              v-for="item in activeItems"
+              :key="item.url"
+              :value="item.url"
+              :disabled="isExisting(item.url)"
+              border>
+              {{ item.nameZh }}
+              <span class="picker-host">{{ hostOf(item.url) }}</span>
+            </el-checkbox>
+          </el-checkbox-group>
+          <p
+            v-if="!activeItems.length"
+            class="picker-empty">
+            这个分类还没有站点
+          </p>
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="pickerVisible = false">
+          取消
+        </el-button>
+        <el-button
+          type="primary"
+          :disabled="!picked.length"
+          @click="addPicked">
+          添加所选{{ picked.length ? `（${picked.length}）` : '' }}
+        </el-button>
+      </template>
+    </el-dialog>
 
     <save-bar
       :dirty="dirty"
@@ -99,10 +166,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Delete, Hide, Plus, Rank, View } from '@element-plus/icons-vue'
+import { Delete, Hide, Menu, Plus, Rank, View } from '@element-plus/icons-vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { getStorage, setStorage } from '@src/util/storage'
 import { initToolbar } from '@src/util/toolbar'
+import useSites from '@src/components/useSites'
 import saveBar from '../components/save-bar.vue'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
 import confirmReset from '../composables/confirm-reset'
@@ -172,6 +240,92 @@ function addItem () {
 
 function removeItem (index: number) {
   list.value.splice(index, 1)
+}
+
+/**
+ * 「从菜单选择」：把站点配置里的引擎直接勾进工具栏，不用逐个手填网址（issue #67）。
+ * 勾选状态按 url 记，所以可以跨分类挑；已经在工具栏里的项显示为禁用。
+ */
+interface PickerItem {
+  nameZh?: string
+  url: string
+  icon?: string
+}
+
+interface PickerCategory {
+  name: string
+  nameZh?: string
+  list: PickerItem[]
+}
+
+const { sites } = useSites()
+
+/** 只保留能直接打开的条目（url 是字符串），正则匹配器不是可点击的地址 */
+const categories = computed<PickerCategory[]>(() =>
+  (sites.value || []).reduce<PickerCategory[]>((acc, cate) => {
+    const list = (cate.list || [])
+      .filter(item => typeof item.url === 'string')
+      .map(item => ({
+        nameZh: item.nameZh,
+        url: item.url as string,
+        icon: item.icon
+      }))
+    if (list.length) {
+      acc.push({ name: cate.name, nameZh: cate.nameZh, list })
+    }
+    return acc
+  }, [])
+)
+
+const activeCategory = ref('')
+const activeItems = computed(() => categories.value.find(c => c.name === activeCategory.value)?.list || [])
+const allItems = computed(() => categories.value.flatMap(c => c.list))
+const pickerVisible = ref(false)
+const picked = ref<string[]>([])
+const usedUrls = computed(() => new Set(list.value.map(item => item.url)))
+
+function isExisting (url: string): boolean {
+  return usedUrls.value.has(url)
+}
+
+function hostOf (url: string): string {
+  try {
+    return new URL(url.replace('%s', '')).hostname.replace(/^www\./, '')
+  } catch {
+    return ''
+  }
+}
+
+function openPicker () {
+  picked.value = []
+  activeCategory.value = categories.value[0]?.name || ''
+  pickerVisible.value = true
+}
+
+function addPicked () {
+  const seen = new Set(list.value.map(item => item.url))
+  let added = 0
+  allItems.value
+    .filter(item => picked.value.includes(item.url))
+    .forEach(item => {
+      if (seen.has(item.url)) return
+      seen.add(item.url)
+      list.value.push(withUid({
+        nameZh: item.nameZh || '',
+        url: item.url,
+        icon: item.icon || '',
+        data: { visible: true }
+      }))
+      added += 1
+    })
+
+  picked.value = []
+  pickerVisible.value = false
+  if (added) {
+    ElMessage.success(`已添加 ${added} 项`)
+  } else {
+    ElMessage.info('这些站点已经在工具栏里了')
+  }
 }
 
 async function save () {
@@ -324,6 +478,24 @@ async function reset () {
       font-size: 14px;
       color: var(--el-text-color-secondary);
     }
+
+    .empty-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+  }
+
+  .head-actions {
+    display: flex;
+    flex: none;
+    gap: 8px;
+  }
+
+  @media (max-width: 767px) {
+    .head-actions {
+      flex-wrap: wrap;
+    }
   }
 
   @media (max-width: 767px) {
@@ -347,6 +519,87 @@ async function reset () {
         order: 1;
       }
     }
+  }
+}
+
+/* 选择弹窗 teleport 到 body，不在 .toolbar-page 里，用全局选择器 */
+.picker-dialog {
+  .picker-body {
+    display: flex;
+    gap: 12px;
+    min-height: 240px;
+  }
+
+  .picker-nav {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: 2px;
+    width: 148px;
+    max-height: 360px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .picker-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--el-text-color-regular);
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--el-fill-color-light);
+    }
+
+    &.is-active {
+      background: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
+      font-weight: 600;
+    }
+  }
+
+  .picker-nav-count {
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+  }
+
+  .picker-list {
+    flex: 1;
+    min-width: 0;
+    max-height: 360px;
+    overflow: auto;
+  }
+
+  .el-checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .el-checkbox {
+    width: calc(50% - 4px);
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .picker-host {
+    margin-left: 6px;
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+  }
+
+  .picker-empty {
+    margin: 24px 0 0;
+    font-size: 13px;
+    color: var(--el-text-color-secondary);
   }
 }
 </style>
