@@ -1,4 +1,4 @@
-import { isPlugin } from '@src/env'
+import { isPlugin, isWeb } from '@src/env'
 import { TmAdapter } from './tm'
 import { ExtensionAdapter } from './extension'
 import { WebBridgeAdapter } from './bridge'
@@ -9,26 +9,23 @@ export { initTmMethods } from './bridge'
 
 // --- 存储管理器 ---
 
-let activeAdapter: StorageAdapter = new TmAdapter()
-
-// 自动根据构建目标选择初始适配器
-const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
-const isOptionsPage = typeof window !== 'undefined' && (
-  window.location.pathname.includes('options') ||
-  hostname.includes('github.io') ||
-  hostname.includes('gitee.io') ||
-  // 本地 dev（pnpm dev:options）也走配置站逻辑，否则会落到 TmAdapter 上报 GM API 不可用
-  hostname === 'localhost' ||
-  hostname === '127.0.0.1' ||
-  hostname === '[::1]'
-)
-
-if (isPlugin) {
-  activeAdapter = new ExtensionAdapter()
-} else if (isOptionsPage) {
-  activeAdapter = new WebBridgeAdapter()
+/**
+ * 适配器按**构建期身份**选，不看运行时 URL。
+ *
+ * 以前是靠 `location.pathname.includes('options')` / `github.io` 猜的，后果是：
+ * 用户脚本跑在任何一个路径含 options 的页面（或 github.io 子页）会被当成配置站，
+ * 走 WebBridge → 5 秒超时 → 降级写 localStorage，GM 里的配置读不到，改动还写到别处。
+ *
+ * 身份来自各包的 `.env`：plugin → `VITE_TARGET=plugin`，
+ * options → `web`，script → `script`（或未设置，默认按脚本处理）。
+ */
+function createAdapter(): StorageAdapter {
+  if (isPlugin) return new ExtensionAdapter()
+  if (isWeb) return new WebBridgeAdapter()
+  return new TmAdapter()
 }
-// 默认为 TmAdapter，已经在声明时初始化
+
+let activeAdapter: StorageAdapter = createAdapter()
 
 /**
  * 切换当前使用的存储适配器

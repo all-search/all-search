@@ -4,8 +4,7 @@ import store from '../util/store'
 import { isPlugin } from '@src/env'
 
 const data = reactive({
-  notInstall: false,
-  notLatest: false
+  notInstall: false
 })
 
 setTimeout(() => {
