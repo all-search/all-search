@@ -17,6 +17,8 @@ interface AdjustedElement {
   originalTop: string
   originalInlineTop: string
   originalPriority: string
+  /** 我们最后写进去的 top 值，用来判断站点有没有自己改过 */
+  appliedTop: string
 }
 
 /** 存储已调整元素的原始值（WeakMap 随元素回收） */
@@ -80,6 +82,37 @@ function refreshTopOffset(): number {
 }
 
 /**
+ * 站点是不是已经把 top 抢回去了。
+ *
+ * 典型场景：B 站 / YouTube 的头部在滚动时用 JS 把自己收起来（`top: -60px`）。
+ * 我们只在「当前值仍是我们写的那个」时才继续管它；一旦被改过就说明站点接管了，
+ * 这时应该撤掉标记，而不是把它的收起动画顶回去。
+ */
+function isStillOurs(item: HTMLElement, data: AdjustedElement): boolean {
+  return item.style.getPropertyValue('top') === data.appliedTop
+}
+
+/** 放弃管这个元素：摘掉标记，但不碰它的样式 */
+function releaseNode(item: HTMLElement): void {
+  delete item.dataset[DATASET_MARKER]
+  adjustedElements.delete(item)
+}
+
+/**
+ * 把「站点已经接管 top」的元素放掉。
+ * 每轮采样前扫一遍：元素可能已经离开菜单条区域，不会再成为候选，只能在这里收尾。
+ */
+function releaseTakenOverNodes(): void {
+  document.querySelectorAll(ADJUSTED_SELECTOR).forEach(el => {
+    if (!(el instanceof HTMLElement)) return
+    const data = adjustedElements.get(el)
+    if (!data || !isStillOurs(el, data)) {
+      releaseNode(el)
+    }
+  })
+}
+
+/**
  * 将元素的 top 恢复成我们记录的原始值
  */
 function restoreOriginalTop(item: HTMLElement): void {
@@ -92,14 +125,19 @@ function restoreOriginalTop(item: HTMLElement): void {
     return
   }
 
+  // 站点自己改过 top：别覆盖它，只把自己的标记摘掉
+  if (!isStillOurs(item, data)) {
+    releaseNode(item)
+    return
+  }
+
   if (data.originalInlineTop === INLINE_UNSET_SENTINEL) {
     item.style.removeProperty('top')
   } else {
     item.style.setProperty('top', data.originalInlineTop, data.originalPriority)
   }
 
-  delete item.dataset[DATASET_MARKER]
-  adjustedElements.delete(item)
+  releaseNode(item)
 }
 
 /** 还原所有被我们调整过的元素 */
@@ -193,9 +231,16 @@ function updateNodeOffset(item: HTMLElement): void {
   if (item.dataset[DATASET_MARKER]) {
     const data = adjustedElements.get(item)
     if (data) {
+      // 站点自己改过 top（滚动收起头部等）：撤掉标记，把控制权还给它
+      if (!isStillOurs(item, data)) {
+        releaseNode(item)
+        return
+      }
       const numericTop = parseFloat(data.originalTop)
       if (!Number.isNaN(numericTop)) {
-        item.style.setProperty('top', `${numericTop + currentTopOffset}px`, 'important')
+        const appliedTop = `${numericTop + currentTopOffset}px`
+        item.style.setProperty('top', appliedTop, 'important')
+        data.appliedTop = appliedTop
       }
     }
     return
@@ -222,10 +267,14 @@ function updateNodeOffset(item: HTMLElement): void {
   adjustedElements.set(item, {
     originalTop: topValue,
     originalInlineTop: item.style.getPropertyValue('top') || INLINE_UNSET_SENTINEL,
-    originalPriority: item.style.getPropertyPriority('top') || ''
+    originalPriority: item.style.getPropertyPriority('top') || '',
+    appliedTop: ''
   })
 
-  item.style.setProperty('top', `${numericTop + currentTopOffset}px`, 'important')
+  const appliedTop = `${numericTop + currentTopOffset}px`
+  item.style.setProperty('top', appliedTop, 'important')
+  const record = adjustedElements.get(item)
+  if (record) record.appliedTop = appliedTop
   item.dataset[DATASET_MARKER] = '1'
 }
 
@@ -291,6 +340,9 @@ function getBarRect(root: HTMLElement): DOMRect {
 function sampleBarArea(): void {
   const root = getAsRoot()
   if (!root) return
+
+  // 站点可能在我们上一轮之后把 top 抢走了：先清掉不再归我们管的标记
+  releaseTakenOverNodes()
 
   if (refreshTopOffset() <= 0) {
     restoreAllAdjustedNodes()
@@ -391,13 +443,30 @@ function observeDomChange(): void {
   }
   domObserver = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
+      // 被我们调整过的元素自己改了 style（站点滚动收起头部）：立刻放手，别等下一轮采样
+      if (mutation.type === 'attributes') {
+        const el = mutation.target as HTMLElement
+        if (el instanceof HTMLElement && el.dataset[DATASET_MARKER]) {
+          const data = adjustedElements.get(el)
+          if (data && !isStillOurs(el, data)) {
+            releaseNode(el)
+          }
+        }
+        continue
+      }
       if (mutation.addedNodes.length > 0) {
         scheduleSample()
         return
       }
     }
   })
-  domObserver.observe(document.body, { childList: true, subtree: true })
+  // 只盯 style 属性：站点页面里其它属性变化太频繁
+  domObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['style']
+  })
 }
 
 const viewportHandler = (): void => {

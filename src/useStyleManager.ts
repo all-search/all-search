@@ -1,6 +1,6 @@
 import { onUnmounted, watchEffect, toValue, Ref, ComputedRef, WritableComputedRef } from 'vue'
 import { initSpecialStyle, disconnectSpecialStyle } from './util/addSpecialStyle'
-import { addCustomStyle, syncHostLayout } from './util/initStyle'
+import { addCustomStyle, syncHostLayout, isGeneratedStyleAlive } from './util/initStyle'
 import { site } from './config/siteInfo'
 import { Direction, Mode } from './components/useMode'
 import { SHOW_STATUS, ShowStatus } from './components/useSwitchShow'
@@ -48,7 +48,10 @@ export function useStyleManager(
 
     // 有构建时扫描规则就不跑运行时采样：静态 CSS 已经处理了压在条上的固定元素，
     // 两者同时生效会把同一元素推两次（CSS 与内联样式都会命中）。
-    syncSampling(isLayoutVisible && !currentSite.generatedStyle)
+    // 但站点改版后规则可能全部失效（CSS 变空操作），这时必须退回采样兜底。
+    const staticAlive = !currentSite.generatedStyle ||
+      isGeneratedStyleAlive(String(currentSite.generatedStyle))
+    syncSampling(isLayoutVisible && (!currentSite.generatedStyle || !staticAlive))
   })
 
   // 应用卸载（SPA 重新挂载 / 扩展重载）时回收监听并还原被调整过的元素
