@@ -3,12 +3,31 @@ import { isPlugin } from '../env'
 export type OpenMode = 'same' | 'new'
 
 /**
+ * 交给后台 worker 用 tabs.create 打开；插件版之外返回 false（调用方退回 window.open）。
+ *
+ * 为什么插件版要走后台：内容脚本里的 `window.open` 在无头/被拦截场景下会返回一个
+ * 指向 about:blank 的窗口，既不导航也不受页面控制（e2e 里表现为「点了没反应」）。
+ * 后台 tabs.create 不受弹窗拦截器限制，行为稳定。
+ */
+function openInBackground (urls: string[]): boolean {
+  const runtime = (globalThis as any).chrome?.runtime
+  if (!isPlugin || !runtime || typeof runtime.sendMessage !== 'function') return false
+  try {
+    runtime.sendMessage({ type: 'all-search:open-tabs', urls })
+    return true
+  } catch {
+    return false
+  }
+}
+
+/**
  * 按配置打开链接。
  * - 'new'  ：新标签页（不打断当前页）
  * - 'same' ：当前页跳转
  */
 export function openUrl (url: string, mode: OpenMode): void {
   if (mode === 'new') {
+    if (openInBackground([url])) return
     window.open(url, '_blank')
   } else {
     window.location.href = url
@@ -32,11 +51,7 @@ export function openUrls (urls: string[]): void {
   const list = urls.filter(url => typeof url === 'string' && !!url)
   if (!list.length) return
 
-  const runtime = (globalThis as any).chrome?.runtime
-  if (isPlugin && runtime && typeof runtime.sendMessage === 'function') {
-    runtime.sendMessage({ type: 'all-search:open-tabs', urls: list })
-    return
-  }
+  if (openInBackground(list)) return
 
   list.forEach(url => window.open(url, '_blank'))
 }

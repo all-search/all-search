@@ -87,10 +87,13 @@ export async function run ({ headless, report }) {
     await page.screenshot({ path: path.join(ARTIFACTS, 'selection-dialog.png') })
 
     // 3. 默认：左键 → 新标签页
+    //    这里必须点「白名单里的站点」（fixture 只放行 baidu/google/bing）：
+    //    目标域名被 route.abort() 时，新标签页的首次导航直接失败，Playwright 收不到 page 事件，
+    //    看起来就像「点了没反应」。
     const before = page.url()
     const [popup] = await Promise.all([
       ctx.waitForEvent('page', { timeout: 10000 }),
-      page.locator('.as-dialog .cate-item a').first().click()
+      page.locator('.as-dialog .cate-item a').filter({ hasText: '百度' }).first().click()
     ])
     await popup.waitForTimeout(400).catch(() => {})
     report.check('默认左键打开新标签页', !!popup && popup.url() !== before, `new=${popup.url().slice(0, 60)}`)
@@ -111,7 +114,7 @@ export async function run ({ headless, report }) {
 
     const pagesBefore = ctx.pages().length
     const urlBefore = page.url()
-    await page.locator('.as-dialog .cate-item a').first().click()
+    await page.locator('.as-dialog .cate-item a').filter({ hasText: '百度' }).first().click()
     await page.waitForTimeout(1500)
     report.check(
       '划词设为“当前页”后左键在当前页打开',
