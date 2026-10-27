@@ -243,6 +243,43 @@ export async function run ({ headless, report }) {
     )
     await popup.screenshot({ path: path.join(ARTIFACTS, 'plugin-options-interaction.png') })
 
+    // 4.1 分类图标（issue #90）：默认内置 SVG，切成「站点图标」后换成 favicon
+    await page.goto(FIXTURE_URL, { waitUntil: 'domcontentloaded' })
+    await waitForMenu(page)
+    await page.waitForTimeout(600)
+    const iconBuiltin = await page.evaluate(() => {
+      const sr = document.querySelector('all-search-ui').shadowRoot
+      const first = sr.querySelector('.as-menu-item')
+      return { svg: !!first?.querySelector('.as-icon'), img: !!first?.querySelector('img') }
+    })
+    report.check('分类图标默认用内置 SVG', iconBuiltin.svg && !iconBuiltin.img, `svg=${iconBuiltin.svg} img=${iconBuiltin.img}`)
+
+    await page.locator('.as-setting-btn').filter({ hasText: '设置' }).click()
+    await page.waitForTimeout(400)
+    await page.locator('label.as-radio').filter({ hasText: '站点图标' }).click()
+    await page.waitForTimeout(1200)
+    await page.locator('.as-overlay').click({ position: { x: 8, y: 400 } })
+    await page.waitForTimeout(500)
+    const iconSite = await page.evaluate(() => {
+      const sr = document.querySelector('all-search-ui').shadowRoot
+      const first = sr.querySelector('.as-menu-item')
+      return {
+        img: !!first?.querySelector('img'),
+        svg: !!first?.querySelector('.as-icon'),
+        src: (first?.querySelector('img')?.getAttribute('src') || '').slice(0, 20)
+      }
+    })
+    report.check('切成站点图标后分类图标变成 favicon', iconSite.img && !iconSite.svg, `img=${iconSite.img} svg=${iconSite.svg} src=${iconSite.src}`)
+    await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-category-icon.png'), clip: { x: 0, y: 0, width: 1280, height: 40 } })
+
+    // 切回内置，后面的移动端断言按默认配置跑
+    await page.locator('.as-setting-btn').filter({ hasText: '设置' }).click()
+    await page.waitForTimeout(400)
+    await page.locator('label.as-radio').filter({ hasText: '内置' }).click()
+    await page.waitForTimeout(400)
+    await page.locator('.as-overlay').click({ position: { x: 8, y: 400 } })
+    await page.waitForTimeout(400)
+
     // 5. 移动端抽屉：占满宽度、标签在上、内容可滚动（375px 下不再挤成两列）
     await page.setViewportSize({ width: 375, height: 667 })
     await page.goto(FIXTURE_URL, { waitUntil: 'domcontentloaded' })

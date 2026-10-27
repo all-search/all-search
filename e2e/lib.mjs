@@ -32,11 +32,16 @@ export const FIXTURE_HTML = `<!doctype html><html lang="zh-CN"><head><meta chars
 <div class="fixed-lower" aria-hidden="true"></div>
 <main><h1>all-search e2e fixture</h1><p>${'搜索引擎跳转菜单回归测试文本。'.repeat(120)}</p></main></body></html>`
 
+/** 1×1 透明 PNG：给 favicon 服务兜底，让「分类图标用站点图标」这条链路可测 */
+export const FIXTURE_ICON = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+  'base64'
+)
+
 /**
  * 命中 generatedStyle 静态规则的站点仿真页（cn.bing.com/search）。
  * `#b_header` 必须带 top:30px —— 由静态 CSS 注入，不走运行时采样。
- */
-export const STATIC_FIXTURE_HTML = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+ */export const STATIC_FIXTURE_HTML = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <title>bing fixture</title>
 <style>
   body{margin:0;font:16px/1.8 system-ui,sans-serif}
@@ -49,7 +54,7 @@ export const STATIC_FIXTURE_HTML = `<!doctype html><html lang="zh-CN"><head><met
 
 /**
  * 拦截页面请求：百度域返回 fixture，谷歌只回一个空壳（用于验证跳转 URL），
- * 扩展自身资源放行，其余外链（图标等）直接 abort。
+ * 扩展自身资源放行，favicon 服务回一张 1×1 PNG（分类图标 #90 要用），其余外链直接 abort。
  */
 export async function installFixture (page) {
   await page.route('**/*', async route => {
@@ -65,6 +70,9 @@ export async function installFixture (page) {
     }
     if (url.startsWith('https://www.google.com/')) {
       return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>google</title><input id="kw">' })
+    }
+    if (/favicon\.yandex\.net|faviconkit\.com/.test(url)) {
+      return route.fulfill({ status: 200, contentType: 'image/png', body: FIXTURE_ICON })
     }
     return route.abort()
   })

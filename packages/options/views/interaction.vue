@@ -53,6 +53,23 @@
           inactive-text="关" />
       </div>
 
+      <div class="row">
+        <div class="row-label">
+          <span class="row-name">分类图标</span>
+          <span class="row-hint">
+            菜单条上每个分类前面的图标；选「首个站点图标」会按分类里第一个启用的站点取 favicon
+          </span>
+        </div>
+        <el-radio-group v-model="categoryIconSource">
+          <el-radio value="builtin">
+            内置图标
+          </el-radio>
+          <el-radio value="site">
+            首个站点图标
+          </el-radio>
+        </el-radio-group>
+      </div>
+
       <footer class="card-foot">
         <openModeTip compact />
       </footer>
@@ -63,10 +80,12 @@
 <script setup lang="ts">
 import openModeTip from '@src/components/open-mode-tip.vue'
 import useOpenMode from '@src/components/useOpenMode'
+import useCategoryIcon from '@src/components/useCategoryIcon'
 
 // 与条上的设置抽屉共用同一份配置（__allSearch__openModeMenu / openModeSelection /
-// openAllInCategory），改完即时生效
+// openAllInCategory / categoryIconSource），改完即时生效
 const { menuOpenMode, selectionOpenMode, openAllInCategory } = useOpenMode()
+const { categoryIconSource } = useCategoryIcon()
 </script>
 
 <style lang="scss">

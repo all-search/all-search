@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import useMode from './useMode'
 import useAlign from './useAlign'
 import useOpenMode from './useOpenMode'
+import useCategoryIcon from './useCategoryIcon'
 import useSwitchShow, { SHOW_STATUS } from './useSwitchShow'
 import useColor from './useColor'
 import useFavicon from './useFavicon'
@@ -25,6 +26,7 @@ const onMaskClick = () => {
 
 const { value: mode, direction } = useMode()
 const { menuOpenMode, selectionOpenMode, openAllInCategory } = useOpenMode()
+const { categoryIconSource } = useCategoryIcon()
 const { list: alignList, value: align } = useAlign()
 const { primaryColor, primaryTextColor } = useColor()
 const { show, options, scrollHide } = useSwitchShow()
@@ -161,6 +163,16 @@ function changeScrollHide (e: any) {
                 <asRadio
                   :label="true"
                   v-model="openAllInCategory">开启
+                </asRadio>
+              </formItem>
+              <formItem label="分类图标" label-width="64">
+                <asRadio
+                  label="builtin"
+                  v-model="categoryIconSource">内置
+                </asRadio>
+                <asRadio
+                  label="site"
+                  v-model="categoryIconSource">站点图标
                 </asRadio>
               </formItem>
               <openModeTip/>
