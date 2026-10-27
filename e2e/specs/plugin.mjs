@@ -244,6 +244,7 @@ export async function run ({ headless, report }) {
     await popup.screenshot({ path: path.join(ARTIFACTS, 'plugin-options-interaction.png') })
 
     // 4.1 分类图标（issue #90）：默认内置 SVG，切成「站点图标」后换成 favicon
+    //     注意：这里不切布局——抽屉还开着，切布局要再点一次「设置」，容易被遮罩挡住
     await page.goto(FIXTURE_URL, { waitUntil: 'domcontentloaded' })
     await waitForMenu(page)
     await page.waitForTimeout(600)
@@ -270,7 +271,7 @@ export async function run ({ headless, report }) {
       }
     })
     report.check('切成站点图标后分类图标变成 favicon', iconSite.img && !iconSite.svg, `img=${iconSite.img} svg=${iconSite.svg} src=${iconSite.src}`)
-    await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-category-icon.png'), clip: { x: 0, y: 0, width: 1280, height: 40 } })
+    await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-category-icon.png') })
 
     // 切回内置，后面的移动端断言按默认配置跑
     await page.locator('.as-setting-btn').filter({ hasText: '设置' }).click()
