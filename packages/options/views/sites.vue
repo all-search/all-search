@@ -139,10 +139,38 @@
         </el-radio-group>
         <span class="toolbar-spacer" />
         <el-button
+          :loading="checking"
+          :disabled="!displayedList.length"
+          title="用一次真实搜索请求探测本分类的站点，失败的可以一键隐藏"
+          @click="checkReachability">
+          <el-icon><Connection/></el-icon>
+          {{ checking ? '检测中…' : '检测可达性' }}
+        </el-button>
+        <el-button
           type="primary"
           @click="addNewUrl">
           <el-icon><Plus/></el-icon>
           添加站点
+        </el-button>
+      </div>
+
+      <!-- 检测结果汇总 -->
+      <div
+        v-if="deadCount > 0"
+        class="check-result">
+        <span>检测到 <b>{{ deadCount }}</b> 个站点没有响应（可能已下线，或被反爬拦截）。</span>
+        <el-button
+          text
+          type="danger"
+          size="small"
+          @click="hideDead">
+          一键隐藏这些站点
+        </el-button>
+        <el-button
+          text
+          size="small"
+          @click="clearCheck">
+          忽略
         </el-button>
       </div>
 
@@ -169,6 +197,7 @@
           :icon-cache="iconCache"
           :sorting-disabled="sortingDisabled"
           :can-add-personal="!isPersonal(currentCate) && personalCategory.length > 0"
+          :probe-state="probeStateOf(item)"
           @edit="startEdit(item)"
           @done="finishEdit(item, $event)"
           @cancel="cancelEdit"
@@ -239,7 +268,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { ElMessage } from 'element-plus'
-import { EditPen, MoreFilled, Plus, Search } from '@element-plus/icons-vue'
+import { EditPen, MoreFilled, Plus, Search, Connection } from '@element-plus/icons-vue'
 import { delStorage, getStorage, setStorage } from '@src/util/storage'
 import useSites, { reloadSites } from '@src/components/useSites'
 import parseUrl from '@src/util/parseUrl'
@@ -249,6 +278,7 @@ import saveBar from '../components/save-bar.vue'
 import siteIconDialog from '../components/site-icon-dialog.vue'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
 import confirmReset from '../composables/confirm-reset'
+import { probeSites } from '../composables/site-check'
 
 let uidSeed = 0
 const ensureUid = (item) => {
@@ -277,6 +307,7 @@ export default {
     // Options API 的模板只能看到 components 里注册的东西，
     // 图标不再全局注册（Element Plus 走按需引入），这里要显式登记
     EditPen,
+    Connection,
     MoreFilled,
     Plus
   },
@@ -326,6 +357,59 @@ export default {
 
     /** 搜索/筛选时禁用拖拽，避免拖到看不见的位置 */
     const sortingDisabled = computed(() => Boolean(search.value.trim()) || filter.value !== 'all')
+
+    /* ---------- 可达性检测（issue #35） ---------- */
+    /** 正在检测 */
+    const checking = ref(false)
+    /** url → 检测结果；只保留当前分类的，切分类时清掉 */
+    const probeStates = ref({})
+
+    function probeStateOf (item) {
+      return probeStates.value[item.url] || undefined
+    }
+
+    const deadUrls = computed(() => Object.keys(probeStates.value).filter(url => probeStates.value[url] === 'dead'))
+    const deadCount = computed(() => deadUrls.value.length)
+
+    function clearCheck () {
+      probeStates.value = {}
+    }
+
+    async function checkReachability () {
+      const list = displayedList.value.filter(item => typeof item.url === 'string' && item.url)
+      if (!list.length || checking.value) return
+
+      checking.value = true
+      probeStates.value = {}
+      // 先把所有条目标成「检测中」，用户能看到进度
+      list.forEach(item => { probeStates.value[item.url] = 'checking' })
+
+      try {
+        await probeSites(list.map(item => item.url), (url, state) => {
+          probeStates.value = { ...probeStates.value, [url]: state }
+        })
+        const dead = Object.values(probeStates.value).filter(state => state === 'dead').length
+        if (dead) {
+          ElMessage.warning(`有 ${dead} 个站点没有响应`)
+        } else {
+          ElMessage.success('本分类的站点都有响应')
+        }
+      } finally {
+        checking.value = false
+      }
+    }
+
+    /** 把不可达的站点隐藏（不删，用户还能在「已隐藏」里找回来） */
+    function hideDead () {
+      const dead = new Set(deadUrls.value)
+      ;(currentCate.value?.list || []).forEach((item) => {
+        if (dead.has(item.url)) {
+          item.data = { ...item.data, visible: false }
+        }
+      })
+      ElMessage.success(`已隐藏 ${dead.size} 个站点，记得保存`)
+      clearCheck()
+    }
 
     /**
      * 脏状态 = 站点数据变了 / 图标缓存变了 / 行内还有没提交的草稿。
@@ -711,6 +795,14 @@ export default {
       hydrated,
       // 模板里的 :prefix-icon="Search" 是表达式取值，Options API 只能从 setup 返回值里拿到
       Search,
+      // 可达性检测（issue #35）
+      checking,
+      probeStates,
+      probeStateOf,
+      deadCount,
+      checkReachability,
+      hideDead,
+      clearCheck,
       addCategory,
       startRename,
       handleCateCommand,
@@ -941,6 +1033,24 @@ export default {
 
 .engine-list {
   min-height: 8px;
+}
+
+/* 「检测可达性」的结果条：只在检出不可达站点时出现 */
+.check-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--el-color-danger);
+  background: var(--el-color-danger-light-9);
+  border-radius: 8px;
+
+  b {
+    font-weight: 600;
+  }
 }
 
 .empty-state {

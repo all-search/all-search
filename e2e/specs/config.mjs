@@ -26,7 +26,12 @@ export async function run ({ headless, report }) {
   const watchPage = (target, tag = '') => {
     target.on('pageerror', e => problems.push(`${tag}pageerror: ${String(e).slice(0, 120)}`))
     target.on('console', (m) => {
-      if (m.type() === 'error') problems.push(`${tag}console: ${m.text().slice(0, 120)}`)
+      if (m.type() !== 'error') return
+      const text = m.text()
+      const from = m.location()?.url || ''
+      // 「检测可达性」会故意 abort 一个站点来模拟下线，这条是预期内的
+      if (/net::ERR_FAILED/.test(text) && /chatgpt\.com/.test(from)) return
+      problems.push(`${tag}console: ${text.slice(0, 120)}`)
     })
     target.on('response', (r) => {
       if (r.status() >= 400) problems.push(`${tag}${r.status()} ${r.url().slice(0, 90)}`)
@@ -126,6 +131,45 @@ export async function run ({ headless, report }) {
     )
     report.check('只渲染当前分类的站点', nav.rows > 0 && nav.rows < 15, `${nav.rows} 行`)
     report.check('初始为已保存态', nav.saveStatus === '所有修改已保存', nav.saveStatus)
+
+    /* ---------- 可达性检测（issue #35） ---------- */
+    // 把 AI 分类里的站点全放行、只让 ChatGPT 失败，模拟「一个引擎下线」
+    await page.route('**/*', route => {
+      const url = route.request().url()
+      if (url.includes('chatgpt.com')) return route.abort()
+      if (/^https?:\/\/(?!127\.0\.0\.1|localhost)/.test(url)) {
+        return route.fulfill({ status: 204, body: '' })
+      }
+      return route.continue()
+    })
+    await page.locator('.panel-toolbar .el-button').filter({ hasText: '检测可达性' }).click()
+    await page.waitForTimeout(2500)
+    const probe = await page.evaluate(() => ({
+      dead: [...document.querySelectorAll('.engine-row')].filter(row => row.querySelector('.engine-badge--dead')).length,
+      deadName: [...document.querySelectorAll('.engine-row')].find(row => row.querySelector('.engine-badge--dead'))?.querySelector('.engine-name')?.textContent?.trim() || '',
+      summary: document.querySelector('.check-result')?.textContent?.replace(/\s+/g, ' ').trim() || ''
+    }))
+    report.check(
+      '检测可达性：标出没有响应的站点',
+      probe.dead === 1 && probe.deadName === 'ChatGPT' && probe.summary.includes('1'),
+      `dead=${probe.dead} name=${probe.deadName}`
+    )
+
+    await page.locator('.check-result .el-button').filter({ hasText: '一键隐藏' }).click()
+    await page.waitForTimeout(600)
+    const afterHide = await page.evaluate(() => ({
+      hidden: [...document.querySelectorAll('.engine-row')].filter(row => row.querySelector('.engine-badge')?.textContent?.includes('已隐藏')).length,
+      dirty: document.querySelector('.save-status')?.classList.contains('is-dirty'),
+      summaryGone: !document.querySelector('.check-result')
+    }))
+    report.check(
+      '一键隐藏不可达站点并进入未保存态',
+      afterHide.hidden >= 1 && afterHide.dirty && afterHide.summaryGone,
+      `hidden=${afterHide.hidden} dirty=${afterHide.dirty}`
+    )
+    await page.locator('.save-bar .el-button').filter({ hasText: '撤销' }).click()
+    await page.waitForTimeout(400)
+    await page.unroute('**/*')
 
     // 可点区域：分类按钮至少 40px 高、4px 间距（鼠标/触控都够得着）
     const navMetrics = await page.evaluate(() => {
@@ -604,7 +648,8 @@ export async function run ({ headless, report }) {
       tip: document.querySelector('.as-open-mode-tip')?.textContent?.trim(),
       cardWidth: Math.round(document.querySelector('.card')?.getBoundingClientRect().width || 0)
     }))
-    report.check('交互页两组单选', interaction.radios === 4, `${interaction.radios} 个`)
+    // 两组「打开方式」+ 一组「分类图标」= 6 个单选
+    report.check('交互页三组单选', interaction.radios === 6, `${interaction.radios} 个`)
     report.check(
       '说明文案包含 Ctrl 且不重复',
       !!interaction.tip && interaction.tip.length > 0 &&

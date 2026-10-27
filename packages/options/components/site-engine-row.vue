@@ -37,6 +37,13 @@
       <span
         v-if="!item.data.visible"
         class="engine-badge">已隐藏</span>
+      <span
+        v-else-if="probeState === 'dead'"
+        class="engine-badge engine-badge--dead"
+        title="检测不到响应：可能已下线，或被浏览器拦住了跨域请求">不可达</span>
+      <span
+        v-else-if="probeState === 'checking'"
+        class="engine-badge engine-badge--checking">检测中</span>
 
       <el-dropdown
         trigger="click"
@@ -132,6 +139,8 @@ const props = defineProps<{
   iconCache: Record<string, string>
   sortingDisabled: boolean
   canAddPersonal: boolean
+  /** 「检测可达性」的结果：dead 显示红色徽标，checking 显示进行中 */
+  probeState?: 'checking' | 'ok' | 'dead' | 'skipped'
 }>()
 
 const emit = defineEmits<{
@@ -327,6 +336,16 @@ function handleCommand (command: string) {
   border-radius: 10px;
   color: var(--el-text-color-secondary);
   background: var(--el-fill-color);
+}
+
+.engine-badge--dead {
+  color: var(--el-color-danger);
+  background: var(--el-color-danger-light-9);
+}
+
+.engine-badge--checking {
+  color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
 }
 
 .engine-more {
