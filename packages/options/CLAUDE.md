@@ -24,7 +24,7 @@
 /config/sites         → views/sites.vue        站点配置（分类导航、拖拽、增删、行内编辑）
 /config/edit          → views/edit.vue         JsonEditor 编辑原始配置
 /config/toolbar       → views/toolbar.vue      划词工具栏配置
-/config/interaction   → views/interaction.vue  左键打开方式（主菜单 / 划词两组）
+/config/interaction   → views/interaction.vue  左键打开方式 + 分类图标来源（三组）
 /:pathMatch(.*)*      → 重定向 /
 ```
 
@@ -61,15 +61,16 @@
 
 | 文件 | 说明 |
 | --- | --- |
-| `views/sites.vue` | 左侧分类导航（带计数、隐藏态划线、**拖拽换位**）+ 右侧面板；工具条（搜索 / 全部·已隐藏 / 添加站点）；列表行两态；底部 `save-bar` |
+| `views/sites.vue` | 左侧分类导航（带计数、隐藏态划线、**拖拽换位**）+ 右侧面板；工具条（搜索 / 全部·已隐藏 / 检测可达性 / 添加站点）；列表行两态；底部 `save-bar` |
 | `components/site-engine-row.vue` | 单行站点：阅读态（拖拽柄 / 图标 / 名称 / 域名 / 隐藏徽标 / ⋯菜单）与编辑态（名称 / 网址 / 图标 / 完成 / 取消）；编辑用**本地草稿**，点“完成”才 emit 回父组件，不改 props |
 | `components/save-bar.vue` | 统一底部条：脏状态文案 + 撤销修改 + 恢复默认 + 保存；**恢复默认不受 dirty 限制**（它是唯一能把自定义数据还原成内置默认的入口） |
 | `components/site-icon-dialog.vue` | 图标弹窗（上传 / 预览 / 删除）；只管当前图标的形态，确定时把 `{ hostname, icon }` 交回父组件写 `iconCache` |
 | `views/toolbar.vue` | 划词工具栏列表，同样接 `save-bar`；存储是异步的，首屏用默认值渲染后再替换成用户数据 |
-| `views/interaction.vue` | 两组单选 + `open-mode-tip`（`compact` 模式下只保留 Ctrl / 中键那一条） |
+| `views/interaction.vue` | 三组单选（主菜单 / 划词 / 分类图标）+ `open-mode-tip`（`compact` 模式下只保留 Ctrl / 中键那一条） |
 | `views/edit.vue` | JSON 编辑器外壳；初始化与重置都做深拷贝，保存后调用 `reloadSites()` 让其它页面同步 |
 | `composables/use-unsaved-guard.ts` | `beforeunload` + 路由守卫的“未保存提醒”，sites / toolbar 共用 |
 | `composables/confirm-reset.ts` | 危险操作的二次确认；取消时 resolve(false)，不用到处写 `.catch(() => {})` |
+| `composables/site-check.ts` | 站点可达性检测（#35）：`probeSite` / `probeSites` 用 `fetch(mode: no-cors)` 探一次真实搜索地址，区分「有响应」与「连不上 / 超时」 |
 
 约定：
 
@@ -101,7 +102,7 @@ pnpm build:options  # 产物 packages/options/dist
 | --- | --- |
 | 配置页列表行 | **缓存优先，绝不主动联网**：`iconCache[host]` → 用户上传的 `item.icon` → 首字母色块（颜色由域名哈希决定）。没有图标不发任何请求 |
 | 配置页抓取 | 显式动作：行内 ⋯「抓取图标」、分类 ⋯「抓取本分类图标」。按 `faviconCandidates` 顺序试（yandex → faviconkit → 站点 `/favicon.ico`），成功才缓存 |
-| 运行时菜单条 | 分类图标仍是 `iconfont.vue` 里的手绘 symbol（AI 用 `icon-ai` 机器人头）；站点图标走 `favicon.vue` 的缓存与回退链。只有带 CORS 头的候选（yandex）才加 `crossorigin`，加载成功后压成 32×32 再进缓存 |
+| 运行时菜单条 | 分类图标默认是 `iconfont.vue` 里的手绘 symbol（AI 用 `icon-ai` 机器人头）；设置里切成「首个站点图标」后改用 `category-icon.vue`（取该分类第一个启用站点的 favicon，失败回退内置）。站点图标走 `favicon.vue` 的缓存与回退链，只有带 CORS 头的候选（yandex）才加 `crossorigin`，加载成功后压成 32×32 再进缓存 |
 
 几条硬约束：
 

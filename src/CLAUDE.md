@@ -78,12 +78,12 @@ key 前缀由 `util/common.ts` 的 `getName()` 生成：`__allSearch__${name}`�
 
 - 布局：`layout-manager.vue`、`logo.vue`、`menu.vue`、`menu-item.vue`、`side-bar.vue`、`hover-btn.vue`
 - 浮层：`popper.vue`（`useFloating` + offset/flip/shift，默认 `strategy: 'fixed'`）、`overlay.vue`、`dialog.vue`、`search-dialog.vue`、`selection-bar.vue`
-- 基础：`button.vue`、`radio.vue`、`color.vue`、`form-item.vue`、`icon.vue`、`iconfont.vue`、`favicon.vue`、`json-editor.vue`、`scrollbar/`
-- Composables：`useConfig`（读写 + 校验 + 回滚）、`useSites`、`useToolbar`、`useMode`、`useSwitchShow`、`useAutoHide`、`useAlign`、`useColor`、`useFavicon`、`useOpenMode`（按功能区控制左键打开方式：`menuOpenMode` / `selectionOpenMode`，取值 `same` / `new`；Ctrl / 中键固定取反）
+- 基础：`button.vue`、`radio.vue`、`color.vue`、`form-item.vue`、`icon.vue`、`iconfont.vue`、`favicon.vue`、`category-icon.vue`（分类图标：内置 SVG / 首个站点 favicon）、`json-editor.vue`、`scrollbar/`
+- Composables：`useConfig`（读写 + 校验 + 回滚）、`useSites`、`useToolbar`、`useMode`、`useSwitchShow`、`useAutoHide`、`useAlign`、`useColor`、`useFavicon`、`useOpenMode`（按功能区控制左键打开方式：`menuOpenMode` / `selectionOpenMode`，取值 `same` / `new`；Ctrl / 中键固定取反）、`useCategoryIcon`（`categoryIconSource` = `builtin` / `site`）
 
 ## 工具函数（`util/`）
 
-`common`（`getName`/`parseJson`/`isMobile`）、`dom`、`mount`、`layoutService`、`storage/`、`openUrl`（统一的 `same`/`new` 打开方式）、`initStyle`（`syncHostLayout`/`addCustomStyle`）、`addSpecialStyle`（fixed 元素避让：命中测试采样，仅在没有静态规则的站点启用）、`injectStyle`、`getKeyword`、`fullScreen`、`clipboard`、`onClickOutside`、`tap`、`routerChange`、`addScript`、`toolbar`（配置页默认工具栏项）、`store`、`debounce`、`raf`、`useTimeout`、`useScroll`、`parseUrl`、`favicon`（图标候选顺序 / 首字母色块 / 32×32 压缩 / 缓存裁剪）
+`common`（`getName`/`parseJson`/`isMobile`）、`dom`、`mount`、`layoutService`、`storage/`、`openUrl`（统一的 `same`/`new` 打开方式）、`initStyle`（`syncHostLayout`/`addCustomStyle`）、`addSpecialStyle`（fixed 元素避让：命中测试采样，仅在没有静态规则的站点启用）、`injectStyle`、`getKeyword`、`fullScreen`、`clipboard`、`onClickOutside`、`tap`、`routerChange`、`addScript`、`toolbar`（配置页默认工具栏项）、`store`、`debounce`、`raf`、`useTimeout`、`useScroll`、`parseUrl`、`favicon`（图标候选顺序 / 首字母色块 / 32×32 压缩 / 缓存裁剪）、`categoryIcon`（分类图标取哪个站点）、`menuTargets`（分类点击要打开哪些站点）
 
 ## 固定元素避让（两套机制，互斥）
 
