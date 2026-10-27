@@ -279,4 +279,21 @@ a.as-menu-item {
     text-align: left;
   }
 }
+
+/* 移动端：下拉项给到 44px 的触控高度（原来 34px，手指容易点错相邻项） */
+@media screen and (max-width: 750px) {
+  .as-subMenu {
+    min-width: 132px;
+
+    li a {
+      height: 44px;
+      padding: 0 18px;
+    }
+
+    .as-subMenu-text {
+      line-height: 44px;
+      font-size: 15px;
+    }
+  }
+}
 </style>

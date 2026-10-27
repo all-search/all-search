@@ -280,11 +280,63 @@ export async function run ({ headless, report }) {
     await page.locator('.as-overlay').click({ position: { x: 8, y: 400 } })
     await page.waitForTimeout(400)
 
-    // 5. 移动端抽屉：占满宽度、标签在上、内容可滚动（375px 下不再挤成两列）
+    // 5. 移动端：菜单条能横向滑动、下拉项够大、抽屉改成上下布局（375px）
+    //    前面的布局用例最后停在「居右」，先切回居顶，否则量到的是竖排菜单
+    await switchMode(page, '居顶')
     await page.setViewportSize({ width: 375, height: 667 })
     await page.goto(FIXTURE_URL, { waitUntil: 'domcontentloaded' })
     await waitForMenu(page)
     await page.waitForTimeout(500)
+
+    // 5.1 13 个分类在 375px 里放不下，必须能横向滑动看全
+    const barScroll = await page.evaluate(() => {
+      const sr = document.querySelector('all-search-ui').shadowRoot
+      const wrap = sr.querySelector('.as-menu-container .as-scrollbar__wrap')
+      const items = [...sr.querySelectorAll('.as-menu-item')]
+      const before = { scrollWidth: wrap.scrollWidth, clientWidth: wrap.clientWidth }
+      wrap.scrollLeft = 99999
+      const last = items[items.length - 1].getBoundingClientRect()
+      return {
+        ...before,
+        scrolled: Math.round(wrap.scrollLeft),
+        lastVisible: last.right <= window.innerWidth + 1 && last.left >= -1,
+        total: items.length
+      }
+    })
+    report.check(
+      '移动端菜单条可横向滑动看到全部分类',
+      barScroll.scrollWidth > barScroll.clientWidth &&
+        barScroll.scrolled > 0 &&
+        barScroll.lastVisible,
+      `内容 ${barScroll.scrollWidth} / 可见 ${barScroll.clientWidth}，滑到 ${barScroll.scrolled}，共 ${barScroll.total} 个分类`
+    )
+    await page.screenshot({ path: path.join(ARTIFACTS, 'plugin-mobile-bar.png'), clip: { x: 0, y: 0, width: 375, height: 40 } })
+
+    // 5.2 下拉项要够大（44px 触控高度）
+    await page.evaluate(() => {
+      const sr = document.querySelector('all-search-ui').shadowRoot
+      sr.querySelector('.as-menu-container .as-scrollbar__wrap').scrollLeft = 0
+    })
+    await page.locator('.as-menu-item').first().hover()
+    await page.waitForTimeout(700)
+    const subMenu = await page.evaluate(() => {
+      const sr = document.querySelector('all-search-ui').shadowRoot
+      const links = [...sr.querySelectorAll('.as-subMenu li a')].filter(a => a.getBoundingClientRect().height > 0)
+      const first = links[0]
+      return {
+        count: links.length,
+        height: first ? Math.round(first.getBoundingClientRect().height) : 0
+      }
+    })
+    report.check(
+      '移动端下拉项高度够点（44px）',
+      subMenu.count > 0 && subMenu.height >= 44,
+      `${subMenu.count} 项，高 ${subMenu.height}px`
+    )
+    await page.mouse.move(370, 640)
+    await page.waitForTimeout(300)
+
+    // 5.3 抽屉：占满宽度、标签在上、内容可滚动
     await page.locator('.as-setting-btn').filter({ hasText: '设置' }).click()
     await page.waitForTimeout(600)
     const mobileDrawer = await page.evaluate(() => {

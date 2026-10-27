@@ -47,6 +47,16 @@ const menuClass = computed(() => ({
 .as-menu-container {
   flex: 1;
   display: flex;
+  /* 不给 0 的话 flex 子项会把内容压到容器宽度，横向滚动就失效了 */
+  min-width: 0;
+
+  /* 窄屏：13 个分类在 375px 里只放得下 5 个，靠横向滑动看剩下的 */
+  @media screen and (max-width: 750px) {
+    .as-scrollbar__wrap {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+  }
 }
 
 .as-menu {
@@ -58,6 +68,11 @@ const menuClass = computed(() => ({
   background-color: var(--as-bg-color);
   display: flex;
   list-style: none;
+}
+
+.as-menu .as-menu-item {
+  /* 分类按内容宽度排开，不参与压缩 */
+  flex: 0 0 auto;
 }
 
 .as-horizontal {
