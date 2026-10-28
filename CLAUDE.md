@@ -470,6 +470,8 @@ pnpm run build:options
 
 ## 📦 部署发布
 
+> 完整流程、发完怎么验、发砸了怎么救：见 `docs/release-runbook.md`。
+
 ### 用户脚本发布
 1. 更新版本号（`package.json`）
 2. 构建脚本文件：`pnpm run build:script`
@@ -598,7 +600,7 @@ chore: 构建/工具变更
 ### 下一步建议
 1. 存储/配置的边界用例补测（adapter 选择、bridge 超时、路由 base）
 2. 把 `pnpm e2e` 接进 CI
-3. 发版走 `pnpm release:patch --push`（自动升版本、打 tag、触发 Release workflow）
+3. 发版走 `pnpm release:patch --push`（自动升版本、**先构建**、检查产物、打 tag、触发 Release workflow）；细节见 `docs/release-runbook.md`
 4. 在有干净出口的环境补扫被拦截的站点，扩充 `generatedStyle`
 
 ## 📄 许可证
