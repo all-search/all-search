@@ -141,3 +141,82 @@ plugin/selection 接 Windows+Edge 的 e2e 门禁（约 4–6 分钟）；`usersc
 | P1-13 克隆节点 | 读 `addSpecialStyle.ts:118-126`：`!data` 分支只 `delete marker` 就 return |
 | 循环依赖 | 自写 import 图检测：2 个环 |
 | 运行时 API 边界 | grep `chrome.` / `GM_*`：只在 `storage/*`，例外 `openUrl`/`side-bar` |
+
+## 8. 「明确不改」的理由（详细版）
+
+Review 的产出不是把所有东西都改一遍，而是区分**债务**（该还）和**决定**（有上下文的选择）。判断标准四条：改了用户能感知吗、不改会丢数据吗、成本是否超过收益、现状有没有测试锁住。
+
+### 8.1 模块级单例 + `watchStorage`
+
+**现状**：`useSites.ts:9` 是模块级 `ref`，`:36` 顶层 `getStorage().then(...)`，`:44` 顶层 `watchStorage(...)`；`useMode` / `useSwitchShow` / `useAlign` / `useColor` / `useOpenMode` / `useFavicon` 同理，都是「模块顶层调 `useConfig()`」。
+
+**为什么这么设计**：三端（content script / options 页 / 独立配置站）**各自只有一个 app 实例**，而这些数据天然是全局的（同一份配置）。`useSites` 同时被 `menu-item.vue`（第 4 层子组件）、options 的 sites / edit / toolbar 三个路由页消费。改成 provide/inject 意味着：`index.vue` provide → `layout-manager` → `menu` → `menu-item` 逐层透传；options 侧要在 `bootstrap` 里给四个路由页共用一个 provider；所有消费点改签名；单测要自己搭 provider。收益只是「符合框架推荐」，而项目规模（一个 app、一份配置）不需要。
+
+**真正的缺陷是另外两件事**，与单例无关：
+- **顶层 IO**：`import` 这个模块就发请求。后果是单测必须整模块 mock `@src/util/storage`（`tests/hooks.spec.ts:12-18` 就是代价），任何工具函数都无法在无 DOM / 无 localStorage 的环境单独 import。修法是把 `getStorage` 挪进 `initXxx()`，由 `setupApp()` 调一次。
+- **`useConfig` 不是单例工厂**：`useConfig.ts:33-71` 每次调用都新建 `ref`，单例性只靠「调用写在模块顶层」这条约定。第二处 `useConfig({ name: 'showToolbar' })` 会得到**第二个真源**，`set` 不广播、两边静默分叉。加一个 `Map<name, Ref>`（约 10 行）即可，这是该修的。
+
+### 8.2 `sites.vue` 的 Options API
+
+**现状**：1124 行，`<script>` + `export default { setup () {...} }`。**逻辑已经全部在 `setup()` 里**，没有 `this.xxx`、没有 `data()`、没有 `methods`，只有末尾一个 `return { ... }` 把 50 多个东西暴露给模板，外加 `components: { EditPen, MorePlus, Connection }`（按需引入的图标）。
+
+**为什么不是瓶颈**：文件长是因为**职责多**（数据加载 / 脏状态 / 拖拽 / 行内编辑 / 图标缓存 / 可达性检测 / 分类管理 / 保存撤销重置），不是因为用了 Options API。`<script setup>` 在这里省掉的只是「一个 return 对象 + components 注册」，代码行数几乎不变。
+
+**改的代价**：1124 行整体重排 → 一个 diff 覆盖全文件。而 P1 里已经排了 4 步拆分（`sites-model` → `useIconCache` → `useSitesEditor` → `useSitesDraft`），每步一个可回滚的 commit。先做机械转换会把「搬家」和「改行为」混在一起，最难 review、最难回滚。
+
+**正确顺序**：先按 4 步抽 composable，最后单独做转换（纯机械，不掺逻辑）。转换时注意两个坑：Element Plus 图标要改成 `import`，`components` 注册块消失；`:prefix-icon="Search"` 这类表达式取值不再需要从 `setup()` 返回。
+
+### 8.3 构建/工程里「踩过坑」的设计
+
+这六条都是**修过的 bug 留下的形状**，不是随手写的：
+
+| 设计 | 位置 | 它修的是什么 | 改回去会怎样 |
+| --- | --- | --- | --- |
+| Element Plus 按需引入 | `vite.config.shared.ts:11-19` | `app.use(ElementPlus)` 会把 293 个图标 + 全套组件打进包 | 首屏从 360KB gzip 回到 2.4MB；图标重新变成全局组件（现在的「图标要 import」反而是正确约束） |
+| `manualChunks` 只在 options | `packages/options/vite.config.ts:33-52` | ①`cjs-helpers` 是 Rollup 虚拟模块，不单独切会被分进 jsoneditor chunk，entry 为了一个 helper 预加载 1MB 编辑器；②用户脚本是单文件产物，多切一个 chunk 只会多出空文件 | 配置页首屏把 jsoneditor 预加载回来；用户脚本多一个空 chunk |
+| script 的 CSS 内容哈希注入 | `packages/script/vite.config.ts:20-58` | 一次构建产出多个 CSS chunk，共用固定 id 时**后者覆盖前者，组件样式全丢**；`as-inject-style` 事件解决「宿主/影子根还没建好就注入」的时序 | 油猴版样式随机丢失，且只在特定 chunk 顺序下复现 |
+| WXT zip 模板 | `packages/plugin/wxt.config.js:23-28` | `sourcesTemplate` 默认用 `{{packageVersion}}`，而 `packages/plugin/package.json` 没有 version 字段 → `all-searchplugin-undefined-sources.zip` | AMO 源码包命名错乱 |
+| `serveOptions` 的路径防护 | `e2e/lib.mjs:253-316` | `decodeURIComponent` 畸形转义返回 400；`path.resolve` 后前缀校验防 `../` 逃逸；**资源请求 404 不回落 HTML** | 「缺 chunk」会变成 200 + 一段 HTML，浏览器报语法错误，极难定位 |
+| `run.mjs` 按场景构建 | `e2e/run.mjs:61-82` | `--only=config` 不必等 plugin + userscript 两次构建 | 每次只跑一个场景都要多等 40 秒 |
+
+### 8.4 `formatSites` 的 spread + `__uid` 只存内存
+
+**现状**：`sites.vue:429-441` 是 `stripUid` 后展开（保留所有未知字段）；`__uid` 是 Vue 的列表 key，只在内存里。
+
+**为什么**：JSON 编辑器就是给高级用户手写 `style` / `selectors` / `invisible` / `query` 用的（`src/types/site.ts:9-33` 全部声明过）。白名单会**静默丢字段**——这正是本次 P0-2 在 `json-editor.vue:189-204` 犯的错。而 `__uid` 每次加载重新生成，落盘只会污染用户 JSON，还会让「导出→导入」产生无意义的 diff。
+
+**但要注意方向**：`toolbar.vue:199-206` 的 `formatList` 是白名单，且已经丢过字段——`util/toolbar.ts:41-45` 先丢掉 `icon`，`formatList` 又写 `icon`，于是「从菜单选择」加进去的图标下次加载就没了。修法应该是让 toolbar **向 spread 对齐**，而不是把 sites 改成白名单。
+
+### 8.5 图标策略（缓存优先、默认零外链、32×32、300 上限、显式抓取）
+
+**现状**：配置页列表行只读 `iconCache` / `item.icon` / 首字母色块，**没有图标不发任何请求**；只有显式点「抓取图标」才走 `yandex → faviconkit → 站点 /favicon.ico`；抓到的图压成 32×32、缓存上限 300 条。e2e 有一条断言专门盯着「默认不请求第三方图标」（`config.mjs:461-470`）。
+
+**为什么是产品优势**：
+- **隐私**：配置页一屏就有几十个站点。自动拉取等于把「你配了哪些搜索引擎」这份清单逐个发给第三方 favicon 服务。
+- **性能**：92 个站点 = 92 个外部请求，冷启动会被拖住。
+- **离线可用**：纯本地数据 + 本地缓存。
+
+**运行时是另一套逻辑**，不要混淆：菜单条的 `favicon.vue` 会在**用户已经访问的站点**上请求图标（同站 favicon 或缓存），这是合理的一次请求。
+
+**要改进的话**：方向是「显式批量抓取」（已经有：分类 ⋯ 菜单）和「抓取失败重试」，不是默认自动拉取。
+
+### 8.6 `addSpecialStyle` 不写 jsdom 单测
+
+**现状**：531 行，依赖 `getBoundingClientRect()`、`document.elementsFromPoint()`、`getComputedStyle()`、`MutationObserver`、`ResizeObserver`。
+
+**jsdom 的现实**：没有布局引擎——所有 `getBoundingClientRect()` 返回 0；没有 `elementsFromPoint`；`getComputedStyle` 基本只回显内联样式。写出来的测试实际是在断言「我 mock 的返回值」，而不是行为。这类测试会给虚假信心，还会在重构时阻碍改动（因为断言的是 mock 的形状）。
+
+**替代方案已经存在**：e2e 用真实浏览器 + fixture 里的 sticky/fixed 头部，覆盖了「滚动后让位」「站点接管 top 后不再被覆盖」「静态规则生效」「离开顶部布局后恢复原位」四条（`plugin.mjs`）。
+
+**但纯判据可以单测**：`isAvoidableGeometry` / `isOffsetAllowed` / `nextAdjustment`（含 `isStillOurs` 的幂等与克隆分支）抽成纯函数后完全可以测——这正是第 6 节纯函数清单的第 3、4 项，属于重构任务，不是「补 jsdom 测试」。
+
+### 8.7 config 的 64 条断言
+
+**现状**：config 64 / plugin 30 / selection 9 / userscript 6。
+
+**为什么 config 多**：它是四个路由 + 拖拽排序 + 行内编辑 + 图标上传/抓取/缓存 + 深色模式 + 窄屏 + 触屏长按 + JSON 编辑器 + 旧数据兼容。而且每一条都对应过一次真实回归：保存条漂移、拖拽换位、图标零外链、分类按钮可点区域、`data` 缺失不崩……
+
+**问题不是 config 太多，是 runtime 太少**：用户脚本是主要分发形态，却只有 6 条断言（宿主存在、菜单渲染、关键词、CSS 注入高度）；`selection` 场景只测插件版，油猴版的划词工具栏零覆盖。
+
+**该做的**：给 `userscript` 补侧边栏/弹窗/划词断言（约 15–20 秒），给 `plugin`/`selection` 补 `pageerror` 收集（`config.mjs:26-39` 已有现成实现，提到 `lib.mjs` 复用）。**删 config 断言来「平衡比例」是最差的选择**——配置页是用户唯一能修数据的地方，删掉等于裸奔。
+
