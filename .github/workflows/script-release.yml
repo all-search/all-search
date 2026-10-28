@@ -1,9 +1,10 @@
 name: Release script
+# 只在发版 tag 上跑：以前每次 push master 都会把用户脚本推到 release 分支，
+# 也就是「没发版的代码会直接推给所有装了脚本的用户」。
 on:
   push:
-    branches:
-      - master
-      - test-actions
+    tags:
+      - 'v*'
   workflow_dispatch:
 jobs:
   verify:

@@ -21,6 +21,9 @@ const asJson = process.argv.includes('--json')
 /** 配置页首屏（entry + 同步 chunk + CSS）的 gzip 预算 */
 const FIRST_LOAD_BUDGET_KB = 450
 
+const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
+const VERSION = pkg.version
+
 const problems = []
 const report = []
 
@@ -46,40 +49,88 @@ function checkFile (label, file, minBytes) {
   return file
 }
 
-/** 在 .output 里按后缀找**最近生成**的那个 zip（按文件名排序会被 2.9.0 / 2.10.0 这种版本号坑到） */
+/**
+ * 在 .output 里找**当前版本**的 zip。
+ *
+ * 以前按 mtime 找「最近生成」的：只要目录里有旧包就能通过，
+ * 实测 package.json 已经是 2.1.1、目录里全是 2.0.1 的包，脚本照样全绿。
+ * 现在必须文件名里带 `-<version>-`，旧包直接算缺失。
+ */
 function findZip (suffix) {
   const dir = path.join(ROOT, 'packages', 'plugin', '.output')
-  if (!fs.existsSync(dir)) return null
-  const candidates = fs.readdirSync(dir)
-    .filter(name => name.endsWith(suffix))
-    .map(name => path.join(dir, name))
-    .map(file => ({ file, mtime: fs.statSync(file).mtimeMs }))
-    .sort((a, b) => b.mtime - a.mtime)
-  return candidates.length ? candidates[0].file : null
+  if (!fs.existsSync(dir)) return { file: null, stale: [] }
+  const names = fs.readdirSync(dir)
+  const hit = names.filter(name => name.endsWith(suffix) && name.includes(`-${VERSION}-`)).sort()
+  if (hit.length) return { file: path.join(dir, hit[hit.length - 1]), stale: [] }
+  return { file: null, stale: names.filter(name => name.endsWith(suffix)) }
+}
+
+/** 缺包时给一句能定位的话：是没构建，还是目录里全是旧版本 */
+function missingZip (label, suffix, stale, hint) {
+  if (!stale.length) {
+    fail(`缺少${label}（先跑 ${hint}）`)
+    return
+  }
+  fail(`没有 ${VERSION} 版本的${label}，.output 里只有旧包：${stale.join(', ')}（重新构建）`)
 }
 
 /* ---------- 1. 用户脚本 ---------- */
-checkFile('用户脚本 index.user.js', path.join(ROOT, 'packages', 'script', 'dist', 'index.user.js'), 100 * 1024)
+const userscript = checkFile('用户脚本 index.user.js', path.join(ROOT, 'packages', 'script', 'dist', 'index.user.js'), 100 * 1024)
+if (userscript) {
+  const head = fs.readFileSync(userscript, 'utf8').slice(0, 8192)
+  const got = (head.match(/^\/\/\s*@version\s+(\S+)/m) || [])[1]
+  if (got !== VERSION) {
+    fail(`用户脚本 @version=${got || '(缺失)'}，与 package.json ${VERSION} 不一致（重新构建）`)
+  }
+  if (!/^\/\/\s*@updateURL\s+https:\/\/raw\.githubusercontent\.com\/all-search\/all-search\/release\/index\.user\.js/m.test(head)) {
+    fail('用户脚本 @updateURL 不是稳定的 release 分支地址（升级链会断）')
+  }
+  if (!/^\/\/\s*@match\s+\*:\/\/\*\/\*/m.test(head)) {
+    fail('用户脚本 @match 不是 *://*/*，菜单条不会在任意站点出现')
+  }
+}
 
 /* ---------- 2. 插件三产物 ---------- */
-const chromeZip = findZip('-chrome.zip')
-if (chromeZip) checkFile('插件 Chrome 包', chromeZip, 100 * 1024)
-else fail('缺少 Chrome 包（先跑 pnpm build:plugin）')
+const chrome = findZip('-chrome.zip')
+if (chrome.file) checkFile('插件 Chrome 包', chrome.file, 100 * 1024)
+else missingZip(' Chrome 包', '-chrome.zip', chrome.stale, 'pnpm build:plugin')
 
-const firefoxZip = findZip('-firefox.zip')
-if (firefoxZip) checkFile('插件 Firefox 包', firefoxZip, 100 * 1024)
-else fail('缺少 Firefox 包（先跑 pnpm zip:firefox）')
+const firefox = findZip('-firefox.zip')
+if (firefox.file) checkFile('插件 Firefox 包', firefox.file, 100 * 1024)
+else missingZip(' Firefox 包', '-firefox.zip', firefox.stale, 'pnpm zip:firefox')
 
-const sourcesZip = findZip('-sources.zip')
-if (sourcesZip) {
-  const name = path.basename(sourcesZip)
+const sources = findZip('-sources.zip')
+if (sources.file) {
+  const name = path.basename(sources.file)
   if (/undefined|null/.test(name)) {
     fail(`sources 包命名异常：${name}（zip.sourcesTemplate 没配好）`)
   } else {
-    checkFile('插件 AMO 源码包', sourcesZip, 5 * 1024)
+    checkFile('插件 AMO 源码包', sources.file, 5 * 1024)
   }
 } else {
-  fail('缺少 AMO 源码包（先跑 pnpm zip:firefox）')
+  missingZip(' AMO 源码包', '-sources.zip', sources.stale, 'pnpm zip:firefox')
+}
+
+/* ---------- 2.1 manifest：版本 / 权限 / options 页 ---------- */
+const manifestPath = path.join(ROOT, 'packages', 'plugin', '.output', 'chrome-mv3', 'manifest.json')
+if (!fs.existsSync(manifestPath)) {
+  fail('缺少 chrome-mv3/manifest.json（先跑 pnpm build:plugin）')
+} else {
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+  if (manifest.version !== VERSION) {
+    fail(`manifest.version=${manifest.version}，与 package.json ${VERSION} 不一致`)
+  }
+  const perms = (manifest.permissions || []).join(',')
+  if (perms !== 'storage') {
+    fail(`manifest.permissions=[${perms}]，预期只有 storage（多了会触发权限申请）`)
+  }
+  if (!manifest.options_ui || !String(manifest.options_ui.page || '').includes('options.html')) {
+    fail('manifest 缺少 options_ui 指向 options.html')
+  }
+  if (!Array.isArray(manifest.content_scripts) || !manifest.content_scripts.length) {
+    fail('manifest 缺少 content_scripts')
+  }
+  ok('manifest', `v${manifest.version}，权限 ${perms || '(无)'}`)
 }
 
 /* ---------- 3. 配置页首屏与预算 ---------- */
@@ -98,6 +149,11 @@ if (!fs.existsSync(indexHtml)) {
   const assets = [...html.matchAll(/\/all-search\/assets\/([\w.-]+\.(?:js|css))/g)]
     .map(match => match[1])
     .filter((name, index, list) => list.indexOf(name) === index)
+
+  // 匹配不到任何资源说明 base 改了或构建异常：gzip 会算成 0 然后「通过」
+  if (!assets.length) {
+    fail('index.html 没有引用任何 /all-search/assets/*（base 或构建异常）')
+  }
 
   let raw = 0
   let gzip = 0

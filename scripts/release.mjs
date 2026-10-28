@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
- * 发版助手：升版本 → 提交 → 打 tag →（可选）推送。
+ * 发版助手：升版本 → 构建 → 检查产物 → 提交 → 打 tag →（可选）推送。
  *
- * 推送 tag 会触发 `.github/workflows/plugin-release.yml`：
- * 校验版本一致 → 类型检查 → 单测 → 打 Chrome/Firefox 包 → 创建 GitHub Release。
+ * 构建放在打 tag 之前：tag 一旦推出，CI 失败也无法重跑（同名 tag 已存在）。
+ * 推送 tag 会触发 `.github/workflows/plugin-release.yml` 与 `script-release.yml`：
+ * 打 Chrome/Firefox 包 + 创建 GitHub Release，并把用户脚本推到 release 分支。
  *
  * 用法：
  *   pnpm release:patch          # 1.5.10 -> 1.5.11，只提交和打 tag，不推送
@@ -67,6 +68,16 @@ function fail (message) {
   process.exit(1)
 }
 
+/** 构建/检查失败时把 package.json 还原，别把半成品版本号留在工作区 */
+function revertPkg () {
+  try {
+    execFileSync('git', ['checkout', '--', 'package.json'], { cwd: ROOT, stdio: 'inherit' })
+    console.error('已还原 package.json')
+  } catch {
+    console.error('⚠ 还原 package.json 失败，请手动执行 git checkout -- package.json')
+  }
+}
+
 const dirty = execFileSync('git', ['status', '--porcelain'], { cwd: ROOT, encoding: 'utf8' })
   .split('\n')
   .map(line => line.trim())
@@ -96,15 +107,47 @@ pkg.version = next
 fs.writeFileSync(PKG, `${JSON.stringify(pkg, null, 2)}\n`, 'utf8')
 console.log(`版本：${current} → ${next}`)
 
+/**
+ * 先构建、再打 tag。
+ *
+ * 以前是「bump → commit → tag → push」，构建发生在 tag 触发之后：
+ * 一旦 CI 构建失败，tag 已经存在、Release 却没有，而 release.mjs 又会因 tag 存在
+ * 拒绝重跑。产物有问题必须在本地就拦住。
+ */
+const buildSteps = [
+  ['构建用户脚本', ['build:script']],
+  ['构建配置页', ['build:options']],
+  ['构建插件（Chrome）', ['build:plugin']],
+  ['构建插件（Firefox + AMO 源码）', ['zip:firefox']]
+]
+for (const [label, args] of buildSteps) {
+  console.log(`▶ ${label}`)
+  try {
+    execFileSync('pnpm', args, { cwd: ROOT, stdio: 'inherit', shell: process.platform === 'win32' })
+  } catch {
+    revertPkg()
+    fail(`${label}失败，发版中止（版本号已还原，tag 未创建）`)
+  }
+}
+
+console.log('▶ 检查产物（版本 / manifest / 用户脚本头 / 首屏预算）')
+try {
+  execFileSync('node', ['scripts/check-artifacts.mjs'], { cwd: ROOT, stdio: 'inherit' })
+} catch {
+  revertPkg()
+  fail('产物检查没过，发版中止（版本号已还原，tag 未创建）')
+}
+
 run('git', ['add', 'package.json'])
 run('git', ['commit', '-m', `chore(release): ${tag}`])
 run('git', ['tag', '-a', tag, '-m', tag])
 console.log(`已提交并打 tag：${tag}`)
 
 if (push) {
-  run('git', ['push'])
+  // 先推 tag：tag 推失败就什么都不发，别留下「分支已更新、Release 没发」的半成品
   run('git', ['push', 'origin', tag])
+  run('git', ['push'])
   console.log('已推送，Release workflow 会自动开始')
 } else {
-  console.log(`下一步：git push && git push origin ${tag}`)
+  console.log(`下一步：git push origin ${tag} && git push`)
 }
