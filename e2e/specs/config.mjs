@@ -29,9 +29,10 @@ export async function run ({ headless, report }) {
       if (m.type() !== 'error') return
       const text = m.text()
       const from = m.location()?.url || ''
-      // 「检测可达性」会故意 abort 一个站点来模拟下线，这条是预期内的
-      if (/net::ERR_FAILED/.test(text) && /chatgpt\.com/.test(from)) return
-      problems.push(`${tag}console: ${text.slice(0, 120)}`)
+      // 「检测可达性」会故意 abort 一个站点来模拟下线：Chromium 对同一次 abort
+      // 可能报 ERR_FAILED / ERR_CONNECTION_CLOSED / ERR_ABORTED，都算预期内
+      if (/net::ERR_(FAILED|CONNECTION_CLOSED|ABORTED)/.test(text) && /chatgpt\.com/.test(from)) return
+      problems.push(`${tag}console: ${text.slice(0, 120)} @${from.slice(0, 80)}`)
     })
     target.on('response', (r) => {
       if (r.status() >= 400) problems.push(`${tag}${r.status()} ${r.url().slice(0, 90)}`)

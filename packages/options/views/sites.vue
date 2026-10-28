@@ -219,7 +219,7 @@
       </draggable>
 
       <div
-        v-if="!displayedList.length"
+        v-if="ready && !displayedList.length"
         class="empty-state">
         <template v-if="search || filter !== 'all'">
           <p class="empty-title">
