@@ -340,6 +340,8 @@ export default {
     /** 拖拽过程中不接收迟到的存储数据，否则 v-for 重渲染会把拖拽打断 */
     const dragging = ref(false)
     const iconCache = ref({})
+    /** 本页清除过、但还没落盘的图标 host（见 clearCategoryIcons） */
+    const removedHosts = new Set()
     const savedSnapshot = ref('')
     const savedIconSnapshot = ref('{}')
     /** 行内编辑中的草稿是否和原值不同（草稿在子组件里，只有它知道） */
@@ -640,8 +642,12 @@ export default {
       }
       if (command === 'personal') {
         const personal = personalCategory.value[0]
-        if (personal && !personal.list.includes(item)) {
-          personal.list.push(item)
+        if (personal && !personal.list.some(child => child.url === item.url)) {
+          // 必须克隆：直接 push 同一个对象会让「常用」和原分类共享引用，
+          // 在常用里改名/隐藏会连原分类一起改，两条还共用同一个 __uid
+          const copy = clone(stripUid(item))
+          ensureUid(copy)
+          personal.list.push(copy)
           ElMessage.success('已加入常用')
         }
         return
@@ -712,7 +718,13 @@ export default {
       })
     }
 
-    /** 清掉当前分类的图标缓存（用户上传的 item.icon 不动） */
+    /**
+     * 清掉当前分类的图标缓存（用户上传的 item.icon 不动）。
+     *
+     * 保存是「读-改-写」合并：只从内存里 delete 是不够的，存储里的那份还在，
+     * spread 之后又会被写回来（表现：清除 → 保存 → 图标复活）。
+     * 这里额外记一份「本页删过的 host」，保存时在合并结果里再删一次。
+     */
     function clearCategoryIcons () {
       const list = currentCate.value?.list || []
       let removed = 0
@@ -720,6 +732,7 @@ export default {
         const { hostname } = parseUrl(item.url || '')
         if (hostname && iconCache.value[hostname]) {
           delete iconCache.value[hostname]
+          removedHosts.add(hostname)
           removed += 1
         }
       })
@@ -745,6 +758,13 @@ export default {
     /* ---------- 保存 / 撤销 / 恢复默认 ---------- */
 
     async function save () {
+      // 行内还有没点「完成」的草稿：草稿只存在子组件里，formatSites() 拿不到，
+      // 直接保存会提示「保存成功」但写的是旧名称/网址，而且脏状态还不消失
+      if (editingUid.value) {
+        ElMessage.warning('请先完成或取消当前编辑再保存')
+        return
+      }
+
       // 图标缓存是「读-改-写」：内容脚本在用户浏览时也会往里加图标，
       // 整份覆盖会把这段时间新缓存的图标丢掉
       let latestIcons = {}
@@ -754,6 +774,8 @@ export default {
         latestIcons = {}
       }
       const mergedIcons = trimIconCache({ ...latestIcons, ...iconCache.value })
+      // 本页删过的 host 要在合并结果里再删一次，否则会被 latestIcons 带回来
+      removedHosts.forEach((host) => { delete mergedIcons[host] })
 
       await setStorage('sites', formatSites())
       await setStorage('iconCache', mergedIcons)
@@ -767,6 +789,7 @@ export default {
       savedSites.value.forEach(cate => (cate.list || []).forEach(ensureUid))
       savedSnapshot.value = JSON.stringify(formatSites())
       savedIconSnapshot.value = JSON.stringify(mergedIcons)
+      removedHosts.clear()
       ElMessage.success('保存成功')
     }
 

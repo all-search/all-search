@@ -62,9 +62,18 @@ const handleClick = (item: Site, mode?: OpenMode) => {
   return false
 }
 
-let isTap = false
+/**
+ * 触屏上「点分类」只应该展开菜单，不应该顺带跳转。
+ *
+ * 以前用一个 `isTap` 布尔标记：onTap 里置 true，之后永不复位——触屏点过一次，
+ * 这个分类的点击就永久失效（「点分类直达首个引擎」和「分类全开」都用不了）。
+ * 现在记时间戳，只吞掉紧随其后的那一次合成 click。
+ */
+let lastTapAt = 0
+const TAP_CLICK_WINDOW = 500
+
 const handleCateClick = (cate: SiteCategory, mode?: OpenMode) => {
-  if (isTap) {
+  if (Date.now() - lastTapAt < TAP_CLICK_WINDOW) {
     return
   }
   const targets = pickCategoryTargets(cate.list)
@@ -83,7 +92,7 @@ const handleCateClick = (cate: SiteCategory, mode?: OpenMode) => {
 }
 
 onTap(categoryRef, () => {
-  isTap = true
+  lastTapAt = Date.now()
 })
 </script>
 

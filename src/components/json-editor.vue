@@ -124,7 +124,16 @@ export default {
           immediate: true
         })
     })
-    onBeforeUnmount(() => clearTimeout(changeTimer))
+    onBeforeUnmount(() => {
+    clearTimeout(changeTimer)
+    // jsoneditor 内部挂着 Ace 编辑器与一堆 DOM 监听，不销毁会在反复进出编辑页时累积
+    try {
+      instance?.destroy()
+    } catch {
+      // 已经销毁过 / 实例未建好，忽略
+    }
+    instance = null
+  })
 
     function reset () {
       ElMessageBox.confirm(

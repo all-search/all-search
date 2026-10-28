@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, unref, computed, nextTick } from 'vue'
+import { reactive, ref, unref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { getAsRoot } from '../util'
 import { openUrl, otherOpenMode, type OpenMode } from '../util/openUrl'
 import { selection } from './selection'
@@ -125,7 +125,7 @@ function isInToolbar (e: Event): boolean {
   return !!el && eventPath(e).includes(el)
 }
 
-window.addEventListener('mousedown', function (e) {
+function handleMouseDown (e: MouseEvent): void {
   if (!isInApp(e)) {
     changeVisible(false)
   }
@@ -134,9 +134,9 @@ window.addEventListener('mousedown', function (e) {
   if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
     selectStart = true
   }
-}, true)
+}
 
-window.addEventListener('mouseup', function (e) {
+function handleMouseUp (e: MouseEvent): void {
   const include = isInApp(e)
   const isToolbar = isInToolbar(e)
   if (!include) {
@@ -150,11 +150,30 @@ window.addEventListener('mouseup', function (e) {
     changeVisible(false)
   }
   selectStart = false
-}, true)
+}
 
-document.addEventListener('selectstart', function () {
+function handleSelectStart (): void {
   selectStart = true
-}, false)
+}
+
+/**
+ * 这三个是全局监听，必须在组件卸载时摘掉。
+ *
+ * 组件由 `v-if="toolbarVisible === 1"` 控制，而「划词工具栏」开关就在设置抽屉里：
+ * 以前监听写在 setup 顶层且从不移除，每切一次就多一份永久监听——旧的 handler
+ * 仍会在每次 mouseup 里跑 readSelection()，还会往已销毁组件的 ref 里写值。
+ */
+onMounted(() => {
+  window.addEventListener('mousedown', handleMouseDown, true)
+  window.addEventListener('mouseup', handleMouseUp, true)
+  document.addEventListener('selectstart', handleSelectStart, false)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('mousedown', handleMouseDown, true)
+  window.removeEventListener('mouseup', handleMouseUp, true)
+  document.removeEventListener('selectstart', handleSelectStart, false)
+})
 
 /** Ctrl / 中键固定走“另一侧”的打开方式 */
 const altMode = computed(() => otherOpenMode(selectionOpenMode.value))

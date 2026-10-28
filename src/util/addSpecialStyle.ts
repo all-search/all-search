@@ -120,7 +120,11 @@ function restoreOriginalTop(item: HTMLElement): void {
 
   const data = adjustedElements.get(item)
   if (!data) {
-    // 异常情况：有标记但没有数据，清理标记
+    // 有标记但没有记录：说明这是站点 cloneNode 出来的副本（标记被一起复制，
+    // 但 WeakMap 里没有它）。副本带着我们写进去的 `top: Npx !important`，
+    // 不还原就会永久错位且再也不会被采样到——这里直接把内联 top 去掉，
+    // 让它回到样式表里原本的位置。
+    item.style.removeProperty('top')
     delete item.dataset[DATASET_MARKER]
     return
   }
