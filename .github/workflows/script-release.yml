@@ -53,5 +53,7 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: ${{ github.ref == 'refs/heads/master' && 'release' || 'test-release' }}
+          # tag 发布 → release（用户脚本的 @updateURL 指向这里）；
+          # 手动在分支上跑 → test-release，避免试跑污染正式更新源
+          branch: ${{ startsWith(github.ref, 'refs/tags/') && 'release' || 'test-release' }}
           folder: packages/script/dist
