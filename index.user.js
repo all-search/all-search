@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         all-search 全搜，搜索引擎快捷跳转，支持任意网站展示
 // @namespace    all-search
-// @version      2.1.1
+// @version      2.2.0
 // @author       endday
-// @description  2026-10-26更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
+// @description  2026-10-28更新 搜索辅助增强，任意跳转，无需代码适配，支持任意网站展示
 // @license      GPL-3.0-only
 // @homepageURL  https://github.com/all-search/all-search
 // @downloadURL  https://raw.githubusercontent.com/all-search/all-search/release/index.user.js
@@ -24,7 +24,7 @@
 
   const c=new Set;const importCSS = async o=>{c.has(o)||(c.add(o),(d=>{let n=5381;for(let e=0;e<d.length;e++)n=(n<<5)+n^d.charCodeAt(e);const s="as-style-"+(n>>>0).toString(36),a=()=>{const e=document.getElementById("all-search"),l=e&&e.shadowRoot,r=l&&(l.querySelector("head")||l);if(!r)return;let t=r.querySelector("#"+s);t||(t=document.createElement("style"),t.id=s,r.append(t)),t.textContent=d;};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",a):a(),window.addEventListener("as-inject-style",a);})(o));};
 
-  importCSS(' @charset "UTF-8";@media screen and (max-width:750px){.as-title-horizontal{display:none}}.as-title-horizontal{min-width:90px;margin:0 10px}.as-title-vertical{width:100%}.as-title{text-decoration:none!important;padding:0;margin:0;color:var(--as-primary-color)}.as-title-inner{padding:0;font-size:17px;height:30px;line-height:30px;font-weight:600;color:var(--as-primary-color);margin:0 auto;text-align:center;cursor:pointer}:root{--as-text-color-secondary: #909399}.as-scrollbar{--as-scrollbar-opacity: .3;--as-scrollbar-background-color: var(--as-text-color-secondary);--as-scrollbar-hover-opacity: .5;--as-scrollbar-hover-background-color: var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}.as-popover-content{z-index:999991;position:relative;will-change:transform,opacity;backface-visibility:hidden;-webkit-font-smoothing:antialiased}.as-popover-content .arrow,.as-popover-content .arrow:before{width:0;height:0;border-style:solid}.as-popover-content .arrow:before{content:"";position:absolute}.slide-fade-enter-active{transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1)}.slide-fade-leave-active{transition:transform .1s cubic-bezier(.645,.045,.355,1),opacity .1s cubic-bezier(.645,.045,.355,1)}.slide-fade-enter-from,.slide-fade-leave-to{opacity:0}.slide-fade-enter-from[data-placement=bottom-start],.slide-fade-leave-to[data-placement=bottom-start]{transform:translateY(-100%);transform-origin:top center}.slide-fade-enter-from[data-placement=top-start],.slide-fade-leave-to[data-placement=top-start]{transform:translateY(100%);transform-origin:bottom center}.slide-fade-enter-from[data-placement=left-start],.slide-fade-leave-to[data-placement=left-start]{transform:translate(100%);transform-origin:center right}.slide-fade-enter-from[data-placement=right-start],.slide-fade-leave-to[data-placement=right-start]{transform:translate(-100%);transform-origin:center left}.as-icon{font-size:20px;width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden;margin:.25px 4px 0 0;display:inline-block}.as-img-icon{border:none;position:relative;font-size:0}.as-img-icon img{width:100%;height:100%;border:none;vertical-align:top}.as-img-icon img.error{display:inline-block;transform:scale(1);content:"";color:transparent}.as-img-icon img.error:before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#f5f5f5 no-repeat center/50% 50%}.as-img-icon img.error:after{content:attr(alt);position:absolute;left:0;bottom:0;width:100%;line-height:2;background-color:#00000080;color:#fff;font-size:12px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.as-menu-item.horizontal{position:relative;padding:0 16px}.as-menu-item.horizontal:after{content:"";transform:scaleX(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;right:0;left:0;bottom:0;border-bottom:2px solid var(--as-primary-color)}.as-menu-item.horizontal:hover:after{transform:scaleX(1);opacity:1}@media screen and (max-width:750px){.as-menu-item.horizontal{padding:0 10px}}.as-menu-item.vertical{margin:5px 0;position:relative}.as-menu-item.vertical:after{content:"";transform:scaleY(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;top:0;bottom:0;right:0;border-right:2.5px solid var(--as-primary-color)}.as-menu-item.vertical:hover:after{transform:scaleY(1);opacity:1}.as-menu-item.vertical .as-menu-item-title{margin-right:6px}.as-menu-item.no-underline{text-decoration:none}.as-menu-item:visited{color:var(--as-primary-text-color)}a.as-menu-item{height:30px;line-height:30px;list-style:none;position:relative;color:var(--as-primary-text-color);transition:color .3s cubic-bezier(.645,.045,.355,1),border-color .3s cubic-bezier(.645,.045,.355,1),background .3s cubic-bezier(.645,.045,.355,1);box-sizing:border-box;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}a.as-menu-item:hover{border-color:var(--as-primary-color)}a.as-menu-item:hover .as-menu-item-icon,a.as-menu-item:hover .as-menu-item-title{color:var(--as-primary-color)}.as-menu-item-icon{color:var(--as-primary-text-color)}.as-url-icon{width:16px;height:16px;margin-right:10px}.as-subMenu-container{background:var(--as-bg-color);border:1px solid #e4e7ed;box-shadow:0 0 12px #0000001f;border-radius:4px}.as-subMenu{list-style:none;padding:0;min-width:90px;box-sizing:border-box;margin:4px 0}.as-subMenu li{overflow:hidden;box-sizing:border-box}.as-subMenu li a{display:flex;align-items:center;height:34px;padding:0 16px;text-decoration:none}.as-subMenu li:hover{background-color:var(--as-secondary-background-color);color:var(--as-primary-color)}.as-subMenu .as-subMenu-text{flex:1;font-size:14px;text-overflow:ellipsis;color:var(--as-primary-text-color);white-space:nowrap;margin:0;line-height:34px;font-weight:400;text-align:left}.as-menu-container{flex:1;display:flex}.as-menu{padding:0;margin:0;white-space:nowrap;border:0;box-shadow:none;background-color:var(--as-bg-color);display:flex;list-style:none}.as-horizontal .as-menu{flex-direction:row}.as-vertical .as-menu{flex-direction:column}.as-vertical .as-scrollbar__wrap{height:auto;width:100%}.as-overlay{position:fixed;inset:0;z-index:999991;height:100%;background-color:#0000004d;overflow:auto}.as-open-mode-tip{margin:8px 0 16px;padding:8px 10px;font-size:12px;line-height:1.65;color:var(--as-primary-text-color, #606266);background:#00000009;border-radius:4px;opacity:.85}.as-open-mode-tip strong{font-weight:600;color:var(--as-primary-color, #1890ff)}label.as-radio{color:var(--as-primary-text-color);font-weight:500;line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;font-size:14px;-webkit-user-select:none;-moz-user-select:none;user-select:none}label.as-radio+label.as-radio{margin-left:14px}label.as-radio input{position:absolute;opacity:0;visibility:hidden}label.as-radio .as-radio-icon{display:inline-block;position:relative;width:12px;height:12px;background:var(--as-bg-color);border:1px solid #979797;border-radius:50%;vertical-align:-2px}label.as-radio input:checked+.as-radio-icon:after{position:absolute;content:"";width:6px;height:6px;background-color:var(--as-bg-color);border-radius:50%;top:3px;left:3px}label.as-radio input:checked+.as-radio-icon{background:var(--as-primary-color);border:1px solid var(--as-primary-color)}label.as-radio input:disabled+.as-radio-icon{background-color:#e8e8e8;border:solid 1px #979797}label.as-radio input:disabled:checked+.as-radio-icon:after{background-color:#c1c1c1}label.as-radio.as-radio-animate .as-radio-icon{transition:background-color ease-out .3s}label.as-radio .as-radio-label{margin-left:6px;font-size:14px}.as-label{vertical-align:middle;float:left;font-size:14px;color:var(--as-primary-text-color);line-height:40px;padding:0 12px 0 0;box-sizing:border-box}.as-content{line-height:40px;position:relative;font-size:14px}.as-button{display:inline-block;line-height:1;white-space:nowrap;cursor:pointer;background:#fff;border:1px solid #dcdfe6;color:var(--as-primary-text-color);text-align:center;box-sizing:border-box;outline:none;margin:0;transition:.1s;font-weight:500;-webkit-user-select:none;-moz-user-select:none;user-select:none;padding:12px 20px;font-size:14px;border-radius:4px}.as-button.as-button__text{border-color:transparent;color:var(--as-primary-color);background:transparent;padding-left:0;padding-right:0}.as-button.as-button__primary{color:#fff;background-color:var(--as-primary-color);border-color:var(--as-primary-color)}.as-color-set .as-color-label{line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;vertical-align:middle}.as-color-set .input\u2014color{width:30px;height:30px;padding:4px;border:1px solid #e6e6e6;border-radius:4px;background-color:var(--as-secondary-background-color);box-sizing:border-box}.as-color-set .input\u2014color::-webkit-color-swatch{border:0}.as-color-set .input\u2014color::-webkit-color-swatch-wrapper{padding:0}.as-color-set .reset-btn{margin-left:20px}#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}.as-setting{position:relative}.as-setting.horizontal{box-shadow:-4px 0 10px #0000001f;display:flex}.as-setting-btn{line-height:30px;padding:0 14px;position:relative;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;color:var(--as-primary-text-color);text-align:center}.as-setting-btn:hover{color:var(--as-primary-color);background-color:#0000000a}.as-group-title{margin:8px 0 2px;font-size:12px;font-weight:600;letter-spacing:.3px;color:var(--as-primary-text-color);opacity:.6}.as-side-bar{width:20vw;min-width:300px;right:0;height:100%;top:0;bottom:0;position:absolute;box-sizing:border-box;background:var(--as-bg-color) radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed;display:flex;flex-direction:column;box-shadow:0 8px 10px -5px #0003,0 16px 24px 2px #00000024,0 6px 30px 5px #0000001f;overflow:hidden}.as-side-bar>header{font-size:16px;align-items:center;color:var(--as-primary-text-color);display:flex;padding:32px 24px}.as-side-bar>section{padding:10px 24px;margin:0 12px;height:100%;flex:1;border-radius:4px;border:1px solid rgba(0,0,0,.1);background:#ffffffab}.as-side-bar>footer{padding:10px 24px 30px}.as-side-bar>footer .link{font-size:14px;text-decoration:none}.as-side-bar>footer .link:visited{color:var(--as-primary-text-color)}.as-side-bar>footer .link+.link{margin-left:20px}.overlay-enter-active,.overlay-leave-active{transition:opacity .3s}.overlay-enter-from,.overlay-leave-to{opacity:0}.overlay-enter-active .as-side-bar{animation:rtl-drawer-animation .3s linear reverse}.overlay-leave-active .as-side-bar{animation:rtl-drawer-animation .3s linear}@keyframes rtl-drawer-animation{0%{transform:translate(0)}to{transform:translate(100%)}}@media(max-width:480px){.as-side-bar{width:100vw;min-width:0;box-shadow:none}.as-side-bar>header{padding:14px 16px 6px;font-size:15px}.as-side-bar>section{height:auto;margin:0;padding:4px 16px 16px;border:0;background:transparent;overflow-y:auto;-webkit-overflow-scrolling:touch}.as-side-bar>footer{display:flex;flex-wrap:wrap;gap:8px 20px;padding:10px 16px 18px;border-top:1px solid rgba(0,0,0,.06)}.as-side-bar>footer .link+.link{margin-left:0}.as-side-bar .as-label{float:none;display:block;width:auto!important;padding:10px 0 2px;line-height:1.5;font-size:13px;opacity:.72}.as-side-bar .as-content{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-left:0!important;line-height:1.9}.as-side-bar .as-radio{display:inline-flex;align-items:center;min-height:32px}.as-side-bar .as-open-mode-tip{margin:12px 0 4px;padding:8px 10px;font-size:11.5px;line-height:1.7}}.as-hover-btn[data-v-8eec6b97]{position:fixed;z-index:99999;font-weight:600;font-size:17px;color:var(--as-primary-color);background:#fff;box-shadow:0 1px 4px #00152914;border:1px var(--as-border-color) solid;opacity:.6;cursor:pointer}.as-hover-btn-horizontal[data-v-8eec6b97]{left:50%;transform:translateY(0) translate(-50%);padding:0 16px;height:28px;line-height:28px}.as-hover-btn-top[data-v-8eec6b97]{top:0}.as-hover-btn-bottom[data-v-8eec6b97]{bottom:0}.as-hover-btn-vertical[data-v-8eec6b97]{top:50%;padding:0 16px;height:28px;line-height:28px}.as-hover-btn-left[data-v-8eec6b97]{left:0;right:unset;transform:translateY(-200%) translate(0) rotate(90deg);transform-origin:0 100%}.as-hover-btn-right[data-v-8eec6b97]{right:0;left:unset;transform-origin:top right;transform:translateY(0) translate(0) rotate(90deg)}.hover-btn.as-hide[data-v-8eec6b97]{transition:transform .2s;transform:translateY(-100%) translate(-50%)}.bar-container[data-v-b687b5a5]{display:flex;padding:2px;max-width:300px;position:absolute;z-index:99999;background-color:#fff;color:#444;box-shadow:0 0 0 1px #0000000d,0 2px 3px #0000001a;border-radius:2px;cursor:pointer;white-space:nowrap}.tool-bar-item[data-v-b687b5a5]{margin:0;padding:2px;width:20px;height:20px;border:1px solid #FFF;cursor:pointer;box-sizing:content-box}.tool-bar-item[data-v-b687b5a5]:hover{border-color:var(--as-border-color)}.as-more-icon[data-v-b687b5a5]{display:block;font-size:20px}.as-dialog{position:fixed;inset:0;margin:0;z-index:99999;display:flex;align-items:center;justify-content:center}.as-dialog__mask{position:fixed;left:0;top:0;width:100%;height:100%;background:#00000080;backdrop-filter:blur(5px)}.as-dialog-container{position:relative;background:#f3f3f3f0;border-radius:10px;box-shadow:0 1px 3px #0000004d;box-sizing:border-box;min-width:50%;max-width:80%;max-height:86vh;display:flex;flex-direction:column;z-index:99;overflow:hidden}.as-dialog__header{position:relative}.as-dialog__body{color:#666;font-size:14px;word-break:break-all;overflow:auto}.as-dialog__footer{padding:10px 20px 20px;text-align:right;box-sizing:border-box}.as-dialog__close{display:inline-block;position:absolute;top:16px;right:24px;padding:0;background:transparent;cursor:pointer;font-size:16px;color:#909399}.as-dialog__close:before{content:"\u2716"}.se-header{padding:15px 20px;box-shadow:0 1px 6px #20212447;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed}.se-input-box{border:1px solid #ccc;background-color:#ffffffab;overflow:hidden;display:flex;border-radius:6px;height:40px;align-items:center;transition:.2s;color:#222}.se-input-box:hover{border-color:#fff;box-shadow:0 1px 6px #20212447}.se-input-box:active{border-color:#fff}.se-input-box .se-input{color:var(--as-primary-text-color);background-color:transparent;font-size:16px;height:100%;width:100%;line-height:20px;margin:0 20px;outline:none;border:none}.se-scrollbar-container{height:50vh;padding:0 20px 20px;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed}.se-container{margin-top:10px;display:flex;border-radius:6px;flex-wrap:wrap}.cate-container{flex:0 0 150px;margin:0 10px 10px 0;border:1px solid rgba(0,0,0,.1);background:#ffffffab;padding:6px}.cate-name{padding:0 10px;height:36px;line-height:36px;font-size:16px;display:flex;align-items:center}.cate-list{list-style:none;min-width:110px;box-sizing:border-box;padding:0}.cate-list .cate-item{box-sizing:border-box;padding:0 10px}.cate-list .cate-item .as-subMenu-text{margin:0}.cate-list .cate-item a{display:flex;align-items:center;height:34px;text-decoration:none;color:var(--as-primary-text-color)}.cate-list .cate-item:hover{background-color:#fff;color:var(--as-primary-color)} ');
+  importCSS(' @charset "UTF-8";@media screen and (max-width:750px){.as-title-horizontal{display:none}}.as-title-horizontal{min-width:90px;margin:0 10px}.as-title-vertical{width:100%}.as-title{text-decoration:none!important;padding:0;margin:0;color:var(--as-primary-color)}.as-title-inner{padding:0;font-size:17px;height:30px;line-height:30px;font-weight:600;color:var(--as-primary-color);margin:0 auto;text-align:center;cursor:pointer}:root{--as-text-color-secondary: #909399}.as-scrollbar{--as-scrollbar-opacity: .3;--as-scrollbar-background-color: var(--as-text-color-secondary);--as-scrollbar-hover-opacity: .5;--as-scrollbar-hover-background-color: var(--as-text-color-secondary);overflow:hidden;position:relative;height:100%}.as-scrollbar__wrap{overflow:auto;height:100%}.as-scrollbar__wrap--hidden-default{scrollbar-width:none}.as-scrollbar__wrap--hidden-default::-webkit-scrollbar{display:none}.as-scrollbar__thumb{position:relative;display:block;width:0;height:0;cursor:pointer;border-radius:inherit;background-color:var(--as-scrollbar-background-color, var(--as-text-color-secondary));transition:var(--as-transition-duration) background-color;opacity:var(--as-scrollbar-opacity, .3)}.as-scrollbar__thumb:hover{background-color:var(--as-scrollbar-hover-background-color, var(--as-text-color-secondary));opacity:var(--as-scrollbar-hover-opacity, .5)}.as-scrollbar__bar{position:absolute;right:2px;bottom:2px;z-index:1;border-radius:4px}.as-scrollbar__bar.is-vertical{width:6px;top:2px}.as-scrollbar__bar.is-vertical>div{width:100%}.as-scrollbar__bar.is-horizontal{height:6px;left:2px}.as-scrollbar__bar.is-horizontal>div{height:100%}.as-scrollbar-fade-enter-active{transition:opacity .34s ease-out}.as-scrollbar-fade-leave-active{transition:opacity .12s ease-out}.as-scrollbar-fade-enter-from,.as-scrollbar-fade-leave-active{opacity:0}.as-popover-content{z-index:999991;position:relative;will-change:transform,opacity;backface-visibility:hidden;-webkit-font-smoothing:antialiased}.as-popover-content .arrow,.as-popover-content .arrow:before{width:0;height:0;border-style:solid}.as-popover-content .arrow:before{content:"";position:absolute}.slide-fade-enter-active{transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1)}.slide-fade-leave-active{transition:transform .1s cubic-bezier(.645,.045,.355,1),opacity .1s cubic-bezier(.645,.045,.355,1)}.slide-fade-enter-from,.slide-fade-leave-to{opacity:0}.slide-fade-enter-from[data-placement=bottom-start],.slide-fade-leave-to[data-placement=bottom-start]{transform:translateY(-100%);transform-origin:top center}.slide-fade-enter-from[data-placement=top-start],.slide-fade-leave-to[data-placement=top-start]{transform:translateY(100%);transform-origin:bottom center}.slide-fade-enter-from[data-placement=left-start],.slide-fade-leave-to[data-placement=left-start]{transform:translate(100%);transform-origin:center right}.slide-fade-enter-from[data-placement=right-start],.slide-fade-leave-to[data-placement=right-start]{transform:translate(-100%);transform-origin:center left}.as-img-icon{border:none;position:relative;font-size:0}.as-img-icon img{width:100%;height:100%;border:none;vertical-align:top}.as-img-icon img.error{display:inline-block;transform:scale(1);content:"";color:transparent}.as-img-icon img.error:before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#f5f5f5 no-repeat center/50% 50%}.as-img-icon img.error:after{content:attr(alt);position:absolute;left:0;bottom:0;width:100%;line-height:2;background-color:#00000080;color:#fff;font-size:12px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.as-icon{font-size:20px;width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden;margin:.25px 4px 0 0;display:inline-block}.as-category-icon{position:relative;display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;margin-right:4px;vertical-align:-.15em}.as-category-icon .as-icon{margin:0}.as-category-icon .as-category-icon-site{position:absolute;inset:0;width:100%;height:100%}.as-category-icon .as-category-icon-site .as-img-icon{width:100%;height:100%}.as-category-icon .as-category-icon-site img{width:100%;height:100%;-o-object-fit:contain;object-fit:contain}.as-menu-item.horizontal{position:relative;padding:0 16px}.as-menu-item.horizontal:after{content:"";transform:scaleX(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;right:0;left:0;bottom:0;border-bottom:2px solid var(--as-primary-color)}.as-menu-item.horizontal:hover:after{transform:scaleX(1);opacity:1}@media screen and (max-width:750px){.as-menu-item.horizontal{padding:0 10px}}.as-menu-item.vertical{margin:5px 0;position:relative}.as-menu-item.vertical:after{content:"";transform:scaleY(0);opacity:0;transition:transform .15s cubic-bezier(.645,.045,.355,1),opacity .15s cubic-bezier(.645,.045,.355,1);position:absolute;top:0;bottom:0;right:0;border-right:2.5px solid var(--as-primary-color)}.as-menu-item.vertical:hover:after{transform:scaleY(1);opacity:1}.as-menu-item.vertical .as-menu-item-title{margin-right:6px}.as-menu-item.no-underline{text-decoration:none}.as-menu-item:visited{color:var(--as-primary-text-color)}a.as-menu-item{height:30px;line-height:30px;list-style:none;position:relative;color:var(--as-primary-text-color);transition:color .3s cubic-bezier(.645,.045,.355,1),border-color .3s cubic-bezier(.645,.045,.355,1),background .3s cubic-bezier(.645,.045,.355,1);box-sizing:border-box;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}a.as-menu-item:hover{border-color:var(--as-primary-color)}a.as-menu-item:hover .as-menu-item-icon,a.as-menu-item:hover .as-menu-item-title{color:var(--as-primary-color)}.as-menu-item-icon{color:var(--as-primary-text-color)}.as-url-icon{width:16px;height:16px;margin-right:10px}.as-subMenu-container{background:var(--as-bg-color);border:1px solid #e4e7ed;box-shadow:0 0 12px #0000001f;border-radius:4px}.as-subMenu{list-style:none;padding:0;min-width:90px;box-sizing:border-box;margin:4px 0}.as-subMenu li{overflow:hidden;box-sizing:border-box}.as-subMenu li a{display:flex;align-items:center;height:34px;padding:0 16px;text-decoration:none}.as-subMenu li:hover{background-color:var(--as-secondary-background-color);color:var(--as-primary-color)}.as-subMenu .as-subMenu-text{flex:1;font-size:14px;text-overflow:ellipsis;color:var(--as-primary-text-color);white-space:nowrap;margin:0;line-height:34px;font-weight:400;text-align:left}@media screen and (max-width:750px){.as-subMenu{min-width:132px}.as-subMenu li a{height:44px;padding:0 18px}.as-subMenu .as-subMenu-text{line-height:44px;font-size:15px}}.as-menu-container{flex:1;display:flex;min-width:0}@media screen and (max-width:750px){.as-menu-container .as-scrollbar__wrap{-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}}.as-menu{padding:0;margin:0;white-space:nowrap;border:0;box-shadow:none;background-color:var(--as-bg-color);display:flex;list-style:none}.as-menu .as-menu-item{flex:0 0 auto}.as-horizontal .as-menu{flex-direction:row}.as-vertical .as-menu{flex-direction:column}.as-vertical .as-scrollbar__wrap{height:auto;width:100%}.as-overlay{position:fixed;inset:0;z-index:999991;height:100%;background-color:#0000004d;overflow:auto}.as-open-mode-tip{margin:8px 0 16px;padding:8px 10px;font-size:12px;line-height:1.65;color:var(--as-primary-text-color, #606266);background:#00000009;border-radius:4px;opacity:.85}.as-open-mode-tip strong{font-weight:600;color:var(--as-primary-color, #1890ff)}label.as-radio{color:var(--as-primary-text-color);font-weight:500;line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;font-size:14px;-webkit-user-select:none;-moz-user-select:none;user-select:none}label.as-radio+label.as-radio{margin-left:14px}label.as-radio input{position:absolute;opacity:0;visibility:hidden}label.as-radio .as-radio-icon{display:inline-block;position:relative;width:12px;height:12px;background:var(--as-bg-color);border:1px solid #979797;border-radius:50%;vertical-align:-2px}label.as-radio input:checked+.as-radio-icon:after{position:absolute;content:"";width:6px;height:6px;background-color:var(--as-bg-color);border-radius:50%;top:3px;left:3px}label.as-radio input:checked+.as-radio-icon{background:var(--as-primary-color);border:1px solid var(--as-primary-color)}label.as-radio input:disabled+.as-radio-icon{background-color:#e8e8e8;border:solid 1px #979797}label.as-radio input:disabled:checked+.as-radio-icon:after{background-color:#c1c1c1}label.as-radio.as-radio-animate .as-radio-icon{transition:background-color ease-out .3s}label.as-radio .as-radio-label{margin-left:6px;font-size:14px}.as-label{vertical-align:middle;float:left;font-size:14px;color:var(--as-primary-text-color);line-height:40px;padding:0 12px 0 0;box-sizing:border-box}.as-content{line-height:40px;position:relative;font-size:14px}.as-button{display:inline-block;line-height:1;white-space:nowrap;cursor:pointer;background:#fff;border:1px solid #dcdfe6;color:var(--as-primary-text-color);text-align:center;box-sizing:border-box;outline:none;margin:0;transition:.1s;font-weight:500;-webkit-user-select:none;-moz-user-select:none;user-select:none;padding:12px 20px;font-size:14px;border-radius:4px}.as-button.as-button__text{border-color:transparent;color:var(--as-primary-color);background:transparent;padding-left:0;padding-right:0}.as-button.as-button__primary{color:#fff;background-color:var(--as-primary-color);border-color:var(--as-primary-color)}.as-color-set .as-color-label{line-height:1;position:relative;cursor:pointer;display:inline-block;white-space:nowrap;outline:none;vertical-align:middle}.as-color-set .input\u2014color{width:30px;height:30px;padding:4px;border:1px solid #e6e6e6;border-radius:4px;background-color:var(--as-secondary-background-color);box-sizing:border-box}.as-color-set .input\u2014color::-webkit-color-swatch{border:0}.as-color-set .input\u2014color::-webkit-color-swatch-wrapper{padding:0}.as-color-set .reset-btn{margin-left:20px}#all-search .row,.all-search-config .row{display:flex}#all-search .column,.all-search-config .column{display:flex;flex-direction:column}#all-search .col,.all-search-config .col{flex:1}#all-search .row.items-center,#all-search .column.items-center,.all-search-config .row.items-center,.all-search-config .column.items-center{align-items:center}#all-search .row.items-end,#all-search .column.items-end,.all-search-config .row.items-end,.all-search-config .column.items-end{align-items:flex-end}#all-search .row.items-stretch,#all-search .column.items-stretch,.all-search-config .row.items-stretch,.all-search-config .column.items-stretch{align-items:stretch}#all-search .row.justify-center,#all-search .column.justify-center,.all-search-config .row.justify-center,.all-search-config .column.justify-center{justify-content:center}#all-search .row.justify-end,#all-search .column.justify-end,.all-search-config .row.justify-end,.all-search-config .column.justify-end{justify-content:flex-end}#all-search .row.justify-between,#all-search .column.justify-between,.all-search-config .row.justify-between,.all-search-config .column.justify-between{justify-content:space-between}#all-search .row.flex-wrap,.all-search-config .row.flex-wrap{flex-wrap:wrap}#all-search .row.content-center,.all-search-config .row.content-center{align-content:center}#all-search .row.content-end,.all-search-config .row.content-end{align-content:end}.as-setting{position:relative}.as-setting.horizontal{box-shadow:-4px 0 10px #0000001f;display:flex}.as-setting-btn{line-height:30px;padding:0 14px;position:relative;margin:0;white-space:nowrap;cursor:pointer;font-size:14px;color:var(--as-primary-text-color);text-align:center}.as-setting-btn:hover{color:var(--as-primary-color);background-color:#0000000a}.as-group-title{margin:8px 0 2px;font-size:12px;font-weight:600;letter-spacing:.3px;color:var(--as-primary-text-color);opacity:.6}.as-side-bar{width:20vw;min-width:300px;right:0;height:100%;top:0;bottom:0;position:absolute;box-sizing:border-box;background:var(--as-bg-color) radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed;display:flex;flex-direction:column;box-shadow:0 8px 10px -5px #0003,0 16px 24px 2px #00000024,0 6px 30px 5px #0000001f;overflow:hidden}.as-side-bar>header{font-size:16px;align-items:center;color:var(--as-primary-text-color);display:flex;padding:32px 24px}.as-side-bar>section{padding:10px 24px;margin:0 12px;height:100%;flex:1;border-radius:4px;border:1px solid rgba(0,0,0,.1);background:#ffffffab}.as-side-bar>footer{padding:10px 24px 30px}.as-side-bar>footer .link{font-size:14px;text-decoration:none}.as-side-bar>footer .link:visited{color:var(--as-primary-text-color)}.as-side-bar>footer .link+.link{margin-left:20px}.overlay-enter-active,.overlay-leave-active{transition:opacity .3s}.overlay-enter-from,.overlay-leave-to{opacity:0}.overlay-enter-active .as-side-bar{animation:rtl-drawer-animation .3s linear reverse}.overlay-leave-active .as-side-bar{animation:rtl-drawer-animation .3s linear}@keyframes rtl-drawer-animation{0%{transform:translate(0)}to{transform:translate(100%)}}@media(max-width:480px){.as-side-bar{width:100vw;min-width:0;box-shadow:none}.as-side-bar>header{padding:14px 16px 6px;font-size:15px}.as-side-bar>section{height:auto;margin:0;padding:4px 16px 16px;border:0;background:transparent;overflow-y:auto;-webkit-overflow-scrolling:touch}.as-side-bar>footer{display:flex;flex-wrap:wrap;gap:8px 20px;padding:10px 16px 18px;border-top:1px solid rgba(0,0,0,.06)}.as-side-bar>footer .link+.link{margin-left:0}.as-side-bar .as-label{float:none;display:block;width:auto!important;padding:10px 0 2px;line-height:1.5;font-size:13px;opacity:.72}.as-side-bar .as-content{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-left:0!important;line-height:1.9}.as-side-bar .as-radio{display:inline-flex;align-items:center;min-height:32px}.as-side-bar .as-open-mode-tip{margin:12px 0 4px;padding:8px 10px;font-size:11.5px;line-height:1.7}}.as-hover-btn[data-v-8eec6b97]{position:fixed;z-index:99999;font-weight:600;font-size:17px;color:var(--as-primary-color);background:#fff;box-shadow:0 1px 4px #00152914;border:1px var(--as-border-color) solid;opacity:.6;cursor:pointer}.as-hover-btn-horizontal[data-v-8eec6b97]{left:50%;transform:translateY(0) translate(-50%);padding:0 16px;height:28px;line-height:28px}.as-hover-btn-top[data-v-8eec6b97]{top:0}.as-hover-btn-bottom[data-v-8eec6b97]{bottom:0}.as-hover-btn-vertical[data-v-8eec6b97]{top:50%;padding:0 16px;height:28px;line-height:28px}.as-hover-btn-left[data-v-8eec6b97]{left:0;right:unset;transform:translateY(-200%) translate(0) rotate(90deg);transform-origin:0 100%}.as-hover-btn-right[data-v-8eec6b97]{right:0;left:unset;transform-origin:top right;transform:translateY(0) translate(0) rotate(90deg)}.hover-btn.as-hide[data-v-8eec6b97]{transition:transform .2s;transform:translateY(-100%) translate(-50%)}.bar-container[data-v-f23013b3]{display:flex;padding:2px;max-width:300px;position:absolute;z-index:99999;background-color:#fff;color:#444;box-shadow:0 0 0 1px #0000000d,0 2px 3px #0000001a;border-radius:2px;cursor:pointer;white-space:nowrap}.tool-bar-item[data-v-f23013b3]{margin:0;padding:2px;width:20px;height:20px;border:1px solid #FFF;cursor:pointer;box-sizing:content-box}.tool-bar-item[data-v-f23013b3]:hover{border-color:var(--as-border-color)}.as-more-icon[data-v-f23013b3]{display:block;font-size:20px}.as-dialog{position:fixed;inset:0;margin:0;z-index:99999;display:flex;align-items:center;justify-content:center}.as-dialog__mask{position:fixed;left:0;top:0;width:100%;height:100%;background:#00000080;backdrop-filter:blur(5px)}.as-dialog-container{position:relative;background:#f3f3f3f0;border-radius:10px;box-shadow:0 1px 3px #0000004d;box-sizing:border-box;min-width:50%;max-width:80%;max-height:86vh;display:flex;flex-direction:column;z-index:99;overflow:hidden}.as-dialog__header{position:relative}.as-dialog__body{color:#666;font-size:14px;word-break:break-all;overflow:auto}.as-dialog__footer{padding:10px 20px 20px;text-align:right;box-sizing:border-box}.as-dialog__close{display:inline-block;position:absolute;top:16px;right:24px;padding:0;background:transparent;cursor:pointer;font-size:16px;color:#909399}.as-dialog__close:before{content:"\u2716"}.se-header{padding:15px 20px;box-shadow:0 1px 6px #20212447;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed}.se-input-box{border:1px solid #ccc;background-color:#ffffffab;overflow:hidden;display:flex;border-radius:6px;height:40px;align-items:center;transition:.2s;color:#222}.se-input-box:hover{border-color:#fff;box-shadow:0 1px 6px #20212447}.se-input-box:active{border-color:#fff}.se-input-box .se-input{color:var(--as-primary-text-color);background-color:transparent;font-size:16px;height:100%;width:100%;line-height:20px;margin:0 20px;outline:none;border:none}.se-scrollbar-container{height:50vh;padding:0 20px 20px;background:#f3f3f3 radial-gradient(#eff4f9 75%,#f3f3f3) no-repeat fixed}.se-container{margin-top:10px;display:flex;border-radius:6px;flex-wrap:wrap}.cate-container{flex:0 0 150px;margin:0 10px 10px 0;border:1px solid rgba(0,0,0,.1);background:#ffffffab;padding:6px}.cate-name{padding:0 10px;height:36px;line-height:36px;font-size:16px;display:flex;align-items:center}.cate-list{list-style:none;min-width:110px;box-sizing:border-box;padding:0}.cate-list .cate-item{box-sizing:border-box;padding:0 10px}.cate-list .cate-item .as-subMenu-text{margin:0}.cate-list .cate-item a{display:flex;align-items:center;height:34px;text-decoration:none;color:var(--as-primary-text-color)}.cate-list .cate-item:hover{background-color:#fff;color:var(--as-primary-color)} ');
 
   const sites$e = [
     {
@@ -522,7 +522,7 @@
   var _GM_deleteValue = (() => typeof GM_deleteValue != "undefined" ? GM_deleteValue : void 0)();
   var _GM_getValue = (() => typeof GM_getValue != "undefined" ? GM_getValue : void 0)();
   var _GM_setValue = (() => typeof GM_setValue != "undefined" ? GM_setValue : void 0)();
-  const version$1 = "2.1.1";
+  const version$1 = "2.2.0";
   const pkg = {
     version: version$1
   };
@@ -652,23 +652,42 @@
       }));
     }
   }
+  const sitesReady = vue.ref(false);
   getStorage("sites").then((val) => {
     sitesData.value = getSites(val);
   }).catch(() => {
     sitesData.value = list$2;
+  }).finally(() => {
+    sitesReady.value = true;
   });
   watchStorage("sites", (value2) => {
     sitesData.value = JSON.parse(JSON.stringify(getSites(value2)));
   });
+  if (typeof window !== "undefined") {
+    window.addEventListener("as-bridge-up", () => {
+      reloadSites().catch(() => {
+      });
+    });
+  }
   function resetSites() {
     if (window.confirm("确认要重置所有网址吗")) {
       delStorage("sites");
     }
   }
+  async function reloadSites() {
+    let value2 = null;
+    try {
+      value2 = await getStorage("sites");
+    } catch {
+      value2 = null;
+    }
+    sitesData.value = JSON.parse(JSON.stringify(getSites(value2)));
+  }
   function useSites(type) {
     return {
       sites: vue.computed(() => initSites(sitesData.value)),
-      resetSites
+      resetSites,
+      sitesReady
     };
   }
   const list$1 = [
@@ -1674,6 +1693,7 @@ url: /\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/(?:search|explore|hashtag)/
     if (!item.dataset[DATASET_MARKER]) return;
     const data = adjustedElements.get(item);
     if (!data) {
+      item.style.removeProperty("top");
       delete item.dataset[DATASET_MARKER];
       return;
     }
@@ -2439,7 +2459,7 @@ async setMode(mode) {
     vue.onUnmounted(() => dispose());
     return { preference, isDark };
   }
-  const _sfc_main$l = vue.defineComponent({
+  const _sfc_main$m = vue.defineComponent({
     __name: "logo",
     props: {
       direction: {}
@@ -3042,7 +3062,7 @@ get: function() {
     }
     return target;
   };
-  const _sfc_main$k = vue.defineComponent({
+  const _sfc_main$l = vue.defineComponent({
     props: {
       vertical: Boolean,
       size: {
@@ -3180,8 +3200,8 @@ get: function() {
       _: 1
     });
   }
-  const Bar = _export_sfc(_sfc_main$k, [["render", _sfc_render$2]]);
-  const _sfc_main$j = vue.defineComponent({
+  const Bar = _export_sfc(_sfc_main$l, [["render", _sfc_render$2]]);
+  const _sfc_main$k = vue.defineComponent({
     components: { Bar },
     props: {
       height: { type: [String, Number], default: "" },
@@ -3298,13 +3318,13 @@ tag: { type: String, default: "div" },
       };
     }
   });
-  const _hoisted_1$d = {
+  const _hoisted_1$e = {
     ref: "scrollbar",
     class: "as-scrollbar"
   };
   function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_bar = vue.resolveComponent("bar");
-    return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$d, [
+    return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$e, [
       vue.createElementVNode("div", {
         ref: "wrap",
         class: vue.normalizeClass([
@@ -3343,7 +3363,7 @@ tag: { type: String, default: "div" },
       ], 64)) : vue.createCommentVNode("", true)
     ], 512);
   }
-  const scrollbar = _export_sfc(_sfc_main$j, [["render", _sfc_render$1]]);
+  const scrollbar = _export_sfc(_sfc_main$k, [["render", _sfc_render$1]]);
   const min = Math.min;
   const max = Math.max;
   const round = Math.round;
@@ -4777,8 +4797,8 @@ root: root.ownerDocument
       update
     };
   }
-  const _hoisted_1$c = ["data-placement"];
-  const _sfc_main$i = vue.defineComponent({
+  const _hoisted_1$d = ["data-placement"];
+  const _sfc_main$j = vue.defineComponent({
     __name: "popper",
     props: {
       tag: { default: "div" },
@@ -4860,31 +4880,11 @@ root: root.ownerDocument
                 onMouseleave: hide
               }, [
                 loaded.value ? vue.renderSlot(_ctx.$slots, "default", vue.normalizeProps(vue.guardReactiveProps({ isPositioned: vue.unref(isPositioned) })), void 0, void 0, 0) : vue.createCommentVNode("", true)
-              ], 46, _hoisted_1$c)) : vue.createCommentVNode("", true)
+              ], 46, _hoisted_1$d)) : vue.createCommentVNode("", true)
             ]),
             _: 3
           })
         ], 64);
-      };
-    }
-  });
-  const _hoisted_1$b = {
-    class: "as-icon as-menu-item-icon",
-    "aria-hidden": "true"
-  };
-  const _hoisted_2$7 = ["xlink:href"];
-  const _sfc_main$h = vue.defineComponent({
-    __name: "icon",
-    props: {
-      name: {}
-    },
-    setup(__props) {
-      return (_ctx, _cache) => {
-        return vue.openBlock(), vue.createElementBlock("svg", _hoisted_1$b, [
-          vue.createElementVNode("use", {
-            "xlink:href": `#icon-${__props.name}`
-          }, null, 8, _hoisted_2$7)
-        ]);
       };
     }
   });
@@ -4952,11 +4952,11 @@ root: root.ownerDocument
       clearIconCache
     };
   }
-  const _hoisted_1$a = {
+  const _hoisted_1$c = {
     key: 0,
     class: "as-img-icon"
   };
-  const _hoisted_2$6 = ["src", "crossorigin"];
+  const _hoisted_2$7 = ["src", "crossorigin"];
   const iconCache = vue.ref({});
   const isLoaded = vue.ref(false);
   getStorage("iconCache").then((iconData) => {
@@ -4970,14 +4970,16 @@ root: root.ownerDocument
     iconCache.value = trimIconCache(iconCache.value);
     setStorage("iconCache", iconCache.value);
   }, 1e3);
-  const _sfc_main$g = vue.defineComponent({
+  const _sfc_main$i = vue.defineComponent({
     __name: "favicon",
     props: {
       url: {},
       icon: {}
     },
-    setup(__props) {
+    emits: ["load", "error"],
+    setup(__props, { emit: __emit }) {
       const props = __props;
+      const emit = __emit;
       const isError = vue.ref(false);
       const { hostname } = parseUrl(props.url || "");
       const index2 = vue.ref(0);
@@ -4990,6 +4992,7 @@ root: root.ownerDocument
       });
       const { favicon: favicon2 } = useFavicon();
       function handleLoad(e) {
+        emit("load");
         if (isError.value || !faviconApi.value || faviconApi.value.startsWith("data:image")) return;
         if (!corsAllowed.value) return;
         const base64 = toIconDataUrl(e.target);
@@ -5003,12 +5006,13 @@ root: root.ownerDocument
         if (target.src !== faviconApi.value) return;
         if (index2.value >= faviconApis.value.length - 1) {
           isError.value = true;
+          emit("error");
           return;
         }
         index2.value += 1;
       }
       return (_ctx, _cache) => {
-        return vue.unref(favicon2) === 1 ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1$a, [
+        return vue.unref(favicon2) === 1 ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1$c, [
           isLoaded.value && img.value ? (vue.openBlock(), vue.createElementBlock("img", {
             key: index2.value,
             class: vue.normalizeClass({ error: isError.value }),
@@ -5016,8 +5020,86 @@ root: root.ownerDocument
             crossorigin: corsAllowed.value ? "anonymous" : void 0,
             onError: handleError,
             onLoad: handleLoad
-          }, null, 42, _hoisted_2$6)) : vue.createCommentVNode("", true)
+          }, null, 42, _hoisted_2$7)) : vue.createCommentVNode("", true)
         ])) : vue.createCommentVNode("", true);
+      };
+    }
+  });
+  const _hoisted_1$b = {
+    class: "as-icon as-menu-item-icon",
+    "aria-hidden": "true"
+  };
+  const _hoisted_2$6 = ["xlink:href"];
+  const _sfc_main$h = vue.defineComponent({
+    __name: "icon",
+    props: {
+      name: {}
+    },
+    setup(__props) {
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("svg", _hoisted_1$b, [
+          vue.createElementVNode("use", {
+            "xlink:href": `#icon-${__props.name}`
+          }, null, 8, _hoisted_2$6)
+        ]);
+      };
+    }
+  });
+  const categoryIconSource = useConfig({
+    name: "categoryIconSource",
+    defaultVal: "builtin",
+    get: (val) => val === "site" ? "site" : "builtin",
+    set: (val, next) => next({ value: val === "site" ? "site" : "builtin" })
+  });
+  function useCategoryIcon() {
+    return { categoryIconSource };
+  }
+  function pickCategoryIconSite(list2) {
+    if (!Array.isArray(list2) || !list2.length) {
+      return null;
+    }
+    const usable = list2.find((item) => item && typeof item.url === "string" && item.data?.visible !== false);
+    return usable || null;
+  }
+  function categoryIconUrl(cate) {
+    const site2 = pickCategoryIconSite(cate?.list);
+    return site2 ? String(site2.url) : "";
+  }
+  const _hoisted_1$a = { class: "as-category-icon" };
+  const _sfc_main$g = vue.defineComponent({
+    __name: "category-icon",
+    props: {
+      item: {}
+    },
+    setup(__props) {
+      const props = __props;
+      const { categoryIconSource: categoryIconSource2 } = useCategoryIcon();
+      const failed = vue.ref(false);
+      const loaded = vue.ref(false);
+      const siteUrl = vue.computed(() => categoryIconUrl(props.item));
+      const useSiteIcon = vue.computed(() => categoryIconSource2.value === "site" && !!siteUrl.value && !failed.value);
+      vue.watch(() => props.item.name, () => {
+        failed.value = false;
+        loaded.value = false;
+      });
+      vue.watch(siteUrl, () => {
+        failed.value = false;
+        loaded.value = false;
+      });
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("span", _hoisted_1$a, [
+          !loaded.value ? (vue.openBlock(), vue.createBlock(_sfc_main$h, {
+            key: 0,
+            name: __props.item.name
+          }, null, 8, ["name"])) : vue.createCommentVNode("", true),
+          useSiteIcon.value ? (vue.openBlock(), vue.createBlock(_sfc_main$i, {
+            key: 1,
+            class: "as-category-icon-site",
+            url: siteUrl.value,
+            onLoad: _cache[0] || (_cache[0] = ($event) => loaded.value = true),
+            onError: _cache[1] || (_cache[1] = ($event) => failed.value = true)
+          }, null, 8, ["url"])) : vue.createCommentVNode("", true)
+        ]);
       };
     }
   });
@@ -5067,6 +5149,7 @@ root: root.ownerDocument
   };
   const _hoisted_5$1 = ["onClick", "onMouseup"];
   const _hoisted_6$1 = ["textContent"];
+  const TAP_CLICK_WINDOW = 500;
   const _sfc_main$f = vue.defineComponent({
     __name: "menu-item",
     props: {
@@ -5109,9 +5192,9 @@ root: root.ownerDocument
         openItem(item, defaultKeyword(), mode);
         return false;
       };
-      let isTap = false;
+      let lastTapAt = 0;
       const handleCateClick = (cate, mode) => {
-        if (isTap) {
+        if (Date.now() - lastTapAt < TAP_CLICK_WINDOW) {
           return;
         }
         const targets = pickCategoryTargets(cate.list);
@@ -5125,10 +5208,10 @@ root: root.ownerDocument
         }
       };
       onTap(categoryRef, () => {
-        isTap = true;
+        lastTapAt = Date.now();
       });
       return (_ctx, _cache) => {
-        return vue.openBlock(), vue.createBlock(_sfc_main$i, {
+        return vue.openBlock(), vue.createBlock(_sfc_main$j, {
           tag: "li",
           placement: placement.value
         }, {
@@ -5146,9 +5229,7 @@ root: root.ownerDocument
               ],
               onMouseup: _cache[2] || (_cache[2] = vue.withModifiers(($event) => handleCateClick(__props.item, altMode.value), ["middle", "exact"]))
             }, [
-              vue.createVNode(_sfc_main$h, {
-                name: __props.item.name
-              }, null, 8, ["name"]),
+              vue.createVNode(_sfc_main$g, { item: __props.item }, null, 8, ["item"]),
               vue.createElementVNode("span", {
                 class: "as-menu-item-title",
                 textContent: vue.toDisplayString(__props.item.nameZh)
@@ -5170,7 +5251,7 @@ root: root.ownerDocument
                       ],
                       onMouseup: vue.withModifiers(($event) => handleClick(child, altMode.value), ["middle", "exact"])
                     }, [
-                      vue.createVNode(_sfc_main$g, {
+                      vue.createVNode(_sfc_main$i, {
                         class: "as-url-icon",
                         url: child.url,
                         icon: child.icon
@@ -5483,6 +5564,7 @@ root: root.ownerDocument
       };
       const { value: mode, direction: direction2 } = useMode();
       const { menuOpenMode: menuOpenMode2, selectionOpenMode: selectionOpenMode2, openAllInCategory: openAllInCategory2 } = useOpenMode();
+      const { categoryIconSource: categoryIconSource2 } = useCategoryIcon();
       const { list: alignList, value: align } = useAlign();
       const { primaryColor: primaryColor2, primaryTextColor: primaryTextColor2 } = useColor();
       const { show: show2, options: options2, scrollHide: scrollHide2 } = useSwitchShow();
@@ -5544,10 +5626,10 @@ root: root.ownerDocument
                           "aria-modal": "true",
                           role: "dialog",
                           class: "as-side-bar",
-                          onClick: _cache[20] || (_cache[20] = vue.withModifiers(() => {
+                          onClick: _cache[22] || (_cache[22] = vue.withModifiers(() => {
                           }, ["stop"]))
                         }, [
-                          _cache[39] || (_cache[39] = vue.createElementVNode("header", { class: "header" }, " 全搜 all-search ", -1)),
+                          _cache[43] || (_cache[43] = vue.createElementVNode("header", { class: "header" }, " 全搜 all-search ", -1)),
                           vue.createElementVNode("section", null, [
                             vue.createVNode(_sfc_main$a, {
                               "label-width": "84",
@@ -5559,7 +5641,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(toolbarVisible),
                                   "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => vue.isRef(toolbarVisible) ? toolbarVisible.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[21] || (_cache[21] = [
+                                  default: vue.withCtx(() => [..._cache[23] || (_cache[23] = [
                                     vue.createTextVNode("显示 ", -1)
                                   ])]),
                                   _: 1
@@ -5569,7 +5651,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(toolbarVisible),
                                   "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => vue.isRef(toolbarVisible) ? toolbarVisible.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[22] || (_cache[22] = [
+                                  default: vue.withCtx(() => [..._cache[24] || (_cache[24] = [
                                     vue.createTextVNode("隐藏 ", -1)
                                   ])]),
                                   _: 1
@@ -5584,7 +5666,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(mode),
                                   "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[23] || (_cache[23] = [
+                                  default: vue.withCtx(() => [..._cache[25] || (_cache[25] = [
                                     vue.createTextVNode("居顶 ", -1)
                                   ])]),
                                   _: 1
@@ -5594,7 +5676,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(mode),
                                   "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[24] || (_cache[24] = [
+                                  default: vue.withCtx(() => [..._cache[26] || (_cache[26] = [
                                     vue.createTextVNode("居底 ", -1)
                                   ])]),
                                   _: 1
@@ -5604,7 +5686,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(mode),
                                   "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[25] || (_cache[25] = [
+                                  default: vue.withCtx(() => [..._cache[27] || (_cache[27] = [
                                     vue.createTextVNode("居左 ", -1)
                                   ])]),
                                   _: 1
@@ -5614,7 +5696,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(mode),
                                   "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => vue.isRef(mode) ? mode.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[26] || (_cache[26] = [
+                                  default: vue.withCtx(() => [..._cache[28] || (_cache[28] = [
                                     vue.createTextVNode("居右 ", -1)
                                   ])]),
                                   _: 1
@@ -5622,7 +5704,7 @@ root: root.ownerDocument
                               ]),
                               _: 1
                             }),
-                            _cache[37] || (_cache[37] = vue.createElementVNode("p", { class: "as-group-title" }, "点击打开方式", -1)),
+                            _cache[41] || (_cache[41] = vue.createElementVNode("p", { class: "as-group-title" }, "点击打开方式", -1)),
                             vue.createVNode(_sfc_main$a, {
                               label: "主菜单",
                               "label-width": "64"
@@ -5633,7 +5715,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(menuOpenMode2),
                                   "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => vue.isRef(menuOpenMode2) ? menuOpenMode2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[27] || (_cache[27] = [
+                                  default: vue.withCtx(() => [..._cache[29] || (_cache[29] = [
                                     vue.createTextVNode("当前页 ", -1)
                                   ])]),
                                   _: 1
@@ -5643,7 +5725,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(menuOpenMode2),
                                   "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => vue.isRef(menuOpenMode2) ? menuOpenMode2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[28] || (_cache[28] = [
+                                  default: vue.withCtx(() => [..._cache[30] || (_cache[30] = [
                                     vue.createTextVNode("新标签页 ", -1)
                                   ])]),
                                   _: 1
@@ -5661,7 +5743,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(selectionOpenMode2),
                                   "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => vue.isRef(selectionOpenMode2) ? selectionOpenMode2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[29] || (_cache[29] = [
+                                  default: vue.withCtx(() => [..._cache[31] || (_cache[31] = [
                                     vue.createTextVNode("当前页 ", -1)
                                   ])]),
                                   _: 1
@@ -5671,7 +5753,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(selectionOpenMode2),
                                   "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => vue.isRef(selectionOpenMode2) ? selectionOpenMode2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[30] || (_cache[30] = [
+                                  default: vue.withCtx(() => [..._cache[32] || (_cache[32] = [
                                     vue.createTextVNode("新标签页 ", -1)
                                   ])]),
                                   _: 1
@@ -5689,7 +5771,7 @@ root: root.ownerDocument
                                   modelValue: vue.unref(openAllInCategory2),
                                   "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => vue.isRef(openAllInCategory2) ? openAllInCategory2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[31] || (_cache[31] = [
+                                  default: vue.withCtx(() => [..._cache[33] || (_cache[33] = [
                                     vue.createTextVNode("关闭 ", -1)
                                   ])]),
                                   _: 1
@@ -5699,8 +5781,36 @@ root: root.ownerDocument
                                   modelValue: vue.unref(openAllInCategory2),
                                   "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => vue.isRef(openAllInCategory2) ? openAllInCategory2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[32] || (_cache[32] = [
+                                  default: vue.withCtx(() => [..._cache[34] || (_cache[34] = [
                                     vue.createTextVNode("开启 ", -1)
+                                  ])]),
+                                  _: 1
+                                }, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            }),
+                            vue.createVNode(_sfc_main$a, {
+                              label: "分类图标",
+                              "label-width": "64"
+                            }, {
+                              default: vue.withCtx(() => [
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "builtin",
+                                  modelValue: vue.unref(categoryIconSource2),
+                                  "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => vue.isRef(categoryIconSource2) ? categoryIconSource2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => [..._cache[35] || (_cache[35] = [
+                                    vue.createTextVNode("内置 ", -1)
+                                  ])]),
+                                  _: 1
+                                }, 8, ["modelValue"]),
+                                vue.createVNode(_sfc_main$b, {
+                                  label: "site",
+                                  modelValue: vue.unref(categoryIconSource2),
+                                  "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => vue.isRef(categoryIconSource2) ? categoryIconSource2.value = $event : null)
+                                }, {
+                                  default: vue.withCtx(() => [..._cache[36] || (_cache[36] = [
+                                    vue.createTextVNode("站点图标 ", -1)
                                   ])]),
                                   _: 1
                                 }, 8, ["modelValue"])
@@ -5715,7 +5825,7 @@ root: root.ownerDocument
                                     key,
                                     label: key,
                                     modelValue: vue.unref(align),
-                                    "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => vue.isRef(align) ? align.value = $event : null)
+                                    "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => vue.isRef(align) ? align.value = $event : null)
                                   }, {
                                     default: vue.withCtx(() => [
                                       vue.createTextVNode(vue.toDisplayString(value2), 1)
@@ -5733,7 +5843,7 @@ root: root.ownerDocument
                                     key,
                                     label: key,
                                     modelValue: vue.unref(scrollHide2),
-                                    "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => vue.isRef(scrollHide2) ? scrollHide2.value = $event : null),
+                                    "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => vue.isRef(scrollHide2) ? scrollHide2.value = $event : null),
                                     onChange: changeScrollHide
                                   }, {
                                     default: vue.withCtx(() => [
@@ -5750,9 +5860,9 @@ root: root.ownerDocument
                                 vue.createVNode(_sfc_main$b, {
                                   label: 1,
                                   modelValue: vue.unref(favicon2),
-                                  "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
+                                  "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[33] || (_cache[33] = [
+                                  default: vue.withCtx(() => [..._cache[37] || (_cache[37] = [
                                     vue.createTextVNode("显示 ", -1)
                                   ])]),
                                   _: 1
@@ -5760,9 +5870,9 @@ root: root.ownerDocument
                                 vue.createVNode(_sfc_main$b, {
                                   label: 2,
                                   modelValue: vue.unref(favicon2),
-                                  "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
+                                  "onUpdate:modelValue": _cache[17] || (_cache[17] = ($event) => vue.isRef(favicon2) ? favicon2.value = $event : null)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[34] || (_cache[34] = [
+                                  default: vue.withCtx(() => [..._cache[38] || (_cache[38] = [
                                     vue.createTextVNode("隐藏 ", -1)
                                   ])]),
                                   _: 1
@@ -5775,7 +5885,7 @@ root: root.ownerDocument
                                 vue.createVNode(_sfc_main$8, {
                                   name: "primaryColor",
                                   modelValue: vue.unref(primaryColor2),
-                                  "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => vue.isRef(primaryColor2) ? primaryColor2.value = $event : null)
+                                  "onUpdate:modelValue": _cache[18] || (_cache[18] = ($event) => vue.isRef(primaryColor2) ? primaryColor2.value = $event : null)
                                 }, null, 8, ["modelValue"])
                               ]),
                               _: 1
@@ -5785,7 +5895,7 @@ root: root.ownerDocument
                                 vue.createVNode(_sfc_main$8, {
                                   name: "primaryTextColor",
                                   modelValue: vue.unref(primaryTextColor2),
-                                  "onUpdate:modelValue": _cache[17] || (_cache[17] = ($event) => vue.isRef(primaryTextColor2) ? primaryTextColor2.value = $event : null)
+                                  "onUpdate:modelValue": _cache[19] || (_cache[19] = ($event) => vue.isRef(primaryTextColor2) ? primaryTextColor2.value = $event : null)
                                 }, null, 8, ["modelValue"])
                               ]),
                               _: 1
@@ -5796,7 +5906,7 @@ root: root.ownerDocument
                                   type: "text",
                                   onClick: vue.unref(clearIconCache2)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[35] || (_cache[35] = [
+                                  default: vue.withCtx(() => [..._cache[39] || (_cache[39] = [
                                     vue.createTextVNode(" 清除 ", -1)
                                   ])]),
                                   _: 1
@@ -5810,7 +5920,7 @@ root: root.ownerDocument
                                   type: "text",
                                   onClick: vue.unref(resetSites2)
                                 }, {
-                                  default: vue.withCtx(() => [..._cache[36] || (_cache[36] = [
+                                  default: vue.withCtx(() => [..._cache[40] || (_cache[40] = [
                                     vue.createTextVNode(" 重置 ", -1)
                                   ])]),
                                   _: 1
@@ -5825,16 +5935,16 @@ root: root.ownerDocument
                               title: "菜单设置页",
                               href: vue.unref(menuSettingsUrl),
                               target: "_blank",
-                              onClick: _cache[18] || (_cache[18] = ($event) => openSettingsPage())
+                              onClick: _cache[20] || (_cache[20] = ($event) => openSettingsPage())
                             }, " 菜单设置 ", 8, _hoisted_1$3),
                             vue.createElementVNode("a", {
                               class: "link",
                               title: "划词工具栏设置页",
                               href: vue.unref(toolbarSettingsUrl),
                               target: "_blank",
-                              onClick: _cache[19] || (_cache[19] = ($event) => openSettingsPage())
+                              onClick: _cache[21] || (_cache[21] = ($event) => openSettingsPage())
                             }, " 划词工具栏设置 ", 8, _hoisted_2$2),
-                            _cache[38] || (_cache[38] = vue.createElementVNode("a", {
+                            _cache[42] || (_cache[42] = vue.createElementVNode("a", {
                               class: "link",
                               title: "github",
                               href: "https://github.com/all-search/all-search/issues",
@@ -5914,7 +6024,7 @@ root: root.ownerDocument
           vue.withDirectives(vue.createElementVNode("div", {
             class: vue.normalizeClass(["as-container", classList.value])
           }, [
-            vue.createVNode(_sfc_main$l, { direction: __props.direction }, null, 8, ["direction"]),
+            vue.createVNode(_sfc_main$m, { direction: __props.direction }, null, 8, ["direction"]),
             vue.createVNode(_sfc_main$e, {
               direction: __props.direction,
               mode: __props.mode
@@ -6031,7 +6141,7 @@ root: root.ownerDocument
         const el2 = vue.unref(toolbarEle);
         return !!el2 && eventPath(e).includes(el2);
       }
-      window.addEventListener("mousedown", function(e) {
+      function handleMouseDown(e) {
         if (!isInApp2(e)) {
           changeVisible(false);
         }
@@ -6039,8 +6149,8 @@ root: root.ownerDocument
         if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
           selectStart = true;
         }
-      }, true);
-      window.addEventListener("mouseup", function(e) {
+      }
+      function handleMouseUp(e) {
         const include = isInApp2(e);
         const isToolbar = isInToolbar(e);
         if (!include) {
@@ -6054,10 +6164,20 @@ root: root.ownerDocument
           changeVisible(false);
         }
         selectStart = false;
-      }, true);
-      document.addEventListener("selectstart", function() {
+      }
+      function handleSelectStart() {
         selectStart = true;
-      }, false);
+      }
+      vue.onMounted(() => {
+        window.addEventListener("mousedown", handleMouseDown, true);
+        window.addEventListener("mouseup", handleMouseUp, true);
+        document.addEventListener("selectstart", handleSelectStart, false);
+      });
+      vue.onBeforeUnmount(() => {
+        window.removeEventListener("mousedown", handleMouseDown, true);
+        window.removeEventListener("mouseup", handleMouseUp, true);
+        document.removeEventListener("selectstart", handleSelectStart, false);
+      });
       const altMode = vue.computed(() => otherOpenMode(selectionOpenMode.value));
       function handleClick(item, mode) {
         const keyword = selection.value;
@@ -6076,7 +6196,7 @@ root: root.ownerDocument
           style: vue.normalizeStyle(style.value)
         }, [
           (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(list2), (item, i) => {
-            return vue.openBlock(), vue.createBlock(_sfc_main$g, {
+            return vue.openBlock(), vue.createBlock(_sfc_main$i, {
               class: "tool-bar-item",
               key: i,
               url: item.url,
@@ -6103,7 +6223,7 @@ root: root.ownerDocument
       };
     }
   });
-  const selectionBar = _export_sfc(_sfc_main$3, [["__scopeId", "data-v-b687b5a5"]]);
+  const selectionBar = _export_sfc(_sfc_main$3, [["__scopeId", "data-v-f23013b3"]]);
   const _hoisted_1$1 = { class: "as-dialog" };
   const _hoisted_2$1 = { class: "as-dialog__header" };
   const _hoisted_3$1 = { class: "as-dialog__body" };
@@ -6248,7 +6368,7 @@ root: root.ownerDocument
                               ],
                               onMouseup: vue.withModifiers(($event) => handleClick(child, altMode.value), ["middle", "exact"])
                             }, [
-                              vue.createVNode(_sfc_main$g, {
+                              vue.createVNode(_sfc_main$i, {
                                 class: "as-url-icon",
                                 url: child.url,
                                 icon: child.icon
