@@ -3,6 +3,9 @@ import store from '../store'
 import { TmAdapter } from './tm'
 import { StorageAdapter } from './types'
 
+/** 记录「上次确认没有油猴脚本」的 localStorage key（存的是 getName 后的名字） */
+const MISS_MARKER = 'bridge-miss'
+
 export interface BridgeMethods {
   getStorage: <T>(name: string) => Promise<T | null>;
   setStorage: <T>(name: string, value: T) => Promise<T>;
@@ -16,7 +19,55 @@ export class WebBridgeAdapter implements StorageAdapter {
   private onScriptLoadedHandler: ((event: Event) => void) | null = null
 
   constructor() {
+    // 上次访问已经确认「没有油猴脚本」：直接走 localStorage，不再干等 5 秒。
+    // 仍然保留监听——用户中途装了脚本也能接上（见 listenLate）。
+    if (this.hasMissedBefore()) {
+      this.enableFallback()
+      this.ready = Promise.resolve()
+      this.listenLate()
+      return
+    }
     this.ready = this.initConnection()
+  }
+
+  /** 上次握手是否已经确认失败过 */
+  private hasMissedBefore(): boolean {
+    try {
+      const key = getName(MISS_MARKER)
+      return !!key && localStorage.getItem(key) === '1'
+    } catch {
+      return false
+    }
+  }
+
+  private markMissed(missed: boolean): void {
+    try {
+      const key = getName(MISS_MARKER)
+      if (!key) return
+      if (missed) localStorage.setItem(key, '1')
+      else localStorage.removeItem(key)
+    } catch {
+      // localStorage 不可用（隐私模式）时忽略
+    }
+  }
+
+  /**
+   * 快速路径下仍然监听 script-loaded：脚本晚到时切到真实 API，
+   * 并广播 `as-bridge-up` 让页面重新读一遍数据。
+   */
+  private listenLate(): void {
+    const scriptLoaded = getName('script-loaded')
+    if (!scriptLoaded) return
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<BridgeMethods>).detail
+      if (!detail) return
+      this.methods = detail
+      if (detail.version) store.tmVersion = detail.version
+      this.markMissed(false)
+      document.removeEventListener(scriptLoaded, handler)
+      window.dispatchEvent(new Event('as-bridge-up'))
+    }
+    document.addEventListener(scriptLoaded, handler)
   }
 
   private initConnection(): Promise<void> {
@@ -34,6 +85,7 @@ export class WebBridgeAdapter implements StorageAdapter {
       const timeout = setTimeout(() => {
         if (!this.methods) {
           console.warn('WebBridgeAdapter: connection timeout, falling back to localStorage')
+          this.markMissed(true)
           this.cleanup()
           this.enableFallback()
           resolve()
@@ -43,6 +95,7 @@ export class WebBridgeAdapter implements StorageAdapter {
       this.onScriptLoadedHandler = (event: Event) => {
         const customEvent = event as CustomEvent<BridgeMethods>
         clearTimeout(timeout)
+        this.markMissed(false)
         this.methods = customEvent.detail
         // 记录油猴脚本版本，供配置页判断“是否已安装/是否需要升级”
         if (this.methods && this.methods.version) {

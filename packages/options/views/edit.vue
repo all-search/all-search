@@ -11,7 +11,19 @@
           </p>
         </div>
       </header>
+      <p
+        v-if="!ready"
+        class="loading-hint"
+        role="status"
+        aria-live="polite">
+        <el-icon class="is-loading">
+          <Loading />
+        </el-icon>
+        正在读取配置…
+      </p>
+      <!-- 没读到真实数据前不挂编辑器：否则用户改的「默认值」会被 dirty 守卫挡在门外 -->
       <json-editor
+        v-else
         :value="localSites"
         @reset="reset"
         @save="save"
@@ -23,14 +35,17 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Loading } from '@element-plus/icons-vue'
 import jsonEditor from '@src/components/json-editor.vue'
 import { setStorage } from '@src/util/storage'
 import defaultSites from '@src/config/sites'
-import useSites, { reloadSites } from '@src/components/useSites'
+import useSites, { reloadSites, sitesReady } from '@src/components/useSites'
 import useUnsavedGuard from '../composables/use-unsaved-guard'
 
 const localSites = ref<any[]>([])
 const savedSnapshot = ref('[]')
+/** 真实配置是否已读回；没读回之前不挂编辑器 */
+const ready = computed(() => sitesReady.value)
 /** 共享的站点数据：存储异步读回来后会更新，这里跟着走 */
 const { sites } = useSites()
 
@@ -49,8 +64,12 @@ function apply (value: any[]) {
 
 // 存储是异步的：线下页面要等 WebBridge 超时才读到用户数据。
 // 之前只在 setup 里读一次，于是编辑器里永远是内置默认值，一保存就把用户数据盖掉。
-watch(sites, (value) => {
-  if (dirty.value) return
+watch([sites, sitesReady], ([value, isReady]) => {
+  if (!isReady) return
+  if (dirty.value) {
+    ElMessage.warning('配置已在后台更新，当前修改基于旧数据，建议撤销后重试')
+    return
+  }
   apply(value)
 }, { immediate: true })
 
@@ -74,6 +93,18 @@ function change (val: any[]) {
 </script>
 
 <style lang="scss">
+.loading-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+  background: var(--el-fill-color-lighter);
+  border-radius: 8px;
+}
+
 .edit-page {
   display: flex;
   flex: 1;

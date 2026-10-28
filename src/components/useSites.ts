@@ -1,4 +1,4 @@
-import { computed, ref, ComputedRef } from 'vue'
+import { computed, ref, ComputedRef, Ref } from 'vue'
 import sites from '../config/sites'
 import { getStorage, delStorage, watchStorage } from '../util/storage'
 import { SiteCategory } from '../types/site'
@@ -33,10 +33,21 @@ function initSites (sites: SiteCategory[], type?: string): SiteCategory[] {
   return sites
 }
 
+/**
+ * 真实数据是否已经从存储读回来。
+ *
+ * 首屏先用内置默认值渲染（避免「打开就是空列表」），但**默认值不等于用户数据**：
+ * 线下配置站要等 WebBridge 超时才读到真实配置，这期间如果让用户编辑并保存，
+ * 就会用默认值覆盖掉用户的配置。所以页面上要等这个标记为 true 才允许改。
+ */
+const sitesReady = ref(false)
+
 getStorage<SiteCategory[]>('sites').then(val => {
   sitesData.value = getSites(val)
 }).catch(() => {
   sitesData.value = sites as SiteCategory[]
+}).finally(() => {
+  sitesReady.value = true
 })
 
 // 别的上下文（另一个标签页 / 插件设置页）保存后同步过来：
@@ -44,6 +55,13 @@ getStorage<SiteCategory[]>('sites').then(val => {
 watchStorage<SiteCategory[]>('sites', (value) => {
   sitesData.value = JSON.parse(JSON.stringify(getSites(value)))
 })
+
+// 油猴脚本晚于页面就绪才连上时（WebBridge 快速路径 → 真 API），重新读一次
+if (typeof window !== 'undefined') {
+  window.addEventListener('as-bridge-up', () => {
+    reloadSites().catch(() => {})
+  })
+}
 
 function resetSites (): void {
   if (window.confirm('确认要重置所有网址吗')) {
@@ -70,9 +88,15 @@ export async function reloadSites (): Promise<void> {
 export default function useSites (type?: string): {
   sites: ComputedRef<SiteCategory[]>;
   resetSites: () => void;
+  /** 真实数据是否已从存储读回（页面用它决定能不能编辑） */
+  sitesReady: Ref<boolean>;
 } {
   return {
     sites: computed(() => initSites(sitesData.value, type)),
-    resetSites
+    resetSites,
+    sitesReady
   }
 }
+
+/** 非组件场景（配置页的 watch）直接用这个标记 */
+export { sitesReady }

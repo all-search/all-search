@@ -1,5 +1,18 @@
 <template>
-  <div class="toolbar-page">
+  <div
+    class="toolbar-page"
+    :class="{ 'is-loading': !ready }"
+    :data-ready="ready ? '1' : '0'">
+    <p
+      v-if="!ready"
+      class="loading-hint"
+      role="status"
+      aria-live="polite">
+      <el-icon class="is-loading">
+        <Loading />
+      </el-icon>
+      正在读取配置…
+    </p>
     <section class="panel">
       <header class="panel-head">
         <div class="head-text">
@@ -169,7 +182,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Delete, Hide, Menu, Plus, Rank, View } from '@element-plus/icons-vue'
+import { Delete, Hide, Loading, Menu, Plus, Rank, View } from '@element-plus/icons-vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { getStorage, setStorage } from '@src/util/storage'
 import { initToolbar } from '@src/util/toolbar'
@@ -216,7 +229,14 @@ const dirty = computed(() => snapshotOf(list.value) !== savedSnapshot.value)
 
 useUnsavedGuard(dirty)
 
-// 存储是异步的：首屏先用内置默认值渲染，读到用户数据后再替换（避免空白闪一下）
+/**
+ * 真实数据是否已经读回。
+ *
+ * 首屏先用内置默认值渲染，但默认值不是用户数据：线下配置站要等 WebBridge 超时
+ * 才有真数据，这期间如果让用户编辑，就会用默认值覆盖掉他的工具栏。
+ */
+const ready = ref(false)
+
 onMounted(async () => {
   let stored: ToolbarItem[] | null = null
   try {
@@ -224,12 +244,16 @@ onMounted(async () => {
   } catch {
     stored = null
   }
-  if (!Array.isArray(stored) || !stored.length) return
-  // 线下配置站连不上油猴时要等满 WebBridge 的 5 秒才降级；
-  // 这期间用户可能已经点「从菜单选择」加了几项，别用旧数据把它们冲掉
-  if (dirty.value) return
-  list.value = stored.map(withUid)
-  savedSnapshot.value = snapshotOf(list.value)
+  // 空数组是合法的（用户可能把工具栏删空），只有「没存过」才保留默认值
+  if (Array.isArray(stored)) {
+    if (dirty.value) {
+      ElMessage.warning('配置已在后台更新，当前修改基于旧数据，建议撤销后重试')
+    } else {
+      list.value = stored.map(withUid)
+      savedSnapshot.value = snapshotOf(list.value)
+    }
+  }
+  ready.value = true
 })
 
 function toggleVisible (item: ToolbarItem) {
@@ -387,6 +411,24 @@ async function reset () {
 </script>
 
 <style lang="scss">
+/* 配置还没读回来：锁住内容，避免用默认值覆盖用户配置 */
+.toolbar-page.is-loading .panel {
+  pointer-events: none;
+  opacity: .55;
+}
+
+.loading-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+  background: var(--el-fill-color-lighter);
+  border-radius: 8px;
+}
+
 .toolbar-page {
   display: flex;
   flex-direction: column;

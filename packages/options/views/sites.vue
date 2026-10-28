@@ -1,7 +1,19 @@
 <template>
   <div
     class="sites-page"
-    :data-hydrated="hydrated ? '1' : '0'">
+    :class="{ 'is-loading': !ready }"
+    :data-hydrated="hydrated ? '1' : '0'"
+    :data-ready="ready ? '1' : '0'">
+    <p
+      v-if="!ready"
+      class="loading-hint"
+      role="status"
+      aria-live="polite">
+      <el-icon class="is-loading">
+        <Loading />
+      </el-icon>
+      正在读取配置…（未安装油猴脚本时最多等 5 秒）
+    </p>
     <div class="sites-body">
     <!-- 分类导航 -->
     <nav
@@ -268,9 +280,9 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { ElMessage } from 'element-plus'
-import { EditPen, MoreFilled, Plus, Search, Connection } from '@element-plus/icons-vue'
+import { EditPen, MoreFilled, Plus, Search, Connection, Loading } from '@element-plus/icons-vue'
 import { delStorage, getStorage, setStorage } from '@src/util/storage'
-import useSites, { reloadSites } from '@src/components/useSites'
+import useSites, { reloadSites, sitesReady } from '@src/components/useSites'
 import parseUrl from '@src/util/parseUrl'
 import { fetchIconDataUrl, trimIconCache } from '@src/util/favicon'
 import siteEngineRow from '../components/site-engine-row.vue'
@@ -308,6 +320,7 @@ export default {
     // 图标不再全局注册（Element Plus 走按需引入），这里要显式登记
     EditPen,
     Connection,
+    Loading,
     MoreFilled,
     Plus
   },
@@ -337,6 +350,8 @@ export default {
     let newUid = null
 
     const { sites } = useSites()
+    /** 真实配置是否已读回：没读回之前不允许编辑/拖拽/保存（见 init 的注释） */
+    const ready = computed(() => sitesReady.value && hydrated.value)
     /** 常用分类固定叫 personal，其它自定义分类是 personal-<时间戳> */
     const personalCategory = computed(() => localSites.value.filter(item => item.name === 'personal'))
 
@@ -461,10 +476,21 @@ export default {
       }
     }
 
-    watch(sites, (value) => {
-      // 存储在线下页面要等 WebBridge 超时才回来；这期间用户可能已经在拖拽或编辑了，
-      // 不能用「刚读到的默认值」把他正在做的事冲掉
-      if (hydrated.value && (dirty.value || dragging.value)) return
+    /**
+     * 只有「真实数据读回来了」才铺到界面。
+     *
+     * 首屏的 `sites` 是内置默认值，不能当成用户配置：线下配置站要等 WebBridge 超时
+     * （或快速路径的 localStorage）才有真数据。之前这里 immediate 直接 init(默认值) 并
+     * 置 hydrated=true，于是 5 秒窗口内用户一动手，真实配置就被 `dirty` 守卫永久挡在门外，
+     * 保存时用默认值覆盖掉用户配置。
+     */
+    watch([sites, sitesReady], ([value, isReady]) => {
+      if (!isReady) return
+      // 读回时用户已经在改了（只可能发生在上面的快速路径之外）：保住用户改动，提示一下
+      if (hydrated.value && (dirty.value || dragging.value)) {
+        ElMessage.warning('配置已在后台更新，当前修改基于旧数据，建议撤销后重试')
+        return
+      }
       init(value)
     }, { immediate: true })
 
@@ -793,6 +819,7 @@ export default {
       fetching,
       dragging,
       hydrated,
+      ready,
       // 模板里的 :prefix-icon="Search" 是表达式取值，Options API 只能从 setup 返回值里拿到
       Search,
       // 可达性检测（issue #35）
@@ -1033,6 +1060,24 @@ export default {
 
 .engine-list {
   min-height: 8px;
+}
+
+/* 配置还没读回来：整块内容锁住，避免用默认值覆盖用户配置 */
+.sites-page.is-loading .sites-body {
+  pointer-events: none;
+  opacity: .55;
+}
+
+.loading-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+  background: var(--el-fill-color-lighter);
+  border-radius: 8px;
 }
 
 /* 「检测可达性」的结果条：只在检出不可达站点时出现 */

@@ -728,6 +728,56 @@ export async function run ({ headless, report }) {
       rejected.error || '没有报错提示'
     )
 
+    // 保存不能吞掉用户手写的扩展字段（invisible / style / selectors 等）
+    const customPayload = [
+      {
+        nameZh: '自定义字段',
+        name: 'custom',
+        data: { visible: true },
+        list: [
+          {
+            nameZh: '带扩展字段的站点',
+            url: 'https://example.com/s?q=%s',
+            data: { visible: true },
+            invisible: true,
+            style: { 1: '.x{top:1px}' },
+            selectors: { input: '#kw' }
+          }
+        ]
+      }
+    ]
+    await page.locator('.editor-toolbar input[type="file"]').setInputFiles({
+      name: 'custom.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(customPayload), 'utf8')
+    })
+    await page.waitForTimeout(500)
+    await page.locator('.editor-toolbar .el-button').filter({ hasText: '保存' }).click()
+    await page.waitForTimeout(800)
+    // 重新加载后再读一次，确认字段是真的落盘了，而不是只在内存里
+    await go('/config/edit')
+    await page.waitForSelector('.editor-body .jsoneditor', { timeout: 15000 })
+    await page.waitForTimeout(800)
+    const kept = await page.evaluate(() => {
+      const text = document.querySelector('.jsoneditor')?.textContent || ''
+      return {
+        invisible: text.includes('invisible'),
+        style: text.includes('top:1px'),
+        selectors: text.includes('#kw')
+      }
+    })
+    report.check(
+      'JSON 保存保留手写的扩展字段',
+      kept.invisible && kept.style && kept.selectors,
+      `invisible=${kept.invisible} style=${kept.style} selectors=${kept.selectors}`
+    )
+    // 把自定义数据清掉，后面的深色/窄屏用例继续用内置默认
+    await page.evaluate(async () => {
+      localStorage.removeItem('__allSearch__sites')
+    })
+    await go('/config/sites')
+    await page.waitForTimeout(500)
+
     /* ---------- 深色模式 ---------- */
     await go('/config/sites')
     await page.locator('.top-actions .icon-btn').first().click()
@@ -795,6 +845,8 @@ export async function run ({ headless, report }) {
     try {
       await touchPage.goto(`${site.origin}/all-search/config/sites`, { waitUntil: 'networkidle' })
       await touchPage.waitForSelector('.site-nav')
+      // 新 context 没有「无油猴」标记，首屏要等 WebBridge 超时（最多 5 秒）才允许操作
+      await touchPage.waitForSelector('[data-hydrated="1"]', { timeout: 15000 })
       await touchPage.waitForTimeout(600)
 
       const touchLabels = () => touchPage.evaluate(

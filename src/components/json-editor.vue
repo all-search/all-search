@@ -93,50 +93,16 @@ export default {
             }
           }, 200)
         },
+        /**
+         * 校验规则与 `util/validateSites` 合一。
+         *
+         * 以前这里是另一套（要求分类和站点都有 nameZh），而导入走的是 validateSites
+         * （只要求 name / list / url）。于是「导入成功 → 点保存被拒」会卡死。
+         */
         onValidate (json) {
-          const errors = []
-          if (!Array.isArray(json)) {
-            errors.push({
-              path: [],
-              message: '根节点必须是数组'
-            })
-          }
-          json.forEach((item, i) => {
-            if (!item.name) {
-              errors.push({
-                path: [i],
-                message: '分类对象中的name字段为必填项'
-              })
-            }
-            if (!item.nameZh) {
-              errors.push({
-                path: [i],
-                message: '分类对象中的nameZh字段为必填项'
-              })
-            }
-            if (!Array.isArray(item.list)) {
-              errors.push({
-                path: [i],
-                message: '分类的list字段必须为数组类型'
-              })
-            } else {
-              item.list.forEach((urlItem, j) => {
-                if (!urlItem.nameZh) {
-                  errors.push({
-                    path: [i, 'list', j],
-                    message: '网址的nameZh字段为必填项'
-                  })
-                }
-                if (!urlItem.url) {
-                  errors.push({
-                    path: [i, 'list', j],
-                    message: '网址的url字段为必填项'
-                  })
-                }
-              })
-            }
-          })
-          return errors
+          const result = validateSites(json)
+          if (result.ok) return []
+          return [{ path: [], message: result.error || '配置格式不正确' }]
         }
       }
       instance = new JSONEditor(container, options)
@@ -186,21 +152,32 @@ export default {
       ElMessage.success('已格式化')
     }
 
+    /**
+     * 保存前只剔除界面用的 `__uid`，其余字段原样保留。
+     *
+     * 这里以前是白名单（只留 nameZh/name/data/list 和 nameZh/url/icon/data），
+     * 于是手写的 invisible / style / selectors / query / favicon 保存一次就没了——
+     * JSON 编辑器本来就是给高级用户改这些字段用的，白名单等于把功能废掉。
+     * 与 sites.vue 的 `stripUid` 保持同一语义。
+     */
     function formatSites (data) {
       if (!Array.isArray(data)) {
         return []
       }
-      return data.map(item => ({
-        nameZh: item.nameZh,
-        name: item.name,
-        data: item.data,
-        list: item.list.map(child => ({
-          nameZh: child.nameZh,
-          url: child.url,
-          icon: child.icon || '',
-          data: child.data
-        }))
-      }))
+      return data.map((item) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { __uid, ...cate } = item
+        return {
+          ...cate,
+          list: Array.isArray(cate.list)
+            ? cate.list.map((child) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const { __uid: childUid, ...site } = child
+              return { ...site, icon: site.icon || '' }
+            })
+            : []
+        }
+      })
     }
 
     function save () {
